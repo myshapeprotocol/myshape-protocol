@@ -6,6 +6,7 @@ import Vision from "@/components/vision/Vision";
 import Capabilities from "@/components/capabilities/Capabilities";
 import HowItWorks from "@/components/howitworks/HowItWorks";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
+// 路径修正：确保与文件夹/文件名的小写一致
 import ProtocolHeader from "@/components/header/header"; 
 import ProtocolFooter from "@/components/footer/footer";
 
@@ -29,9 +30,6 @@ export default function HomePage() {
         <Capabilities />
         <HowItWorks />
         
-        {/* 注意：如果 JoinWaitlist 内部自带了截图中的那两行小字，
-           建议进入该组件代码中，将那部分文字删除或注释掉。
-        */}
         <JoinWaitlist />
 
         <ProtocolFooter />

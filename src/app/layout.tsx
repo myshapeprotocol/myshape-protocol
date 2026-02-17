@@ -1,13 +1,19 @@
 import "./globals.css";
 import { GeistSans, GeistMono } from "geist/font";
 import HeroVisual from "@/components/hero/HeroVisual";
+import React from "react";
 
 export const metadata = {
   title: "MyShape Protocol",
   description: "Identity as motion.",
 };
 
-export default function RootLayout({ children }) {
+// 修复点：为 children 添加了 React.ReactNode 类型定义，解决了 Vercel 的 Type error
+export default function RootLayout({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body
@@ -17,7 +23,7 @@ export default function RootLayout({ children }) {
           overflowX: "hidden",
         }}
       >
-        {/* ⭐ 全站星空背景 */}
+        {/* ⭐ 全站星空背景 - 保留原有逻辑与排版 */}
         <div
           style={{
             position: "fixed",
@@ -29,7 +35,7 @@ export default function RootLayout({ children }) {
           <HeroVisual showCore={false} />
         </div>
 
-        {/* ⭐ 页面内容 */}
+        {/* ⭐ 页面内容 - 保留原有层级 */}
         <div style={{ position: "relative", zIndex: 1 }}>
           {children}
         </div>
