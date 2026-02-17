@@ -48,9 +48,10 @@ export default function Starfield() {
   return (
     <points ref={ref}>
       <bufferGeometry>
+        {/* 核心修复：添加 args 解决 Vercel 报错，并将 attach 改为连字符格式 */}
         <bufferAttribute
-          attach="attributes.position"
-          array={positions}
+          attach="attributes-position"
+          args={[positions, 3]}
           count={count}
           itemSize={3}
         />
