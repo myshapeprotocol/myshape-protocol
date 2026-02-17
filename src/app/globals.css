@@ -10,8 +10,9 @@ body {
   color: var(--foreground);
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden; /* 核心：防止手机端左右滑动 */
   font-family: sans-serif;
+  width: 100%;
 }
 
 /* ============================
@@ -67,4 +68,49 @@ body {
   border-radius: 50%;
   box-shadow: 0 0 15px #80bfff;
   animation: pulse 3s infinite ease-in-out;
+}
+
+/* ============================
+   响应式适配（新增：专为手机和 PAD 优化）
+   ============================ */
+
+/* 针对手机和平板 (屏幕宽度小于 1024px) */
+@media (max-width: 1024px) {
+  /* 调整所有大标题的默认大小，防止溢出 */
+  h1 { font-size: clamp(32px, 8vw, 64px) !important; }
+  h2 { font-size: clamp(24px, 6vw, 48px) !important; }
+  
+  /* 优化移动端输入框和容器的内边距 */
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* 针对手机 (屏幕宽度小于 768px) */
+@media (max-width: 768px) {
+  /* 打字机效果在手机上稍微调慢，防止闪烁感太强 */
+  .typing-text {
+    font-size: 11px !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  /* 针对 NarrativeText 的行间距在小屏上优化 */
+  .narrative-row {
+    margin-bottom: 1rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* 按钮在手机上全宽显示，方便点击 */
+  .genesis-btn {
+    width: 100% !important;
+    max-width: 320px;
+    padding: 18px 0 !important;
+    letter-spacing: 0.3em !important;
+  }
+}
+
+/* 针对超小屏幕手机 (宽度小于 380px) */
+@media (max-width: 380px) {
+  h2 { font-size: 28px !important; }
 }

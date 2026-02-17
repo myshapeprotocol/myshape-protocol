@@ -21,7 +21,6 @@ export default function JoinWaitlist() {
     setErrorHint("");
 
     try {
-      // 已替换为你的专用加密字符串：e24852dbfcaeee1d6895450fa46367e7
       const response = await fetch("https://formsubmit.co/ajax/e24852dbfcaeee1d6895450fa46367e7", {
         method: "POST",
         headers: { 
@@ -32,8 +31,8 @@ export default function JoinWaitlist() {
           email: email,
           _subject: "Genesis Protocol: New Node Connection",
           message: `Identity Established: ${email}`,
-          _template: "table", // 可选：让收到的邮件格式更漂亮
-          _captcha: "false"   // 因为我们用 AJAX 提交，所以关闭人机验证
+          _template: "table",
+          _captcha: "false"
         })
       });
 
@@ -60,7 +59,7 @@ export default function JoinWaitlist() {
     
     const resize = () => { 
       canvas.width = window.innerWidth; 
-      canvas.height = 800; 
+      canvas.height = window.innerWidth < 768 ? 600 : 800; // 手机端高度稍微收紧
     };
     
     class Particle {
@@ -71,7 +70,9 @@ export default function JoinWaitlist() {
 
       constructor() {
         this.angle = Math.random() * Math.PI * 2;
-        this.radius = Math.random() * 320 + 30;
+        // 手机端漩涡半径缩小，确保在窄屏幕也能看到完整粒子
+        const maxRadius = window.innerWidth < 768 ? window.innerWidth * 0.4 : 320;
+        this.radius = Math.random() * maxRadius + 30;
         this.speed = 0.005 + Math.random() * 0.005;
         this.size = Math.random() * 1.8;
       }
@@ -92,7 +93,9 @@ export default function JoinWaitlist() {
 
     const init = () => { 
       resize(); 
-      particles = Array.from({ length: 200 }, () => new Particle()); 
+      // 性能适配：手机端(小于768px)使用80个粒子，桌面端保持200个
+      const particleCount = window.innerWidth < 768 ? 80 : 200;
+      particles = Array.from({ length: particleCount }, () => new Particle()); 
     };
 
     const render = () => {
@@ -103,7 +106,7 @@ export default function JoinWaitlist() {
 
     init(); 
     render();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', () => { resize(); init(); }); // 屏幕旋转时重新初始化
     return () => { 
       cancelAnimationFrame(animationFrameId); 
       window.removeEventListener('resize', resize); 
@@ -111,19 +114,29 @@ export default function JoinWaitlist() {
   }, [isTyping, status]);
 
   return (
-    <section style={{ padding: '160px 24px 100px', background: 'transparent', position: 'relative', overflow: 'hidden', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <section style={{ 
+      padding: '120px 24px 80px', 
+      background: 'transparent', 
+      position: 'relative', 
+      overflow: 'hidden', 
+      minHeight: '80vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center' 
+    }}>
       {/* 背景漩涡层 */}
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }} />
 
       <div style={{ maxWidth: '800px', width: '100%', position: 'relative', zIndex: 2, textAlign: 'center' }}>
         
         {/* 标题与滚动副标题 */}
-        <div style={{ marginBottom: "80px" }}>
-          <h2 style={{ fontSize: '48px', fontWeight: 200, color: '#f8feff', letterSpacing: '-0.02em', marginBottom: '1.5rem' }}>
+        <div style={{ marginBottom: "60px" }}>
+          {/* 响应式标题字体大小 */}
+          <h2 className="genesis-title" style={{ fontWeight: 200, color: '#f8feff', letterSpacing: '-0.02em', marginBottom: '1.5rem' }}>
              {status === "success" ? "Uplink Confirmed." : "Initialize Genesis."}
           </h2>
           <div style={{ overflow: 'hidden', display: 'inline-block' }}>
-             <p className="typing-text" style={{ color: 'rgba(144, 200, 255, 0.7)', fontSize: '13px', letterSpacing: '0.5em', fontWeight: 300 }}>
+             <p className="typing-text" style={{ color: 'rgba(144, 200, 255, 0.7)', fontSize: '11px', letterSpacing: '0.4em', fontWeight: 300 }}>
                {status === "success" ? "IDENTITY_LAYER_INITIALIZED" : "ESTABLISHING_IDENTITY_LAYER_PROTOCOL"}
              </p>
           </div>
@@ -131,24 +144,24 @@ export default function JoinWaitlist() {
 
         {status === "success" ? (
           <div style={{ animation: 'contentFadeIn 1.5s forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
-            <div style={{ padding: '40px 60px', border: '1px solid rgba(144,200,255,0.3)', background: 'rgba(144,200,255,0.03)', backdropFilter: 'blur(15px)', position: 'relative' }}>
+            <div style={{ padding: '30px 40px', border: '1px solid rgba(144,200,255,0.3)', background: 'rgba(144,200,255,0.03)', backdropFilter: 'blur(15px)', position: 'relative', width: 'fit-content' }}>
                <div className="corner tl" /> <div className="corner tr" />
                <div className="corner bl" /> <div className="corner br" />
                
-               <p style={{ color: '#fff', fontSize: '13px', letterSpacing: '0.3em', lineHeight: '2.5', margin: 0, fontWeight: 300 }}>
+               <p style={{ color: '#fff', fontSize: '11px', letterSpacing: '0.2em', lineHeight: '2.2', margin: 0, fontWeight: 300, textAlign: 'left' }}>
                  NODE_STATUS: <span style={{ color: '#90c8ff' }}>ACTIVE</span> <br/>
                  ENCRYPTION: <span style={{ color: '#90c8ff' }}>RSA_4096_SYNC</span> <br/>
                  WAITLIST: <span style={{ color: '#90c8ff' }}>SEQUENTIAL_ENQUEUED</span>
                </p>
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', fontStyle: 'italic', marginTop: '20px', letterSpacing: '0.1em' }}>
-              "The motion has been captured. Stand by for synchronization."
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontStyle: 'italic', marginTop: '10px', letterSpacing: '0.1em' }}>
+              "The motion has been captured."
             </p>
             <div className="pulse-dot" />
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '50px' }}>
-            <div className={`input-portal ${isTyping ? 'active' : ''}`} style={{ position: 'relative' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '40px', width: '100%' }}>
+            <div className={`input-portal ${isTyping ? 'active' : ''}`} style={{ position: 'relative', width: '100%', maxWidth: '440px' }}>
               <input
                 type="email"
                 required
@@ -158,17 +171,17 @@ export default function JoinWaitlist() {
                 value={email}
                 placeholder="GENESIS_EMAIL@ADDRESS.IO"
                 style={{
-                  padding: '28px 60px', width: '440px', fontSize: '12px', letterSpacing: '0.3em',
+                  padding: '24px 20px', width: '100%', fontSize: '12px', letterSpacing: '0.2em',
                   textAlign: 'center', outline: 'none', color: '#fff',
                   background: 'rgba(255,255,255,0.02)', border: `1px solid ${status === "error" ? '#ff4d4d' : 'rgba(128, 191, 255, 0.3)'}`,
-                  transition: 'all 0.5s ease', backdropFilter: 'blur(5px)'
+                  transition: 'all 0.5s ease', backdropFilter: 'blur(5px)', borderRadius: '0'
                 }}
               />
               <div className="corner tl" /> <div className="corner tr" />
               <div className="corner bl" /> <div className="corner br" />
               
               {status === "error" && (
-                <p style={{ position: 'absolute', bottom: '-35px', left: 0, width: '100%', color: '#ff4d4d', fontSize: '10px', letterSpacing: '0.1em' }}>
+                <p style={{ position: 'absolute', bottom: '-30px', left: 0, width: '100%', color: '#ff4d4d', fontSize: '10px', letterSpacing: '0.1em' }}>
                   {errorHint}
                 </p>
               )}
@@ -186,6 +199,12 @@ export default function JoinWaitlist() {
       </div>
 
       <style jsx>{`
+        .genesis-title { font-size: 48px; }
+        @media (max-width: 768px) {
+          .genesis-title { font-size: 32px; }
+          .genesis-btn { padding: 18px 40px !important; width: 100%; max-width: 440px; }
+        }
+
         .typing-text {
           display: inline-block; border-right: 2px solid #90c8ff;
           white-space: nowrap; overflow: hidden;
@@ -195,7 +214,7 @@ export default function JoinWaitlist() {
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #90c8ff } }
 
         .genesis-btn {
-          padding: 22px 100px; letter-spacing: 0.6em; font-size: 10px;
+          padding: 22px 100px; letter-spacing: 0.5em; font-size: 10px;
           cursor: pointer; border: 1px solid #80bfff; background: transparent;
           color: #80bfff; transition: all 0.6s; position: relative; overflow: hidden;
         }
