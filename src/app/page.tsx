@@ -6,8 +6,8 @@ import Vision from "@/components/vision/Vision";
 import Capabilities from "@/components/capabilities/Capabilities";
 import HowItWorks from "@/components/howitworks/HowItWorks";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
-import ProtocolHeader from "@/components/header/Header"; 
-import ProtocolFooter from "@/components/footer/Footer";
+import ProtocolHeader from "@/components/header/header"; 
+import ProtocolFooter from "@/components/footer/footer";
 
 export default function HomePage() {
   return (
