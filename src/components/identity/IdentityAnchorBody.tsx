@@ -59,22 +59,17 @@ const CoreBeing = ({ scrollEnergyRef, mouseRef }: any) => {
     for (let i = 0; i < count; i++) {
       const spineY = (Math.random() - 0.5) * 1.8;
       const spineStrength = Math.pow(1 - Math.abs(spineY) / 1.8, 2);
-
       const verticalBias = spineY > 0 ? 1.4 : 0.7;
-
       const radial = 0.08 + Math.random() * 0.18 * verticalBias;
       const angle = Math.random() * Math.PI * 2;
-
       const noiseX = Math.cos(angle) * radial * spineStrength;
       const noiseZ = Math.sin(angle) * radial * spineStrength;
-
       const forwardTilt = spineY * 0.18;
 
       positions[i * 3] = noiseX;
       positions[i * 3 + 1] = spineY;
       positions[i * 3 + 2] = noiseZ + forwardTilt;
     }
-
     return positions;
   }, []);
 
@@ -83,7 +78,6 @@ const CoreBeing = ({ scrollEnergyRef, mouseRef }: any) => {
     if (!coreRef.current) return;
 
     const energy = scrollEnergyRef.current;
-
     const pulse =
       1 +
       Math.sin(t * 1.8) * 0.05 * energy +
@@ -110,6 +104,7 @@ const CoreBeing = ({ scrollEnergyRef, mouseRef }: any) => {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
+          args={[coreData, 3]}
           count={coreData.length / 3}
           array={coreData}
           itemSize={3}
@@ -141,20 +136,14 @@ const EnergyFlow = ({ scrollEnergyRef }: any) => {
       const t = i / count;
       const angle = t * Math.PI * 6;
       const radius = 0.6 + t * 0.9 + (Math.random() - 0.5) * 0.15;
-
       const x = Math.cos(angle) * radius + (Math.random() - 0.5) * 0.15;
-      const y =
-        (t - 0.5) * 2.0 +
-        Math.sin(angle * 0.5) * 0.25 +
-        (Math.random() - 0.5) * 0.12;
-      const z =
-        Math.sin(angle) * radius * 0.6 + (Math.random() - 0.5) * 0.4;
+      const y = (t - 0.5) * 2.0 + Math.sin(angle * 0.5) * 0.25 + (Math.random() - 0.5) * 0.12;
+      const z = Math.sin(angle) * radius * 0.6 + (Math.random() - 0.5) * 0.4;
 
       positions[i * 3] = x;
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = z;
     }
-
     return positions;
   }, []);
 
@@ -174,6 +163,7 @@ const EnergyFlow = ({ scrollEnergyRef }: any) => {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
+          args={[flowData, 3]}
           count={flowData.length / 3}
           array={flowData}
           itemSize={3}
@@ -210,7 +200,6 @@ const OuterField = () => {
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = r * Math.cos(phi);
     }
-
     return positions;
   }, []);
 
@@ -226,6 +215,7 @@ const OuterField = () => {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
+          args={[fieldData, 3]}
           count={fieldData.length / 3}
           array={fieldData}
           itemSize={3}
