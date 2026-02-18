@@ -10,9 +10,30 @@ body {
   color: var(--foreground);
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* 核心：防止手机端左右滑动 */
+  overflow-x: hidden; /* 防止手机端左右滑动 */
   font-family: sans-serif;
   width: 100%;
+}
+
+/* ============================
+   NarrativeText 稳定性锁死 (核心修复)
+   ============================ */
+
+/* 强制 Narrative 容器高度，确保 5 行文案时布局稳如磐石 */
+.narrative-container {
+  min-height: 180px !important; 
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+/* 统一每一行的表现，防止打字机动画过程中高度抖动 */
+.narrative-row {
+  height: 1.8em !important;     /* 锁定行高 */
+  margin-bottom: 0.6rem !important;
+  display: flex !important;
+  align-items: center !important;
+  opacity: 1 !important;
 }
 
 /* ============================
@@ -33,7 +54,7 @@ body {
 }
 
 /* ============================
-   你原本的动画（保持不动）
+   核心动画（保持不动）
    ============================ */
 
 @keyframes typing { from { width: 0 } to { width: 100% } }
@@ -41,6 +62,10 @@ body {
 @keyframes pulse {
   0%, 100% { opacity: 0.3; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.5); }
+}
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .typing-text {
@@ -71,10 +96,48 @@ body {
 }
 
 /* ============================
-   响应式适配（新增：专为手机和 PAD 优化）
+   A/B/C 增强样式
    ============================ */
 
-/* 针对所有移动设备 (屏幕宽度小于 1024px) */
+.secret-link {
+  display: inline-block;
+  margin-top: 20px;
+  font-family: monospace;
+  font-size: 10px;
+  color: rgba(144, 200, 255, 0.3);
+  text-decoration: none;
+  letter-spacing: 0.2em;
+  transition: all 0.4s ease;
+  border-bottom: 1px dashed rgba(144, 200, 255, 0.1);
+  cursor: pointer;
+}
+
+.secret-link:hover {
+  color: #90c8ff;
+  border-bottom-color: #90c8ff;
+  text-shadow: 0 0 10px rgba(144, 200, 255, 0.8);
+  transform: translateY(-1px);
+}
+
+.status-box {
+  padding: 24px 30px;
+  border: 1px solid rgba(144, 200, 255, 0.3);
+  background: rgba(144, 200, 255, 0.03);
+  backdrop-filter: blur(15px);
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+  animation: contentFadeIn 1s ease forwards;
+}
+
+.fade-in {
+  animation: contentFadeIn 1s ease forwards;
+}
+
+/* ============================
+   响应式适配
+   ============================ */
+
 @media (max-width: 1024px) {
   h1 { font-size: clamp(32px, 8vw, 64px) !important; }
   h2 { font-size: clamp(24px, 6vw, 48px) !important; }
@@ -84,15 +147,14 @@ body {
     padding-right: 20px !important;
   }
 
-  /* 核心修复：Narrative 卡片容器在移动端转为纵向排列 */
   .narrative-container {
     flex-direction: column !important;
     align-items: center !important;
     gap: 40px !important;
     padding: 40px 0 !important;
+    min-height: auto !important; /* 移动端视情况解除硬高度限制 */
   }
 
-  /* 核心修复：防止卡片内的文字如 "Omni-Presence" 断行 */
   .narrative-card {
     width: 90% !important;
     max-width: 340px;
@@ -102,20 +164,17 @@ body {
 
   .narrative-card h3 {
     font-size: 22px !important;
-    white-space: nowrap !important; /* 强制不换行 */
+    white-space: nowrap !important;
     letter-spacing: 0.1em !important;
   }
 }
 
-/* 针对手机端 (屏幕宽度小于 768px) */
 @media (max-width: 768px) {
-  /* 优化 Waitlist 模块的垂直间距 */
   .waitlist-section {
     padding: 60px 20px !important;
     min-height: 70vh !important;
   }
 
-  /* 标题与副标题间距压缩 */
   .waitlist-header {
     margin-bottom: 40px !important;
   }
@@ -125,7 +184,6 @@ body {
     letter-spacing: 0.2em !important;
   }
 
-  /* 修复：缩小输入框区域，防止溢出 */
   .input-portal {
     width: 100% !important;
     max-width: 320px !important;
@@ -136,7 +194,6 @@ body {
     font-size: 11px !important;
   }
 
-  /* 按钮适配 */
   .genesis-btn {
     width: 100% !important;
     max-width: 320px !important;
@@ -144,15 +201,20 @@ body {
     letter-spacing: 0.3em !important;
   }
 
-  /* 针对 NarrativeText 的行间距优化 */
+  /* 移动端行高微调，保持 5 行稳定 */
   .narrative-row {
-    margin-bottom: 0.8rem !important;
-    line-height: 1.5 !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.4 !important;
     font-size: 13px !important;
+    height: auto !important;
+  }
+
+  .status-box {
+    padding: 18px 20px !important;
+    width: 90% !important;
   }
 }
 
-/* 针对极窄屏幕手机 */
 @media (max-width: 380px) {
   h2 { font-size: 26px !important; }
   .narrative-card h3 { font-size: 18px !important; }

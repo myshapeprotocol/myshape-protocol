@@ -52,14 +52,17 @@ export default function Hero() {
       {/* 粒子视觉层（背景） */}
       <HeroVisual showCore={true} />
 
-      {/* 顶部标题 */}
-      <div className="absolute top-0 left-0 w-full z-[5000] pointer-events-none text-center pt-[8vh] px-6">
-        <h1 className="text-[1.8rem] md:text-[2.6rem] font-extralight tracking-[0.35em] uppercase text-white/90">
-          MYSHAPE PROTOCOL
+      {/* ⭐ 仅修改此处的文案、字号与位置 (上移并缩小) */}
+      <div className="absolute top-[14vh] left-0 w-full z-[5000] pointer-events-none text-center px-6">
+        <h1 
+          className="text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
+          style={{ letterSpacing: '0.8em', textIndent: '0.8em' }}
+        >
+          THE SOVEREIGN IDENTITY LAYER
         </h1>
 
-        <p className="mt-4 text-[12px] md:text-[14px] tracking-[0.25em] text-blue-300/60 uppercase">
-          The Sovereign 3D Identity Layer for the Decentralized Human.
+        <p className="mt-5 text-[10px] md:text-[11px] tracking-[0.4em] text-blue-300/40 uppercase font-mono">
+          The Decentralized 3D Identity Standard
         </p>
       </div>
 
