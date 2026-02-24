@@ -1,7 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-export default function JoinWaitlist() {
+// 定义组件 Props 类型，修复 IntrinsicAttributes 报错
+interface JoinWaitlistProps {
+  onEmailChange?: (email: string) => void;
+}
+
+export default function JoinWaitlist({ onEmailChange }: JoinWaitlistProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
@@ -30,7 +35,6 @@ export default function JoinWaitlist() {
   }, []);
 
   const playProtocolSound = (isSuccess: boolean) => {
-    // 成功：向上的双音阶；失败：沉闷的降调
     if (isSuccess) {
       playSound(880, 'triangle', 0.4, 0.05);
       setTimeout(() => playSound(1320, 'triangle', 0.6, 0.03), 100);
@@ -41,8 +45,14 @@ export default function JoinWaitlist() {
 
   const handleTyping = (val: string) => {
     setEmail(val);
+    
+    // 关键修复：同步到父组件 (page.tsx)
+    if (onEmailChange) {
+      onEmailChange(val);
+    }
+
     if(status === "error") setStatus("idle");
-    // 输入时的微弱电传感 (1200Hz - 1600Hz 随机)
+    // 输入时的微弱电传感
     playSound(1200 + Math.random() * 400, 'sine', 0.05, 0.01);
   };
 
@@ -58,7 +68,7 @@ export default function JoinWaitlist() {
 
     setStatus("submitting");
     setErrorHint("");
-    playSound(440, 'sine', 0.1, 0.02); // 提交动作音
+    playSound(440, 'sine', 0.1, 0.02);
 
     try {
       const response = await fetch("https://formsubmit.co/ajax/e24852dbfcaeee1d6895450fa46367e7", {
@@ -71,7 +81,6 @@ export default function JoinWaitlist() {
         const hash = email.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
         const uniqueHue = 190 + (hash % 60); 
         setNodeColor(`hsla(${uniqueHue}, 100%, 75%, 0.8)`);
-        
         setStatus("success");
         playProtocolSound(true); 
       } else {
@@ -114,7 +123,6 @@ export default function JoinWaitlist() {
         if (isTyping) currentSpeed *= 2.5;
 
         p.angle += currentSpeed;
-        
         const x = canvas.width / 2 + Math.cos(p.angle) * p.radius;
         const y = canvas.height / 2 + Math.sin(p.angle) * p.radius;
         
