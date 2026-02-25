@@ -2,22 +2,30 @@ import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// 关键修正 1：增加防御性判断，防止 Build 时因为缺少 Key 而崩溃
+const resendKey = process.env.RESEND_API_KEY || 're_dummy_key_for_build';
+const resend = new Resend(resendKey);
 
-export async function POST(req: Request) { // 保持这里为 req
+// 关键修正 2：确保 Supabase 变量在没有环境变量时也不会导致运行时 Crash
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function POST(req: Request) {
   try {
-    // 关键修正：确保变量名与上面定义的 req 一致
+    // 检查环境变量是否真实存在（生产环境下）
+    if (!process.env.RESEND_API_KEY || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      throw new Error("SERVER_CONFIGURATION_INCOMPLETE");
+    }
+
     const { email } = await req.json(); 
     
     // 1. 生成 6 位随机验证码
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // 2. 将邮箱和验证码存入 Supabase
-    // 这里的 upsert 会自动处理：如果邮箱存在则更新 otp_code，不存在则插入新行
+    // 使用 upsert，如果 email 存在则更新，不存在则插入
     const { error: dbError } = await supabase
       .from('protocol_nodes')
       .upsert({ 
@@ -29,9 +37,9 @@ export async function POST(req: Request) { // 保持这里为 req
     if (dbError) throw dbError;
 
     // 3. 发送黑客风格的验证邮件
-    await resend.emails.send({
-      // 提示：在你的 DNS 记录变为 Verified 之前，这里可能需要先用 onboarding@resend.dev 测试
-      from: 'MyShape Protocol <system@myshape.com>',
+    // 注意：如果你的域名没在 Resend 验证通过，这里必须使用 onboarding@resend.dev
+    const { error: emailError } = await resend.emails.send({
+      from: 'MyShape Protocol <onboarding@resend.dev>', // 建议先用这个测试，验证通过后再改
       to: email,
       subject: 'ACTION_REQUIRED: IDENTITY_CHALLENGE',
       html: `
@@ -48,9 +56,14 @@ export async function POST(req: Request) { // 保持这里为 req
       `,
     });
 
+    if (emailError) throw emailError;
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('API_ERROR:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'INTERNAL_SERVER_ERROR' }, 
+      { status: 500 }
+    );
   }
 }
