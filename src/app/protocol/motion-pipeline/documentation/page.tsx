@@ -9,8 +9,8 @@ const techSections = [
     title: 'Kinetic Ingestion', 
     subtitle: 'CORE_API // SENSOR_LAYER', 
     content: [
-      "The pipeline begins with high-frequency kinetic capture. Local visual sensors (RGB-D or standard CMOS) stream raw skeletal frames at 60-120Hz. Crucially, the image data is never written to disk; it exists only in volatile memory for the duration of vector extraction.",
-      "The ingestion layer utilizes a lightweight pose estimation model optimized for edge devices (NPU/GPU). It identifies 24 key skeletal joints, converting visual pixels into a raw coordinate matrix: 24 nodes across 3D space."
+      "The pipeline begins with high-frequency kinetic capture. Local visual sensors stream raw skeletal frames at 60-120Hz. Image data exists only in volatile memory for the duration of vector extraction.",
+      "The ingestion layer utilizes a lightweight pose estimation model identifying 24 key skeletal joints, converting visual pixels into a raw coordinate matrix."
     ]
   },
   { 
@@ -18,26 +18,34 @@ const techSections = [
     title: 'Vector Anonymization', 
     subtitle: 'ENGINE // GEOMETRIC_REDUCTION', 
     content: [
-      "To ensure sovereignty, raw coordinates must be stripped of absolute spatial markers (height, limb length, environmental position). The Geometry Engine calculates relative joint angles and micro-acceleration vectors.",
-      "This process creates an 'Identity Seed'—a normalized geometric signature that retains the rhythm of motion while discarding the biological markers that could be used for facial or bodily reconstruction. The output is a pure behavior vector."
+      "To ensure sovereignty, raw coordinates are stripped of absolute spatial markers. The Geometry Engine calculates relative joint angles and micro-acceleration vectors.",
+      "This creates an 'Identity Seed'—a normalized geometric signature that retains the rhythm of motion while discarding biological markers. The output is a pure behavior vector."
     ]
   },
   { 
     id: '03', 
-    title: 'ZK-SNARK Integration', 
-    subtitle: 'SECURITY // PROOF_GEN', 
+    title: 'Visual Protocol V1.0', 
+    subtitle: 'SPECIFICATION // DATA_BODY_PRIMITIVE', 
+    isProtocol: true, // 特殊標記，渲染為代碼塊
     content: [
-      "The behavior vector is fed into a Zero-Knowledge circuit. This circuit proves two things: 1. The signal originates from a living human (via micro-variation analysis). 2. The signal matches a pre-registered identity template.",
-      "The system generates a succinct proof that is less than 1KB in size. This proof allows a third-party application to verify the user's presence and identity without ever seeing the motion data itself. Privacy is mathematically guaranteed."
+      "GENESIS_VISUAL_PROTOCOL_V1.0",
+      "TYPE: DATA-BODY_PRIMITIVE | STATUS: ACTIVE",
+      "------------------------------------------",
+      "2.1 // PARTICLE_LAYER: 800–1500 count | #A8E4FF | Perlin float 0.8s",
+      "2.2 // ENERGY_LAYER: Kinematic Signature | Direction: Foot → Head",
+      "2.3 // GEOMETRY_LAYER: CIRCLE(chest), TRIANGLE(pelvis), SPIRAL(spine)",
+      "2.4 // HALO_SCAN: 8–12px width | 1.2s cycle | Decay 0.3s",
+      "------------------------------------------",
+      "STATE_MACHINE: IDLE / SCAN / BINDING / ACTIVATION"
     ]
   },
   { 
     id: '04', 
-    title: 'Protocol Projection', 
-    subtitle: 'NETWORK // NODE_MINT', 
+    title: 'ZK-SNARK Integration', 
+    subtitle: 'SECURITY // PROOF_GEN', 
     content: [
-      "Verified proofs are broadcast to the MyShape Identity Layer. This is not a centralized database, but a distributed state machine. The proof acts as a 'temporary key,' granting access to 3D environments, dApps, or agents.",
-      "The projection is ephemeral. Once the motion stream stops, the identity node enters a 'Silent State,' leaving no residual data footprint in the cloud. You exist only as long as you move."
+      "The behavior vector is fed into a Zero-Knowledge circuit. It proves the signal originates from a living human and matches a registered template without revealing raw data.",
+      "The system generates a succinct proof (<1KB), allowing verification without surveillance. Privacy is mathematically guaranteed."
     ]
   }
 ];
@@ -49,7 +57,6 @@ export default function TechDocPage() {
            style={{ backgroundImage: `linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
 
       <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/80 backdrop-blur-md px-10 py-5 flex justify-between items-center text-[10px] tracking-[0.4em]">
-        {/* 注意這裡的返回路徑已從 /protocol-core 改為 /protocol */}
         <Link href="/protocol/motion-pipeline" className="text-cyan-400/40 hover:text-cyan-400 transition-colors uppercase">← EXIT_TECH_STACK</Link>
         <div className="text-white/20 uppercase font-bold tracking-[0.5em]">TECHNICAL_SPECIFICATION // V0.8.1_CORE</div>
       </nav>
@@ -62,9 +69,7 @@ export default function TechDocPage() {
               <li key={s.id} className="group">
                 <a href={`#${s.id}`} className="block">
                   <div className="text-[10px] text-white/10 group-hover:text-cyan-400 transition-colors duration-300 mb-1 font-bold">{s.id}</div>
-                  <div className="text-[11px] uppercase tracking-[0.2em] text-white/20 group-hover:text-cyan-400 transition-all duration-300">
-                    {s.title}
-                  </div>
+                  <div className="text-[11px] uppercase tracking-[0.2em] text-white/20 group-hover:text-cyan-400 transition-all duration-300">{s.title}</div>
                 </a>
               </li>
             ))}
@@ -79,15 +84,25 @@ export default function TechDocPage() {
                 <div className="h-[1px] flex-1 bg-white/10 group-hover:bg-cyan-500/30 transition-all duration-700" />
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-white mb-16 uppercase transition-all duration-700 group-hover:text-[#4fd1ed] group-hover:drop-shadow-[0_0_20px_rgba(79,209,237,0.4)]">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-white mb-16 uppercase transition-all duration-700 group-hover:text-[#4fd1ed]">
                 {s.title}
               </h2>
 
-              <div className="space-y-12 text-white/50 text-[17px] leading-[1.85] font-light text-justify font-mono opacity-80 group-hover:opacity-100 transition-all duration-700">
-                {s.content.map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-              </div>
+              {/* 判斷是否為協議代碼塊 */}
+              {s.isProtocol ? (
+                <div className="bg-cyan-500/[0.03] border border-cyan-500/20 p-8 font-mono text-[13px] leading-loose text-cyan-400/80 space-y-2 relative overflow-hidden shadow-[inset_0_0_40px_rgba(6,182,212,0.05)]">
+                   <div className="absolute top-0 right-0 p-4 opacity-20 text-[8px]">SPEC_V1.0</div>
+                   {s.content.map((line, i) => (
+                     <div key={i} className="whitespace-pre-wrap">{line}</div>
+                   ))}
+                </div>
+              ) : (
+                <div className="space-y-12 text-white/50 text-[17px] leading-[1.85] font-light text-justify">
+                  {s.content.map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+              )}
             </section>
           ))}
 
