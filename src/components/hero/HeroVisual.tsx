@@ -55,10 +55,10 @@ export default function HeroVisual({ showCore = true }: { showCore?: boolean }) 
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const cx = canvas.width / 2;
-      // 关键改动：将 Y 轴重心下移到 65% 的位置，留出顶部呼吸感
+      // 严格执行：核心粒子团垂直中心锁定在 height * 0.65，subject in the lower half of frame
       const cy = canvas.height * 0.65; 
 
-      // 1. 星空绘制：锁定速度 0.008
+      // 1. 星空绘制：锁定速度 0.008，背景星空保持正中（不随粒子团下沉）
       stars.forEach(s => {
         s.z -= 0.008; 
         if (s.z <= 0) s.z = 2;
@@ -91,7 +91,8 @@ export default function HeroVisual({ showCore = true }: { showCore?: boolean }) 
         }
 
         ctx.save();
-        ctx.translate(cx, cy); // 粒子团下沉
+        // 核心粒子团严格锁定在 height * 0.65 位置
+        ctx.translate(cx, cy);
         coreParticles.forEach(p => {
           p.angle += p.speed;
           const modRadius = p.radius * resMod * pulseMod;
