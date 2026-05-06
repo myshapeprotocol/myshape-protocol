@@ -82,7 +82,7 @@ export default function HomePage() {
     <>
       <ProtocolHeader />
       
-      {/* 🔹 悬浮 HUD 监控层 - 保持 z-[999] 确保在最顶层 🔹 */}
+      {/* 🔹 悬浮 HUD 监控层 - 锁定 z-[999] 确保在最顶层，pointer-events-none 不干扰交互 🔹 */}
       <div className="fixed inset-0 z-[999] pointer-events-none">
         <div className="absolute top-10 right-10 pointer-events-auto">
           <div className="flex items-center gap-2">
