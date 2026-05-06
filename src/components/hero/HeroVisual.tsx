@@ -55,8 +55,8 @@ export default function HeroVisual({ showCore = true }: { showCore?: boolean }) 
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const cx = canvas.width / 2;
-      // 严格执行：核心粒子团垂直中心锁定在 height * 0.7，subject in the lower half of frame
-      const cy = canvas.height * 0.7; 
+      // 严格执行：核心粒子团垂直中心锁定在 height * 0.75，确保位于页面下半部分，避开顶部文字
+      const cy = canvas.height * 0.75; 
 
       // 1. 星空绘制：锁定速度 0.008，背景星空保持正中（不随粒子团下沉）
       stars.forEach(s => {
