@@ -17,23 +17,17 @@ export default function ProtocolFooter() {
     if (!email) return;
     setStatus("SENDING");
     try {
-      const response = await fetch("/api/send-otp", {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email: email.trim() }),
       });
-      if (response.ok) {
-        setStatus("SUCCESS");
-        setEmail("");
-        setTimeout(() => setStatus("IDLE"), 3000);
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Subscription error:", errorData);
-        setStatus("ERROR");
-        setTimeout(() => setStatus("IDLE"), 3000);
-      }
-    } catch (error) {
-      console.error("Network error during subscription:", error);
+      const data = await res.json();
+      if (!res.ok && !data.alreadySubscribed) throw new Error(data.error || "SUBSCRIBE_FAILED");
+      setStatus("SUCCESS");
+      setEmail("");
+      setTimeout(() => setStatus("IDLE"), 3000);
+    } catch {
       setStatus("ERROR");
       setTimeout(() => setStatus("IDLE"), 3000);
     }
@@ -51,13 +45,13 @@ export default function ProtocolFooter() {
       ] 
     },
     { 
-      title: "CIV_LAYER", 
+      title: "CIV_LAYER",
       links: [
-        { name: "GENESIS_ORIGIN", href: "/civ-layer/genesis" }, 
+        { name: "GENESIS_ORIGIN", href: "/civ-layer/genesis" },
         { name: "VISION_ARCHIVE", href: "/civ-layer/vision" },
         { name: "TECHNICAL_PAPERS", href: "/civ-layer/papers" },
         { name: "PUBLICATION_HALL", href: "/civ-layer/publication" }
-      ] 
+      ]
     },
     { 
       title: "SYS_COMPANY", 
@@ -70,15 +64,16 @@ export default function ProtocolFooter() {
     { 
       title: "CONNECT_NODES", 
       links: [
-		{ name: "X_PROTOCOL", href: "https://x.com" },
-		{ name: "LINKED_IN", href: "#" },
+		{ name: "X_PROTOCOL", href: "https://x.com/myshapeprotocol" },
+		{ name: "LINKED_IN", href: "https://www.linkedin.com/company/111557251/" },
+			{ name: "GITHUB", href: "https://github.com/myshapeprotocol" },
       ] 
     }
   ];
 
   return (
-    <footer className="relative z-10 w-full bg-transparent font-mono pt-32 pb-20">
-      <div className="max-w-6xl mx-auto px-10 grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-12">
+    <footer className="relative z-10 w-full bg-transparent font-mono pt-20 md:pt-32 pb-12 md:pb-20">
+      <div className="max-w-6xl mx-auto px-4 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-y-12 md:gap-y-16 gap-x-4 md:gap-x-12">
         {navGroups.map((group) => (
           <div key={group.title} className="flex justify-start md:justify-center"> 
             <div className="flex flex-col items-start min-w-[160px]">
@@ -107,25 +102,36 @@ export default function ProtocolFooter() {
       </div>
 
       {/* 2. 狀態條 & 訂閱區 */}
-      <div className="max-w-6xl mx-auto px-10 border-t border-white/5 pt-12 mt-28">
+      <div className="max-w-6xl mx-auto px-4 md:px-10 border-t border-white/5 pt-8 md:pt-12 mt-16 md:mt-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 text-cyan-500/80 text-[9px] tracking-[0.3em] uppercase font-bold">
+            <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_10px_#22d3ee]" />
-              <span>SYS_ID: MS_PROT_2026</span>
-              <span className="text-white/20">|</span>
-              <span>SECURED: RSA_4096</span>
+              <span className="text-cyan-400/70 text-[9px] tracking-[0.3em] uppercase font-mono font-bold">
+                PROTOCOL_CORE_V2.0
+              </span>
+              <span className="text-white/15">|</span>
+              <span className="text-white/30 text-[9px] tracking-[0.25em] uppercase font-mono">
+                ZK_VERIFIED
+              </span>
             </div>
-            <p className="text-[8px] text-white/40 tracking-[0.2em] leading-relaxed max-w-sm uppercase">
-              DECENTRALIZED MOTION PROTOCOL LAYER. <br />
-              ENCRYPTED DATA TRANSMISSION ACTIVE.
-            </p>
+            <div className="space-y-1.5">
+              <p className="text-[8px] text-white/35 tracking-[0.2em] leading-relaxed uppercase font-mono">
+                SOVEREIGN 3D IDENTITY LAYER
+              </p>
+              <p className="text-[7px] text-white/15 tracking-[0.25em] leading-relaxed uppercase font-mono">
+                AI-NATIVE • ZERO-KNOWLEDGE • MOTION-VERIFIED
+              </p>
+            </div>
           </div>
 
           <div className="flex flex-col items-start md:items-end">
             <div className="flex items-center gap-2 mb-4">
                <span className="text-[9px] text-white/40 tracking-[0.4em] uppercase font-bold">
-                {status === "SUCCESS" ? "✓ UPLINK_ESTABLISHED" : "SIGNAL_SUBSCRIPTION"}
+                {status === "SENDING" ? "⋯ TRANSMITTING" :
+                 status === "SUCCESS" ? "✓ UPLINK_ESTABLISHED" :
+                 status === "ERROR" ? "✗ TRANSMISSION_FAILED" :
+                 "SIGNAL_SUBSCRIPTION"}
               </span>
             </div>
             <form onSubmit={handleSubscribe} className="relative w-full max-w-[320px] group">
@@ -143,10 +149,19 @@ export default function ProtocolFooter() {
                 className="absolute right-0 bottom-3 text-[9px] font-normal text-cyan-500/25 hover:text-cyan-400/60 transition-all tracking-[0.2em]"
               >
                 {status === "IDLE" && "[ CONNECT ]"}
+                {status === "SENDING" && "[ ... ]"}
+                {status === "SUCCESS" && "[ ✓ ]"}
+                {status === "ERROR" && "[ ✗ ]"}
               </button>
             </form>
           </div>
         </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 md:px-10 mt-16 pt-6 border-t border-white/5 text-center">
+        <span className="text-[7px] text-white/15 tracking-[0.3em] uppercase font-mono">
+          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL. ALL RIGHTS RESERVED.
+        </span>
       </div>
     </footer>
   );

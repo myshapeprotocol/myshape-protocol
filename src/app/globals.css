@@ -1,72 +1,48 @@
 @import "tailwindcss";
 
+/* ============================================================
+   MyShape Protocol — Global Styles
+   - @keyframes 统一定义在 @/styles/animations.css
+   - 本文件仅保留全局重置 + CSS 变量 + 通用工具类
+   ============================================================ */
+
 :root {
   --background: #02040a;
   --foreground: #ededed;
 }
 
 body {
-  background: var(--background) !important;
+  background: var(--background);
   color: var(--foreground);
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* 防止手机端左右滑动 */
+  overflow-x: hidden;
   font-family: sans-serif;
   width: 100%;
 }
 
 /* ============================
-   NarrativeText 稳定性锁死 (核心修复)
+   NarrativeText 容器稳定性
    ============================ */
 
-/* 强制 Narrative 容器高度，确保 5 行文案时布局稳如磐石 */
 .narrative-container {
-  min-height: 180px !important; 
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* 统一每一行的表现，防止打字机动画过程中高度抖动 */
 .narrative-row {
-  height: 1.8em !important;     /* 锁定行高 */
-  margin-bottom: 0.6rem !important;
-  display: flex !important;
-  align-items: center !important;
-  opacity: 1 !important;
+  height: 1.8em;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  opacity: 1;
 }
 
 /* ============================
-   NarrativeText 必须的动画
+   通用工具类
    ============================ */
-
-/* 字符淡入闪烁 */
-@keyframes flash {
-  0% { opacity: 0; transform: translateY(2px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* 行级漂浮 */
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
-}
-
-/* ============================
-   核心动画（保持不动）
-   ============================ */
-
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes scan { from { left: -100% } to { left: 100% } }
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.5); }
-}
-@keyframes contentFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 
 .typing-text {
   display: inline-block;
@@ -135,118 +111,114 @@ body {
 }
 
 /* ============================
-   响应式适配 (重点优化区)
+   响应式适配
+   @keyframes 引用保留（定义在 animations.css）
    ============================ */
 
 @media (max-width: 1024px) {
-  h1 { font-size: clamp(32px, 8vw, 64px) !important; }
-  h2 { font-size: clamp(24px, 6vw, 48px) !important; }
-  
+  h1 { font-size: clamp(32px, 8vw, 64px); }
+  h2 { font-size: clamp(24px, 6vw, 48px); }
+
   section {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .narrative-container {
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 40px !important;
-    padding: 40px 0 !important;
-    min-height: auto !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 0;
+    min-height: auto;
   }
 
   .narrative-card {
-    width: 90% !important;
+    width: 90%;
     max-width: 340px;
-    min-height: auto !important;
-    padding: 30px 20px !important;
+    min-height: auto;
+    padding: 30px 20px;
   }
 
   .narrative-card h3 {
-    font-size: 22px !important;
-    white-space: nowrap !important;
-    letter-spacing: 0.1em !important;
+    font-size: 22px;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
   }
 }
 
 @media (max-width: 768px) {
-  /* 修复手机端标题过大导致重叠的问题 */
-  h1 { 
-    font-size: 28px !important; 
-    line-height: 1.2 !important; 
-    letter-spacing: 0.1em !important;
+  h1 {
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
   }
-  h2 { 
-    font-size: 24px !important; 
-    line-height: 1.3 !important;
+  h2 {
+    font-size: 24px;
+    line-height: 1.3;
   }
 
-  /* 解决 Hero 章节在手机端高度过窄的问题 */
   .hero-section {
-    padding-top: 100px !important;
-    padding-bottom: 60px !important;
-    min-height: auto !important;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    min-height: auto;
   }
 
   .waitlist-section {
-    padding: 60px 20px !important;
-    min-height: 70vh !important;
+    padding: 60px 20px;
+    min-height: 70vh;
   }
 
   .waitlist-header {
-    margin-bottom: 40px !important;
+    margin-bottom: 40px;
   }
 
-  /* 缩小打字机文字，防止在窄屏上断行过长 */
   .typing-text {
-    font-size: 9px !important;
-    letter-spacing: 0.15em !important;
+    font-size: 9px;
+    letter-spacing: 0.15em;
     max-width: 90vw;
   }
 
   .input-portal {
-    width: 100% !important;
-    max-width: 300px !important;
+    width: 100%;
+    max-width: 300px;
   }
 
   .input-portal input {
-    padding: 16px !important;
-    font-size: 11px !important;
+    padding: 16px;
+    font-size: 11px;
   }
 
   .genesis-btn {
-    width: 100% !important;
-    max-width: 300px !important;
-    padding: 16px 0 !important;
-    letter-spacing: 0.2em !important;
+    width: 100%;
+    max-width: 300px;
+    padding: 16px 0;
+    letter-spacing: 0.2em;
   }
 
-  /* 手机端行高微调，增加呼吸感 */
   .narrative-row {
-    margin-bottom: 0.8rem !important;
-    line-height: 1.5 !important;
-    font-size: 14px !important;
-    height: auto !important;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    font-size: 14px;
+    height: auto;
     text-align: center;
     justify-content: center;
   }
 
   .status-box {
-    padding: 15px 15px !important;
-    width: 95% !important;
-    font-size: 12px !important;
+    padding: 15px 15px;
+    width: 95%;
+    font-size: 12px;
   }
 
-  /* 强制 Capabilities 卡片在移动端纵向平铺，防止挤扁 */
   .capabilities-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 }
 
 @media (max-width: 380px) {
-  h1 { font-size: 24px !important; }
-  h2 { font-size: 22px !important; }
-  .narrative-card h3 { font-size: 18px !important; }
+  h1 { font-size: 24px; }
+  h2 { font-size: 22px; }
+  .narrative-card h3 { font-size: 18px; }
 }

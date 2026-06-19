@@ -1,26 +1,66 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import "./joinwaitlist.css";
 
 export default function JoinWaitlist({ id }: { id?: string }) {
+  const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [isRitual, setIsRitual] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const [isCollapsing, setIsCollapsing] = useState(false);
-  const collapseStartRef = useRef(0);
-  const isHoveringRef = useRef(false);
-  const isCollapsingRef = useRef(false);
-  const currentSpeedRef = useRef(1);
-  isHoveringRef.current = isHovering;
-  isCollapsingRef.current = isCollapsing;
+  const [ritualText, setRitualText] = useState("");
 
-  const handleEstablishConnection = () => {
-    if (isCollapsing) return;
-    setIsCollapsing(true);
-    collapseStartRef.current = Date.now();
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent("protocol:open-wallet"));
-      setIsCollapsing(false);
-    }, 1000);
+  // 全局 AudioContext 单例 — 避免每次调用创建新实例（浏览器限制 ~6 个）
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const getAudioContext = useCallback(() => {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+    }
+    return audioCtxRef.current;
+  }, []);
+
+  const playSound = useCallback(
+    (
+      freq: number,
+      type: OscillatorType = "sine",
+      duration: number = 0.1,
+      vol: number = 0.02
+    ) => {
+      if (typeof window === "undefined") return;
+      try {
+        const audioCtx = getAudioContext();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+          0.00001,
+          audioCtx.currentTime + duration
+        );
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    },
+    [getAudioContext]
+  );
+
+  const handleCommence = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // 进入仪式态：UI 渐隐 + 粒子开始坍塌
+    setIsRitual(true);
+    setRitualText("INITIALIZING_GENESIS_SEQUENCE...");
+    playSound(60, "sawtooth", 0.8, 0.1);
+
+    // 让坍塌动画完整演完（与你 Identity 粒子坍塌时长对齐：3200ms 左右）
+    await new Promise((r) => setTimeout(r, 3200));
+
+    // 跳转到 Genesis 流程（与首页 ENTER_GENESIS 统一）
+    window.dispatchEvent(new CustomEvent("pt:navigate", { detail: { href: "/genesis" } }));
   };
 
   useEffect(() => {
@@ -34,67 +74,42 @@ export default function JoinWaitlist({ id }: { id?: string }) {
     const init = () => {
       canvas.width = window.innerWidth;
       canvas.height = 800;
-      const count = window.innerWidth < 768 ? 80 : 220;
-      particles = Array.from({ length: count }, () => {
-        const radius = 20 + Math.random() * (window.innerWidth < 768 ? 250 : 380);
-        const speedGradient = 1 / (radius / 300 + 0.25);
-        return {
-          angle: Math.random() * Math.PI * 2,
-          radius,
-          baseRadius: radius,
-          speed: (0.0035 + Math.random() * 0.001) * speedGradient,
-          size: 0.5 + Math.random() * 1.5,
-          y: (Math.random() - 0.5) * 80,
-        };
-      });
+      const count = window.innerWidth < 768 ? 60 : 180;
+      particles = Array.from({ length: count }, () => ({
+        angle: Math.random() * Math.PI * 2,
+        radius:
+          Math.random() *
+            (window.innerWidth < 768 ? window.innerWidth * 0.35 : 320) +
+          20,
+        speed: 0.005 + Math.random() * 0.005,
+        size: Math.random() * 1.5,
+      }));
     };
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-
-      const isColl = isCollapsingRef.current;
-      const isHov = isHoveringRef.current;
-      const collapseElapsed = isColl ? (Date.now() - collapseStartRef.current) / 1000 : 0;
-      const collapseT = Math.min(collapseElapsed, 1);
-
-      const targetSpeed = isHov ? 2.5 : 1;
-      currentSpeedRef.current += (targetSpeed - currentSpeedRef.current) * 0.04;
-      const speedMult = currentSpeedRef.current;
-
-      ctx.globalCompositeOperation = 'lighter';
-
       particles.forEach((p) => {
-        if (isColl) {
-          p.radius *= 0.85 + 0.1 * collapseT;
-          p.angle += p.speed * 10;
-          p.radius += (p.baseRadius - p.radius) * 0.02;
-        } else {
-          p.angle += p.speed * speedMult;
-          p.radius += (p.baseRadius - p.radius) * 0.008;
+        let currentSpeed = p.speed;
+
+        if (isRitual) {
+          p.radius *= 0.95; // 向中心收缩
+          currentSpeed *= 20; // 旋转加速
+        } else if (isHovering) {
+          currentSpeed *= 5;
         }
 
-        const x = Math.cos(p.angle) * p.radius;
-        const y = Math.sin(p.angle) * p.radius;
+        p.angle += currentSpeed;
+        const x = canvas.width / 2 + Math.cos(p.angle) * p.radius;
+        const y = canvas.height / 2 + Math.sin(p.angle) * p.radius;
 
-        const size = isColl ? Math.max(0.1, p.size * (p.radius / Math.max(1, p.baseRadius))) : p.size;
-        const starSize = size * 0.7;
+        ctx.fillStyle = isRitual
+          ? `rgba(255, 255, 255, ${p.radius / 150})`
+          : "rgba(144, 200, 255, 0.4)";
 
-        const alpha = isColl
-          ? Math.min(p.radius / Math.max(1, p.baseRadius), 1) * 0.5
-          : 0.12 + 0.25 * (1 - p.radius / 500);
-
-        ctx.shadowColor = '#00f2ff';
-        ctx.shadowBlur = 2;
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(alpha * 2.5, 1)})`;
         ctx.beginPath();
-        ctx.arc(x, y, starSize * 0.35, 0, Math.PI * 2);
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
       });
-
-      ctx.restore();
       animationFrameId = requestAnimationFrame(render);
     };
 
@@ -105,12 +120,11 @@ export default function JoinWaitlist({ id }: { id?: string }) {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", init);
     };
-  }, []);
+  }, [isRitual, isHovering]);
 
   return (
     <section
       id={id}
-      ref={sectionRef}
       className="waitlist-section"
       style={{
         padding: "100px 24px",
@@ -120,9 +134,37 @@ export default function JoinWaitlist({ id }: { id?: string }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        pointerEvents: "none",
       }}
     >
+      {/* 仪式态：文字浮在坍塌粒子上方 */}
+      {isRitual && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 100,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            className="ritual-text"
+            style={{
+              color: "#fff",
+              fontFamily: "monospace",
+              fontSize: "11px",
+              letterSpacing: "0.8em",
+              textShadow: "0 0 10px #fff",
+            }}
+          >
+            {ritualText}
+          </div>
+        </div>
+      )}
+
       <canvas
         ref={canvasRef}
         style={{
@@ -133,6 +175,7 @@ export default function JoinWaitlist({ id }: { id?: string }) {
         }}
       />
 
+      {/* 原有 UI：在仪式态时整体淡出 */}
       <div
         style={{
           maxWidth: "800px",
@@ -140,27 +183,18 @@ export default function JoinWaitlist({ id }: { id?: string }) {
           position: "relative",
           zIndex: 2,
           textAlign: "center",
-          opacity: isCollapsing ? 0 : 1,
+          opacity: isRitual ? 0 : 1,
           transition: "opacity 0.8s ease",
-          pointerEvents: "none",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-            marginBottom: "50px",
-          }}
-        >
+        <div className="waitlist-header" style={{ marginBottom: "50px" }}>
           <h2
             style={{
               fontWeight: 200,
               color: "#f8feff",
               letterSpacing: "-0.02em",
               marginBottom: "1.2rem",
-              fontSize: "3.2rem",
+              fontSize: "clamp(2rem, 5vw, 3.2rem)",
             }}
           >
             Initialize Genesis.
@@ -170,121 +204,38 @@ export default function JoinWaitlist({ id }: { id?: string }) {
           </div>
         </div>
 
-        <div style={{ pointerEvents: "auto", display: "inline-block" }}>
+        <form
+          onSubmit={handleCommence}
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
           <button
-            onClick={handleEstablishConnection}
+            type="submit"
+            className="genesis-btn"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            className="establish-connection group"
           >
-            <span className="btn-border" />
-            <span className="btn-streak" />
-            <span className="btn-text">[ ESTABLISH _ CONNECTION ]</span>
+            {/* 边框流光 */}
+            <span className="btn-border-glow" />
+            {/* 表面扫光 */}
+            <span className="btn-sweep" />
+            {/* 四角呼吸点 */}
+            <span className="btn-corner-tl" />
+            <span className="btn-corner-tr" />
+            <span className="btn-corner-bl" />
+            <span className="btn-corner-br" />
+            {/* hover 光环 */}
+            <span className="halo-scan" />
+            <span className="halo-ring" />
+            <span className="btn-text">[ INITIALIZE_IDENTITY_LAYER ]</span>
           </button>
-        </div>
+        </form>
       </div>
 
-      <style>{`
-        .typing-container {
-          display: inline-block;
-          position: relative;
-        }
-        .typing-text {
-          color: rgba(144, 200, 255, 0.7);
-          font-size: 10px;
-          letter-spacing: 0.6em;
-          font-weight: 300;
-          text-transform: uppercase;
-          margin: 0;
-          white-space: nowrap;
-          overflow: hidden;
-          border-right: 2px solid #90c8ff;
-          width: 0;
-          animation: typing 3.5s steps(40) infinite,
-            blink-cursor 0.75s step-end infinite;
-        }
-        @keyframes typing {
-          0% { width: 0; }
-          70% { width: 100%; }
-          90% { width: 100%; }
-          100% { width: 0; }
-        }
-        @keyframes blink-cursor {
-          from, to { border-color: transparent; }
-          50% { border-color: #90c8ff; }
-        }
-
-        .establish-connection {
-          position: relative;
-          display: inline-block;
-          padding: 22px 60px;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          overflow: hidden;
-          pointer-events: auto;
-        }
-        .establish-connection .btn-border {
-          position: absolute;
-          inset: 0;
-          border: 1px solid rgba(128, 191, 255, 0.5);
-          transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-          pointer-events: none;
-        }
-        .establish-connection .btn-text {
-          position: relative;
-          z-index: 2;
-          font-family: monospace;
-          font-size: 10px;
-          letter-spacing: 0.4em;
-          font-weight: 300;
-          text-transform: uppercase;
-          color: rgba(128, 191, 255, 0.8);
-          transition: all 0.6s ease;
-          white-space: nowrap;
-        }
-
-        .establish-connection:hover .btn-border {
-          border-color: rgba(0, 242, 255, 0.8);
-          box-shadow: 0 0 30px rgba(0, 242, 255, 0.15),
-                      inset 0 0 30px rgba(0, 242, 255, 0.05);
-        }
-        .establish-connection:hover .btn-text {
-          color: #ffffff;
-          text-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-        }
-
-        .btn-streak {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: -300px;
-          width: 300px;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(0, 242, 255, 0.02) 20%,
-            rgba(0, 242, 255, 0.15) 50%,
-            rgba(0, 242, 255, 0.02) 80%,
-            transparent 100%
-          );
-          mix-blend-mode: screen;
-          opacity: 0.6;
-          animation: streakScroll 6s ease-in-out infinite;
-          pointer-events: none;
-          z-index: 1;
-        }
-        .establish-connection:hover .btn-streak {
-          opacity: 1;
-        }
-        @keyframes streakScroll {
-          0%   { transform: translateX(0); opacity: 0; }
-          33%  { transform: translateX(0); opacity: 0; }
-          35%  { transform: translateX(0); opacity: 0.6; }
-          100% { transform: translateX(750px); opacity: 0.6; }
-        }
-      `}</style>
     </section>
   );
 }

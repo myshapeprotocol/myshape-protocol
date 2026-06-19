@@ -1,37 +1,16 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React from "react";
+import { playTick } from "@/utils/useAudioTick";
 
 export default function HowItWorks() {
-  // 核心音效生成器：根据步骤索引调整音调
-  const playPipelineTick = useCallback((stepIndex: number) => {
-    if (typeof window === 'undefined') return;
-    try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      // 频率随步骤上升：600Hz -> 800Hz -> 1000Hz，模拟流程的推进感
-      const frequencies = [600, 800, 1000];
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(frequencies[stepIndex], audioCtx.currentTime); 
-      
-      gainNode.gain.setValueAtTime(0.015, audioCtx.currentTime);
-      
-      oscillator.start();
-      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.06);
-      oscillator.stop(audioCtx.currentTime + 0.06);
-    } catch (e) { /* 忽略拦截 */ }
-  }, []);
+  const playPipelineTick = (stepIndex: number) => playTick([600, 800, 1000][stepIndex] || 800, "sine", 0.06, 0.015);
 
   return (
     <section
       style={{
         width: "100%",
-        padding: "10rem 6%",
+        padding: "clamp(4rem, 10vw, 10rem) 6%",
         background: "transparent",
         position: "relative",
         fontFamily: "var(--font-geist-sans), sans-serif",
@@ -40,7 +19,14 @@ export default function HowItWorks() {
         alignItems: "center",
       }}
     >
-      <style jsx>{`
+      {/* ------------------------------
+          隐藏式 H1（SEO / AI 可读）
+      ------------------------------- */}
+      <h1 className="sr-only">
+        How MyShape Works — Motion-Native Zero-Knowledge Identity Pipeline
+      </h1>
+
+      <style>{`
         @keyframes pulseDot {
           0% { transform: scale(1); opacity: 0.8; }
           50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 15px #90c8ff; }
@@ -124,12 +110,12 @@ export default function HowItWorks() {
       <div style={{ maxWidth: "1200px", width: "100%" }}>
         
         {/* 标题区 */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "6rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(3rem, 6vw, 6rem)" }}>
           <div style={{ maxWidth: "650px" }}>
             <span style={{ fontSize: "0.75rem", letterSpacing: "0.6em", color: "rgba(144, 200, 255, 0.5)", display: "block", marginBottom: "1.5rem" }}>
               HOW IT WORKS
             </span>
-            <h2 style={{ fontSize: "3.2rem", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
+            <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
               The protocol behind <span style={{ color: "rgba(144, 200, 255, 0.9)" }}>your identity.</span>
             </h2>
             <p style={{ fontSize: "1.2rem", fontWeight: 300, color: "rgba(255,255,255,0.85)", marginTop: "1.5rem", maxWidth: "600px", lineHeight: 1.6 }}>
@@ -178,6 +164,71 @@ export default function HowItWorks() {
 
         </div>
       </div>
+
+      {/* -----------------------------------------
+          AI-Native Invisible Semantic Layer
+      ------------------------------------------ */}
+      <div className="sr-only">
+        <h2>How MyShape Works — Motion-Native Identity Pipeline</h2>
+        <p>
+          MyShape transforms human motion into a zero-knowledge identity layer.
+          The pipeline consists of three stages: local motion capture, behavioral
+          encoding, and zero-knowledge verification. This process ensures privacy,
+          sovereignty, and cross-platform portability.
+        </p>
+
+        <p>
+          Related concepts include: motion identity, kinetic authentication,
+          privacy-preserving identity, decentralized identity mesh, and
+          AI-native identity protocols.
+        </p>
+
+        {/* 隐形内部链接 */}
+        <a href="/genesis">Genesis Protocol</a>
+        <a href="/identity">Identity Layer</a>
+        <a href="/protocol">Protocol Architecture</a>
+        <a href="/papers">Technical Papers</a>
+      </div>
+
+      {/* -----------------------------------------
+          Schema.org Structured Data
+      ------------------------------------------ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "How MyShape Works — Motion-Native Identity Pipeline",
+            description:
+              "Learn how MyShape transforms human motion into a zero-knowledge identity layer through local capture, behavioral encoding, and ZK verification.",
+            step: [
+              {
+                "@type": "HowToStep",
+                name: "Local Motion Capture",
+                text: "On-device posture, balance, and micro-movement reading.",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Behavioral Encoding",
+                text: "Movement becomes a compact, irreversible identity vector.",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Zero-Knowledge Verification",
+                text: "Prove identity without exposing raw data.",
+              },
+            ],
+            keywords: [
+              "motion identity",
+              "zero-knowledge identity",
+              "kinetic authentication",
+              "AI-native identity",
+              "behavioral encoding",
+            ],
+          }),
+        }}
+      />
     </section>
   );
 }

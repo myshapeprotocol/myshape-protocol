@@ -1,0 +1,396 @@
+/* ============================================================
+   ProtocolHeader — 组件样式
+   @keyframes 不在此处定义，统一定义在 @/styles/animations.css
+   ============================================================ */
+
+/* ── 晶体全息面板 ── */
+
+.protocol-crystal-panel {
+  position: absolute;
+  top: 75px;
+  right: 40px;
+  width: 280px;
+  background: rgba(10, 25, 47, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(144, 200, 255, 0.2);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 92%, 92% 100%, 0% 100%);
+  border-radius: 2px;
+  color: #90c8ff;
+  font-family: monospace;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(144, 200, 255, 0.15);
+  z-index: 10000;
+  overflow: hidden;
+}
+
+.corner-deco-tl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  border-top: 2px solid #90c8ff;
+  border-left: 2px solid #90c8ff;
+  opacity: 0.6;
+}
+
+.corner-deco-br {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 15px;
+  height: 15px;
+  border-bottom: 2px solid #90c8ff;
+  border-right: 2px solid #90c8ff;
+  opacity: 0.6;
+}
+
+.panel-content {
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.animate-panel-in {
+  animation: holographicIn 0.5s cubic-bezier(0.2, 1, 0.2, 1) forwards;
+}
+
+.panel-header {
+  font-size: 8px;
+  color: rgba(144, 200, 255, 0.4);
+  letter-spacing: 0.4em;
+  text-align: center;
+  margin-bottom: 15px;
+  opacity: 0.7;
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-row .label {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+
+.panel-row .value {
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.value-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.value-cyan {
+  color: #90c8ff;
+  font-size: 10px;
+  text-shadow: 0 0 10px rgba(144, 200, 255, 0.6);
+  animation: cyanPulse 2s infinite ease-in-out;
+}
+
+.signal-pct {
+  font-size: 9px;
+  min-width: 42px;
+  text-align: right;
+}
+
+.panel-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(144, 200, 255, 0.25), transparent);
+  margin: 18px 0;
+}
+
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel-link {
+  text-decoration: none;
+  color: #90c8ff;
+  font-size: 10px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.8;
+}
+
+.panel-link .link-icon {
+  color: rgba(144, 200, 255, 0.4);
+  font-size: 12px;
+}
+
+.panel-link:hover {
+  color: #fff;
+  transform: translateX(3px);
+  opacity: 1;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.panel-link:hover .link-icon {
+  color: #fff;
+}
+
+/* ── SYNC 按钮 ── */
+
+.panel-btn-sync {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid rgba(144, 200, 255, 0.2);
+  color: rgba(144, 200, 255, 0.6);
+  padding: 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 8px;
+  transition: border-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  letter-spacing: 0.05em;
+}
+
+.sync-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(144, 200, 255, 0.1) 50%, transparent 100%);
+  background-size: 200% 100%;
+  background-position: -200% 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.panel-btn-sync:hover .sync-sweep {
+  opacity: 1;
+  animation: syncFlow 1s ease-in-out infinite;
+}
+
+.panel-btn-sync:hover {
+  border-color: rgba(144, 200, 255, 0.4);
+  color: rgba(144, 200, 255, 0.9);
+}
+
+.panel-btn-sync:hover .sync-text {
+  animation: textJitter 0.08s infinite;
+}
+
+.sync-icon {
+  font-size: 11px;
+  opacity: 0.5;
+  position: relative;
+  z-index: 1;
+}
+
+.sync-text {
+  position: relative;
+  z-index: 1;
+}
+
+.sync-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(144, 200, 255, 0.4);
+  transform: translate(-50%, -50%);
+  animation: rippleExpand 1s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── DISCONNECT 按钮 ── */
+
+.panel-btn-disconnect {
+  background: transparent;
+  border: 1px solid rgba(144, 200, 255, 0.25);
+  color: rgba(144, 200, 255, 0.7);
+  padding: 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 9px;
+  margin-top: 8px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.panel-btn-disconnect .btn-icon {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.panel-btn-disconnect .disconnect-text {
+  transition: all 0.3s;
+}
+
+.panel-btn-disconnect:hover {
+  border-color: rgba(144, 200, 255, 0.4);
+  color: rgba(144, 200, 255, 0.9);
+}
+
+.panel-btn-disconnect:hover .btn-icon {
+  opacity: 1;
+}
+
+.panel-btn-disconnect.phase-confirm {
+  border-color: rgba(255, 200, 50, 0.8);
+  color: rgba(255, 200, 50, 0.9);
+  background: rgba(255, 200, 50, 0.08);
+  box-shadow: 0 0 20px rgba(255, 200, 50, 0.15);
+  animation: warningFlicker 0.15s ease-in-out infinite;
+}
+
+.phase-signal-loss .disconnect-text {
+  animation: signalLoss 0.35s ease-out forwards;
+}
+
+/* ── 全屏粒子微颤动效 ── */
+
+.shimmer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  pointer-events: none;
+  animation: shimmerTremor 1.2s ease-out forwards;
+  background: radial-gradient(ellipse at 50% 50%, rgba(144, 200, 255, 0.03) 0%, transparent 70%);
+}
+
+/* ── 底部能量呼吸条 ── */
+
+.panel-footer-glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #90c8ff, transparent);
+  animation: footerResonance 3s infinite ease-in-out;
+  filter: blur(2px);
+}
+
+/* ── 状态脉冲点 ── */
+
+.status-pulse {
+  width: 4px;
+  height: 4px;
+  background-color: #90c8ff;
+  border-radius: 50%;
+  animation: statusBlink 3s infinite ease-in-out;
+}
+
+.status-pulse-cyan {
+  width: 4px;
+  height: 4px;
+  background-color: #90c8ff;
+  border-radius: 50%;
+  animation: cyanBlink 2s infinite ease-in-out;
+}
+
+.status-pulse-cyan-small {
+  width: 3px;
+  height: 3px;
+  background-color: #90c8ff;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 5px rgba(144, 200, 255, 0.8);
+}
+
+/* ── 品牌 Logo ── */
+
+.brand-logo-link {
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.brand-logo-link:hover {
+  opacity: 1;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  transform: translateX(-50%) scale(1.05);
+  letter-spacing: 1.1em;
+}
+
+/* ── 钱包按钮 ── */
+
+.wallet-btn-optimized {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: borderResonance 4s infinite ease-in-out;
+}
+
+.wallet-btn-optimized .scan-line {
+  position: absolute;
+  top: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(144, 200, 255, 0.1), transparent);
+  animation: scan 3s infinite linear;
+  pointer-events: none;
+}
+
+.wallet-btn-optimized:hover {
+  border-color: #90c8ff;
+  box-shadow: inset 0 0 10px rgba(144, 200, 255, 0.2), 0 0 15px rgba(144, 200, 255, 0.1);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.wallet-btn-optimized.is-active {
+  border-color: #90c8ff;
+  box-shadow: inset 0 0 15px rgba(144, 200, 255, 0.3), 0 0 20px rgba(144, 200, 255, 0.2);
+  color: #fff;
+}
+
+/* ── 节点链接 ── */
+
+.node-link-hover {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.node-link-hover:hover {
+  background: rgba(144, 200, 255, 0.15);
+  border-color: rgba(144, 200, 255, 0.4);
+  color: #fff;
+  opacity: 1;
+}
+
+/* ── 手机端适配 ── */
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+  .brand-logo-link {
+    letter-spacing: 0.4em;
+    font-size: 11px;
+    text-indent: 0.4em;
+  }
+  .brand-logo-link:hover {
+    letter-spacing: 0.45em;
+  }
+}

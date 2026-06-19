@@ -1,9 +1,38 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
 
 export default function ProtocolPage() {
+  const fullText = "THE ARCHITECTURE OF SOVEREIGN IDENTITY REQUIRES A NEW LOCAL ANCHOR.";
+  const highlightStart = fullText.indexOf("SOVEREIGN IDENTITY");
+  const highlightEnd = highlightStart + "SOVEREIGN IDENTITY".length;
+  const [revealedCount, setRevealedCount] = useState(0);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
+  useEffect(() => {
+    const total = fullText.length;
+    let count = 0;
+    const typeInterval = setInterval(() => {
+      count++;
+      setRevealedCount(count);
+      setCursorVisible(true);
+      if (count >= total) {
+        clearInterval(typeInterval);
+        let blinkStep = 0;
+        const blinkTimer = setInterval(() => {
+          blinkStep++;
+          if (blinkStep >= 6) {
+            clearInterval(blinkTimer);
+            setCursorVisible(false);
+          } else {
+            setCursorVisible(blinkStep % 2 === 1);
+          }
+        }, 300);
+      }
+    }, 40);
+    return () => clearInterval(typeInterval);
+  }, []);
   const protocolMilestones = [
     { year: "LOCAL_GEN", event: "IDENTITY MUST ORIGINATE FROM THE INDIVIDUAL, NOT THE PLATFORM." },
     { year: "PROOF_SYS", event: "VERIFICATION OCCURS THROUGH PROOFS, NOT DATA DISCLOSURE." },
@@ -11,16 +40,25 @@ export default function ProtocolPage() {
   ];
 
   return (
-    <ProtocolLayout 
-      refId="001" category="PROTOCOL_CORE" title="SYSTEM_INDEX" 
+    <ProtocolLayout
+      refId="001" category="PROTOCOL_CORE" title="SYSTEM_INDEX"
       secLevel="CLASS_OMEGA" systemStatus="ACTIVE_SYNC"
+      renderSigil={true}
     >
       <div className="space-y-32">
         {/* --- 1. 引言 --- */}
         <section className="max-w-4xl relative">
           <div className="absolute -left-10 top-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-transparent opacity-30" />
-          <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.4em] text-white leading-tight uppercase mb-8">
-            The architecture of <span className="text-cyan-400">Sovereign Identity</span> requires a new local anchor.
+          <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.4em] text-white leading-tight uppercase mb-8 min-h-[1.2em]">
+            {fullText.split('').map((char, i) => {
+              if (i >= revealedCount) return null;
+              return (
+                <span key={i} className={i >= highlightStart && i < highlightEnd ? 'text-cyan-400' : ''}>
+                  {char}
+                </span>
+              );
+            })}
+            {cursorVisible && <span className="text-cyan-400 ml-0.5">|</span>}
           </h2>
           <p className="text-white/50 text-base tracking-[0.2em] leading-relaxed font-light">
             Identity in the AI era cannot be something that platforms store. 

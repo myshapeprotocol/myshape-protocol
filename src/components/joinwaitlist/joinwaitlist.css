@@ -1,0 +1,140 @@
+/* ============================================================
+   JoinWaitlist — 组件样式
+   所有 @keyframes 统一引用 @/styles/animations.css
+   ============================================================ */
+
+.typing-container {
+  display: inline-block;
+  position: relative;
+}
+
+.typing-text {
+  color: rgba(144, 200, 255, 0.7);
+  font-size: 10px;
+  letter-spacing: 0.6em;
+  font-weight: 300;
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #90c8ff;
+  width: 0;
+  animation: typing 3.5s steps(40) infinite,
+    blink-cursor 0.75s step-end infinite;
+}
+
+/* ── Genesis 按钮 ── */
+
+.genesis-btn {
+  padding: 22px 60px;
+  letter-spacing: 0.4em;
+  font-size: 10px;
+  cursor: pointer;
+  border: 1px solid #80bfff;
+  background: transparent;
+  color: #80bfff;
+  transition: all 0.6s;
+  position: relative;
+  overflow: hidden;
+}
+
+.genesis-btn .btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.genesis-btn:hover {
+  background: rgba(144, 200, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 0 30px rgba(144, 200, 255, 0.2);
+}
+
+/* ── Circular Deep-Sense Halo Scan ── */
+
+.halo-scan {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(144, 200, 255, 0.2) 0%, transparent 60%);
+  transform: translate(-50%, -50%);
+  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.halo-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(144, 200, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: all 0.9s cubic-bezier(0.2, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+.genesis-btn:hover .halo-scan {
+  width: 350%;
+  height: 350%;
+}
+
+.genesis-btn:hover .halo-ring {
+  width: 300%;
+  height: 300%;
+  opacity: 1;
+  border-color: transparent;
+  box-shadow: 0 0 40px rgba(144, 200, 255, 0.15), 0 0 80px rgba(144, 200, 255, 0.05);
+}
+
+/* ── 边框辉光呼吸 ── */
+.btn-border-glow {
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(144,200,255,0.15);
+  animation: borderBreath 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes borderBreath {
+  0%, 100% { border-color: rgba(144,200,255,0.1); box-shadow: 0 0 8px rgba(144,200,255,0.05); }
+  50% { border-color: rgba(144,200,255,0.4); box-shadow: 0 0 16px rgba(144,200,255,0.12); }
+}
+
+/* ── 表面扫光 ── */
+.btn-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(105deg, transparent 40%, rgba(144,200,255,0.06) 45%, rgba(180,220,255,0.15) 50%, rgba(144,200,255,0.06) 55%, transparent 60%);
+  pointer-events: none;
+  animation: sweepLight 3.5s ease-in-out infinite;
+}
+@keyframes sweepLight {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+/* ── 四角呼吸点 ── */
+.btn-corner-tl, .btn-corner-tr, .btn-corner-bl, .btn-corner-br {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  z-index: 2;
+  background: rgba(144,200,255,0.25);
+  pointer-events: none;
+}
+.btn-corner-tl { top: 3px; left: 3px;   animation: cornerGlow 2s ease-in-out infinite; }
+.btn-corner-tr { top: 3px; right: 3px;  animation: cornerGlow 2s ease-in-out 0.4s infinite; }
+.btn-corner-bl { bottom: 3px; left: 3px; animation: cornerGlow 2s ease-in-out 0.8s infinite; }
+.btn-corner-br { bottom: 3px; right: 3px; animation: cornerGlow 2s ease-in-out 1.2s infinite; }
+@keyframes cornerGlow {
+  0%, 100% { opacity: 0.15; transform: scale(1); background: rgba(144,200,255,0.2); }
+  50% { opacity: 1; transform: scale(1.6); background: rgba(180,220,255,0.7); }
+}

@@ -1,104 +1,34 @@
-"use client";
-import React from 'react';
-import ProtocolLayout from "@/components/layout/ProtocolLayout";
+import VisionClient from "./VisionClient";
+
+export const metadata = {
+  title: "MyShape Vision — Identity Beyond Surveillance",
+  description:
+    "Explore the MyShape Vision: AI-native identity, spatial sovereignty, and data permanence. A future where digital presence becomes sovereign, private, and human-aligned.",
+  openGraph: {
+    title: "MyShape Vision — The Future of Identity",
+    description:
+      "MyShape envisions a world where identity is sovereign, private, and AI-native. Discover the pillars of the future identity protocol.",
+    url: "https://www.myshape.com/vision",
+    siteName: "MyShape Protocol",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MyShape Vision — Identity Beyond Surveillance",
+    description:
+      "The future of identity is movement, sovereignty, and AI-native presence. Explore the MyShape Vision.",
+    images: ["/og-image.png"],
+  },
+};
 
 export default function VisionPage() {
-  const visionPillars = [
-    { 
-      id: "PIL_01", 
-      title: "AI-NATIVE IDENTITY", 
-      desc: "Creating a verifiable bridge between human kinetic energy and artificial intelligence agents." 
-    },
-    { 
-      id: "PIL_02", 
-      title: "SPATIAL SOVEREIGNTY", 
-      desc: "Establishing the right to remain private within increasingly immersive 3D digital environments." 
-    },
-    { 
-      id: "PIL_03", 
-      title: "DATA PERMANENCE", 
-      desc: "Ensuring your motion-signature remains yours across the shifting sands of platforms and servers." 
-    }
-  ];
-
-  return (
-    <ProtocolLayout 
-      refId="006" 
-      category="CIV_LAYER" 
-      title="VISION" 
-      secLevel="CLASS_OMEGA" 
-      systemStatus="FUTURE_STAMP"
-    >
-      <div className="space-y-32">
-        {/* --- 1. 核心愿景：文明的维度 --- */}
-        <section className="relative">
-          <div className="text-cyan-500/20 text-[60px] font-bold absolute -top-10 -left-6 select-none pointer-events-none">
-            EYE
-          </div>
-          <div className="relative z-10">
-            <h2 className="text-2xl md:text-3xl font-extralight tracking-[0.5em] text-white leading-tight uppercase mb-10">
-              Beyond Surveillance, <br/>
-              Towards <span className="text-cyan-400">Expression</span>.
-            </h2>
-            <p className="text-white/60 text-lg tracking-[0.15em] leading-relaxed font-light max-w-3xl">
-              We envision a future where the digital version of yourself is as authentic, 
-              private, and sovereign as your physical body. MyShape is the protocol 
-              that makes this autonomy possible in the age of total simulation.
-            </p>
-          </div>
-        </section>
-
-        {/* --- 2. 三大愿景支柱 (The Pillars) --- */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {visionPillars.map((pillar) => (
-            <div key={pillar.id} className="group">
-              <div className="text-cyan-500 text-[10px] tracking-[0.4em] font-bold mb-4 opacity-50 group-hover:opacity-100 transition-opacity">
-                {pillar.id}
-              </div>
-              <h3 className="text-white text-[14px] tracking-[0.3em] font-bold uppercase mb-6 group-hover:text-cyan-400 transition-colors">
-                {pillar.title}
-              </h3>
-              <p className="text-white/30 text-[10px] tracking-[0.2em] leading-loose uppercase group-hover:text-white/50 transition-colors">
-                {pillar.desc}
-              </p>
-              <div className="mt-8 h-[2px] w-8 bg-white/10 group-hover:w-full group-hover:bg-cyan-500/30 transition-all duration-700" />
-            </div>
-          ))}
-        </section>
-
-        {/* --- 3. 终极哲学探讨 --- */}
-        <section className="py-20 border-y border-white/5 relative overflow-hidden">
-          {/* 装饰性扫描线 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent animate-pulse" />
-          
-          <div className="max-w-2xl mx-auto text-center space-y-8 relative z-10">
-            <h4 className="text-white/20 text-[9px] tracking-[0.8em] uppercase italic">Internal_Projection_088</h4>
-            <p className="text-white/80 text-[11px] tracking-[0.3em] leading-loose uppercase">
-              "The history of identity is the history of control. 
-              The future of identity is the history of movement."
-            </p>
-            <div className="flex justify-center gap-2">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="w-1 h-1 bg-cyan-500/40 rounded-full" />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* --- 4. 底部行动感召 --- */}
-        <section className="flex flex-col md:flex-row justify-between items-end gap-8">
-          <div className="space-y-4">
-            <div className="text-cyan-400 text-[10px] tracking-[0.5em] font-bold uppercase italic">Status: System_Expansion</div>
-            <p className="text-white/30 text-[9px] tracking-[0.2em] uppercase max-w-sm">
-              Current protocol parameters are optimized for a million-node identity mesh. 
-              Scaling to global civilization layer...
-            </p>
-          </div>
-          <div className="text-[40px] font-extralight text-white/5 tracking-tighter select-none">
-            2026_VISION
-          </div>
-        </section>
-      </div>
-    </ProtocolLayout>
-  );
+  return <VisionClient />;
 }

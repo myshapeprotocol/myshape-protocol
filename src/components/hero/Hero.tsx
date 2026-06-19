@@ -1,15 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import HeroVisual from "./HeroVisual";
 import GlowVortexButton from "./GlowVortexButton";
 import NarrativeText from "./NarrativeText";
 
 export default function Hero() {
-  const router = useRouter();
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
-  const [isFading, setIsFading] = useState(false);
+  const [genesisCompleted, setGenesisCompleted] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
+      setGenesisCompleted(true);
+    }
+  }, []);
 
   useEffect(() => {
     const closeAll = () => {
@@ -20,46 +25,12 @@ export default function Hero() {
     return () => window.removeEventListener("click", closeAll);
   }, []);
 
-  // 添加自定义事件监听器，使按钮功能完整
-  useEffect(() => {
-    const handleGenesisIgnite = () => {
-      console.log("Genesis ignition triggered");
-      // 可以在这里添加动画或音效
-    };
-    const handleRapidPulse = () => {
-      console.log("Rapid pulse triggered");
-    };
-    const handleOpenWallet = () => {
-      console.log("Wallet open triggered");
-    };
-
-    window.addEventListener("protocol:genesis-ignite", handleGenesisIgnite);
-    window.addEventListener("protocol:rapid-pulse", handleRapidPulse);
-    window.addEventListener("protocol:open-wallet", handleOpenWallet);
-
-    return () => {
-      window.removeEventListener("protocol:genesis-ignite", handleGenesisIgnite);
-      window.removeEventListener("protocol:rapid-pulse", handleRapidPulse);
-      window.removeEventListener("protocol:open-wallet", handleOpenWallet);
-    };
-  }, []);
-
   const handleEnterGenesis = (e: React.MouseEvent) => {
     e.stopPropagation();
-    window.dispatchEvent(new CustomEvent("protocol:genesis-ignite"));
-    // 3s supernova animation, then 800ms fade buffer
+    window.dispatchEvent(new CustomEvent("protocol:particle-pulse"));
     setTimeout(() => {
-      setIsFading(true);
-    }, 3000);
-    setTimeout(() => {
-      router.push("/protocol");
-    }, 3800);
-  };
-
-  const handleProtocolInitialize = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.dispatchEvent(new CustomEvent("protocol:rapid-pulse"));
-    window.dispatchEvent(new CustomEvent("protocol:open-wallet"));
+      window.dispatchEvent(new CustomEvent("pt:navigate", { detail: { href: "/genesis" } }));
+    }, 1200);
   };
 
   const leftLines = [
@@ -79,103 +50,108 @@ export default function Hero() {
 
   return (
     <>
-      {/* 🚀 修正：删除了内部的所有 HeroVisual。
-          视觉层现在由 layout.tsx 里的单例统一管理，避免多重渲染卡顿。 */}
-      
+      {/* 🚀 影子星空：强制设为 zIndex -1，确保它在所有模块的最底层，绝不遮挡文字 */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: -1,
+          pointerEvents: "none",
+          backgroundColor: "#02040a",
+        }}
+      >
+        <HeroVisual showCore={false} />
+      </div>
+
+      {/* 🚀 首页 Hero 容器：强制背景透明，透出底层的固定星空 */}
       <section
         style={{
           position: "relative",
           width: "100%",
           height: "100vh",
           overflow: "hidden",
-          backgroundColor: "transparent", // 必须透明，透出底层的全站星空
+          backgroundColor: "transparent",
         }}
       >
-        {/* Fade container — overlays fade out during genesis exit */}
-        <div className={`hero-overlay ${isFading ? 'hero-fade-out' : ''}`}>
-          
-          {/* 文案位置与字号 */}
-          <div className="absolute top-[14vh] left-0 w-full z-10 pointer-events-none text-center px-6">
-            <h1
-              className="text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
-              style={{ letterSpacing: "0.8em", textIndent: "0.8em" }}
-            >
-              THE SOVEREIGN IDENTITY LAYER
-            </h1>
-            <p className="mt-5 text-[8px] md:text-[9px] tracking-[0.3em] text-blue-300/25 uppercase font-mono max-w-2xl mx-auto leading-relaxed">
-              The decentralized motion-native protocol for verifiable human-AI existence.
-            </p>
-          </div>
+        {/* 首页粒子核心：随 Hero 模块一起滚动 */}
+        <HeroVisual showCore={true} />
 
-          {/* 按钮容器 - 调整了 z-index 确保可点击 */}
-          <div className="absolute inset-0 flex items-center justify-between px-[8vw] z-[50] pointer-events-none">
-            <div className="pointer-events-auto">
-              <GlowVortexButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowRight(false);
-                  setShowLeft(!showLeft);
-                }}
-              />
+        {/* 严格还原：文案位置与字号 */}
+        <div className="absolute top-[14vh] left-0 w-full z-100 pointer-events-none text-center px-6">
+          <h1
+            className="text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
+            style={{ letterSpacing: "0.8em", textIndent: "0.8em" }}
+          >
+            THE SOVEREIGN IDENTITY LAYER
+          </h1>
+          <p className="mt-5 text-[10px] md:text-[11px] tracking-[0.25em] text-blue-200/45 uppercase font-mono max-w-2xl mx-auto leading-relaxed"
+            style={{ textShadow: "0 0 12px rgba(144,200,255,0.15)" }}>
+            The decentralized motion-native protocol for verifiable human-AI existence.
+          </p>
+        </div>
+
+        {/* 严格还原：按钮容器 */}
+        <div className="absolute inset-0 flex items-center justify-between px-[8vw] z-[9999] pointer-events-none">
+          <div className="pointer-events-auto">
+            <GlowVortexButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowRight(false);
+                setShowLeft(!showLeft);
+              }}
+            />
+          </div>
+          <div className="pointer-events-auto">
+            <GlowVortexButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowLeft(false);
+                setShowRight(!showRight);
+              }}
+            />
+          </div>
+        </div>
+
+        {/* 叙事文本 */}
+        <NarrativeText lines={leftLines} visible={showLeft} side="left" />
+        <NarrativeText lines={rightLines} visible={showRight} side="right" />
+
+        {/* 主入口 CTA：粒子云下方 */}
+        <div className="absolute top-[calc(50%+280px)] left-0 w-full z-100 text-center">
+          <button
+            onClick={handleEnterGenesis}
+            className="enter-genesis group relative inline-block px-12 py-4 bg-transparent"
+          >
+            <span className="relative z-10 font-mono font-extralight text-[12px] tracking-[0.6em] text-white/90 group-hover:text-cyan-400 transition-all duration-700">
+              [ ENTER_GENESIS ]
+            </span>
+            <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(144,200,255,0.12) 0%, transparent 70%)', filter: 'blur(12px)' }} />
+            <div className="flow-boundary absolute -bottom-3 left-[5%] right-[5%] h-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+              <div className="flow-dot left-0" />
+              <div className="flow-dot left-[15%]" />
+              <div className="flow-dot left-[30%]" />
+              <div className="flow-glow" />
+              <div className="flow-dot right-[30%]" />
+              <div className="flow-dot right-[15%]" />
+              <div className="flow-dot right-0" />
             </div>
-            <div className="pointer-events-auto">
-              <GlowVortexButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowLeft(false);
-                  setShowRight(!showRight);
-                }}
-              />
-            </div>
-          </div>
+          </button>
+        </div>
 
-          {/* 叙事文本 */}
-          <NarrativeText lines={leftLines} visible={showLeft} side="left" />
-          <NarrativeText lines={rightLines} visible={showRight} side="right" />
-
-          {/* 主入口 CTA：位于粒子云下方（基于 fixed 视口定位） */}
-          <div className="absolute top-[75vh] left-0 w-full z-20 text-center">
-            <button
-              onClick={handleEnterGenesis}
-              className="enter-genesis group relative inline-block px-12 py-4 bg-transparent"
-            >
-              <span className="relative z-10 font-mono font-extralight text-[12px] tracking-[0.6em] text-white/90 group-hover:text-cyan-400 transition-all duration-700">
-                [ ENTER _ GENESIS ]
-              </span>
-              <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(144,200,255,0.12) 0%, transparent 70%)', filter: 'blur(12px)' }} />
-              <div className="flow-boundary absolute -bottom-3 left-[5%] right-[5%] h-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <div className="flow-dot left-0" />
-                <div className="flow-dot left-[15%]" />
-                <div className="flow-dot left-[30%]" />
-                <div className="flow-glow" />
-                <div className="flow-dot right-[30%]" />
-                <div className="flow-dot right-[15%]" />
-                <div className="flow-dot right-0" />
-              </div>
-            </button>
-          </div>
-
-          {/* 底层协议命令 */}
-          <div className="absolute bottom-[60px] left-0 w-full z-20 text-center">
-            <button
-              onClick={handleProtocolInitialize}
-              className="protocol-access inline-block bg-transparent"
-            >
-              <span className="font-mono font-extralight text-[7px] md:text-[8px] tracking-[0.5em] text-white/15 hover:text-cyan-400 transition-all duration-500">
-                [ PROTOCOL _ GENESIS _ INITIALIZE ]
-              </span>
-            </button>
-          </div>
+        {/* 系统状态行 */}
+        <div className="absolute bottom-[30px] md:bottom-[60px] left-0 w-full z-100 text-center pointer-events-none">
+          <span className="font-mono font-light text-[9px] md:text-[10px] tracking-[0.4em] transition-all duration-700"
+            style={genesisCompleted
+              ? { color: "rgba(180,220,255,0.8)", textShadow: "0 0 10px rgba(144,200,255,0.5), 0 0 20px rgba(144,200,255,0.2)" }
+              : { color: "rgba(255,255,255,0.18)" }}>
+            {genesisCompleted
+              ? "[ PROTOCOL_GENESIS::INITIALIZED ]"
+              : "[ PROTOCOL_GENESIS::awaiting_input ]"}
+          </span>
         </div>
       </section>
 
       <style>{`
-        .hero-overlay {
-          transition: opacity 0.8s ease;
-        }
-        .hero-overlay.hero-fade-out {
-          opacity: 0;
-        }
         .flow-boundary {
           background: radial-gradient(ellipse at center, rgba(144, 200, 255, 0.06) 0%, transparent 70%);
         }
@@ -230,6 +206,18 @@ export default function Hero() {
         .flow-dot:nth-child(5) { --tx-start: 6px; }
         .flow-dot:nth-child(6) { --tx-start: 12px; }
         .flow-dot:nth-child(7) { --tx-start: 18px; }
+        .protocol-command.glitch span {
+          animation: textGlitch 0.8s ease-out forwards;
+        }
+        @keyframes textGlitch {
+          0% { filter: blur(0); transform: translateX(0); opacity: 0.15; }
+          10% { filter: blur(3px); transform: translateX(-4px); opacity: 0.6; }
+          20% { filter: blur(1px); transform: translateX(3px); opacity: 0.3; }
+          30% { filter: blur(4px); transform: translateX(-6px); opacity: 0.7; }
+          50% { filter: blur(0); transform: translateX(2px); opacity: 0.2; }
+          70% { filter: blur(2px); transform: translateX(-3px); opacity: 0.5; }
+          100% { filter: blur(0); transform: translateX(0); opacity: 0.15; }
+        }
       `}</style>
     </>
   );

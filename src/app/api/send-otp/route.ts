@@ -2,48 +2,62 @@ import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-// 在运行时检查环境变量，避免构建时崩溃
-function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) {
-    throw new Error("SERVER_CONFIGURATION_INCOMPLETE");
-  }
-  return createClient(url, key);
-}
+/**
+ * Send OTP API — 生成 6 位验证码并发送邮件
+ *
+ * 安全策略：
+ * - 所有凭据从环境变量注入，运行时校验缺失则拒绝请求
+ * - Supabase 和 Resend 客户端在 handler 内延迟初始化，避免构建时误用 placeholder
+ */
 
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("SERVER_CONFIGURATION_INCOMPLETE");
+function validateEnv(): { supabaseUrl: string; supabaseKey: string; resendKey: string } {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const resendKey = process.env.RESEND_API_KEY;
+
+  const missing: string[] = [];
+  if (!supabaseUrl) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  if (!supabaseKey) missing.push("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  if (!resendKey) missing.push("RESEND_API_KEY");
+
+  if (missing.length > 0) {
+    throw new Error(`SERVER_CONFIGURATION_INCOMPLETE: Missing ${missing.join(", ")}`);
   }
-  return new Resend(apiKey);
+
+  return { supabaseUrl: supabaseUrl!, supabaseKey: supabaseKey!, resendKey: resendKey! };
 }
 
 export async function POST(req: Request) {
   try {
-    const supabase = getSupabaseClient();
-    const resend = getResendClient();
+    const { supabaseUrl, supabaseKey, resendKey } = validateEnv();
+    const resend = new Resend(resendKey);
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { email } = await req.json(); 
-    
+    const { email } = await req.json();
+
+    if (!email || !email.includes("@")) {
+      return NextResponse.json(
+        { error: "INVALID_EMAIL: A valid email address is required" },
+        { status: 400 }
+      );
+    }
+
     // 1. 生成 6 位随机验证码
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // 2. 将邮箱和验证码存入 Supabase
+    // 2. 将邮箱和验证码存入 Supabase（upsert 按 email 去重）
     const { error: dbError } = await supabase
       .from('protocol_nodes')
-      .upsert({ 
-        email, 
-        otp_code: otp, 
-        status: 'PENDING_VERIFICATION' 
-      }, { onConflict: 'email' });
+      .upsert(
+        { email, otp_code: otp, status: 'PENDING_VERIFICATION' },
+        { onConflict: 'email' }
+      );
 
     if (dbError) throw dbError;
 
     // 3. 发送验证邮件
     const { error: emailError } = await resend.emails.send({
-      from: 'MyShape Protocol <onboarding@resend.dev>',
+      from: process.env.RESEND_FROM_EMAIL || 'MyShape Protocol <onboarding@resend.dev>',
       to: email,
       subject: 'ACTION_REQUIRED: IDENTITY_CHALLENGE',
       html: `
@@ -64,9 +78,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('API_ERROR:', error);
+    console.error('SEND_OTP_ERROR:', error);
     return NextResponse.json(
-      { error: error.message || 'INTERNAL_SERVER_ERROR' }, 
+      { error: error.message || 'INTERNAL_SERVER_ERROR' },
       { status: 500 }
     );
   }

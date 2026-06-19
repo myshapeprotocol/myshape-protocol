@@ -1,22 +1,42 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) {
-    throw new Error("SERVER_CONFIGURATION_INCOMPLETE");
+/**
+ * Verify OTP API — 校验 6 位验证码并激活节点
+ *
+ * 安全策略：
+ * - Supabase 客户端在 handler 内延迟初始化
+ * - 运行时校验环境变量
+ */
+
+function validateEnv() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error(
+      "SERVER_CONFIGURATION_INCOMPLETE: Missing Supabase credentials"
+    );
   }
-  return createClient(url, key);
+
+  return { supabaseUrl, supabaseKey };
 }
 
 export async function POST(req: Request) {
   try {
-    const supabase = getSupabaseClient();
+    const { supabaseUrl, supabaseKey } = validateEnv();
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { email, otp } = await req.json();
 
-    // 1. 从数据库校验 OTP
+    if (!email || !otp) {
+      return NextResponse.json(
+        { error: "MISSING_FIELDS: email and otp are required" },
+        { status: 400 }
+      );
+    }
+
+    // 1. 从数据库查询该邮箱的 OTP
     const { data, error: dbError } = await supabase
       .from('protocol_nodes')
       .select('otp_code, status')
@@ -32,7 +52,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "SIGNATURE_INVALID" }, { status: 401 });
     }
 
-    // 3. 验证成功，更新状态
+    // 3. 验证成功，更新状态为 ACTIVE
     const { error: updateError } = await supabase
       .from('protocol_nodes')
       .update({ status: 'ACTIVE' })
@@ -42,7 +62,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('VERIFY_ERROR:', error);
+    console.error('VERIFY_OTP_ERROR:', error);
     return NextResponse.json(
       { error: error.message || 'INTERNAL_SERVER_ERROR' },
       { status: 500 }

@@ -1,0 +1,233 @@
+/* ============================================================
+   MyShape Protocol — Shared Animation Keyframes
+   全项目唯一 @keyframes 定义源，消除组件间的重复定义
+   ============================================================ */
+
+/* ── 文字动画 ── */
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-cursor {
+  from, to { border-color: transparent; }
+  50% { border-color: #90c8ff; }
+}
+
+@keyframes flash {
+  0% { opacity: 0; transform: translateY(2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* ── 扫描与脉冲 ── */
+
+@keyframes scan {
+  from { left: -100%; }
+  to { left: 100%; }
+}
+
+@keyframes scan-slow {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(144, 200, 255, 0.6); }
+  50% { opacity: 0.3; transform: scale(0.9); box-shadow: 0 0 2px rgba(144, 200, 255, 0.2); }
+}
+
+@keyframes greenBlink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(80, 255, 170, 0.8); }
+  50% { opacity: 0.4; box-shadow: 0 0 2px rgba(80, 255, 170, 0.2); }
+}
+
+@keyframes greenPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes cyanBlink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(144, 200, 255, 0.8); }
+  50% { opacity: 0.4; box-shadow: 0 0 2px rgba(144, 200, 255, 0.2); }
+}
+
+@keyframes cyanPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ── 面板入场动画 ── */
+
+@keyframes holographicIn {
+  from { opacity: 0; transform: translateY(-15px) scaleY(0.8); filter: brightness(3); }
+  to { opacity: 1; transform: translateY(0) scaleY(1); filter: brightness(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 流光与波纹 ── */
+
+@keyframes syncFlow {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes textJitter {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(0.4px, -0.3px); }
+  50% { transform: translate(-0.3px, 0.2px); }
+  75% { transform: translate(0.2px, -0.2px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes rippleExpand {
+  0% { width: 0; height: 0; opacity: 0.8; }
+  100% { width: 500%; height: 500%; opacity: 0; border-color: transparent; box-shadow: 0 0 40px rgba(144, 200, 255, 0.15); }
+}
+
+@keyframes warningFlicker {
+  0%, 100% { border-color: rgba(255, 200, 50, 0.9); opacity: 1; }
+  50% { border-color: rgba(255, 200, 50, 0.2); opacity: 0.6; }
+}
+
+@keyframes signalLoss {
+  0% { opacity: 1; letter-spacing: 0.05em; filter: blur(0); }
+  100% { opacity: 0; letter-spacing: 1em; filter: blur(6px); }
+}
+
+@keyframes shimmerTremor {
+  0% { opacity: 0; transform: scale(1); }
+  5% { opacity: 0.6; transform: scale(1.002) translateY(0.5px); }
+  15% { opacity: 0.4; transform: scale(1.001) translateY(-0.3px); }
+  30% { opacity: 0.2; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes borderResonance {
+  0%, 100% { border-color: rgba(144, 200, 255, 0.2); background: rgba(144, 200, 255, 0.05); }
+  50% { border-color: rgba(144, 200, 255, 0.5); background: rgba(144, 200, 255, 0.08); }
+}
+
+@keyframes footerResonance {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes identityScan {
+  0% { transform: translateY(0); opacity: 0.15; }
+  100% { transform: translateY(260px); opacity: 0.15; }
+}
+
+@keyframes identityPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.35); opacity: 1; }
+}
+
+@keyframes myshape-loading-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.8); }
+}
+
+
+/* ── Hero flow animations ── */
+@keyframes flowCenter {
+  0% { opacity: 0; transform: translateY(-50%) translateX(var(--tx-start, -10px)) scale(0.5); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-50%) translateX(0) scale(1.2); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+}
+@keyframes textGlitch {
+  0% { filter: blur(0); transform: translateX(0); opacity: 0.15; }
+  10% { filter: blur(3px); transform: translateX(-4px); opacity: 0.6; }
+  20% { filter: blur(1px); transform: translateX(3px); opacity: 0.3; }
+  30% { filter: blur(4px); transform: translateX(-6px); opacity: 0.7; }
+  50% { filter: blur(0); transform: translateX(2px); opacity: 0.2; }
+  70% { filter: blur(2px); transform: translateX(-3px); opacity: 0.5; }
+  100% { filter: blur(0); transform: translateX(0); opacity: 0.15; }
+}
+
+/* ── Genesis ── */
+@keyframes progressSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+@keyframes genesisScan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* ── Capabilities ── */
+@keyframes cap-pulse { 0% { transform: scale(0.6); opacity: 0; } 50% { opacity: 0.4; } 100% { transform: scale(1.4); opacity: 0; } }
+@keyframes cap-scan-line { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(24px); opacity: 0; } }
+@keyframes cap-spread { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.2); opacity: 0; } }
+@keyframes decryptGlitch {
+  0% { filter: blur(0); transform: translateX(0); opacity: 1; }
+  5% { filter: blur(3px); transform: translateX(-6px); opacity: 0.4; }
+  8% { filter: blur(0); transform: translateX(4px); opacity: 1; }
+  12% { filter: blur(4px); transform: translateX(-8px); opacity: 0.3; }
+  16% { filter: blur(0); transform: translateX(5px); opacity: 1; }
+  22% { filter: blur(5px); transform: translateX(-7px); opacity: 0.2; }
+  28% { filter: blur(0); transform: translateX(3px); opacity: 1; }
+  35% { filter: blur(3px); transform: translateX(-5px); opacity: 0.5; }
+  45% { filter: blur(0); transform: translateX(2px); opacity: 1; }
+  60% { filter: blur(2px); transform: translateX(-3px); opacity: 0.6; }
+  80% { filter: blur(0); transform: translateX(1px); opacity: 1; }
+  100% { filter: blur(0); transform: translateX(0); opacity: 1; }
+}
+@keyframes textVibrate { 0% { transform: translateX(0); } 25% { transform: translateX(-0.5px); } 50% { transform: translateX(0.5px); } 75% { transform: translateX(-0.3px); } 100% { transform: translateX(0); } }
+
+/* ── HowItWorks ── */
+@keyframes pulseDot { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; box-shadow: 0 0 15px #90c8ff; } 100% { transform: scale(1); opacity: 0.8; } }
+@keyframes scanBeam { 0% { left: -30%; opacity: 0; } 20% { opacity: 1; } 50% { left: 50%; opacity: 0.9; } 80% { opacity: 1; } 100% { left: 120%; opacity: 0; } }
+@keyframes droplet { 0% { left: -10%; opacity: 0; transform: scale(0.6); } 10% { opacity: 1; transform: scale(1); } 50% { left: 50%; opacity: 0.9; transform: scale(1.15); } 90% { opacity: 0.4; transform: scale(0.8); } 100% { left: 110%; opacity: 0; transform: scale(0.6); } }
+
+/* ── Vision ── */
+@keyframes glitchPulse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  10% { transform: translate(-2px, 1px) scale(1.06); }
+  30% { transform: translate(2px, -1px) scale(0.96); }
+  50% { transform: translate(-1px, -1px) scale(1.04); }
+  70% { transform: translate(1px, 1px) scale(0.97); }
+  90% { transform: translate(-1px, 0) scale(1.03); }
+}
+
+@keyframes visionShake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 0.5px); }
+  50% { transform: translate(0.5px, -0.5px); }
+  75% { transform: translate(-0.5px, 0); }
+}
+
+@keyframes visionGlyphGlow {
+  0%, 100% { opacity: 0.7; transform: scale(1); text-shadow: 0 0 8px rgba(144,200,255,0.5); }
+  50% { opacity: 1; transform: scale(1.12); text-shadow: 0 0 16px rgba(180,220,255,0.9); }
+}
+
+/* ── Misc ── */
+@keyframes coreBreath { 0%, 100% { box-shadow: 0 0 8px rgba(34,211,238,0.6); } 50% { box-shadow: 0 0 20px rgba(34,211,238,1); } }
+@keyframes badgePulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+@keyframes sigilBreathe { 0%, 100% { filter: drop-shadow(0 0 4px rgba(144,200,255,0.3)); } 50% { filter: drop-shadow(0 0 12px rgba(144,200,255,0.7)); } }
+
+@keyframes starFall {
+  0% { transform: translateY(-10vh); opacity: 0; }
+  5% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}

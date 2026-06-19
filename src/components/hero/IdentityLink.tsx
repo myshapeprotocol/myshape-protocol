@@ -43,7 +43,7 @@ export default function IdentityLink() {
         </div>
       )}
 
-      <style jsx global>{`
+      <style>{`
         @keyframes glitch {
           0% { transform: translate(2px, -1px); filter: hue-rotate(90deg); }
           50% { transform: translate(-2px, 1px); filter: hue-rotate(180deg); }

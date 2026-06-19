@@ -1,0 +1,12 @@
+/* ============================================================
+   IdentityClient — 组件样式
+   所有 @keyframes 统一引用 @/styles/animations.css
+   ============================================================ */
+
+.identity-scan {
+  animation: identityScan 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.identity-pulse {
+  animation: identityPulse 1.4s ease-in-out infinite;
+}

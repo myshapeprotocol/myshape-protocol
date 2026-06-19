@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import ProtocolFooter from "@/components/footer/footer"; 
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
+import ProtocolFooter from "@/components/footer/footer";
 
 const sections = [
   { 
@@ -68,7 +69,18 @@ const sections = [
 
 export default function VisionManifestoPage() {
   const [mounted, setMounted] = useState(false);
+  const [activeIndex, setActiveIndex] = useState('V01');
+  const observerRef = useRef<IntersectionObserver | null>(null);
   useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    if (!mounted) return;
+    observerRef.current = new IntersectionObserver(
+      (entries) => { for (const e of entries) { if (e.isIntersecting) setActiveIndex(e.target.id); } },
+      { rootMargin: '-20% 0% -70% 0%', threshold: 0 }
+    );
+    document.querySelectorAll('section[id]').forEach(el => observerRef.current?.observe(el));
+    return () => observerRef.current?.disconnect();
+  }, [mounted]);
   if (!mounted) return null;
 
   return (
@@ -78,8 +90,9 @@ export default function VisionManifestoPage() {
       <div className="fixed inset-0 pointer-events-none opacity-[0.05]" 
            style={{ 
              backgroundImage: `linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px)`, 
-             backgroundSize: '45px 45px' 
+             backgroundSize: '45px 45px'
            }} />
+      <BackgroundParticles />
 
       {/* 頂部導航 */}
       <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/80 backdrop-blur-md px-10 py-5 flex justify-between items-center text-[10px] tracking-[0.3em]">
@@ -93,16 +106,18 @@ export default function VisionManifestoPage() {
         <aside className="md:w-64 shrink-0 h-fit md:sticky md:top-48 hidden md:block border-l border-white/5 pl-6">
           <div className="text-[9px] text-cyan-500/40 mb-10 tracking-[0.4em] uppercase font-bold">Vision_Sequence</div>
           <ul className="space-y-8">
-            {sections.map(s => (
+            {sections.map(s => {
+              const isActive = s.id === activeIndex;
+              return (
               <li key={s.id} className="group cursor-pointer">
                 <a href={`#${s.id}`} className="block">
-                  <div className="text-[10px] text-white/10 group-hover:text-cyan-400 transition-colors duration-300 mb-1">{s.id}</div>
-                  <div className="text-[11px] uppercase tracking-[0.2em] text-white/20 group-hover:text-cyan-400 transition-all">
+                  <div className={`text-[10px] mb-1 transition-colors duration-300 ${isActive ? 'text-cyan-400' : 'text-white/10 group-hover:text-cyan-400'}`}>{s.id}</div>
+                  <div className={`text-[11px] uppercase tracking-[0.2em] transition-all ${isActive ? 'text-cyan-300' : 'text-white/20 group-hover:text-cyan-400'}`}>
                     {s.title}
                   </div>
                 </a>
               </li>
-            ))}
+            )})}
           </ul>
         </aside>
 

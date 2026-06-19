@@ -1,183 +1,369 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import "./header.css";
+
+/* ============================================================
+   ProtocolHeader — 全局导航 + 钱包面板
+
+   职责：
+   - 顶部导航栏（系统状态 / Logo / 时间 / 节点）
+   - 晶体全息协议面板（身份、信号、同步、断开）
+   - 触发全局粒子事件
+
+   样式：header.css
+   动画：@/styles/animations.css
+   ============================================================ */
 
 const ProtocolHeader = () => {
   const [utcTime, setUtcTime] = useState("");
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [signalStrength, setSignalStrength] = useState(98.4);
+  const [disconnectPhase, setDisconnectPhase] = useState<
+    "IDLE" | "CONFIRM" | "SIGNAL_LOSS"
+  >("IDLE");
+  const [isShimmering, setIsShimmering] = useState(false);
+  const [rippleActive, setRippleActive] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const confirmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [genesisDone, setGenesisDone] = useState(false);
+  const [maskedEmail, setMaskedEmail] = useState("");
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
+      setGenesisDone(true);
+      const email = sessionStorage.getItem("genesis_email") || "";
+      if (email) {
+        const [name, domain] = email.split("@");
+        setMaskedEmail(`${name.slice(0, 2)}****@${domain || ""}`);
+      }
+    }
+  }, []);
+
+  /* ── UTC 时钟 ── */
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
-      setUtcTime(now.getUTCHours().toString().padStart(2, '0') + ":" + 
-                  now.getUTCMinutes().toString().padStart(2, '0') + ":" + 
-                  now.getUTCSeconds().toString().padStart(2, '0') + " UTC");
+      setUtcTime(
+        `${now.getUTCHours().toString().padStart(2, "0")}:${now
+          .getUTCMinutes()
+          .toString()
+          .padStart(2, "0")}:${now
+          .getUTCSeconds()
+          .toString()
+          .padStart(2, "0")} UTC`
+      );
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
+  /* ── 点击面板外部关闭 ── */
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(event.target as Node)
+      ) {
+        setIsPanelOpen(false);
+      }
+    };
+    if (isPanelOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isPanelOpen]);
+
+  /* ── 动态信号强度 ── */
+  useEffect(() => {
+    const update = () => setSignalStrength(97.5 + Math.random() * 2.3);
+    update();
+    const timer = setInterval(update, 2000 + Math.random() * 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  /* ── 关闭面板时重置 disconnect 状态 ── */
+  useEffect(() => {
+    if (!isPanelOpen) {
+      setDisconnectPhase("IDLE");
+    }
+  }, [isPanelOpen]);
+
+  /* ═══ 事件处理 ═══ */
+
+  const handleWalletClick = () => {
+    setIsPanelOpen(!isPanelOpen);
+  };
+
+  const handleSync = () => {
+    setRippleActive(true);
+    setTimeout(() => setRippleActive(false), 1000);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("protocol:particle-resonance"));
+    }
+    setIsShimmering(true);
+    setTimeout(() => setIsShimmering(false), 1000);
+  };
+
+  const handleDisconnect = () => {
+    if (disconnectPhase === "IDLE") {
+      setDisconnectPhase("CONFIRM");
+      if (confirmTimerRef.current) clearTimeout(confirmTimerRef.current);
+      confirmTimerRef.current = setTimeout(
+        () => setDisconnectPhase("IDLE"),
+        4000
+      );
+    } else if (disconnectPhase === "CONFIRM") {
+      if (confirmTimerRef.current) clearTimeout(confirmTimerRef.current);
+      setDisconnectPhase("SIGNAL_LOSS");
+      setTimeout(() => {
+        setDisconnectPhase("IDLE");
+        setIsPanelOpen(false);
+      }, 400);
+    }
+  };
+
+  /* ═══ 渲染 ═══ */
   return (
     <nav style={styles.headerNav}>
       <div style={styles.gradientOverlay} />
 
-      {/* 左侧：系统状态 */}
+      {/* ── 左侧：系统状态 ── */}
       <div style={styles.leftSection}>
         <div className="status-pulse" />
-        <span style={styles.versionText} className="hide-mobile">MYSHAPE_CORE_V1.92</span>
-        <span style={styles.divider} className="hide-mobile">//</span>
+        <span style={styles.versionText} className="hide-mobile">
+          MYSHAPE_CORE_V1.92
+        </span>
+        <span style={styles.divider} className="hide-mobile">
+          //
+        </span>
         <span style={styles.statusText}>E&C: ACTIVE</span>
       </div>
 
-      {/* 中间：Logo - 点击返回首页 */}
+      {/* ── 中间：Logo ── */}
       <Link href="/" style={styles.centerSection} className="brand-logo-link">
         M Y S H A P E
       </Link>
 
-      {/* 右侧：时间、节点与钱包 */}
-      <div style={styles.rightSection}>
-        <span style={styles.timeDisplay} className="hide-mobile">{utcTime}</span>
-        
-        {/* 🔹 关键修改：将节点标识作为通往 /protocol 的入口 🔹 */}
-        <Link href="/protocol" style={{ textDecoration: 'none' }}>
+      {/* ── 右侧：时间、节点与钱包 ── */}
+      <div style={styles.rightSection} ref={panelRef}>
+        <span style={styles.timeDisplay} className="hide-mobile">
+          {utcTime}
+        </span>
+
+        <Link href="/protocol" style={{ textDecoration: "none" }}>
           <div style={styles.nodeBadge} className="node-link-hover">
-            KFK_SPC_DC{new Date().getDate()} 
+            KFK_SPC_DC{new Date().getDate()}
           </div>
         </Link>
 
-        <button 
-          onClick={() => console.log("Wallet connection triggered")}
+        {/* GitHub DEV 入口 */}
+        <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+          <div style={styles.nodeBadge} className="node-link-hover">
+            DEV_HUB
+          </div>
+        </a>
+
+        {/* 钱包按钮 */}
+        <button
+          onClick={handleWalletClick}
           style={styles.walletBtn}
-          className="wallet-btn-optimized"
+          className={`wallet-btn-optimized ${isPanelOpen ? "is-active" : ""}`}
         >
           <div className="scan-line" />
-          <div className="status-pulse-green" />
-          <span style={{ position: 'relative', zIndex: 1 }}>MYSHAE.BASE.ETH</span>
+          <div className="status-pulse-cyan" />
+          <span style={{ position: "relative", zIndex: 1 }}>
+            MYSHAPE.BASE.ETH
+          </span>
         </button>
+
+        {/* ── 晶体玻璃/全息协议面板 ── */}
+        {isPanelOpen && (
+          <div className="protocol-crystal-panel animate-panel-in">
+            <div className="corner-deco-tl" />
+            <div className="corner-deco-br" />
+
+            <div className="panel-content">
+              <div className="panel-header">
+                {genesisDone ? "IDENTITY_SESSION_ACTIVE" : "PROTOCOL_ACCESS_SESSION"}
+              </div>
+
+              <div className="panel-section">
+                {genesisDone ? (
+                  <>
+                    <div className="panel-row">
+                      <span className="label">IDENTITY</span>
+                      <span className="value">{maskedEmail || "MYSHAPE.BASE.ETH"}</span>
+                    </div>
+                    <div className="panel-row">
+                      <span className="label">STATUS</span>
+                      <div className="value-group">
+                        <div className="status-pulse-cyan-small" />
+                        <span className="value-cyan">GENESIS_VERIFIED</span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="panel-row">
+                      <span className="label">IDENTITY</span>
+                      <span className="value">UNINITIALIZED</span>
+                    </div>
+                    <div className="panel-row">
+                      <span className="label">STATUS</span>
+                      <span className="value" style={{ color: "rgba(255,255,255,0.3)" }}>AWAITING_GENESIS</span>
+                    </div>
+                  </>
+                )}
+                <div className="panel-row">
+                  <span className="label">NETWORK</span>
+                  <span className="value">BASE_MAINNET</span>
+                </div>
+                <div className="panel-row">
+                  <span className="label">SIGNAL</span>
+                  <div className="value-group">
+                    <div className="status-pulse-cyan-small" />
+                    <span className="value-cyan">ENCRYPTED</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="panel-divider" />
+
+              <div className="panel-actions">
+                {genesisDone ? (
+                  <a href="/identity" className="panel-link">
+                    <span className="link-icon">›</span> ENTER_IDENTITY_LAYER
+                  </a>
+                ) : (
+                  <a href="/genesis" className="panel-link">
+                    <span className="link-icon">›</span> INITIALIZE_GENESIS
+                  </a>
+                )}
+                <a href="/protocol" className="panel-link">
+                  <span className="link-icon">›</span> PROTOCOL_ARCHITECTURE
+                </a>
+                <a href="/roadmap" className="panel-link">
+                  <span className="link-icon">›</span> DEVELOPMENT_ROADMAP
+                </a>
+                <button
+                  onClick={handleDisconnect}
+                  className={`panel-btn-disconnect ${
+                    disconnectPhase === "CONFIRM" ? "phase-confirm" : ""
+                  } ${disconnectPhase === "SIGNAL_LOSS" ? "phase-signal-loss" : ""}`}
+                >
+                  <span className="btn-icon">×</span>
+                  <span
+                    className={`disconnect-text ${
+                      disconnectPhase === "SIGNAL_LOSS" ? "text-fade-out" : ""
+                    }`}
+                  >
+                    {disconnectPhase === "CONFIRM"
+                      ? "[ !! RECONFIRM_DISCONNECT !! ]"
+                      : "DISCONNECT_SESSION"}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* 底部能量呼吸条 */}
+            <div className="panel-footer-glow" />
+          </div>
+        )}
       </div>
 
-      <style jsx>{`
-        @keyframes statusBlink {
-          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(144, 200, 255, 0.6); }
-          50% { opacity: 0.3; transform: scale(0.9); box-shadow: 0 0 2px rgba(144, 200, 255, 0.2); }
-        }
-        @keyframes greenBlink {
-          0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(80, 255, 170, 0.8); }
-          50% { opacity: 0.4; box-shadow: 0 0 2px rgba(80, 255, 170, 0.2); }
-        }
-        @keyframes borderResonance {
-          0%, 100% { border-color: rgba(144, 200, 255, 0.2); background: rgba(144, 200, 255, 0.05); }
-          50% { border-color: rgba(144, 200, 255, 0.5); background: rgba(144, 200, 255, 0.08); }
-        }
-        @keyframes scan {
-          0% { left: -100%; }
-          100% { left: 100%; }
-        }
-
-        .status-pulse {
-          width: 4px; height: 4px; background-color: #90c8ff; border-radius: 50%;
-          animation: statusBlink 3s infinite ease-in-out;
-        }
-        .status-pulse-green {
-          width: 4px; height: 4px; background-color: #50ffaa; border-radius: 50%;
-          animation: greenBlink 2s infinite ease-in-out;
-        }
-
-        .brand-logo-link {
-          text-decoration: none;
-          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-        }
-        .brand-logo-link:hover {
-          opacity: 1 !important;
-          text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-          transform: translateX(-50%) scale(1.05) !important;
-          letter-spacing: 1.1em !important;
-        }
-
-        .wallet-btn-optimized {
-          position: relative;
-          overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          animation: borderResonance 4s infinite ease-in-out;
-        }
-
-        .scan-line {
-          position: absolute;
-          top: 0; width: 40%; height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(144, 200, 255, 0.1), transparent);
-          animation: scan 3s infinite linear;
-          pointer-events: none;
-        }
-
-        .wallet-btn-optimized:hover {
-          border-color: #90c8ff !important;
-          box-shadow: inset 0 0 10px rgba(144, 200, 255, 0.2), 0 0 15px rgba(144, 200, 255, 0.1);
-          color: #fff !important;
-          transform: translateY(-1px);
-        }
-
-        /* 新增：节点链接的交互感 */
-        .node-link-hover {
-          transition: all 0.3s ease;
-          cursor: pointer;
-        }
-        .node-link-hover:hover {
-          background: rgba(144, 200, 255, 0.15) !important;
-          border-color: rgba(144, 200, 255, 0.4) !important;
-          color: #fff !important;
-          opacity: 1 !important;
-        }
-
-        @media (max-width: 768px) {
-          .hide-mobile { display: none; }
-          .brand-logo-link { 
-            letter-spacing: 0.4em !important; 
-            font-size: 11px !important; 
-            text-indent: 0.4em !important;
-          }
-          .brand-logo-link:hover {
-            letter-spacing: 0.45em !important;
-          }
-        }
-      `}</style>
+      {/* 全屏粒子微颤动效 */}
+      {isShimmering && <div className="shimmer-overlay" />}
     </nav>
   );
 };
 
+/* ═══ 布局样式（保留为 JS 对象 — 动态值少、无需 CSS 文件） ═══ */
+
 const styles: { [key: string]: React.CSSProperties } = {
   headerNav: {
-    position: 'fixed', top: 0, left: 0, width: '100%', height: '60px',
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px',
-    background: 'linear-gradient(to bottom, rgba(2, 4, 10, 0.95) 0%, rgba(2, 4, 10, 0) 100%)',
-    backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-    zIndex: 9999, fontFamily: 'monospace', color: '#90c8ff',
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "60px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 40px",
+    background:
+      "linear-gradient(to bottom, rgba(2, 4, 10, 0.95) 0%, rgba(2, 4, 10, 0) 100%)",
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
+    zIndex: 9999,
+    fontFamily: "monospace",
+    color: "#90c8ff",
   },
   gradientOverlay: {
-    position: 'absolute', bottom: 0, left: 0, width: '100%', height: '1px',
-    background: 'linear-gradient(to right, transparent, rgba(144, 200, 255, 0.2), transparent)',
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    height: "1px",
+    background:
+      "linear-gradient(to right, transparent, rgba(144, 200, 255, 0.2), transparent)",
   },
-  leftSection: { display: 'flex', alignItems: 'center', gap: '15px', fontSize: '9px', letterSpacing: '0.15em' },
-  versionText: { fontWeight: 'bold', opacity: 0.8 },
+  leftSection: {
+    display: "flex",
+    alignItems: "center",
+    gap: "15px",
+    fontSize: "9px",
+    letterSpacing: "0.15em",
+  },
+  versionText: { fontWeight: "bold", opacity: 0.8 },
   divider: { opacity: 0.2 },
   statusText: { opacity: 0.5 },
   centerSection: {
-    position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-    color: '#fff', fontSize: '14px', letterSpacing: '1em', fontWeight: 300,
-    whiteSpace: 'nowrap', textIndent: '1em', opacity: 0.9,
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    color: "#fff",
+    fontSize: "14px",
+    letterSpacing: "1em",
+    fontWeight: 300,
+    whiteSpace: "nowrap",
+    textIndent: "1em",
+    opacity: 0.9,
   },
-  rightSection: { display: 'flex', alignItems: 'center', gap: '12px', fontSize: '9px' },
-  timeDisplay: { opacity: 0.4, letterSpacing: '0.05em' },
+  rightSection: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    fontSize: "9px",
+    position: "relative",
+  },
+  timeDisplay: { opacity: 0.4, letterSpacing: "0.05em" },
   nodeBadge: {
-    border: '1px solid rgba(144, 200, 255, 0.15)', padding: '3px 8px', fontSize: '8px',
-    background: 'rgba(144, 200, 255, 0.02)', borderRadius: '2px', opacity: 0.6,
+    border: "1px solid rgba(144, 200, 255, 0.15)",
+    padding: "3px 8px",
+    fontSize: "8px",
+    background: "rgba(144, 200, 255, 0.02)",
+    borderRadius: "2px",
+    opacity: 0.6,
   },
   walletBtn: {
-    display: 'flex', alignItems: 'center', gap: '8px',
-    border: '1px solid rgba(144, 200, 255, 0.2)',
-    padding: '4px 12px', borderRadius: '2px', color: '#90c8ff',
-    fontSize: '9px', cursor: 'pointer', fontFamily: 'monospace',
-    letterSpacing: '0.1em', fontWeight: 'bold', outline: 'none', marginLeft: '5px',
-  }
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    border: "1px solid rgba(144, 200, 255, 0.2)",
+    padding: "4px 12px",
+    borderRadius: "2px",
+    color: "#90c8ff",
+    fontSize: "9px",
+    cursor: "pointer",
+    fontFamily: "monospace",
+    letterSpacing: "0.1em",
+    fontWeight: "bold",
+    outline: "none",
+    marginLeft: "5px",
+  },
 };
 
 export default ProtocolHeader;

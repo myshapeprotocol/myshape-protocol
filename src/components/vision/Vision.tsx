@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
+import { playTick } from "@/utils/useAudioTick";
 
 /* ---------------------- 卡片组件 ---------------------- */
 interface CardProps {
@@ -15,38 +16,29 @@ const VisionCard = ({ index, glyph, title, desc1, desc2 }: CardProps) => {
   const [hover, setHover] = useState(false);
   const themeColor = "144, 200, 255"; 
 
-  // 这里的微音效逻辑针对“悬停”做了调优：声音更厚实一点
-  const playHoverTick = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      // 使用 triangle 波形，听起来比打字机的 sine 波更有“点击感”
-      oscillator.type = 'triangle';
-      oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); 
-      
-      // 极小音量 (1.5%)，确保若有若无的精致感
-      gainNode.gain.setValueAtTime(0.015, audioCtx.currentTime);
-      
-      oscillator.start();
-      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.04);
-      oscillator.stop(audioCtx.currentTime + 0.04);
-    } catch (e) { /* 浏览器拦截策略处理 */ }
-  }, []);
+  const playHoverTick = () => playTick(800, "triangle", 0.04, 0.015);
 
   return (
     <div
       onMouseEnter={() => {
         setHover(true);
-        playHoverTick(); // 触发微音效
+        playHoverTick();
       }}
       onMouseLeave={() => setHover(false)}
       className="vision-card-container"
+      style={hover ? {
+        border: `1px solid rgba(${themeColor}, 0.35)`,
+        background: `radial-gradient(circle at top left, rgba(${themeColor}, 0.06) 0%, transparent 70%)`,
+        boxShadow: `0 12px 32px -8px rgba(${themeColor}, 0.12)`,
+        transform: "translateY(-4px)",
+        transition: "all 0.5s cubic-bezier(0.2, 1, 0.3, 1)",
+      } : {
+        border: `1px solid rgba(${themeColor}, 0.1)`,
+        background: "transparent",
+        boxShadow: "none",
+        transform: "none",
+        transition: "all 0.5s cubic-bezier(0.2, 1, 0.3, 1)",
+      }}
     >
       <div className="v-scan-line" />
 
@@ -65,25 +57,19 @@ const VisionCard = ({ index, glyph, title, desc1, desc2 }: CardProps) => {
         {desc2 && <p className="vision-card-desc-sub">{desc2}</p>}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .vision-card-container {
           position: relative;
           width: 100%;
           padding: 1.5rem;
-          border-radius: 12px; 
-          border: 1px solid ${hover ? `rgba(${themeColor}, 0.3)` : `rgba(${themeColor}, 0.1)`};
-          background: ${hover 
-            ? `radial-gradient(circle at top left, rgba(${themeColor}, 0.05) 0%, transparent 70%)` 
-            : 'transparent'};
-          transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-          transform: ${hover ? 'translateY(-4px)' : 'none'};
-          box-shadow: ${hover ? `0 15px 40px -10px rgba(${themeColor}, 0.1)` : 'none'};
+          border-radius: 12px;
           cursor: default;
           overflow: hidden;
           font-family: var(--font-geist-sans), sans-serif;
           display: flex;
           flex-direction: column;
           min-height: 180px;
+          transition: border 0.6s, background 0.6s, box-shadow 0.6s;
         }
 
         .vision-card-header {
@@ -104,7 +90,7 @@ const VisionCard = ({ index, glyph, title, desc1, desc2 }: CardProps) => {
         .vision-glyph.active {
           color: #fff;
           opacity: 1;
-          animation: glitchPulse 0.4s infinite ease-out;
+          animation: visionGlyphGlow 1.5s ease-in-out infinite;
           text-shadow: 0 0 10px rgba(${themeColor}, 0.8);
         }
 
@@ -148,11 +134,7 @@ const VisionCard = ({ index, glyph, title, desc1, desc2 }: CardProps) => {
           opacity: ${hover ? 1 : 0.4};
         }
 
-        @keyframes glitchPulse {
-          0%, 100% { transform: scale(1) skew(0deg); }
-          20% { transform: scale(1.1) skew(1deg); }
-          50% { transform: scale(0.98) skew(-1deg); }
-        }
+        /* @keyframes glitchPulse → animations.css */
       `}</style>
     </div>
   );

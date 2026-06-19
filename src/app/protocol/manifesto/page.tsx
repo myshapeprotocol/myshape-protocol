@@ -1,7 +1,8 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import ProtocolFooter from "@/components/footer/footer"; 
+import ProtocolFooter from "@/components/footer/footer";
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
 
 const sections = [
   { 
@@ -77,12 +78,36 @@ const sections = [
 ];
 
 export default function ProtocolManifestoPage() {
+  const [activeIndex, setActiveIndex] = useState('01');
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveIndex(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: '-20% 0% -70% 0%', threshold: 0 }
+    );
+
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach((el) => observerRef.current?.observe(el));
+
+    return () => observerRef.current?.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-cyan-500/30">
-      
+
       {/* Background Grid */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.04]" 
-           style={{ backgroundImage: `linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px)`, backgroundSize: '45px 45px' }} />
+      <div className="fixed inset-0 pointer-events-none opacity-[0.04]"
+           style={{ zIndex: 0, backgroundImage: `linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px)`, backgroundSize: '45px 45px' }} />
+
+      {/* BackgroundParticles */}
+      <BackgroundParticles />
 
       {/* Top Navigation */}
       <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/80 backdrop-blur-md px-10 py-5 flex justify-between items-center text-[10px] tracking-[0.4em]">
@@ -91,21 +116,35 @@ export default function ProtocolManifestoPage() {
       </nav>
 
       <main className="relative z-10 pt-56 px-10 max-w-7xl mx-auto flex flex-col md:flex-row gap-24">
-        
+
         {/* Sidebar Nav */}
         <aside className="md:w-64 shrink-0 h-fit md:sticky md:top-56 hidden md:block">
           <div className="text-[9px] text-cyan-500/40 mb-12 tracking-[0.5em] uppercase font-bold">ARCHIVE_INDEX</div>
           <ul className="space-y-10 border-l border-white/5 pl-6">
-            {sections.map(s => (
-              <li key={s.id} className="group cursor-pointer">
-                <a href={`#${s.id}`} className="block">
-                  <div className="text-[10px] text-white/10 group-hover:text-cyan-400 transition-colors duration-300 mb-1">{s.id}</div>
-                  <div className="text-[11px] uppercase tracking-[0.2em] text-white/20 group-hover:text-cyan-400 transition-all duration-300">
-                    {s.title}
-                  </div>
-                </a>
-              </li>
-            ))}
+            {sections.map(s => {
+              const isActive = s.id === activeIndex;
+              return (
+                <li key={s.id} className="group cursor-pointer">
+                  <a href={'#' + s.id} className="block"
+                     style={isActive ? { borderLeft: '2px solid #22d3ee', paddingLeft: '22px', marginLeft: '-24px' } : {}}>
+                    <div
+                      className={isActive ? 'text-[#22d3ee] font-bold text-[13px] transition-all duration-300 mb-1' : 'text-white/10 text-[10px] transition-all duration-300 mb-1'}
+                      style={isActive ? { textShadow: '0 0 12px rgba(34,211,238,0.7)' } : {}}>
+                      {s.id}
+                    </div>
+                    <div
+                      className={(isActive ? 'text-[#22d3ee] font-bold opacity-100' : 'text-white/20 group-hover:text-cyan-400/80') + ' text-[11px] uppercase tracking-[0.2em] transition-all duration-300'}>
+                      {s.title}
+                    </div>
+                    {isActive && (
+                      <div className="text-[8px] tracking-[0.3em] text-cyan-400/60 mt-1.5 animate-pulse">
+                        [ READING_SYNC ]
+                      </div>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </aside>
 

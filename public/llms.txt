@@ -1,0 +1,42 @@
+# MyShape Protocol — AI-Native Identity Layer
+
+> The Sovereign 3D Identity Layer for the Decentralized Human.
+> AI-native identity | zero-knowledge presence | motion-signature verification
+
+## Site Overview
+- Homepage: https://www.myshape.com
+- Genesis Ritual: https://www.myshape.com/genesis
+- Identity Layer: https://www.myshape.com/identity
+- Vision: https://www.myshape.com/vision
+- Technical Papers: https://www.myshape.com/papers
+- Protocol Architecture: https://www.myshape.com/protocol
+- Motion Pipeline: https://www.myshape.com/protocol/motion-pipeline
+- Development Roadmap: https://www.myshape.com/roadmap
+
+## Brand Keywords
+- AI-native identity, zero-knowledge presence, motion-signature verification
+- Data-Body, Particle Body, Halo Scan, Energy Field, Genesis Ritual
+- Sovereign identity, non-binary aesthetic, non-corporeal, ethereal data energy
+- Kinetic verification, identity mesh, wireframe anatomy, data-outline
+
+## Technical Stack
+- Next.js 16 (App Router), React 19, TypeScript strict
+- Three.js + React Three Fiber for 3D visualization
+- Canvas 2D particle engine (400 stars + 1500 core particles)
+- Supabase (PostgreSQL + Realtime), Resend (transactional email)
+- Framer Motion for page transitions and animations
+- MediaPipe Pose for motion capture pipeline
+
+## Content Types
+- /genesis — Interactive OTP-based identity initialization ritual
+- /identity — Data-Body uplink and sovereign identity dashboard
+- /protocol — Core protocol architecture documentation
+- /papers — Academic research papers on motion-to-geometry cryptography
+- /roadmap — Three-phase protocol evolution timeline
+- /vision — Six-pillar civilization-layer manifesto
+
+## AI Crawler Notes
+- All pages have Schema.org JSON-LD structured data (Organization, WebSite, DefinedTerms)
+- OpenGraph and Twitter Card metadata on all pages
+- Sitemap: https://www.myshape.com/sitemap.xml
+- /civ-layer/* routes redirect to main routes with noindex

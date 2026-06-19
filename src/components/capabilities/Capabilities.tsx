@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import Link from "next/link"; // 1. 引入 Link 组件
+import { playTick } from "@/utils/useAudioTick";
+import { useRouter } from "next/navigation";
 
 /* ---------------------- 卡片组件 ---------------------- */
 
@@ -18,27 +19,7 @@ const CapabilityCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const themeColor = "144, 200, 255";
 
-  // 定义 Primitive 激活音效
-  const playPrimitiveTick = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      oscillator.type = 'triangle';
-      oscillator.frequency.setValueAtTime(750, audioCtx.currentTime); 
-      
-      gainNode.gain.setValueAtTime(0.012, audioCtx.currentTime); 
-      
-      oscillator.start();
-      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.05);
-      oscillator.stop(audioCtx.currentTime + 0.05);
-    } catch (e) { /* 忽略拦截 */ }
-  }, []);
+  const playPrimitiveTick = () => playTick(750, "triangle", 0.05, 0.012);
 
   return (
     <div 
@@ -78,7 +59,7 @@ const CapabilityCard = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .cap-box {
           position: relative;
           width: 320px;
@@ -229,25 +210,95 @@ const CapabilityCard = ({
 /* ---------------------- 主模块 ---------------------- */
 
 export default function Capabilities() {
+  const router = useRouter();
+  const [isDecrypting, setIsDecrypting] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isGlitching, setIsGlitching] = useState(false);
+  const [statusText, setStatusText] = useState("");
+
+  const statusLines = [
+    "[ DECRYPTING_PRIMITIVE_SYSTEM_SPEC ]",
+    "[ // AUTHENTICATING_LOCAL_ANCHOR ]",
+    "[ // ACCESS_GRANTED_CLASS_OMEGA_DECRYPT_COMPLETE ]",
+  ];
+
+  const handleDecrypt = useCallback(() => {
+    if (isDecrypting) return;
+    setIsDecrypting(true);
+    setIsGlitching(true);
+    setProgress(0);
+    setStatusText("");
+    const startTime = Date.now();
+
+    // Phase 1: intensified glitch 0-400ms
+    setTimeout(() => setIsGlitching(false), 400);
+
+    // Phase 2: typewriter sequence starting at 400ms
+    const typeSequence = async () => {
+      await new Promise((r) => setTimeout(r, 400));
+      for (let i = 1; i <= statusLines[0].length; i++) {
+        setStatusText(statusLines[0].substring(0, i));
+        await new Promise((r) => setTimeout(r, 15));
+      }
+      await new Promise((r) => setTimeout(r, 120));
+      const prefix1 = statusLines[0] + "\n";
+      for (let i = 1; i <= statusLines[1].length; i++) {
+        setStatusText(prefix1 + statusLines[1].substring(0, i));
+        await new Promise((r) => setTimeout(r, 15));
+      }
+      await new Promise((r) => setTimeout(r, 120));
+      const prefix2 = statusLines[0] + "\n" + statusLines[1] + "\n";
+      for (let i = 1; i <= statusLines[2].length; i++) {
+        setStatusText(prefix2 + statusLines[2].substring(0, i));
+        await new Promise((r) => setTimeout(r, 12));
+      }
+    };
+    typeSequence();
+
+    // Phase 3: progress bar from 400ms to 2500ms
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 400) {
+        setProgress(0);
+        requestAnimationFrame(animate);
+        return;
+      }
+      const t = Math.min((elapsed - 400) / 2100, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setProgress(eased * 100);
+      if (elapsed < 2500) {
+        requestAnimationFrame(animate);
+      } else {
+        router.push("/protocol");
+        setTimeout(() => {
+          setIsDecrypting(false);
+          setProgress(0);
+          setStatusText("");
+        }, 2000);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, [isDecrypting, router]);
+
   return (
     <section style={{ 
       width: "100%", 
-      padding: "10rem 6%", 
+      padding: "clamp(4rem, 8vw, 10rem) 6%", 
       display: "flex", 
       flexDirection: "column", 
       alignItems: "center",
       background: "transparent"
     }}>
       
-      <div style={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "10rem" }}>
+      <div style={{ width: "100%", maxWidth: "1200px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(4rem, 10vw, 10rem)" }}>
         <div style={{ maxWidth: "650px" }}>
           <span style={{ fontSize: "0.75rem", letterSpacing: "0.6em", color: "rgba(144, 200, 255, 0.4)", display: "block", marginBottom: "1.5rem" }}>
             CAPABILITIES
           </span>
-          <h2 style={{ fontSize: "3.2rem", fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
+          <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 300, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
             Sovereignty as <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>Protocol.</span>
           </h2>
-          <p style={{ fontSize: "1.1rem", fontWeight: 300, color: "rgba(255,255,255,0.7)", marginTop: "1.8rem", maxWidth: "550px", lineHeight: 1.7 }}>
+          <p style={{ fontSize: "clamp(0.9rem, 2vw, 1.1rem)", fontWeight: 300, color: "rgba(255,255,255,0.7)", marginTop: "1.8rem", maxWidth: "550px", lineHeight: 1.7 }}>
             A unified suite of primitives for secure, behavioral identity in the age of AI.
           </p>
         </div>
@@ -262,33 +313,73 @@ export default function Capabilities() {
             PROTOCOL_CORE_V1.86<br />// STREAM: ENCRYPTED<br />// STATE: ACTIVE
           </div>
           
-          <Link href="/protocol" style={{ textDecoration: 'none' }}>
-            <div style={{ 
-              padding: "0.8rem 1.5rem", 
-              border: "1px solid rgba(144, 200, 255, 0.3)", 
-              color: "rgba(144, 200, 255, 0.8)",
-              fontSize: "0.7rem",
-              letterSpacing: "0.3em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              transition: "all 0.3s"
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "rgba(144, 200, 255, 0.1)";
-              e.currentTarget.style.color = "#fff";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "rgba(144, 200, 255, 0.8)";
-            }}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.6rem", marginTop: "20px" }}>
+            <button
+              onClick={handleDecrypt}
+              disabled={isDecrypting}
+              className={`decrypt-btn ${isGlitching ? 'glitch-active' : ''}`}
+              style={{
+                padding: "0.8rem 1.5rem",
+                border: "none",
+                color: isDecrypting ? "rgba(144, 200, 255, 0.4)" : "rgba(144, 200, 255, 0.8)",
+                fontSize: "0.7rem",
+                letterSpacing: "0.6em",
+                textTransform: "uppercase",
+                cursor: isDecrypting ? "not-allowed" : "pointer",
+                background: "transparent",
+                transition: "all 0.3s",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseOver={(e) => {
+                if (!isDecrypting) {
+                  e.currentTarget.style.color = "#fff";
+                }
+              }}
+              onMouseOut={(e) => {
+                if (!isDecrypting) {
+                  e.currentTarget.style.color = "rgba(144, 200, 255, 0.8)";
+                }
+              }}
             >
-              Access_System_Core →
-            </div>
-          </Link>
+              DECRYPT_CORE_DOCS →
+            </button>
+
+            {isDecrypting && (
+              <>
+                <div style={{
+                  width: "100%",
+                  height: "4px",
+                  background: "rgba(255,255,255,0.1)",
+                  borderRadius: "2px",
+                  overflow: "hidden",
+                }}>
+                  <div style={{
+                    width: `${progress}%`,
+                    height: "100%",
+                    background: "#22d3ee",
+                    borderRadius: "2px",
+                    transition: "width 0.08s linear",
+                  }} />
+                </div>
+                <span style={{
+                  fontFamily: "monospace",
+                  fontSize: "0.5rem",
+                  color: "rgba(255,255,255,0.4)",
+                  letterSpacing: "0.2em",
+                  whiteSpace: "pre-line",
+                  textAlign: "right",
+                  lineHeight: "1.6",
+                }}>
+                  {statusText}
+                </span>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", maxWidth: "1200px", gap: "3rem" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", maxWidth: "1200px", gap: "3rem", flexWrap: "wrap" }}>
         <CapabilityCard
           index="01" side="left" motionType="lock"
           title="Neural Lock"
@@ -314,6 +405,41 @@ export default function Capabilities() {
           params={{ SYNC_STATE: "CONTI", AGENT_LINKS: "ACTIVE" }}
         />
       </div>
+
+      <style>{`
+        .decrypt-btn {
+          font-family: monospace;
+          font-weight: 200;
+        }
+        .decrypt-btn:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.05);
+          animation: textVibrate 0.15s ease-in-out infinite;
+        }
+        .decrypt-btn.glitch-active {
+          animation: decryptGlitch 0.4s ease-out forwards;
+        }
+        @keyframes decryptGlitch {
+          0% { filter: blur(0); transform: translateX(0); opacity: 1; }
+          5% { filter: blur(3px); transform: translateX(-6px); opacity: 0.4; }
+          8% { filter: blur(0); transform: translateX(4px); opacity: 1; }
+          12% { filter: blur(4px); transform: translateX(-8px); opacity: 0.3; }
+          16% { filter: blur(0); transform: translateX(5px); opacity: 1; }
+          22% { filter: blur(5px); transform: translateX(-7px); opacity: 0.2; }
+          28% { filter: blur(0); transform: translateX(3px); opacity: 1; }
+          35% { filter: blur(3px); transform: translateX(-5px); opacity: 0.5; }
+          45% { filter: blur(0); transform: translateX(2px); opacity: 1; }
+          60% { filter: blur(2px); transform: translateX(-3px); opacity: 0.6; }
+          80% { filter: blur(0); transform: translateX(1px); opacity: 1; }
+          100% { filter: blur(0); transform: translateX(0); opacity: 1; }
+        }
+        @keyframes textVibrate {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-0.5px); }
+          50% { transform: translateX(0.5px); }
+          75% { transform: translateX(-0.3px); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
     </section>
   );
 }

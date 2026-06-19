@@ -79,10 +79,10 @@ export default function PapersPage() {
                     <span className="text-[9px] text-white/40 border border-white/10 px-3 py-1 bg-white/5">
                       REV_{paper.version}
                     </span>
-                    <button className="text-cyan-500 hover:text-white text-[10px] tracking-[0.4em] uppercase font-bold transition-all flex items-center gap-2 group/btn">
+                    <a href="/protocol" className="text-cyan-500 hover:text-white text-[10px] tracking-[0.4em] uppercase font-bold transition-all flex items-center gap-2 group/btn">
                       <span>READ_FILE</span>
                       <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function PapersPage() {
         </section>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .clip-path-slant {
           clip-path: polygon(100% 0, 0 0, 100% 100%);
         }

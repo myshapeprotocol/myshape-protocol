@@ -11,7 +11,7 @@ export default function ContactPage() {
       name: "X_PROTOCOL", 
       desc: "UPDATES, PROTOCOL ANNOUNCEMENTS, AND CIVILIZATION SIGNALS.", 
       status: "SIGNAL_ACTIVE",
-      url: "https://x.com/myshapeprotocol", 
+      url: "https://x.com/myshapeprotocol",
       active: true 
     },
     { 
@@ -19,7 +19,7 @@ export default function ContactPage() {
       name: "LINKEDIN", 
       desc: "ORGANIZATION PROFILE, HIRING, AND INSTITUTIONAL PRESENCE.", 
       status: "STABLE_LINK",
-      url: "https://www.linkedin.com/company/myshapeprotocol/", 
+      url: "https://www.linkedin.com/company/111557251/",
       active: true 
     },
     { 
@@ -32,11 +32,11 @@ export default function ContactPage() {
     },
     { 
       id: "15", 
-      name: "GITHUB", 
-      desc: "OPEN‑SOURCE REPOSITORIES, SDKS, AND PROTOCOL REFERENCE IMPLEMENTATIONS.", 
-      status: "CODEBASE_ENCRYPTED",
-      url: "#", 
-      active: false 
+      name: "GITHUB",
+      desc: "OPEN‑SOURCE REPOSITORIES, SDKS, AND PROTOCOL REFERENCE IMPLEMENTATIONS.",
+      status: "REPO_ACTIVE",
+      url: "https://github.com/myshapeprotocol",
+      active: true
     }
   ];
 
