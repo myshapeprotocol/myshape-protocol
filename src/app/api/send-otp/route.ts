@@ -77,10 +77,10 @@ export async function POST(req: Request) {
     if (emailError) throw emailError;
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('SEND_OTP_ERROR:', error);
     return NextResponse.json(
-      { error: error.message || 'INTERNAL_SERVER_ERROR' },
+      { error: (error as Error).message || 'INTERNAL_SERVER_ERROR' },
       { status: 500 }
     );
   }

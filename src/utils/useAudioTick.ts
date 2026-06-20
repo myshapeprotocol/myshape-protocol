@@ -7,7 +7,7 @@ function warmUp() {
   if (_warmed || typeof window === "undefined") return;
   _warmed = true;
   const resume = () => {
-    if (!_ctx) _ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
     _ctx.resume();
   };
   document.addEventListener("click", resume, { once: true });
@@ -18,7 +18,7 @@ warmUp();
 
 export async function playTick(freq = 800, type: OscillatorType = "triangle", duration = 0.04, vol = 0.012) {
   if (typeof window === "undefined") return;
-  if (!_ctx) _ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
   // 每次调用都尝试恢复（浏览器可能在后台暂停 AudioContext）
   if (_ctx.state === "suspended") await _ctx.resume();
   if (_ctx.state !== "running") return;

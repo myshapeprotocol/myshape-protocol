@@ -13,8 +13,8 @@ export default function HeroVisual({ showCore = true }: { showCore?: boolean }) 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let stars: any[] = [];
-    let coreParticles: any[] = [];
+    let stars: { x: number; y: number; z: number }[] = [];
+    let coreParticles: { angle: number; radius: number; y: number; speed: number }[] = [];
 
     const handleResonance = () => {
       resonanceRef.current = { active: true, startTime: Date.now() };

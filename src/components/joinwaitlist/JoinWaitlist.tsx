@@ -26,7 +26,7 @@ export default function JoinWaitlist({ id }: { id?: string }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     let animationFrameId: number;
-    let particles: any[] = [];
+    let particles: { angle: number; radius: number; speed: number; size: number }[] = [];
 
     const init = () => {
       canvas.width = window.innerWidth;

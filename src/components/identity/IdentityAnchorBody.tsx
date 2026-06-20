@@ -8,7 +8,7 @@ import * as THREE from "three";
 /* -------------------------------------------------------
    Mouse Influence — MUST run inside Canvas
 ------------------------------------------------------- */
-const MouseTracker = ({ mouseRef }: any) => {
+const MouseTracker = ({ mouseRef }: { mouseRef: React.MutableRefObject<{ x: number; y: number }> }) => {
   const { size, camera } = useThree();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const useScrollEnergy = () => {
 /* -------------------------------------------------------
    Core Being — 脊柱型能量生命体
 ------------------------------------------------------- */
-const CoreBeing = ({ scrollEnergyRef, mouseRef }: any) => {
+const CoreBeing = ({ scrollEnergyRef, mouseRef }: { scrollEnergyRef: React.MutableRefObject<number>; mouseRef: React.MutableRefObject<{ x: number; y: number }> }) => {
   const coreRef = useRef<THREE.Points>(null);
 
   const coreData = useMemo(() => {
@@ -125,7 +125,7 @@ const CoreBeing = ({ scrollEnergyRef, mouseRef }: any) => {
 /* -------------------------------------------------------
    Energy Flow — 螺旋能量轨迹
 ------------------------------------------------------- */
-const EnergyFlow = ({ scrollEnergyRef }: any) => {
+const EnergyFlow = ({ scrollEnergyRef }: { scrollEnergyRef: React.MutableRefObject<number> }) => {
   const flowRef = useRef<THREE.Points>(null);
 
   const flowData = useMemo(() => {

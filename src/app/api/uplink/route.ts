@@ -85,8 +85,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error("UPLINK_ERROR:", err.message);
-    return NextResponse.json({ error: err.message || "INTERNAL_SERVER_ERROR" }, { status: 500 });
+  } catch (err: unknown) {
+    console.error("UPLINK_ERROR:", (err as Error).message);
+    return NextResponse.json({ error: (err as Error).message || "INTERNAL_SERVER_ERROR" }, { status: 500 });
   }
 }

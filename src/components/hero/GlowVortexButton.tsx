@@ -16,7 +16,7 @@ export default function GlowVortexButton({
   const getAudioCtx = useCallback(() => {
     if (typeof window === 'undefined') return null;
     if (!audioCtxRef.current) {
-      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioCtxRef.current = new (window.AudioContext || (window as unknown as Record<string, unknown>).webkitAudioContext)();
     }
     // 如果是被浏览器挂起的（Autoplay Policy），尝试恢复
     if (audioCtxRef.current.state === 'suspended') {

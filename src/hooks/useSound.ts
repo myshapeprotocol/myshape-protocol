@@ -5,7 +5,7 @@ export const useProtocolSound = () => {
     // 确保只在浏览器端运行
     if (typeof window === 'undefined') return;
 
-    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioCtx = new (window.AudioContext || (window as unknown as Record<string, unknown>).webkitAudioContext)();
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 

@@ -6,16 +6,14 @@ import { useRouter } from "next/navigation";
 
 /* ---------------------- 卡片组件 ---------------------- */
 
+type CardProps = {
+  index: string; title: string; line1: string; line2: string; line3: string;
+  params: Record<string, string>; side: string; motionType: string;
+};
+
 const CapabilityCard = ({
-  index,
-  title,
-  line1,
-  line2,
-  line3,
-  params,
-  side,
-  motionType,
-}: any) => {
+  index, title, line1, line2, line3, params, side, motionType,
+}: CardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const themeColor = "144, 200, 255";
 
@@ -50,7 +48,7 @@ const CapabilityCard = ({
         </div>
 
         <div className="cap-footer">
-          {Object.entries(params).map(([k, v]: any) => (
+          {Object.entries(params).map(([k, v]: [string, string]) => (
             <div key={k} className="param-row">
               <span className="param-key">{k}</span>
               <span className="param-val">{v}</span>

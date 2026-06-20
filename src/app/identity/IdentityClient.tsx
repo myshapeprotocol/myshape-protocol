@@ -108,10 +108,10 @@ export default function IdentityClient() {
 
       sessionStorage.setItem("genesis_completed", "1");
       setStatus("success");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Local Uplink Error:", err);
       setStatus("error");
-      setErrorHint(err.message.toUpperCase());
+      setErrorHint((err as Error).message.toUpperCase());
     }
   };
 

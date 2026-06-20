@@ -6,7 +6,7 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState("IDLE");
-  const poseRef = useRef<any>(null);
+  const poseRef = useRef<PoseInstance | null>(null);
 
   useEffect(() => {
     // ⭐ 修改關鍵：我們只在 activeStage 為 0 (假設 0 是 Genesis 階段) 
@@ -36,7 +36,7 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
         setStatus("FETCHING_CORE");
 
         // 2. 只有在此時才加載 MediaPipe，將 10 秒等待轉化為儀式感
-        if (!(window as any).Pose) {
+        if (!window.Pose) {
           await new Promise((resolve) => {
             const s = document.createElement('script');
             s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js";
@@ -47,7 +47,8 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
 
         setStatus("INITIALIZING_GENESIS");
 
-        const poseObj = new (window as any).Pose({
+        if (!window.Pose) return;
+        const poseObj = new window.Pose({
           locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
         });
 
@@ -57,7 +58,7 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
           minDetectionConfidence: 0.5 
         });
 
-        poseObj.onResults((results: any) => {
+        poseObj.onResults((results: PoseResult) => {
           if (!isActive || !canvasRef.current || !results.poseLandmarks) return;
           const canvas = canvasRef.current;
           const ctx = canvas.getContext('2d');
@@ -68,7 +69,7 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
             ctx.beginPath();
             // 繪製核心骨架
             [11, 12, 24, 23, 11].forEach((idx, i) => {
-              const p = results.poseLandmarks[idx];
+              const p = results.poseLandmarks![idx];
               if (p) {
                 const x = p.x * canvas.width;
                 const y = p.y * canvas.height;
