@@ -52,15 +52,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "SIGNATURE_INVALID" }, { status: 401 });
     }
 
-    // 3. 验证成功，更新状态为 ACTIVE
+    // 3. 验证成功——前 100 名标记为 GENESIS_NODE
+    const { count } = await supabase
+      .from('protocol_nodes')
+      .select('*', { count: 'exact', head: true })
+      .in('status', ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE']);
+
+    const nodeStatus = (count ?? 0) < 100 ? 'GENESIS_NODE' : 'ACTIVE';
+
     const { error: updateError } = await supabase
       .from('protocol_nodes')
-      .update({ status: 'ACTIVE' })
+      .update({ status: nodeStatus })
       .eq('email', email);
 
     if (updateError) throw updateError;
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, status: nodeStatus });
   } catch (error: unknown) {
     console.error('VERIFY_OTP_ERROR:', error);
     return NextResponse.json(

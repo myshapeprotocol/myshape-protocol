@@ -48,6 +48,7 @@ export default function GenesisClient() {
       if (!res.ok) throw new Error(data.error || "SIGNATURE_INVALID");
       sessionStorage.setItem("genesis_completed", "1");
       sessionStorage.setItem("genesis_email", email.trim());
+      if (data.status) sessionStorage.setItem("genesis_status", data.status);
       setStage("success");
     } catch (err: unknown) {
       setStage("error");
@@ -100,6 +101,13 @@ export default function GenesisClient() {
               <form onSubmit={handleCommence} className="flex flex-col items-center space-y-10">
                 {/* ── 邮箱输入终端 ── */}
                 <div className="relative group">
+                  {/* Genesis Cohort 标签 — 悬浮在终端上方 */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-0.5"
+                    style={{ border: "1px solid rgba(144,200,255,0.2)", background: "rgba(4,14,28,0.95)" }}>
+                    <span className="text-cyan-400/60 font-mono text-[6px] tracking-[0.3em] uppercase">
+                      ◈ Genesis_Cohort — First 100 only
+                    </span>
+                  </div>
                   {/* 外层辉光 */}
                   <div className="absolute -inset-[1px] rounded-sm opacity-50 group-focus-within:opacity-100 transition-opacity duration-700"
                     style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.3), transparent 40%, transparent 60%, rgba(34,211,238,0.3))", filter: "blur(8px)" }} />
@@ -237,14 +245,14 @@ export default function GenesisClient() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-              className="flex flex-col items-center space-y-6 md:space-y-8">
+              className="flex flex-col items-center space-y-4 md:space-y-5">
 
               {/* ── 核心确认视觉：光环 + 亮点 ── */}
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.7, ease: [0, 0.6, 0.3, 1] }}
-                className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
+                className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
                 {/* 外光环 1 — 慢速大圈 */}
                 <div className="absolute inset-0 rounded-full genesis-halo-outer" />
                 {/* 外光环 2 — 中速中圈 */}
@@ -259,51 +267,62 @@ export default function GenesisClient() {
                   style={{ background: "radial-gradient(circle at 35% 35%, #fff, rgba(120,200,255,0.9))" }} />
               </motion.div>
 
-              {/* ── 确认信息卡 ── */}
+              {/* ── Genesis Cohort 身份卡 ── */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
                 className="relative w-full max-w-sm genesis-success-card">
-                {/* 卡片辉光边 */}
                 <div className="absolute -inset-[1px] rounded-sm genesis-card-glow" />
-                {/* 卡片主体 */}
-                <div className="relative px-6 py-4 md:px-8 md:py-6 text-center"
+                <div className="relative px-5 py-3 md:px-7 md:py-4 text-center"
                   style={{ border: "1px solid rgba(144,200,255,0.2)", background: "rgba(4,14,28,0.9)" }}>
-                  {/* 顶部状态条 */}
-                  <div className="flex items-center justify-center gap-2 mb-3 md:mb-5">
+                  <div className="flex items-center justify-center gap-2 mb-2">
                     <div className="w-1 h-1 rounded-full bg-cyan-300 genesis-success-dot-small" />
                     <span className="text-cyan-400/50 font-mono text-[7px] tracking-[0.5em] uppercase">SIGNATURE_ACCEPTED</span>
                   </div>
-                  {/* 主标题 */}
-                  <div className="text-cyan-200/85 font-mono text-[11px] tracking-[0.35em] uppercase mb-3"
+                  <div className="text-cyan-200/85 font-mono text-[11px] tracking-[0.35em] uppercase mb-2"
                     style={{ textShadow: "0 0 14px rgba(144,200,255,0.5)" }}>
-                    IDENTITY_LAYER<br />INITIALIZED
+                    GENESIS_COHORT<br />IDENTITY_INITIALIZED
                   </div>
-                  {/* 分隔线 */}
-                  <div className="w-16 h-[1px] mx-auto mb-4 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
-                  {/* 描述 */}
-                  <p className="text-white/30 text-[8px] tracking-[0.25em] uppercase leading-relaxed">
-                    Your identity challenge has been verified.<br />
-                    <span className="text-white/15">SIG_KEY: {email.slice(0, 3)}****{email.slice(-4)}</span>
+                  <div className="w-12 h-[1px] mx-auto mb-2 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+                  <p className="text-white/50 text-[9px] tracking-[0.2em] uppercase leading-relaxed mb-2">
+                    You are now a <span className="text-cyan-300/80">Genesis Founding Entity</span>.
                   </p>
+                  <p className="text-white/20 text-[7px] tracking-[0.15em] uppercase leading-relaxed">
+                    Permanent tier. Never offered again.
+                  </p>
+                  <div className="mt-2 pt-2 border-t border-white/5">
+                    <span className="text-white/15 text-[7px] tracking-[0.15em] font-mono">
+                      SIG_KEY: {email.slice(0, 3)}****{email.slice(-4)}
+                    </span>
+                  </div>
                 </div>
-                {/* 四角括号 */}
                 <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-300/60 genesis-card-corner" />
                 <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-cyan-300/60 genesis-card-corner-tr" />
                 <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-cyan-300/60 genesis-card-corner-bl" />
                 <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-300/60 genesis-card-corner" />
               </motion.div>
 
+              {/* ── Genesis Cohort 专属徽标 ── */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.9, duration: 0.5 }}
+                className="flex items-center gap-3 px-5 py-2 border border-cyan-400/15 bg-cyan-400/[0.02]">
+                <span className="text-[9px] tracking-[0.3em] uppercase text-cyan-300/60"
+                  style={{ textShadow: "0 0 8px rgba(144,200,255,0.3)" }}>
+                  ◈ GENESIS_COHORT — FOUNDING_ENTITY
+                </span>
+              </motion.div>
+
               {/* ── 行动按钮 ── */}
               <motion.a
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
+                transition={{ delay: 1.0, duration: 0.5 }}
                 href="/identity"
                 className="relative group px-14 py-3.5 font-mono text-[9px] tracking-[0.35em] uppercase transition-all duration-500 overflow-hidden"
                 style={{ border: "1px solid rgba(144,200,255,0.3)", color: "rgba(180,220,255,0.8)", textShadow: "0 0 8px rgba(144,200,255,0.3)" }}>
-                {/* hover 辉光底 */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: "rgba(144,200,255,0.06)", boxShadow: "inset 0 0 30px rgba(144,200,255,0.1)" }} />
                 <span className="relative z-10 group-hover:text-white transition-colors duration-500">

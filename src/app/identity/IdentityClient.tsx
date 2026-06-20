@@ -245,6 +245,12 @@ export default function IdentityClient() {
                     <p className="text-[10px] tracking-[0.35em] uppercase text-cyan-200/70 text-center">
                       NODE_REGISTERED. AUTH_STATE_UPDATED.
                     </p>
+                    {typeof window !== "undefined" && sessionStorage.getItem("genesis_status") === "GENESIS_NODE" && (
+                      <p className="text-[8px] tracking-[0.3em] uppercase text-cyan-300/60 text-center animate-pulse"
+                        style={{ textShadow: "0 0 8px rgba(144,200,255,0.5)" }}>
+                        ◈ GENESIS_NODE — FOUNDING_IDENTITY
+                      </p>
+                    )}
                     <a
                       href="/"
                       onMouseEnter={() => {

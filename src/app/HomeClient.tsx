@@ -19,6 +19,7 @@ export default function HomeClient() {
   const [isTyping, setIsTyping] = useState(false);
   const [clientHash, setClientHash] = useState("0X7B2E1A9C");
   const [isGenesisUser, setIsGenesisUser] = useState(false);
+  const [genesisStatus, setGenesisStatus] = useState("ACTIVE");
 
   const maskIdentifier = (id: string) => {
     if (!id) return "RODDOG03";
@@ -31,8 +32,10 @@ export default function HomeClient() {
     // 优先检查本地 Genesis 状态
     if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
       const email = sessionStorage.getItem("genesis_email") || "";
+      const st = sessionStorage.getItem("genesis_status") || "ACTIVE";
       setActiveUser(email);
       setIsGenesisUser(true);
+      setGenesisStatus(st);
     }
   }, []);
 
@@ -107,7 +110,7 @@ export default function HomeClient() {
                   {displayText}
                 </div>
                 <div className="pr-3 border-r border-cyan-400/40 text-[7px] text-cyan-300/50 space-y-1 tracking-[0.1em] font-mono">
-                  <p>STATUS: ACTIVE</p>
+                  <p>STATUS: {genesisStatus}</p>
                   <p className="opacity-50">HASH: {clientHash}</p>
                 </div>
               </>
