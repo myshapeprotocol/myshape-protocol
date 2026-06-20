@@ -12,6 +12,7 @@ function warmUp() {
   };
   document.addEventListener("click", resume, { once: true });
   document.addEventListener("touchstart", resume, { once: true });
+  document.addEventListener("mouseenter", resume, { once: true });
 }
 warmUp();
 

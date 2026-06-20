@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import IdentitySigil from "@/components/identity/IdentitySigil";
@@ -25,25 +25,6 @@ export default function ProtocolLayout({
   renderSigil = false,
   transparentBg = false,
 }: ProtocolLayoutProps) {
-  const [flashSecLevel, setFlashSecLevel] = useState(false);
-  const [flashSysStatus, setFlashSysStatus] = useState(false);
-
-  useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const schedule = (setter: typeof setFlashSecLevel) => {
-      const delay = 5000 + Math.random() * 3000;
-      const timer = setTimeout(() => {
-        setter(true);
-        setTimeout(() => setter(false), 200);
-        schedule(setter);
-      }, delay);
-      timers.push(timer);
-    };
-    schedule(setFlashSecLevel);
-    schedule(setFlashSysStatus);
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
   return (
     <div className={`min-h-screen text-white font-mono selection:bg-cyan-500/30 overflow-x-hidden flex flex-col ${transparentBg ? 'bg-transparent' : 'bg-[#02040a]'}`}>
       {/* 1. 統一背景與動畫裝飾 */}
@@ -74,11 +55,11 @@ export default function ProtocolLayout({
               </h1>
             </div>
             <div className="hidden md:block text-[9px] tracking-[0.3em] text-right uppercase leading-loose font-mono">
-              <span style={{ color: flashSecLevel ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.3)' }}>
+              <span style={{ color: 'rgba(255,255,255,0.35)' }}>
                 SECURITY_LVL: {secLevel}
               </span>
               <br/>
-              <span style={{ color: flashSysStatus ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.3)' }}>
+              <span style={{ color: 'rgba(255,255,255,0.35)' }}>
                 SYS_STATUS: {systemStatus}
               </span>
             </div>

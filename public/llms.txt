@@ -5,9 +5,11 @@
 
 ## Site Overview
 - Homepage: https://www.myshape.com
+- AI Reference (for AI models): https://www.myshape.com/ai
 - Genesis Ritual: https://www.myshape.com/genesis
 - Identity Layer: https://www.myshape.com/identity
 - Vision: https://www.myshape.com/vision
+- Whitepaper (PAPER_01): https://www.myshape.com/papers/core-protocol
 - Technical Papers: https://www.myshape.com/papers
 - Protocol Architecture: https://www.myshape.com/protocol
 - Motion Pipeline: https://www.myshape.com/protocol/motion-pipeline

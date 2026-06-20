@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { playTick } from "@/utils/useAudioTick";
 import "./joinwaitlist.css";
 
 export default function JoinWaitlist({ id }: { id?: string }) {
@@ -10,56 +11,12 @@ export default function JoinWaitlist({ id }: { id?: string }) {
   const [isHovering, setIsHovering] = useState(false);
   const [ritualText, setRitualText] = useState("");
 
-  // 全局 AudioContext 单例 — 避免每次调用创建新实例（浏览器限制 ~6 个）
-  const audioCtxRef = useRef<AudioContext | null>(null);
-
-  const getAudioContext = useCallback(() => {
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
-    }
-    return audioCtxRef.current;
-  }, []);
-
-  const playSound = useCallback(
-    (
-      freq: number,
-      type: OscillatorType = "sine",
-      duration: number = 0.1,
-      vol: number = 0.02
-    ) => {
-      if (typeof window === "undefined") return;
-      try {
-        const audioCtx = getAudioContext();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(
-          0.00001,
-          audioCtx.currentTime + duration
-        );
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
-    },
-    [getAudioContext]
-  );
-
   const handleCommence = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 进入仪式态：UI 渐隐 + 粒子开始坍塌
     setIsRitual(true);
     setRitualText("INITIALIZING_GENESIS_SEQUENCE...");
-    playSound(60, "sawtooth", 0.8, 0.1);
-
-    // 让坍塌动画完整演完（与你 Identity 粒子坍塌时长对齐：3200ms 左右）
+    playTick(60, "sawtooth", 0.8, 0.03);
     await new Promise((r) => setTimeout(r, 3200));
-
-    // 跳转到 Genesis 流程（与首页 ENTER_GENESIS 统一）
     window.dispatchEvent(new CustomEvent("pt:navigate", { detail: { href: "/genesis" } }));
   };
 
@@ -92,8 +49,8 @@ export default function JoinWaitlist({ id }: { id?: string }) {
         let currentSpeed = p.speed;
 
         if (isRitual) {
-          p.radius *= 0.95; // 向中心收缩
-          currentSpeed *= 20; // 旋转加速
+          p.radius *= 0.95;
+          currentSpeed *= 20;
         } else if (isHovering) {
           currentSpeed *= 5;
         }
@@ -216,19 +173,15 @@ export default function JoinWaitlist({ id }: { id?: string }) {
           <button
             type="submit"
             className="genesis-btn"
-            onMouseEnter={() => setIsHovering(true)}
+            onMouseEnter={() => { setIsHovering(true); playTick(800, "triangle", 0.04, 0.012); }}
             onMouseLeave={() => setIsHovering(false)}
           >
-            {/* 边框流光 */}
             <span className="btn-border-glow" />
-            {/* 表面扫光 */}
             <span className="btn-sweep" />
-            {/* 四角呼吸点 */}
             <span className="btn-corner-tl" />
             <span className="btn-corner-tr" />
             <span className="btn-corner-bl" />
             <span className="btn-corner-br" />
-            {/* hover 光环 */}
             <span className="halo-scan" />
             <span className="halo-ring" />
             <span className="btn-text">[ INITIALIZE_IDENTITY_LAYER ]</span>

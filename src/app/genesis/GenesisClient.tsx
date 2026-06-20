@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
 import LiveCapture from "@/components/ritual/LiveCapture";
@@ -12,6 +12,7 @@ export default function GenesisClient() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleCommence = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,24 +192,20 @@ export default function GenesisClient() {
                     <div className="flex justify-center gap-2 md:gap-3 mb-8">
                       {Array.from({ length: 6 }).map((_, i) => (
                         <input key={i} type="text" maxLength={1} value={otp[i] || ""}
+                          ref={(el) => { otpRefs.current[i] = el; }}
                           onChange={(e) => {
                             const val = e.target.value.replace(/\D/g, "");
                             const arr = otp.split("");
                             arr[i] = val.slice(-1);
                             const joined = arr.join("").slice(0, 6);
                             setOtp(joined);
-                            if (val && i < 5) {
-                              const next = document.querySelector(`[data-oi="${i + 1}"]`) as HTMLInputElement;
-                              next?.focus();
-                            }
+                            if (val && i < 5) otpRefs.current[i + 1]?.focus();
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Backspace" && !otp[i] && i > 0) {
-                              const prev = document.querySelector(`[data-oi="${i - 1}"]`) as HTMLInputElement;
-                              prev?.focus();
+                              otpRefs.current[i - 1]?.focus();
                             }
                           }}
-                          data-oi={i}
                           className="w-10 h-14 md:w-11 md:h-16 bg-transparent text-center text-white font-mono text-xl md:text-2xl outline-none transition-all"
                           style={{
                             borderBottom: otp[i] ? "2px solid rgba(34,211,238,0.8)" : "1px solid rgba(255,255,255,0.1)",

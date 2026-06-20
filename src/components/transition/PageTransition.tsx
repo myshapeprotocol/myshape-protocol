@@ -1,19 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-/**
- * PageTransition — 全局页面过渡遮罩
- *
- * 所有页面切换通过 400ms 淡入淡出实现，消除硬切造成的白色闪屏。
- *
- * 使用方式：
- * - JS 导航：dispatchEvent(new CustomEvent("pt:navigate", { detail: { href: "/target" } }))
- * - <a> 链接：自动拦截（内部路由），无需修改
- *
- * 工作流程：
- *   离开旧页 → 遮罩淡入(400ms) → window.location.href → 新页加载
- *   → 遮罩从 opaque 淡出(400ms) → 隐藏
- */
 export default function PageTransition() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -27,7 +14,6 @@ export default function PageTransition() {
     if (arriving) {
       sessionStorage.removeItem("pt_arriving");
       overlay.style.display = "block";
-      // 强制重绘确保 display:block 生效
       void overlay.offsetHeight;
       overlay.style.opacity = "1";
       requestAnimationFrame(() => {
@@ -67,7 +53,6 @@ export default function PageTransition() {
       if (!anchor) return;
       const href = anchor.getAttribute("href");
       if (!href) return;
-      // 仅拦截内部路由
       if (
         href.startsWith("http") ||
         href.startsWith("#") ||

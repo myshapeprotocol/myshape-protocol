@@ -9,6 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/identity", priority: 0.8, changeFreq: "monthly" as const },
     { path: "/vision", priority: 0.8, changeFreq: "monthly" as const },
     { path: "/papers", priority: 0.7, changeFreq: "monthly" as const },
+    { path: "/papers/core-protocol", priority: 0.8, changeFreq: "monthly" as const },
+    { path: "/ai", priority: 0.5, changeFreq: "monthly" as const },
     { path: "/protocol", priority: 0.9, changeFreq: "weekly" as const },
     { path: "/protocol/motion-pipeline", priority: 0.8, changeFreq: "weekly" as const },
     { path: "/roadmap", priority: 0.7, changeFreq: "monthly" as const },
