@@ -97,7 +97,7 @@ export default function GenesisManifestoPage() {
 
       {/* 1. 固定導航欄 (Fixed Top Nav) */}
       <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/80 backdrop-blur-md px-10 py-5 flex justify-between items-center text-[10px] tracking-[0.4em]">
-        <Link href="/civ-layer/genesis" className="text-cyan-400/40 hover:text-cyan-400 transition-colors uppercase">← EXIT_ARCHIVE</Link>
+        <Link href="/civ-layer/genesis" className="text-cyan-400/70 hover:text-cyan-300 transition-colors uppercase">← EXIT_ARCHIVE</Link>
         <div className="text-white/20 uppercase font-bold tracking-[0.5em]">GENESIS_MANIFESTO // DATA_SEQUENCE</div>
       </nav>
 

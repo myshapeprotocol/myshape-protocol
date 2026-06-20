@@ -85,7 +85,7 @@ export default function TechDocPage() {
 
       {/* Top Navigation */}
       <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/80 backdrop-blur-md px-10 py-5 flex justify-between items-center text-[10px] tracking-[0.4em]">
-        <Link href="/protocol/motion-pipeline" className="text-cyan-400/40 hover:text-cyan-400 transition-colors uppercase">← EXIT_TECH_STACK</Link>
+        <Link href="/protocol/motion-pipeline" className="text-cyan-400/70 hover:text-cyan-300 transition-colors uppercase">← EXIT_TECH_STACK</Link>
         <div className="text-white/20 uppercase font-bold tracking-[0.5em]">TECHNICAL_SPECIFICATION // V0.8.1_CORE</div>
       </nav>
 

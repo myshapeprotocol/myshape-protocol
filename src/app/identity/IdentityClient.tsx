@@ -62,10 +62,8 @@ export default function IdentityClient() {
   useEffect(() => {
     setGenesisId(makeGenesisId());
     setClientReady(true);
-    // 读取 Genesis 传来的邮箱
-    const params = new URLSearchParams(window.location.search);
-    const emailParam = params.get("email");
-    if (emailParam) setEmail(emailParam);
+    const savedEmail = sessionStorage.getItem("genesis_email");
+    if (savedEmail) setEmail(savedEmail);
   }, []);
 
   useEffect(() => {
