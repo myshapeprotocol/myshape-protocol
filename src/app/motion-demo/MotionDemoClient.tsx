@@ -446,11 +446,13 @@ export default function MotionDemoClient() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 pt-28 pb-16">
         <div className="space-y-4 mb-10">
-          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">PROTOTYPE // PROOF_OF_CONCEPT</div>
-          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">Motion → Geometry → Signature</h1>
+          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">Presence_Engine // Live_Demo</div>
+          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">
+            Motion <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>→</span> Geometry <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>→</span> Signature
+          </h1>
           <p className="text-white/40 text-[12px] leading-relaxed max-w-xl">
-            All processing is local. No data is stored or transmitted. This prototype
-            demonstrates the motion-to-geometry pipeline with real or simulated motion data.
+            Real-time Presence Entropy Score via webcam. Motion Vector → SST 18-pt → 4D Entropy → ZK-Proof.
+            All processing local. Nothing uploaded. Firefox recommended.
           </p>
         </div>
 
