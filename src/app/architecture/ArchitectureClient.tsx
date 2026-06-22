@@ -82,6 +82,21 @@ export default function ArchitectureClient() {
           </div>
         </section>
 
+        {/* Reference Implementation */}
+        <section className="mb-16 p-6 border border-cyan-400/20 bg-cyan-400/[0.02] text-center">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// REFERENCE_IMPLEMENTATION</h2>
+          <p className="text-white/50 text-[12px] leading-relaxed mb-2">
+            16 protocol engines. 3863-line specification. Zero external dependencies.
+          </p>
+          <p className="text-white/25 text-[10px] leading-relaxed mb-4">
+            TypeScript monorepo. All processing on-device. No data stored or transmitted.
+          </p>
+          <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
+            className="inline-block px-8 py-2.5 border border-cyan-400/30 text-cyan-400/60 text-[10px] tracking-[0.2em] uppercase hover:border-cyan-400 hover:text-cyan-200 transition-all">
+            View on GitHub →
+          </a>
+        </section>
+
         {/* CTA */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-14">
           {[
