@@ -7,38 +7,44 @@ const PAPERS = [
   {
     title: "Technical Specification v1",
     path: "/papers/technical-spec",
-    desc: "Motion Vector format, PES engine, SST topology, proof system, and reference implementation. The engineering document.",
-    tags: ["Core", "Engineers"],
+    desc: "Motion Vector format, PES engine, SST topology, proof system, and reference implementation.",
+    tags: ["Technical Spec", "V1.0"],
+    author: "MyShape Protocol · June 2026",
   },
   {
     title: "Threat Model",
     path: "/papers/threat-model",
-    desc: "8 attack signatures, entropy gap theorem, cost model, and defense-in-depth architecture across five layers.",
-    tags: ["Security", "Researchers"],
+    desc: "8 attack signatures, entropy gap theorem, cost model, and defense-in-depth architecture.",
+    tags: ["Security Analysis", "V1.0"],
+    author: "MyShape Protocol · June 2026",
   },
   {
     title: "Core Protocol",
     path: "/civ-layer/papers/core-protocol",
     desc: "Motion-Based Identity, ZK-Presence, manifold projection, and the cryptographic foundations of geometric identity.",
-    tags: ["Core", "Whitepaper"],
+    tags: ["Whitepaper", "V2.1"],
+    author: "MyShape Protocol · 2026",
   },
   {
     title: "Protocol Architecture",
     path: "/civ-layer/papers/protocol-architecture",
     desc: "Five-layer architecture: Capture → Geometry → Integrity → Proof → Identity. Security boundaries and data flow.",
-    tags: ["Architecture", "Engineers"],
+    tags: ["Architecture", "V1.0"],
+    author: "MyShape Protocol · 2026",
   },
   {
     title: "Civilization Roadmap",
     path: "/civ-layer/papers/civilization-roadmap",
-    desc: "Four-epoch roadmap spanning 20+ years. From geometry to civilization. The long-term vision.",
-    tags: ["Vision", "Strategy"],
+    desc: "Four-epoch roadmap spanning 20+ years. From geometry to civilization.",
+    tags: ["Vision", "V1.0"],
+    author: "MyShape Protocol · 2026",
   },
   {
     title: "Papers Manifesto",
     path: "/civ-layer/papers/manifesto",
-    desc: "The philosophical foundations: why motion, why geometry, why zero-knowledge. Identity evolution.",
-    tags: ["Philosophy", "Foundations"],
+    desc: "The philosophical foundations: why motion, why geometry, why zero-knowledge.",
+    tags: ["Philosophy", "V1.0"],
+    author: "MyShape Protocol · 2026",
   },
 ];
 
@@ -71,6 +77,7 @@ export default function PapersHubClient() {
                 {p.title}
               </h3>
               <p className="text-white/25 text-[10px] leading-relaxed mb-3">{p.desc}</p>
+              <p className="text-white/12 text-[8px] tracking-[0.08em] mb-2">{p.author}</p>
               <span className="text-cyan-400/30 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all inline-block text-[10px]">→</span>
             </a>
           ))}
