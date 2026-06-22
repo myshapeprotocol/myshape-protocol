@@ -156,6 +156,21 @@ export default function HomeClient() {
               </p>
             </div>
 
+            {/* Architecture Flow */}
+            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-14">
+              {["Motion", "Behavior", "Identity Vector", "ZK Proof", "Agent Identity"].map((step, i) => (
+                <div key={step} className="flex items-center gap-2 md:gap-3">
+                  <div className="px-4 py-2 border border-cyan-400/20 bg-cyan-400/[0.03] text-cyan-400/60 text-[10px] tracking-[0.15em] uppercase whitespace-nowrap hover:border-cyan-400/40 hover:text-cyan-300 transition-all">
+                    {step}
+                  </div>
+                  {i < 4 && <span className="text-cyan-400/20 text-[10px]">→</span>}
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-white/15 text-[9px] tracking-[0.1em] mb-14 -mt-8">
+              Real-time motion → behavioral encoding → identity vector → zero-knowledge proof → cross-species verification
+            </p>
+
             {/* Five Layers */}
             <div className="space-y-1 mb-14">
               {[

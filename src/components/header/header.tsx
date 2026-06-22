@@ -147,6 +147,22 @@ const ProtocolHeader = () => {
         M Y S H A P E
       </Link>
 
+      {/* ── 导航链接 ── */}
+      <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+        <Link href="/protocol" style={{ fontFamily: "monospace", fontSize: "9px", letterSpacing: "0.2em", color: "rgba(255,255,255,0.5)", textDecoration: "none", textTransform: "uppercase" }}>
+          Protocol
+        </Link>
+        <Link href="/papers/technical-spec" style={{ fontFamily: "monospace", fontSize: "9px", letterSpacing: "0.2em", color: "rgba(255,255,255,0.5)", textDecoration: "none", textTransform: "uppercase" }}>
+          Technology
+        </Link>
+        <Link href="/developers" style={{ fontFamily: "monospace", fontSize: "9px", letterSpacing: "0.2em", color: "rgba(255,255,255,0.5)", textDecoration: "none", textTransform: "uppercase" }}>
+          Build
+        </Link>
+        <Link href="/motion-demo" style={{ fontFamily: "monospace", fontSize: "9px", letterSpacing: "0.2em", color: "rgba(144,200,255,0.6)", textDecoration: "none", textTransform: "uppercase" }}>
+          Demo
+        </Link>
+      </div>
+
       {/* ── 右侧：时间、节点与钱包 ── */}
       <div style={styles.rightSection} ref={panelRef}>
         <span style={styles.timeDisplay} className="hide-mobile">
