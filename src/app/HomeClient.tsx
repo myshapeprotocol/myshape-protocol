@@ -149,7 +149,7 @@ export default function HomeClient() {
             <div className="text-center mb-16">
               <div className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Protocol_Stack</div>
               <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
-                Human Presence Protocol
+                Human <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>Presence</span> Protocol
               </h2>
               <p style={{ fontSize: "clamp(0.9rem, 2vw, 1.1rem)", fontWeight: 300, color: "rgba(255,255,255,0.7)", marginTop: "1.8rem", maxWidth: "550px", lineHeight: 1.7, marginLeft: "auto", marginRight: "auto" }}>
                 Five-layer reference implementation. Open specification. Developer-ready.
