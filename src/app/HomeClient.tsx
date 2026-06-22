@@ -174,18 +174,18 @@ export default function HomeClient() {
             {/* Five Layers */}
             <div className="space-y-1 mb-14">
               {[
-                { l: "L5", name: "Agent Identity", desc: "AI-native identity declaration & verification", color: "cyan" },
-                { l: "L4", name: "Proof Layer", desc: "ZK-Presence: PoP + MP + EP → composite proof", color: "cyan" },
-                { l: "L3", name: "Identity Vector", desc: "Motion Vector → SST 18-pt → Feature Pipeline", color: "cyan" },
-                { l: "L2", name: "Behavior Encoding", desc: "PES engine — 4-dimensional entropy scoring", color: "cyan" },
-                { l: "L1", name: "Motion Capture", desc: "Real-time capture → MediaPipe → on-device processing", color: "cyan" },
+                { l: "L5", name: "Agent Identity", desc: "Cross-species verification. Human and AI identities coexist in one protocol." },
+                { l: "L4", name: "Proof Layer", desc: "Zero-knowledge proofs. Verify presence without exposing motion data." },
+                { l: "L3", name: "Identity Vector", desc: "Motion geometry distilled into a compact, non-replicable signature." },
+                { l: "L2", name: "Behavior Encoding", desc: "4-dimensional entropy scoring detects AI-generated motion." },
+                { l: "L1", name: "Motion Capture", desc: "Real-time camera input. All processing on-device. Nothing uploaded." },
               ].map((layer) => (
-                <div key={layer.l} className="flex items-center gap-4 px-5 py-3 border border-white/5 bg-black/30 group hover:border-white/15 transition-all">
-                  <span className="w-8 h-8 flex items-center justify-center border border-white/15 text-white/30 font-mono text-[10px] shrink-0">{layer.l}</span>
+                <div key={layer.l} className="flex items-start gap-4 px-5 py-3 border border-white/5 bg-black/30 group hover:border-white/15 transition-all">
+                  <span className="w-8 h-8 flex items-center justify-center border border-white/15 text-white/30 font-mono text-[10px] shrink-0 mt-0.5">{layer.l}</span>
                   <div className="flex-1 min-w-0">
-                    <span className="text-white/60 text-[11px] tracking-[0.2em] uppercase">{layer.name}</span>
+                    <div className="text-white/60 text-[11px] tracking-[0.2em] uppercase mb-0.5">{layer.name}</div>
+                    <div className="text-white/20 text-[10px] tracking-[0.08em] leading-relaxed">{layer.desc}</div>
                   </div>
-                  <span className="text-white/25 text-[10px] tracking-[0.1em] hidden md:block">{layer.desc}</span>
                 </div>
               ))}
             </div>
