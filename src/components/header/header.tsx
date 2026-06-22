@@ -296,8 +296,8 @@ const ProtocolHeader = () => {
       ].map(link => (
         <Link key={link.href} href={link.href}
           onMouseEnter={e => {
-            e.currentTarget.style.color = "rgba(144,200,255,0.9)";
-            e.currentTarget.style.textShadow = "0 0 8px rgba(144,200,255,0.3)";
+            e.currentTarget.style.color = "rgb(34, 211, 238)";
+            e.currentTarget.style.textShadow = "0 0 8px rgba(34,211,238,0.3)";
           }}
           onMouseLeave={e => {
             e.currentTarget.style.color = "rgba(255,255,255,0.45)";
