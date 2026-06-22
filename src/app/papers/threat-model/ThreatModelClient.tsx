@@ -176,6 +176,14 @@ export default function ThreatModelClient() {
             nervous system and any external model of it.
           </p>
         </section>
+
+        {/* Citation */}
+        <section className="mt-14 p-5 border border-white/5 bg-black/30">
+          <div className="text-white/20 text-[8px] tracking-[0.2em] uppercase mb-2">Cite This Document</div>
+          <p className="text-white/30 text-[9px] leading-relaxed font-mono">
+            MyShape Protocol. "MyShape Threat Model v1.0." June 2026. https://www.myshape.com/papers/threat-model
+          </p>
+        </section>
       </div>
 
       <ProtocolFooter />

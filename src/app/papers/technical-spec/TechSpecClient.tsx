@@ -143,8 +143,16 @@ export default function TechSpecClient() {
           ))}
         </section>
 
+        {/* Citation */}
+        <section className="mt-14 p-5 border border-white/5 bg-black/30">
+          <div className="text-white/20 text-[8px] tracking-[0.2em] uppercase mb-2">Cite This Document</div>
+          <p className="text-white/30 text-[9px] leading-relaxed font-mono">
+            MyShape Protocol. "MyShape Technical Specification v1.0." June 2026. https://www.myshape.com/papers/technical-spec
+          </p>
+        </section>
+
         {/* Reference Implementation */}
-        <section className="mt-14 p-6 border border-cyan-400/10 bg-cyan-400/[0.02] text-center">
+        <section className="mt-4 p-6 border border-cyan-400/10 bg-cyan-400/[0.02] text-center">
           <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase mb-3">Reference Implementation</div>
           <p className="text-white/30 text-[11px] leading-relaxed mb-4">
             16 protocol engines implemented in TypeScript. Zero external dependencies.
