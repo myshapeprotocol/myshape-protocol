@@ -139,11 +139,17 @@ export default function Hero() {
           </button>
         </div>
 
-        {/* Motion Demo 入口 */}
+        {/* Motion Demo 入口 — 醒目 CTA */}
         <div className="absolute bottom-[56px] md:bottom-[92px] left-0 w-full z-100 text-center pointer-events-auto">
           <a href="/motion-demo"
-            className="inline-block px-6 py-1.5 border border-cyan-400/12 text-cyan-400/25 hover:text-cyan-300/60 hover:border-cyan-400/30 text-[8px] md:text-[9px] tracking-[0.25em] uppercase font-mono transition-all duration-500">
-            See_Motion_Demo →
+            className="group relative inline-block px-8 py-2.5 border border-cyan-400/25 text-cyan-400/50 hover:text-cyan-200 hover:border-cyan-400/60 text-[9px] md:text-[10px] tracking-[0.25em] uppercase font-mono transition-all duration-500"
+            style={{ boxShadow: "0 0 20px rgba(34,211,238,0.06)" }}>
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{ background: "radial-gradient(ellipse at center, rgba(34,211,238,0.08) 0%, transparent 70%)" }} />
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_rgba(34,211,238,0.6)]" />
+              TRY_LIVE_DEMO →
+            </span>
           </a>
         </div>
         {/* 系统状态行 — 始终可见 */}
