@@ -333,11 +333,14 @@ export default function HomeClient() {
                 { value: "8", label: "Attack Signatures", sub: "4D Entropy Detection" },
                 { value: "5", label: "Lines to Integrate", sub: "import MyShape from \"@/sdk\"" },
               ].map(m => (
-                <div key={m.label} onMouseEnter={() => playTick(600, "sine", 0.06, 0.012)}
-                  className="group border border-white/5 bg-black/30 p-4 hover:border-cyan-400/15 hover:bg-black/40 transition-all duration-500 cursor-default">
-                  <div className="text-cyan-300/80 text-xl md:text-2xl font-light tracking-wider mb-1 group-hover:text-cyan-200/90 transition-colors duration-500">{m.value}</div>
-                  <div className="text-white/40 text-[9px] tracking-[0.15em] uppercase mb-0.5 group-hover:text-white/60 transition-colors duration-500">{m.label}</div>
-                  <div className="text-white/15 text-[8px] tracking-[0.08em] group-hover:text-white/25 transition-colors duration-500">{m.sub}</div>
+                <div key={m.label}
+                  className="group border border-white/5 bg-black/30 p-4 hover:border-cyan-400/30 hover:bg-black/40 hover:-translate-y-1 transition-all duration-500 cursor-default"
+                  style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}
+                  onMouseEnter={e => { playTick(600, "sine", 0.08, 0.02); e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(34,211,238,0.08)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)"; }}>
+                  <div className="text-cyan-300/80 text-xl md:text-2xl font-light tracking-wider mb-1 group-hover:text-cyan-200/90 group-hover:scale-105 transition-all duration-500">{m.value}</div>
+                  <div className="text-white/40 text-[9px] tracking-[0.15em] uppercase mb-0.5 group-hover:text-white/70 transition-colors duration-500">{m.label}</div>
+                  <div className="text-white/15 text-[8px] tracking-[0.08em] group-hover:text-white/30 transition-colors duration-500">{m.sub}</div>
                 </div>
               ))}
             </div>
