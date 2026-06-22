@@ -53,7 +53,7 @@ export default function ContactClient() {
         {/* --- SECTION A: DIRECT UPLINK (Email 通讯区) --- */}
         <section className="space-y-16">
           <div className="max-w-4xl">
-            <h2 className="text-cyan-500/80 text-[10px] tracking-[0.6em] font-bold uppercase mb-8">// ESTABLISHING_CONNECTION</h2>
+            <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// ESTABLISHING_CONNECTION</h2>
             <p className="text-xl md:text-2xl font-light tracking-[0.2em] text-white leading-tight uppercase">
               FOR PARTNERSHIPS, RESEARCH COLLABORATION, OR <span className="text-cyan-400">PROTOCOL INTEGRATION</span>.
             </p>
@@ -87,7 +87,7 @@ export default function ContactClient() {
         {/* --- SECTION B: CONNECT_NODES (网格区) --- */}
         <section id="nodes" className="space-y-12 pt-16 border-t border-white/5">
           <div className="flex items-center justify-between">
-            <h3 className="text-white/20 text-[9px] tracking-[0.6em] uppercase italic">// CONNECT_NODES_DETECTION</h3>
+            <h3 className="text-white/20 text-[9px] tracking-[0.6em] uppercase">// CONNECT_NODES_DETECTION</h3>
             <span className="text-[8px] text-cyan-500/50 font-mono animate-pulse uppercase">Scanning_External_Links...</span>
           </div>
           

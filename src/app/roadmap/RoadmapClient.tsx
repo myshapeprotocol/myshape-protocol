@@ -120,7 +120,7 @@ export default function RoadmapClient() {
     >
       <div className="space-y-24 md:space-y-32">
         <section className="max-w-4xl">
-          <h2 className="text-cyan-500/60 text-[10px] tracking-[0.6em] font-bold uppercase mb-8">// FOUR_EPOCH_ROADMAP</h2>
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// FOUR_EPOCH_ROADMAP</h2>
           <p className="text-xl md:text-2xl font-light tracking-widest text-white leading-relaxed">
             From{" "}
             <span className="text-cyan-300">geometry</span> → to{" "}

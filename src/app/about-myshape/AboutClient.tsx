@@ -32,7 +32,7 @@ export default function About() {
       <div className="space-y-32">
         {/* --- 1. 深度叙事：找回所有被删减的宏大文案 --- */}
         <section className="max-w-4xl">
-          <h2 className="text-cyan-500/80 text-[10px] tracking-[0.6em] font-bold uppercase mb-10 flex items-center gap-4">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4 flex items-center gap-4">
             <span className="w-12 h-[1px] bg-cyan-500/30" />
             ORGANIZATION_ETHOS
           </h2>
@@ -55,14 +55,14 @@ export default function About() {
 
         {/* --- 2. 组织原则矩阵 (完整的丰富文本) --- */}
         <section className="space-y-12">
-          <h3 className="text-white/20 text-[9px] tracking-[0.5em] uppercase text-center">// CORE_VALUES_CONSTITUTION</h3>
+          <h3 className="text-white/20 text-[9px] tracking-[0.6em] uppercase text-center">// CORE_VALUES_CONSTITUTION</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {organizationalPrinciples.map((principle) => (
               <div key={principle.label} className="p-8 border border-white/5 bg-white/[0.01] hover:border-cyan-500/20 transition-all group">
                 <div className="text-cyan-500 text-[9px] tracking-[0.4em] font-mono mb-6 group-hover:text-cyan-400 transition-colors">
                   {principle.label}
                 </div>
-                <h4 className="text-white text-[13px] tracking-[0.3em] font-bold uppercase mb-6">
+                <h4 className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-6">
                   {principle.title}
                 </h4>
                 <p className="text-white/30 text-[10px] tracking-widest leading-relaxed uppercase group-hover:text-white/50 transition-colors">

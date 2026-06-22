@@ -49,7 +49,7 @@ export default function VisionClient() {
             </h2>
             <p className="text-white/60 text-lg tracking-[0.15em] leading-relaxed font-light max-w-3xl">
               We envision a future where the digital version of yourself is as
-              authentic, private, and sovereign as your physical body. MyShape
+              authentic, private, and sovereign as your physical form. MyShape
               is the protocol that makes this autonomy possible in the age of
               total simulation.
             </p>
@@ -79,7 +79,7 @@ export default function VisionClient() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent animate-pulse" />
 
           <div className="max-w-2xl mx-auto text-center space-y-8 relative z-10">
-            <h4 className="text-white/20 text-[9px] tracking-[0.8em] uppercase italic">
+            <h4 className="text-white/20 text-[9px] tracking-[0.6em] uppercase">
               Internal_Projection_088
             </h4>
             <p className="text-white/80 text-[11px] tracking-[0.3em] leading-loose uppercase">
