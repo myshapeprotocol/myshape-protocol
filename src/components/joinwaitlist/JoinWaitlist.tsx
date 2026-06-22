@@ -145,16 +145,20 @@ export default function JoinWaitlist({ id }: { id?: string }) {
         }}
       >
         <div className="waitlist-header" style={{ marginBottom: "50px" }}>
+          <span style={{ fontSize: "9px", letterSpacing: "0.6em", color: "rgba(255, 255, 255, 0.2)", display: "block", marginBottom: "1rem", textTransform: "uppercase" }}>
+            Begin
+          </span>
           <h2
             style={{
               fontWeight: 200,
-              color: "#f8feff",
+              color: "#fff",
               letterSpacing: "-0.02em",
-              marginBottom: "1.2rem",
+              lineHeight: 1.1,
+              margin: 0,
               fontSize: "clamp(2rem, 5vw, 3.2rem)",
             }}
           >
-            Initialize Genesis.
+            Initialize <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>Genesis</span>.
           </h2>
           <div className="typing-container">
             <p className="typing-text">ESTABLISHING_IDENTITY_LAYER_PROTOCOL</p>
