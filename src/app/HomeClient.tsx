@@ -167,9 +167,9 @@ export default function HomeClient() {
                   <div key={layer.l} className="border border-cyan-400/10 bg-black/30 p-4">
                     <div className="flex items-center gap-3 mb-2">
                       <span className="font-mono text-[10px] shrink-0" style={{ color: "rgba(144,200,255,0.4)" }}>{layer.l}</span>
-                      <span className="text-white/70 text-[11px] tracking-[0.2em] uppercase">{layer.name}</span>
+                      <span className="text-white/70 text-[13px] tracking-[0.2em] uppercase">{layer.name}</span>
                     </div>
-                    <p className="text-white/25 text-[10px] leading-relaxed mb-2">{layer.desc}</p>
+                    <p className="text-white/25 text-[11px] leading-relaxed mb-2">{layer.desc}</p>
                     <div className="inline-block px-2 py-0.5 font-mono text-[8px] border border-cyan-400/10 text-cyan-400/40 bg-cyan-400/[0.02]">{layer.meta}</div>
                   </div>
                 ))}
@@ -259,12 +259,12 @@ export default function HomeClient() {
                             style={{ color: "rgba(144, 200, 255, 0.4)" }}>
                             {layer.l}
                           </span>
-                          <span className="text-white/70 text-[11px] tracking-[0.2em] uppercase group-hover:text-white transition-colors duration-500">
+                          <span className="text-white/70 text-[13px] tracking-[0.2em] uppercase group-hover:text-white transition-colors duration-500">
                             {layer.name}
                           </span>
                         </div>
                         {/* Description */}
-                        <p className="text-white/25 text-[10px] tracking-[0.06em] leading-relaxed mb-2 group-hover:text-white/45 transition-colors duration-500">
+                        <p className="text-white/25 text-[11px] tracking-[0.06em] leading-relaxed mb-2 group-hover:text-white/45 transition-colors duration-500">
                           {layer.desc}
                         </p>
                         {/* Metadata chip */}
