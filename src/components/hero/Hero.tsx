@@ -83,11 +83,11 @@ export default function Hero() {
             className="text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
             style={{ letterSpacing: "0.8em", textIndent: "0.8em" }}
           >
-            THE SOVEREIGN IDENTITY LAYER
+            PROOF OF PRESENCE
           </h1>
           <p className="mt-5 text-[10px] md:text-[11px] tracking-[0.25em] text-blue-200/45 uppercase font-mono max-w-2xl mx-auto leading-relaxed"
             style={{ textShadow: "0 0 12px rgba(144,200,255,0.15)" }}>
-            The decentralized motion-native protocol for verifiable human-AI existence.
+            Motion is the last sovereign signal. Verify presence, not identity.
           </p>
         </div>
 

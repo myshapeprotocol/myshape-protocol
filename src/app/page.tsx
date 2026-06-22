@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import HomeClient from "./HomeClient";
 
 export const metadata: Metadata = {
-  title: "MyShape Protocol — The Sovereign 3D Identity Layer",
+  title: "MyShape Protocol — Proof of Presence",
   description:
-    "MyShape is the identity protocol for the AI-native era. A particle-based data-body system enabling sovereign, zero-knowledge, cross-platform identity. Body is data. Data is sovereignty.",
+    "Verify human presence, not identity. Motion → Identity Vector → Zero-Knowledge Proof. The decentralized protocol for verifiable human-AI existence.",
   openGraph: {
     title: "MyShape Protocol — Identity for the AI-Native Future",
     description:
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "MyShape Protocol — AI-Native Identity",
     description:
-      "A particle-based identity protocol for the AI-native era. Body is data. Data is sovereignty.",
+      "Verify human presence, not identity. Motion → Identity Vector → Zero-Knowledge Proof.",
     images: ["/identity-sigil.jpg"],
   },
 };
