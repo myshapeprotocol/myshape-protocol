@@ -3,11 +3,9 @@ import "@/styles/animations.css";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { GeistSans, GeistMono } from "geist/font";
-import dynamic from "next/dynamic";
 import PageTransition from "@/components/transition/PageTransition";
 import ScrollTop from "@/components/ui/ScrollTop";
-
-const HeroVisual = dynamic(() => import("@/components/hero/HeroVisual"), { ssr: false });
+import HeroVisualLoader from "@/components/hero/HeroVisualLoader";
 
 /* -------------------------------
    全站 SEO metadata（首页）
@@ -192,7 +190,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         {/* 背景视觉层 */}
         <div style={{ position: "fixed", inset: 0, zIndex: -1, pointerEvents: "none" }}>
-          <HeroVisual showCore={false} />
+          <HeroVisualLoader showCore={false} />
         </div>
 
         {/* 页面内容 */}
