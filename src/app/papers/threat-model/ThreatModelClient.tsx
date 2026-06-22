@@ -77,7 +77,7 @@ export default function ThreatModelClient() {
             are detected across four PES dimensions. Defense-in-depth across five layers.
           </p>
           <p className="text-white/15 text-[10px] tracking-[0.15em] mt-2">
-            By MyShape Protocol &nbsp;·&nbsp; V1.0 &nbsp;·&nbsp; June 2026
+            By MyShape Protocol &nbsp;·&nbsp; V1.0 &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; Security Analysis — Not an Academic Paper
           </p>
         </div>
 
