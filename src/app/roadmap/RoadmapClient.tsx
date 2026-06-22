@@ -1,5 +1,6 @@
 "use client";
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
+import { playTick } from "@/utils/useAudioTick";
 
 type Status = "COMPLETED" | "CURRENT" | "PENDING";
 
@@ -149,7 +150,8 @@ export default function RoadmapClient() {
                     )}
                   </div>
 
-                  <div className={`border ${cfg.border} ${cfg.glow} bg-[#02040a]/80`}>
+                  <div className={`border ${cfg.border} ${cfg.glow} bg-[#02040a]/80`}
+                    onMouseEnter={() => playTick([600, 700, 800, 900][epochs.indexOf(epoch)] || 700, "sine", 0.08, 0.015)}>
                     <div className="p-6 md:p-10">
                       <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6 mb-2">
                         <span className="text-cyan-500/50 text-[10px] tracking-[0.4em] font-mono shrink-0">
