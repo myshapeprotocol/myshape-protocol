@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
+import { playTick } from "@/utils/useAudioTick";
 
 export default function IdentityLayer() {
   const models = [
@@ -69,6 +70,7 @@ export default function IdentityLayer() {
             {models.map((model) => (
               <div
                 key={model.name}
+                onMouseEnter={() => playTick(600, "sine", 0.08, 0.015)}
                 className="group relative bg-[#02040a] p-8 md:p-10 transition-all duration-700"
                 style={{ border: "1px solid rgba(255,255,255,0.05)" }}
               >
