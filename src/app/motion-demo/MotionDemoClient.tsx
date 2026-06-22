@@ -725,8 +725,8 @@ export default function MotionDemoClient() {
                     </div>
                   </div>
                 )}
-                <button onClick={stop} className="w-full py-2 border border-white/15 text-white/40 text-[9px] tracking-[0.3em] uppercase hover:border-white/30 hover:text-white/70 transition-all">
-                  Run_Again
+                <button onClick={stop} className="w-full py-2.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.3em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 hover:bg-cyan-400/[0.03] transition-all">
+                  ↻ Run_Again
                 </button>
               </div>
             )}
