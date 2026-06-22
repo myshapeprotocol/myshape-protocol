@@ -111,7 +111,7 @@ export default function MotionDemoClient() {
           const z = Math.sin(p.angle) * p.radius;
           const s = 300 / (300 + z);
           const alpha = 0.5 + s * 0.5;
-          ctx.fillStyle = `hsla(210, 20%, 95%, ${alpha})`;
+          ctx.fillStyle = `hsla(205, 18%, 90%, ${alpha})`;
           ctx.beginPath();
           ctx.arc(x * s, p.y * s, 0.7 * s, 0, Math.PI * 2);
           ctx.fill();
