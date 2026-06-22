@@ -148,7 +148,7 @@ export default function HomeClient() {
                 Human <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>Presence</span> Protocol
               </h2>
               <p style={{ fontSize: "clamp(0.9rem, 2vw, 1.1rem)", fontWeight: 300, color: "rgba(255,255,255,0.7)", marginTop: "1.8rem", maxWidth: "550px", lineHeight: 1.7, marginLeft: "auto", marginRight: "auto" }}>
-                Five-layer reference implementation. Open specification. Developer-ready.
+                Reference implementation. Open specification. Developer-ready.
               </p>
             </div>
 
