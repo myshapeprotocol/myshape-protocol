@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { playTick } from "@/utils/useAudioTick";
 
 export default function ProtocolFooter() {
   const [email, setEmail] = useState("");
@@ -104,12 +103,9 @@ export default function ProtocolFooter() {
                 const linkClass = "text-white/30 text-[9px] mb-5 hover:text-cyan-400 hover:translate-x-1 transition-all duration-300 tracking-[0.25em] uppercase block";
                 
                 return isExternal ? (
-                  <a key={link.name} href={safeHref} target="_blank" rel="noopener noreferrer" className={linkClass} onMouseEnter={(e) => { playTick(500, "sine", 0.10, 0.025); e.currentTarget.style.color = "rgb(34,211,238)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = ""; }}>{link.name}</a>
+                  <a key={link.name} href={safeHref} target="_blank" rel="noopener noreferrer" className={linkClass}>{link.name}</a>
                 ) : (
-                  <Link key={link.name} href={safeHref} className={linkClass}
-                    onMouseEnter={(e) => { playTick(500, "sine", 0.10, 0.025); e.currentTarget.style.color = "rgb(34,211,238)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = ""; }}>{link.name}</Link>
+                  <Link key={link.name} href={safeHref} className={linkClass}>{link.name}</Link>
                 );
               })}
             </div>
