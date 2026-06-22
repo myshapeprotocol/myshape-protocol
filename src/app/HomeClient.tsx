@@ -151,7 +151,7 @@ export default function HomeClient() {
               <h2 className="text-2xl md:text-3xl font-light tracking-[0.15em] text-white uppercase">
                 Human Presence Protocol
               </h2>
-              <p className="text-white/25 text-[11px] tracking-[0.15em] mt-3 max-w-xl mx-auto">
+              <p className="text-white/40 text-[12px] leading-relaxed max-w-xl mx-auto">
                 Five-layer reference implementation. Open specification. Developer-ready.
               </p>
             </div>
@@ -184,7 +184,7 @@ export default function HomeClient() {
                 style={{ boxShadow: "0 0 0px rgba(34,211,238,0)" }}
               >
                 <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors duration-500">Read</div>
-                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Technical Spec</div>
+                <div className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Technical Spec</div>
                 <div className="text-white/20 text-[9px] tracking-[0.1em] group-hover:text-white/35 transition-colors duration-500">Motion Vector · PES · Proof System</div>
                 <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
               </a>
@@ -195,7 +195,7 @@ export default function HomeClient() {
                 style={{ boxShadow: "0 0 0px rgba(34,211,238,0)" }}
               >
                 <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors duration-500">Review</div>
-                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Threat Model</div>
+                <div className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Threat Model</div>
                 <div className="text-white/20 text-[9px] tracking-[0.1em] group-hover:text-white/35 transition-colors duration-500">8 Attack Signatures · Entropy Gap Theorem</div>
                 <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
               </a>
@@ -206,7 +206,7 @@ export default function HomeClient() {
                 style={{ boxShadow: "0 0 0px rgba(34,211,238,0)" }}
               >
                 <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors duration-500">Build</div>
-                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Developer SDK</div>
+                <div className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Developer SDK</div>
                 <div className="text-white/20 text-[9px] tracking-[0.1em] group-hover:text-white/35 transition-colors duration-500">5 Lines to Integrate · TypeScript · Zero Deps</div>
                 <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
               </a>

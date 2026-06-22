@@ -47,11 +47,11 @@ export default function ProtocolLayout({
               {renderSigil ? (
                 <IdentitySigil />
               ) : (
-                <div className="text-cyan-500 text-[10px] tracking-[0.6em] mb-4 uppercase opacity-70 font-bold">
+                <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] mb-4 uppercase">
                   {category} // REF_{refId}
                 </div>
               )}
-              <h1 className="text-4xl font-extralight tracking-[0.4em] uppercase leading-tight">
+              <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">
                 {title.replace(/_/g, ' ')}
               </h1>
             </div>

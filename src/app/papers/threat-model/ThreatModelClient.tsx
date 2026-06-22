@@ -122,10 +122,10 @@ export default function ThreatModelClient() {
             <table className="w-full text-left border-collapse border border-white/5">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.02]">
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.2em] uppercase font-normal">Tier</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.2em] uppercase font-normal">Cost</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.2em] uppercase font-normal">Attack Types</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.2em] uppercase font-normal">Max Success</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Tier</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Cost</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Attack Types</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Max Success</th>
                 </tr>
               </thead>
               <tbody>

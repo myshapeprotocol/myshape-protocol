@@ -46,7 +46,7 @@ export default function ProtocolClient() {
       <div className="space-y-20 md:space-y-28">
         {/* ── 五层架构 ── */}
         <section>
-          <h2 className="text-white/20 text-[10px] tracking-[0.5em] uppercase mb-8 text-center">Five-Layer Architecture</h2>
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Five-Layer Architecture</h2>
           <div className="space-y-1 max-w-3xl mx-auto">
             {FIVE_LAYERS.map((l) => (
               <div key={l.layer} className="flex items-center gap-4 p-4 bg-[#02040a] border border-white/5 group hover:border-cyan-500/20 transition-all">
@@ -68,7 +68,7 @@ export default function ProtocolClient() {
 
         {/* ── 规范实施状态 ── */}
         <section>
-          <h2 className="text-white/20 text-[10px] tracking-[0.5em] uppercase mb-8 text-center">Specification Implementation</h2>
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Specification Implementation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5">
             {SPEC_SECTIONS.map((s) => (
               <div key={s.id} className="bg-[#02040a] p-5 group hover:bg-cyan-500/[0.02] transition-all">
@@ -88,7 +88,7 @@ export default function ProtocolClient() {
 
         {/* ── 引擎清单 ── */}
         <section>
-          <h2 className="text-white/20 text-[10px] tracking-[0.5em] uppercase mb-8 text-center">Protocol Engines</h2>
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Protocol Engines</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>

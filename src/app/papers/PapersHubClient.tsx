@@ -67,7 +67,7 @@ export default function PapersHubClient() {
                   <span key={t} className="text-cyan-400/30 text-[8px] tracking-[0.15em] uppercase px-2 py-0.5 border border-cyan-400/10">{t}</span>
                 ))}
               </div>
-              <h3 className="text-white/70 text-[13px] tracking-[0.2em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors">
+              <h3 className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors">
                 {p.title}
               </h3>
               <p className="text-white/25 text-[10px] leading-relaxed mb-3">{p.desc}</p>
