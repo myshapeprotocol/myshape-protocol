@@ -46,7 +46,6 @@ export default function MotionDemoClient() {
   const [aiCompare, setAiCompare] = useState<{ score: number; timing: number; noise: number; freq: number; bio: number } | null>(null);
   const [copied, setCopied] = useState(false);
   const [countdown, setCountdown] = useState(8);
-  const [, setIsSimulated] = useState(false);
   const framesRef = useRef<FeatureFrame[]>([]);
   const animRef = useRef<number>(0);
   const phaseRef = useRef<Phase>("idle");
@@ -58,87 +57,8 @@ export default function MotionDemoClient() {
   const particlesInitRef = useRef(false);
   const sstFramesRef = useRef<Array<{ frame: Record<SSTJointId, JointPosition>; timestamp: number }>>([]);
 
-  // ── Simulated Mode ──
-  const startSimulated = useCallback(() => {
-    setIsSimulated(true);
-    setPhase("capturing");
-    phaseRef.current = "capturing";
-    setCountdown(8);
-    framesRef.current = [];
-    setProofHashes(null);
-
-    const simInterval = setInterval(() => {
-      const t = Date.now();
-      const shoulderAngle = 5 + Math.sin(t * 0.003) * 8 + Math.random() * 2;
-      const elbowAngle = 30 + Math.cos(t * 0.004) * 15 + Math.random() * 3;
-      const velocity = 0.02 + Math.abs(Math.sin(t * 0.005)) * 0.08 + Math.random() * 0.01;
-      const frame: FeatureFrame = {
-        features: {
-          angles: { shoulder: shoulderAngle, elbow: elbowAngle },
-          velocities: { shoulder: velocity },
-          joints: {},
-          phase: "capturing",
-          energy: velocity * 10,
-          custom: {},
-        },
-        timestamp: t,
-      };
-      framesRef.current.push(frame);
-      setFeatures(frame);
-    }, 200);
-
-    // ── HeroVisual identical particle engine (scaled to panel) ──
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      // HeroVisual particle engine — scaled to ~50% for panel
-      const scaleFactor = 0.45;
-      const coreParticles = Array.from({ length: 1500 }, () => ({
-        angle: Math.random() * Math.PI * 2,
-        radius: Math.random() * 150,
-        y: (Math.random() - 0.5) * 300,
-        speed: 0.02 + Math.random() * 0.02,
-      }));
-
-      const drawSim = () => {
-        if (phaseRef.current !== "capturing" || !ctx) return;
-        const w = canvas.width = canvas.clientWidth || 640;
-        const h = canvas.height = canvas.clientHeight || 400;
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = "#02040a";
-        ctx.fillRect(0, 0, w, h);
-        ctx.save();
-        ctx.translate(w / 2, h / 2);
-        ctx.scale(scaleFactor, scaleFactor);
-        coreParticles.forEach(p => {
-          p.angle += p.speed;
-          const x = Math.cos(p.angle) * p.radius;
-          const z = Math.sin(p.angle) * p.radius;
-          const s = 300 / (300 + z);
-          const alpha = 0.55 + s * 0.45;
-          // Outer glow
-          ctx.fillStyle = `rgba(180, 215, 255, ${alpha * 0.35})`;
-          ctx.beginPath();
-          ctx.arc(x * s, p.y * s, 2.0 * s, 0, Math.PI * 2);
-          ctx.fill();
-          // Bright core
-          ctx.fillStyle = `rgba(220, 240, 255, ${alpha})`;
-          ctx.beginPath();
-          ctx.arc(x * s, p.y * s, 0.8 * s, 0, Math.PI * 2);
-          ctx.fill();
-        });
-        ctx.restore();
-        animRef.current = requestAnimationFrame(drawSim);
-      };
-      drawSim();
-    }
-
-    (window as unknown as Record<string, unknown>)._myshapeSimInterval = simInterval;
-  }, []);
-
   // ── Real Camera Mode ──
   const startCapture = useCallback(async () => {
-    setIsSimulated(false);
     setPhase("capturing");
     phaseRef.current = "capturing";
     setCountdown(8);
@@ -442,11 +362,8 @@ export default function MotionDemoClient() {
   // ── Stop ──
   const stop = () => {
     if (animRef.current) cancelAnimationFrame(animRef.current);
-    const si = (window as unknown as Record<string, unknown>)._myshapeSimInterval as ReturnType<typeof setInterval>;
-    if (si) { clearInterval(si); delete (window as unknown as Record<string, unknown>)._myshapeSimInterval; }
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     if (poseRef.current) { try { poseRef.current.close(); } catch { /* ok */ } }
-    setIsSimulated(false);
     setPhase("idle");
     phaseRef.current = "idle";
     setFeatures(null);
