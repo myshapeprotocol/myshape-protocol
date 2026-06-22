@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { GeistSans, GeistMono } from "geist/font";
 import HeroVisual from "@/components/hero/HeroVisual";
 import PageTransition from "@/components/transition/PageTransition";
+import ScrollTop from "@/components/ui/ScrollTop";
 
 /* -------------------------------
    全站 SEO metadata（首页）
@@ -198,6 +199,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <Analytics />
         <PageTransition />
+        <ScrollTop />
       </body>
     </html>
   );
