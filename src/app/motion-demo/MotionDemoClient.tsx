@@ -500,14 +500,26 @@ export default function MotionDemoClient() {
                 <p className="text-white/20 text-[11px] tracking-[0.08em] text-center max-w-xs mt-1">
                   Face the camera. Stand naturally.<br />No specific pose or movement needed.
                 </p>
-                <div className="flex gap-4 mt-4">
-                  <button onClick={startCapture}
-                    className="px-10 py-4 border border-cyan-400/40 text-cyan-400/80 text-[11px] tracking-[0.4em] uppercase hover:bg-cyan-400/10 hover:text-white transition-all">
-                    Activate_Camera
-                  </button>
-                  <button onClick={startSimulated}
-                    className="px-10 py-4 border border-white/10 text-white/30 text-[9px] tracking-[0.3em] uppercase hover:border-white/30 hover:text-white/60 transition-all">
-                    Simulated (no camera)
+                <div className="flex flex-col items-center gap-3 mt-4">
+                  <div className="flex gap-4">
+                    <button onClick={startCapture}
+                      className="px-10 py-4 border border-cyan-400/40 text-cyan-400/80 text-[11px] tracking-[0.4em] uppercase hover:bg-cyan-400/10 hover:text-white transition-all">
+                      Activate_Camera
+                    </button>
+                    <button onClick={startSimulated}
+                      className="px-10 py-4 border border-white/10 text-white/30 text-[9px] tracking-[0.3em] uppercase hover:border-white/30 hover:text-white/60 transition-all">
+                      Simulated (no camera)
+                    </button>
+                  </div>
+                  <button onClick={() => {
+                    playTick(800, "sine", 0.10, 0.025);
+                    setPesData({ score: 0.64, timing: 0.38, noise: 0.72, frequency: 0.15, biological: 0.55 });
+                    setThreatVerdict("✓ HUMAN_PRESENCE_VERIFIED");
+                    setProofHashes({ zkp: "a1b2c3d4", pop: "e5f6a7b8", mp: "c9d0e1f2", ep: "3a4b5c6d" });
+                    setPhase("complete");
+                  }}
+                    className="text-cyan-400/20 hover:text-cyan-400/50 text-[8px] tracking-[0.15em] uppercase transition-colors">
+                    Quick Preview (instant demo data) →
                   </button>
                 </div>
               </div>
