@@ -36,16 +36,22 @@ export default function ProtocolFooter() {
   // 注意：這裡的所有鏈接必須使用 href 鍵名
   const navGroups = [
     { 
-      title: "PROTOCOL_CORE",
+      title: "PROTOCOL",
       links: [
         { name: "PROTOCOL_INDEX", href: "/protocol" },
         { name: "ARCHITECTURE", href: "/architecture" },
         { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
-        { name: "MOTION_DEMO", href: "/motion-demo" },
+        { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" }
+      ]
+    },
+    {
+      title: "BUILD",
+      links: [
         { name: "DEVELOPERS", href: "/developers" },
-        { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" },
-        { name: "AI_AGENT", href: "/agent" }
+        { name: "MOTION_DEMO", href: "/motion-demo" },
+        { name: "AI_AGENT", href: "/agent" },
+        { name: "GITHUB", href: "https://github.com/myshapeprotocol" }
       ]
     },
     {
