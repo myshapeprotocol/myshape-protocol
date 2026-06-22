@@ -182,10 +182,20 @@ export default function HomeClient() {
               {/* Spine glow pulse */}
               <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[3px] opacity-20"
                 style={{ background: "linear-gradient(to bottom, transparent, rgba(144,200,255,0.4), rgba(144,200,255,0.2), transparent)", filter: "blur(4px)" }} />
+              {/* Scanning droplet — scrolls up and down the spine */}
+              <div className="absolute left-1/2 -translate-x-1/2 z-20"
+                style={{ animation: "dropletScroll 6s ease-in-out infinite" }}>
+                <div className="w-3 h-3 rounded-full"
+                  style={{
+                    background: "radial-gradient(circle at 40% 35%, rgba(200,235,255,0.7), rgba(100,180,255,0.2))",
+                    boxShadow: "0 0 12px rgba(144,200,255,0.3), 0 0 24px rgba(144,200,255,0.1)",
+                  }} />
+              </div>
+
               {/* Scanning beam */}
               <div className="absolute left-1/2 -translate-x-1/2 w-[2px] h-16"
                 style={{
-                  background: "linear-gradient(to bottom, transparent, rgba(200,230,255,0.5), transparent)",
+                  background: "linear-gradient(to bottom, transparent, rgba(200,230,255,0.3), transparent)",
                   animation: "spineScan 4s ease-in-out infinite",
                   filter: "blur(1px)",
                 }} />
@@ -198,14 +208,13 @@ export default function HomeClient() {
                 { l: "L1", name: "MOTION CAPTURE", desc: "Real-time local camera input. All processing on-device. Zero data upload.", meta: "HARDWARE: LOCAL_SANDBOX // ENCLAVE_SECURE", hue: 180, side: "right" as const, delay: "1.2s" },
               ].map((layer) => (
                 <div key={layer.l} className={`relative flex items-center mb-6 ${layer.side === "left" ? "flex-row" : "flex-row-reverse"}`}>
-                  {/* Spine trace — horizontal circuit line to card, pulsing opacity */}
-                  <div className="absolute top-1/2 -translate-y-1/2 z-10"
+                  {/* Spine trace — horizontal bridge to card */}
+                  <div className="absolute top-1/2 z-10"
                     style={{
-                      left: layer.side === "left" ? "calc(50% - 18px)" : "50%",
-                      width: "18px",
+                      left: layer.side === "left" ? "calc(50% - 14px)" : "50%",
+                      width: "14px",
                       height: "1px",
-                      background: "rgba(144,200,255,0.25)",
-                      animation: `nodePulse 2.5s ease-in-out ${layer.delay} infinite`,
+                      background: "rgba(144,200,255,0.15)",
                     }} />
 
                   {/* Bracket Card */}
