@@ -156,44 +156,82 @@ export default function HomeClient() {
               </p>
             </div>
 
-            {/* Five Layers — staggered floating cards */}
-            <div className="relative max-w-2xl mx-auto">
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent"
-                style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)" }} />
+            {/* ── Cryptographic Sovereign Spine ── */}
+            <div className="relative max-w-3xl mx-auto">
+              {/* Quantum Spine — central axis */}
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px]"
+                style={{ background: "linear-gradient(to bottom, hsla(270,60%,70%,0.4), hsla(200,60%,60%,0.3), hsla(180,50%,50%,0.2))" }} />
+              {/* Spine glow pulse */}
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[3px] opacity-20"
+                style={{ background: "linear-gradient(to bottom, hsla(270,60%,70%,0.6), hsla(200,60%,60%,0.4), hsla(180,50%,50%,0.2))", filter: "blur(4px)" }} />
+
               {[
-                { l: "L5", name: "Agent Identity", desc: "Cross-species verification. Human and AI identities coexist in one protocol.", hue: 210, ml: "ml-0 md:ml-16", mr: "mr-0 md:mr-16" },
-                { l: "L4", name: "Proof Layer", desc: "Zero-knowledge proofs. Verify presence without exposing motion data.", hue: 205, ml: "ml-0 md:ml-4", mr: "mr-0 md:mr-4" },
-                { l: "L3", name: "Identity Vector", desc: "Motion geometry distilled into a compact, non-replicable signature.", hue: 200, ml: "ml-0 md:ml-12", mr: "mr-0 md:mr-12" },
-                { l: "L2", name: "Behavior Encoding", desc: "4-dimensional entropy scoring detects AI-generated motion.", hue: 195, ml: "ml-0 md:ml-2", mr: "mr-0 md:mr-2" },
-                { l: "L1", name: "Motion Capture", desc: "Real-time camera input. All processing on-device. Nothing uploaded.", hue: 190, ml: "ml-0 md:ml-20", mr: "mr-0 md:mr-20" },
-              ].map((layer, i) => (
-                <div key={layer.l} className={`${i % 2 === 0 ? layer.ml : layer.mr} mb-3 group`}>
-                  <div className="relative border border-cyan-400/10 bg-black/40 hover:border-cyan-400/25 transition-all duration-700 overflow-hidden"
+                { l: "L5", name: "AGENT IDENTITY", desc: "Cross-species verification. Human and AI identities coexist in one protocol.", meta: "PROOF_STATE: ACTIVE_COEXISTENCE // 0x2A19F", hue: 270, side: "right" as const },
+                { l: "L4", name: "PROOF LAYER", desc: "Zero-knowledge proofs. Verify presence without exposing raw motion data.", meta: "VERIFIER: ZK_SNARK_PASS // SIG_OK", hue: 230, side: "left" as const },
+                { l: "L3", name: "IDENTITY VECTOR", desc: "Motion geometry distilled into a compact, non-replicable signature.", meta: "GEOMETRY: VECTOR_3D_DISTILLED // SIG_SECURE", hue: 210, side: "right" as const },
+                { l: "L2", name: "BEHAVIOR ENCODING", desc: "4-dimensional entropy scoring detects and flags AI-generated synthetic motion.", meta: "ENTROPY: 4D_SCORING_VERIFIED // 0.992_REAL", hue: 195, side: "left" as const },
+                { l: "L1", name: "MOTION CAPTURE", desc: "Real-time local camera input. All processing on-device. Zero data upload.", meta: "HARDWARE: LOCAL_SANDBOX // ENCLAVE_SECURE", hue: 180, side: "right" as const },
+              ].map((layer) => (
+                <div key={layer.l} className={`relative flex items-center mb-6 ${layer.side === "left" ? "flex-row" : "flex-row-reverse"}`}>
+                  {/* Spine connector */}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full z-10 border-2"
                     style={{
-                      boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-                      backdropFilter: "blur(4px)",
-                    }}>
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                      style={{ background: `radial-gradient(ellipse at 20% 50%, rgba(144,200,255,0.06) 0%, transparent 60%)` }} />
-                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    <div className="flex items-center gap-4 px-5 py-4">
-                      <span className="w-10 h-10 flex items-center justify-center font-mono text-[11px] shrink-0 rounded-sm"
+                      borderColor: `hsla(${layer.hue}, 60%, 60%, 0.5)`,
+                      background: `hsla(${layer.hue}, 50%, 30%, 0.8)`,
+                      boxShadow: `0 0 8px hsla(${layer.hue}, 60%, 60%, 0.3)`,
+                    }} />
+
+                  {/* Bracket Card */}
+                  <div className={`w-[calc(50%-20px)] group`}>
+                    <div className="relative"
+                      style={{
+                        background: "rgba(2,4,10,0.85)",
+                        border: "none",
+                      }}>
+                      {/* Opening bracket */}
+                      <span className="absolute top-0 bottom-0 w-[8px] opacity-40 group-hover:opacity-80 transition-opacity duration-500"
                         style={{
-                          border: `1px solid rgba(144,200,255,0.2)`,
-                          color: `hsla(${layer.hue}, 70%, 75%, 0.7)`,
-                          background: `hsla(${layer.hue}, 50%, 50%, 0.08)`,
-                          boxShadow: `0 0 12px hsla(${layer.hue}, 70%, 60%, 0.15), inset 0 1px 0 hsla(${layer.hue}, 70%, 80%, 0.1)`,
-                        }}>
-                        {layer.l}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-white/70 text-[12px] tracking-[0.2em] uppercase mb-1">{layer.name}</div>
-                        <div className="text-white/25 text-[10px] tracking-[0.06em] leading-relaxed">{layer.desc}</div>
+                          [layer.side === "left" ? "left" : "right"]: 0,
+                          borderLeft: layer.side === "left" ? "1px solid rgba(144,200,255,0.4)" : "none",
+                          borderRight: layer.side === "right" ? "1px solid rgba(144,200,255,0.4)" : "none",
+                          borderTop: "none",
+                          borderBottom: "none",
+                        }} />
+                      <span className={`absolute top-0 h-[1px] w-6 opacity-40 group-hover:opacity-80 transition-opacity duration-500 ${layer.side === "left" ? "left-0" : "right-0"}`}
+                        style={{ background: "rgba(144,200,255,0.4)" }} />
+                      <span className={`absolute bottom-0 h-[1px] w-6 opacity-40 group-hover:opacity-80 transition-opacity duration-500 ${layer.side === "left" ? "left-0" : "right-0"}`}
+                        style={{ background: "rgba(144,200,255,0.4)" }} />
+
+                      <div className={`${layer.side === "left" ? "pl-5 pr-4" : "pr-5 pl-4"} py-4`}>
+                        {/* Layer label + name */}
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="font-mono text-[9px] tracking-[0.3em] shrink-0"
+                            style={{ color: `hsla(${layer.hue}, 70%, 70%, 0.6)` }}>
+                            {layer.l}
+                          </span>
+                          <span className="text-white/60 text-[11px] tracking-[0.25em] uppercase font-light">
+                            {layer.name}
+                          </span>
+                        </div>
+                        {/* Description */}
+                        <p className="text-white/25 text-[10px] tracking-[0.06em] leading-relaxed mb-2">
+                          {layer.desc}
+                        </p>
+                        {/* Metadata chip */}
+                        <div className="inline-block px-2 py-0.5 font-mono text-[8px] tracking-[0.1em]"
+                          style={{
+                            border: `1px solid hsla(${layer.hue}, 40%, 50%, 0.25)`,
+                            color: `hsla(${layer.hue}, 50%, 70%, 0.6)`,
+                            background: `hsla(${layer.hue}, 30%, 20%, 0.15)`,
+                          }}>
+                          {layer.meta}
+                        </div>
                       </div>
-                      <div className="w-1.5 h-1.5 rounded-full shrink-0 opacity-30 group-hover:opacity-80 transition-opacity duration-700"
-                        style={{ background: `hsla(${layer.hue}, 70%, 70%, 0.8)`, boxShadow: `0 0 6px hsla(${layer.hue}, 70%, 60%, 0.4)` }} />
                     </div>
                   </div>
+
+                  {/* Empty spacer for the other side */}
+                  <div className="w-[calc(50%-20px)]" />
                 </div>
               ))}
             </div>
