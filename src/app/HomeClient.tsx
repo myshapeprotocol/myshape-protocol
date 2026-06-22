@@ -276,7 +276,7 @@ export default function HomeClient() {
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
               {[
-                { value: "16", label: "Protocol Engines", sub: "TypeScript · Zero Deps" },
+                { value: "15", label: "Protocol Engines", sub: "TypeScript · Zero Deps" },
                 { value: "§1–40", label: "Spec Sections", sub: "3863-line Technical Spec" },
                 { value: "8", label: "Attack Signatures", sub: "4D Entropy Detection" },
                 { value: "5", label: "Lines to Integrate", sub: "import MyShape from \"@/sdk\"" },

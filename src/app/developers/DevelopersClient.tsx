@@ -171,7 +171,7 @@ if (threat.overallVerdict === "human") {
 
           {/* Live API Response Examples */}
           <div className="mt-6 border border-cyan-400/10 bg-cyan-400/[0.02] p-5">
-            <div className="text-cyan-400/40 text-[8px] tracking-[0.3em] uppercase mb-4">// LIVE_RESPONSE_EXAMPLES</div>
+            <div className="text-cyan-400/40 text-[8px] tracking-[0.3em] uppercase mb-4">// RESPONSE_FORMAT</div>
             <div className="space-y-4">
               <div>
                 <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/identity?email=hello@myshape.com</div>
