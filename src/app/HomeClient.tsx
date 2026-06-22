@@ -311,9 +311,9 @@ export default function HomeClient() {
         {/* Protocol Status */}
         <section className="relative py-6">
           <div className="max-w-5xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-emerald-400/15 bg-emerald-400/[0.02]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)] animate-pulse" />
-              <span className="text-emerald-400/50 text-[8px] tracking-[0.2em] uppercase font-mono">Protocol_Status: ACTIVE — 15 engines · 45 tests passing</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-cyan-400/15 bg-cyan-400/[0.02]">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)] animate-pulse" />
+              <span className="text-cyan-400/50 text-[8px] tracking-[0.2em] uppercase font-mono">Protocol_Status: ACTIVE — 15 engines · 45 tests passing</span>
             </div>
           </div>
         </section>
