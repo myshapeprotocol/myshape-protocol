@@ -43,8 +43,10 @@ export default function Hero() {
     let frame = 0;
     const pulse = setInterval(() => {
       frame++;
-      const glow = 0.08 + Math.sin(frame * 0.05) * 0.12;
-      el.style.textShadow = `0 0 ${24 + Math.sin(frame * 0.05) * 16}px rgba(144,200,255,${glow})`;
+      const phase = Math.sin(frame * 0.04);
+      const blur = 20 + phase * 14;
+      const alpha = 0.2 + phase * 0.3;
+      el.style.textShadow = `0 0 ${blur}px rgba(144,200,255,${alpha}), 0 0 ${blur * 2}px rgba(144,200,255,${alpha * 0.5})`;
     }, 50);
     return () => clearInterval(pulse);
   }, []);
