@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import HomeClient from "./HomeClient";
 
 export const metadata: Metadata = {
-  title: "MyShape Protocol — Proof of Presence",
+  title: "MyShape — The Sovereign 3D Identity Layer for the Decentralized Human",
   description:
     "Verify human presence, not identity. Motion → Identity Vector → Zero-Knowledge Proof. The decentralized protocol for verifiable human-AI existence.",
   openGraph: {
