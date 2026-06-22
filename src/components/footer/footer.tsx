@@ -85,7 +85,7 @@ export default function ProtocolFooter() {
 
   return (
     <footer className="relative z-10 w-full bg-transparent font-mono pt-20 md:pt-32 pb-12 md:pb-20">
-      <div className="max-w-6xl mx-auto px-4 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-y-12 md:gap-y-16 gap-x-4 md:gap-x-12">
+      <div className="max-w-6xl mx-auto px-4 md:px-10 grid grid-cols-2 md:grid-cols-5 gap-y-12 md:gap-y-16 gap-x-2 md:gap-x-6">
         {navGroups.map((group) => (
           <div key={group.title} className="flex justify-start md:justify-center"> 
             <div className="flex flex-col items-start min-w-[160px]">
