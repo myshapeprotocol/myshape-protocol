@@ -168,6 +168,34 @@ if (threat.overallVerdict === "human") {
               <span className="text-white/25 text-[10px]">{ep.desc}</span>
             </div>
           ))}
+
+          {/* Live API Response Examples */}
+          <div className="mt-6 border border-cyan-400/10 bg-cyan-400/[0.02] p-5">
+            <div className="text-cyan-400/40 text-[8px] tracking-[0.3em] uppercase mb-4">// LIVE_RESPONSE_EXAMPLES</div>
+            <div className="space-y-4">
+              <div>
+                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/identity?email=hello@myshape.com</div>
+                <pre className="bg-black/60 p-3 text-emerald-400/60 text-[9px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">
+{`{
+  "found": true,
+  "email": "hello@myshape.com",
+  "node_handle": null,
+  "status": "GENESIS_NODE",
+  "registered_at": "2026-06-22T09:12:01.329Z"
+}`}</pre>
+              </div>
+              <div>
+                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/nodes/count</div>
+                <pre className="bg-black/60 p-3 text-emerald-400/60 text-[9px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">
+{`{
+  "total": 17,
+  "humans": 8,
+  "agents": 3,
+  "genesis_nodes": 4
+}`}</pre>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
 

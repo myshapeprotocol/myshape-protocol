@@ -271,6 +271,26 @@ export default function HomeClient() {
           </div>
         </section>
 
+        {/* Protocol Metrics */}
+        <section className="relative py-12">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+              {[
+                { value: "16", label: "Protocol Engines", sub: "TypeScript · Zero Deps" },
+                { value: "§1–40", label: "Spec Sections", sub: "3863-line Technical Spec" },
+                { value: "8", label: "Attack Signatures", sub: "4D Entropy Detection" },
+                { value: "5", label: "Lines to Integrate", sub: "import MyShape from \"@/sdk\"" },
+              ].map(m => (
+                <div key={m.label} className="border border-white/5 bg-black/30 p-4">
+                  <div className="text-cyan-300/80 text-xl md:text-2xl font-light tracking-wider mb-1">{m.value}</div>
+                  <div className="text-white/40 text-[9px] tracking-[0.15em] uppercase mb-0.5">{m.label}</div>
+                  <div className="text-white/15 text-[8px] tracking-[0.08em]">{m.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <Vision />
         <Capabilities />
         <HowItWorks />
