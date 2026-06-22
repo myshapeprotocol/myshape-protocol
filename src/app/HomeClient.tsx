@@ -158,15 +158,15 @@ export default function HomeClient() {
 
             {/* Architecture Flow — visual centerpiece */}
             <div className="relative mb-12">
-              <div className="hidden md:block absolute top-1/2 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className="hidden md:block absolute top-1/2 left-[5%] right-[5%] h-[1px] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
               <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
                 {["Motion", "Behavior", "Identity Vector", "ZK Proof", "Agent Identity"].map((step, i) => (
                   <div key={step} className="flex items-center gap-3 md:gap-4">
-                    <div className="group relative px-5 py-2.5 border border-white/10 bg-black/40 hover:border-white/25 hover:bg-black/60 transition-all duration-500 cursor-default"
+                    <div className="group relative px-5 py-2.5 border border-cyan-400/10 bg-black/40 hover:border-cyan-400/25 hover:bg-black/60 transition-all duration-500 cursor-default"
                       style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         style={{ background: "radial-gradient(ellipse at center, rgba(144,200,255,0.06) 0%, transparent 70%)" }} />
-                      <span className="relative z-10 text-white/50 group-hover:text-white/80 text-[11px] tracking-[0.15em] uppercase transition-colors duration-500">{step}</span>
+                      <span className="relative z-10 text-cyan-400/40 group-hover:text-cyan-300/80 text-[11px] tracking-[0.15em] uppercase transition-colors duration-500">{step}</span>
                     </div>
                     {i < 4 && <span className="text-white/10 text-[12px] font-light">→</span>}
                   </div>
@@ -176,7 +176,7 @@ export default function HomeClient() {
 
             {/* Five Layers — with vertical connecting line */}
             <div className="relative max-w-2xl mx-auto mb-14">
-              <div className="absolute left-[19px] top-4 bottom-4 w-[1px] bg-gradient-to-b from-white/10 via-white/5 to-white/10" />
+              <div className="absolute left-[19px] top-4 bottom-4 w-[1px] bg-gradient-to-b from-cyan-400/20 via-cyan-400/10 to-cyan-400/20" />
               <div className="space-y-0.5">
                 {[
                   { l: "L5", name: "Agent Identity", desc: "Cross-species verification. Human and AI identities coexist in one protocol." },
@@ -185,8 +185,8 @@ export default function HomeClient() {
                   { l: "L2", name: "Behavior Encoding", desc: "4-dimensional entropy scoring detects AI-generated motion." },
                   { l: "L1", name: "Motion Capture", desc: "Real-time camera input. All processing on-device. Nothing uploaded." },
                 ].map((layer) => (
-                  <div key={layer.l} className="relative flex items-start gap-4 pl-12 pr-5 py-3 border border-transparent hover:border-white/5 hover:bg-white/[0.02] transition-all">
-                    <span className="absolute left-0 w-[38px] h-[38px] flex items-center justify-center border border-white/10 bg-black/50 text-white/25 font-mono text-[10px] shrink-0"
+                  <div key={layer.l} className="relative flex items-start gap-4 pl-12 pr-5 py-3 border border-transparent hover:border-cyan-400/10 hover:bg-cyan-400/[0.02] transition-all">
+                    <span className="absolute left-0 w-[38px] h-[38px] flex items-center justify-center border border-cyan-400/15 bg-black/50 text-cyan-400/35 font-mono text-[10px] shrink-0"
                       style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.4)" }}>
                       {layer.l}
                     </span>
@@ -208,7 +208,7 @@ export default function HomeClient() {
               ].map(card => (
                 <a key={card.href} href={card.href}
                   onMouseEnter={e => { playTick(card.freq, "sine", 0.10, 0.025); }}
-                  className="group relative p-6 border border-white/10 bg-black/40 hover:border-white/25 hover:bg-black/60 transition-all duration-500 text-center"
+                  className="group relative p-6 border border-cyan-400/10 bg-black/40 hover:border-cyan-400/25 hover:bg-black/60 transition-all duration-500 text-center"
                   style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{ background: "radial-gradient(ellipse at center, rgba(144,200,255,0.06) 0%, transparent 70%)" }} />
