@@ -45,18 +45,29 @@ export default function ArchitectureClient() {
           <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-8">// PROTOCOL_PIPELINE</h2>
           <div className="relative">
             <div className="absolute left-6 top-8 bottom-8 w-[1px] bg-gradient-to-b from-cyan-400/30 via-cyan-400/15 to-cyan-400/5" />
+            {/* Scanning beam */}
+            <div className="absolute left-[21px] w-[3px] h-12"
+              style={{
+                background: "linear-gradient(to bottom, transparent, rgba(34,211,238,0.25), transparent)",
+                animation: "spineScan 4s ease-in-out infinite",
+                filter: "blur(1px)",
+              }} />
             <div className="space-y-0">
               {PIPELINE.map((p, i) => (
-                <div key={p.step} className="relative flex gap-5 pl-10 pb-8 last:pb-0">
-                  <div className="absolute left-[10px] top-3 w-3 h-3 rounded-full border-2 border-cyan-400/40 bg-[#02040a] z-10"
-                    style={{ boxShadow: "0 0 8px rgba(34,211,238,0.3)" }} />
-                  <div className="flex-1 border border-white/5 bg-black/30 p-5 hover:border-cyan-400/15 transition-all">
+                <div key={p.step} className="relative flex gap-5 pl-10 pb-8 last:pb-0 group">
+                  <div className="absolute left-[10px] top-3 w-3 h-3 rounded-full border-2 border-cyan-400/40 bg-[#02040a] z-10 group-hover:border-cyan-300/80 group-hover:shadow-[0_0_12px_rgba(34,211,238,0.5)] transition-all duration-500"
+                    style={{
+                      boxShadow: "0 0 8px rgba(34,211,238,0.3)",
+                      animation: `nodePulse 2.5s ease-in-out ${i * 0.4}s infinite`,
+                    }} />
+                  <div className="flex-1 border border-white/5 bg-black/30 p-5 hover:border-cyan-400/20 hover:bg-black/40 hover:-translate-y-0.5 transition-all duration-500"
+                    style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <span className="text-cyan-400/40 font-mono text-[10px] tracking-[0.2em]">{p.step}</span>
                         <span className="text-white/70 text-[12px] tracking-[0.2em] uppercase">{p.name}</span>
                       </div>
-                      <span className="text-cyan-400/25 text-[9px] tracking-[0.1em] font-mono">{p.output}</span>
+                      <span className="text-cyan-400/20 group-hover:text-cyan-300/50 text-[9px] tracking-[0.1em] font-mono transition-colors duration-500">{p.output}</span>
                     </div>
                     <p className="text-white/25 text-[10px] leading-relaxed">{p.desc}</p>
                   </div>
