@@ -137,6 +137,14 @@ export default function Hero() {
               <div className="flow-dot right-0" />
             </div>
           </button>
+
+          {/* Try Demo — secondary CTA */}
+          <div className="mt-4">
+            <a href="/motion-demo"
+              className="inline-block text-cyan-400/30 hover:text-cyan-300/70 text-[10px] tracking-[0.25em] uppercase font-mono transition-all duration-500 border border-transparent hover:border-cyan-400/20 px-6 py-1.5">
+              Try Motion Demo →
+            </a>
+          </div>
         </div>
 
         {/* Motion Demo 入口 */}
