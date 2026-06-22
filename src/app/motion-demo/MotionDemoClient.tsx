@@ -110,10 +110,16 @@ export default function MotionDemoClient() {
           const x = Math.cos(p.angle) * p.radius;
           const z = Math.sin(p.angle) * p.radius;
           const s = 300 / (300 + z);
-          const alpha = 0.5 + s * 0.5;
-          ctx.fillStyle = `hsla(205, 18%, 90%, ${alpha})`;
+          const alpha = 0.55 + s * 0.45;
+          // Outer glow
+          ctx.fillStyle = `hsla(200, 12%, 92%, ${alpha * 0.35})`;
           ctx.beginPath();
-          ctx.arc(x * s, p.y * s, 0.7 * s, 0, Math.PI * 2);
+          ctx.arc(x * s, p.y * s, 2.0 * s, 0, Math.PI * 2);
+          ctx.fill();
+          // Bright core
+          ctx.fillStyle = `hsla(200, 8%, 98%, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(x * s, p.y * s, 0.8 * s, 0, Math.PI * 2);
           ctx.fill();
         });
         ctx.restore();
