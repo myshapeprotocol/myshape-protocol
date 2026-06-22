@@ -2,6 +2,7 @@
 import ProtocolHeader from "@/components/header/header";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import ProtocolFooter from "@/components/footer/footer";
+import { playTick } from "@/utils/useAudioTick";
 
 const PIPELINE = [
   { step: "01", name: "Human Motion", desc: "Real-time camera input. On-device processing. MediaPipe Pose → 33 landmarks. Nothing uploaded.", output: "Raw Frames" },
@@ -82,7 +83,7 @@ export default function ArchitectureClient() {
           <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-6">// REFERENCE_IMPLEMENTATION</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {ENGINES.map(e => (
-              <div key={e.file} className="border border-white/5 bg-black/30 p-4 flex items-center justify-between hover:border-cyan-400/15 transition-all">
+              <div key={e.file} onMouseEnter={() => playTick(700, "sine", 0.08, 0.015)} className="border border-white/5 bg-black/30 p-4 flex items-center justify-between hover:border-cyan-400/15 transition-all">
                 <div>
                   <div className="text-white/60 text-[11px] tracking-[0.15em] uppercase mb-0.5">{e.name}</div>
                   <div className="text-white/20 text-[9px]">{e.desc}</div>
