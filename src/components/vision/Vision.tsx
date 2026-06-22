@@ -87,7 +87,7 @@ export default function Vision() {
         {/* 标题组 */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "8rem" }}>
           <div style={{ maxWidth: "650px" }}>
-            <span style={{ fontSize: "0.75rem", letterSpacing: "0.6em", color: "rgba(144, 200, 255, 0.4)", display: "block", marginBottom: "1.5rem" }}>
+            <span style={{ fontSize: "9px", letterSpacing: "0.6em", color: "rgba(255, 255, 255, 0.2)", display: "block", marginBottom: "1rem", textTransform: "uppercase" }}>
               VISION
             </span>
             <h2 style={{ 

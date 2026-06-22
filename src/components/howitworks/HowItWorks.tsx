@@ -32,7 +32,7 @@ export default function HowItWorks() {
         {/* 标题区 */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(3rem, 6vw, 6rem)" }}>
           <div style={{ maxWidth: "650px" }}>
-            <span style={{ fontSize: "0.75rem", letterSpacing: "0.6em", color: "rgba(144, 200, 255, 0.5)", display: "block", marginBottom: "1.5rem" }}>
+            <span style={{ fontSize: "9px", letterSpacing: "0.6em", color: "rgba(255, 255, 255, 0.2)", display: "block", marginBottom: "1rem", textTransform: "uppercase" }}>
               HOW IT WORKS
             </span>
             <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
