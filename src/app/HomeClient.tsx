@@ -156,29 +156,46 @@ export default function HomeClient() {
               </p>
             </div>
 
-            {/* Five Layers — sole visual element */}
-            <div className="relative max-w-xl mx-auto">
-              <div className="absolute left-[19px] top-4 bottom-4 w-[1px] bg-gradient-to-b from-cyan-400/20 via-cyan-400/10 to-cyan-400/20" />
-              <div className="space-y-0.5">
-                {[
-                  { l: "L5", name: "Agent Identity", desc: "Cross-species verification. Human and AI identities coexist in one protocol." },
-                  { l: "L4", name: "Proof Layer", desc: "Zero-knowledge proofs. Verify presence without exposing motion data." },
-                  { l: "L3", name: "Identity Vector", desc: "Motion geometry distilled into a compact, non-replicable signature." },
-                  { l: "L2", name: "Behavior Encoding", desc: "4-dimensional entropy scoring detects AI-generated motion." },
-                  { l: "L1", name: "Motion Capture", desc: "Real-time camera input. All processing on-device. Nothing uploaded." },
-                ].map((layer) => (
-                  <div key={layer.l} className="relative flex items-start gap-4 pl-12 pr-5 py-3 border border-transparent hover:border-cyan-400/10 hover:bg-cyan-400/[0.02] transition-all">
-                    <span className="absolute left-0 w-[38px] h-[38px] flex items-center justify-center border border-cyan-400/15 bg-black/50 text-cyan-400/35 font-mono text-[10px] shrink-0"
-                      style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.4)" }}>
-                      {layer.l}
-                    </span>
-                    <div className="flex-1 min-w-0 pt-1">
-                      <div className="text-white/60 text-[11px] tracking-[0.2em] uppercase mb-0.5">{layer.name}</div>
-                      <div className="text-white/20 text-[10px] tracking-[0.08em] leading-relaxed">{layer.desc}</div>
+            {/* Five Layers — staggered floating cards */}
+            <div className="relative max-w-2xl mx-auto">
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent"
+                style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)" }} />
+              {[
+                { l: "L5", name: "Agent Identity", desc: "Cross-species verification. Human and AI identities coexist in one protocol.", hue: 210, ml: "ml-0 md:ml-16", mr: "mr-0 md:mr-16" },
+                { l: "L4", name: "Proof Layer", desc: "Zero-knowledge proofs. Verify presence without exposing motion data.", hue: 205, ml: "ml-0 md:ml-4", mr: "mr-0 md:mr-4" },
+                { l: "L3", name: "Identity Vector", desc: "Motion geometry distilled into a compact, non-replicable signature.", hue: 200, ml: "ml-0 md:ml-12", mr: "mr-0 md:mr-12" },
+                { l: "L2", name: "Behavior Encoding", desc: "4-dimensional entropy scoring detects AI-generated motion.", hue: 195, ml: "ml-0 md:ml-2", mr: "mr-0 md:mr-2" },
+                { l: "L1", name: "Motion Capture", desc: "Real-time camera input. All processing on-device. Nothing uploaded.", hue: 190, ml: "ml-0 md:ml-20", mr: "mr-0 md:mr-20" },
+              ].map((layer, i) => (
+                <div key={layer.l} className={`${i % 2 === 0 ? layer.ml : layer.mr} mb-3 group`}>
+                  <div className="relative border border-cyan-400/10 bg-black/40 hover:border-cyan-400/25 transition-all duration-700 overflow-hidden"
+                    style={{
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                      backdropFilter: "blur(4px)",
+                    }}>
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                      style={{ background: `radial-gradient(ellipse at 20% 50%, rgba(144,200,255,0.06) 0%, transparent 60%)` }} />
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="flex items-center gap-4 px-5 py-4">
+                      <span className="w-10 h-10 flex items-center justify-center font-mono text-[11px] shrink-0 rounded-sm"
+                        style={{
+                          border: `1px solid rgba(144,200,255,0.2)`,
+                          color: `hsla(${layer.hue}, 70%, 75%, 0.7)`,
+                          background: `hsla(${layer.hue}, 50%, 50%, 0.08)`,
+                          boxShadow: `0 0 12px hsla(${layer.hue}, 70%, 60%, 0.15), inset 0 1px 0 hsla(${layer.hue}, 70%, 80%, 0.1)`,
+                        }}>
+                        {layer.l}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white/70 text-[12px] tracking-[0.2em] uppercase mb-1">{layer.name}</div>
+                        <div className="text-white/25 text-[10px] tracking-[0.06em] leading-relaxed">{layer.desc}</div>
+                      </div>
+                      <div className="w-1.5 h-1.5 rounded-full shrink-0 opacity-30 group-hover:opacity-80 transition-opacity duration-700"
+                        style={{ background: `hsla(${layer.hue}, 70%, 70%, 0.8)`, boxShadow: `0 0 6px hsla(${layer.hue}, 70%, 60%, 0.4)` }} />
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
 
             {/* Light CTA row */}
