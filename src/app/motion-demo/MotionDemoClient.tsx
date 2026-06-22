@@ -42,6 +42,7 @@ export default function MotionDemoClient() {
   const [pesData, setPesData] = useState<PESData | null>(null);
   const [threatVerdict, setThreatVerdict] = useState<string>("");
   const [proofHashes, setProofHashes] = useState<{ zkp: string; pop: string; mp: string; ep: string } | null>(null);
+  const [livePes, setLivePes] = useState<{ score: number; timing: number; noise: number; freq: number; bio: number } | null>(null);
   const [countdown, setCountdown] = useState(8);
   const [, setIsSimulated] = useState(false);
   const framesRef = useRef<FeatureFrame[]>([]);
@@ -176,6 +177,23 @@ export default function MotionDemoClient() {
           // ── SST conversion + frame accumulation for PES ──
           const sstFrame = normalizeSSTFrame(mediaPipeToSST(lm));
           sstFramesRef.current.push({ frame: sstFrame, timestamp: now });
+
+          // Live PES preview — update every 10 frames from last 30
+          const sstLen = sstFramesRef.current.length;
+          if (sstLen >= 30 && sstLen % 10 === 0) {
+            const recent = sstFramesRef.current.slice(-30);
+            const { pes, components } = computeFullPES(
+              recent.map(f => f.frame) as Array<Record<number, JointPosition>>,
+              recent.map(f => f.timestamp),
+            );
+            setLivePes({
+              score: pes,
+              timing: components.microTimingVariance,
+              noise: components.noiseResidual,
+              freq: components.frequencyEntropy,
+              bio: components.biologicalPerturbation,
+            });
+          }
 
           const frame: FeatureFrame = {
             features: {
@@ -576,6 +594,37 @@ export default function MotionDemoClient() {
               </>
             )}
 
+            {/* Live PES Preview (during capture) */}
+            {phase === "capturing" && livePes && (
+              <div className="p-3 border border-cyan-400/10 bg-cyan-400/[0.02] space-y-2">
+                <div className="text-cyan-400/40 text-[7px] tracking-[0.2em] uppercase">Live PES Estimate</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-white/30 text-[9px]">Score</span>
+                  <span className="text-cyan-200/80 font-mono text-[13px]">{(livePes.score * 100).toFixed(0)}%</span>
+                </div>
+                {[
+                  { label: "μTiming", value: livePes.timing },
+                  { label: "Noise", value: livePes.noise },
+                  { label: "Freq", value: livePes.freq },
+                  { label: "Bio", value: livePes.bio },
+                ].map(g => (
+                  <div key={g.label} className="space-y-0.5">
+                    <div className="flex justify-between text-[7px]">
+                      <span className="text-white/20">{g.label}</span>
+                      <span className="text-cyan-300/40 font-mono">{(g.value * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-300"
+                        style={{
+                          width: `${Math.min(g.value * 100, 100)}%`,
+                          background: "rgba(144,200,255,0.3)",
+                        }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="text-cyan-400/40 text-[7px] tracking-[0.3em] uppercase">Motion_Telemetry</div>
             <div className="space-y-2.5 text-[10px] font-mono">
               <div className="flex justify-between">
@@ -590,8 +639,8 @@ export default function MotionDemoClient() {
                 <span className="text-white/25">Phase</span>
                 <span className="text-cyan-400/50">{phase.toUpperCase()}</span>
               </div>
-              {phase === "capturing" && sstFramesRef.current.length < 8 && (
-                <div className="text-cyan-400/30 text-[7px] italic">Collecting frames for PES... (need ≥8)</div>
+              {phase === "capturing" && sstFramesRef.current.length < 30 && (
+                <div className="text-cyan-400/30 text-[7px] italic">Collecting frames... ({sstFramesRef.current.length}/30)</div>
               )}
             </div>
 
