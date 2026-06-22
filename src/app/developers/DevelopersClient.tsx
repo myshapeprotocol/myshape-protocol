@@ -108,6 +108,56 @@ export default function DevelopersClient() {
           </div>
         </section>
 
+        {/* ── Code Examples ── */}
+        <section className="mb-14">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// CODE_EXAMPLES</h2>
+          <div className="space-y-4">
+            {[
+              {
+                title: "Basic Presence Verification",
+                code: `import MyShape from "@/sdk";
+
+// MediaPipe pose landmarks from camera
+const frames = [...];
+const timestamps = [...];
+
+const receipt = MyShape.requestPresence(frames, timestamps);
+// → { zkp_hash, pes: 0.72, timestamp, session_id }
+
+const valid = MyShape.verifyReceipt(receipt);
+// → true if human presence confirmed`,
+              },
+              {
+                title: "Threat Assessment",
+                code: `import { assessThreat } from "@/engine/threat-assessment";
+import { computeFullPES } from "@/engine/presence-entropy";
+
+const { pes, components } = computeFullPES(sstFrames, timestamps);
+const threat = assessThreat(pes, components);
+
+if (threat.overallVerdict === "human") {
+  // Allow access. Real human confirmed.
+} else if (threat.overallVerdict === "suspicious") {
+  // Request additional verification
+} else {
+  // Block. Likely synthetic.
+}`,
+              },
+            ].map((ex, i) => (
+              <div key={i} className="border border-white/10 bg-black/40 overflow-hidden">
+                <div className="px-5 py-3 border-b border-white/5 bg-white/[0.02]">
+                  <span className="text-cyan-400/70 text-[10px] tracking-[0.15em] uppercase">{ex.title}</span>
+                </div>
+                <div className="p-5">
+                  <pre className="text-white/35 text-[10px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">
+                    {ex.code}
+                  </pre>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ── REST API ── */}
         <section className="mb-14">
           <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// REST_API</h2>
