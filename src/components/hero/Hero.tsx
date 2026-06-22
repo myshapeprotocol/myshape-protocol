@@ -99,7 +99,7 @@ export default function Hero() {
           <h1
             ref={titleRef}
             className="text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
-            style={{ letterSpacing: "0.8em", textIndent: "0.8em", textShadow: "0 0 40px rgba(144,200,255,0.6)" }}
+            style={{ letterSpacing: "0.8em", textIndent: "0.8em", filter: "drop-shadow(0 0 30px rgba(144,200,255,0.4))" }}
           >
             PROOF OF PRESENCE
           </h1>
