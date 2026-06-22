@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
+import Typewriter from "@/components/ui/Typewriter";
 import Hero from "@/components/hero/Hero";
 import Vision from "@/components/vision/Vision";
 import Capabilities from "@/components/capabilities/Capabilities";
@@ -313,7 +314,7 @@ export default function HomeClient() {
           <div className="max-w-5xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-cyan-400/15 bg-cyan-400/[0.02]">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)] animate-pulse" />
-              <span className="text-cyan-400/50 text-[8px] tracking-[0.2em] uppercase font-mono">Protocol_Status: ACTIVE — 15 engines · 45 tests passing</span>
+              <Typewriter text="Protocol_Status: ACTIVE — 15 engines · 45 tests passing" className="text-cyan-400/50 text-[8px] tracking-[0.2em] uppercase font-mono" />
             </div>
           </div>
         </section>
