@@ -41,18 +41,20 @@ export default function ProtocolFooter() {
         { name: "PROTOCOL_INDEX", href: "/protocol" },
         { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
+        { name: "MOTION_DEMO", href: "/motion-demo" },
         { name: "DEVELOPERS", href: "/developers" },
-        { name: "AI_AGENT", href: "/agent" },
         { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" }
       ]
     },
-    { 
-      title: "CIV_LAYER",
+    {
+      title: "PAPERS",
       links: [
-        { name: "GENESIS_ORIGIN", href: "/civ-layer/genesis" },
-        { name: "VISION_ARCHIVE", href: "/civ-layer/vision" },
-        { name: "TECHNICAL_PAPERS", href: "/civ-layer/papers" },
-        { name: "PUBLICATION_HALL", href: "/civ-layer/publication" }
+        { name: "TECHNICAL_SPEC", href: "/papers/technical-spec" },
+        { name: "THREAT_MODEL", href: "/papers/threat-model" },
+        { name: "CORE_PROTOCOL", href: "/papers/core-protocol" },
+        { name: "ARCHITECTURE", href: "/papers/protocol-architecture" },
+        { name: "ROADMAP_PAPER", href: "/papers/civilization-roadmap" },
+        { name: "ALL_PAPERS", href: "/papers" }
       ]
     },
     { 
