@@ -87,7 +87,7 @@ export default function Hero() {
           </h1>
           <p className="mt-5 text-[10px] md:text-[11px] tracking-[0.25em] text-blue-200/45 uppercase font-mono max-w-2xl mx-auto leading-relaxed"
             style={{ textShadow: "0 0 12px rgba(144,200,255,0.15)" }}>
-            Motion is the last sovereign signal. Verify presence, not identity.
+            Identity is not stored. Presence is the identity.
           </p>
         </div>
 
