@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HeroVisual from "./HeroVisual";
 import GlowVortexButton from "./GlowVortexButton";
 import "./Hero.css";
@@ -34,6 +34,20 @@ export default function Hero() {
       window.dispatchEvent(new CustomEvent("pt:navigate", { detail: { href: "/genesis" } }));
     }, 1200);
   };
+
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    let frame = 0;
+    const pulse = setInterval(() => {
+      frame++;
+      const glow = 0.08 + Math.sin(frame * 0.05) * 0.12;
+      el.style.textShadow = `0 0 ${24 + Math.sin(frame * 0.05) * 16}px rgba(144,200,255,${glow})`;
+    }, 50);
+    return () => clearInterval(pulse);
+  }, []);
 
   const leftLines = [
     "PRESENCE IS A SIGNAL.",
@@ -81,7 +95,8 @@ export default function Hero() {
         {/* 严格还原：文案位置与字号 */}
         <div className="absolute top-[14vh] left-0 w-full z-100 pointer-events-none text-center px-6">
           <h1
-            className="hero-title-glow text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
+            ref={titleRef}
+            className="text-[1.4rem] md:text-[1.8rem] font-extralight uppercase text-white/90"
             style={{ letterSpacing: "0.8em", textIndent: "0.8em" }}
           >
             PROOF OF PRESENCE
