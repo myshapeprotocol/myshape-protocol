@@ -1,42 +1,33 @@
 "use client";
-import React from "react";
 import ProtocolHeader from "@/components/header/header";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import ProtocolFooter from "@/components/footer/footer";
 
-const endpoints = [
-  {
-    method: "GET",
-    path: "/api/identity?email=user@example.com",
-    desc: "Look up a node by email. Returns status, handle, and registration timestamp.",
-    response: `{
-  "found": true,
-  "email": "user@example.com",
-  "node_handle": null,
-  "status": "GENESIS_NODE",
-  "registered_at": "2026-03-24T09:12:01.329Z"
-}`,
-  },
-  {
-    method: "GET",
-    path: "/api/nodes/count",
-    desc: "Returns total protocol node counts, broken down by type.",
-    response: `{
-  "total": 13,
-  "humans": 3,
-  "agents": 2,
-  "genesis_nodes": 1
-}`,
-  },
+const SDK_METHODS = [
+  { module: "Presence", method: "generatePresenceProof(frames, timestamps, opts?)", returns: "PresenceProofResult", desc: "Generate PoP + MP + EP + ZKP from MediaPipe frames" },
+  { module: "Presence", method: "getEntropyScore(frames, timestamps)", returns: "number | null", desc: "Real-time PES for live UI feedback" },
+  { module: "Presence", method: "requestPresence(frames, timestamps)", returns: "PresenceReceipt", desc: "Full flow: proof → submit → receipt" },
+  { module: "Proof", method: "verifyLocalProof(proof, opts?)", returns: "VerificationResult", desc: "Verify ZKP locally with 5 checks" },
+  { module: "Proof", method: "aggregateProofs(proofs[])", returns: "AggregatedProof", desc: "Recursive proof aggregation over time windows" },
+  { module: "Proof", method: "revokeDevice(reason?)", returns: "RevocationReceipt", desc: "Rotate device salt and revoke old identity" },
+  { module: "Verification", method: "verifyPresenceProof(zkp, opts?)", returns: "VerificationResult", desc: "Full 6-rule verification (§9.4)" },
+  { module: "Verification", method: "verifyPresenceReceipt(receipt)", returns: "boolean", desc: "Lightweight app-layer verification" },
 ];
 
-const statuses = [
-  { value: "GENESIS_NODE", desc: "Founding identity — first 100 registrants. Permanent tier." },
-  { value: "ACTIVE", desc: "Verified human identity via Genesis OTP." },
-  { value: "AGENT_ACTIVE", desc: "AI agent declared via cryptographic attestation." },
-  { value: "SUBSCRIBED", desc: "Email subscribed via footer form." },
-  { value: "PENDING_VERIFICATION", desc: "OTP sent, awaiting verification." },
+const API_ENDPOINTS = [
+  { method: "GET", path: "/api/identity?email=...", desc: "Look up a node by email" },
+  { method: "GET", path: "/api/nodes/count", desc: "Total protocol node counts" },
 ];
+
+const QUICK_START = `// 5 lines to integrate Presence
+import MyShape from "@/sdk";
+
+const frames = [...]; // MediaPipe pose landmarks
+const timestamps = [...];
+
+const receipt = MyShape.requestPresence(frames, timestamps);
+const isValid = MyShape.verifyReceipt(receipt);
+// Done. Your app now has presence verification.`;
 
 export default function DevelopersClient() {
   return (
@@ -45,59 +36,89 @@ export default function DevelopersClient() {
       <BackgroundParticles />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-16">
-        <div className="space-y-4 mb-14">
-          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">DEVELOPER_REFERENCE // V0.1</div>
-          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">Protocol API</h1>
+        <div className="space-y-4 mb-12">
+          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">DEVELOPER_HUB // V1.0</div>
+          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">Build with Presence</h1>
           <p className="text-white/40 text-[12px] leading-relaxed max-w-xl">
-            Read-only endpoints for querying the MyShape identity mesh. All endpoints
-            are public. No authentication required. Rate limiting will be added in a
-            future version.
+            Integrate sovereign identity verification into any application.
+            Five lines of code. Zero data stored. Real human presence.
           </p>
         </div>
 
-        {/* Endpoints */}
-        <div className="space-y-10 mb-16">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase">// ENDPOINTS</h2>
-          {endpoints.map((ep) => (
-            <div key={ep.path} className="border border-white/10 bg-black/40 overflow-hidden">
-              <div className="flex items-center gap-3 px-5 py-3 border-b border-white/5 bg-white/[0.02]">
-                <span className="text-cyan-400/70 text-[10px] tracking-[0.2em] font-bold">{ep.method}</span>
-                <span className="text-white/60 text-[12px] tracking-[0.1em] font-mono">{ep.path}</span>
-              </div>
-              <div className="p-5 space-y-4">
-                <p className="text-white/35 text-[11px] leading-relaxed">{ep.desc}</p>
-                <pre className="bg-black/60 p-4 text-[11px] text-white/40 leading-relaxed overflow-x-auto whitespace-pre-wrap font-mono">
-                  {ep.response}
-                </pre>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* ── Quick Start ── */}
+        <section className="mb-14">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// QUICK_START</h2>
+          <div className="border border-cyan-400/20 bg-cyan-400/[0.02] p-5 overflow-x-auto">
+            <pre className="text-cyan-200/70 text-[11px] leading-relaxed font-mono whitespace-pre">
+              {QUICK_START}
+            </pre>
+          </div>
+          <div className="mt-2 text-white/20 text-[8px] tracking-[0.15em]">
+            TypeScript · Zero dependencies · Works with any MediaPipe-compatible camera
+          </div>
+        </section>
 
-        {/* Node Statuses */}
-        <div className="mb-16">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-6">// NODE_STATUSES</h2>
-          <div className="border border-white/10 bg-black/40 overflow-hidden">
-            {statuses.map((s, i) => (
-              <div key={s.value} className={`flex items-start gap-4 px-5 py-3 ${i < statuses.length - 1 ? "border-b border-white/5" : ""}`}>
-                <span className="text-cyan-400/60 text-[10px] tracking-[0.15em] font-mono shrink-0 min-w-[140px]">{s.value}</span>
-                <span className="text-white/30 text-[10px] leading-relaxed">{s.desc}</span>
+        {/* ── SDK Reference ── */}
+        <section className="mb-14">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// SDK_REFERENCE (§8)</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse border border-white/5">
+              <thead>
+                <tr className="border-b border-white/10 bg-white/[0.02]">
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal w-20">Module</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Method</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal w-32">Returns</th>
+                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {SDK_METHODS.map((m, i) => (
+                  <tr key={i} className="border-b border-white/5 hover:bg-cyan-500/[0.02] transition-all">
+                    <td className="p-3 text-cyan-400/60 text-[10px] tracking-[0.15em]">{m.module}</td>
+                    <td className="p-3 text-white/50 font-mono text-[10px]">{m.method}</td>
+                    <td className="p-3 text-emerald-400/50 text-[9px] font-mono">{m.returns}</td>
+                    <td className="p-3 text-white/25 text-[10px] leading-relaxed">{m.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* ── Protocol Engines ── */}
+        <section className="mb-14">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// PROTOCOL_ENGINES</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              { name: "PES Engine", path: "engine/presence-entropy.ts", desc: "4-dimensional entropy scoring" },
+              { name: "Proof System", path: "engine/proof-system.ts", desc: "PoP + MP + EP → ZK-Presence" },
+              { name: "SST Mapper", path: "engine/skeleton-topology.ts", desc: "MediaPipe 33-pt → SST 18-pt" },
+              { name: "Threat Assessment", path: "engine/threat-assessment.ts", desc: "8 attack signatures, corroboration logic" },
+              { name: "Protocol Validator", path: "engine/protocol-validator.ts", desc: "6 verification rules §9.4" },
+              { name: "Local Identity", path: "engine/local-identity.ts", desc: "Device salt, key derivation, session" },
+              { name: "Presence Stream", path: "engine/presence-stream.ts", desc: "Aggregation, multi-device, PSS" },
+              { name: "Unforgeability", path: "engine/unforgeability.ts", desc: "Entropy gap theorem, security horizon" },
+            ].map((e) => (
+              <div key={e.name} className="border border-white/5 bg-black/30 p-4 hover:border-cyan-500/20 transition-all">
+                <div className="text-white/60 text-[11px] tracking-[0.15em] uppercase mb-1">{e.name}</div>
+                <div className="text-cyan-400/30 text-[9px] font-mono mb-1.5">{e.path}</div>
+                <div className="text-white/20 text-[10px]">{e.desc}</div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* curl example */}
-        <div className="p-5 border border-white/5 bg-white/[0.01]">
-          <div className="text-cyan-400/40 text-[8px] tracking-[0.3em] uppercase mb-4">// QUICK_START</div>
-          <pre className="text-white/30 text-[10px] leading-relaxed font-mono whitespace-pre-wrap">
-{`# Look up a node
-curl https://www.myshape.com/api/identity?email=hello@example.com
-
-# Get network stats
-curl https://www.myshape.com/api/nodes/count`}
-          </pre>
-        </div>
+        {/* ── REST API ── */}
+        <section className="mb-14">
+          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// REST_API</h2>
+          {API_ENDPOINTS.map((ep) => (
+            <div key={ep.path} className="border border-white/10 bg-black/40 p-4 mb-2 flex items-center gap-4">
+              <span className="text-cyan-400/70 text-[10px] tracking-[0.2em] font-bold w-10">{ep.method}</span>
+              <span className="text-white/50 font-mono text-[11px]">{ep.path}</span>
+              <span className="text-white/25 text-[10px]">{ep.desc}</span>
+            </div>
+          ))}
+        </section>
       </div>
 
       <ProtocolFooter />
