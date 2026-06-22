@@ -177,23 +177,38 @@ export default function HomeClient() {
 
             {/* Entry Points */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <a href="/papers/technical-spec" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)} className="group p-6 border border-cyan-400/20 bg-cyan-400/[0.03] hover:bg-cyan-400/[0.08] transition-all text-center">
-                <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2">Read</div>
-                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1">Technical Spec</div>
-                <div className="text-white/20 text-[9px] tracking-[0.1em]">Motion Vector · PES · Proof System</div>
-                <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all inline-block">→</div>
+              <a href="/papers/technical-spec"
+                onMouseEnter={e => { playTick(800, "sine", 0.10, 0.025); e.currentTarget.style.boxShadow = "0 0 30px rgba(34,211,238,0.12)"; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 0px rgba(34,211,238,0)"; }}
+                className="group p-6 border border-cyan-400/20 bg-cyan-400/[0.03] hover:bg-cyan-400/[0.08] hover:border-cyan-400/50 hover:-translate-y-1 transition-all duration-500 text-center"
+                style={{ boxShadow: "0 0 0px rgba(34,211,238,0)" }}
+              >
+                <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors duration-500">Read</div>
+                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Technical Spec</div>
+                <div className="text-white/20 text-[9px] tracking-[0.1em] group-hover:text-white/35 transition-colors duration-500">Motion Vector · PES · Proof System</div>
+                <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
               </a>
-              <a href="/papers/threat-model" onMouseEnter={() => playTick(900, "sine", 0.10, 0.025)} className="group p-6 border border-cyan-400/20 bg-cyan-400/[0.03] hover:bg-cyan-400/[0.08] transition-all text-center">
-                <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2">Review</div>
-                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1">Threat Model</div>
-                <div className="text-white/20 text-[9px] tracking-[0.1em]">8 Attack Signatures · Entropy Gap Theorem</div>
-                <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all inline-block">→</div>
+              <a href="/papers/threat-model"
+                onMouseEnter={e => { playTick(900, "sine", 0.10, 0.025); e.currentTarget.style.boxShadow = "0 0 30px rgba(34,211,238,0.12)"; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 0px rgba(34,211,238,0)"; }}
+                className="group p-6 border border-cyan-400/20 bg-cyan-400/[0.03] hover:bg-cyan-400/[0.08] hover:border-cyan-400/50 hover:-translate-y-1 transition-all duration-500 text-center"
+                style={{ boxShadow: "0 0 0px rgba(34,211,238,0)" }}
+              >
+                <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors duration-500">Review</div>
+                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Threat Model</div>
+                <div className="text-white/20 text-[9px] tracking-[0.1em] group-hover:text-white/35 transition-colors duration-500">8 Attack Signatures · Entropy Gap Theorem</div>
+                <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
               </a>
-              <a href="/developers" onMouseEnter={() => playTick(1000, "sine", 0.10, 0.025)} className="group p-6 border border-cyan-400/20 bg-cyan-400/[0.03] hover:bg-cyan-400/[0.08] transition-all text-center">
-                <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2">Build</div>
-                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1">Developer SDK</div>
-                <div className="text-white/20 text-[9px] tracking-[0.1em]">5 Lines to Integrate · TypeScript · Zero Deps</div>
-                <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all inline-block">→</div>
+              <a href="/developers"
+                onMouseEnter={e => { playTick(1000, "sine", 0.10, 0.025); e.currentTarget.style.boxShadow = "0 0 30px rgba(34,211,238,0.12)"; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 0px rgba(34,211,238,0)"; }}
+                className="group p-6 border border-cyan-400/20 bg-cyan-400/[0.03] hover:bg-cyan-400/[0.08] hover:border-cyan-400/50 hover:-translate-y-1 transition-all duration-500 text-center"
+                style={{ boxShadow: "0 0 0px rgba(34,211,238,0)" }}
+              >
+                <div className="text-cyan-400/60 text-[11px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-300/80 transition-colors duration-500">Build</div>
+                <div className="text-white/80 text-[13px] tracking-[0.2em] uppercase mb-1 group-hover:text-white transition-colors duration-500">Developer SDK</div>
+                <div className="text-white/20 text-[9px] tracking-[0.1em] group-hover:text-white/35 transition-colors duration-500">5 Lines to Integrate · TypeScript · Zero Deps</div>
+                <div className="mt-4 text-cyan-400/40 group-hover:text-cyan-300 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
               </a>
             </div>
           </div>
