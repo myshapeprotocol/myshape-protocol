@@ -521,47 +521,58 @@ export default function MotionDemoClient() {
 
           {/* Feature Panel */}
           <div className="border border-white/10 bg-black/40 p-5 space-y-4">
-            {/* ── PES Section (§3.5.5) ── */}
+            {/* ── PES Dashboard ── */}
             {pesData && (
               <>
                 <div className="text-cyan-400/40 text-[7px] tracking-[0.3em] uppercase">Presence_Entropy_Score (PES)</div>
-                <div className="p-3 border border-cyan-400/20 bg-cyan-400/[0.03] space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/30 text-[9px]">PES Score</span>
-                    <span className="text-cyan-200/90 font-mono text-[14px] tracking-wider"
-                      style={{ textShadow: "0 0 10px rgba(144,200,255,0.4)" }}>
-                      {(pesData.score * 100).toFixed(1)}%
-                    </span>
-                  </div>
-                  <div className="h-px bg-white/5" />
-                  {threatVerdict && (
-                    <div className={`text-center text-[9px] tracking-[0.15em] uppercase font-mono ${
-                      threatVerdict.startsWith("✓") ? "text-emerald-300/80" :
-                      threatVerdict.startsWith("⚠") ? "text-amber-300/80" : "text-red-300/80"
-                    }`} style={{ textShadow: threatVerdict.startsWith("✓") ? "0 0 8px rgba(52,211,153,0.4)" : "0 0 8px rgba(252,211,77,0.4)" }}>
-                      {threatVerdict}
-                    </div>
-                  )}
-                  <div className="h-px bg-white/5" />
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[8px]">
-                    <div className="flex justify-between">
-                      <span className="text-white/25">μTiming</span>
-                      <span className="text-cyan-300/60">{pesData.timing.toFixed(3)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/25">Noise</span>
-                      <span className="text-cyan-300/60">{pesData.noise.toFixed(3)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/25">Freq</span>
-                      <span className="text-cyan-300/60">{pesData.frequency.toFixed(3)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/25">Bio</span>
-                      <span className="text-cyan-300/60">{pesData.biological.toFixed(3)}</span>
+                {/* PES Ring */}
+                <div className="flex items-center justify-center py-2">
+                  <div className="relative w-20 h-20">
+                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
+                      <circle cx="50" cy="50" r="42" fill="none" stroke={pesData.score > 0.5 ? "rgba(52,211,153,0.7)" : "rgba(144,200,255,0.6)"} strokeWidth="6"
+                        strokeDasharray={`${pesData.score * 264} 264`} strokeLinecap="round"
+                        style={{ filter: `drop-shadow(0 0 6px ${pesData.score > 0.5 ? "rgba(52,211,153,0.5)" : "rgba(144,200,255,0.4)"})` }} />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-white/80 font-mono text-[16px] tracking-tighter"
+                        style={{ textShadow: pesData.score > 0.5 ? "0 0 10px rgba(52,211,153,0.5)" : "0 0 10px rgba(144,200,255,0.4)" }}>
+                        {(pesData.score * 100).toFixed(0)}
+                      </span>
                     </div>
                   </div>
                 </div>
+                {threatVerdict && (
+                  <div className={`text-center text-[9px] tracking-[0.15em] uppercase font-mono py-1 ${
+                    threatVerdict.startsWith("✓") ? "text-emerald-300/80" :
+                    threatVerdict.startsWith("⚠") ? "text-amber-300/80" : "text-red-300/80"
+                  }`} style={{ textShadow: threatVerdict.startsWith("✓") ? "0 0 8px rgba(52,211,153,0.4)" : "0 0 8px rgba(252,211,77,0.4)" }}>
+                    {threatVerdict}
+                  </div>
+                )}
+                <div className="h-px bg-white/5" />
+                {/* 4D Gauge Bars */}
+                {[
+                  { label: "μTiming", value: pesData.timing, hue: 200 },
+                  { label: "Noise", value: pesData.noise, hue: 190 },
+                  { label: "Freq", value: pesData.frequency, hue: 210 },
+                  { label: "Bio", value: pesData.biological, hue: 180 },
+                ].map(g => (
+                  <div key={g.label} className="space-y-1">
+                    <div className="flex justify-between text-[8px]">
+                      <span className="text-white/25">{g.label}</span>
+                      <span className="text-cyan-300/50 font-mono">{(g.value * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{
+                          width: `${Math.min(g.value * 100, 100)}%`,
+                          background: `linear-gradient(90deg, hsla(${g.hue},60%,50%,0.4), hsla(${g.hue},70%,60%,0.8))`,
+                          boxShadow: `0 0 6px hsla(${g.hue},60%,60%,0.3)`,
+                        }} />
+                    </div>
+                  </div>
+                ))}
               </>
             )}
 
