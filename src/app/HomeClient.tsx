@@ -199,7 +199,7 @@ export default function HomeClient() {
               </div>
             </div>
 
-            {/* Entry Points — premium cards with top accent line */}
+            {/* Entry Points — matching flow card style */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {[
                 { label: "Read", title: "Technical Spec", desc: "Motion Vector · PES · Proof System", href: "/papers/technical-spec", freq: 800 as const },
@@ -207,15 +207,15 @@ export default function HomeClient() {
                 { label: "Build", title: "Developer SDK", desc: "5 Lines to Integrate · TypeScript · Zero Deps", href: "/developers", freq: 1000 as const },
               ].map(card => (
                 <a key={card.href} href={card.href}
-                  onMouseEnter={e => { playTick(card.freq, "sine", 0.10, 0.025); e.currentTarget.style.boxShadow = "0 0 30px rgba(255,255,255,0.06)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 0px rgba(255,255,255,0)"; }}
-                  className="group relative p-6 border border-white/10 bg-black/40 hover:bg-white/[0.04] hover:border-white/20 hover:-translate-y-1 transition-all duration-500 text-center"
-                  style={{ boxShadow: "0 0 0px rgba(255,255,255,0)" }}>
-                  <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="text-white/25 text-[10px] tracking-[0.3em] uppercase mb-3 group-hover:text-white/50 transition-colors duration-500">{card.label}</div>
-                  <div className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-2 group-hover:text-white transition-colors duration-500">{card.title}</div>
-                  <div className="text-white/15 text-[9px] tracking-[0.1em] group-hover:text-white/30 transition-colors duration-500">{card.desc}</div>
-                  <div className="mt-4 text-white/15 group-hover:text-white/50 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
+                  onMouseEnter={e => { playTick(card.freq, "sine", 0.10, 0.025); }}
+                  className="group relative p-6 border border-white/10 bg-black/40 hover:border-white/25 hover:bg-black/60 transition-all duration-500 text-center"
+                  style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse at center, rgba(144,200,255,0.06) 0%, transparent 70%)" }} />
+                  <div className="relative z-10 text-white/40 text-[10px] tracking-[0.3em] uppercase mb-3 group-hover:text-white/70 transition-colors duration-500">{card.label}</div>
+                  <div className="relative z-10 text-white/60 text-[11px] tracking-[0.2em] uppercase mb-2 group-hover:text-white/90 transition-colors duration-500">{card.title}</div>
+                  <div className="relative z-10 text-white/15 text-[9px] tracking-[0.1em] group-hover:text-white/30 transition-colors duration-500">{card.desc}</div>
+                  <div className="relative z-10 mt-4 text-white/15 group-hover:text-white/50 group-hover:translate-x-1.5 transition-all duration-500 inline-block">→</div>
                 </a>
               ))}
             </div>
