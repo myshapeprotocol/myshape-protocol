@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/civ-layer/genesis/manifesto", priority: 0.5, changeFreq: "monthly" as const },
     { path: "/civ-layer/publication", priority: 0.6, changeFreq: "monthly" as const },
     { path: "/civ-layer/publication/manifesto", priority: 0.5, changeFreq: "monthly" as const },
+    { path: "/architecture", priority: 0.9, changeFreq: "weekly" as const },
     { path: "/papers/technical-spec", priority: 0.9, changeFreq: "weekly" as const },
     { path: "/papers/threat-model", priority: 0.8, changeFreq: "weekly" as const },
     { path: "/papers/protocol-architecture", priority: 0.7, changeFreq: "monthly" as const },

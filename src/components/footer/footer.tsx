@@ -39,6 +39,7 @@ export default function ProtocolFooter() {
       title: "PROTOCOL_CORE",
       links: [
         { name: "PROTOCOL_INDEX", href: "/protocol" },
+        { name: "ARCHITECTURE", href: "/architecture" },
         { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
         { name: "MOTION_DEMO", href: "/motion-demo" },

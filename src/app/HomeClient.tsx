@@ -253,20 +253,24 @@ export default function HomeClient() {
               ))}
             </div>
 
-            {/* Light CTA row */}
-            <div className="flex flex-wrap justify-center gap-6 mt-12">
-              <a href="/papers/technical-spec" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-                className="text-cyan-400/35 hover:text-cyan-300/80 text-[10px] tracking-[0.2em] uppercase font-mono transition-all duration-500 border-b border-transparent hover:border-cyan-400/30 pb-0.5">
-                Technical Spec →
-              </a>
-              <a href="/papers/threat-model" onMouseEnter={() => playTick(900, "sine", 0.10, 0.025)}
-                className="text-cyan-400/35 hover:text-cyan-300/80 text-[10px] tracking-[0.2em] uppercase font-mono transition-all duration-500 border-b border-transparent hover:border-cyan-400/30 pb-0.5">
-                Threat Model →
-              </a>
-              <a href="/developers" onMouseEnter={() => playTick(1000, "sine", 0.10, 0.025)}
-                className="text-cyan-400/35 hover:text-cyan-300/80 text-[10px] tracking-[0.2em] uppercase font-mono transition-all duration-500 border-b border-transparent hover:border-cyan-400/30 pb-0.5">
-                Developer SDK →
-              </a>
+            {/* Protocol Artifacts */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-14">
+              {[
+                { label: "Read", title: "Technical Spec v1", desc: "Motion Vector · PES · Proof System · SST Topology", href: "/papers/technical-spec", freq: 800 as const },
+                { label: "Review", title: "Threat Model", desc: "8 Attack Signatures · Entropy Gap Theorem · Cost Model", href: "/papers/threat-model", freq: 900 as const },
+                { label: "Build", title: "Developer SDK", desc: "5 Lines · TypeScript · Zero Dependencies · MIT License", href: "/developers", freq: 1000 as const },
+              ].map(card => (
+                <a key={card.href} href={card.href}
+                  onMouseEnter={e => { playTick(card.freq, "sine", 0.10, 0.025); e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.4)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  className="group block p-5 transition-all duration-500 text-center"
+                  style={{ border: "1px solid rgba(144,200,255,0.1)", background: "rgba(2,4,10,0.85)" }}>
+                  <div className="text-cyan-400/30 text-[9px] tracking-[0.3em] uppercase mb-2 group-hover:text-cyan-400/60 transition-colors duration-500">{card.label}</div>
+                  <div className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-1.5 group-hover:text-white transition-colors duration-500">{card.title}</div>
+                  <div className="text-white/20 text-[9px] tracking-[0.08em] group-hover:text-white/35 transition-colors duration-500">{card.desc}</div>
+                  <div className="mt-3 text-cyan-400/25 group-hover:text-cyan-400/60 group-hover:translate-x-1 transition-all duration-500 inline-block text-[10px]">→</div>
+                </a>
+              ))}
             </div>
           </div>
         </section>
