@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
+import { playTick } from "@/utils/useAudioTick";
 
 const SPEC_SECTIONS = [
   { id: "§1", title: "Definitions", desc: "Presence, Motion Vector, ZK-Presence — the mathematical vocabulary", status: "implemented" },
@@ -71,7 +72,7 @@ export default function ProtocolClient() {
           <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Specification Implementation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5">
             {SPEC_SECTIONS.map((s) => (
-              <div key={s.id} className="bg-[#02040a] p-5 group hover:bg-cyan-500/[0.02] transition-all">
+              <div key={s.id} onMouseEnter={() => playTick(600, "sine", 0.06, 0.012)} className="bg-[#02040a] p-5 group hover:bg-cyan-500/[0.02] transition-all">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-cyan-400/60 font-mono text-[10px] tracking-[0.3em]">{s.id}</span>
                   <span className="flex items-center gap-1 text-[8px] text-emerald-400/60 tracking-[0.2em] uppercase">
