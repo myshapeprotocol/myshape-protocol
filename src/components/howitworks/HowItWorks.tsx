@@ -4,6 +4,15 @@ import React from "react";
 import { playTick } from "@/utils/useAudioTick";
 import "./HowItWorks.css";
 
+const hoverOn = (e: React.MouseEvent<HTMLElement>) => {
+  const kids = e.currentTarget.querySelectorAll<HTMLElement>('[data-hover]');
+  kids.forEach(k => { k.style.color = k.dataset.hover || ''; });
+};
+const hoverOff = (e: React.MouseEvent<HTMLElement>) => {
+  const kids = e.currentTarget.querySelectorAll<HTMLElement>('[data-hover]');
+  kids.forEach(k => { k.style.color = k.dataset.default || ''; });
+};
+
 export default function HowItWorks() {
   const playPipelineTick = (stepIndex: number) => playTick([600, 800, 1000][stepIndex] || 800, "sine", 0.10, 0.025);
 
@@ -53,32 +62,38 @@ export default function HowItWorks() {
           <div className="pipeline-line" />
 
           {/* STEP 01 */}
-          <div className="step-container" style={{ position: "relative" }} onMouseEnter={() => playPipelineTick(0)}>
+          <div className="step-container" style={{ position: "relative" }}
+            onMouseEnter={e => { playPipelineTick(0); hoverOn(e); }}
+            onMouseLeave={e => hoverOff(e)}>
             <div style={{ width: "12px", height: "12px", background: "#fff", borderRadius: "50%", marginBottom: "3rem", zIndex: 2, position: "relative", animation: "pulseDot 2s infinite" }} />
             <div className="text-motion-wrapper">
               <span className="text-item index-num" style={{ fontFamily: "monospace", fontSize: "0.8rem", color: "#90c8ff", opacity: 0.5 }}>01</span>
-              <h3 className="text-item" style={{ fontSize: "1.2rem", fontWeight: 200, color: "#fff", margin: "1rem 0" }}>LOCAL MOTION CAPTURE</h3>
-              <p className="text-item" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontWeight: 300 }}>On-device posture, balance, and micro-movement reading — processed locally.</p>
+              <h3 className="text-item" style={{ fontSize: "1.2rem", fontWeight: 200, color: "#fff", margin: "1rem 0" }} data-default="#fff" data-hover="rgba(34,211,238,0.9)">LOCAL MOTION CAPTURE</h3>
+              <p className="text-item" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontWeight: 300 }} data-default="rgba(255,255,255,0.6)" data-hover="rgba(255,255,255,0.9)">On-device posture, balance, and micro-movement reading — processed locally.</p>
             </div>
           </div>
 
           {/* STEP 02 */}
-          <div className="step-container" style={{ position: "relative" }} onMouseEnter={() => playPipelineTick(1)}>
+          <div className="step-container" style={{ position: "relative" }}
+            onMouseEnter={e => { playPipelineTick(1); hoverOn(e); }}
+            onMouseLeave={e => hoverOff(e)}>
             <div style={{ width: "12px", height: "12px", background: "#fff", borderRadius: "50%", marginBottom: "3rem", zIndex: 2, position: "relative", animation: "pulseDot 2s infinite 0.5s" }} />
             <div className="text-motion-wrapper">
               <span className="text-item index-num" style={{ fontFamily: "monospace", fontSize: "0.8rem", color: "#90c8ff", opacity: 0.5 }}>02</span>
-              <h3 className="text-item" style={{ fontSize: "1.2rem", fontWeight: 200, color: "#fff", margin: "1rem 0" }}>BEHAVIORAL ENCODING</h3>
-              <p className="text-item" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontWeight: 300 }}>Movement becomes a compact identity vector — non-corporeal and irreversible.</p>
+              <h3 className="text-item" style={{ fontSize: "1.2rem", fontWeight: 200, color: "#fff", margin: "1rem 0" }} data-default="#fff" data-hover="rgba(34,211,238,0.9)">BEHAVIORAL ENCODING</h3>
+              <p className="text-item" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontWeight: 300 }} data-default="rgba(255,255,255,0.6)" data-hover="rgba(255,255,255,0.9)">Movement becomes a compact identity vector — non-corporeal and irreversible.</p>
             </div>
           </div>
 
           {/* STEP 03 */}
-          <div className="step-container" style={{ position: "relative" }} onMouseEnter={() => playPipelineTick(2)}>
+          <div className="step-container" style={{ position: "relative" }}
+            onMouseEnter={e => { playPipelineTick(2); hoverOn(e); }}
+            onMouseLeave={e => hoverOff(e)}>
             <div style={{ width: "12px", height: "12px", background: "#fff", borderRadius: "50%", marginBottom: "3rem", zIndex: 2, position: "relative", animation: "pulseDot 2s infinite 1s" }} />
             <div className="text-motion-wrapper">
               <span className="text-item index-num" style={{ fontFamily: "monospace", fontSize: "0.8rem", color: "#90c8ff", opacity: 0.5 }}>03</span>
-              <h3 className="text-item" style={{ fontSize: "1.2rem", fontWeight: 200, color: "#fff", margin: "1rem 0" }}>ZERO-KNOWLEDGE VERIFICATION</h3>
-              <p className="text-item" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontWeight: 300 }}>Prove identity without exposing raw data — portable across AI and onchain worlds.</p>
+              <h3 className="text-item" style={{ fontSize: "1.2rem", fontWeight: 200, color: "#fff", margin: "1rem 0" }} data-default="#fff" data-hover="rgba(34,211,238,0.9)">ZERO-KNOWLEDGE VERIFICATION</h3>
+              <p className="text-item" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontWeight: 300 }} data-default="rgba(255,255,255,0.6)" data-hover="rgba(255,255,255,0.9)">Prove identity without exposing raw data — portable across AI and onchain worlds.</p>
             </div>
           </div>
 
