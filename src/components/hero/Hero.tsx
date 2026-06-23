@@ -6,6 +6,7 @@ import GlowVortexButton from "./GlowVortexButton";
 import "./Hero.css";
 import NarrativeText from "./NarrativeText";
 import "./Hero.css";
+import { playTick } from "@/utils/useAudioTick";
 
 export default function Hero() {
   const [showLeft, setShowLeft] = useState(false);
@@ -139,6 +140,7 @@ export default function Hero() {
         <div className="absolute top-[calc(50%+280px)] left-0 w-full z-100 text-center">
           <button
             onClick={handleEnterGenesis}
+            onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
             className="enter-genesis group relative inline-block px-12 py-4 bg-transparent"
           >
             <span className="relative z-10 font-mono font-extralight text-[12px] tracking-[0.6em] text-white/90 group-hover:text-cyan-400 transition-all duration-700">
