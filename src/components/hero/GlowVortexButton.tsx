@@ -14,7 +14,7 @@ export default function GlowVortexButton({
 
   const playVortexSound = useCallback((action: 'hover' | 'click') => {
     if (action === 'hover') {
-      playTick(150, "sine", 0.15, 0.015);
+      playTick(600, "sine", 0.08, 0.02);
     } else {
       playTick(800, "triangle", 0.10, 0.03);
     }
