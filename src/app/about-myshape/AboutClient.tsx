@@ -59,7 +59,7 @@ export default function About() {
           <h3 className="text-white/20 text-[9px] tracking-[0.6em] uppercase text-center">// CORE_VALUES_CONSTITUTION</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {organizationalPrinciples.map((principle) => (
-              <div key={principle.label} onMouseEnter={() => playTick(600, "sine", 0.08, 0.015)} className="p-8 border border-white/5 bg-white/[0.01] hover:border-cyan-500/20 transition-all group">
+              <div key={principle.label} onMouseEnter={e => { playTick(600, "sine", 0.08, 0.015); e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; }} className="p-8 border transition-all group" style={{ borderColor: "rgba(144,200,255,0.1)", background: "transparent" }}>
                 <div className="text-cyan-500 text-[9px] tracking-[0.4em] font-mono mb-6 group-hover:text-cyan-400 transition-colors">
                   {principle.label}
                 </div>
@@ -75,9 +75,9 @@ export default function About() {
         </section>
 
         {/* --- 3. 找回之前的团队/实验室声明 --- */}
-        <section className="relative group">
-          <div className="absolute inset-0 border border-cyan-500/10 scale-[1.02] group-hover:scale-100 transition-transform duration-700" />
-          <div className="bg-[#02040a] p-12 border border-white/10 relative z-10">
+        <section className="relative group" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
+          <div className="absolute inset-0 border scale-[1.02] group-hover:scale-100 transition-transform duration-700" style={{ borderColor: "rgba(144,200,255,0.1)" }} />
+          <div className="p-12 border relative z-10 transition-all duration-500" style={{ borderColor: "rgba(144,200,255,0.1)", background: "transparent" }}>
             <div className="flex flex-col md:flex-row gap-12 items-center">
               <div className="flex-1 space-y-6">
                 <h3 className="text-white text-sm tracking-[0.5em] uppercase font-bold">THE_LABORATORY</h3>

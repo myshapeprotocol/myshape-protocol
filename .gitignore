@@ -45,3 +45,4 @@ docs/.core/
 
 .vercel
 .env*.local
+scripts/node_modules/

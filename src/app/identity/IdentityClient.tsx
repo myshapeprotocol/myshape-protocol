@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import HeroVisual from "@/components/hero/HeroVisual";
 import ParticleEngine from "@/components/animations/ParticleEngine";
+import { playTick } from "@/utils/useAudioTick";
 import "./identity.css";
 
 /* -----------------------------------------

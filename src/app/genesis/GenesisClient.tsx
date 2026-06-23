@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
 import VortexScan from "@/components/ritual/VortexScan";
+import { playTick } from "@/utils/useAudioTick";
 import "./genesis.css";
 
 type Stage = "input" | "scanning" | "sending_otp" | "verifying" | "success" | "error";
@@ -135,6 +136,7 @@ export default function GenesisClient() {
                 </div>
                 {/* ── 启动按钮 ── */}
                 <button type="submit"
+                  onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                   className="group relative px-20 py-4 transition-all duration-500 overflow-hidden"
                   style={{ border: "1px solid rgba(34,211,238,0.35)", background: "rgba(34,211,238,0.03)" }}>
                   {/* 按钮顶部扫描线 */}
@@ -227,6 +229,7 @@ export default function GenesisClient() {
                       ))}
                     </div>
                     <button type="submit" disabled={otp.length !== 6}
+                      onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                       className="w-full py-3 border text-[9px] tracking-[0.4em] uppercase font-mono transition-all duration-500"
                       style={{
                         borderColor: otp.length === 6 ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.08)",
@@ -353,6 +356,7 @@ export default function GenesisClient() {
               className="flex flex-col items-center space-y-6">
               <div className="text-red-300/80 font-mono text-[10px] tracking-[0.3em] uppercase animate-pulse">{`> ${errorMsg}`}</div>
               <button onClick={() => { setStage("input"); setErrorMsg(""); setOtp(""); }}
+                onMouseEnter={() => playTick(600, "sine", 0.08, 0.02)}
                 className="px-8 py-3 border border-white/20 text-white/60 font-mono text-[9px] tracking-[0.3em] uppercase hover:border-white/50 hover:text-white transition-all">
                 Retry_Initialization
               </button>
