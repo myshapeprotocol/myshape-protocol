@@ -137,14 +137,14 @@ export default function ProtocolClient() {
         </section>
 
         {/* ── 入口 ── */}
-        <section className="flex flex-wrap justify-center gap-6 py-16 border-t border-white/5">
-          <Link href="/protocol/manifesto" className="group relative px-10 py-4 border border-cyan-500/30 bg-black text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all">
+        <section className="flex flex-wrap justify-center gap-6 py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
+          <Link href="/protocol/manifesto" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)} className="group relative px-10 py-4 border border-cyan-500/30 text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all" style={{ background: "transparent" }}>
             Protocol_Manifesto →
           </Link>
-          <Link href="/protocol/motion-pipeline" className="group relative px-10 py-4 border border-cyan-500/30 bg-black text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all">
+          <Link href="/protocol/motion-pipeline" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)} className="group relative px-10 py-4 border border-cyan-500/30 text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all" style={{ background: "transparent" }}>
             Motion_Pipeline →
           </Link>
-          <Link href="/protocol/identity-layer" className="group relative px-10 py-4 border border-cyan-500/30 bg-black text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all">
+          <Link href="/protocol/identity-layer" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)} className="group relative px-10 py-4 border border-cyan-500/30 text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all" style={{ background: "transparent" }}>
             Identity_Layer →
           </Link>
         </section>
