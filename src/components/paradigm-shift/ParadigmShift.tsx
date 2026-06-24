@@ -52,7 +52,7 @@ export default function ParadigmShift() {
           return (
             <div
               key={node.id}
-              onMouseEnter={() => { setHoveredId(node.id); playTick(500, "sine", 0.04, 0.01); }}
+              onMouseEnter={() => { setHoveredId(node.id); playTick(600, "sine", 0.08, 0.025); }}
               onMouseLeave={() => setHoveredId(null)}
               className="relative flex flex-col md:flex-row items-stretch justify-between transition-all duration-300"
               style={{ minHeight: "64px" }}
