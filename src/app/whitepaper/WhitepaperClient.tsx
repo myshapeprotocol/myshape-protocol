@@ -160,14 +160,19 @@ export default function WhitepaperClient() {
   const [genesisNodes, setGenesisNodes] = useState<{ total: number; remaining: number; nodes: Array<{ index: number; id: string; joined: string }> } | null>(null);
   const [prevTotal, setPrevTotal] = useState(0);
   const [nodePulse, setNodePulse] = useState(false);
+  const [isSealed, setIsSealed] = useState(false);
+  const [glitchActive, setGlitchActive] = useState(false);
 
-  // 实时轮询 Genesis 节点数（每 15 秒）
+  // 实时轮询 Genesis 节点数
   useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
     const poll = () => {
       fetch("/api/nodes/genesis")
         .then(r => r.json())
         .then(data => {
           if (data.nodes) {
+            const wasNotSealed = genesisNodes && genesisNodes.total < 100;
+            const nowSealed = data.total >= 100;
             setGenesisNodes(prev => {
               if (prev && data.total > prev.total) {
                 setNodePulse(true);
@@ -176,12 +181,22 @@ export default function WhitepaperClient() {
               return data;
             });
             if (data.total > prevTotal) setPrevTotal(data.total);
+            // 检测封存事件
+            if (wasNotSealed && nowSealed) {
+              setIsSealed(true);
+              setGlitchActive(true);
+              setTimeout(() => setGlitchActive(false), 2500);
+            }
+            if (data.total >= 100) {
+              setIsSealed(true);
+              clearInterval(interval); // 封存后停止轮询
+            }
           }
         })
         .catch(() => {});
     };
     poll();
-    const interval = setInterval(poll, 15000);
+    interval = setInterval(poll, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -210,7 +225,18 @@ export default function WhitepaperClient() {
       <ProtocolHeader />
       <BackgroundParticles />
 
-      <style>{`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }`}</style>
+      <style>{`
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        @keyframes glitchBorder { 0%,100% { opacity:0; } 10% { opacity:0.8; } 20% { opacity:0; } 30% { opacity:0.6; } 40% { opacity:0; } 50% { opacity:0.9; } 60% { opacity:0; } }
+        @keyframes glitchShift { 0%,100% { transform:translate(0); } 5% { transform:translate(-4px,2px); } 10% { transform:translate(4px,-1px); } 15% { transform:translate(0); } }
+      `}</style>
+      {/* Glitch 封存特效 */}
+      {glitchActive && (
+        <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: "glitchShift 0.15s steps(1) infinite" }}>
+          <div className="absolute inset-0 border-[3px] border-cyan-400/30" style={{ animation: "glitchBorder 2.5s ease-out forwards", boxShadow: "inset 0 0 120px rgba(34,211,238,0.15), 0 0 80px rgba(34,211,238,0.1)" }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.04] to-transparent" />
+        </div>
+      )}
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-28 pb-16 flex flex-col md:flex-row gap-24">
         {/* ── Sidebar Nav ── */}
         <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
@@ -311,8 +337,13 @@ export default function WhitepaperClient() {
                     {/* Genesis Cohort 实时状态 */}
                     <div className="border p-6" style={{ borderColor: "rgba(144,200,255,0.15)", background: "rgba(4,14,28,0.5)" }}>
                       <div className="flex items-center gap-3 mb-4">
-                        <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] animate-pulse" />
-                        <span className="text-cyan-400/60 text-[9px] tracking-[0.4em] uppercase">Genesis Cohort — Live Registry</span>
+                        <span className={`w-2 h-2 rounded-full ${isSealed ? "bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.9)]" : "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] animate-pulse"}`} />
+                        <span className="text-cyan-400/60 text-[9px] tracking-[0.4em] uppercase">
+                          {isSealed ? "Genesis Cohort — Sealed & Immutable" : "Genesis Cohort — Live Registry"}
+                        </span>
+                        {isSealed && (
+                          <span className="text-cyan-400/40 text-[7px] tracking-[0.2em] border border-cyan-400/20 px-2 py-0.5">FINAL</span>
+                        )}
                       </div>
 
                       <div className="flex items-baseline gap-4 mb-4">
@@ -323,44 +354,63 @@ export default function WhitepaperClient() {
 
                       {/* 协议同步进度条 */}
                       <div className="mb-6">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <span className="text-white/10 text-[7px] tracking-[0.3em] uppercase">Protocol Sync</span>
-                          <span className="text-cyan-400/30 font-mono text-[8px]">{(genesisNodes.total / 100 * 100).toFixed(1)}%</span>
-                        </div>
-                        <div className="relative h-1 bg-white/[0.04] overflow-hidden">
-                          <div
-                            className={`absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500/40 via-cyan-400/60 to-cyan-300/40 transition-all duration-1000 ease-out ${nodePulse ? "animate-pulse" : ""}`}
-                            style={{
-                              width: `${Math.max(genesisNodes.total / 100 * 100, 1)}%`,
-                              boxShadow: nodePulse ? "0 0 12px rgba(34,211,238,0.6)" : "0 0 4px rgba(34,211,238,0.2)",
-                            }}
-                          />
-                          <div className="absolute inset-y-0 w-full pointer-events-none" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)", backgroundSize: "200% 100%", animation: "shimmer 3s ease-in-out infinite" }} />
-                        </div>
-                        <div className="flex items-center gap-1.5 mt-1">
-                          <span className={`w-1 h-1 rounded-full transition-all duration-500 ${nodePulse ? "bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.8)]" : "bg-cyan-400/30"}`} />
-                          <span className="text-white/10 text-[6px] tracking-[0.2em] uppercase">
-                            {genesisNodes.total === 0 ? "Awaiting genesis initialization" :
-                             genesisNodes.total < 100 ? "Network bootstrapping in progress" :
-                             "Genesis Cohort sealed — network active"}
-                          </span>
-                        </div>
+                        {isSealed ? (
+                          <div className="text-center py-3 border border-cyan-400/20 bg-cyan-400/[0.03]">
+                            <div className="text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase font-mono mb-1">◈ COHORT_SEALED ◈</div>
+                            <div className="text-white/25 text-[8px] tracking-[0.2em] uppercase">Identity Layer Anchored — Registry Immutable</div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-white/10 text-[7px] tracking-[0.3em] uppercase">Protocol Sync</span>
+                              <span className="text-cyan-400/30 font-mono text-[8px]">{(genesisNodes.total / 100 * 100).toFixed(1)}%</span>
+                            </div>
+                            <div className="relative h-1 bg-white/[0.04] overflow-hidden">
+                              <div
+                                className={`absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500/40 via-cyan-400/60 to-cyan-300/40 transition-all duration-1000 ease-out ${nodePulse ? "animate-pulse" : ""}`}
+                                style={{
+                                  width: `${Math.max(genesisNodes.total / 100 * 100, 1)}%`,
+                                  boxShadow: nodePulse ? "0 0 12px rgba(34,211,238,0.6)" : "0 0 4px rgba(34,211,238,0.2)",
+                                }}
+                              />
+                              <div className="absolute inset-y-0 w-full pointer-events-none" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)", backgroundSize: "200% 100%", animation: "shimmer 3s ease-in-out infinite" }} />
+                            </div>
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className={`w-1 h-1 rounded-full transition-all duration-500 ${nodePulse ? "bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.8)]" : "bg-cyan-400/30"}`} />
+                              <span className="text-white/10 text-[6px] tracking-[0.2em] uppercase">
+                                {genesisNodes.total === 0 ? "Awaiting genesis initialization" :
+                                 genesisNodes.total < 100 ? "Network bootstrapping in progress" :
+                                 "Genesis Cohort sealed — network active"}
+                              </span>
+                            </div>
+                          </>
+                        )}
                       </div>
 
                       {genesisNodes.nodes.length > 0 && (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                          {genesisNodes.nodes.slice(0, 20).map(n => (
-                            <div key={n.index} className="flex items-center gap-2 p-2 border border-white/[0.04] text-[9px] font-mono"
-                              style={{ background: "rgba(2,4,10,0.6)" }}>
+                        <div className={`grid ${isSealed ? "grid-cols-3 md:grid-cols-5" : "grid-cols-2 md:grid-cols-4"} gap-2`}>
+                          {genesisNodes.nodes.slice(0, isSealed ? 100 : 20).map(n => (
+                            <div key={n.index} className="flex items-center gap-2 p-2 border text-[9px] font-mono transition-all duration-500"
+                              style={{
+                                borderColor: isSealed ? "rgba(144,200,255,0.1)" : "rgba(255,255,255,0.04)",
+                                background: isSealed ? "rgba(4,14,28,0.8)" : "rgba(2,4,10,0.6)",
+                              }}>
                               <span className="text-white/10 text-[8px] w-5">#{n.index}</span>
                               <span className="text-white/25 truncate">{n.id}</span>
                             </div>
                           ))}
-                          {genesisNodes.total > 20 && (
+                          {!isSealed && genesisNodes.total > 20 && (
                             <div className="flex items-center justify-center p-2 border border-white/[0.02] text-[9px] text-white/10 font-mono">
                               +{genesisNodes.total - 20} more
                             </div>
                           )}
+                        </div>
+                      )}
+                      {isSealed && (
+                        <div className="text-center mt-4 pt-3 border-t border-cyan-400/10">
+                          <span className="text-cyan-400/30 text-[8px] tracking-[0.3em] uppercase font-mono">
+                            ◈ Genesis Registry — Permanently Anchored to Protocol Root Index
+                          </span>
                         </div>
                       )}
                     </div>
