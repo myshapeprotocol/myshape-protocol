@@ -30,8 +30,9 @@ export default function GenesisClient() {
     }
   };
 
-  const handleCommence = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleCommence = async (e?: React.FormEvent<HTMLFormElement> | React.MouseEvent) => {
+    if (e && "preventDefault" in e) e.preventDefault();
+    console.log("COMMENCE_CONNECTION_CLICKED", { email, inviteCode });
     if (!email.includes("@")) return;
 
     // 邀请码格式校验（仅当用户填写时）
@@ -187,13 +188,14 @@ export default function GenesisClient() {
                     {/* 侧边数据流 */}
                     <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-l" />
                     <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-r" />
-                    <input type="email" required placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
+                    <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="relative z-10 w-80 max-w-[75vw] bg-transparent py-5 text-center text-xs tracking-[0.3em] text-white/90 focus:outline-none placeholder:text-white/15" />
                   </div>
                 </div>
                 {/* ── 启动按钮 ── */}
-                <button type="submit"
+                <button type="button"
+                  onClick={(e) => handleCommence(e)}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                   className="group relative px-20 py-4 transition-all duration-500 overflow-hidden"
                   style={{ border: "1px solid rgba(34,211,238,0.35)", background: "rgba(34,211,238,0.03)" }}>
