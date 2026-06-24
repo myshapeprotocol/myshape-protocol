@@ -27,7 +27,8 @@ export default function ParadigmShift() {
     <section className="relative z-10 w-full py-16 md:py-24 font-mono">
 
       {/* 顶部标题 — 左对齐 + 右侧状态指示 */}
-      <div className="w-full max-w-4xl mx-auto px-6 mb-12 flex justify-between items-end border-b border-white/[0.06] pb-6">
+      <div className="w-full max-w-4xl mx-auto px-6 mb-12 flex justify-between items-end border-b border-white/[0.06] pb-6"
+        onMouseEnter={() => playTick(700, "sine", 0.06, 0.02)}>
         <div>
           <div className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-3">Identity Paradigm Shift</div>
           <h2 style={{ fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
@@ -132,7 +133,8 @@ export default function ParadigmShift() {
       </div>
 
       {/* 底部校准线 */}
-      <div className="w-full max-w-4xl mx-auto px-6 mt-14 pt-4 border-t border-white/[0.06] flex justify-center text-[9px] tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}>
+      <div className="w-full max-w-4xl mx-auto px-6 mt-14 pt-4 border-t border-white/[0.06] flex justify-center text-[9px] tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}
+        onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
         SYSTEM_SHIFT_CALIBRATION: [ COMPLETED_100% ]
       </div>
     </section>
