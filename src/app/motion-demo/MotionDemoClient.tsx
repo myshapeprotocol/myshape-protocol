@@ -356,7 +356,19 @@ export default function MotionDemoClient() {
         ep: zkp.ep.ep_hash,
       });
     }
-    setTimeout(() => { playTick(1200, "sine", 0.12, 0.03); setPhase("complete"); }, 1500);
+    setTimeout(() => {
+      playTick(1200, "sine", 0.12, 0.03);
+      setPhase("complete");
+      // 记录一次成功的 motion 验证，递增 scan_count
+      const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+      if (genesisEmail) {
+        fetch("/api/motion/record", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: genesisEmail }),
+        }).catch(() => {});
+      }
+    }, 1500);
   }, [phase]);
 
   // ── Stop ──
@@ -429,6 +441,14 @@ export default function MotionDemoClient() {
                     setThreatVerdict("✓ HUMAN_PRESENCE_VERIFIED");
                     setProofHashes({ zkp: "a1b2c3d4", pop: "e5f6a7b8", mp: "c9d0e1f2", ep: "3a4b5c6d" });
                     setPhase("complete");
+                    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+                    if (genesisEmail) {
+                      fetch("/api/motion/record", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: genesisEmail }),
+                      }).catch(() => {});
+                    }
                   }}
                     onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
                     className="text-cyan-400/35 hover:text-cyan-300/70 text-[10px] tracking-[0.15em] uppercase transition-colors border-b border-transparent hover:border-cyan-400/30 pb-0.5">

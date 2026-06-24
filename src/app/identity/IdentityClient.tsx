@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import HeroVisual from "@/components/hero/HeroVisual";
 import ParticleEngine from "@/components/animations/ParticleEngine";
+import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
 import { playTick } from "@/utils/useAudioTick";
 import "./identity.css";
 
@@ -121,6 +122,13 @@ export default function IdentityClient() {
             durationMs={3200}
             colorRgb="128, 191, 255"
           />
+        </div>
+      )}
+
+      {/* 身份徽章 — 粒子形成后浮现 */}
+      {isFormed && (
+        <div className="absolute top-6 right-6 md:top-10 md:right-10 z-20">
+          <GenesisBadge />
         </div>
       )}
 
