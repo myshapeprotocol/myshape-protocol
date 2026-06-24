@@ -391,11 +391,11 @@ export default function GenesisClient() {
                   <p className="text-white/50 text-[9px] tracking-[0.2em] uppercase leading-relaxed mb-2">
                     You are now a <span className="text-cyan-300/80">Genesis Founding Entity</span>.
                   </p>
-                  <p className="text-white/20 text-[7px] tracking-[0.15em] uppercase leading-relaxed">
+                  <p className="text-white/35 text-[9px] tracking-[0.15em] uppercase leading-relaxed">
                     Permanent tier. Never offered again.
                   </p>
-                  <div className="mt-2 pt-2 border-t border-white/5">
-                    <span className="text-white/15 text-[7px] tracking-[0.15em] font-mono">
+                  <div className="mt-2 pt-2 border-t border-white/10">
+                    <span className="text-white/30 text-[9px] tracking-[0.15em] font-mono">
                       SIG_KEY: {email.slice(0, 3)}****{email.slice(-4)}
                     </span>
                   </div>
