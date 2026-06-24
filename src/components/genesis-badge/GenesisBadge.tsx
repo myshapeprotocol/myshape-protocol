@@ -24,23 +24,32 @@ export default function GenesisBadge() {
   const badgeRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<number>(0);
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
-      setStatus(sessionStorage.getItem("genesis_status") || "ACTIVE");
-      const email = sessionStorage.getItem("genesis_email") || "";
-      setVisible(true);
+  const fetchStats = (email: string) => {
+    fetch(`/api/node/privileges?email=${encodeURIComponent(email)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.scan_count !== undefined) setScanCount(data.scan_count);
+        if (data.data_contribution !== undefined) setDataContrib(data.data_contribution);
+      })
+      .catch(() => {});
+  };
 
-      // 拉取实时节点数据
-      if (email) {
-        fetch(`/api/node/privileges?email=${encodeURIComponent(email)}`)
-          .then(r => r.json())
-          .then(data => {
-            if (data.scan_count !== undefined) setScanCount(data.scan_count);
-            if (data.data_contribution !== undefined) setDataContrib(data.data_contribution);
-          })
-          .catch(() => {});
-      }
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const storedEmail = sessionStorage.getItem("genesis_email") || "";
+    const isCompleted = sessionStorage.getItem("genesis_completed") === "1";
+    const storedStatus = sessionStorage.getItem("genesis_status") || "";
+
+    // 有 session 记录：直接显示
+    if (isCompleted && storedEmail) {
+      setStatus(storedStatus || "ACTIVE");
+      setVisible(true);
+      fetchStats(storedEmail);
+      return;
     }
+
+    // session 丢失：无法恢复，不显示（用户需重新登录）
   }, []);
 
   // 鼠标视差倾斜

@@ -99,9 +99,15 @@ export default function HomeClient() {
 
         <div className="absolute bottom-10 right-10 text-right">
           <div className="flex flex-col items-end">
-            {isGenesisUser ? (
-              <div className="pr-1">
+            {isGenesisUser && (
+              <div className="pr-1 mb-2">
                 <GenesisBadge />
+              </div>
+            )}
+            {isGenesisUser ? (
+              <div className="pr-3 border-r border-cyan-400/20 text-[7px] text-cyan-300/30 space-y-1 tracking-[0.1em] font-mono">
+                <p>STATUS: {activeUser ? "GENESIS_NODE" : "ACTIVE"}</p>
+                <p className="opacity-50">HASH: {clientHash}</p>
               </div>
             ) : activeUser ? (
               <>
