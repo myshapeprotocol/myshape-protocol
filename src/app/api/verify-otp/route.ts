@@ -145,14 +145,18 @@ export async function POST(req: Request) {
 
     if (updateError) throw updateError;
 
-    // 4. 发送祝贺邮件（异步，不阻塞响应）
+    // 4. 发送祝贺邮件（必须 await，否则 Vercel serverless 会提前杀线程）
     if (resend) {
-      console.log('[WELCOME_EMAIL] Attempting to send to:', email);
-      sendWelcomeEmail(resend, email, nodeStatus).catch((err) =>
-        console.error('[WELCOME_EMAIL] Async error:', err)
-      );
+      try {
+        console.log('[WELCOME_EMAIL] Sending to:', email, '| tier:', nodeStatus);
+        await sendWelcomeEmail(resend, email, nodeStatus);
+        console.log('[WELCOME_EMAIL] ✅ Sent successfully');
+      } catch (err) {
+        console.error('[WELCOME_EMAIL] ❌ Failed:', err);
+        // 邮件失败不阻断验证流程
+      }
     } else {
-      console.warn('[WELCOME_EMAIL] SKIPPED — RESEND_API_KEY not configured');
+      console.warn('[WELCOME_EMAIL] ⚠️ SKIPPED — RESEND_API_KEY not configured');
     }
 
     return NextResponse.json({ success: true, status: nodeStatus });
