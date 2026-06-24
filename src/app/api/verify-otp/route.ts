@@ -131,6 +131,9 @@ export async function POST(req: Request) {
     }
 
     // 3. 验证成功——前 100 名标记为 GENESIS_NODE
+    const previousStatus = data.status;
+    const isFirstActivation = !['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(previousStatus);
+
     const { count } = await supabase
       .from('protocol_nodes')
       .select('*', { count: 'exact', head: true })
@@ -145,8 +148,8 @@ export async function POST(req: Request) {
 
     if (updateError) throw updateError;
 
-    // 4. 发送祝贺邮件（必须 await，否则 Vercel serverless 会提前杀线程）
-    if (resend) {
+    // 4. 发送祝贺邮件（仅首次激活时）
+    if (resend && isFirstActivation) {
       try {
         console.log('[WELCOME_EMAIL] Sending to:', email, '| tier:', nodeStatus);
         await sendWelcomeEmail(resend, email, nodeStatus);
