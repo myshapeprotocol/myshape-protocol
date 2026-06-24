@@ -403,6 +403,18 @@ export default function GenesisClient() {
                 className="text-cyan-400/25 hover:text-cyan-300/60 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
                 See_How_It_Works → Motion_Demo
               </motion.a>
+
+              {/* Beta tester feedback */}
+              <motion.a
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.6, duration: 0.5 }}
+                href="https://tally.so/r/placeholder"
+                target="_blank" rel="noopener noreferrer"
+                onMouseEnter={() => playTick(750, "sine", 0.07, 0.02)}
+                className="text-purple-400/30 hover:text-purple-300/70 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
+                ◈ Beta_Feedback → Report_Experience
+              </motion.a>
             </motion.div>
           )}
 

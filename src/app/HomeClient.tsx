@@ -5,7 +5,6 @@ import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
 import Typewriter from "@/components/ui/Typewriter";
-import Hero from "@/components/hero/Hero";
 import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
 import Capabilities from "@/components/capabilities/Capabilities";
