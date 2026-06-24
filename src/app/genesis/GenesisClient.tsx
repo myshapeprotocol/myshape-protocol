@@ -455,6 +455,17 @@ export default function GenesisClient() {
                 className="text-purple-400/30 hover:text-purple-300/70 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
                 ◈ Beta_Feedback → Report_Experience
               </motion.a>
+
+              {/* Whitepaper deep dive */}
+              <motion.a
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.9, duration: 0.5 }}
+                href="/whitepaper#genesis-protocol"
+                onMouseEnter={() => playTick(700, "sine", 0.07, 0.02)}
+                className="text-cyan-400/20 hover:text-cyan-300/60 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
+                Deep_Dive → Read §7 of the Whitepaper
+              </motion.a>
             </motion.div>
           )}
 
