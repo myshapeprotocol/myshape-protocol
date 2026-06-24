@@ -34,9 +34,9 @@ export default function GenesisClient() {
     e.preventDefault();
     if (!email.includes("@")) return;
 
-    // 校验邀请码格式
+    // 邀请码格式校验（仅当用户填写时）
     const normalizedCode = inviteCode.trim().toUpperCase();
-    if (!/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedCode)) {
+    if (normalizedCode && !/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedCode)) {
       setStage("error");
       setErrorMsg("INVITE_CODE_FORMAT_INVALID: Expected MYSHAPE-XXXX-XXXX");
       return;
@@ -49,14 +49,14 @@ export default function GenesisClient() {
     try {
       const res = await fetch("/api/send-otp", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), invite_code: normalizedCode }),
+        body: JSON.stringify({ email: email.trim(), invite_code: normalizedCode || undefined }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "OTP_SEND_FAILED");
       setStage("verifying");
     } catch (err: unknown) {
       setStage("error");
-      setErrorMsg((err as Error).message?.slice(0, 80) || "OTP_FAILED");
+      setErrorMsg((err as Error).message?.slice(0, 120) || "OTP_FAILED");
     }
   };
 
@@ -152,7 +152,7 @@ export default function GenesisClient() {
                     <div className="flex items-center gap-2 mb-1 relative z-10">
                       <span className="text-purple-400/40 font-mono text-[7px] tracking-[0.3em] uppercase">BETA_ACCESS</span>
                     </div>
-                    <input type="text" required placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
+                    <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
                       onChange={(e) => handleInviteCodeChange(e.target.value)}
                       maxLength={19}
                       className="relative z-10 w-80 max-w-[75vw] bg-transparent py-4 text-center text-xs tracking-[0.3em] text-purple-200/80 focus:outline-none placeholder:text-white/10" />

@@ -42,9 +42,32 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1a. 如果提供了邀请码，校验并消耗
-    if (invite_code) {
+    // 1a. 智慧分流：检查是否为老用户
+    const { data: existingNode } = await supabase
+      .from('protocol_nodes')
+      .select('status')
+      .eq('email', email.trim())
+      .maybeSingle();
+
+    const isReturningUser = existingNode && ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(existingNode.status);
+
+    if (!isReturningUser) {
+      // 新用户：必须提供有效的邀请码
+      if (!invite_code) {
+        return NextResponse.json(
+          { error: "INVITE_CODE_REQUIRED: New entity initialization requires a Genesis invite code" },
+          { status: 403 }
+        );
+      }
+
       const normalized = String(invite_code).trim().toUpperCase();
+
+      if (!/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalized)) {
+        return NextResponse.json(
+          { error: "INVITE_CODE_FORMAT_INVALID: Expected MYSHAPE-XXXX-XXXX" },
+          { status: 400 }
+        );
+      }
 
       const { data: inviteData, error: inviteLookupError } = await supabase
         .from('invite_codes')
@@ -87,6 +110,7 @@ export async function POST(req: Request) {
         );
       }
     }
+    // 老用户：跳过邀请码校验，直接进入 OTP 流程
 
     // 1b. 生成 6 位随机验证码
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
