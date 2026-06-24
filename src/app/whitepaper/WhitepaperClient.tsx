@@ -158,12 +158,31 @@ New nodes may join the protocol after the Genesis Cohort is sealed, but they ent
 export default function WhitepaperClient() {
   const [activeId, setActiveId] = useState("proposition");
   const [genesisNodes, setGenesisNodes] = useState<{ total: number; remaining: number; nodes: Array<{ index: number; id: string; joined: string }> } | null>(null);
+  const [prevTotal, setPrevTotal] = useState(0);
+  const [nodePulse, setNodePulse] = useState(false);
 
+  // 实时轮询 Genesis 节点数（每 15 秒）
   useEffect(() => {
-    fetch("/api/nodes/genesis")
-      .then(r => r.json())
-      .then(data => { if (data.nodes) setGenesisNodes(data); })
-      .catch(() => {});
+    const poll = () => {
+      fetch("/api/nodes/genesis")
+        .then(r => r.json())
+        .then(data => {
+          if (data.nodes) {
+            setGenesisNodes(prev => {
+              if (prev && data.total > prev.total) {
+                setNodePulse(true);
+                setTimeout(() => setNodePulse(false), 1200);
+              }
+              return data;
+            });
+            if (data.total > prevTotal) setPrevTotal(data.total);
+          }
+        })
+        .catch(() => {});
+    };
+    poll();
+    const interval = setInterval(poll, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -191,6 +210,7 @@ export default function WhitepaperClient() {
       <ProtocolHeader />
       <BackgroundParticles />
 
+      <style>{`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }`}</style>
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-28 pb-16 flex flex-col md:flex-row gap-24">
         {/* ── Sidebar Nav ── */}
         <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
@@ -295,10 +315,36 @@ export default function WhitepaperClient() {
                         <span className="text-cyan-400/60 text-[9px] tracking-[0.4em] uppercase">Genesis Cohort — Live Registry</span>
                       </div>
 
-                      <div className="flex items-baseline gap-4 mb-6">
+                      <div className="flex items-baseline gap-4 mb-4">
                         <span className="text-5xl font-light font-mono text-cyan-300/80">{genesisNodes.total}</span>
                         <span className="text-white/20 text-[11px] tracking-[0.2em] uppercase">of 100 slots claimed</span>
                         <span className="text-cyan-400/40 text-[10px]">— {genesisNodes.remaining} remaining</span>
+                      </div>
+
+                      {/* 协议同步进度条 */}
+                      <div className="mb-6">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-white/10 text-[7px] tracking-[0.3em] uppercase">Protocol Sync</span>
+                          <span className="text-cyan-400/30 font-mono text-[8px]">{(genesisNodes.total / 100 * 100).toFixed(1)}%</span>
+                        </div>
+                        <div className="relative h-1 bg-white/[0.04] overflow-hidden">
+                          <div
+                            className={`absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500/40 via-cyan-400/60 to-cyan-300/40 transition-all duration-1000 ease-out ${nodePulse ? "animate-pulse" : ""}`}
+                            style={{
+                              width: `${Math.max(genesisNodes.total / 100 * 100, 1)}%`,
+                              boxShadow: nodePulse ? "0 0 12px rgba(34,211,238,0.6)" : "0 0 4px rgba(34,211,238,0.2)",
+                            }}
+                          />
+                          <div className="absolute inset-y-0 w-full pointer-events-none" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)", backgroundSize: "200% 100%", animation: "shimmer 3s ease-in-out infinite" }} />
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className={`w-1 h-1 rounded-full transition-all duration-500 ${nodePulse ? "bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.8)]" : "bg-cyan-400/30"}`} />
+                          <span className="text-white/10 text-[6px] tracking-[0.2em] uppercase">
+                            {genesisNodes.total === 0 ? "Awaiting genesis initialization" :
+                             genesisNodes.total < 100 ? "Network bootstrapping in progress" :
+                             "Genesis Cohort sealed — network active"}
+                          </span>
+                        </div>
                       </div>
 
                       {genesisNodes.nodes.length > 0 && (
