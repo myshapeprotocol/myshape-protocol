@@ -20,27 +20,27 @@ const FADE_MS = 600;
 const SCENES = [
   {
     name: "formation" as const,
-    label: "DATA-BODY",
+    label: "PRESENCE",
     subtitle:
-      "A non-corporeal particle field — your sovereign identity generated as pure data energy.",
+      "Your being generates a non-corporeal data-body. Sovereign identity as pure energy — no physical form required.",
   },
   {
     name: "motion" as const,
-    label: "MOTION_SIGNATURE",
+    label: "FIELD",
     subtitle:
-      "Every kinetic signature is unique. AI cannot forge human motion — the entropy gap is unbridgeable.",
+      "Motion creates a field of memory. Every kinetic signature is unique — AI cannot forge the entropy gap.",
   },
   {
     name: "genesis" as const,
-    label: "GENESIS_RITUAL",
+    label: "MEMORY_GEOMETRY",
     subtitle:
-      "One Genesis. Permanent tier. Initialize your node on the sovereign identity mesh.",
+      "Geometry holds memory. The scan extracts your motion-signature into a permanent, verifiable imprint.",
   },
   {
     name: "mesh" as const,
-    label: "IDENTITY_MESH",
+    label: "GENESIS_RITUAL",
     subtitle:
-      "Sovereign nodes. Zero-knowledge verified. A decentralized identity layer for the AI-native era.",
+      "The ritual completes. Your node joins the sovereign identity mesh. One Genesis. Permanent tier.",
   },
 ];
 

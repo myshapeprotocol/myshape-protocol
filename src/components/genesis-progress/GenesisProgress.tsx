@@ -60,6 +60,7 @@ export default function GenesisProgress() {
   const current = count ?? 0;
   const pct = Math.min((current / MAX_SLOTS) * 100, 100);
   const remaining = MAX_SLOTS - current;
+  const showCount = current > 3; // 人数太少时不显示数字
 
   return (
     <div className="genesis-progress-root">
@@ -69,14 +70,16 @@ export default function GenesisProgress() {
           <div className="genesis-progress-dot" />
           <span className="genesis-progress-label">GENESIS_COHORT</span>
         </div>
-        <span className="genesis-progress-count">
-          <span className="genesis-progress-current">{current}</span>
-          <span className="genesis-progress-sep">/</span>
-          <span className="genesis-progress-max">{MAX_SLOTS}</span>
-          <span className="genesis-progress-remaining">
-            &nbsp;— {remaining > 0 ? `${remaining} SLOTS_REMAIN` : 'COHORT_FULL'}
+        {showCount ? (
+          <span className="genesis-progress-count">
+            <span className="genesis-progress-current">{current}</span>
+            <span className="genesis-progress-sep">/</span>
+            <span className="genesis-progress-max">{MAX_SLOTS}</span>
+            <span className="genesis-progress-remaining">
+              &nbsp;— {remaining > 0 ? `${remaining} SLOTS_REMAIN` : 'COHORT_FULL'}
+            </span>
           </span>
-        </span>
+        ) : null}
       </div>
 
       {/* 进度条 */}

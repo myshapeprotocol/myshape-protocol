@@ -11,6 +11,7 @@ import Capabilities from "@/components/capabilities/Capabilities";
 import HowItWorks from "@/components/howitworks/HowItWorks";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
+import ParadigmShift from "@/components/paradigm-shift/ParadigmShift";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -25,7 +26,7 @@ export default function HomeClient() {
   const [genesisStatus, setGenesisStatus] = useState("ACTIVE");
 
   const maskIdentifier = (id: string) => {
-    if (!id) return "RODDOG03";
+    if (!id) return "";
     const name = id.includes('@') ? id.split('@')[0] : id;
     if (name.length <= 4) return name.toUpperCase();
     return `${name.substring(0, 2)}****${name.slice(-2)}`.toUpperCase();
@@ -115,7 +116,7 @@ export default function HomeClient() {
                   <p className="opacity-50">HASH: {clientHash}</p>
                 </div>
               </>
-            ) : (
+            ) : activeUser ? (
               <>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[7px] tracking-[0.3em] text-cyan-500/50 uppercase font-light">LAST_NODE_INBOUND</span>
@@ -130,7 +131,7 @@ export default function HomeClient() {
                   <p>STATUS: STREAMING</p>
                 </div>
               </>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -144,6 +145,9 @@ export default function HomeClient() {
             <GenesisProgress />
           </div>
         </section>
+
+        {/* ── Paradigm Shift — Legacy vs MyShape ── */}
+        <ParadigmShift />
 
         {/* ── Protocol Stack — engineering first ── */}
         <section className="relative py-24 md:py-32">

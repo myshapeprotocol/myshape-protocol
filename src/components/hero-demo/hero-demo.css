@@ -32,6 +32,16 @@
 .hero-demo-vortex-left,
 .hero-demo-vortex-right {
   pointer-events: auto;
+  animation: vortexHint 3s ease-in-out infinite;
+}
+
+.hero-demo-vortex-right {
+  animation-delay: 0.8s;
+}
+
+@keyframes vortexHint {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.85; }
 }
 
 /* ── 内容叠加层 ── */
