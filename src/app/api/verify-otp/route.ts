@@ -92,8 +92,10 @@ async function sendWelcomeEmail(
   });
 
   if (error) {
-    console.error('WELCOME_EMAIL_ERROR:', error);
+    console.error('[WELCOME_EMAIL] FAILED:', error.message, error);
     // 不抛出 — 邮件发送失败不应阻断验证流程
+  } else {
+    console.log('[WELCOME_EMAIL] SENT successfully to:', email, '| tier:', nodeStatus);
   }
 }
 
@@ -145,9 +147,12 @@ export async function POST(req: Request) {
 
     // 4. 发送祝贺邮件（异步，不阻塞响应）
     if (resend) {
+      console.log('[WELCOME_EMAIL] Attempting to send to:', email);
       sendWelcomeEmail(resend, email, nodeStatus).catch((err) =>
-        console.error('WELCOME_EMAIL_ASYNC_ERROR:', err)
+        console.error('[WELCOME_EMAIL] Async error:', err)
       );
+    } else {
+      console.warn('[WELCOME_EMAIL] SKIPPED — RESEND_API_KEY not configured');
     }
 
     return NextResponse.json({ success: true, status: nodeStatus });
