@@ -424,6 +424,7 @@ export default function GenesisClient() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.0, duration: 0.5 }}
                 href="/identity"
+                onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                 className="relative group px-14 py-3.5 font-mono text-[9px] tracking-[0.35em] uppercase transition-all duration-500 overflow-hidden"
                 style={{ border: "1px solid rgba(144,200,255,0.3)", color: "rgba(180,220,255,0.8)", textShadow: "0 0 8px rgba(144,200,255,0.3)" }}>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -438,6 +439,7 @@ export default function GenesisClient() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.3, duration: 0.5 }}
                 href="/motion-demo"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
                 className="text-cyan-400/25 hover:text-cyan-300/60 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
                 See_How_It_Works → Motion_Demo
               </motion.a>
