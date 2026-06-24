@@ -6,8 +6,8 @@
 
 .genesis-badge {
   position: relative;
-  width: 260px;
-  padding: 20px;
+  width: 210px;
+  padding: 14px;
   background: rgba(4, 14, 28, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(144, 200, 255, 0.18);
@@ -99,23 +99,23 @@
 }
 
 .badge-code {
-  font-size: 8px;
-  letter-spacing: 0.35em;
+  font-size: 7px;
+  letter-spacing: 0.3em;
   color: rgba(144, 200, 255, 0.4);
   text-transform: uppercase;
 }
 
 .badge-dots {
   display: flex;
-  gap: 5px;
+  gap: 4px;
 }
 
 .badge-dot {
-  width: 3px;
-  height: 3px;
+  width: 2.5px;
+  height: 2.5px;
   border-radius: 50%;
   background: #22d3ee;
-  box-shadow: 0 0 5px rgba(34, 211, 238, 0.7);
+  box-shadow: 0 0 4px rgba(34, 211, 238, 0.7);
   animation: dotFlash 2s ease-in-out infinite;
 }
 
@@ -128,26 +128,26 @@
 
 /* ── 核心标题 — 故障风 ── */
 .badge-title-main {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.1;
   color: rgba(210, 235, 255, 0.9);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   margin-bottom: 2px;
   position: relative;
 }
 
 .tier-genesis .badge-title-main {
   text-shadow:
-    0 0 20px rgba(144, 200, 255, 0.5),
-    0 0 60px rgba(144, 200, 255, 0.15);
+    0 0 16px rgba(144, 200, 255, 0.5),
+    0 0 40px rgba(144, 200, 255, 0.15);
   animation: glitchShuffle 6s steps(1) infinite;
 }
 
 @keyframes glitchShuffle {
   0%, 94%, 96%, 98%, 100% { transform: translate(0); }
-  95% { transform: translate(-2px, 1px); }
-  97% { transform: translate(2px, -1px); }
+  95% { transform: translate(-1px, 0.5px); }
+  97% { transform: translate(1px, -0.5px); }
 }
 
 /* 故障伪影 */
@@ -159,7 +159,7 @@
   width: 100%;
   height: 100%;
   color: rgba(34, 211, 238, 0.3);
-  text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.5);
   animation: glitchSlice 6s steps(1) infinite;
   clip-path: inset(0 0 0 0);
   pointer-events: none;
@@ -173,26 +173,26 @@
 
 /* ── 副标题 ── */
 .badge-title-sub {
-  font-size: 10px;
+  font-size: 8px;
   font-weight: 300;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: rgba(144, 200, 255, 0.6);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .tier-genesis .badge-title-sub {
   color: rgba(144, 200, 255, 0.8);
-  text-shadow: 0 0 12px rgba(144, 200, 255, 0.3);
+  text-shadow: 0 0 10px rgba(144, 200, 255, 0.3);
 }
 
 /* ── 底部数据行 ── */
 .badge-data-row {
   display: flex;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 8px;
   border-top: 1px solid rgba(144, 200, 255, 0.1);
-  font-size: 8px;
+  font-size: 7px;
   letter-spacing: 0.15em;
   color: rgba(255, 255, 255, 0.3);
 }
