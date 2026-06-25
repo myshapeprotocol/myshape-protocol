@@ -32,66 +32,47 @@ export default function GenesisClient() {
 
   const handleCommence = async (e?: React.FormEvent<HTMLFormElement> | React.MouseEvent) => {
     if (e && "preventDefault" in e) e.preventDefault();
-    // [STEP 1] handleCommence triggered
 
     try {
-      // 邮箱校验
       const cleanEmail = (email || "").trim().toLowerCase();
       if (!cleanEmail.includes("@")) {
-        console.warn("[STEP 2 - BLOCKED] Invalid email:", cleanEmail);
         setStage("error");
         setErrorMsg("INVALID_EMAIL: A valid email address is required");
         return;
       }
-      console.log("[STEP 2] Email valid:", cleanEmail);
 
-      // 邀请码格式校验（仅当用户填写时）
       const normalizedCode = (inviteCode || "").trim().toUpperCase();
       if (normalizedCode && !/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedCode)) {
-        console.warn("[STEP 3 - BLOCKED] Invalid invite code format:", normalizedCode);
         setStage("error");
         setErrorMsg("INVITE_CODE_FORMAT_INVALID: Expected MYSHAPE-XXXX-XXXX");
         return;
       }
-      console.log("[STEP 3] Invite code:", normalizedCode || "(empty — backend will route)");
 
-      // 请求体
       const requestBody = {
         email: cleanEmail,
         invite_code: normalizedCode || undefined,
       };
-      console.log("[STEP 4] Request payload:", requestBody);
 
-      // 扫描动画
-      console.log("[STEP 5] Starting scan animation...");
       setStage("scanning");
       await new Promise((r) => setTimeout(r, 8000));
-      console.log("[STEP 6] Scan complete, sending OTP...");
 
-      // 发送 API 请求
       setStage("sending_otp");
-      console.log("[STEP 7] Fetching /api/send-otp...");
       const res = await fetch("/api/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       });
 
-      console.log("[STEP 8] Response status:", res.status);
       const data = await res.json();
-      console.log("[STEP 9] Response data:", data);
 
       if (!res.ok) {
-        console.warn("[STEP 10 - FAILED] Backend rejected:", data.error);
         setStage("error");
         setErrorMsg(data.error || "OTP_SEND_FAILED");
         return;
       }
 
-      console.log("[STEP 11 - SUCCESS] OTP sent, switching to verify stage");
       setStage("verifying");
     } catch (err: unknown) {
-      console.error("[CRITICAL] handleCommence crashed:", err);
       setStage("error");
       setErrorMsg((err as Error).message?.slice(0, 120) || "OTP_FAILED");
     }
