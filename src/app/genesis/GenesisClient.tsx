@@ -449,7 +449,7 @@ export default function GenesisClient() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.6, duration: 0.5 }}
-                href="https://tally.so/r/placeholder"
+                href="https://tally.so/r/7Rj6z0"
                 target="_blank" rel="noopener noreferrer"
                 onMouseEnter={() => playTick(750, "sine", 0.07, 0.02)}
                 className="text-purple-400/30 hover:text-purple-300/70 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
