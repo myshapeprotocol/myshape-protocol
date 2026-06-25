@@ -59,6 +59,25 @@ export default function IdentityLayer() {
             multi-dimensional visual and cryptographic state. This is the first step
             toward becoming a sovereign data-body.
           </p>
+
+          <div className="mt-10 p-6 border border-cyan-400/10 bg-cyan-400/[0.02]">
+            <div className="text-cyan-400/40 text-[8px] tracking-[0.3em] uppercase mb-4">The Geometric Primitive</div>
+            <p className="text-white/35 text-sm leading-[1.9] font-light">
+              2D images are projections. They collapse depth into pixels, discarding the
+              spatial relationships that make a motion signature unique. A 3D Motion
+              Signature preserves what 2D cannot — bone lengths, joint angles, acceleration
+              vectors — forming an irreducible geometric primitive that no AI model can
+              reconstruct from flat training data.
+            </p>
+            <p className="mt-4 text-white/25 text-sm leading-[1.9] font-light">
+              The Nyquist limit ensures that 30 fps video cannot resolve dynamics above 15 Hz,
+              precisely where the 8–12 Hz physiological tremor band resides. Depth ambiguity
+              from 2D-to-3D lifting introduces ±10% uncertainty in skeletal proportions. And
+              the sensor noise floor sits at the millimeter scale — the exact scale of the
+              micro-kinematic signals that distinguish individuals. These are not temporary
+              AI limitations. They are laws of physics and information theory.
+            </p>
+          </div>
         </section>
 
         {/* ── 2. 四大身份模型 ── */}
