@@ -115,11 +115,20 @@ export async function POST(req: Request) {
     // 1b. 生成 6 位随机验证码
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // 2. 将邮箱和验证码存入 Supabase（upsert 按 email 去重）
+    // 2. 存入 Supabase — 保留已有节点的状态，新节点设为 PENDING_VERIFICATION
+    const { data: existing } = await supabase
+      .from('protocol_nodes')
+      .select('status')
+      .eq('email', email.trim())
+      .maybeSingle();
+
+    const existingStatus = existing?.status;
+    const isAlreadyActive = existingStatus && ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(existingStatus);
+
     const { error: dbError } = await supabase
       .from('protocol_nodes')
       .upsert(
-        { email, otp_code: otp, status: 'PENDING_VERIFICATION' },
+        { email, otp_code: otp, status: isAlreadyActive ? existingStatus : 'PENDING_VERIFICATION' },
         { onConflict: 'email' }
       );
 
