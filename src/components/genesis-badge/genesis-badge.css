@@ -19,6 +19,33 @@
   position: relative;
   width: 180px;
   padding: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 折叠态 */
+.genesis-badge.is-collapsed .badge-content { display: none; }
+.genesis-badge.is-collapsed .badge-corner,
+.genesis-badge.is-collapsed .badge-scan,
+.genesis-badge.is-collapsed .badge-bg-glow { opacity: 0.3; }
+.genesis-badge.is-collapsed { width: auto; padding: 8px 14px; }
+
+.genesis-badge.is-expanded .badge-collapsed-view { display: none; }
+
+.badge-collapsed-view {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.badge-tier-label-collapsed {
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(34,211,238,0.7);
+  text-shadow: 0 0 8px rgba(34,211,238,0.3);
+}
   background: rgba(4, 14, 28, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(144, 200, 255, 0.18);

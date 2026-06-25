@@ -17,6 +17,7 @@ let sparkId = 0;
 
 export default function GenesisBadge() {
   const [visible, setVisible] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [status, setStatus] = useState("");
   const [scanCount, setScanCount] = useState(0);
   const [dataContrib, setDataContrib] = useState(0);
@@ -139,7 +140,12 @@ export default function GenesisBadge() {
 
   return (
     <div className="genesis-badge-wrapper">
-      <div ref={badgeRef} className={`genesis-badge ${isGenesis ? "tier-genesis" : "tier-active"}`}>
+      <div
+        ref={badgeRef}
+        className={`genesis-badge ${isGenesis ? "tier-genesis" : "tier-active"} ${expanded ? "is-expanded" : "is-collapsed"}`}
+        onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
+        title={expanded ? "Click to collapse" : "Click to expand — view node stats"}
+      >
         {/* 粒子散溢 */}
         {sparks.map(s => {
           const dx = Math.cos(s.angle) * s.distance;
@@ -168,6 +174,13 @@ export default function GenesisBadge() {
         <div className="badge-corner badge-corner-br" />
         <div className="badge-scan" />
 
+        {/* 折叠态：仅显示核心标识 */}
+        <div className="badge-collapsed-view">
+          <span className="badge-dot" />
+          <span className="badge-tier-label-collapsed">GENESIS</span>
+        </div>
+
+        {/* 展开态：完整详情 */}
         <div className="badge-content">
           <div className="badge-topbar">
             <span className="badge-code">SIG_006_OMEGA</span>

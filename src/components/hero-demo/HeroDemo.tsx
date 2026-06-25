@@ -125,6 +125,9 @@ export default function HeroDemo() {
     let W = 0;
     let H = 0;
 
+    // 检测创世用户 — 粒子团中心增强
+    const isGenesisUser = typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1";
+
     /* ── 星空背景（HeroVisual 同款参数）── */
     const stars: { x: number; y: number; z: number }[] = [];
     function initStars() {
@@ -447,6 +450,38 @@ export default function HeroDemo() {
           ctx.fillStyle = `rgba(200,230,255,${0.45 + np * 0.2})`;
           ctx.beginPath();
           ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // ── Genesis Core — 创世节点中心标记（嵌入粒子几何体）──
+      if (isGenesisUser) {
+        const corePulse = 1 + Math.sin(now * 0.003) * 0.3;
+        // 内核实心辉光
+        const cg = ctx.createRadialGradient(0, 0, 0, 0, 0, 18 * corePulse);
+        cg.addColorStop(0, "rgba(220,240,255,0.7)");
+        cg.addColorStop(0.3, "rgba(144,200,255,0.3)");
+        cg.addColorStop(0.6, "rgba(34,211,238,0.08)");
+        cg.addColorStop(1, "rgba(34,211,238,0)");
+        ctx.fillStyle = cg;
+        ctx.beginPath();
+        ctx.arc(0, 0, 18 * corePulse, 0, Math.PI * 2);
+        ctx.fill();
+        // 外围光环
+        ctx.strokeStyle = `rgba(144,200,255,${0.15 * corePulse})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.arc(0, 0, 22 * corePulse, 0, Math.PI * 2);
+        ctx.stroke();
+        // 微粒子环
+        for (let i = 0; i < 8; i++) {
+          const angle = (now * 0.0008 + i * Math.PI / 4) % (Math.PI * 2);
+          const r = 14 + Math.sin(now * 0.004 + i) * 3;
+          const px = Math.cos(angle) * r;
+          const py = Math.sin(angle) * r;
+          ctx.fillStyle = `rgba(200,235,255,${0.5 + Math.sin(now * 0.005 + i) * 0.3})`;
+          ctx.beginPath();
+          ctx.arc(px, py, 1.2, 0, Math.PI * 2);
           ctx.fill();
         }
       }
