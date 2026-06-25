@@ -127,6 +127,14 @@ export default function HeroDemo() {
 
     // 检测创世用户 — 粒子团中心增强
     const isGenesisUser = typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1";
+    const rawScanCount = typeof window !== "undefined" ? parseInt(sessionStorage.getItem("genesis_scan_count") || "0", 10) : 0;
+    const scanCount = isNaN(rawScanCount) ? 0 : rawScanCount;
+    // 阶梯映射（基于 100 次扫描 = 创世圆满）：
+    // 0→0, 1→1, 5→2, 15→3, 30→4, 50→5, 70→6, 85→7, 100→8
+    const orbCount = scanCount >= 100 ? 8 : scanCount >= 85 ? 7 : scanCount >= 70 ? 6 : scanCount >= 50 ? 5 : scanCount >= 30 ? 4 : scanCount >= 15 ? 3 : scanCount >= 5 ? 2 : scanCount >= 1 ? 1 : 0;
+    const isFullLoad = orbCount >= 8;
+    let prevOrbCount = orbCount;
+    const orbGrowTimestamp = { current: 0 };
 
     /* ── 星空背景（HeroVisual 同款参数）── */
     const stars: { x: number; y: number; z: number }[] = [];
@@ -454,35 +462,77 @@ export default function HeroDemo() {
         }
       }
 
-      // ── Genesis Core — 创世节点中心标记（嵌入粒子几何体）──
-      if (isGenesisUser) {
+      // ── Genesis Core — 动态贡献指标（嵌入粒子几何体）──
+      if (isGenesisUser || orbCount > 0) {
         const corePulse = 1 + Math.sin(now * 0.003) * 0.3;
-        // 内核实心辉光
-        const cg = ctx.createRadialGradient(0, 0, 0, 0, 0, 18 * corePulse);
-        cg.addColorStop(0, "rgba(220,240,255,0.7)");
-        cg.addColorStop(0.3, "rgba(144,200,255,0.3)");
-        cg.addColorStop(0.6, "rgba(34,211,238,0.08)");
-        cg.addColorStop(1, "rgba(34,211,238,0)");
-        ctx.fillStyle = cg;
-        ctx.beginPath();
-        ctx.arc(0, 0, 18 * corePulse, 0, Math.PI * 2);
-        ctx.fill();
-        // 外围光环
-        ctx.strokeStyle = `rgba(144,200,255,${0.15 * corePulse})`;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.arc(0, 0, 22 * corePulse, 0, Math.PI * 2);
-        ctx.stroke();
-        // 微粒子环
-        for (let i = 0; i < 8; i++) {
-          const angle = (now * 0.0008 + i * Math.PI / 4) % (Math.PI * 2);
-          const r = 14 + Math.sin(now * 0.004 + i) * 3;
-          const px = Math.cos(angle) * r;
-          const py = Math.sin(angle) * r;
-          ctx.fillStyle = `rgba(200,235,255,${0.5 + Math.sin(now * 0.005 + i) * 0.3})`;
+        const timeSec = now * 0.001;
+
+        // 粒子增长检测 — 漂移动画计时
+        if (orbCount > prevOrbCount) {
+          orbGrowTimestamp.current = timeSec;
+          prevOrbCount = orbCount;
+        }
+        const growProgress = Math.min((timeSec - orbGrowTimestamp.current) / 1.5, 1);
+
+        // 创世核心（仅 Genesis 节点）
+        if (isGenesisUser) {
+          const cg = ctx.createRadialGradient(0, 0, 0, 0, 0, 16 * corePulse);
+          cg.addColorStop(0, "rgba(220,240,255,0.65)");
+          cg.addColorStop(0.3, "rgba(144,200,255,0.25)");
+          cg.addColorStop(0.6, "rgba(34,211,238,0.06)");
+          cg.addColorStop(1, "rgba(34,211,238,0)");
+          ctx.fillStyle = cg;
           ctx.beginPath();
-          ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+          ctx.arc(0, 0, 16 * corePulse, 0, Math.PI * 2);
           ctx.fill();
+        }
+
+        // 满载光环（8 粒子）
+        if (isFullLoad) {
+          const ha = 0.12 + Math.sin(timeSec * 2) * 0.05;
+          const hg = ctx.createRadialGradient(0, 0, 20, 0, 0, 35);
+          hg.addColorStop(0, "rgba(34,211,238,0)");
+          hg.addColorStop(0.4, `rgba(144,200,255,${ha})`);
+          hg.addColorStop(0.7, `rgba(144,200,255,${ha * 0.5})`);
+          hg.addColorStop(1, "rgba(34,211,238,0)");
+          ctx.fillStyle = hg;
+          ctx.beginPath();
+          ctx.arc(0, 0, 35, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = `rgba(144,200,255,${ha * 1.5})`;
+          ctx.lineWidth = 0.4;
+          ctx.beginPath();
+          ctx.arc(0, 0, 28, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // 环绕粒子（数量 = orbCount，仅场景 3）
+        if (orbCount > 0 && name === "genesis") {
+          ctx.strokeStyle = `rgba(144,200,255,${0.15 * corePulse})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, 22 * corePulse, 0, Math.PI * 2);
+          ctx.stroke();
+          for (let i = 0; i < orbCount; i++) {
+            const ba = (timeSec * 0.8 + i * (Math.PI * 2) / orbCount) % (Math.PI * 2);
+            const tr = 15 + Math.sin(timeSec * 3 + i) * 3;
+            const r = tr * (0.3 + 0.7 * growProgress); // 漂移
+            const px = Math.cos(ba) * r;
+            const py = Math.sin(ba) * r;
+            const a = (0.5 + Math.sin(timeSec * 4 + i) * 0.3) * growProgress;
+            const pg = ctx.createRadialGradient(px, py, 0, px, py, 3.5);
+            pg.addColorStop(0, `rgba(220,240,255,${a})`);
+            pg.addColorStop(0.5, `rgba(144,200,255,${a * 0.4})`);
+            pg.addColorStop(1, "rgba(34,211,238,0)");
+            ctx.fillStyle = pg;
+            ctx.beginPath();
+            ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = `rgba(255,255,255,${a})`;
+            ctx.beginPath();
+            ctx.arc(px, py, 1, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
       }
 

@@ -29,7 +29,10 @@ export default function GenesisBadge() {
     fetch(`/api/node/privileges?email=${encodeURIComponent(email)}`)
       .then(r => r.json())
       .then(data => {
-        if (data.scan_count !== undefined) setScanCount(data.scan_count);
+        if (data.scan_count !== undefined) {
+          setScanCount(data.scan_count);
+          sessionStorage.setItem("genesis_scan_count", String(data.scan_count));
+        }
         if (data.data_contribution !== undefined) setDataContrib(data.data_contribution);
       })
       .catch(() => {});
