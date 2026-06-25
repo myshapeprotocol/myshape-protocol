@@ -15,14 +15,6 @@
   will-change: transform, opacity;
 }
 
-.genesis-badge {
-  position: relative;
-  width: 180px;
-  padding: 12px;
-  cursor: pointer;
-  user-select: none;
-}
-
 /* 折叠态 */
 .genesis-badge.is-collapsed .badge-content { display: none; }
 .genesis-badge.is-collapsed .badge-corner,
@@ -46,6 +38,13 @@
   color: rgba(34,211,238,0.7);
   text-shadow: 0 0 8px rgba(34,211,238,0.3);
 }
+
+.genesis-badge {
+  position: relative;
+  width: 180px;
+  padding: 12px;
+  cursor: pointer;
+  user-select: none;
   background: rgba(4, 14, 28, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(144, 200, 255, 0.18);
