@@ -592,7 +592,11 @@ export default function HeroDemo() {
       <meta itemProp="name" content="MyShape Motion-Signature Verification" />
       <meta itemProp="description" content="Real-time ethereal data energy visualization of sovereign identity through non-corporeal particle geometry." />
       <meta itemProp="applicationCategory" content="Identity Verification" />
-      <canvas ref={canvasRef} className="hero-demo-canvas" />
+      <canvas ref={canvasRef} className="hero-demo-canvas"
+        itemProp="image" itemScope itemType="https://schema.org/ImageObject"
+        aria-label="Ethereal Data Energy — real-time particle field visualization of sovereign identity" />
+      <meta itemProp="name" content="Ethereal Data Energy Particle Field" />
+      <meta itemProp="description" content="The visual manifestation of identity primitives represented by light, particles, and wireframe geometry. Direct visual encoding of the 128-dimensional Motion Signature vector." />
 
       {/* 左右小漩涡按钮 */}
       <div className="hero-demo-vortexes">
@@ -750,7 +754,11 @@ export default function HeroDemo() {
 
         <div className="hero-demo-ctas">
           <Link href="/genesis" className="hero-demo-cta primary"
-            onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>
+            onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
+            itemProp="potentialAction" itemScope itemType="https://schema.org/EntryPoint">
+            <meta itemProp="name" content="Initialize Genesis Cohort" />
+            <meta itemProp="description" content="Begin the Genesis Ritual to initialize your sovereign data-body and join the inaugural group of identity nodes." />
+            <meta itemProp="actionApplication" content="MyShape Protocol Genesis Initialization" />
             <span className="hero-demo-cta-label">INITIALIZE_GENESIS</span>
           </Link>
           <Link href="/motion-demo" className="hero-demo-cta secondary"
