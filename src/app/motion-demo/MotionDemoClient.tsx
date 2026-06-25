@@ -684,6 +684,21 @@ export default function MotionDemoClient() {
                     </div>
                   </div>
                 )}
+                {/* Genesis 状态提示 */}
+                {typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1" ? (
+                  <div className="text-center text-cyan-400/25 text-[8px] tracking-[0.15em] uppercase">
+                    ◈ Scan recorded — contributing to your orbital evolution
+                  </div>
+                ) : (
+                  <div className="text-center space-y-1">
+                    <div className="text-amber-400/25 text-[8px] tracking-[0.15em] uppercase">
+                      ⚠ Demo mode — scan not bound to identity
+                    </div>
+                    <a href="/genesis" className="inline-block text-cyan-400/25 hover:text-cyan-300/50 text-[7px] tracking-[0.2em] uppercase transition-colors">
+                      Complete Genesis to bind scans →
+                    </a>
+                  </div>
+                )}
                 <button onClick={stop}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                   className="w-full py-2.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.3em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 hover:bg-cyan-400/[0.03] transition-all">
