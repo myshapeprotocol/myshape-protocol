@@ -97,7 +97,7 @@ export default function HomeClient() {
           </div>
         </div>
 
-        <div className="absolute bottom-10 right-10 text-right">
+        <div className="absolute bottom-10 right-10 text-right pointer-events-auto">
           <div className="flex flex-col items-end">
             {isGenesisUser && (
               <div className="pr-1 mb-2">
