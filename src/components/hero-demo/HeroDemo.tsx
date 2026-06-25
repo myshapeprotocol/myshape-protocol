@@ -125,16 +125,29 @@ export default function HeroDemo() {
     let W = 0;
     let H = 0;
 
-    // 检测创世用户 — 粒子团中心增强
-    const isGenesisUser = typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1";
-    const rawScanCount = typeof window !== "undefined" ? parseInt(sessionStorage.getItem("genesis_scan_count") || "0", 10) : 0;
-    const scanCount = isNaN(rawScanCount) ? 0 : rawScanCount;
-    // 阶梯映射（基于 100 次扫描 = 创世圆满）：
-    // 0→0, 1→1, 5→2, 15→3, 30→4, 50→5, 70→6, 85→7, 100→8
-    const orbCount = scanCount >= 100 ? 8 : scanCount >= 85 ? 7 : scanCount >= 70 ? 6 : scanCount >= 50 ? 5 : scanCount >= 30 ? 4 : scanCount >= 15 ? 3 : scanCount >= 5 ? 2 : scanCount >= 1 ? 1 : 0;
-    const isFullLoad = orbCount >= 8;
+    // 检测创世用户 + 贡献指标
+    function readOrbCount() {
+      if (typeof window === "undefined") return { orbCount: 0, isFullLoad: false, isGenesisUser: false };
+      const isGenesisUser = sessionStorage.getItem("genesis_completed") === "1";
+      const raw = parseInt(sessionStorage.getItem("genesis_scan_count") || "0", 10);
+      const sc = isNaN(raw) ? 0 : raw;
+      const orbCount = sc >= 100 ? 8 : sc >= 85 ? 7 : sc >= 70 ? 6 : sc >= 50 ? 5 : sc >= 30 ? 4 : sc >= 15 ? 3 : sc >= 5 ? 2 : sc >= 1 ? 1 : 0;
+      return { orbCount, isFullLoad: orbCount >= 8, isGenesisUser };
+    }
+    let { orbCount, isFullLoad, isGenesisUser } = readOrbCount();
     let prevOrbCount = orbCount;
     const orbGrowTimestamp = { current: 0 };
+    // 每 5 秒重新读取（检测扫描后的增长）
+    setInterval(() => {
+      const next = readOrbCount();
+      if (next.orbCount > orbCount) {
+        prevOrbCount = orbCount;
+        orbCount = next.orbCount;
+        isFullLoad = next.isFullLoad;
+        orbGrowTimestamp.current = performance.now() * 0.001;
+      }
+      isGenesisUser = next.isGenesisUser;
+    }, 5000);
 
     /* ── 星空背景（HeroVisual 同款参数）── */
     const stars: { x: number; y: number; z: number }[] = [];
@@ -467,12 +480,13 @@ export default function HeroDemo() {
         const corePulse = 1 + Math.sin(now * 0.003) * 0.3;
         const timeSec = now * 0.001;
 
-        // 粒子增长检测 — 漂移动画计时
+        // 粒子增长检测 — 漂移动画计时（使用 ease-out 缓动）
         if (orbCount > prevOrbCount) {
           orbGrowTimestamp.current = timeSec;
           prevOrbCount = orbCount;
         }
-        const growProgress = Math.min((timeSec - orbGrowTimestamp.current) / 1.5, 1);
+        const growRaw = Math.min((timeSec - orbGrowTimestamp.current) / 1.8, 1);
+        const growProgress = 1 - Math.pow(1 - growRaw, 3); // ease-out cubic
 
         // 创世核心（仅 Genesis 节点）
         if (isGenesisUser) {
