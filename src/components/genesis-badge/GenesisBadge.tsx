@@ -143,8 +143,9 @@ export default function GenesisBadge() {
       <div
         ref={badgeRef}
         className={`genesis-badge ${isGenesis ? "tier-genesis" : "tier-active"} ${expanded ? "is-expanded" : "is-collapsed"}`}
-        onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
-        title={expanded ? "Click to collapse" : "Click to expand — view node stats"}
+        onClick={() => setExpanded(!expanded)}
+        style={{ cursor: "pointer" }}
+        title={expanded ? "Collapse" : "Expand stats"}
       >
         {/* 粒子散溢 */}
         {sparks.map(s => {
