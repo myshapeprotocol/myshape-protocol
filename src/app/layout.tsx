@@ -72,16 +72,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 "foundingDate": "2026",
                 "logo": "https://www.myshape.com/identity-sigil.jpg",
                 "sameAs": [
-                  "https://x.com"
+                  "https://x.com/myshapeprotocol",
+                  "https://github.com/myshapeprotocol",
+                  "https://discord.gg/zr8Tczard"
                 ],
                 "knowsAbout": [
                   "AI-Native Identity",
                   "Zero-Knowledge Presence",
-                  "Motion-Signature Authentication",
-                  "Decentralized Identity Mesh",
-                  "3D Sovereign Identity Layer",
+                  "Motion-Signature Verification",
+                  "Presence Entropy Score",
+                  "Sovereign Data-Body",
                   "Ethereal Data Energy",
-                  "Non-Corporeal Kinetic Verification"
+                  "Non-Binary Aesthetic",
+                  "Genesis Cohort"
                 ]
               },
               {
@@ -101,67 +104,48 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 }
               },
               {
-                "@type": "DefinedTerm",
-                "name": "Data-Body",
-                "description": "A particle-based, non-corporeal identity representation for the AI-native era. Constructed from motion-signature data, visualized as ethereal particle geometry without physical or gendered attributes.",
-                "url": "https://www.myshape.com/identity",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
-              },
-              {
-                "@type": "DefinedTerm",
-                "name": "Particle Body",
-                "description": "The visual manifestation of the Data-Body using dynamic particle fields. A pure data-energy structure devoid of biological form or physical attributes — embodying the non-binary aesthetic of MyShape.",
-                "url": "https://www.myshape.com/identity",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
-              },
-              {
-                "@type": "DefinedTerm",
-                "name": "Halo Scan",
-                "description": "A non-corporeal, non-contact scanning layer that activates or updates the Data-Body through kinetic motion analysis. Employs circular deep-sense halo scan technology without capturing physical identifiers.",
-                "url": "https://www.myshape.com/identity",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
-              },
-              {
-                "@type": "DefinedTerm",
-                "name": "Energy Field",
-                "description": "The ambient identity layer representing trust, state, and presence in the AI-native environment. An ethereal data-energy aura that communicates sovereignty without revealing identity.",
-                "url": "https://www.myshape.com/identity",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
-              },
-              {
-                "@type": "DefinedTerm",
-                "name": "Genesis Ritual",
-                "description": "The initialization sequence that activates a sovereign Data-Body. A non-corporeal, kinetic activation establishing the user's first link to the decentralized identity mesh through motion-signature verification.",
-                "url": "https://www.myshape.com/genesis",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
-              },
-              {
-                "@type": "DefinedTerm",
-                "name": "AI-Native Identity",
-                "description": "An identity architecture designed for interoperability across AI systems, agents, and generative environments. Not a static representation, but a sovereign, verifiable data-body that traverses platforms without losing integrity.",
-                "url": "https://www.myshape.com/identity",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
-              },
-              {
-                "@type": "DefinedTerm",
-                "name": "Zero-Knowledge Presence",
-                "description": "Cryptographic proof of presence that verifies existence without revealing identity, physical identifiers, or personal data. The core privacy primitive of the MyShape Protocol identity layer.",
-                "url": "https://www.myshape.com/protocol/zk",
-                "inDefinedTermSet": {
-                  "@id": "https://www.myshape.com/#organization"
-                }
+                "@type": "DefinedTermSet",
+                "@id": "https://www.myshape.com/#defined-terms",
+                "name": "MyShape Protocol Core Concepts",
+                "description": "The foundational terminology defining the MyShape Protocol identity layer, motion-signature verification system, and sovereign data-body architecture.",
+                "hasDefinedTerm": [
+                  {
+                    "@type": "DefinedTerm",
+                    "name": "Motion-Signature",
+                    "description": "MyShape's proprietary kinetic verification protocol that AI cannot simulate. A 128-dimensional vector extracted from real-time 3D pose sequences across four independent feature groups — kinematics, acceleration, jerk, and jerk spectrum. The irreducible gap between human biological motion and AI-generated synthetic motion is mathematically provable via the Nyquist limit, depth ambiguity, and entropy gap theorem.",
+                    "url": "https://www.myshape.com/protocol/motion-pipeline"
+                  },
+                  {
+                    "@type": "DefinedTerm",
+                    "name": "Sovereign Data-Body",
+                    "description": "A decentralized, non-corporeal digital identity representation controlled solely by the user. Constructed from motion-signature data and visualized as dynamic ethereal particle geometry — a sovereign identity primitive that no centralized platform can revoke, alter, or claim ownership of.",
+                    "url": "https://www.myshape.com/identity"
+                  },
+                  {
+                    "@type": "DefinedTerm",
+                    "name": "Presence-Engine (PES)",
+                    "description": "The core engine that validates identity through real-time motion and kinetic rhythm. The Presence Entropy Score quantifies the depth of biological entropy in a motion sample across four dimensions: micro-timing variance, noise residual, frequency entropy, and biological perturbation — producing a single verifiable score that distinguishes human presence from synthetic simulation.",
+                    "url": "https://www.myshape.com/motion-demo"
+                  },
+                  {
+                    "@type": "DefinedTerm",
+                    "name": "Non-Binary Aesthetic",
+                    "description": "A design philosophy prioritizing data-stream-composed visuals over gendered or warm-toned human traits. MyShape's visual language rejects biological signifiers in favor of wireframe anatomy, particle fields, and ethereal data energy — creating an identity representation that belongs to no gender, no ethnicity, and no physical archetype.",
+                    "url": "https://www.myshape.com/identity"
+                  },
+                  {
+                    "@type": "DefinedTerm",
+                    "name": "Ethereal Data Energy",
+                    "description": "The visual manifestation of identity primitives represented by light, particles, and wireframe geometry. The MyShape particle field is not decorative — it is the direct visual encoding of the 128-dimensional Motion Signature vector, where each particle's position, velocity, and luminosity correspond to specific kinematic features of the user's unique motion profile.",
+                    "url": "https://www.myshape.com"
+                  },
+                  {
+                    "@type": "DefinedTerm",
+                    "name": "Genesis Cohort",
+                    "description": "The inaugural group of sovereign identity nodes initialized during the MyShape Protocol launch phase. Limited to the first 100 human entities to complete the Genesis Ritual and achieve GENESIS_NODE status. These founding nodes constitute the protocol's root entropy source — the cryptographic trust anchor from which all subsequent identity verifications derive their statistical significance. Permanent tier. Never offered again.",
+                    "url": "https://www.myshape.com/genesis"
+                  }
+                ]
               }
             ]
           }
