@@ -105,7 +105,8 @@ export async function POST(req: Request) {
     const supabase = createClient(supabaseUrl, supabaseKey);
     const resend = resendKey ? new Resend(resendKey) : null;
 
-    const { email, otp } = await req.json();
+    const { email: rawEmail, otp } = await req.json();
+    const email = (rawEmail || "").trim().toLowerCase();
 
     if (!email || !otp) {
       return NextResponse.json(

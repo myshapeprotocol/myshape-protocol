@@ -33,7 +33,8 @@ export async function POST(req: Request) {
     const resend = new Resend(resendKey);
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { email, invite_code } = await req.json();
+    const { email: rawEmail, invite_code } = await req.json();
+    const email = (rawEmail || "").trim().toLowerCase();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json(

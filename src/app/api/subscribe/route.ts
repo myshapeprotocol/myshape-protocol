@@ -86,7 +86,8 @@ export async function POST(req: Request) {
     const supabase = createClient(supabaseUrl, supabaseKey);
     const resend = resendKey ? new Resend(resendKey) : null;
 
-    const { email } = await req.json();
+    const { email: rawEmail } = await req.json();
+    const email = (rawEmail || "").trim().toLowerCase();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json({ error: "INVALID_EMAIL" }, { status: 400 });

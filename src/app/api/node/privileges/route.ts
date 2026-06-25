@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { searchParams } = new URL(req.url);
-    const email = searchParams.get('email');
+    const email = (searchParams.get('email') || "").trim().toLowerCase();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json({ error: "INVALID_EMAIL" }, { status: 400 });

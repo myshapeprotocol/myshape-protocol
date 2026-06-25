@@ -36,7 +36,7 @@ export default function GenesisClient() {
 
     try {
       // 邮箱校验
-      const cleanEmail = (email || "").trim();
+      const cleanEmail = (email || "").trim().toLowerCase();
       if (!cleanEmail.includes("@")) {
         console.warn("[STEP 2 - BLOCKED] Invalid email:", cleanEmail);
         setStage("error");

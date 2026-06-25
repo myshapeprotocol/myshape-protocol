@@ -20,7 +20,8 @@ export async function POST(req: Request) {
     const { supabaseUrl, supabaseKey } = validateEnv();
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { email } = await req.json();
+    const { email: rawEmail } = await req.json();
+    const email = (rawEmail || "").trim().toLowerCase();
     if (!email || !email.includes("@")) {
       return NextResponse.json({ error: "INVALID_EMAIL" }, { status: 400 });
     }
