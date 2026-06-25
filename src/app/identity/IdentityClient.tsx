@@ -125,8 +125,7 @@ export default function IdentityClient() {
           />
           {/* Genesis Core — 创世节点中心标记 */}
           {isGenesisUser && isFormed && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ width: "40px", height: "40px", transform: "translate(-50%, -50%)" }}>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="genesis-core-glow" />
             </div>
           )}
