@@ -209,15 +209,17 @@ export default function GenesisClient() {
                 <button type="button"
                   onClick={(e) => handleCommence(e)}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-                  className="group relative px-20 py-4 transition-all duration-500 overflow-hidden"
-                  style={{ border: "1px solid rgba(34,211,238,0.35)", background: "rgba(34,211,238,0.03)" }}>
-                  {/* 按钮顶部扫描线 */}
-                  <div className="absolute top-0 left-0 w-full h-[1px] genesis-btn-scan" />
-                  {/* hover 辉光 */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                    style={{ boxShadow: "0 0 40px rgba(34,211,238,0.35), 0 0 80px rgba(34,211,238,0.12)" }} />
-                  <span className="relative z-10 text-cyan-400 font-mono text-[10px] tracking-[0.8em] uppercase group-hover:text-white transition-all duration-500"
-                    style={{ textShadow: "0 0 10px rgba(34,211,238,0.3)" }}>
+                  className="group relative px-16 py-3.5 transition-all duration-500 overflow-hidden"
+                  style={{
+                    border: "1px solid rgba(34,211,238,0.3)",
+                    background: "linear-gradient(180deg, rgba(34,211,238,0.05) 0%, rgba(34,211,238,0.01) 100%)",
+                    clipPath: "polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)",
+                  }}>
+                  <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none"
+                    style={{ boxShadow: "0 0 60px rgba(34,211,238,0.3), 0 0 120px rgba(34,211,238,0.08), inset 0 1px 0 rgba(34,211,238,0.1)" }} />
+                  <span className="relative z-10 text-cyan-400 font-mono text-[10px] tracking-[0.6em] uppercase group-hover:text-white transition-all duration-500"
+                    style={{ textShadow: "0 0 12px rgba(34,211,238,0.35)" }}>
                     Commence_Connection
                   </span>
                 </button>

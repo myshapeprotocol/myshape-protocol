@@ -121,18 +121,27 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
         <button
           onClick={handleConnect}
           disabled={status === "connecting" || status === "signing" || status === "verifying"}
-          className={`relative group px-6 py-2.5 border transition-all duration-500 overflow-hidden font-mono text-[9px] tracking-[0.3em] uppercase ${
-            status === "error" ? "border-red-400/30 text-red-300/60" : "border-cyan-400/25 text-cyan-300/60 hover:text-cyan-200 hover:border-cyan-400/50"
-          }`}
-          style={{ background: "rgba(34,211,238,0.03)" }}
+          className="relative group px-5 py-2.5 transition-all duration-500 overflow-hidden font-mono text-[9px] tracking-[0.3em] uppercase"
+          style={{
+            border: status === "error" ? "1px solid rgba(248,113,113,0.3)" : "1px solid rgba(168,221,255,0.2)",
+            background: "linear-gradient(180deg, rgba(168,200,240,0.04) 0%, rgba(144,180,220,0.01) 100%)",
+            color: status === "error" ? "rgba(252,165,165,0.7)" : "rgba(160,210,240,0.65)",
+            clipPath: "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)",
+          }}
         >
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-30 group-hover:opacity-60 transition-opacity" />
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+            style={{ boxShadow: "0 0 30px rgba(144,200,255,0.2), inset 0 1px 0 rgba(168,200,240,0.08)" }} />
           {status === "connecting" || status === "signing" || status === "verifying" ? (
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)] animate-pulse" />
               {status === "connecting" ? "CONNECTING..." : status === "signing" ? "SIGNING..." : "VERIFYING..."}
             </span>
           ) : (
-            <span>{isMetaMask ? "CONNECT_WALLET" : "INSTALL_METAMASK"}</span>
+            <span className="relative z-10 group-hover:text-white transition-all duration-500"
+              style={{ textShadow: "0 0 8px rgba(144,200,255,0.2)" }}>
+              {isMetaMask ? "CONNECT_WALLET" : "INSTALL_METAMASK"}
+            </span>
           )}
         </button>
       )}
