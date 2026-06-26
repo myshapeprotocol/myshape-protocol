@@ -77,7 +77,7 @@ export default function ProtocolFooter() {
       links: [
 		{ name: "X_PROTOCOL", href: "https://x.com/myshapeprotocol" },
 		{ name: "LINKED_IN", href: "https://www.linkedin.com/company/111557251/" },
-			{ name: "GITHUB", href: "https://github.com/myshapeprotocol" },
+			{ name: "GITHUB / PROTOCOL_SPECS", href: "https://github.com/myshapeprotocol" },
 		{ name: "DISCORD", href: "https://discord.gg/zr8Tczard" },
       ] 
     }
@@ -180,7 +180,7 @@ export default function ProtocolFooter() {
           <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 15 Engines · 45 Tests</span>
         </div>
         <span className="text-[8px] text-white/15 tracking-[0.25em] uppercase font-mono block">
-          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL
+          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL <span style={{ color: "rgba(255,255,255,0.08)", fontSize: "7px", marginLeft: "4px" }}>// SPEC_VERSION: V1.0_GENESIS</span>
         </span>
       </div>
     </footer>
