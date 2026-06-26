@@ -170,35 +170,41 @@ export default function GenesisClient() {
                   </button>
                 )}
 
-                {/* ── 邮箱终端 ── */}
-                <div className="relative group">
-                  <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
-                    style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.22), transparent 40%, transparent 60%, rgba(34,211,238,0.22))", filter: "blur(5px)" }} />
-                  <div className="relative px-6 py-1 overflow-hidden"
-                    style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(2,10,20,0.85)", boxShadow: "0 0 30px rgba(34,211,238,0.03)" }}>
-                    <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-400/50 genesis-corner-tl" />
-                    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-cyan-400/50 genesis-corner-tr" />
-                    <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-cyan-400/50 genesis-corner-bl" />
-                    <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-400/50 genesis-corner-br" />
-                    <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
-                    <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="relative z-10 w-56 max-w-[60vw] bg-transparent py-3 text-center text-xs tracking-[0.3em] text-white/85 focus:outline-none placeholder:text-white/12" />
+                {/* ── 双栏：邮箱主路径 ‖ 钱包快登 ── */}
+                <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+                  {/* 左：邮箱 */}
+                  <div className="relative group">
+                    <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
+                      style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.22), transparent 40%, transparent 60%, rgba(34,211,238,0.22))", filter: "blur(5px)" }} />
+                    <div className="relative px-5 py-1 overflow-hidden"
+                      style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(2,10,20,0.85)", boxShadow: "0 0 30px rgba(34,211,238,0.03)" }}>
+                      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-400/50 genesis-corner-tl" />
+                      <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-cyan-400/50 genesis-corner-tr" />
+                      <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-cyan-400/50 genesis-corner-bl" />
+                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-400/50 genesis-corner-br" />
+                      <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
+                      <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="relative z-10 w-48 max-w-[55vw] bg-transparent py-3 text-center text-xs tracking-[0.3em] text-white/85 focus:outline-none placeholder:text-white/12" />
+                    </div>
                   </div>
-                </div>
 
-                {/* ── 钱包 — 轻量 ── */}
-                <ConnectWallet
-                  email={email}
-                  onSuccess={(walletData) => {
-                    if (walletData.skip_otp) {
-                      sessionStorage.setItem("genesis_completed", "1");
-                      sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
-                      sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
-                      setStage("success");
-                    }
-                  }}
-                />
+                  {/* 分隔 */}
+                  <span className="text-white/[0.04] text-[9px] hidden md:block">‖</span>
+
+                  {/* 右：钱包 */}
+                  <ConnectWallet
+                    email={email}
+                    onSuccess={(walletData) => {
+                      if (walletData.skip_otp) {
+                        sessionStorage.setItem("genesis_completed", "1");
+                        sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
+                        sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
+                        setStage("success");
+                      }
+                    }}
+                  />
+                </div>
                 {/* ── 启动按钮 ── */}
                 <button type="button"
                   onClick={(e) => handleCommence(e)}
