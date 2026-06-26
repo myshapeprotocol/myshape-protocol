@@ -143,9 +143,9 @@ export default function GenesisClient() {
                 <span className="text-cyan-400/20 font-mono text-[7px] tracking-[0.5em] uppercase">Genesis_Protocol</span>
                 <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-cyan-400/30" />
               </div>
-              <form onSubmit={handleCommence} className="flex flex-col items-center space-y-10">
+              <form onSubmit={handleCommence} className="flex flex-col items-center space-y-5">
                 {/* Genesis Cohort 标签 — 滚动数据流 */}
-                <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="flex items-center justify-center gap-2">
                   <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-cyan-400/30" />
                   <div className="cohort-marquee">
                     <span className="cohort-marquee-inner text-cyan-400/70 font-mono text-[8px] tracking-[0.25em] uppercase">
@@ -155,77 +155,50 @@ export default function GenesisClient() {
                   <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-cyan-400/30" />
                 </div>
 
-                {/* ── 邀请码输入终端 ── */}
-                <div className="relative group">
-                  <div className="absolute -inset-[1px] rounded-sm opacity-40 group-focus-within:opacity-90 transition-opacity duration-700"
-                    style={{ background: "linear-gradient(135deg, rgba(168,85,247,0.25), transparent 40%, transparent 60%, rgba(168,85,247,0.25))", filter: "blur(8px)" }} />
-                  <div className="relative px-8 py-2 overflow-hidden"
-                    style={{ border: "1px solid rgba(168,85,247,0.25)", background: "rgba(8,4,20,0.85)", boxShadow: "0 0 40px rgba(168,85,247,0.04), inset 0 0 60px rgba(168,85,247,0.02)" }}>
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-purple-400/70 genesis-corner-tl" />
-                    <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-purple-400/70 genesis-corner-tr" />
-                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-purple-400/70 genesis-corner-bl" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-purple-400/70 genesis-corner-br" />
-                    <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
-                    <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-l" style={{ background: "rgba(168,85,247,0.3)" }} />
-                    <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-r" style={{ background: "rgba(168,85,247,0.3)" }} />
-                    <div className="flex items-center gap-2 mb-1 relative z-10">
-                      <span className="text-purple-400/40 font-mono text-[7px] tracking-[0.3em] uppercase">BETA_ACCESS</span>
-                    </div>
+                {/* ── 邀请码 — 可折叠轻量 ── */}
+                {inviteCode || inviteCodeValid !== null ? (
+                  <div className="w-56 max-w-[60vw]">
                     <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
                       onChange={(e) => handleInviteCodeChange(e.target.value)}
                       maxLength={19}
-                      className="relative z-10 w-80 max-w-[75vw] bg-transparent py-4 text-center text-xs tracking-[0.3em] text-purple-200/80 focus:outline-none placeholder:text-white/10" />
-                    {inviteCode.length > 0 && (
-                      <div className="relative z-10 text-center">
-                        {inviteCodeValid === true && (
-                          <span className="text-green-400/60 font-mono text-[7px] tracking-[0.2em]">◈ CODE_FORMAT_VALID</span>
-                        )}
-                        {inviteCodeValid === false && (
-                          <span className="text-red-400/50 font-mono text-[7px] tracking-[0.2em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
-                        )}
-                      </div>
-                    )}
+                      className="w-full bg-transparent border-b border-white/[0.07] py-2 text-center text-[9px] tracking-[0.2em] text-purple-200/50 focus:outline-none focus:border-purple-400/35 placeholder:text-white/06 transition-colors" />
+                  </div>
+                ) : (
+                  <button type="button" onClick={() => setInviteCodeValid(false)}
+                    className="text-white/05 hover:text-white/15 text-[7px] tracking-[0.2em] uppercase transition-colors">
+                    + Invite code
+                  </button>
+                )}
+
+                {/* ── 邮箱终端 ── */}
+                <div className="relative group">
+                  <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
+                    style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.22), transparent 40%, transparent 60%, rgba(34,211,238,0.22))", filter: "blur(5px)" }} />
+                  <div className="relative px-6 py-1 overflow-hidden"
+                    style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(2,10,20,0.85)", boxShadow: "0 0 30px rgba(34,211,238,0.03)" }}>
+                    <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-400/50 genesis-corner-tl" />
+                    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-cyan-400/50 genesis-corner-tr" />
+                    <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-cyan-400/50 genesis-corner-bl" />
+                    <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-400/50 genesis-corner-br" />
+                    <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
+                    <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="relative z-10 w-56 max-w-[60vw] bg-transparent py-3 text-center text-xs tracking-[0.3em] text-white/85 focus:outline-none placeholder:text-white/12" />
                   </div>
                 </div>
 
-                {/* ── 邮箱输入终端 ── */}
-                <div className="relative group">
-                  {/* 外层辉光 */}
-                  <div className="absolute -inset-[1px] rounded-sm opacity-50 group-focus-within:opacity-100 transition-opacity duration-700"
-                    style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.3), transparent 40%, transparent 60%, rgba(34,211,238,0.3))", filter: "blur(8px)" }} />
-                  {/* 主体 */}
-                  <div className="relative px-8 py-2 overflow-hidden"
-                    style={{ border: "1px solid rgba(34,211,238,0.25)", background: "rgba(2,10,20,0.85)", boxShadow: "0 0 40px rgba(34,211,238,0.04), inset 0 0 60px rgba(34,211,238,0.02)" }}>
-                    {/* 四角装饰 */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-cyan-400/70 genesis-corner-tl" />
-                    <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-cyan-400/70 genesis-corner-tr" />
-                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-cyan-400/70 genesis-corner-bl" />
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-cyan-400/70 genesis-corner-br" />
-                    {/* 扫描线 */}
-                    <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
-                    {/* 侧边数据流 */}
-                    <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-l" />
-                    <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-r" />
-                    <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="relative z-10 w-80 max-w-[75vw] bg-transparent py-5 text-center text-xs tracking-[0.3em] text-white/90 focus:outline-none placeholder:text-white/15" />
-                  </div>
-                </div>
-                {/* ── 钱包绑定（可选）── */}
-                <div className="flex flex-col items-center space-y-2">
-                  <span className="text-white/10 text-[7px] tracking-[0.3em] uppercase">— or bind wallet —</span>
-                  <ConnectWallet
-                    email={email}
-                    onSuccess={(walletData) => {
-                      if (walletData.skip_otp) {
-                        sessionStorage.setItem("genesis_completed", "1");
-                        sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
-                        sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
-                        setStage("success");
-                      }
-                    }}
-                  />
-                </div>
+                {/* ── 钱包 — 轻量 ── */}
+                <ConnectWallet
+                  email={email}
+                  onSuccess={(walletData) => {
+                    if (walletData.skip_otp) {
+                      sessionStorage.setItem("genesis_completed", "1");
+                      sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
+                      sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
+                      setStage("success");
+                    }
+                  }}
+                />
                 {/* ── 启动按钮 ── */}
                 <button type="button"
                   onClick={(e) => handleCommence(e)}
