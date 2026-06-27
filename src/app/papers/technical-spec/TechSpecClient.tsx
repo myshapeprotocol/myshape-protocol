@@ -123,8 +123,8 @@ export default function TechSpecClient() {
             {METRICS.map((m) => (
               <div key={m.label} className="border p-3 md:p-4 text-center transition-all duration-300"
                 style={{ borderColor: "rgba(144,200,255,0.1)", background: "transparent" }}
-                onMouseEnter={e => { playTick(600, "sine", 0.06, 0.015); hoverOn(e); e.currentTarget.style.borderColor = "rgba(144,200,255,0.4)"; e.currentTarget.style.transform = "scale(1.03)"; }}
-                onMouseLeave={e => { hoverOff(e); e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; e.currentTarget.style.transform = "scale(1)"; }}>
+                onMouseEnter={e => { playTick(600, "sine", 0.06, 0.015); hoverOn(e); e.currentTarget.style.borderColor = "rgba(144,200,255,0.4)"; }}
+                onMouseLeave={e => { hoverOff(e); e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; }}>
                 <div className="text-cyan-300/80 text-lg md:text-xl font-light tracking-wider"
                   data-default="rgba(200,240,255,0.8)" data-hover="rgba(200,240,255,1)">{m.value}</div>
                 <div className="text-white/20 text-[8px] tracking-[0.15em] uppercase mt-1"
