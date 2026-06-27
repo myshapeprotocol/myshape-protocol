@@ -1,147 +1,85 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
 
-const SECTIONS = [
-  { id: "experiment", label: "The Experiment" },
-  { id: "results", label: "The Results" },
-  { id: "why", label: "Why This Matters" },
-  { id: "how", label: "How It Works" },
-  { id: "run", label: "Run It Yourself" },
-  { id: "truth", label: "The Deeper Truth" },
-  { id: "building", label: "What We're Building" },
-];
-
 export default function BlogClient() {
-  const [active, setActive] = useState("experiment");
-  const [tocOpen, setTocOpen] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter(e => e.isIntersecting);
-        if (visible.length > 0) {
-          setActive(visible[0].target.id);
-        }
-      },
-      { rootMargin: "-100px 0px -60% 0px" }
-    );
-
-    SECTIONS.forEach(s => {
-      const el = document.getElementById(s.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTocOpen(false);
-    playTick(600, "sine", 0.06, 0.015);
-  };
-
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-cyan-500/30">
       <ProtocolHeader />
 
-      {/* ── Desktop TOC: fixed left ── */}
-      <nav className="hidden xl:block fixed left-8 top-36 z-40 w-48">
-        <div className="text-white/15 text-[8px] tracking-[0.4em] uppercase mb-4">Contents</div>
-        <ul className="space-y-1.5">
-          {SECTIONS.map(s => (
-            <li key={s.id}>
-              <button
-                onClick={() => scrollTo(s.id)}
-                className={`text-left text-[10px] tracking-[0.1em] transition-all duration-300 hover:text-cyan-300 ${
-                  active === s.id ? "text-cyan-400/90 border-l border-cyan-400/60 pl-2 -ml-2" : "text-white/25 pl-0"
-                }`}
-              >
-                {s.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* ── Mobile TOC: collapsible top bar ── */}
-      <div className="xl:hidden fixed top-[92px] left-0 w-full z-40">
-        <button
-          onClick={() => setTocOpen(!tocOpen)}
-          className="w-full flex items-center justify-between px-4 py-2 text-[10px] tracking-[0.2em] uppercase transition-colors"
-          style={{ background: "rgba(2,4,10,0.92)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}
-        >
-          <span style={{ color: "rgba(255,255,255,0.4)" }}>
-            {SECTIONS.find(s => s.id === active)?.label || "Contents"}
-          </span>
-          <span style={{ color: "rgba(34,211,238,0.4)" }}>{tocOpen ? "▲" : "▼"}</span>
-        </button>
-        {tocOpen && (
-          <ul className="px-4 py-2 space-y-1" style={{ background: "rgba(2,4,10,0.95)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-            {SECTIONS.map(s => (
-              <li key={s.id}>
-                <button
-                  onClick={() => scrollTo(s.id)}
-                  className={`text-left text-[10px] tracking-[0.1em] w-full py-1 transition-all ${
-                    active === s.id ? "text-cyan-400/90" : "text-white/25"
-                  }`}
-                >
-                  {s.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <article className="relative z-10 max-w-3xl mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-16 md:pb-24 xl:ml-64">
+      <article className="relative z-10 max-w-3xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16">
         {/* Header */}
-        <header className="mb-16">
-          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase mb-6 font-mono">
-            TECHNICAL_BLOG // JUNE_2026
-          </div>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-white leading-tight mb-6">
+        <div className="mb-12 md:mb-16">
+          <div className="text-cyan-500/40 text-[9px] tracking-[0.4em] uppercase mb-4">TECHNICAL_BLOG // JUNE_2026</div>
+          <h1 className="text-2xl md:text-4xl font-light tracking-[0.04em] text-white leading-tight mb-6"
+            style={{ textShadow: "0 0 40px rgba(144,200,255,0.15)" }}>
             We Built an Engine That Detects AI-Generated Human Motion.
             <br />
             <span className="text-cyan-300/80">GPT-5 and DeepSeek Both Failed.</span>
           </h1>
-          <div className="flex items-center gap-3 text-[11px] text-white/30">
-            <span>MyShape Protocol</span>
+          <p className="text-white/35 text-[13px] leading-relaxed">
+            AI can fake a face. AI can clone a voice. But AI cannot generate your motion — not the specific,
+            irreducibly biological, physically-constrained pattern of your nervous system. Here are the numbers.
+          </p>
+          <div className="flex items-center gap-3 mt-4 text-[9px]">
+            <span className="text-white/20">MyShape Protocol</span>
             <span className="text-white/10">·</span>
-            <span>June 2026</span>
+            <span className="text-white/20">June 2026</span>
+            <span className="text-white/10">·</span>
+            <span className="text-white/20">6 min read</span>
           </div>
-        </header>
+        </div>
+
+        {/* Visual Hook — Architecture Diagram */}
+        <div className="my-12 md:my-16 border border-cyan-400/15 bg-cyan-400/[0.02] p-5 md:p-8 font-mono"
+          onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
+          <div className="text-cyan-400/30 text-[8px] tracking-[0.3em] uppercase mb-4 text-center">SYSTEM_SCHEMA: VERIFICATION PIPELINE</div>
+          <pre className="text-cyan-400/40 text-[9px] md:text-[10px] leading-[2.2] tracking-[0.08em] whitespace-pre overflow-x-auto text-center">
+{`CAMERA ──→ SST_18PT ──→ PES_4D ──→ 128D_VECTOR ──→ ZK_PROOF
+ 30fps      Skeleton    Entropy     Motion          Presence
+ Local      Topology    Scoring     Signature       Verified
+
+   ◄─────────────── 0 DATA UPLOADED ─────────────────►
+          All processing on-device. Nothing stored.`}
+          </pre>
+          <div className="mt-4 flex justify-center gap-4 text-[7px]">
+            <span className="text-cyan-400/25">◈ Engine: Rust + TypeScript</span>
+            <span className="text-white/10">|</span>
+            <span className="text-cyan-400/25">◈ Human—AI Gap: 0.3960</span>
+            <span className="text-white/10">|</span>
+            <span className="text-cyan-400/25">◈ License: MIT</span>
+          </div>
+        </div>
 
         {/* Content */}
-        <div className="space-y-10 text-[15px] leading-[1.85] font-light text-white/55">
-          {/* Lead */}
-          <p>
-            AI can generate a face. AI can clone a voice. AI can forge a fingerprint.
-          </p>
-          <p>
-            But AI cannot generate <em className="text-white/70">you</em> — not your specific, irreducibly biological, physically-constrained human motion. And we have the numbers to prove it.
-          </p>
-
+        <div className="space-y-16 md:space-y-20">
           {/* The Experiment */}
-          <h2 id="experiment" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Experiment</h2>
-          <p>We built a Rust-based verification engine that analyzes human motion through four independent feature dimensions. Then we ran a simple test:</p>
-          <ol className="list-decimal pl-6 space-y-2">
-            <li><strong className="text-white/70">Enroll a human:</strong> 20 motion samples → one cryptographic signature.</li>
-            <li><strong className="text-white/70">Issue a challenge:</strong> "Draw a circle with your right hand. Tilt your torso 12 degrees. Keep your head still." — unpredictable, multi-joint, with a coupling constraint that shares a kinetic chain.</li>
-            <li><strong className="text-white/70">Test three responses:</strong> genuine human, AI-generated forgery, and a different human.</li>
-          </ol>
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug"
+              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Experiment</h2>
+            <div className="space-y-5">
+              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+                We built a Rust-based verification engine that analyzes human motion through four independent feature dimensions. Then we ran a simple test:
+              </p>
+              <ol className="list-decimal pl-6 space-y-3 text-white/40 text-[13px] leading-[1.9] font-light">
+                <li><strong className="text-white/65 font-normal">Enroll a human:</strong> 20 motion samples → one cryptographic signature.</li>
+                <li><strong className="text-white/65 font-normal">Issue a challenge:</strong> "Draw a circle with your right hand. Tilt your torso 12 degrees. Keep your head still." — unpredictable, multi-joint, with a coupling constraint that shares a kinetic chain.</li>
+                <li><strong className="text-white/65 font-normal">Test three responses:</strong> genuine human, AI-generated forgery, and a different human.</li>
+              </ol>
+            </div>
+          </section>
 
           {/* The Results */}
-          <h2 id="results" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Results</h2>
-          <div className="border p-5 my-6 transition-all duration-300 hover:border-cyan-400/40"
-            style={{ borderColor: "rgba(144,200,255,0.1)" }}
-            onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-            <pre className="text-white/55 text-[12px] leading-relaxed font-mono whitespace-pre">
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug"
+              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Results</h2>
+            <div className="space-y-5">
+              <div className="border p-5 my-6 transition-all duration-300 hover:border-cyan-400/40"
+                style={{ borderColor: "rgba(144,200,255,0.1)" }}
+                onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
+                <pre className="text-cyan-300/50 text-[11px] md:text-[12px] leading-relaxed font-mono whitespace-pre">
 {`Test Case              Presence Score   Verdict
 ─────────────────────────────────────────────────
 Genuine Human           0.9817           PASS ✓
@@ -149,101 +87,132 @@ AI Forgery              0.5857           FAIL ✗
 Impostor                0.0000           FAIL ✗
 
 Human—AI Gap: 0.3960`}
-            </pre>
-          </div>
-
-          <p>The engine rejected the AI-generated motion across four independent dimensions:</p>
-
-          <div className="space-y-3">
-            {[
-              { tag: "TREMOR_ABSENT", detail: "8–12 Hz physiological tremor missing — AI has no stretch reflex arc." },
-              { tag: "JERK_SPECTRUM_ANOMALY", detail: "1/f spectral scaling violated — AI jerk is either over-smoothed or white noise." },
-              { tag: "HURST_ANOMALY", detail: "Long-range dependence absent — AI acceleration is uncorrelated noise." },
-              { tag: "OVER_SMOOTHED", detail: "Motor micro-perturbations missing — too perfect to be biological." },
-            ].map(r => (
-              <div key={r.tag} className="border p-4 transition-all duration-300 hover:border-cyan-400/35 hover:bg-cyan-400/[0.02]"
-                style={{ borderColor: "rgba(144,200,255,0.08)" }}
-                onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
-                <span className="text-cyan-400/70 font-mono text-[11px] tracking-[0.1em]">{r.tag}</span>
-                <span className="text-white/45 text-[13px] ml-3">{r.detail}</span>
+                </pre>
               </div>
-            ))}
-          </div>
+              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+                The engine rejected the AI-generated motion across four independent dimensions:
+              </p>
+              <div className="space-y-2">
+                {[
+                  { tag: "TREMOR_ABSENT", detail: "8–12 Hz physiological tremor missing — AI has no stretch reflex arc." },
+                  { tag: "JERK_SPECTRUM_ANOMALY", detail: "1/f spectral scaling violated — AI jerk is either over-smoothed or white noise." },
+                  { tag: "HURST_ANOMALY", detail: "Long-range dependence absent — AI acceleration is uncorrelated noise." },
+                  { tag: "OVER_SMOOTHED", detail: "Motor micro-perturbations missing — too perfect to be biological." },
+                ].map(r => (
+                  <div key={r.tag} className="border p-4 transition-all duration-300 hover:border-cyan-400/35 hover:bg-cyan-400/[0.02]"
+                    style={{ borderColor: "rgba(144,200,255,0.08)" }}
+                    onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
+                    <span className="text-cyan-400/70 font-mono text-[10px] md:text-[11px] tracking-[0.1em]">{r.tag}</span>
+                    <span className="text-white/40 text-[12px] md:text-[13px] ml-3 font-light">{r.detail}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
           {/* Why This Matters */}
-          <h2 id="why" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Why This Matters</h2>
-          <p>Every identity system in production today — passwords, biometrics, hardware wallets, KYC — answers one question: "Does the credential match?"</p>
-          <p>None of them answer: "Is the human who enrolled that credential physically present right now?"</p>
-          <p>This gap has existed for decades. AI makes it fatal.</p>
-          <p>In a world where AI agents hold private keys, where deepfakes bypass visual verification, where GPT-5 can generate convincing video of anyone doing anything — the only signal that cannot be forged is the real-time, physics-bound motion of a living human entity.</p>
-          <p>Motion is not a file. Motion is not a template. Motion is a continuous, high-dimensional, noise-driven field generated by the irreducible physics of your nervous system and your skeleton. AI can approximate its output. It cannot replicate its entropy.</p>
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug"
+              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Why This Matters</h2>
+            <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
+              <p>Every identity system in production today — passwords, KYC, hardware wallets — answers one question: "Does the credential match?"</p>
+              <p>None of them answer: "Is the human who enrolled that credential physically present right now?"</p>
+              <p>This gap has existed for decades. AI makes it fatal.</p>
+              <p>In a world where AI agents hold private keys, where deepfakes bypass visual verification, where GPT-5 can generate convincing video of anyone doing anything — the only signal that cannot be forged is the real-time, physics-bound motion of a living human entity.</p>
+              <p>Motion is not a file. Motion is not a template. Motion is a continuous, high-dimensional, noise-driven field generated by the irreducible physics of your nervous system. AI can approximate its output. It cannot replicate its entropy.</p>
+            </div>
+          </section>
 
           {/* How It Works */}
-          <h2 id="how" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>How It Works</h2>
-          <p>The engine extracts a 128-dimensional signature from four feature groups:</p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li><strong className="text-white/70">Kinematics (40 dims):</strong> Skeletal ratios between 14 bone segments. Your femur-to-tibia ratio is physically unique. AI doesn't know your bone lengths.</li>
-            <li><strong className="text-white/70">Acceleration Profile (25 dims):</strong> Statistical distribution including Hurst exponent. Human: H ≈ 0.6–0.8. AI: H ≈ 0.5.</li>
-            <li><strong className="text-white/70">Jerk Profile (25 dims):</strong> The third derivative of position. The most unforgeable single kinematic dimension.</li>
-            <li><strong className="text-white/70">Jerk Spectrum (30 dims):</strong> Frequency-domain analysis. Human: 1/f^α scaling. AI: over-smoothed or white noise.</li>
-          </ul>
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug"
+              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>How It Works</h2>
+            <div className="space-y-5">
+              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+                The engine extracts a 128-dimensional signature from four feature groups:
+              </p>
+              <ul className="list-disc pl-6 space-y-3 text-white/40 text-[13px] leading-[1.9] font-light">
+                <li><strong className="text-white/65 font-normal">Kinematics (40 dims):</strong> Skeletal ratios between 14 bone segments. Your bone-length ratios are physically unique — AI does not know them.</li>
+                <li><strong className="text-white/65 font-normal">Acceleration Profile (25 dims):</strong> Statistical distribution including Hurst exponent. Human: H ≈ 0.6–0.8. AI: H ≈ 0.5.</li>
+                <li><strong className="text-white/65 font-normal">Jerk Profile (25 dims):</strong> The third derivative of position. The single most unforgeable kinematic dimension.</li>
+                <li><strong className="text-white/65 font-normal">Jerk Spectrum (30 dims):</strong> Frequency-domain analysis. Human: 1/f^α scaling (α ≈ 1.0–1.5). AI: α &gt; 2.0 or α ≈ 0.</li>
+              </ul>
+            </div>
+          </section>
+
+          {/* The Deeper Truth */}
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug"
+              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Deeper Truth</h2>
+            <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
+              <p>Every AI motion model — diffusion, transformer, VAE — is trained with L2 loss. L2 loss penalizes the square of the error. A 1 mm tremor deviation is penalized 100× less than a 10 mm trajectory error. The model learns to suppress high-frequency, low-amplitude signals — exactly the signals that make human motion human.</p>
+              <p>This is not a temporary AI limitation. It is a structural consequence of neural network optimization. The better AI gets at generating realistic motion, the more aggressively it smooths — and the more detectable it becomes.</p>
+              <p><strong className="text-white/65">The AI Paradox:</strong> Every improvement in visual fidelity comes at the cost of spectral fidelity. AI faces an impossible tradeoff: look more real, or be more real. It cannot do both.</p>
+            </div>
+          </section>
 
           {/* Run It */}
-          <h2 id="run" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Run It Yourself</h2>
-          <p>The core engine is open source:</p>
-          <div className="border p-5 my-4 transition-all duration-300 hover:border-cyan-400/35"
-            style={{ borderColor: "rgba(144,200,255,0.1)", background: "rgba(2,4,10,0.6)" }}
-            onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
-            <pre className="text-cyan-400/50 text-[11px] leading-relaxed font-mono whitespace-pre">
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug"
+              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Run It Yourself</h2>
+            <div className="space-y-5">
+              <p className="text-white/40 text-[13px] leading-[1.9] font-light">The core engine is open source:</p>
+              <div className="border p-5 transition-all duration-300 hover:border-cyan-400/35"
+                style={{ borderColor: "rgba(144,200,255,0.1)", background: "rgba(2,4,10,0.6)" }}
+                onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
+                <pre className="text-cyan-400/45 text-[10px] md:text-[11px] leading-relaxed font-mono whitespace-pre">
 {`git clone https://github.com/myshapeprotocol
 cd cli
 cargo run --release --bin myshape-demo -- --verbose`}
-            </pre>
-          </div>
-          <p>25 tests. Zero dependencies beyond the Rust standard library and audited crypto crates.</p>
-          <p>See the live dashboard at <a href="/developers" className="text-cyan-400/60 hover:text-cyan-300">myshape.com/developers</a>.</p>
-
-          {/* The Deeper Truth */}
-          <h2 id="truth" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Deeper Truth</h2>
-          <p>Every AI motion model — diffusion, transformer, VAE — is trained with L2 loss. L2 loss penalizes the square of the error. A 1 mm tremor deviation is penalized 100× less than a 10 mm trajectory error. The model learns to suppress high-frequency, low-amplitude signals — exactly the signals that make human motion human.</p>
-          <p>This is not a temporary AI limitation. It is a structural property of neural network training. The better AI gets at generating realistic motion, the more aggressively it smooths — and the more detectable it becomes.</p>
-          <p><strong className="text-white/70">The AI Paradox:</strong> Every improvement in visual fidelity comes at the cost of spectral fidelity. AI faces an impossible tradeoff: look more real, or be more real. It cannot do both.</p>
-
-          {/* CTA */}
-          <hr className="my-12" style={{ borderColor: "rgba(144,200,255,0.08)" }} />
-          <h2 id="building" className="text-xl font-bold tracking-tighter text-white scroll-mt-28">What We're Building</h2>
-          <p>MyShape is a presence verification protocol. Not proof of <em>identity</em> — proof of <em>presence</em>.</p>
-          <p>World (the orb project) proves you're <em>a</em> human. MyShape proves you're <em>this</em> human — physically present, authorizing this specific operation.</p>
-          <p>We're currently in closed development. If you're building in the identity, security, agent infrastructure, or applied cryptography space, we'd like to talk.</p>
-
-          <div className="flex flex-wrap gap-4 pt-4 text-[11px]">
-            <a href="/whitepaper" className="border px-4 py-2 text-cyan-400/60 hover:text-cyan-300 hover:border-cyan-400/40 transition-all"
-              style={{ borderColor: "rgba(144,200,255,0.2)" }}
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>
-              Read the Whitepaper →
-            </a>
-            <a href="https://x.com/myshapeprotocol" target="_blank" rel="noopener noreferrer" className="border px-4 py-2 text-cyan-400/60 hover:text-cyan-300 hover:border-cyan-400/40 transition-all"
-              style={{ borderColor: "rgba(144,200,255,0.2)" }}
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>
-              @myshapeprotocol →
-            </a>
-          </div>
-
-          {/* More Essays */}
-          <div className="mt-16 pt-10 border-t border-white/[0.05]">
-            <h2 className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-6">More Essays</h2>
-            <a href="/blog/stored-identity-vs-generated-presence"
-              className="block border border-cyan-400/10 p-5 hover:border-cyan-400/35 transition-all group"
-              onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-              <div className="text-white/25 text-[9px] tracking-[0.2em] uppercase mb-2">PROTOCOL_ESSAY // 001</div>
-              <div className="text-white/50 text-[14px] tracking-[0.05em] font-light mb-1 group-hover:text-white/70 transition-colors">
-                Stored Identity vs. Generated Presence
+                </pre>
               </div>
-              <div className="text-white/20 text-[10px]">Why your identity is just a copyable database record — and what comes next.</div>
+              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+                25 tests. Zero dependencies beyond the Rust standard library and audited crypto crates.
+                See the live dashboard at <a href="/developers" className="text-cyan-400/50 hover:text-cyan-300 transition-colors">myshape.com/developers</a>.
+              </p>
+            </div>
+          </section>
+
+          {/* What We're Building */}
+          <section>
+            <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug">What We're Building</h2>
+            <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
+              <p>MyShape is a presence verification protocol. Not proof of identity — proof of presence.</p>
+              <p>World (the orb) proves you are a human. MyShape proves you are <em className="text-white/55">this</em> human — physically present, authorizing this specific operation.</p>
+              <p>We are in active development. If you build in identity, security, agent infrastructure, or applied cryptography — we would like to talk.</p>
+            </div>
+          </section>
+        </div>
+
+        {/* Invite adversarial review */}
+        <div className="mt-16 p-6 border border-cyan-400/10 bg-cyan-400/[0.02]">
+          <p className="text-white/30 text-[11px] leading-relaxed mb-4">
+            <strong className="text-white/50">To the skeptic:</strong> every claim in this article is verifiable.
+            The benchmark code is on GitHub. The threat model is published. Attack it. We invite adversarial review.
+          </p>
+          <p className="text-white/20 text-[9px]">
+            Repository: github.com/myshapeprotocol &middot; Threat Model: myshape.com/papers/threat-model &middot; Live Demo: myshape.com/motion-demo
+          </p>
+        </div>
+
+        {/* Discussion + More Essays */}
+        <div className="mt-12 pt-10 border-t border-white/[0.05] text-center space-y-4">
+          <p className="text-white/20 text-[10px]">Discuss on HN or GitHub. More technical essays below.</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
+              className="px-6 py-2.5 border border-cyan-400/25 text-cyan-300/60 text-[10px] tracking-[0.3em] uppercase hover:bg-cyan-400/[0.04] hover:text-white transition-all"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>
+              View on GitHub →
+            </a>
+            <a href="/blog/stored-identity-vs-generated-presence"
+              className="px-6 py-2.5 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all"
+              onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
+              Stored Identity vs. Generated Presence →
+            </a>
+            <a href="/architecture"
+              className="px-6 py-2.5 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all"
+              onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
+              Protocol Architecture →
             </a>
           </div>
         </div>
