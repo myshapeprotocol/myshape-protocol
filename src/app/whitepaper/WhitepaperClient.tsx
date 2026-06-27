@@ -256,11 +256,6 @@ export default function WhitepaperClient() {
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-cyan-500/30">
       <ProtocolHeader />
 
-      <style>{`
-        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        @keyframes glitchBorder { 0%,100% { opacity:0; } 10% { opacity:0.8; } 20% { opacity:0; } 30% { opacity:0.6; } 40% { opacity:0; } 50% { opacity:0.9; } 60% { opacity:0; } }
-        @keyframes glitchShift { 0%,100% { transform:translate(0); } 5% { transform:translate(-4px,2px); } 10% { transform:translate(4px,-1px); } 15% { transform:translate(0); } }
-      `}</style>
       {/* Glitch 封存特效 */}
       {glitchActive && (
         <div className="fixed inset-0 z-50 pointer-events-none" style={{ animation: "glitchShift 0.15s steps(1) infinite" }}>

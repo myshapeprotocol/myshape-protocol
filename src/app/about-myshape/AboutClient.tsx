@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
 import { playTick } from "@/utils/useAudioTick";
+import "./AboutClient.css";
 
 export default function About() {
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
@@ -57,39 +58,6 @@ export default function About() {
       secLevel="CLASS_GAMMA"
       systemStatus="INTERNAL_REC"
     >
-      <style>{`
-        @keyframes decryptReveal {
-          0% { clip-path: inset(0 100% 0 0); opacity: 0; }
-          40% { clip-path: inset(0 0 0 0); opacity: 0.4; }
-          60% { clip-path: inset(0 0 0 0); opacity: 0.7; }
-          80% { clip-path: inset(0 0 0 0); opacity: 0.9; }
-          100% { clip-path: inset(0 0 0 0); opacity: 1; }
-        }
-        @keyframes scanLineGlitch {
-          0%,100% { top: 0; opacity: 0; }
-          50% { top: 100%; opacity: 0.3; }
-        }
-        @keyframes particleDrift {
-          0% { transform: translateY(0) scale(1); opacity: 0.6; }
-          100% { transform: translateY(-20px) scale(0.4); opacity: 0; }
-        }
-        .decrypt-card {
-          opacity: 0;
-          transform: translateY(12px);
-          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .decrypt-card.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        .decrypt-card.visible .decrypt-content {
-          animation: decryptReveal 1.2s cubic-bezier(0.2, 1, 0.2, 1) forwards;
-        }
-        .decrypt-card.visible .decrypt-scan {
-          animation: scanLineGlitch 0.8s ease-out forwards;
-        }
-      `}</style>
-
       <div className="space-y-32">
         {/* --- 1. 深层叙事 --- */}
         <section className="max-w-4xl">

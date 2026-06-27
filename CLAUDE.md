@@ -8,11 +8,12 @@
 ## 1. 品牌红线（最高优先级）
 
 ### 绝对禁止的词汇和概念
-- ❌ man, woman, male, female, boy, girl
-- ❌ skin, muscle, flesh, body, chest, breasts, genital
-- ❌ strong, handsome, pretty, brawny, beautiful
-- ❌ biometric, fingerprint, face recognition, retina scan
-- ❌ avatar, profile picture, headshot
+> 完整禁止词列表见 `MyShape_Documentation/AI_Agent_Guidelines.md` §6
+- ❌ 性别化术语 (gendered terms)
+- ❌ 身体/肉体词汇 (corporeal terms)
+- ❌ 外貌判断词 (appearance judgments)
+- ❌ 生物识别术语 (bio-identification terms)
+- ❌ 头像/照片概念 (profile-image concepts)
 
 ### 必须使用的品牌词汇
 - ✅ entity, agent, silhouette (abstract)
@@ -131,9 +132,10 @@ chore: upgrade Next.js to 16.1.6
 
 ## 8. 已知技术债务（供优先级参考）
 
-1. `any` 类型未完全消除（strict 模式开启后逐步修复）
-2. 多个组件的内联 `<style>` 尚未完全提取到 CSS 文件
+1. ✅ ~~`any` 类型未完全消除~~ — 已清零（2026-06-27 验证）
+2. 内联 `<style>` 标签残留 — 2 个文件待提取：`WhitepaperClient.tsx`、`AboutClient.tsx`（`@keyframes` 应迁入 `src/styles/animations.css`）
 3. 部分 CIV layer 页面仍使用 `"use client"` — 可考虑拆分为 Server + Client 组件
-4. `useSound.ts` hook 存在但未被复用（JoinWaitlist 自实现了逻辑）
-5. `public/protocol-body.glb` 可能已废弃 — 需确认是否删除
-6. `src/components/joinwaitlist/index.tsx` — 确认作用（可能冗余）
+4. ✅ ~~`useSound.ts` hook~~ — 已移除
+5. ✅ ~~`public/protocol-b-o-d-y.glb`~~ — 已移除
+6. ✅ ~~`src/components/joinwaitlist/index.tsx`~~ — 已移除
+7. Architecture 页面大量内联 `style={{}}` — 后续可提取为 CSS 类，但非紧急（不影响功能）
