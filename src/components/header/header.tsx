@@ -177,7 +177,7 @@ const ProtocolHeader = () => {
           style={styles.walletBtn}
           className={`wallet-btn-optimized ${isPanelOpen ? "is-active" : ""}`}
         >
-          MYSHAPE.BASE.ETH
+          IDENTITY_SESSION
         </button>
 
         {/* ── 晶体玻璃/全息协议面板 ── */}
@@ -196,7 +196,7 @@ const ProtocolHeader = () => {
                   <>
                     <div className="panel-row">
                       <span className="label">IDENTITY</span>
-                      <span className="value">{maskedEmail || "MYSHAPE.BASE.ETH"}</span>
+                      <span className="value">{maskedEmail || "UNINITIALIZED"}</span>
                     </div>
                     <div className="panel-row">
                       <span className="label">STATUS</span>
