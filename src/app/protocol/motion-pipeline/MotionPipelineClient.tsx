@@ -138,18 +138,18 @@ export default function MotionPipeline() {
 
           {/* --- 4. Protocol Notes ── */}
           <section className="py-10 space-y-4 max-w-2xl mx-auto">
-            <div className="border border-cyan-400/15 bg-cyan-400/[0.02] p-6 group"
-              onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.15)"; }}>
-              <div className="text-cyan-400/40 text-[8px] tracking-[0.3em] uppercase mb-3 font-mono">◈ Protocol Note: Replay Defense</div>
-              <p className="text-white/35 text-[11px] leading-[1.8] font-light">
+            <div className="border border-cyan-400/15 bg-cyan-400/[0.02] p-6 group cursor-default transition-all duration-500"
+              onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(34,211,238,0.5)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(34,211,238,0.08)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.15)"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div className="text-cyan-400/40 group-hover:text-cyan-300/70 text-[8px] tracking-[0.3em] uppercase mb-3 font-mono transition-colors">◈ Protocol Note: Replay Defense</div>
+              <p className="text-white/35 group-hover:text-white/60 text-[11px] leading-[1.8] font-light transition-colors">
                 The motion engine utilizes non-deterministic continuous entropy sampling. Any replay of fixed-length recordings fails the temporal-coherence check, converging to zero entropy within the sampling window.
               </p>
             </div>
-            <div className="border border-cyan-400/10 bg-cyan-400/[0.01] p-5 group"
-              onMouseEnter={e => { playTick(450, "sine", 0.03, 0.01); e.currentTarget.style.borderColor = "rgba(34,211,238,0.2)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.1)"; }}>
-              <p className="text-white/25 text-[10px] tracking-[0.1em] uppercase italic text-center">
+            <div className="border border-cyan-400/10 bg-cyan-400/[0.01] p-5 group cursor-default transition-all duration-500"
+              onMouseEnter={e => { playTick(450, "sine", 0.03, 0.01); e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(34,211,238,0.05)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.1)"; e.currentTarget.style.boxShadow = "none"; }}>
+              <p className="text-white/25 group-hover:text-white/50 text-[10px] tracking-[0.1em] uppercase italic text-center transition-colors">
                 Phase 1: Local proof generation &amp; cryptographic signing. On-chain ZK-verification is scheduled for Genesis-v2 integration.
               </p>
             </div>
