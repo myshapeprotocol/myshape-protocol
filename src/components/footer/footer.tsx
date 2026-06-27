@@ -50,6 +50,7 @@ export default function ProtocolFooter() {
       title: "BUILD",
       links: [
         { name: "DEVELOPERS", href: "/developers" },
+        { name: "DASHBOARD", href: "/dashboard" },
         { name: "MOTION_DEMO", href: "/motion-demo" },
         { name: "AI_AGENT", href: "/agent" }
       ]
