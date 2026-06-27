@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { ethers } from "ethers";
 
 interface Props {
@@ -28,8 +28,11 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
   const [status, setStatus] = useState<"idle" | "connecting" | "signing" | "verifying" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [showConfirmed, setShowConfirmed] = useState(false);
+  const [isMetaMask, setIsMetaMask] = useState(false);
 
-  const isMetaMask = typeof window !== "undefined" && !!window.ethereum?.isMetaMask;
+  useEffect(() => {
+    setIsMetaMask(!!window.ethereum?.isMetaMask);
+  }, []);
 
   const handleConnect = useCallback(async () => {
     try {
