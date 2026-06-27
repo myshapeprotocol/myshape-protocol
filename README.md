@@ -5,6 +5,10 @@
 > AI-native identity. Zero-knowledge presence. Motion-signature verification.
 > A protocol primitive — not a product.
 
+[![Protocol Status](https://img.shields.io/badge/Protocol_Activity-v1.0_Genesis-22d3ee?style=flat)](PROTOCOL_LOG.md)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.0__GENESIS-6e7681?style=flat)](https://www.myshape.com)
+[![Genesis Cohort](https://img.shields.io/badge/Genesis_Cohort-100_Slots-58a6ff?style=flat)](https://www.myshape.com/genesis)
+
 ---
 
 ## Overview
