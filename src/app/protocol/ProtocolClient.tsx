@@ -203,16 +203,46 @@ export default function ProtocolClient() {
 
         {/* ── Protocol Lifecycle ── */}
         <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
-          <div className="max-w-2xl mx-auto">
-            <div className="text-white/25 text-[10px] tracking-[0.5em] uppercase mb-8 text-center hover:text-cyan-300/50 transition-colors cursor-default"
+          <div className="max-w-3xl mx-auto">
+            <div className="text-white/25 text-[10px] tracking-[0.5em] uppercase mb-10 text-center hover:text-cyan-300/50 transition-colors cursor-default"
               onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Lifecycle</div>
-            <div className="border border-cyan-400/10 bg-cyan-400/[0.02] p-6 font-mono">
-              <pre className="text-cyan-400/45 text-[10px] leading-[2.4] tracking-[0.1em] whitespace-pre overflow-x-auto">
-{`WALLET_SIGNATURE ──→ SIWE_VERIFY ──→ PROTOCOL_NODES ──→ ZK_PROOF ──→ IDENTITY_MESH
-   (EIP-4361)        (on-chain)       (local anchor)     (zero-knowledge)  (decentralized)`.trim()}
-              </pre>
+
+            {/* 流水线图 */}
+            <div className="relative border border-cyan-400/15 bg-gradient-to-b from-cyan-400/[0.03] to-transparent p-8 md:p-10 font-mono group"
+              onMouseEnter={e => { playTick(600, "sine", 0.06, 0.015); e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)"; e.currentTarget.style.boxShadow = "0 0 40px rgba(34,211,238,0.06)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.15)"; e.currentTarget.style.boxShadow = "none"; }}>
+              {/* 步骤条 */}
+              <div className="flex flex-wrap justify-center gap-x-2 gap-y-3">
+                {[
+                  { label: "WALLET", sub: "EIP-4361" },
+                  { label: "SIWE_VERIFY", sub: "on-chain" },
+                  { label: "PROTOCOL_NODES", sub: "local anchor" },
+                  { label: "ZK_PROOF", sub: "zero-knowledge" },
+                  { label: "IDENTITY_MESH", sub: "decentralized" },
+                ].map((step, i) => (
+                  <div key={step.label} className="flex items-center">
+                    <div className="border border-cyan-400/20 bg-cyan-400/[0.03] px-4 py-3 text-center transition-all duration-300 hover:border-cyan-400/50 hover:bg-cyan-400/[0.06] hover:scale-105"
+                      onMouseEnter={() => playTick(500 + i * 80, "sine", 0.05, 0.01)}>
+                      <div className="text-cyan-300/70 text-[11px] tracking-[0.15em] font-bold mb-1">{step.label}</div>
+                      <div className="text-cyan-400/25 text-[8px] tracking-[0.2em]">{step.sub}</div>
+                    </div>
+                    {i < 4 && (
+                      <span className="text-cyan-400/30 mx-1 text-[14px] font-light">→</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* 底部说明 */}
+              <p className="mt-8 text-white/40 text-[11px] leading-[1.7] font-light text-center max-w-xl mx-auto">
+                From wallet signature to decentralized identity mesh. Each step is cryptographically
+                verifiable. No raw data stored. No centralized intermediary.
+              </p>
             </div>
-            <p className="mt-6 text-white/25 text-sm leading-[1.8] font-light text-center max-w-xl mx-auto">
+
+            {/* Agent 角色说明 */}
+            <p className="mt-6 text-white/30 text-[11px] leading-[1.8] font-light text-center max-w-lg mx-auto italic"
+              onMouseEnter={() => playTick(450, "sine", 0.03, 0.01)}>
               Agents such as Hermes operate at the application layer — they consume
               protocol-anchored identity signals but never possess the underlying
               cryptographic material. The protocol remains the single source of truth.
