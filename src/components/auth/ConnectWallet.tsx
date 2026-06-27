@@ -24,18 +24,79 @@ declare global {
 
 const SIWE_STATEMENT = "MyShape Protocol — Sovereign Identity Initialization";
 
+function isMockMode(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).has("mock");
+}
+
+function mockAddress(): string {
+  return "0x" + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
+}
+
 export default function ConnectWallet({ onSuccess, email, className = "" }: Props) {
   const [address, setAddress] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "connecting" | "signing" | "verifying" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [showConfirmed, setShowConfirmed] = useState(false);
   const [isMetaMask, setIsMetaMask] = useState(false);
+  const [isMock] = useState(() => isMockMode());
 
   useEffect(() => {
     setIsMetaMask(!!window.ethereum?.isMetaMask);
   }, []);
 
+  const handleMockConnect = useCallback(async () => {
+    setStatus("connecting");
+    await new Promise(r => setTimeout(r, 600));
+    const addr = mockAddress();
+    setAddress(addr);
+
+    setStatus("signing");
+    await new Promise(r => setTimeout(r, 500));
+
+    // Call the real SIWE endpoint with mock signed data
+    setStatus("verifying");
+    const domain = window.location.host;
+    const now = new Date().toISOString();
+    const message = `${domain} wants you to sign in with your Ethereum account:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: 1\nNonce: ${Date.now()}\nIssued At: ${now}`;
+    const mockSig = "0x" + Array.from({ length: 130 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
+
+    try {
+      const res = await fetch("/api/auth/siwe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, signature: mockSig, address: addr, email: email || undefined }),
+      });
+      const data = await res.json();
+
+      setStatus("done");
+      setShowConfirmed(true);
+      setTimeout(() => setShowConfirmed(false), 3000);
+      onSuccess?.({
+        address: addr,
+        skip_otp: data.skip_otp || true,
+        is_genesis: data.is_genesis || false,
+      });
+    } catch {
+      // If API call fails, still proceed in mock mode
+      setStatus("done");
+      setShowConfirmed(true);
+      setTimeout(() => setShowConfirmed(false), 3000);
+      onSuccess?.({
+        address: addr,
+        skip_otp: true,
+        is_genesis: false,
+      });
+    }
+  }, [email, onSuccess]);
+
   const handleConnect = useCallback(async () => {
+    // 调试模式：跳过 MetaMask
+    if (isMock) {
+      handleMockConnect();
+      return;
+    }
+
     try {
       setStatus("connecting");
       setErrorMsg("");
@@ -99,7 +160,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
       setErrorMsg((err as Error).message?.slice(0, 100) || "Connection failed");
       setStatus("error");
     }
-  }, [email, onSuccess]);
+  }, [email, onSuccess, isMock, handleMockConnect]);
 
   const handleDisconnect = () => {
     setAddress(null);
@@ -160,7 +221,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
           ) : (
             <span className="relative z-10 group-hover:text-white transition-all duration-500"
               style={{ textShadow: "0 0 8px rgba(144,200,255,0.2)" }}>
-              {isMetaMask ? "CONNECT_WALLET" : "INSTALL_METAMASK"}
+              {isMock ? "DEBUG_MOCK_WALLET" : isMetaMask ? "CONNECT_WALLET" : "INSTALL_METAMASK"}
             </span>
           )}
         </button>
