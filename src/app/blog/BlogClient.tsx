@@ -1,15 +1,103 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
 
+const SECTIONS = [
+  { id: "experiment", label: "The Experiment" },
+  { id: "results", label: "The Results" },
+  { id: "why", label: "Why This Matters" },
+  { id: "how", label: "How It Works" },
+  { id: "run", label: "Run It Yourself" },
+  { id: "truth", label: "The Deeper Truth" },
+  { id: "building", label: "What We're Building" },
+];
+
 export default function BlogClient() {
+  const [active, setActive] = useState("experiment");
+  const [tocOpen, setTocOpen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter(e => e.isIntersecting);
+        if (visible.length > 0) {
+          setActive(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-100px 0px -60% 0px" }
+    );
+
+    SECTIONS.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTocOpen(false);
+    playTick(600, "sine", 0.06, 0.015);
+  };
+
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-cyan-500/30">
       <ProtocolHeader />
 
-      <article className="relative z-10 max-w-3xl mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-16 md:pb-24">
+      {/* ── Desktop TOC: fixed left ── */}
+      <nav className="hidden xl:block fixed left-8 top-36 z-40 w-48">
+        <div className="text-white/15 text-[8px] tracking-[0.4em] uppercase mb-4">Contents</div>
+        <ul className="space-y-1.5">
+          {SECTIONS.map(s => (
+            <li key={s.id}>
+              <button
+                onClick={() => scrollTo(s.id)}
+                className={`text-left text-[10px] tracking-[0.1em] transition-all duration-300 hover:text-cyan-300 ${
+                  active === s.id ? "text-cyan-400/90 border-l border-cyan-400/60 pl-2 -ml-2" : "text-white/25 pl-0"
+                }`}
+              >
+                {s.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* ── Mobile TOC: collapsible top bar ── */}
+      <div className="xl:hidden fixed top-[92px] left-0 w-full z-40">
+        <button
+          onClick={() => setTocOpen(!tocOpen)}
+          className="w-full flex items-center justify-between px-4 py-2 text-[10px] tracking-[0.2em] uppercase transition-colors"
+          style={{ background: "rgba(2,4,10,0.92)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+        >
+          <span style={{ color: "rgba(255,255,255,0.4)" }}>
+            {SECTIONS.find(s => s.id === active)?.label || "Contents"}
+          </span>
+          <span style={{ color: "rgba(34,211,238,0.4)" }}>{tocOpen ? "▲" : "▼"}</span>
+        </button>
+        {tocOpen && (
+          <ul className="px-4 py-2 space-y-1" style={{ background: "rgba(2,4,10,0.95)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            {SECTIONS.map(s => (
+              <li key={s.id}>
+                <button
+                  onClick={() => scrollTo(s.id)}
+                  className={`text-left text-[10px] tracking-[0.1em] w-full py-1 transition-all ${
+                    active === s.id ? "text-cyan-400/90" : "text-white/25"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <article className="relative z-10 max-w-3xl mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-16 md:pb-24 xl:ml-64">
         {/* Header */}
         <header className="mb-16">
           <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase mb-6 font-mono">
@@ -38,7 +126,7 @@ export default function BlogClient() {
           </p>
 
           {/* The Experiment */}
-          <h2 className="text-xl font-bold tracking-tighter text-white pt-6"
+          <h2 id="experiment" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Experiment</h2>
           <p>We built a Rust-based verification engine that analyzes human motion through four independent feature dimensions. Then we ran a simple test:</p>
           <ol className="list-decimal pl-6 space-y-2">
@@ -48,7 +136,7 @@ export default function BlogClient() {
           </ol>
 
           {/* The Results */}
-          <h2 className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200"
+          <h2 id="results" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Results</h2>
           <div className="border p-5 my-6 transition-all duration-300 hover:border-cyan-400/40"
             style={{ borderColor: "rgba(144,200,255,0.1)" }}
@@ -83,7 +171,7 @@ Human—AI Gap: 0.3960`}
           </div>
 
           {/* Why This Matters */}
-          <h2 className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200"
+          <h2 id="why" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Why This Matters</h2>
           <p>Every identity system in production today — passwords, biometrics, hardware wallets, KYC — answers one question: "Does the credential match?"</p>
           <p>None of them answer: "Is the human who enrolled that credential physically present right now?"</p>
@@ -92,7 +180,7 @@ Human—AI Gap: 0.3960`}
           <p>Motion is not a file. Motion is not a template. Motion is a continuous, high-dimensional, noise-driven field generated by the irreducible physics of your nervous system and your skeleton. AI can approximate its output. It cannot replicate its entropy.</p>
 
           {/* How It Works */}
-          <h2 className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200"
+          <h2 id="how" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>How It Works</h2>
           <p>The engine extracts a 128-dimensional signature from four feature groups:</p>
           <ul className="list-disc pl-6 space-y-2">
@@ -103,7 +191,7 @@ Human—AI Gap: 0.3960`}
           </ul>
 
           {/* Run It */}
-          <h2 className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200"
+          <h2 id="run" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Run It Yourself</h2>
           <p>The core engine is open source:</p>
           <div className="border p-5 my-4 transition-all duration-300 hover:border-cyan-400/35"
@@ -119,7 +207,7 @@ cargo run --release --bin myshape-demo -- --verbose`}
           <p>See the live dashboard at <a href="/developers" className="text-cyan-400/60 hover:text-cyan-300">myshape.com/developers</a>.</p>
 
           {/* The Deeper Truth */}
-          <h2 className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200"
+          <h2 id="truth" className="text-xl font-bold tracking-tighter text-white pt-6 transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Deeper Truth</h2>
           <p>Every AI motion model — diffusion, transformer, VAE — is trained with L2 loss. L2 loss penalizes the square of the error. A 1 mm tremor deviation is penalized 100× less than a 10 mm trajectory error. The model learns to suppress high-frequency, low-amplitude signals — exactly the signals that make human motion human.</p>
           <p>This is not a temporary AI limitation. It is a structural property of neural network training. The better AI gets at generating realistic motion, the more aggressively it smooths — and the more detectable it becomes.</p>
@@ -127,7 +215,7 @@ cargo run --release --bin myshape-demo -- --verbose`}
 
           {/* CTA */}
           <hr className="my-12" style={{ borderColor: "rgba(144,200,255,0.08)" }} />
-          <h2 className="text-xl font-bold tracking-tighter text-white">What We're Building</h2>
+          <h2 id="building" className="text-xl font-bold tracking-tighter text-white scroll-mt-28">What We're Building</h2>
           <p>MyShape is a presence verification protocol. Not proof of <em>identity</em> — proof of <em>presence</em>.</p>
           <p>World (the orb project) proves you're <em>a</em> human. MyShape proves you're <em>this</em> human — physically present, authorizing this specific operation.</p>
           <p>We're currently in closed development. If you're building in the identity, security, agent infrastructure, or applied cryptography space, we'd like to talk.</p>
