@@ -55,7 +55,7 @@ export default function VisionClient() {
         {/* ── 0. 行业宣言 ── */}
         <section className="relative max-w-3xl"
           onMouseEnter={() => playTick(400, "sine", 0.03, 0.01)}>
-          <div className="text-cyan-500/[0.03] text-[140px] font-bold absolute -top-20 -left-10 select-none pointer-events-none leading-none">I</div>
+          <div className="text-cyan-500/[0.2] text-[90px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">EYE</div>
           <div className="relative z-10 border-l-2 border-cyan-400/25 pl-6 md:pl-10 py-3">
             <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase font-mono mb-5">// PROTOCOL_MANIFESTO</div>
             <p className="text-white/75 text-[15px] md:text-[18px] leading-[1.8] font-light mb-5">
@@ -71,7 +71,6 @@ export default function VisionClient() {
 
         {/* ── 1. 协议立场 ── */}
         <section className="relative max-w-3xl">
-          <div className="text-cyan-500/[0.2] text-[90px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">EYE</div>
           <div className="relative z-10">
             <h2 className="text-2xl md:text-4xl font-extralight tracking-[0.4em] text-white leading-tight uppercase mb-8"
               style={{ textShadow: "0 0 60px rgba(144,200,255,0.15)" }}>
