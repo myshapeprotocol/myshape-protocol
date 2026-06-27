@@ -3,6 +3,14 @@ import React, { useState, useCallback, useEffect } from "react";
 import { ethers } from "ethers";
 import { playTick } from "@/utils/useAudioTick";
 
+/* ═══════════════════════════════════════════════
+   ConnectWallet — Base Mainnet 标准化
+   - chainId 固定 8453 (Base)
+   - 自动检测并切换至 Base
+   - 不强制 MetaMask，兼容任何 EIP-1193 钱包
+   - ?mock 调试模式跳过真实钱包
+   ═══════════════════════════════════════════════ */
+
 interface Props {
   onSuccess?: (data: { address: string; skip_otp: boolean; is_genesis: boolean }) => void;
   email?: string;
@@ -23,6 +31,8 @@ declare global {
 }
 
 const SIWE_STATEMENT = "MyShape Protocol — Sovereign Identity Initialization";
+const BASE_MAINNET = 8453;
+const BASE_MAINNET_HEX = "0x2105";
 
 function isMockMode(): boolean {
   if (typeof window === "undefined") return false;
@@ -33,18 +43,60 @@ function mockAddress(): string {
   return "0x" + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
 }
 
+/** 检查当前链并切换到 Base（如需要） */
+async function ensureBaseChain(): Promise<void> {
+  if (!window.ethereum) return;
+
+  try {
+    const currentChainId = await window.ethereum.request({ method: "eth_chainId" }) as string;
+    const currentChain = parseInt(currentChainId, 16);
+
+    if (currentChain !== BASE_MAINNET) {
+      // 尝试切换到 Base
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: BASE_MAINNET_HEX }],
+        });
+      } catch (switchError: unknown) {
+        // 如果 Base 不在钱包网络中，尝试添加
+        const err = switchError as { code?: number };
+        if (err.code === 4902) {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: BASE_MAINNET_HEX,
+              chainName: "Base Mainnet",
+              nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+              rpcUrls: ["https://mainnet.base.org"],
+              blockExplorerUrls: ["https://basescan.org"],
+            }],
+          });
+        } else {
+          throw switchError;
+        }
+      }
+    }
+  } catch {
+    // 静默失败——用户可能拒绝了切换，仍然允许继续
+    console.warn("[ConnectWallet] Could not switch to Base. Proceeding on current chain.");
+  }
+}
+
 export default function ConnectWallet({ onSuccess, email, className = "" }: Props) {
   const [address, setAddress] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "connecting" | "signing" | "verifying" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [showConfirmed, setShowConfirmed] = useState(false);
-  const [isMetaMask, setIsMetaMask] = useState(false);
+  const [hasWallet, setHasWallet] = useState(false);
   const [isMock] = useState(() => isMockMode());
 
   useEffect(() => {
-    setIsMetaMask(!!window.ethereum?.isMetaMask);
+    // 仅检测是否有 EIP-1193 钱包，不检测特定品牌
+    setHasWallet(!!window.ethereum);
   }, []);
 
+  /* ── 调试模拟 ── */
   const handleMockConnect = useCallback(async () => {
     setStatus("connecting");
     await new Promise(r => setTimeout(r, 600));
@@ -54,11 +106,10 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
     setStatus("signing");
     await new Promise(r => setTimeout(r, 500));
 
-    // Call the real SIWE endpoint with mock signed data
     setStatus("verifying");
     const domain = window.location.host;
     const now = new Date().toISOString();
-    const message = `${domain} wants you to sign in with your Ethereum account:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: 1\nNonce: ${Date.now()}\nIssued At: ${now}`;
+    const message = `${domain} wants you to sign in with your Ethereum account:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: ${BASE_MAINNET}\nNonce: ${Date.now()}\nIssued At: ${now}`;
     const mockSig = "0x" + Array.from({ length: 130 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
 
     try {
@@ -68,66 +119,51 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
         body: JSON.stringify({ message, signature: mockSig, address: addr, email: email || undefined }),
       });
       const data = await res.json();
-
       setStatus("done");
       setShowConfirmed(true);
       setTimeout(() => setShowConfirmed(false), 3000);
-      onSuccess?.({
-        address: addr,
-        skip_otp: data.skip_otp || true,
-        is_genesis: data.is_genesis || false,
-      });
+      onSuccess?.({ address: addr, skip_otp: data.skip_otp || true, is_genesis: data.is_genesis || false });
     } catch {
-      // If API call fails, still proceed in mock mode
       setStatus("done");
       setShowConfirmed(true);
       setTimeout(() => setShowConfirmed(false), 3000);
-      onSuccess?.({
-        address: addr,
-        skip_otp: true,
-        is_genesis: false,
-      });
+      onSuccess?.({ address: addr, skip_otp: true, is_genesis: false });
     }
   }, [email, onSuccess]);
 
+  /* ── 真实连接 ── */
   const handleConnect = useCallback(async () => {
-    // 调试模式：跳过 MetaMask
-    if (isMock) {
-      handleMockConnect();
-      return;
-    }
+    if (isMock) { handleMockConnect(); return; }
 
     try {
       setStatus("connecting");
       setErrorMsg("");
 
       if (!window.ethereum) {
-        setErrorMsg("No Web3 wallet detected. Install MetaMask or Rainbow.");
+        setErrorMsg("No EIP-1193 wallet detected. Install any Web3 wallet (Rainbow, MetaMask, Coinbase Wallet, etc).");
         setStatus("error");
         return;
       }
 
-      // 请求账户
-      const accounts = (await window.ethereum.request({
-        method: "eth_requestAccounts",
-      })) as string[];
+      // 强制切换至 Base Mainnet
+      await ensureBaseChain();
 
+      // 请求账户
+      const accounts = (await window.ethereum.request({ method: "eth_requestAccounts" })) as string[];
       if (!accounts || accounts.length === 0) {
         setErrorMsg("No accounts authorized.");
         setStatus("error");
         return;
       }
-
       const addr = accounts[0];
       setAddress(addr);
 
-      // 构造 SIWE 消息
+      // 构造 SIWE 消息 — chainId 固定 8453
+      setStatus("signing");
       const domain = window.location.host;
       const now = new Date().toISOString();
-      const message = `${domain} wants you to sign in with your Ethereum account:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: 1\nNonce: ${Date.now()}\nIssued At: ${now}`;
+      const message = `${domain} wants you to sign in with your Ethereum account:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: ${BASE_MAINNET}\nNonce: ${Date.now()}\nIssued At: ${now}`;
 
-      // 请求签名
-      setStatus("signing");
       const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
       const signer = await provider.getSigner();
       const signature = await signer.signMessage(message);
@@ -139,9 +175,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, signature, address: addr, email: email || undefined }),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         setErrorMsg(data.error || "Signature verification failed");
         setStatus("error");
@@ -151,11 +185,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
       setStatus("done");
       setShowConfirmed(true);
       setTimeout(() => setShowConfirmed(false), 3000);
-      onSuccess?.({
-        address: addr,
-        skip_otp: data.skip_otp || false,
-        is_genesis: data.is_genesis || false,
-      });
+      onSuccess?.({ address: addr, skip_otp: data.skip_otp || false, is_genesis: data.is_genesis || false });
     } catch (err: unknown) {
       setErrorMsg((err as Error).message?.slice(0, 100) || "Connection failed");
       setStatus("error");
@@ -190,7 +220,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
               </div>
               <button
                 onClick={handleDisconnect}
-                className="text-white/15 hover:text-white/30 text-[7px] tracking-[0.2em] uppercase transition-colors"
+                className="text-white/15 hover:text-white/30 text-[8px] tracking-[0.2em] uppercase transition-colors"
               >
                 Disconnect
               </button>
@@ -221,13 +251,13 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
           ) : (
             <span className="relative z-10 group-hover:text-white transition-all duration-500"
               style={{ textShadow: "0 0 8px rgba(144,200,255,0.2)" }}>
-              {isMock ? "DEBUG_MOCK_WALLET" : isMetaMask ? "CONNECT_WALLET" : "INSTALL_METAMASK"}
+              {isMock ? "DEBUG_MOCK_WALLET" : hasWallet ? "CONNECT_WALLET" : "NO_WALLET_DETECTED"}
             </span>
           )}
         </button>
       )}
       {errorMsg && (
-        <p className="text-red-300/40 text-[7px] tracking-[0.15em] mt-1.5">{errorMsg}</p>
+        <p className="text-red-300/40 text-[8px] tracking-[0.15em] mt-1.5">{errorMsg}</p>
       )}
     </div>
   );
