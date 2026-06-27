@@ -142,6 +142,9 @@ export default function RoadmapClient() {
             Four epochs spanning 20+ years. Each epoch establishes a new layer of identity infrastructure.
             This is not a product roadmap — it is a civilizational blueprint.
           </p>
+          <p className="mt-4 text-cyan-400/20 text-[9px] tracking-[0.3em] uppercase font-mono italic">
+            // ROADMAP_UPDATING_VIA_GENESIS_ENTROPY
+          </p>
         </section>
 
         <section className="relative">
