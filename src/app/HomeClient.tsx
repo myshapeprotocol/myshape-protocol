@@ -13,6 +13,7 @@ import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import ParadigmShift from "@/components/paradigm-shift/ParadigmShift";
 import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
+import ProtocolStatus from "@/components/protocol-status/ProtocolStatus";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -336,6 +337,7 @@ export default function HomeClient() {
         </div>
       </main>
 
+      <ProtocolStatus />
       <ProtocolFooter />
     </>
   );
