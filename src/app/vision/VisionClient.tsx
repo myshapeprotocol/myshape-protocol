@@ -38,7 +38,25 @@ export default function VisionClient() {
       secLevel="CLASS_OMEGA" systemStatus="PROTOCOL_EXPANDING"
     >
       <div className="space-y-28 md:space-y-36">
-        {/* ── 1. 核心宣言 ── */}
+        {/* ── 0. 行业宣言 ── */}
+        <section className="relative max-w-3xl"
+          onMouseEnter={() => playTick(400, "sine", 0.03, 0.01)}>
+          <div className="text-cyan-500/[0.03] text-[120px] font-bold absolute -top-16 -left-8 select-none pointer-events-none leading-none">I</div>
+          <div className="relative z-10 border-l-2 border-cyan-400/20 pl-6 md:pl-8 py-2">
+            <p className="text-white/40 text-[11px] tracking-[0.25em] uppercase font-mono mb-4">The Identity Crisis of the AI Era</p>
+            <p className="text-white/70 text-[15px] md:text-[17px] leading-[1.8] font-light mb-4">
+              AI can replicate your face. Clone your voice. Forge your writing style.
+              Every static credential — passwords, biometrics, identity documents — is a snapshot
+              that generative models will eventually learn to reproduce.
+            </p>
+            <p className="text-white/55 text-[13px] leading-[1.9] font-light">
+              The only signal a machine cannot fabricate is the continuous, irreducible entropy
+              of a living entity in motion. <span className="text-cyan-300/70">Presence is not stored. Presence is generated.</span>
+            </p>
+          </div>
+        </section>
+
+        {/* ── 1. 协议立场 ── */}
         <section className="relative max-w-3xl">
           <div className="text-cyan-500/10 text-[80px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">EYE</div>
           <div className="relative z-10">
