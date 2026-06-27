@@ -71,7 +71,7 @@ export default function VisionClient() {
 
         {/* ── 1. 协议立场 ── */}
         <section className="relative max-w-3xl">
-          <div className="text-cyan-500/[0.06] text-[90px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">P</div>
+          <div className="text-cyan-500/[0.2] text-[90px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">EYE</div>
           <div className="relative z-10">
             <h2 className="text-2xl md:text-4xl font-extralight tracking-[0.4em] text-white leading-tight uppercase mb-8"
               style={{ textShadow: "0 0 60px rgba(144,200,255,0.15)" }}>
