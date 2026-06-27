@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
 import VortexScan from "@/components/ritual/VortexScan";
@@ -16,7 +16,14 @@ export default function GenesisClient() {
   const [inviteCodeValid, setInviteCodeValid] = useState<boolean | null>(null);
   const [otp, setOtp] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [headerWallet, setHeaderWallet] = useState<string | null>(null);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // 检测 Header 是否已连接钱包
+  useEffect(() => {
+    const saved = sessionStorage.getItem("wallet_address");
+    if (saved) setHeaderWallet(saved);
+  }, []);
 
   // 实时校验邀请码格式
   const handleInviteCodeChange = (value: string) => {
@@ -36,9 +43,12 @@ export default function GenesisClient() {
 
     try {
       const cleanEmail = (email || "").trim().toLowerCase();
-      if (!cleanEmail.includes("@")) {
+      const hasWallet = !!headerWallet;
+
+      // 钱包已连接 → 不需要邮箱
+      if (!hasWallet && !cleanEmail.includes("@")) {
         setStage("error");
-        setErrorMsg("INVALID_EMAIL: A valid email address is required");
+        setErrorMsg("Connect wallet or enter email to proceed");
         return;
       }
 
@@ -49,8 +59,9 @@ export default function GenesisClient() {
         return;
       }
 
-      const requestBody = {
-        email: cleanEmail,
+      const requestBody: Record<string, string | undefined> = {
+        wallet_address: headerWallet || undefined,
+        email: cleanEmail || undefined,
         invite_code: normalizedCode || undefined,
       };
 
@@ -159,22 +170,46 @@ export default function GenesisClient() {
 
                 {/* ── 主路径：Wallet-First ── */}
                 <div className="flex flex-col items-center space-y-2 relative">
-                  {/* 浮动粒子（桌面端专属） */}
-                  <div className="absolute -top-3 -right-2 w-1 h-1 rounded-full bg-cyan-400/40 genesis-float-dot hidden md:block" />
-                  <div className="absolute top-0 -left-3 w-1 h-1 rounded-full bg-cyan-400/30 genesis-float-dot hidden md:block" />
-                  <div className="absolute -bottom-1 right-0 w-1 h-1 rounded-full bg-cyan-400/35 genesis-float-dot hidden md:block" />
-                  <ConnectWallet
-                    email={email}
-                    onSuccess={(walletData) => {
-                      if (walletData.skip_otp) {
-                        sessionStorage.setItem("genesis_completed", "1");
-                        sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
-                        sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
-                        setStage("success");
-                      }
-                    }}
-                  />
-                  <span className="text-cyan-400/40 text-[8px] md:text-[9px] tracking-[0.12em] md:tracking-[0.18em] uppercase font-light">Recommended: Trustless on-chain binding</span>
+                  {headerWallet ? (
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="flex items-center gap-2 px-4 py-2 border border-cyan-400/40 bg-cyan-400/[0.06]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                        <span className="text-cyan-300/80 font-mono text-[10px] tracking-[0.2em] uppercase">Wallet Connected</span>
+                      </div>
+                      <span className="text-cyan-400/30 text-[8px] tracking-[0.15em] uppercase font-mono">
+                        {headerWallet.slice(0, 8)}...{headerWallet.slice(-6)}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleCommence()}
+                        onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
+                        className="relative group px-6 py-2.5 transition-all duration-500 overflow-hidden font-mono text-[9px] tracking-[0.3em] uppercase border border-cyan-400/30 text-cyan-300/70 hover:text-white hover:border-cyan-300"
+                        style={{ background: "rgba(34,211,238,0.04)" }}>
+                        Begin Genesis →
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      {/* 浮动粒子（桌面端专属） */}
+                      <div className="absolute -top-3 -right-2 w-1 h-1 rounded-full bg-cyan-400/40 genesis-float-dot hidden md:block" />
+                      <div className="absolute top-0 -left-3 w-1 h-1 rounded-full bg-cyan-400/30 genesis-float-dot hidden md:block" />
+                      <div className="absolute -bottom-1 right-0 w-1 h-1 rounded-full bg-cyan-400/35 genesis-float-dot hidden md:block" />
+                      <ConnectWallet
+                        email={email}
+                        onSuccess={(walletData) => {
+                          sessionStorage.setItem("wallet_address", walletData.address);
+                          setHeaderWallet(walletData.address);
+                          if (walletData.skip_otp) {
+                            sessionStorage.setItem("genesis_completed", "1");
+                            sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
+                            sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
+                            setStage("success");
+                          }
+                        }}
+                      />
+                      <span className="text-cyan-400/40 text-[8px] md:text-[9px] tracking-[0.12em] md:tracking-[0.18em] uppercase font-light">Recommended: Trustless on-chain binding</span>
+                    </>
+                  )}
                 </div>
 
                 {/* ── 分隔（桌面端专属）── */}
