@@ -55,20 +55,36 @@ export default function DevelopersClient() {
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-16">
         <div className="space-y-4 mb-12">
           <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">DEVELOPER_HUB // V1.0</div>
-          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">Build with Presence</h1>
+          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase"
+            style={{ textShadow: "0 0 40px rgba(144,200,255,0.2)" }}>Build with Presence</h1>
           <p className="text-white/40 text-[12px] leading-relaxed max-w-xl">
             Integrate sovereign identity verification into any application.
             Five lines of code. Zero data stored. Real human presence.
           </p>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <a href="/motion-demo" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 border border-cyan-400/30 text-cyan-300/70 text-[10px] tracking-[0.25em] uppercase hover:bg-cyan-400/[0.04] hover:text-white transition-all">
+              ◈ Try Live Demo →
+            </a>
+            <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 border border-white/10 text-white/25 text-[10px] tracking-[0.25em] uppercase hover:border-white/25 hover:text-white/50 transition-all">
+              GitHub →
+            </a>
+          </div>
         </div>
 
         {/* ── Quick Start ── */}
         <section className="mb-14">
           <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// QUICK_START</h2>
-          <div className="border border-cyan-400/20 bg-cyan-400/[0.02] p-5 overflow-x-auto">
+          <div className="border border-cyan-400/20 bg-cyan-400/[0.02] p-5 overflow-x-auto relative group">
             <pre className="text-cyan-200/70 text-[11px] leading-relaxed font-mono whitespace-pre">
               {QUICK_START}
             </pre>
+            <button onClick={() => { navigator.clipboard.writeText(QUICK_START); playTick(600, "sine", 0.06, 0.015); }}
+              className="absolute top-3 right-3 text-white/10 hover:text-cyan-400/60 text-[8px] tracking-[0.15em] uppercase transition-colors opacity-0 group-hover:opacity-100">
+              Copy
+            </button>
           </div>
           <div className="mt-2 text-white/20 text-[8px] tracking-[0.15em]">
             TypeScript · Zero dependencies · Works with any MediaPipe-compatible camera
