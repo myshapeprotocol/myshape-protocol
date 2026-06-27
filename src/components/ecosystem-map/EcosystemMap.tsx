@@ -6,7 +6,7 @@ const LAYERS = [
   {
     name: "APPLICATION LAYER",
     tag: "USER_INTERFACE",
-    color: "#22d3ee",
+    color: "rgba(34,211,238,0.9)",
     bg: "rgba(34,211,238,0.04)",
     border: "rgba(34,211,238,0.2)",
     items: [
@@ -21,9 +21,9 @@ const LAYERS = [
   {
     name: "INTELLIGENCE LAYER",
     tag: "AI_AGENTS",
-    color: "#a78bfa",
-    bg: "rgba(167,139,250,0.03)",
-    border: "rgba(167,139,250,0.18)",
+    color: "rgba(34,211,238,0.75)",
+    bg: "rgba(34,211,238,0.03)",
+    border: "rgba(34,211,238,0.18)",
     items: [
       { label: "Hermes Agent", desc: "Social matrix cruiser" },
       { label: "Matrix Bot", desc: "HN/X/LinkedIn/Bluesky" },
@@ -32,7 +32,7 @@ const LAYERS = [
   {
     name: "DEVELOPER LAYER",
     tag: "BUILD_AND_INTEGRATE",
-    color: "#22d3ee",
+    color: "rgba(34,211,238,0.6)",
     bg: "rgba(34,211,238,0.03)",
     border: "rgba(34,211,238,0.15)",
     items: [
@@ -45,7 +45,7 @@ const LAYERS = [
   {
     name: "PROTOCOL LAYER",
     tag: "CORE_PRIMITIVES",
-    color: "#22d3ee",
+    color: "rgba(34,211,238,0.45)",
     bg: "rgba(34,211,238,0.02)",
     border: "rgba(34,211,238,0.12)",
     items: [
@@ -58,7 +58,7 @@ const LAYERS = [
   {
     name: "ROOT ENTROPY SOURCE",
     tag: "GENESIS_FOUNDATION",
-    color: "#e2e8f0",
+    color: "rgba(200,230,255,0.9)",
     bg: "rgba(144,200,255,0.05)",
     border: "rgba(144,200,255,0.25)",
     items: [
@@ -73,12 +73,32 @@ const LAYERS = [
 export default function EcosystemMap() {
   return (
     <div className="relative max-w-2xl mx-auto py-6">
-      {/* 左侧 DATA_FLOW 箭头 */}
+      {/* 左侧 DATA_FLOW 动态轴线 */}
       <div className="absolute left-2 md:left-5 top-0 bottom-0 flex flex-col items-center z-10">
-        <div className="flex-1 w-[1px] bg-gradient-to-b from-cyan-400/10 via-cyan-400/35 to-cyan-400/50" />
-        <div className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center gap-1"
-          style={{ left: "-26px", width: "60px" }}>
-          <span className="text-cyan-400/35 text-[7px] tracking-[0.3em] uppercase -rotate-90 origin-center whitespace-nowrap leading-none">
+        {/* 主轴线 */}
+        <div className="flex-1 w-[1px] bg-gradient-to-b from-cyan-400/10 via-cyan-400/40 to-cyan-400/60" />
+        {/* 扫描脉冲 */}
+        <div className="absolute inset-0 w-[2px] left-[-0.5px]"
+          style={{
+            background: "linear-gradient(to bottom, transparent, rgba(34,211,238,0.3), transparent)",
+            animation: "spineScan 4s ease-in-out infinite",
+            filter: "blur(1px)",
+          }} />
+        {/* 各层节点圆点 */}
+        {LAYERS.map((_, i) => (
+          <div key={i} className="absolute w-2 h-2 rounded-full bg-[#02040a] border border-cyan-400/40 z-10"
+            style={{
+              top: `${(i + 0.5) * (100 / LAYERS.length)}%`,
+              left: "-4px",
+              boxShadow: "0 0 6px rgba(34,211,238,0.3)",
+              animation: `nodePulse 2.5s ease-in-out ${i * 0.4}s infinite`,
+            }} />
+        ))}
+        {/* DATA_FLOW 标签 */}
+        <div className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center"
+          style={{ left: "-24px", width: "52px" }}>
+          <span className="text-cyan-400/45 text-[8px] tracking-[0.3em] uppercase -rotate-90 origin-center whitespace-nowrap leading-none"
+            style={{ animation: "cyanPulse 2s infinite ease-in-out" }}>
             DATA_FLOW
           </span>
         </div>
@@ -116,7 +136,7 @@ export default function EcosystemMap() {
                 style={{ color: layer.color }}>
                 {layer.name}
               </span>
-              <span className="text-[7px] tracking-[0.2em] px-2 py-0.5 border transition-colors"
+              <span className="text-[8px] tracking-[0.2em] px-2 py-0.5 border transition-colors"
                 style={{
                   color: layer.color,
                   borderColor: layer.color,
@@ -125,7 +145,7 @@ export default function EcosystemMap() {
                 {layer.tag}
               </span>
               {layer.annotation && (
-                <span className="text-white/15 text-[7px] tracking-[0.12em] italic hidden md:inline">
+                <span className="text-white/15 text-[8px] tracking-[0.12em] italic hidden md:inline">
                   {layer.annotation}
                 </span>
               )}
@@ -161,7 +181,7 @@ export default function EcosystemMap() {
                     style={{ color: layer.highlight ? "rgba(230,240,255,0.75)" : "rgba(255,255,255,0.5)" }}>
                     {item.label}
                   </span>
-                  <span className="text-[7px] tracking-[0.08em] transition-colors"
+                  <span className="text-[8px] tracking-[0.08em] transition-colors"
                     style={{ color: "rgba(255,255,255,0.2)" }}>
                     {item.desc}
                   </span>
@@ -171,7 +191,7 @@ export default function EcosystemMap() {
 
             {/* 移动端注释 */}
             {layer.annotation && (
-              <p className="text-white/15 text-[7px] tracking-[0.12em] italic mt-3 md:hidden">
+              <p className="text-white/15 text-[8px] tracking-[0.12em] italic mt-3 md:hidden">
                 {layer.annotation}
               </p>
             )}
