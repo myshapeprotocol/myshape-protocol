@@ -77,7 +77,7 @@ const content: Record<string, string[]> = {
     "5.4 Non-Reconstructability",
     "The manifold is a one-way projection. Given M, it is computationally infeasible to reconstruct the original motion data or any identifying physical identifier information. The manifold reveals identity without revealing the individual.",
     "5.5 Manifold as Identity",
-    "The manifold is the identity. It is what gets proven in zero-knowledge. It is what makes each human unique. It is what cannot be copied, transferred, or synthesized.",
+    "The manifold is the identity. It is what gets proven in zero-knowledge. It is what makes each human unique. Motion provides the highest-entropy continuously generated human signal — significantly harder to replicate than static identity samples.",
   ],
   "sec-zk": [
     "6. ZERO-KNOWLEDGE VERIFICATION ARCHITECTURE",
