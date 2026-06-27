@@ -186,13 +186,16 @@ export default function ProtocolClient() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 text-white/10 text-[8px] tracking-[0.3em] uppercase">
+            <div className="mt-4 text-white/25 hover:text-cyan-300/50 text-[9px] tracking-[0.25em] uppercase transition-colors cursor-default"
+              onMouseEnter={() => playTick(450, "sine", 0.03, 0.01)}>
               Stillness → Awakening → Genesis Sealed
             </div>
 
-            <div className="mt-10 text-white/10 text-[8px] tracking-[0.2em]">
+            <div className="mt-8 text-white/20 text-[9px] tracking-[0.15em]">
               Full evolution specification archived in{' '}
-              <a href="/papers/technical-spec" className="text-cyan-400/30 hover:text-cyan-400/50 transition-colors">Technical Specification §12</a>
+              <a href="/papers/technical-spec"
+                onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
+                className="text-cyan-400/40 hover:text-cyan-300/70 transition-colors underline decoration-cyan-400/20 hover:decoration-cyan-400/40">Technical Specification §12</a>
             </div>
           </div>
         </section>
