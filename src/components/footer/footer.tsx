@@ -43,7 +43,8 @@ export default function ProtocolFooter() {
         { name: "ARCHITECTURE", href: "/architecture" },
         { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
-        { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" }
+        { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" },
+        { name: "EVIDENCE", href: "/evidence" }
       ]
     },
     {
@@ -80,8 +81,7 @@ export default function ProtocolFooter() {
 		{ name: "LINKED_IN", href: "https://www.linkedin.com/company/111557251/" },
 			{ name: "GITHUB / PROTOCOL_SPECS", href: "https://github.com/myshapeprotocol" },
 		{ name: "DISCORD", href: "https://discord.gg/zr8Tczard" },
-		{ name: "EVIDENCE", href: "/evidence" },
-      ] 
+      ]
     }
   ];
 
