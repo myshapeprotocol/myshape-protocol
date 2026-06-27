@@ -20,23 +20,41 @@
 .genesis-badge.is-collapsed .badge-corner,
 .genesis-badge.is-collapsed .badge-scan,
 .genesis-badge.is-collapsed .badge-bg-glow { opacity: 0.3; }
-.genesis-badge.is-collapsed { width: auto; padding: 8px 14px; }
+.genesis-badge.is-collapsed { width: auto; padding: 10px 18px; }
 
 .genesis-badge.is-expanded .badge-collapsed-view { display: none; }
 
 .badge-collapsed-view {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: 0 4px;
 }
 
 .badge-tier-label-collapsed {
-  font-size: 8px;
-  letter-spacing: 0.35em;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: rgba(34,211,238,0.7);
-  text-shadow: 0 0 8px rgba(34,211,238,0.3);
+  color: rgba(200,235,255,0.9);
+  text-shadow: 0 0 12px rgba(144,200,255,0.5), 0 0 24px rgba(34,211,238,0.3);
+}
+
+/* 折叠态呼吸光环 */
+.genesis-badge.is-collapsed::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 2px;
+  border: 1px solid rgba(34,211,238,0.3);
+  animation: badgeBreath 2.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes badgeBreath {
+  0%, 100% { border-color: rgba(34,211,238,0.2); box-shadow: 0 0 6px rgba(34,211,238,0.1); }
+  50%      { border-color: rgba(34,211,238,0.5); box-shadow: 0 0 16px rgba(34,211,238,0.25); }
 }
 
 .genesis-badge {
@@ -61,8 +79,23 @@
 }
 
 .tier-genesis {
-  border-color: rgba(144, 200, 255, 0.3);
-  box-shadow: 0 0 40px rgba(144, 200, 255, 0.06), 0 0 80px rgba(144, 200, 255, 0.03);
+  border-color: rgba(144, 200, 255, 0.35);
+  box-shadow:
+    0 0 20px rgba(144, 200, 255, 0.08),
+    0 0 50px rgba(144, 200, 255, 0.04),
+    inset 0 1px 0 rgba(200, 230, 255, 0.06);
+}
+
+/* 展开态外光环 */
+.genesis-badge.is-expanded.tier-genesis::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  z-index: -1;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  border: 1px solid rgba(34,211,238,0.25);
+  animation: badgeBreath 2.5s ease-in-out infinite;
 }
 
 /* ── 粒子辉光背景 ── */
