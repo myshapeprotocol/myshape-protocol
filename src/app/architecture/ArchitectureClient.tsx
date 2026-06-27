@@ -91,18 +91,37 @@ export default function ArchitectureClient() {
             <div className="flex items-start justify-between gap-0 max-w-3xl mx-auto">
               {PIPELINE.map((p, i) => (
                 <div key={p.step} className="flex items-start">
-                  <div className="flex flex-col items-center group cursor-default"
+                  <div className="flex flex-col items-center cursor-default"
                     title={p.desc}
-                    onMouseEnter={() => playTick(800, "sine", 0.08, 0.02)}>
-                    <div className="w-14 h-14 rounded-full border border-cyan-400/30 flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-300 group-hover:border-cyan-300 group-hover:shadow-[0_0_28px_rgba(34,211,238,0.55)] group-hover:text-cyan-200"
+                    onMouseEnter={e => {
+                      playTick(800, "sine", 0.08, 0.02);
+                      const c = e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!;
+                      c.style.borderColor = "rgba(34,211,238,1)";
+                      c.style.boxShadow = "0 0 28px rgba(34,211,238,0.55)";
+                      c.style.color = "rgba(200,240,255,1)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.color = "#fff";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.textShadow = "0 0 6px rgba(255,255,255,0.3)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.color = "rgba(160,230,255,1)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.textShadow = "0 0 4px rgba(34,211,238,0.4)";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.borderColor = "rgba(34,211,238,0.3)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.boxShadow = "none";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.color = "rgba(34,211,238,0.55)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.color = "rgba(255,255,255,0.55)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.textShadow = "none";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.color = "rgba(34,211,238,0.3)";
+                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.textShadow = "none";
+                    }}>
+                    <div data-node="circle" className="w-14 h-14 rounded-full border border-cyan-400/30 flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-300"
                       style={{ color: "rgba(34,211,238,0.55)", background: "#02040a" }}>
                       {p.step}
                     </div>
-                    <span className="text-[11px] tracking-[0.15em] uppercase mt-3 text-center leading-tight font-medium transition-all duration-300 group-hover:text-white group-hover:drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]"
+                    <span data-node="name" className="text-[11px] tracking-[0.15em] uppercase mt-3 text-center leading-tight font-medium transition-all duration-300"
                       style={{ color: "rgba(255,255,255,0.55)" }}>
                       {p.name}
                     </span>
-                    <span className="text-[8px] tracking-[0.1em] font-mono mt-1.5 transition-all duration-300 group-hover:text-cyan-200 group-hover:drop-shadow-[0_0_4px_rgba(34,211,238,0.4)]"
+                    <span data-node="output" className="text-[8px] tracking-[0.1em] font-mono mt-1.5 transition-all duration-300"
                       style={{ color: "rgba(34,211,238,0.3)" }}>
                       {p.output}
                     </span>
