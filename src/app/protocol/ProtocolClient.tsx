@@ -140,7 +140,8 @@ export default function ProtocolClient() {
         {/* ── Protocol Respiration & Evolution ── */}
         <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
           <div className="max-w-2xl mx-auto text-center">
-            <div className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-6">Protocol Respiration &amp; Evolution</div>
+            <div className="text-white/25 text-[10px] tracking-[0.5em] uppercase mb-6 hover:text-cyan-300/50 transition-colors cursor-default"
+              onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Respiration &amp; Evolution</div>
             <h2 className="text-2xl md:text-3xl font-light tracking-tight text-white mb-8">
               Identity is not static.<br />
               <span className="text-cyan-300/70">It breathes with you.</span>
@@ -221,7 +222,8 @@ export default function ProtocolClient() {
 
         {/* ── Ecosystem Map ── */}
         <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
-          <div className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-8 text-center">Protocol Ecosystem</div>
+          <div className="text-white/25 text-[10px] tracking-[0.5em] uppercase mb-8 text-center hover:text-cyan-300/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Ecosystem</div>
           <EcosystemMap />
         </section>
 
