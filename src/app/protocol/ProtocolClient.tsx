@@ -203,7 +203,8 @@ export default function ProtocolClient() {
         {/* ── Protocol Lifecycle ── */}
         <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
           <div className="max-w-2xl mx-auto">
-            <div className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-8 text-center">Protocol Lifecycle</div>
+            <div className="text-white/25 text-[10px] tracking-[0.5em] uppercase mb-8 text-center hover:text-cyan-300/50 transition-colors cursor-default"
+              onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Lifecycle</div>
             <div className="border border-cyan-400/10 bg-cyan-400/[0.02] p-6 font-mono">
               <pre className="text-cyan-400/45 text-[10px] leading-[2.4] tracking-[0.1em] whitespace-pre overflow-x-auto">
 {`WALLET_SIGNATURE ──→ SIWE_VERIFY ──→ PROTOCOL_NODES ──→ ZK_PROOF ──→ IDENTITY_MESH
