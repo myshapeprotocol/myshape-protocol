@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
+import EcosystemMap from "@/components/ecosystem-map/EcosystemMap";
 import { playTick } from "@/utils/useAudioTick";
 
 const hoverOn = (e: React.MouseEvent<HTMLElement>) => {
@@ -196,7 +197,7 @@ export default function ProtocolClient() {
           </div>
         </section>
 
-        {/* ── Protocol Lifecycle — Data Flow ── */}
+        {/* ── Protocol Lifecycle ── */}
         <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
           <div className="max-w-2xl mx-auto">
             <div className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-8 text-center">Protocol Lifecycle</div>
@@ -212,6 +213,12 @@ export default function ProtocolClient() {
               cryptographic material. The protocol remains the single source of truth.
             </p>
           </div>
+        </section>
+
+        {/* ── Ecosystem Map ── */}
+        <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
+          <div className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-8 text-center">Protocol Ecosystem</div>
+          <EcosystemMap />
         </section>
 
         {/* ── 入口 ── */}
