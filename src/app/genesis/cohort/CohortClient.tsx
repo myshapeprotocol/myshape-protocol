@@ -93,12 +93,12 @@ export default function CohortClient() {
               { title: "Identity Mesh", desc: "The first 100 nodes form the initial identity mesh from which all subsequent ZK-proofs derive statistical significance. Without this root, the protocol has no anchor." },
             ].map((item) => (
               <div key={item.title}
-                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.3)"; e.currentTarget.style.background = "rgba(144,200,255,0.02)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.08)"; e.currentTarget.style.background = "transparent"; }}
+                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.3)"; e.currentTarget.style.background = "rgba(144,200,255,0.02)"; e.currentTarget.querySelector("h3")!.style.color = "rgba(34,211,238,0.9)"; e.currentTarget.querySelector("p")!.style.color = "rgba(255,255,255,0.6)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.08)"; e.currentTarget.style.background = "transparent"; e.currentTarget.querySelector("h3")!.style.color = "rgba(34,211,238,0.55)"; e.currentTarget.querySelector("p")!.style.color = "rgba(255,255,255,0.35)"; }}
                 className="p-6 border transition-all duration-500 text-center group"
                 style={{ borderColor: "rgba(144,200,255,0.08)", background: "transparent" }}>
-                <div className="text-cyan-400/55 text-[12px] tracking-[0.2em] uppercase mb-4 font-bold">{item.title}</div>
-                <p className="text-white/35 text-[11px] leading-relaxed">{item.desc}</p>
+                <h3 className="text-cyan-400/55 text-[12px] tracking-[0.2em] uppercase mb-4 font-bold transition-colors">{item.title}</h3>
+                <p className="text-white/35 text-[11px] leading-relaxed transition-colors">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -135,12 +135,12 @@ export default function CohortClient() {
               { label: "PROTOCOL_LEGACY", desc: "Your node ID is permanently inscribed in the protocol's root index. A founding entity, forever." },
             ].map((item) => (
               <div key={item.label}
-                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.25)"; e.currentTarget.style.background = "rgba(144,200,255,0.02)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.06)"; e.currentTarget.style.background = "transparent"; }}
+                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.3)"; e.currentTarget.style.background = "rgba(144,200,255,0.02)"; const els = e.currentTarget.querySelectorAll("div,p"); els.forEach(el => { (el as HTMLElement).style.color = el.tagName === "DIV" ? "rgba(34,211,238,0.85)" : "rgba(255,255,255,0.55)"; }); }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.06)"; e.currentTarget.style.background = "transparent"; const els = e.currentTarget.querySelectorAll("div,p"); els.forEach(el => { (el as HTMLElement).style.color = el.tagName === "DIV" ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.3)"; }); }}
                 className="p-5 border transition-all duration-300 group"
                 style={{ borderColor: "rgba(144,200,255,0.06)", background: "transparent" }}>
-                <div className="text-cyan-400/50 text-[10px] tracking-[0.25em] uppercase mb-2 font-bold">{item.label}</div>
-                <p className="text-white/30 text-[10px] leading-relaxed">{item.desc}</p>
+                <div className="text-cyan-400/50 text-[10px] tracking-[0.25em] uppercase mb-2 font-bold transition-colors">{item.label}</div>
+                <p className="text-white/30 text-[10px] leading-relaxed transition-colors">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -157,14 +157,14 @@ export default function CohortClient() {
               { phase: "PHASE_4", label: "Mesh Expansion", desc: "Genesis Nodes become validators. New nodes join via Genesis Node sponsorship." },
             ].map((item, i) => (
               <div key={item.phase}
-                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.25)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.06)"; }}
-                className="flex items-center gap-4 p-4 border transition-all duration-300"
+                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.3)"; e.currentTarget.style.background = "rgba(144,200,255,0.02)"; const els = e.currentTarget.querySelectorAll("span,div"); }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.06)"; e.currentTarget.style.background = item.active ? "rgba(34,211,238,0.03)" : "transparent"; }}
+                className="flex items-center gap-4 p-4 border transition-all duration-300 group"
                 style={{ borderColor: "rgba(144,200,255,0.06)", background: item.active ? "rgba(34,211,238,0.03)" : "transparent" }}>
-                <span className="text-cyan-400/50 font-mono text-[10px] tracking-[0.2em] w-20 shrink-0">{item.phase}</span>
+                <span className="text-cyan-400/50 group-hover:text-cyan-300/80 font-mono text-[10px] tracking-[0.2em] w-20 shrink-0 transition-colors">{item.phase}</span>
                 <div>
-                  <div className="text-white/55 text-[10px] tracking-[0.15em] uppercase mb-0.5">{item.label}</div>
-                  <div className="text-white/25 text-[10px] leading-relaxed">{item.desc}</div>
+                  <div className="text-white/55 group-hover:text-white/80 text-[10px] tracking-[0.15em] uppercase mb-0.5 transition-colors">{item.label}</div>
+                  <div className="text-white/25 group-hover:text-white/45 text-[10px] leading-relaxed transition-colors">{item.desc}</div>
                 </div>
                 {item.active && <span className="ml-auto text-cyan-400/45 text-[9px] tracking-[0.2em]">◈ ACTIVE</span>}
               </div>
