@@ -219,36 +219,39 @@ export default function GenesisClient() {
 
                 {/* ── 邀请码 — 可折叠 ── */}
                 {inviteCode || inviteCodeValid !== null ? (
-                  <div className="w-48 max-w-[55vw] mt-1">
-                    <div className="relative group genesis-terminal-glow">
-                      <div className="absolute -inset-[1px] rounded-sm opacity-25 group-focus-within:opacity-55 transition-opacity duration-700"
-                        style={{ background: "linear-gradient(135deg, rgba(168,85,247,0.18), transparent 40%, transparent 60%, rgba(168,85,247,0.18))", filter: "blur(4px)" }} />
+                  <div className="w-52 max-w-[58vw] mt-1">
+                    <div className="relative group">
+                      <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
+                        style={{ background: "linear-gradient(135deg, rgba(168,85,247,0.25), transparent 40%, transparent 60%, rgba(168,85,247,0.25))", filter: "blur(5px)" }} />
                       <div className="relative px-4 py-0.5 overflow-hidden"
-                        style={{ border: "1px solid rgba(168,85,247,0.2)", background: "rgba(8,4,20,0.8)" }}>
-                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-400/60 genesis-invite-corner-tl" />
-                        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-400/60 genesis-invite-corner-tr" />
-                        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-purple-400/60 genesis-invite-corner-bl" />
-                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-purple-400/60 genesis-invite-corner-br" />
+                        style={{ border: "1px solid rgba(168,85,247,0.3)", background: "rgba(8,4,20,0.85)", boxShadow: "0 0 28px rgba(168,85,247,0.06)" }}>
+                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-400/70 genesis-invite-corner-tl" />
+                        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-400/70 genesis-invite-corner-tr" />
+                        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-purple-400/70 genesis-invite-corner-bl" />
+                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-purple-400/70 genesis-invite-corner-br" />
                         <div className="absolute inset-0 pointer-events-none genesis-invite-scan" />
+                        {/* 侧边数据流 */}
+                        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(168,85,247,0.25), transparent)", animation: "dataFlow 2.5s ease-in-out infinite" }} />
+                        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(168,85,247,0.2), transparent)", animation: "dataFlow 2.5s ease-in-out 0.8s infinite" }} />
                         <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
                           onChange={(e) => handleInviteCodeChange(e.target.value)}
                           maxLength={19}
-                          className="relative z-10 w-full bg-transparent py-2.5 text-center text-[10px] tracking-[0.18em] text-purple-200/60 focus:outline-none placeholder:text-white/10 transition-all" />
+                          className="relative z-10 w-full bg-transparent py-3 text-center text-[11px] tracking-[0.2em] text-purple-200/70 focus:outline-none placeholder:text-white/14 transition-all" />
                       </div>
                     </div>
                     {inviteCode.length > 0 && (
                       <div className="text-center mt-1.5">
                         {inviteCodeValid === true ? (
-                          <span className="text-green-400/40 font-mono text-[7px] tracking-[0.15em]">◈ VALID</span>
+                          <span className="text-green-400/50 font-mono text-[8px] tracking-[0.18em]">◈ CODE_VALID</span>
                         ) : (
-                          <span className="text-red-400/35 font-mono text-[7px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
+                          <span className="text-red-400/45 font-mono text-[8px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
                         )}
                       </div>
                     )}
                   </div>
                 ) : (
                   <button type="button" onClick={() => setInviteCodeValid(false)}
-                    className="text-purple-400/20 hover:text-purple-300/40 text-[8px] tracking-[0.2em] uppercase transition-colors mt-1 border-b border-dashed border-purple-400/10 pb-0.5">
+                    className="text-purple-400/25 hover:text-purple-300/50 text-[9px] tracking-[0.22em] uppercase transition-colors mt-1 border-b border-dashed border-purple-400/15 pb-0.5">
                     + Enter invite code
                   </button>
                 )}
