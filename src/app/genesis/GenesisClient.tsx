@@ -68,6 +68,16 @@ export default function GenesisClient() {
       setStage("scanning");
       await new Promise((r) => setTimeout(r, 8000));
 
+      // 钱包模式：跳过 OTP，直接用 SIWE 验证结果
+      if (hasWallet) {
+        sessionStorage.setItem("genesis_completed", "1");
+        sessionStorage.setItem("genesis_email", cleanEmail || "wallet@" + headerWallet!.slice(2, 10));
+        sessionStorage.setItem("genesis_status", "GENESIS_NODE");
+        setStage("success");
+        return;
+      }
+
+      // 邮箱模式：发送 OTP
       setStage("sending_otp");
       const res = await fetch("/api/send-otp", {
         method: "POST",
