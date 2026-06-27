@@ -112,16 +112,11 @@ const ProtocolHeader = () => {
 
   /* ═══ 事件处理 ═══ */
 
-  const handleWalletClick = async () => {
-    // 已连接 → 切换面板
-    if (walletStatus === "done") {
-      setIsPanelOpen(!isPanelOpen);
-      return;
-    }
-    // 连接中 → 忽略
-    if (walletStatus !== "idle") return;
+  const handleWalletClick = () => {
+    setIsPanelOpen(!isPanelOpen);
+  };
 
-    // 开始连接
+  const handleConnectWallet = async () => {
     try {
       setWalletStatus("connecting");
       setWalletError("");
@@ -167,7 +162,6 @@ const ProtocolHeader = () => {
       setWalletAddress(addr);
       setWalletStatus("done");
       sessionStorage.setItem("wallet_address", addr);
-      setIsPanelOpen(true);
 
       if (data.is_genesis) {
         sessionStorage.setItem("genesis_completed", "1");
@@ -342,6 +336,20 @@ const ProtocolHeader = () => {
               <div className="panel-divider" />
 
               <div className="panel-actions">
+                {!walletAddress && walletStatus === "idle" && (
+                  <button
+                    onClick={handleConnectWallet}
+                    onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                    className="panel-link w-full text-center"
+                    style={{ border: "1px solid rgba(34,211,238,0.25)", padding: "6px 0", justifyContent: "center" }}>
+                    <span className="link-icon">◈</span> CONNECT_WALLET
+                  </button>
+                )}
+                {walletStatus !== "idle" && walletStatus !== "done" && (
+                  <div className="text-cyan-400/50 text-[9px] tracking-[0.2em] uppercase text-center py-2">
+                    {walletStatus === "connecting" ? "CONNECTING..." : walletStatus === "signing" ? "SIGNING..." : "VERIFYING..."}
+                  </div>
+                )}
                 {genesisDone ? (
                   <a href="/identity" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
                     <span className="link-icon">›</span> ENTER_IDENTITY_LAYER
