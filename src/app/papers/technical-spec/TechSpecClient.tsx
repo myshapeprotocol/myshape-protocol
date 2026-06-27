@@ -149,9 +149,7 @@ export default function TechSpecClient() {
                 <div className="text-cyan-400/60 text-[10px] tracking-[0.2em] uppercase mb-1"
                   data-default="rgba(34,211,238,0.6)" data-hover="rgba(34,211,238,1)">{a.layer}</div>
                 <div className="text-white/30 text-[10px] leading-relaxed"
-                  style={{ fontSize: "10px" }}
-                  data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)"
-                  data-default-size="10px" data-hover-size="12px">{a.detail}</div>
+                  data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)">{a.detail}</div>
               </div>
             ))}
           </div>
@@ -169,16 +167,12 @@ export default function TechSpecClient() {
                 onMouseLeave={e => { hoverOff(e); e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; }}>
                 <div className="px-5 py-3 border-b border-white/5 bg-white/[0.02]">
                   <span className="text-cyan-400/70 text-[11px] md:text-[12px] tracking-[0.15em] uppercase font-medium"
-                    style={{ fontSize: "11px" }}
-                    data-default="rgba(34,211,238,0.7)" data-hover="rgba(34,211,238,1)"
-                    data-default-size="11px" data-hover-size="14px">{s.question}</span>
+                    data-default="rgba(34,211,238,0.7)" data-hover="rgba(34,211,238,1)">{s.question}</span>
                 </div>
                 <div className="p-5 space-y-2">
                   {s.answer.map((line, j) => (
                     <p key={j} className="text-white/35 text-[11px] leading-relaxed"
-                      style={{ fontSize: "11px" }}
-                      data-default="rgba(255,255,255,0.35)" data-hover="rgba(255,255,255,0.6)"
-                      data-default-size="11px" data-hover-size="13px">{line}</p>
+                      data-default="rgba(255,255,255,0.35)" data-hover="rgba(255,255,255,0.6)">{line}</p>
                   ))}
                 </div>
               </div>
@@ -194,9 +188,7 @@ export default function TechSpecClient() {
           <div className="text-white/25 text-[8px] tracking-[0.2em] uppercase mb-2"
             data-default="rgba(255,255,255,0.25)" data-hover="rgba(255,255,255,0.5)">Cite This Document</div>
           <p className="text-white/30 text-[9px] leading-relaxed font-mono"
-            style={{ fontSize: "9px" }}
-            data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)"
-            data-default-size="9px" data-hover-size="11px">
+            data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)">
             MyShape Protocol. "MyShape Technical Specification v1.0." June 2026. https://www.myshape.com/papers/technical-spec
           </p>
         </section>
@@ -209,9 +201,7 @@ export default function TechSpecClient() {
           <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase mb-3"
             data-default="rgba(34,211,238,0.5)" data-hover="rgba(34,211,238,0.9)">Reference Implementation</div>
           <p className="text-white/30 text-[11px] leading-relaxed mb-4"
-            style={{ fontSize: "11px" }}
-            data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)"
-            data-default-size="11px" data-hover-size="13px">
+            data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)">
             16 protocol engines implemented in TypeScript. Zero external dependencies.
             All processing on-device. No data stored or transmitted.
           </p>
