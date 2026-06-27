@@ -196,6 +196,24 @@ export default function ProtocolClient() {
           </div>
         </section>
 
+        {/* ── Protocol Lifecycle — Data Flow ── */}
+        <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
+          <div className="max-w-2xl mx-auto">
+            <div className="text-white/15 text-[9px] tracking-[0.5em] uppercase mb-8 text-center">Protocol Lifecycle</div>
+            <div className="border border-cyan-400/10 bg-cyan-400/[0.02] p-6 font-mono">
+              <pre className="text-cyan-400/45 text-[10px] leading-[2.4] tracking-[0.1em] whitespace-pre overflow-x-auto">
+{`WALLET_SIGNATURE ──→ SIWE_VERIFY ──→ PROTOCOL_NODES ──→ ZK_PROOF ──→ IDENTITY_MESH
+   (EIP-4361)        (on-chain)       (local anchor)     (zero-knowledge)  (decentralized)`.trim()}
+              </pre>
+            </div>
+            <p className="mt-6 text-white/25 text-sm leading-[1.8] font-light text-center max-w-xl mx-auto">
+              Agents such as Hermes operate at the application layer — they consume
+              protocol-anchored identity signals but never possess the underlying
+              cryptographic material. The protocol remains the single source of truth.
+            </p>
+          </div>
+        </section>
+
         {/* ── 入口 ── */}
         <section className="flex flex-wrap justify-center gap-6 py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
           <Link href="/protocol/manifesto" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)} className="group relative px-10 py-4 border border-cyan-500/30 text-cyan-400/80 text-[10px] tracking-[0.4em] uppercase hover:text-white hover:border-cyan-400 transition-all" style={{ background: "transparent" }}>
