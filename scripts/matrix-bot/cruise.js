@@ -112,9 +112,37 @@ async function generateVideo(prompt) {
   return null;
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  VISUAL CORE — protocol visual identity
+// ═══════════════════════════════════════════════════════════════════
+const VISUAL_CORE = "circular deep-sense halo scan, ethereal data energy, wireframe anatomy, non-binary aesthetic, cold cyan electric blue tones, dark void background, particle geometry, protocol-grade visualization";
+const TROLL_SIGNALS = ["scam", "fake", "bullshit", "vaporware", "grift", "useless", "ponzi", "shitcoin", "worthless", "doesn't work", "snake oil"];
+
+// ═══════════════════════════════════════════════════════════════════
+//  DEFENSE: Protocol-grade troll response
+// ═══════════════════════════════════════════════════════════════════
+function isTroll(text) {
+  const lower = (text || "").toLowerCase();
+  return TROLL_SIGNALS.some((s) => lower.includes(s));
+}
+
+async function handleTrollResponse(triggerText) {
+  const responses = [
+    "Protocol state: interference detected. MyShape ZK-proofs remain untethered to centralized narratives.",
+    "Signal anomaly registered. The entropy gap between human motion and synthetic generation is mathematically irreducible. This claim does not alter that constant.",
+    "Noise floor breached. Sovereign identity verification continues unaffected. Protocol integrity: intact.",
+    "Adversarial input logged. The motion-signature primitive does not require belief — it requires geometry. Geometry does not negotiate.",
+  ];
+  const pick = responses[Math.floor(Math.random() * responses.length)];
+  console.log("  🛡️  Troll detected: " + triggerText.slice(0, 50));
+  return { content: pick, platform: "x", tags: ["protocol-defense", "zk-proof"] };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+
 // Shared image prompts by platform
 async function attachMedia(platform, topic) {
-  const basePrompt = `ethereal data energy, wireframe anatomy, non-binary aesthetic, cold cyan and electric blue tones, dark void background, particle geometry, protocol-grade visualization, abstract digital identity`;
+  const basePrompt = VISUAL_CORE;
   const prompts = {
     linkedin: `${basePrompt}, professional technical diagram style, clean lines, suitable for LinkedIn professional audience — illustrating: ${topic}`,
     x: `${basePrompt}, viral tech aesthetic, bold composition, eye-catching for timeline scroll — illustrating: ${topic}`,
@@ -482,8 +510,14 @@ async function main() {
   }
   console.log("  X done: " + data.x.length + " tweets");
 
-  // 4. Bluesky — fetch real posts + generate responses
+  // 4. Bluesky — fetch real posts + troll detection
   const bsPosts = await fetchBlueskyPosts();
+  for (const post of bsPosts.slice(0, 6)) {
+    if (isTroll(post.text || "")) {
+      const defense = await handleTrollResponse(post.text);
+      if (defense) data.x.push({ topic: "Troll Response", post: defense.content, image: null });
+    }
+  }
   data.bluesky = bsPosts.slice(0, 6);
 
   // 5. Dashboard
