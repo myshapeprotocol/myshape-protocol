@@ -142,12 +142,19 @@ export default function EcosystemMap() {
                     background: "transparent",
                   }}
                   onMouseEnter={e => {
+                    playTick(550, "sine", 0.04, 0.008);
                     e.currentTarget.style.borderColor = layer.color;
                     e.currentTarget.style.background = layer.bg;
+                    const spans = e.currentTarget.querySelectorAll("span");
+                    if (spans[0]) spans[0].style.color = "rgba(255,255,255,0.85)";
+                    if (spans[1]) spans[1].style.color = "rgba(255,255,255,0.45)";
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = layer.highlight ? "rgba(144,200,255,0.12)" : "rgba(255,255,255,0.04)";
                     e.currentTarget.style.background = "transparent";
+                    const spans = e.currentTarget.querySelectorAll("span");
+                    if (spans[0]) spans[0].style.color = layer.highlight ? "rgba(230,240,255,0.75)" : "rgba(255,255,255,0.5)";
+                    if (spans[1]) spans[1].style.color = "rgba(255,255,255,0.2)";
                   }}
                 >
                   <span className="text-[9px] tracking-[0.12em] font-mono mb-0.5 transition-colors"
