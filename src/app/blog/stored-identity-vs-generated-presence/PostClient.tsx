@@ -192,7 +192,7 @@ export default function PostClient() {
         <div className="space-y-20">
           {SECTIONS.map((s, i) => (
             <section key={i}>
-              <h2 id={s.id} className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+              <h2 id={s.id} className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
                 onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>
                 {s.heading}
               </h2>

@@ -81,13 +81,13 @@ export default function BlogClient() {
           <div className="text-cyan-500/40 text-[9px] tracking-[0.4em] uppercase mb-4">TECHNICAL_BLOG // JUNE_2026</div>
           <h1 className="text-2xl md:text-4xl font-light tracking-[0.04em] text-white leading-tight mb-6"
             style={{ textShadow: "0 0 40px rgba(144,200,255,0.15)" }}>
-            We Built an Engine That Detects AI-Generated Human Motion.
+            AI Cannot Forge Human Motion.
             <br />
-            <span className="text-cyan-300/80">GPT-5 and DeepSeek Both Failed.</span>
+            <span className="text-cyan-300/80">We proved it. Here is the evidence.</span>
           </h1>
           <p className="text-white/35 text-[13px] leading-relaxed">
-            AI can fake a face. AI can clone a voice. But AI cannot generate your motion — not the specific,
-            irreducibly biological, physically-constrained pattern of your nervous system. Here are the numbers.
+            AI can fake a face. AI can clone a voice. But AI cannot generate your motion — the specific,
+            irreducibly biological pattern of your nervous system. Here are the numbers.
           </p>
           <div className="flex items-center gap-3 mt-4 text-[9px]">
             <span className="text-white/20">MyShape Protocol</span>
@@ -123,7 +123,7 @@ export default function BlogClient() {
         <div className="space-y-16 md:space-y-20">
           {/* The Experiment */}
           <section>
-            <h2 id="experiment" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+            <h2 id="experiment" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Experiment</h2>
             <div className="space-y-5">
               <p className="text-white/40 text-[13px] leading-[1.9] font-light">
@@ -139,7 +139,7 @@ export default function BlogClient() {
 
           {/* The Results */}
           <section>
-            <h2 id="results" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+            <h2 id="results" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Results</h2>
             <div className="space-y-5">
               <div className="border p-5 my-6 transition-all duration-300 hover:border-cyan-400/40"
@@ -178,7 +178,7 @@ Human—AI Gap: 0.3960`}
 
           {/* Why This Matters */}
           <section>
-            <h2 id="why" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+            <h2 id="why" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Why This Matters</h2>
             <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
               <p>Every identity system in production today — passwords, KYC, hardware wallets — answers one question: "Does the credential match?"</p>
@@ -191,7 +191,7 @@ Human—AI Gap: 0.3960`}
 
           {/* How It Works */}
           <section>
-            <h2 id="how" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+            <h2 id="how" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>How It Works</h2>
             <div className="space-y-5">
               <p className="text-white/40 text-[13px] leading-[1.9] font-light">
@@ -208,7 +208,7 @@ Human—AI Gap: 0.3960`}
 
           {/* The Deeper Truth */}
           <section>
-            <h2 id="truth" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+            <h2 id="truth" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Deeper Truth</h2>
             <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
               <p>Every AI motion model — diffusion, transformer, VAE — is trained with L2 loss. L2 loss penalizes the square of the error. A 1 mm tremor deviation is penalized 100× less than a 10 mm trajectory error. The model learns to suppress high-frequency, low-amplitude signals — exactly the signals that make human motion human.</p>
@@ -219,7 +219,7 @@ Human—AI Gap: 0.3960`}
 
           {/* Run It */}
           <section>
-            <h2 id="run" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
+            <h2 id="run" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Run It Yourself</h2>
             <div className="space-y-5">
               <p className="text-white/40 text-[13px] leading-[1.9] font-light">The core engine is open source:</p>
