@@ -13,10 +13,10 @@ const PIPELINE = [
 ];
 
 const ENTROPY_BARS = [
-  { label: "Human Motion", pct: 99.2, color: "#22d3ee", glow: true },
-  { label: "Replay Attack", pct: 12.5, color: "#facc15" },
-  { label: "MoCap Data", pct: 18.3, color: "#facc15" },
-  { label: "AI Generated", pct: 1.4, color: "#f87171" },
+  { label: "Human Motion", pct: 99.2, opacity: 1 },
+  { label: "Replay Attack", pct: 12.5, opacity: 0.45 },
+  { label: "MoCap Data", pct: 18.3, opacity: 0.35 },
+  { label: "AI Generated", pct: 1.4, opacity: 0.2 },
 ];
 
 const ENTROPY_DIMS = [
@@ -36,11 +36,11 @@ const THREATS = [
   { attack: "Statistical", vector: "ML-generated motion stats", defense: "Frequency-domain analysis exposes synthetic patterns", confidence: 0.991 },
 ];
 
-function confColor(c: number) {
-  if (c >= 0.995) return "#4ade80";
-  if (c >= 0.990) return "#22d3ee";
-  if (c >= 0.985) return "#a78bfa";
-  return "rgba(255,255,255,0.4)";
+function confBrightness(c: number) {
+  if (c >= 0.998) return 0.9;
+  if (c >= 0.990) return 0.7;
+  if (c >= 0.985) return 0.55;
+  return 0.4;
 }
 
 const hoverOn = (e: React.MouseEvent<HTMLElement>) => {
@@ -152,13 +152,12 @@ export default function ArchitectureClient() {
                   <div className="h-full rounded-sm transition-all duration-1000"
                     style={{
                       width: `${bar.pct}%`,
-                      background: bar.glow
-                        ? `linear-gradient(90deg, ${bar.color}88, ${bar.color})`
-                        : bar.color,
-                      boxShadow: bar.glow ? `0 0 12px ${bar.color}44` : "none",
+                      background: `linear-gradient(90deg, rgba(34,211,238,${bar.opacity * 0.5}), rgba(34,211,238,${bar.opacity}))`,
+                      boxShadow: bar.pct > 50 ? "0 0 12px rgba(34,211,238,0.25)" : "none",
                     }} />
                 </div>
-                <span className="text-[10px] md:text-[12px] font-mono w-16 shrink-0 font-medium" style={{ color: bar.color }}>{bar.pct}%</span>
+                <span className="text-[10px] md:text-[12px] font-mono w-16 shrink-0 font-medium"
+                  style={{ color: `rgba(34,211,238,${0.4 + bar.opacity * 0.6})` }}>{bar.pct}%</span>
               </div>
             ))}
           </div>
@@ -182,8 +181,8 @@ export default function ArchitectureClient() {
                 <tr className="border-b border-white/10" style={{ color: "rgba(255,255,255,0.35)" }}>
                   <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase w-[28%]">Dimension</th>
                   <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase hidden md:table-cell">Measures</th>
-                  <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase text-green-400/70">Human ✓</th>
-                  <th className="text-left py-3 font-medium tracking-[0.15em] uppercase text-red-400/50">AI ✗</th>
+                  <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>Human</th>
+                  <th className="text-left py-3 font-medium tracking-[0.15em] uppercase" style={{ color: "rgba(255,255,255,0.25)" }}>AI</th>
                 </tr>
               </thead>
               <tbody>
@@ -227,7 +226,7 @@ export default function ArchitectureClient() {
                     <td className="py-3 pr-3 font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>{t.attack}</td>
                     <td className="py-3 pr-3 hidden md:table-cell" style={{ color: "rgba(255,255,255,0.3)" }}>{t.vector}</td>
                     <td className="py-3 pr-3" style={{ color: "rgba(34,211,238,0.6)" }}>{t.defense}</td>
-                    <td className="py-3 text-right font-mono font-medium" style={{ color: confColor(t.confidence) }}>{(t.confidence * 100).toFixed(1)}%</td>
+                    <td className="py-3 text-right font-mono font-medium" style={{ color: `rgba(34,211,238,${confBrightness(t.confidence)})` }}>{(t.confidence * 100).toFixed(1)}%</td>
                   </tr>
                 ))}
               </tbody>
