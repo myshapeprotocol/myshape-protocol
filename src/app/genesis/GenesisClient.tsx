@@ -172,13 +172,13 @@ export default function GenesisClient() {
                       }
                     }}
                   />
-                  <span className="text-cyan-400/25 text-[8px] tracking-[0.18em] uppercase font-light">Recommended: Trustless on-chain binding</span>
+                  <span className="text-cyan-400/40 text-[9px] tracking-[0.18em] uppercase font-light">Recommended: Trustless on-chain binding</span>
                 </div>
 
                 {/* ── 分隔 ── */}
                 <div className="flex items-center gap-3 w-full max-w-[260px]">
                   <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-                  <span className="text-white/15 text-[9px] tracking-[0.25em] uppercase font-light">or</span>
+                  <span className="text-white/25 text-[10px] tracking-[0.3em] uppercase font-light">or</span>
                   <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
                 </div>
 
@@ -216,13 +216,13 @@ export default function GenesisClient() {
                   </div>
                 ) : (
                   <button type="button" onClick={() => setInviteCodeValid(false)}
-                    className="text-purple-400/25 hover:text-purple-300/50 text-[9px] tracking-[0.22em] uppercase transition-colors mt-1 border-b border-dashed border-purple-400/15 pb-0.5">
+                    className="text-purple-400/35 hover:text-purple-300/60 text-[10px] tracking-[0.22em] uppercase transition-colors border-b border-dashed border-purple-400/20 pb-0.5">
                     + Enter invite code
                   </button>
                 )}
               {/* ── 备选路径：Legacy Email ── */}
                 <div className="flex flex-col items-center space-y-2">
-                  <span className="text-white/20 text-[8px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
+                  <span className="text-white/35 text-[10px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
                   <div className="relative flex items-center gap-2">
                     <div className="relative group genesis-terminal-glow flex-1">
                       <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
@@ -239,7 +239,7 @@ export default function GenesisClient() {
                         <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           onKeyDown={(e) => { if (e.key === "Enter") handleCommence(); }}
-                          className="relative z-10 w-52 max-w-[50vw] bg-transparent py-3 pr-2 text-center text-[10px] tracking-[0.25em] text-white/75 focus:outline-none placeholder:text-white/12" />
+                          className="relative z-10 w-52 max-w-[50vw] bg-transparent py-3 pr-2 text-center text-[11px] tracking-[0.25em] text-white/85 focus:outline-none placeholder:text-white/18" />
                         {/* 提交箭头 */}
                         <button type="button" onClick={() => handleCommence()}
                           onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
@@ -252,7 +252,7 @@ export default function GenesisClient() {
                       </div>
                     </div>
                   </div>
-                  <span className="text-white/12 text-[7px] tracking-[0.1em]">For restricted environments only</span>
+                  <span className="text-white/12 text-[7px] tracking-[0.1em]">                  <span className="text-white/18 text-[8px] tracking-[0.1em]">For restricted environments only</span></span>
                 </div>
 
                 </form>
