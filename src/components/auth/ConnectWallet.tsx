@@ -27,6 +27,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
   const [address, setAddress] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "connecting" | "signing" | "verifying" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [showConfirmed, setShowConfirmed] = useState(false);
 
   const isMetaMask = typeof window !== "undefined" && !!window.ethereum?.isMetaMask;
 
@@ -83,6 +84,8 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
       }
 
       setStatus("done");
+      setShowConfirmed(true);
+      setTimeout(() => setShowConfirmed(false), 3000);
       onSuccess?.({
         address: addr,
         skip_otp: data.skip_otp || false,
@@ -103,19 +106,31 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
   return (
     <div className={className}>
       {status === "done" && address ? (
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 border border-cyan-400/30 bg-cyan-400/[0.04]">
-            <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]" />
-            <span className="text-cyan-300/70 font-mono text-[10px] tracking-[0.1em]">
-              {address.slice(0, 6)}...{address.slice(-4)}
-            </span>
-          </div>
-          <button
-            onClick={handleDisconnect}
-            className="text-white/20 hover:text-white/40 text-[8px] tracking-[0.2em] uppercase transition-colors"
-          >
-            Disconnect
-          </button>
+        <div className="flex flex-col items-center gap-2">
+          {showConfirmed ? (
+            <div className="flex flex-col items-center gap-1 animate-[fadeIn_0.4s_ease-out]">
+              <div className="flex items-center gap-2 px-4 py-2 border border-cyan-400/40 bg-cyan-400/[0.06]">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                <span className="text-cyan-300/80 font-mono text-[10px] tracking-[0.2em] uppercase">Identity Linked</span>
+              </div>
+              <span className="text-white/25 text-[8px] tracking-[0.15em] uppercase font-light italic">Geometry is now verified.</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 px-3 py-1.5 border border-cyan-400/25 bg-cyan-400/[0.03]">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/60 shadow-[0_0_4px_rgba(34,211,238,0.4)]" />
+                <span className="text-cyan-300/50 font-mono text-[10px] tracking-[0.1em]">
+                  {address.slice(0, 6)}...{address.slice(-4)}
+                </span>
+              </div>
+              <button
+                onClick={handleDisconnect}
+                className="text-white/15 hover:text-white/30 text-[7px] tracking-[0.2em] uppercase transition-colors"
+              >
+                Disconnect
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <button
