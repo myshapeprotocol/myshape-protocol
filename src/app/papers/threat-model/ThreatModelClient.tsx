@@ -87,11 +87,27 @@ export default function ThreatModelClient() {
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-16">
         <div className="space-y-4 mb-14">
           <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">SECURITY_ANALYSIS // V1.0</div>
-          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">Threat Model</h1>
+          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase"
+            style={{ textShadow: "0 0 40px rgba(144,200,255,0.2)" }}>Threat Model</h1>
           <p className="text-white/40 text-[12px] leading-relaxed max-w-2xl">
             The MyShape Protocol faces three classes of adversaries. Eight attack signatures
             are detected across four PES dimensions. Defense-in-depth across five layers.
           </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
+            {[
+              { label: "Attacks Modeled", value: "12", sub: "Across 3 classes" },
+              { label: "Max Success Rate", value: "< 10%", sub: "At extreme cost tier" },
+              { label: "Defense Layers", value: "5", sub: "Device → Application" },
+            ].map(m => (
+              <div key={m.label} className="border border-cyan-400/10 p-4 text-center bg-cyan-400/[0.02] transition-all duration-500"
+                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(34,211,238,0.05)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.1)"; e.currentTarget.style.boxShadow = "none"; }}>
+                <div className="text-cyan-300/70 text-[22px] font-light font-mono mb-1">{m.value}</div>
+                <div className="text-white/30 text-[8px] tracking-[0.2em] uppercase">{m.label}</div>
+                <div className="text-white/12 text-[7px] mt-1">{m.sub}</div>
+              </div>
+            ))}
+          </div>
           <p className="text-white/15 text-[10px] tracking-[0.15em] mt-2">
             By MyShape Protocol &nbsp;·&nbsp; V1.0 &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; Security Analysis — Not an Academic Paper
           </p>
