@@ -122,13 +122,10 @@ const ProtocolHeader = () => {
       setWalletStatus("connecting");
       setWalletError("");
 
-      // Mock 模式：模拟钱包连接
       if (isMock) {
         await new Promise(r => setTimeout(r, 600));
         setWalletStatus("signing");
         await new Promise(r => setTimeout(r, 500));
-        setWalletStatus("verifying");
-        await new Promise(r => setTimeout(r, 400));
         const addr = "0x" + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
         setWalletAddress(addr);
         setWalletStatus("done");
@@ -137,7 +134,7 @@ const ProtocolHeader = () => {
       }
 
       if (!window.ethereum) {
-        setWalletError("No wallet detected");
+        setWalletError("No wallet detected. Install MetaMask or Rainbow.");
         setWalletStatus("idle");
         return;
       }
