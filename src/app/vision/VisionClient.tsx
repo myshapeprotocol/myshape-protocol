@@ -89,8 +89,8 @@ export default function VisionClient() {
 
         {/* ── 2. 四大支柱 ── */}
         <section>
-          <div className="text-white/20 text-[9px] tracking-[0.5em] uppercase mb-12 text-center hover:text-cyan-300/40 transition-colors cursor-default"
-            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
+          <div className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-12 text-center hover:text-cyan-300/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             // PROTOCOL_PILLARS
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -119,8 +119,8 @@ export default function VisionClient() {
 
         {/* ── 3. 协议轨迹 ── */}
         <section className="border-t border-white/[0.04] pt-16">
-          <div className="text-white/20 text-[9px] tracking-[0.5em] uppercase mb-14 text-center hover:text-cyan-300/40 transition-colors cursor-default"
-            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
+          <div className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-14 text-center hover:text-cyan-300/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             Protocol Trajectory
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">

@@ -186,7 +186,7 @@ export default function ProtocolClient() {
                       animationDelay: `${n * 0.2}s`,
                     }}
                   />
-                  <span className="text-[7px] text-white/10 font-mono">{n}</span>
+                  <span className="text-[8px] text-white/15 font-mono">{n}</span>
                 </div>
               ))}
             </div>
@@ -224,7 +224,7 @@ export default function ProtocolClient() {
                   { label: "IDENTITY_MESH", sub: "decentralized" },
                 ].map((step, i) => (
                   <div key={step.label} className="flex items-center">
-                    <div className="border border-cyan-400/20 bg-cyan-400/[0.03] px-4 py-3 text-center transition-all duration-300 hover:border-cyan-400/50 hover:bg-cyan-400/[0.06] hover:scale-105"
+                    <div className="border border-cyan-400/20 bg-cyan-400/[0.03] px-4 py-3 text-center transition-all duration-300 hover:border-cyan-400/50 hover:bg-cyan-400/[0.06]"
                       onMouseEnter={() => playTick(500 + i * 80, "sine", 0.05, 0.01)}>
                       <div className="text-cyan-300/70 text-[11px] tracking-[0.15em] font-bold mb-1">{step.label}</div>
                       <div className="text-cyan-400/25 text-[8px] tracking-[0.2em]">{step.sub}</div>
