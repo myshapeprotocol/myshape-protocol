@@ -7,42 +7,42 @@ import { playTick } from "@/utils/useAudioTick";
 const pillars = [
   {
     id: "PIL_01",
-    title: "AI-NATIVE IDENTITY",
-    subtitle: "Designed for coexistence",
-    desc: "A new category of identity — built for a world where human and machine intelligence coexist. Motion-Signature verification bridges the gap between biological presence and digital authentication.",
+    title: "PRESENCE FIRST",
+    subtitle: "Identity is generated, not stored",
+    desc: "Every identity system today stores a credential. MyShape verifies presence — the continuous, entropy-rich signal of a living entity in motion. Presence is the identity. Everything else is just a record.",
     accent: "from-cyan-400/80 to-cyan-400/0",
     color: "rgba(34,211,238,0.4)",
   },
   {
     id: "PIL_02",
-    title: "SPATIAL SOVEREIGNTY",
-    subtitle: "Privacy as a right",
-    desc: "The right to remain private within immersive 3D environments. ZK-Presence proves you are human without revealing who you are, where you are, or how you move.",
+    title: "ZERO-KNOWLEDGE BY DEFAULT",
+    subtitle: "Prove without revealing",
+    desc: "ZK-Presence proofs verify that an entity is physically present without exposing who they are, where they are, or how they move. Privacy is not an option. It is the protocol default.",
     accent: "from-cyan-400/60 to-cyan-400/0",
     color: "rgba(34,211,238,0.35)",
   },
   {
     id: "PIL_03",
-    title: "PROTOCOL PERMANENCE",
-    subtitle: "Ownership by physics",
-    desc: "Your Motion-Signature is permanently inscribed into the protocol's root entropy source. No platform can revoke it. No server can lose it. Your identity geometry is yours — forever.",
+    title: "SOVEREIGN BY PROTOCOL",
+    subtitle: "No platform can revoke you",
+    desc: "Your Motion-Signature is inscribed into the protocol's root entropy source. No server holds it. No platform controls it. No authority can revoke it. Sovereignty is not granted — it is mathematically enforced.",
     accent: "from-cyan-400/45 to-cyan-400/0",
     color: "rgba(34,211,238,0.3)",
   },
   {
     id: "PIL_04",
-    title: "CONTINUOUS PRESENCE",
-    subtitle: "Living proof",
-    desc: "Identity is not a one-time verification. It is a continuous stream of proof — each scan adds entropy, each verification strengthens the mesh. Your presence evolves with you.",
+    title: "CROSS-SPECIES CONTINUITY",
+    subtitle: "Human and AI, one protocol",
+    desc: "The identity layer for the simulation age. Human and AI identities coexist in one protocol. Presence Receipts form a continuous verifiable timeline — infrastructure for all intelligent entities.",
     accent: "from-cyan-400/35 to-cyan-400/0",
     color: "rgba(34,211,238,0.25)",
   },
 ];
 
 const futureStates = [
-  { label: "TODAY", desc: "Genesis Cohort — 100 founding nodes anchoring the identity mesh.", active: true },
-  { label: "NEXT", desc: "On-chain ZK verification. Cross-platform presence proof. Multi-device aggregation." },
-  { label: "THEN", desc: "Global identity mesh. One billion sovereign nodes. The protocol becomes invisible infrastructure." },
+  { label: "TODAY", desc: "Genesis Cohort — 100 founding nodes. Presence verification for sovereign entities.", active: true },
+  { label: "NEXT", desc: "Human-Agent Continuity Layer. Cross-species verification. Presence Receipts as infrastructure." },
+  { label: "THEN", desc: "The protocol disappears. Presence becomes a property of the network itself — invisible, universal, assumed." },
 ];
 
 export default function VisionClient() {
@@ -59,19 +59,19 @@ export default function VisionClient() {
           <div className="relative z-10 border-l-2 border-cyan-400/25 pl-6 md:pl-10 py-3">
             <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase font-mono mb-5">// PROTOCOL_MANIFESTO</div>
             <p className="text-white/75 text-[15px] md:text-[18px] leading-[1.8] font-light mb-5">
-              AI can replicate your face. Clone your voice. Forge your writing style.
+              AI can generate a face. Clone a voice. Forge a writing style.
               Every static credential is a snapshot that generative models will eventually learn to reproduce.
             </p>
             <p className="text-white/60 text-[13px] md:text-[15px] leading-[1.9] font-light">
               The only signal a machine cannot fabricate is the continuous, irreducible entropy
-              of a living entity in motion. <span className="text-cyan-300/80 font-medium">Presence is not stored. Presence is generated.</span>
+              of an entity in motion. <span className="text-cyan-300/80 font-medium">Presence is not stored. Presence is generated.</span>
             </p>
           </div>
         </section>
 
         {/* ── 1. 协议立场 ── */}
         <section className="relative max-w-3xl">
-          <div className="text-cyan-500/[0.06] text-[90px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">EYE</div>
+          <div className="text-cyan-500/[0.06] text-[90px] font-bold absolute -top-12 -left-6 select-none pointer-events-none">P</div>
           <div className="relative z-10">
             <h2 className="text-2xl md:text-4xl font-extralight tracking-[0.4em] text-white leading-tight uppercase mb-8"
               style={{ textShadow: "0 0 60px rgba(144,200,255,0.15)" }}>
@@ -164,7 +164,7 @@ export default function VisionClient() {
                   onMouseEnter={() => playTick(350, "sine", 0.02, 0.005)} />
               ))}
             </div>
-            <p className="text-white/12 text-[9px] tracking-[0.2em] uppercase">
+            <p className="text-white/20 text-[9px] tracking-[0.2em] uppercase">
               — MyShape Protocol &middot; V1.0_GENESIS
             </p>
           </div>
