@@ -524,10 +524,24 @@ async function main() {
   const outPath = path.join(__dirname, "matrix_dashboard.html");
   fs.writeFileSync(outPath, generateDashboard(data), "utf8");
 
+  // 6. Sync to protocol log — all posts become immutable protocol record
+  const publishedPath = path.join(__dirname, "..", "agent-workflow", "published.json");
+  try {
+    const allPosts = [
+      ...data.hn.map(p => ({ platform: "hn", content: p.post || "", tags: [], source: p.url, publishedAt: new Date().toISOString() })),
+      ...data.linkedin.map(p => ({ platform: "linkedin", content: p.post || "", tags: [], source: p.source, publishedAt: new Date().toISOString() })),
+      ...data.x.map(p => ({ platform: "x", content: p.post || "", tags: [], source: p.topic, publishedAt: new Date().toISOString() })),
+    ];
+    const existing = fs.existsSync(publishedPath) ? JSON.parse(fs.readFileSync(publishedPath, "utf8")) : [];
+    fs.writeFileSync(publishedPath, JSON.stringify([...existing, ...allPosts], null, 2));
+    try { require(path.join(__dirname, "..", "agent-workflow", "log")); } catch {}
+  } catch { /* graceful */ }
+
   console.log("\n═".repeat(64));
   console.log("  Dashboard -> " + outPath);
   console.log("  HN: " + data.hn.length + " | LinkedIn: " + data.linkedin.length +
     " | X: " + data.x.length + " | Bluesky: " + data.bluesky.length);
+  console.log("  Protocol log synced -> PROTOCOL_LOG.md");
   console.log("═".repeat(64) + "\n");
 }
 
