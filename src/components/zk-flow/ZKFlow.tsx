@@ -3,67 +3,52 @@ import React from "react";
 import { playTick } from "@/utils/useAudioTick";
 
 const STEPS = [
-  { num: "01", label: "CAMERA", desc: "Real-time 30fps pose capture via MediaPipe. All processing on-device.", icon: "●" },
-  { num: "02", label: "SST_18PT", desc: "33-point → 18-point Skeleton Topology. Bones, joints, angles.", icon: "◈" },
-  { num: "03", label: "PES_4D", desc: "4-dimensional Entropy Scoring: timing, noise, frequency, biological.", icon: "◆" },
-  { num: "04", label: "128D_VECTOR", desc: "Kinematics + Acceleration + Jerk + Jerk Spectrum → Motion Signature.", icon: "◇" },
-  { num: "05", label: "ZK_PROOF", desc: "PoP + MP + EP composite proof. Verifiable without revealing data.", icon: "⬡" },
+  { step: "01", title: "CAPTURE", label: "LOCAL_DEVICE", desc: "Raw kinetic energy captured via local visual sensors. No cloud streaming." },
+  { step: "02", title: "EXTRACT", label: "GEOMETRY_ENGINE", desc: "Anonymizing skeletal data into pure motion geometry vectors." },
+  { step: "03", title: "SCORE", label: "PES_4D_ENGINE", desc: "4-dimensional Entropy Scoring: timing, noise, frequency, biological." },
+  { step: "04", title: "SIGN", label: "MOTION_SIGNATURE", desc: "Kinematics + Acceleration + Jerk + Jerk Spectrum → 128D Vector." },
+  { step: "05", title: "PROVE", label: "ZK_PROOF_GEN", desc: "PoP + MP + EP composite proof. Verifiable without revealing data." },
 ];
 
 export default function ZKFlow() {
   return (
-    <div className="relative py-6">
-      <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-0">
-        {/* 连接线 */}
-        <div className="hidden md:block absolute top-1/2 left-[6%] right-[6%] h-[1px]"
-          style={{ transform: "translateY(-50%)", background: "linear-gradient(90deg, rgba(34,211,238,0.08), rgba(34,211,238,0.25), rgba(34,211,238,0.08))" }} />
+    <div className="relative pt-4 pb-8">
+      {/* 水平连接线 */}
+      <div className="hidden md:block absolute top-[32px] left-0 w-full h-[1px]"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)" }} />
 
-        {STEPS.map((step, i) => (
-          <div
-            key={step.num}
-            onMouseEnter={e => {
-              playTick(600 + i * 80, "sine", 0.08, 0.02);
-              e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.borderColor = "rgba(144,200,255,0.08)";
-            }}
-            className="relative flex flex-row md:flex-col items-center gap-4 md:gap-4 py-3 md:py-0 md:w-[18%] group transition-all duration-500 p-3 md:p-4"
-            style={{ border: "1px solid rgba(144,200,255,0.08)", background: "transparent" }}
-          >
-            {/* 节点圆 */}
-            <div className="relative shrink-0">
-              <div className="w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                style={{
-                  borderColor: i === 4 ? "rgba(34,211,238,0.45)" : "rgba(34,211,238,0.18)",
-                  background: i === 4 ? "rgba(34,211,238,0.06)" : "transparent",
-                  boxShadow: i === 4 ? "0 0 16px rgba(34,211,238,0.15)" : "none",
-                }}>
-                <span className="text-cyan-400/50 group-hover:text-cyan-300/80 text-[13px] transition-colors">
-                  {step.icon}
-                </span>
-              </div>
-              <div className="absolute inset-0 rounded-full border border-cyan-400/8 opacity-0 group-hover:opacity-100 pointer-events-none"
-                style={{ animation: "ping 3s cubic-bezier(0,0,0.2,1) infinite" }} />
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-4 relative z-10">
+        {STEPS.map((item) => (
+          <div key={item.step} className="group flex flex-col items-center text-center"
+            onMouseEnter={() => playTick(800, "sine", 0.08, 0.02)}>
+            {/* 圆形节点 */}
+            <div className="w-16 h-16 rounded-full border border-white/10 bg-[#02040a] flex items-center justify-center mb-8 group-hover:border-cyan-500 transition-all duration-700 relative">
+              <span className="text-[11px] text-white/30 group-hover:text-cyan-400 font-bold tracking-widest transition-colors">
+                {item.step}
+              </span>
+              <div className="absolute inset-[-4px] border-[1px] border-cyan-500/0 border-t-cyan-500/40 rounded-full opacity-0 group-hover:opacity-100"
+                style={{ animation: "spin 1.5s linear infinite" }} />
             </div>
 
-            {/* 文字 */}
-            <div className="flex-1 text-center md:text-center">
-              <div className="text-cyan-400/25 text-[8px] tracking-[0.35em] mb-2 font-mono">{step.num}</div>
-              <div className="text-white/55 text-[10px] tracking-[0.2em] uppercase mb-2 group-hover:text-white/85 transition-colors font-bold">
-                {step.label}
+            {/* 文字区 */}
+            <div className="space-y-4">
+              <h4 className="text-white text-[13px] tracking-[0.4em] font-bold uppercase group-hover:text-cyan-400 transition-colors">
+                {item.title}
+              </h4>
+              <div className="text-cyan-500/40 text-[9px] tracking-[0.3em] font-mono">
+                [{item.label}]
               </div>
-              <div className="hidden md:block text-white/20 text-[8px] leading-[1.6] max-w-[140px] mx-auto group-hover:text-white/35 transition-colors">
-                {step.desc}
-              </div>
+              <p className="text-white/30 text-[10px] tracking-[0.2em] leading-relaxed uppercase max-w-[180px] mx-auto group-hover:text-white/60 transition-colors">
+                {item.desc}
+              </p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="text-center mt-8">
-        <span className="text-cyan-400/12 text-[8px] tracking-[0.3em] uppercase">
-          From Geometry → Proof in 5 steps. Zero raw data leaves the device.
+      <div className="text-center mt-10">
+        <span className="text-white/15 text-[8px] tracking-[0.4em] uppercase">
+          From Geometry → Proof. Zero raw data leaves the device.
         </span>
       </div>
     </div>
