@@ -123,6 +123,26 @@ export default function BlogPost() {
           </div>
         </div>
 
+        {/* Visual Hook — Architecture Diagram */}
+        <div className="my-16 border border-cyan-400/15 bg-cyan-400/[0.02] p-6 md:p-8 font-mono">
+          <div className="text-cyan-400/30 text-[8px] tracking-[0.3em] uppercase mb-4 text-center">SYSTEM_SCHEMA: PRESENCE PIPELINE</div>
+          <pre className="text-cyan-400/40 text-[10px] leading-[2.2] tracking-[0.08em] whitespace-pre overflow-x-auto text-center">
+{`CAMERA ──→ SST_18PT ──→ PES_4D ──→ 128D_VECTOR ──→ ZK_PROOF
+ 30fps      Skeleton    Entropy     Motion          Presence
+ Local      Topology    Scoring     Signature       Verified
+
+  ◄──────────────── 0 DATA UPLOADED ────────────────►
+         All processing on-device. Nothing stored.`}
+          </pre>
+          <div className="mt-4 flex justify-center gap-4 text-[7px]">
+            <span className="text-cyan-400/25">◈ Benchmark: 0.3960 Human—AI Gap</span>
+            <span className="text-white/10">|</span>
+            <span className="text-cyan-400/25">◈ Engine: Rust → WASM</span>
+            <span className="text-white/10">|</span>
+            <span className="text-cyan-400/25">◈ License: MIT</span>
+          </div>
+        </div>
+
         <div className="space-y-20">
           {SECTIONS.map((s, i) => (
             <section key={i}>
@@ -140,13 +160,27 @@ export default function BlogPost() {
           ))}
         </div>
 
-        <div className="mt-20 pt-10 border-t border-white/[0.05] text-center space-y-4">
-          <p className="text-white/20 text-[10px]">Discuss this essay on GitHub.</p>
+        <div className="mt-16 p-6 border border-cyan-400/10 bg-cyan-400/[0.02]">
+          <p className="text-white/30 text-[11px] leading-relaxed mb-4">
+            <strong className="text-white/50">To the skeptic:</strong> every claim in this essay is verifiable.
+            The benchmark code is on GitHub. The threat model is published. Attack it. We invite adversarial review.
+          </p>
+          <p className="text-white/20 text-[9px]">
+            Repository: github.com/myshapeprotocol &middot; Threat Model: myshape.com/papers/threat-model &middot; Live Demo: myshape.com/motion-demo
+          </p>
+        </div>
+
+        <div className="mt-16 pt-10 border-t border-white/[0.05] text-center space-y-4">
+          <p className="text-white/20 text-[10px]">Discuss this essay on HN or GitHub.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
               className="px-8 py-3 border border-cyan-400/25 text-cyan-300/60 text-[10px] tracking-[0.3em] uppercase hover:bg-cyan-400/[0.04] hover:text-white transition-all">
               View on GitHub →
             </a>
+            <Link href="/evidence"
+              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all">
+              Evidence →
+            </Link>
             <Link href="/blog"
               className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all">
               All Essays →
