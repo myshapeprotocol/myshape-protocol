@@ -47,3 +47,4 @@ docs/.core/
 .env*.local
 scripts/node_modules/
 agent-workflow/node_modules/
+scripts/agent-workflow/node_modules/

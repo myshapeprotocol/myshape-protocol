@@ -47,6 +47,7 @@ CONTENT RULES:
 - Structure: claim → evidence → implication (3 sentences minimum)
 - For X/Twitter: 200-280 chars, sharp, quotable
 - For LinkedIn: 500-1000 chars, technical depth, data-backed
+- COMPRESSION: If any draft exceeds platform max, force-compress to fit. Brevity is protocol law.
 
 OUTPUT: JSON only — { "platform": "x"|"linkedin"|"protocol", "content": "...", "tags": [...] }`;
 

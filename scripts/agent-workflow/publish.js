@@ -9,6 +9,10 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
+// Sentry — error tracking for protocol operations
+let Sentry = null;
+try { Sentry = require("@sentry/node"); } catch { /* optional */ }
+
 const DRAFTS_PATH = path.join(__dirname, "drafts.json");
 const PUBLISHED_PATH = path.join(__dirname, "published.json");
 
@@ -41,8 +45,9 @@ async function publishOne(draft) {
         } else {
           console.log(`   ⚠ Aitoearn returned ${res.status} — marked as published anyway`);
         }
-      } catch {
+      } catch (err) {
         console.log("   ⚠ Aitoearn unreachable — marked as published locally");
+        if (Sentry) Sentry.captureException(err, { tags: { workflow: "publish", platform: draft.platform } });
       }
     } else {
       console.log("   💾 Dry run — marked as published (AITOEARN_API_URL not set)");
@@ -97,6 +102,9 @@ async function main() {
     fs.writeFileSync(DRAFTS_PATH, JSON.stringify(remaining, null, 2));
     console.log(`\n✓ ${published.length} published → published.json`);
     console.log(`  ${remaining.length} remaining in drafts.json`);
+
+    // Auto-generate protocol changelog
+    try { require("./log"); } catch { console.log("  (log.js not found, skipping)"); }
   } else {
     console.log(`\n  No drafts published.`);
   }
