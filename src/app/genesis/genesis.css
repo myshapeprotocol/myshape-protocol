@@ -48,6 +48,42 @@
   animation: dotBlink 1.2s ease-in-out infinite;
   box-shadow: 0 0 6px rgba(144,200,255,0.8);
 }
+
+/* ── 终端框活跃态辉光脉冲 ── */
+.genesis-terminal-glow {
+  animation: terminalGlow 3s ease-in-out infinite;
+}
+@keyframes terminalGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(34,211,238,0.03); }
+  50% { box-shadow: 0 0 35px rgba(34,211,238,0.08), 0 0 60px rgba(34,211,238,0.03); }
+}
+
+/* ── 邀请码终端 — 紫色主题扫描线 ── */
+.genesis-invite-scan {
+  background: linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.06) 45%, rgba(168,85,247,0.12) 50%, rgba(168,85,247,0.06) 55%, transparent 100%);
+  animation: genesisScan 3.5s ease-in-out infinite;
+}
+
+.genesis-invite-corner-tl { animation: cornerPulseInvite 2s ease-in-out infinite; }
+.genesis-invite-corner-tr { animation: cornerPulseInvite 2s ease-in-out 0.4s infinite; }
+.genesis-invite-corner-bl { animation: cornerPulseInvite 2s ease-in-out 0.8s infinite; }
+.genesis-invite-corner-br { animation: cornerPulseInvite 2s ease-in-out 1.2s infinite; }
+@keyframes cornerPulseInvite {
+  0%, 100% { opacity: 0.3; border-color: rgba(168,85,247,0.5); }
+  50% { opacity: 1; border-color: rgba(168,85,247,0.9); }
+}
+
+/* ── 浮动指示点 ── */
+.genesis-float-dot {
+  animation: floatDot 4s ease-in-out infinite;
+}
+.genesis-float-dot:nth-child(2) { animation-delay: 1.5s; }
+.genesis-float-dot:nth-child(3) { animation-delay: 3s; }
+@keyframes floatDot {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(0.5); }
+  30% { opacity: 0.6; }
+  70% { opacity: 0; transform: translateY(-16px) scale(1.2); }
+}
 @keyframes dotBlink {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
