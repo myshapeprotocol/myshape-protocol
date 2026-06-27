@@ -172,7 +172,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         {/* 页面内容 */}
-        <div style={{ position: "relative", zIndex: 1, width: "100%", flex: 1 }} suppressHydrationWarning>
+        <div style={{ position: "relative", zIndex: 1, width: "100%", flex: 1 }}>
           {children}
         </div>
         <Analytics />
