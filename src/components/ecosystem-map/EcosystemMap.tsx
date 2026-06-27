@@ -120,7 +120,7 @@ export default function EcosystemMap() {
                 style={{
                   color: layer.color,
                   borderColor: layer.color,
-                  opacity: 0.5,
+                  opacity: 0.7,
                 }}>
                 {layer.tag}
               </span>
@@ -151,11 +151,11 @@ export default function EcosystemMap() {
                   }}
                 >
                   <span className="text-[9px] tracking-[0.12em] font-mono mb-0.5 transition-colors"
-                    style={{ color: layer.highlight ? "rgba(220,235,255,0.6)" : "rgba(255,255,255,0.3)" }}>
+                    style={{ color: layer.highlight ? "rgba(230,240,255,0.75)" : "rgba(255,255,255,0.5)" }}>
                     {item.label}
                   </span>
                   <span className="text-[7px] tracking-[0.08em] transition-colors"
-                    style={{ color: "rgba(255,255,255,0.1)" }}>
+                    style={{ color: "rgba(255,255,255,0.2)" }}>
                     {item.desc}
                   </span>
                 </div>
@@ -174,7 +174,7 @@ export default function EcosystemMap() {
 
       {/* 底部标注 */}
       <div className="mt-8 text-center ml-10 md:ml-14">
-        <span className="text-cyan-400/20 text-[8px] tracking-[0.25em] uppercase hover:text-cyan-400/40 transition-colors cursor-default"
+        <span className="text-cyan-400/35 text-[9px] tracking-[0.25em] uppercase hover:text-cyan-300/60 transition-colors cursor-default"
           onMouseEnter={() => playTick(400, "sine", 0.03, 0.01)}>
           DATA_FLOW: RAW_ENTROPY → VERIFIED_IDENTITY
         </span>

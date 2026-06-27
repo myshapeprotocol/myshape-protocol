@@ -252,8 +252,9 @@ export default function ProtocolClient() {
 
         {/* ── Ecosystem Map ── */}
         <section className="py-16 border-t" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
-          <div className="text-white/25 text-[10px] tracking-[0.5em] uppercase mb-8 text-center hover:text-cyan-300/50 transition-colors cursor-default"
-            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Ecosystem</div>
+          <div className="text-white/35 text-[11px] tracking-[0.5em] uppercase mb-10 text-center hover:text-cyan-300/60 transition-colors cursor-default"
+            onMouseEnter={() => playTick(500, "sine", 0.05, 0.015)}
+            style={{ textShadow: "0 0 20px rgba(34,211,238,0.15)" }}>Protocol Ecosystem</div>
           <EcosystemMap />
         </section>
 
