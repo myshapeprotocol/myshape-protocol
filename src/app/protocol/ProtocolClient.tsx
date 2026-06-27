@@ -224,17 +224,29 @@ export default function ProtocolClient() {
                   { step: "05", label: "Mesh", sub: "Identity Mesh", desc: "Node joins the decentralized identity mesh. Sovereign. Permanent. Verifiable." },
                 ].map((s, i) => (
                   <div key={s.step} className="flex items-center">
-                    <div className="flex flex-col items-center group cursor-default w-36 md:w-40"
+                    <div className="flex flex-col items-center cursor-default w-36 md:w-40"
                       onMouseEnter={e => {
                         playTick(600 + i * 100, "sine", 0.06, 0.015);
-                        e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.borderColor = "rgba(34,211,238,0.9)";
-                        e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.boxShadow = "0 0 20px rgba(34,211,238,0.4)";
-                        e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.color = "rgba(200,240,255,0.9)";
+                        const el = e.currentTarget;
+                        el.querySelector<HTMLElement>('[data-node="circle"]')!.style.borderColor = "rgba(34,211,238,0.9)";
+                        el.querySelector<HTMLElement>('[data-node="circle"]')!.style.boxShadow = "0 0 20px rgba(34,211,238,0.4)";
+                        el.querySelector<HTMLElement>('[data-node="circle"]')!.style.color = "rgba(200,240,255,0.9)";
+                        el.querySelector<HTMLElement>('[data-node="label"]')!.style.color = "#fff";
+                        el.querySelector<HTMLElement>('[data-node="sub"]')!.style.color = "rgba(160,230,255,0.9)";
+                        if (el.querySelector<HTMLElement>('[data-node="desc"]')) {
+                          el.querySelector<HTMLElement>('[data-node="desc"]')!.style.color = "rgba(255,255,255,0.45)";
+                        }
                       }}
                       onMouseLeave={e => {
-                        e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.borderColor = "rgba(34,211,238,0.25)";
-                        e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.boxShadow = "none";
-                        e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.color = "rgba(34,211,238,0.5)";
+                        const el = e.currentTarget;
+                        el.querySelector<HTMLElement>('[data-node="circle"]')!.style.borderColor = "rgba(34,211,238,0.25)";
+                        el.querySelector<HTMLElement>('[data-node="circle"]')!.style.boxShadow = "none";
+                        el.querySelector<HTMLElement>('[data-node="circle"]')!.style.color = "rgba(34,211,238,0.5)";
+                        el.querySelector<HTMLElement>('[data-node="label"]')!.style.color = "rgba(255,255,255,0.55)";
+                        el.querySelector<HTMLElement>('[data-node="sub"]')!.style.color = "rgba(34,211,238,0.4)";
+                        if (el.querySelector<HTMLElement>('[data-node="desc"]')) {
+                          el.querySelector<HTMLElement>('[data-node="desc"]')!.style.color = "rgba(255,255,255,0.2)";
+                        }
                       }}>
                       {/* Node circle */}
                       <div data-node="circle" className="w-10 h-10 md:w-12 md:h-12 rounded-full border flex items-center justify-center font-mono text-[11px] md:text-[13px] transition-all duration-300 shrink-0"
@@ -242,12 +254,11 @@ export default function ProtocolClient() {
                         {s.step}
                       </div>
                       {/* Labels */}
-                      <span className="text-[11px] md:text-[12px] tracking-[0.15em] uppercase mt-3 font-medium text-center transition-colors duration-300 group-hover:text-white"
+                      <span data-node="label" className="text-[11px] md:text-[12px] tracking-[0.15em] uppercase mt-3 font-medium text-center transition-colors duration-300"
                         style={{ color: "rgba(255,255,255,0.55)" }}>{s.label}</span>
-                      <span className="text-[9px] md:text-[10px] tracking-[0.1em] font-mono mt-1 text-center transition-colors duration-300 group-hover:text-cyan-200"
+                      <span data-node="sub" className="text-[9px] md:text-[10px] tracking-[0.1em] font-mono mt-1 text-center transition-colors duration-300"
                         style={{ color: "rgba(34,211,238,0.4)" }}>{s.sub}</span>
-                      {/* Description — desktop only */}
-                      <span className="hidden md:block text-[9px] text-center mt-2 leading-relaxed transition-colors duration-300 group-hover:text-white/40"
+                      <span data-node="desc" className="hidden md:block text-[9px] text-center mt-2 leading-relaxed transition-colors duration-300"
                         style={{ color: "rgba(255,255,255,0.2)" }}>{s.desc}</span>
                     </div>
                     {/* Arrow between nodes */}
