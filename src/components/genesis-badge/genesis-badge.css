@@ -211,6 +211,18 @@
   text-align: center;
 }
 
+.tier-genesis .badge-code {
+  color: rgba(245, 200, 120, 0.5);
+}
+
+.tier-genesis .badge-data-row strong {
+  color: rgba(245, 200, 120, 0.85);
+}
+
+.tier-genesis .badge-data-row {
+  border-top-color: rgba(200, 160, 60, 0.15);
+}
+
 .badge-dots {
   display: flex;
   gap: 4px;
@@ -304,8 +316,18 @@
 }
 
 .tier-genesis .badge-title-sub {
-  color: rgba(144, 200, 255, 0.8);
-  text-shadow: 0 0 8px rgba(144, 200, 255, 0.3);
+  color: rgba(245, 200, 120, 0.85);
+  text-shadow: 0 0 8px rgba(200, 150, 40, 0.3);
+}
+
+/* 扫描线 — Genesis 金色 */
+.tier-genesis .badge-scan {
+  background: linear-gradient(90deg, transparent, rgba(245,200,100,0.25), transparent);
+}
+
+/* 辉光背景 — Genesis 暖金 */
+.tier-genesis .badge-bg-glow {
+  background: radial-gradient(ellipse at 50% 0%, rgba(200, 160, 60, 0.06), transparent 55%);
 }
 
 /* ── 底部数据行 ── */
