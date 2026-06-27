@@ -4,6 +4,7 @@ import ProtocolHeader from "@/components/header/header";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick, resumeAudio } from "@/utils/useAudioTick";
+import PresenceSignature from "@/components/presence-signature/PresenceSignature";
 import { mediaPipeToSST, normalizeSSTFrame } from "@/engine/skeleton-topology";
 import { computeFullPES } from "@/engine/presence-entropy";
 import { assessThreat } from "@/engine/threat-assessment";
@@ -698,6 +699,21 @@ export default function MotionDemoClient() {
                       Complete Genesis to bind scans →
                     </a>
                   </div>
+                )}
+                {/* Presence Signature — 存在证明证书 */}
+                {pesData && proofHashes && (
+                  <PresenceSignature proof={{
+                    pesScore: pesData.score,
+                    timing: pesData.timing,
+                    noise: pesData.noise,
+                    freq: pesData.frequency,
+                    bio: pesData.biological,
+                    zkpHash: proofHashes.zkp,
+                    popHash: proofHashes.pop,
+                    mpHash: proofHashes.mp,
+                    epHash: proofHashes.ep,
+                    timestamp: Date.now(),
+                  }} />
                 )}
                 <button onClick={stop}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
