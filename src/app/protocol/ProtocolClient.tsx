@@ -63,7 +63,8 @@ export default function ProtocolClient() {
       <div className="space-y-20 md:space-y-28">
         {/* ── 五层架构 ── */}
         <section>
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Five-Layer Architecture</h2>
+          <h2 className="text-white/30 text-[11px] tracking-[0.5em] uppercase mb-6 hover:text-cyan-300/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Five-Layer Architecture</h2>
           <div className="space-y-1 max-w-3xl mx-auto">
             {FIVE_LAYERS.map((l) => (
               <div key={l.layer}
@@ -75,8 +76,8 @@ export default function ProtocolClient() {
                   L{l.layer}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11px] tracking-[0.3em] uppercase mb-0.5" style={{ color: "rgba(255,255,255,0.6)" }} data-default="rgba(255,255,255,0.6)" data-hover="rgba(255,255,255,0.95)">{l.name}</div>
-                  <div className="text-[9px] tracking-[0.1em] truncate" style={{ color: "rgba(255,255,255,0.25)" }} data-default="rgba(255,255,255,0.25)" data-hover="rgba(255,255,255,0.5)">{l.role}</div>
+                  <div className="text-[12px] tracking-[0.25em] uppercase mb-0.5" style={{ color: "rgba(255,255,255,0.65)" }} data-default="rgba(255,255,255,0.65)" data-hover="rgba(255,255,255,1)">{l.name}</div>
+                  <div className="text-[10px] tracking-[0.1em] truncate" style={{ color: "rgba(255,255,255,0.3)" }} data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.55)">{l.role}</div>
                 </div>
                 <div className="flex items-center gap-1.5 text-[8px] tracking-[0.2em] uppercase" style={{ color: "rgba(34,211,238,0.4)" }} data-default="rgba(34,211,238,0.4)" data-hover="rgba(34,211,238,0.8)">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)]" />
@@ -89,7 +90,8 @@ export default function ProtocolClient() {
 
         {/* ── 规范实施状态 ── */}
         <section>
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Specification Implementation</h2>
+          <h2 className="text-white/30 text-[11px] tracking-[0.5em] uppercase mb-6 hover:text-cyan-300/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Specification Implementation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {SPEC_SECTIONS.map((s) => (
               <div key={s.id}
@@ -113,7 +115,8 @@ export default function ProtocolClient() {
 
         {/* ── 引擎清单 ── */}
         <section>
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">Protocol Engines</h2>
+          <h2 className="text-white/30 text-[11px] tracking-[0.5em] uppercase mb-6 hover:text-cyan-300/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Engines</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
