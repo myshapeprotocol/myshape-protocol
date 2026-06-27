@@ -102,7 +102,7 @@ export default function IdentityClient() {
       {/* Genesis badge — 实体背景阻挡粒子穿透 */}
       {isFormed && (
         <div className="absolute left-1/2 -translate-x-1/2 py-3 px-6 transition-all duration-700"
-          style={{ zIndex: 50, background: "rgba(2,4,10,0.85)", backdropFilter: "blur(4px)", borderRadius: "6px", top: status !== "idle" ? "65%" : "76%" }}>
+          style={{ zIndex: 50, background: "rgba(2,4,10,0.85)", backdropFilter: "blur(4px)", borderRadius: "6px", top: status !== "idle" ? "64%" : "76%" }}>
           <GenesisBadge />
         </div>
       )}
