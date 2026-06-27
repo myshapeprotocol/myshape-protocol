@@ -1,12 +1,23 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
 
+const TOC_ITEMS = [
+  { id: "crisis", label: "The Identity Crisis" },
+  { id: "architecture", label: "Stored Identity Architecture" },
+  { id: "presence", label: "Generated Presence" },
+  { id: "entropy-gap", label: "The Entropy Gap" },
+  { id: "infrastructure", label: "Identity Infrastructure" },
+];
+
 const SECTIONS = [
   {
+    id: "crisis",
     heading: "The Identity Crisis Nobody Is Talking About",
     content: `In 2026, AI can generate your face. Clone your voice. Forge your writing style. Deepfake detection is an arms race — and the defenders are losing.
 
@@ -19,6 +30,7 @@ The question no one is asking: what happens when generative AI can reproduce any
 The answer: stored identity becomes worthless. Not because the cryptography fails — but because the physical link between the credential and the human is severed. A perfect copy of a face is not a face. A perfect copy of a voice is not a voice. And a perfect copy of a password is not a human — but it authenticates as one.`,
   },
   {
+    id: "architecture",
     heading: "The Architecture of Stored Identity",
     content: `Let's be precise about what "stored identity" means.
 
@@ -34,6 +46,7 @@ This is not a bug in implementation. It is a property of the architecture. Store
 AI does not "break" stored identity. AI reveals what was always true: stored identity was never identity. It was always just a password with extra steps.`,
   },
   {
+    id: "presence",
     heading: "Generated Presence: A New Primitive",
     content: `What if identity cannot be stored?
 
@@ -51,6 +64,7 @@ A presence-based identity system works differently:
 The key insight: presence is not data. Presence is a physical property of a living nervous system. It cannot be copied because it is not a file. It cannot be replayed because it requires continuous non-deterministic entropy. It cannot be synthesized because AI models — trained to minimize loss over distributions — systematically suppress the very signal that makes human motion human.`,
   },
   {
+    id: "entropy-gap",
     heading: "The Entropy Gap: Why AI Cannot Forge Presence",
     content: `The PES engine measures four dimensions of biological entropy:
 
@@ -67,6 +81,7 @@ The result: a Human—AI PES gap of 0.3960. This gap is not a temporary AI limit
 This is the Entropy Gap Theorem: Pr[AI generates PES ≥ 0.65] → 0.`,
   },
   {
+    id: "infrastructure",
     heading: "What This Means For Identity Infrastructure",
     content: `If you are building any system that needs to know whether a user is human — authentication, KYC, access control, agent delegation — you have two choices:
 
@@ -85,11 +100,56 @@ We are asking you to verify.`,
 ];
 
 export default function PostClient() {
+  const [active, setActive] = useState("crisis");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY + 120;
+      for (let i = TOC_ITEMS.length - 1; i >= 0; i--) {
+        const el = document.getElementById(TOC_ITEMS[i].id);
+        if (el && el.offsetTop <= scrollY) { setActive(TOC_ITEMS[i].id); break; }
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    playTick(600, "sine", 0.06, 0.015);
+  };
+
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-cyan-500/30">
       <ProtocolHeader />
+      <BackgroundParticles />
 
-      <article className="relative z-10 max-w-3xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
+        {/* TOC sidebar */}
+        <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
+          <div className="text-cyan-400/30 text-[9px] tracking-[0.5em] uppercase mb-8 font-mono italic">// ON_THIS_PAGE</div>
+          <ul className="space-y-6 border-l" style={{ borderColor: "rgba(144,200,255,0.08)" }}>
+            {TOC_ITEMS.map(s => {
+              const isActive = s.id === active;
+              return (
+                <li key={s.id}>
+                  <button onClick={() => scrollTo(s.id)}
+                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
+                    className="block text-left w-full transition-all duration-300"
+                    style={{ borderLeft: isActive ? "2px solid rgba(34,211,238,0.6)" : "2px solid transparent", marginLeft: "-1px", paddingLeft: "20px" }}>
+                    <div className="text-[11px] tracking-[0.15em] uppercase transition-colors duration-300"
+                      style={{ color: isActive ? "rgba(34,211,238,0.9)" : "rgba(255,255,255,0.2)" }}>
+                      {s.label}
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
+
+        <article className="flex-1 min-w-0">
         <div className="mb-16">
           <div className="text-cyan-500/40 text-[9px] tracking-[0.4em] uppercase mb-4">PROTOCOL_ESSAY // 001</div>
           <h1 className="text-2xl md:text-4xl font-light tracking-[0.04em] text-white leading-tight mb-6"
@@ -132,7 +192,7 @@ export default function PostClient() {
         <div className="space-y-20">
           {SECTIONS.map((s, i) => (
             <section key={i}>
-              <h2 className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200"
+              <h2 id={s.id} className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-cyan-200 scroll-mt-28"
                 onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>
                 {s.heading}
               </h2>
@@ -167,17 +227,18 @@ export default function PostClient() {
             </a>
             <Link href="/evidence"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all">
+              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/45 hover:text-white/80 hover:bg-cyan-400/[0.04] transition-all">
               Evidence →
             </Link>
             <Link href="/blog"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all">
+              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/45 hover:text-white/80 hover:bg-cyan-400/[0.04] transition-all">
               All Essays →
             </Link>
           </div>
         </div>
-      </article>
+        </article>
+      </div>
 
       <ProtocolFooter />
     </div>
