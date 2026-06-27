@@ -156,7 +156,7 @@ export default function GenesisClient() {
                 </div>
 
                 {/* ── 主路径：Wallet-First ── */}
-                <div className="flex flex-col items-center space-y-2">
+                <div className="flex flex-col items-center space-y-1.5">
                   <ConnectWallet
                     email={email}
                     onSuccess={(walletData) => {
@@ -168,44 +168,51 @@ export default function GenesisClient() {
                       }
                     }}
                   />
-                  <span className="text-white/[0.06] text-[7px] tracking-[0.15em] uppercase">Recommended: Trustless on-chain binding</span>
+                  <span className="text-cyan-400/25 text-[8px] tracking-[0.18em] uppercase font-light">Recommended: Trustless on-chain binding</span>
                 </div>
 
                 {/* ── 分隔 ── */}
-                <div className="flex items-center gap-3 w-full max-w-[240px]">
-                  <div className="flex-1 h-[1px] bg-white/[0.04]" />
-                  <span className="text-white/[0.05] text-[7px] tracking-[0.2em] uppercase">or</span>
-                  <div className="flex-1 h-[1px] bg-white/[0.04]" />
+                <div className="flex items-center gap-3 w-full max-w-[260px]">
+                  <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                  <span className="text-white/15 text-[9px] tracking-[0.25em] uppercase font-light">or</span>
+                  <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
                 </div>
 
                 {/* ── 备选路径：Legacy Email ── */}
-                <div className="flex flex-col items-center space-y-1.5">
-                  <span className="text-white/[0.05] text-[7px] tracking-[0.12em] uppercase">Legacy Access (Email)</span>
+                <div className="flex flex-col items-center space-y-2">
+                  <span className="text-white/20 text-[8px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
                   <div className="relative group">
-                    <div className="absolute -inset-[1px] rounded-sm opacity-25 group-focus-within:opacity-50 transition-opacity duration-700"
-                      style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.15), transparent 40%, transparent 60%, rgba(34,211,238,0.15))", filter: "blur(4px)" }} />
-                    <div className="relative px-4 py-0.5 overflow-hidden"
-                      style={{ border: "1px solid rgba(34,211,238,0.12)", background: "rgba(2,10,20,0.8)" }}>
+                    <div className="absolute -inset-[1px] rounded-sm opacity-30 group-focus-within:opacity-60 transition-opacity duration-700"
+                      style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.18), transparent 40%, transparent 60%, rgba(34,211,238,0.18))", filter: "blur(4px)" }} />
+                    <div className="relative px-5 py-0.5 overflow-hidden"
+                      style={{ border: "1px solid rgba(34,211,238,0.16)", background: "rgba(2,10,20,0.82)", boxShadow: "0 0 24px rgba(34,211,238,0.04)" }}>
                       <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="relative z-10 w-44 max-w-[50vw] bg-transparent py-2.5 text-center text-[10px] tracking-[0.25em] text-white/70 focus:outline-none placeholder:text-white/08" />
+                        className="relative z-10 w-48 max-w-[55vw] bg-transparent py-3 text-center text-[10px] tracking-[0.25em] text-white/75 focus:outline-none placeholder:text-white/12" />
                     </div>
                   </div>
-                  <span className="text-white/[0.04] text-[6px] tracking-[0.1em]">For restricted environments only</span>
+                  <span className="text-white/12 text-[7px] tracking-[0.1em]">For restricted environments only</span>
                 </div>
 
-                {/* ── 邀请码 — 折叠 ── */}
+                {/* ── 邀请码 — 可折叠 ── */}
                 {inviteCode || inviteCodeValid !== null ? (
-                  <div className="w-44 max-w-[50vw] mt-1">
-                    <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
-                      onChange={(e) => handleInviteCodeChange(e.target.value)}
-                      maxLength={19}
-                      className="w-full bg-transparent border-b border-white/[0.06] py-2 text-center text-[9px] tracking-[0.15em] text-purple-200/40 focus:outline-none focus:border-purple-400/30 placeholder:text-white/05 transition-colors" />
+                  <div className="w-48 max-w-[55vw] mt-1">
+                    <div className="relative">
+                      <div className="absolute -inset-[1px] rounded-sm opacity-25 group-focus-within:opacity-50 transition-opacity duration-700"
+                        style={{ background: "linear-gradient(135deg, rgba(168,85,247,0.2), transparent 40%, transparent 60%, rgba(168,85,247,0.2))", filter: "blur(4px)" }} />
+                      <div className="relative px-4 py-0.5 overflow-hidden"
+                        style={{ border: "1px solid rgba(168,85,247,0.18)", background: "rgba(8,4,20,0.8)", boxShadow: "0 0 20px rgba(168,85,247,0.03)" }}>
+                        <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
+                          onChange={(e) => handleInviteCodeChange(e.target.value)}
+                          maxLength={19}
+                          className="relative z-10 w-full bg-transparent py-2.5 text-center text-[10px] tracking-[0.18em] text-purple-200/60 focus:outline-none placeholder:text-white/10 transition-all" />
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <button type="button" onClick={() => setInviteCodeValid(false)}
-                    className="text-white/[0.04] hover:text-white/12 text-[7px] tracking-[0.15em] uppercase transition-colors mt-1">
-                    + Invite code
+                    className="text-purple-400/20 hover:text-purple-300/40 text-[8px] tracking-[0.2em] uppercase transition-colors mt-1 border-b border-dashed border-purple-400/10 pb-0.5">
+                    + Enter invite code
                   </button>
                 )}
                 {/* ── 启动按钮 ── */}
