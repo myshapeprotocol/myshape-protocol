@@ -293,6 +293,7 @@ const ProtocolHeader = () => {
     }}>
       {[
         { label: "Protocol", href: "/protocol" },
+        { label: "Vision", href: "/vision" },
         { label: "Build", href: "/developers" },
         { label: "Demo", href: "/motion-demo" },
         { label: "Genesis", href: "/genesis/cohort" },
