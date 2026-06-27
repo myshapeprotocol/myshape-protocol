@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import ProtocolHeader from "@/components/header/header";
 import { useMyShapeEngine } from "@/hooks/useMyShapeEngine";
+import MotionGuide, { TOTAL_DURATION_MS } from "@/components/motion-guide/MotionGuide";
 
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick, resumeAudio } from "@/utils/useAudioTick";
@@ -55,10 +56,15 @@ export default function MotionDemoClient() {
   const [wasmCompare, setWasmCompare] = useState<{ loading: boolean; similarity: number | null; sigDim: number } | null>(null);
   const { engine, loading: wasmLoading, load: loadWasm } = useMyShapeEngine();
   const [copied, setCopied] = useState(false);
-  const [countdown, setCountdown] = useState(8);
+  const [countdown, setCountdown] = useState(30);
+  const [landmarkVisibility, setLandmarkVisibility] = useState<(number | undefined)[]>([]);
+  const [captureElapsedMs, setCaptureElapsedMs] = useState(0);
+  const [validFrameCount, setValidFrameCount] = useState(0);
+  const [allPhasesComplete, setAllPhasesComplete] = useState(false);
   const framesRef = useRef<FeatureFrame[]>([]);
   const animRef = useRef<number>(0);
   const phaseRef = useRef<Phase>("idle");
+  const captureStartRef = useRef<number>(0);
   const poseRef = useRef<PoseInstance | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -74,7 +80,12 @@ export default function MotionDemoClient() {
 
     setPhase("capturing");
     phaseRef.current = "capturing";
-    setCountdown(8);
+    setCountdown(30);
+    captureStartRef.current = performance.now();
+    setCaptureElapsedMs(0);
+    setValidFrameCount(0);
+    setLandmarkVisibility([]);
+    setAllPhasesComplete(false);
     framesRef.current = [];
     setProofHashes(null);
 
@@ -100,6 +111,21 @@ export default function MotionDemoClient() {
           const now = Date.now();
           const lm = results.poseLandmarks;
           landmarksRef.current = lm.map((l: { x: number; y: number; z: number }) => ({ x: l.x, y: l.y, z: l.z }));
+          // ── Visibility extraction + valid frame counting ──
+          // MediaPipe runtime provides visibility but the CDN type defs may omit it
+          const rawLm = lm as Array<{ x: number; y: number; z: number; visibility?: number }>;
+          const vis = rawLm.map(l => l.visibility);
+          setLandmarkVisibility(vis);
+          const elapsed = performance.now() - captureStartRef.current;
+          setCaptureElapsedMs(elapsed);
+          // Check 9 mandatory anchors (indices: 0,11,12,13,14,15,16,23,24)
+          const anchorIndices = [0, 11, 12, 13, 14, 15, 16, 23, 24];
+          const allAnchorsVisible = anchorIndices.every(i => (rawLm[i]?.visibility ?? 0) > 0.5);
+          if (allAnchorsVisible) setValidFrameCount(c => c + 1);
+          // Auto-transition when 30s elapsed
+          if (elapsed >= TOTAL_DURATION_MS && !allPhasesComplete) {
+            setAllPhasesComplete(true);
+          }
           const shoulderAngle = Math.atan2(lm[12].y - lm[11].y, lm[12].x - lm[11].x) * (180 / Math.PI);
           const elbowAngle = Math.atan2(lm[14].y - lm[12].y, lm[14].x - lm[12].x) * (180 / Math.PI);
           const prev = framesRef.current[framesRef.current.length - 1];
@@ -313,13 +339,15 @@ export default function MotionDemoClient() {
   // ── Sync phaseRef with phase state (keeps feed loop + onResults in sync) ──
   useEffect(() => { phaseRef.current = phase; }, [phase]);
 
-  // ── Countdown ──
+  // ── Countdown (30s protocol) ──
   useEffect(() => {
     if (phase !== "capturing") return;
-    if (countdown <= 0) { setPhase("processing"); return; }
-    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    if (allPhasesComplete) { setPhase("processing"); return; }
+    const remaining = Math.max(0, Math.ceil((TOTAL_DURATION_MS - captureElapsedMs) / 1000));
+    if (remaining !== countdown) setCountdown(remaining);
+    const t = setTimeout(() => {}, 500); // polling tick
     return () => clearTimeout(t);
-  }, [phase, countdown]);
+  }, [phase, countdown, allPhasesComplete, captureElapsedMs]);
 
   // ── Generate Signature + PES computation ──
   useEffect(() => {
@@ -475,17 +503,17 @@ export default function MotionDemoClient() {
 
             {phase === "capturing" && (
               <>
-                <div className="absolute top-3 left-3 z-10 flex items-center gap-2 px-3 py-1.5 bg-black/70 border border-cyan-400/30">
-                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="text-cyan-400/80 text-[9px] tracking-[0.2em] uppercase">Capturing... {countdown}s</span>
-                </div>
-                <div className="absolute top-16 left-0 right-0 z-10 text-center pointer-events-none">
-                  <p className="text-cyan-400/35 text-[11px] tracking-[0.12em] uppercase leading-relaxed">
-                    Stand naturally — micro-motion is your signature
-                  </p>
-                  <p className="text-white/15 text-[10px] tracking-[0.06em] mt-0.5">
-                    No pose required. Breathe. Shift weight. Be present.
-                  </p>
+                {/* ── MotionGuide: 5-phase gold standard protocol overlay ── */}
+                <MotionGuide
+                  elapsedMs={captureElapsedMs}
+                  landmarkVisibility={landmarkVisibility}
+                  active={true}
+                />
+                {/* Mini status badge — frame counter */}
+                <div className="absolute top-3 right-3 z-30 flex items-center gap-2 px-2.5 py-1 bg-black/70 border border-cyan-400/20 rounded-sm pointer-events-none">
+                  <span className="text-cyan-400/60 text-[8px] tracking-[0.15em] font-mono">
+                    {validFrameCount} valid
+                  </span>
                 </div>
               </>
             )}
@@ -605,6 +633,10 @@ export default function MotionDemoClient() {
               <div className="flex justify-between">
                 <span className="text-white/25">SST Frames</span>
                 <span className="text-cyan-300/60">{sstFramesRef.current.length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white/25">Valid Frames</span>
+                <span className="text-cyan-300/60">{validFrameCount} <span className="text-white/15">/ {sstFramesRef.current.length || 0}</span></span>
               </div>
               <div className="flex justify-between">
                 <span className="text-white/25">Energy</span>
