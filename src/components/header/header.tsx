@@ -299,6 +299,7 @@ const ProtocolHeader = () => {
         { label: "Demo", href: "/motion-demo" },
         { label: "Genesis", href: "/genesis/cohort" },
         { label: "Dashboard", href: "/dashboard" },
+        { label: "Evidence", href: "/evidence" },
         { label: "Papers", href: "/papers" },
       ].map(link =>
           <Link key={link.href} href={link.href}
