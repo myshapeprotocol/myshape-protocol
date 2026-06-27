@@ -128,9 +128,7 @@ export default function TechSpecClient() {
                 <div className="text-cyan-300/80 text-lg md:text-xl font-light tracking-wider"
                   data-default="rgba(200,240,255,0.8)" data-hover="rgba(200,240,255,1)">{m.value}</div>
                 <div className="text-white/20 text-[8px] tracking-[0.15em] uppercase mt-1"
-                  style={{ fontSize: "8px" }}
-                  data-default="rgba(255,255,255,0.2)" data-hover="rgba(255,255,255,0.5)"
-                  data-default-size="8px" data-hover-size="10px">{m.label}</div>
+                  data-default="rgba(255,255,255,0.2)" data-hover="rgba(255,255,255,0.5)">{m.label}</div>
               </div>
             ))}
           </div>
