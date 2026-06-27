@@ -95,7 +95,7 @@ export default function ArchitectureClient() {
                     title={p.desc}
                     onMouseEnter={e => { playTick(800, "sine", 0.08, 0.02); hoverOn(e); }}
                     onMouseLeave={e => hoverOff(e)}>
-                    <div className="w-14 h-14 rounded-full border border-cyan-400/30 flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-500 group-hover:border-cyan-300/90 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.45)] group-hover:scale-110"
+                    <div className="w-14 h-14 rounded-full border border-cyan-400/30 flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-500 group-hover:border-cyan-300/90 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.45)]"
                       style={{ color: "rgba(34,211,238,0.55)", background: "#02040a" }}>
                       {p.step}
                     </div>
