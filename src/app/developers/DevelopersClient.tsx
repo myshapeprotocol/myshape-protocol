@@ -54,10 +54,10 @@ export default function DevelopersClient() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-16">
         <div className="space-y-4 mb-12">
-          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">DEVELOPER_HUB // V1.0</div>
-          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase"
-            style={{ textShadow: "0 0 40px rgba(144,200,255,0.2)" }}>Build with Presence</h1>
-          <p className="text-white/40 text-[12px] leading-relaxed max-w-xl">
+          <div className="text-cyan-400/60 text-[10px] md:text-[11px] tracking-[0.4em] md:tracking-[0.5em] uppercase"
+            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>DEVELOPER_HUB // V1.0</div>
+          <h1 className="text-3xl md:text-5xl font-light tracking-[0.08em] md:tracking-[0.12em] text-white uppercase">Build with Presence</h1>
+          <p className="text-white/45 md:text-white/50 text-[11px] md:text-[14px] leading-relaxed max-w-xl font-light">
             Integrate sovereign identity verification into any application.
             Five lines of code. Zero data stored. Real human presence.
           </p>
@@ -76,7 +76,7 @@ export default function DevelopersClient() {
 
         {/* ── Quick Start ── */}
         <section className="mb-14">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// QUICK_START</h2>
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// QUICK_START</h2>
           <div className="border border-cyan-400/20 bg-cyan-400/[0.02] p-5 overflow-x-auto relative group">
             <pre className="text-cyan-200/70 text-[11px] leading-relaxed font-mono whitespace-pre">
               {QUICK_START}
@@ -93,7 +93,7 @@ export default function DevelopersClient() {
 
         {/* ── SDK Reference ── */}
         <section className="mb-14">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// SDK_REFERENCE (§8)</h2>
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// SDK_REFERENCE (§8)</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse border border-white/5">
               <thead>
@@ -122,7 +122,7 @@ export default function DevelopersClient() {
 
         {/* ── Protocol Engines ── */}
         <section className="mb-14">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// PROTOCOL_ENGINES</h2>
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// PROTOCOL_ENGINES</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {[
               { name: "PES Engine", path: "engine/presence-entropy.ts", desc: "4-dimensional entropy scoring" },
@@ -148,7 +148,7 @@ export default function DevelopersClient() {
 
         {/* ── Code Examples ── */}
         <section className="mb-14">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// CODE_EXAMPLES</h2>
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// CODE_EXAMPLES</h2>
           <div className="space-y-4">
             {[
               {
@@ -206,7 +206,7 @@ if (threat.overallVerdict === "human") {
 
         {/* ── REST API ── */}
         <section className="mb-14">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// REST_API</h2>
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// REST_API</h2>
           {API_ENDPOINTS.map((ep) => (
             <div key={ep.path} className="p-4 mb-2 flex items-center gap-4 transition-all duration-300"
               onMouseEnter={ev => { playTick(600, "sine", 0.06, 0.015); hoverOn(ev); ev.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; ev.currentTarget.style.transform = "scale(1.02)"; }}
