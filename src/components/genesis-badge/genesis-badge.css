@@ -40,6 +40,12 @@
   text-shadow: 0 0 12px rgba(144,200,255,0.5), 0 0 24px rgba(34,211,238,0.3);
 }
 
+/* Genesis 层级：金色文字 */
+.tier-genesis .badge-tier-label-collapsed {
+  color: rgba(245, 200, 100, 0.95);
+  text-shadow: 0 0 16px rgba(245, 180, 60, 0.5), 0 0 32px rgba(200, 150, 40, 0.25);
+}
+
 /* 折叠态呼吸光环 */
 .genesis-badge.is-collapsed::before {
   content: "";
@@ -79,14 +85,14 @@
 }
 
 .tier-genesis {
-  border-color: rgba(144, 200, 255, 0.35);
+  border-color: rgba(200, 160, 60, 0.3);
   box-shadow:
-    0 0 20px rgba(144, 200, 255, 0.08),
+    0 0 20px rgba(200, 160, 60, 0.06),
     0 0 50px rgba(144, 200, 255, 0.04),
-    inset 0 1px 0 rgba(200, 230, 255, 0.06);
+    inset 0 1px 0 rgba(245, 200, 100, 0.08);
 }
 
-/* 展开态外光环 */
+/* 展开态外光环 — 青色+金色交替 */
 .genesis-badge.is-expanded.tier-genesis::after {
   content: "";
   position: absolute;
@@ -94,8 +100,19 @@
   pointer-events: none;
   z-index: -1;
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-  border: 1px solid rgba(34,211,238,0.25);
-  animation: badgeBreath 2.5s ease-in-out infinite;
+  border: 1px solid rgba(200,160,60,0.3);
+  animation: badgeBreathGold 2.5s ease-in-out infinite;
+}
+
+@keyframes badgeBreathGold {
+  0%, 100% { border-color: rgba(200,160,60,0.2); box-shadow: 0 0 8px rgba(200,160,60,0.08); }
+  50%      { border-color: rgba(245,200,100,0.45); box-shadow: 0 0 20px rgba(245,200,100,0.2); }
+}
+
+/* 折叠态光环也改为金色 */
+.tier-genesis.is-collapsed::before {
+  border-color: rgba(200,160,60,0.35) !important;
+  animation-name: badgeBreathGold;
 }
 
 /* ── 粒子辉光背景 ── */
@@ -125,7 +142,7 @@
 .badge-corner-bl { bottom: 1px; left: 1px; border-bottom: 1px solid rgba(144,200,255,0.6); border-left: 1px solid rgba(144,200,255,0.6); }
 .badge-corner-br { bottom: 1px; right: 1px; border-bottom: 1px solid rgba(144,200,255,0.6); border-right: 1px solid rgba(144,200,255,0.6); }
 
-.tier-genesis .badge-corner { animation: cornerPulse 2s ease-in-out infinite; }
+.tier-genesis .badge-corner { animation: cornerPulseGold 2s ease-in-out infinite; }
 .tier-genesis .badge-corner-tr { animation-delay: 0.3s; }
 .tier-genesis .badge-corner-bl { animation-delay: 0.6s; }
 .tier-genesis .badge-corner-br { animation-delay: 0.9s; }
@@ -133,6 +150,11 @@
 @keyframes cornerPulse {
   0%, 100% { border-color: rgba(144,200,255,0.3); }
   50% { border-color: rgba(144,200,255,0.8); }
+}
+
+@keyframes cornerPulseGold {
+  0%, 100% { border-color: rgba(200,160,60,0.3); }
+  50% { border-color: rgba(245,200,100,0.85); }
 }
 
 /* ── 扫描线 ── */
@@ -191,11 +213,23 @@
   animation: dotFlash 2s ease-in-out infinite;
 }
 
+.tier-genesis .badge-dot {
+  background: #f5b83c;
+  box-shadow: 0 0 6px rgba(245, 184, 60, 0.8);
+  animation: dotFlashGold 2s ease-in-out infinite;
+}
+
 .badge-dot:last-child { animation-delay: 0.6s; }
+.tier-genesis .badge-dot:last-child { animation-delay: 0.6s; }
 
 @keyframes dotFlash {
   0%, 100% { opacity: 0.3; box-shadow: 0 0 3px rgba(34,211,238,0.3); }
   50% { opacity: 1; box-shadow: 0 0 8px rgba(34,211,238,0.9); }
+}
+
+@keyframes dotFlashGold {
+  0%, 100% { opacity: 0.4; box-shadow: 0 0 4px rgba(245,184,60,0.4); }
+  50% { opacity: 1; box-shadow: 0 0 12px rgba(245,184,60,0.9); }
 }
 
 /* ── 核心标题 — 故障风 ── */
@@ -211,9 +245,11 @@
 }
 
 .tier-genesis .badge-title-main {
+  color: rgba(245, 220, 150, 0.95);
   text-shadow:
-    0 0 16px rgba(144, 200, 255, 0.5),
-    0 0 40px rgba(144, 200, 255, 0.15);
+    0 0 16px rgba(245, 200, 100, 0.5),
+    0 0 40px rgba(200, 150, 40, 0.25),
+    0 0 60px rgba(144, 200, 255, 0.15);
   animation: glitchShuffle 6s steps(1) infinite;
 }
 

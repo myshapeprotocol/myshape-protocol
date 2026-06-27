@@ -95,7 +95,7 @@ export default function IdentityClient() {
 
       {/* Genesis badge — 粒子下方，面板上方 */}
       {isFormed && (
-        <div className="absolute top-[42%] md:top-[52%] left-1/2 -translate-x-1/2 z-20">
+        <div className="absolute bottom-[20%] md:bottom-[24%] left-1/2 -translate-x-1/2 z-30">
           <GenesisBadge />
         </div>
       )}
