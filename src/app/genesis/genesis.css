@@ -69,8 +69,8 @@
 .genesis-invite-corner-bl { animation: cornerPulseInvite 2s ease-in-out 0.8s infinite; }
 .genesis-invite-corner-br { animation: cornerPulseInvite 2s ease-in-out 1.2s infinite; }
 @keyframes cornerPulseInvite {
-  0%, 100% { opacity: 0.3; border-color: rgba(168,85,247,0.5); }
-  50% { opacity: 1; border-color: rgba(168,85,247,0.9); }
+  0%, 100% { opacity: 0.3; border-color: rgba(99,140,220,0.5); }
+  50% { opacity: 1; border-color: rgba(99,140,220,0.9); }
 }
 
 /* ── 浮动指示点 ── */

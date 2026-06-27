@@ -124,10 +124,12 @@ export default function GenesisClient() {
 
       <div className="relative z-10 min-h-[60vh] flex flex-col items-center justify-center text-center mt-4 md:mt-8 pb-16">
         <div className={`transition-all duration-1000 shrink-0 ${isActive ? "opacity-20 blur-sm scale-90" : "opacity-100"}`}>
-          <h2 className="text-white text-2xl md:text-4xl font-light tracking-tight mb-3">
+          <h2 className="text-white text-2xl md:text-4xl font-light tracking-tight mb-3"
+            style={{ textShadow: "0 0 40px rgba(144,200,255,0.3), 0 0 80px rgba(144,200,255,0.1)" }}>
             {stage === "success" ? "Genesis Confirmed." : stage === "error" ? "Uplink Interrupted." : "Initialize Genesis."}
           </h2>
-          <p className="text-cyan-500/50 font-mono text-[10px] tracking-[0.6em] uppercase mb-6 md:mb-8">
+          <p className="text-cyan-400/60 font-mono text-[10px] tracking-[0.6em] uppercase mb-6 md:mb-8"
+            style={{ textShadow: "0 0 16px rgba(34,211,238,0.3)" }}>
             ESTABLISHING_IDENTITY_LAYER_PROTOCOL
           </p>
         </div>
@@ -185,38 +187,40 @@ export default function GenesisClient() {
                 {/* ── 邀请码 — 可折叠 ── */}
                 {inviteCode || inviteCodeValid !== null ? (
                   <div className="w-52 max-w-[58vw] mt-1">
-                    <div className="relative group">
+                    <div className="relative group"
+                      onMouseEnter={() => playTick(500, "sine", 0.05, 0.015)}>
                       <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
-                        style={{ background: "linear-gradient(135deg, rgba(168,85,247,0.25), transparent 40%, transparent 60%, rgba(168,85,247,0.25))", filter: "blur(5px)" }} />
+                        style={{ background: "linear-gradient(135deg, rgba(99,140,220,0.25), transparent 40%, transparent 60%, rgba(99,140,220,0.25))", filter: "blur(5px)" }} />
                       <div className="relative px-4 py-0.5 overflow-hidden"
-                        style={{ border: "1px solid rgba(168,85,247,0.3)", background: "rgba(8,4,20,0.85)", boxShadow: "0 0 28px rgba(168,85,247,0.06)" }}>
-                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-400/70 genesis-invite-corner-tl" />
-                        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-400/70 genesis-invite-corner-tr" />
-                        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-purple-400/70 genesis-invite-corner-bl" />
-                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-purple-400/70 genesis-invite-corner-br" />
+                        style={{ border: "1px solid rgba(99,140,220,0.3)", background: "rgba(4,10,22,0.85)", boxShadow: "0 0 28px rgba(99,140,220,0.06)" }}>
+                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-300/60 genesis-invite-corner-tl" />
+                        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-indigo-300/60 genesis-invite-corner-tr" />
+                        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-indigo-300/60 genesis-invite-corner-bl" />
+                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-300/60 genesis-invite-corner-br" />
                         <div className="absolute inset-0 pointer-events-none genesis-invite-scan" />
-                        {/* 侧边数据流 */}
-                        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(168,85,247,0.25), transparent)", animation: "dataFlow 2.5s ease-in-out infinite" }} />
-                        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(168,85,247,0.2), transparent)", animation: "dataFlow 2.5s ease-in-out 0.8s infinite" }} />
+                        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.3), transparent)", animation: "dataFlow 2.5s ease-in-out infinite" }} />
+                        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.25), transparent)", animation: "dataFlow 2.5s ease-in-out 0.8s infinite" }} />
                         <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
                           onChange={(e) => handleInviteCodeChange(e.target.value)}
+                          onFocus={() => playTick(600, "sine", 0.06, 0.015)}
                           maxLength={19}
-                          className="relative z-10 w-full bg-transparent py-3 text-center text-[11px] tracking-[0.2em] text-purple-200/70 focus:outline-none placeholder:text-white/14 transition-all" />
+                          className="relative z-10 w-full bg-transparent py-3 text-center text-[11px] tracking-[0.2em] text-indigo-200/70 focus:outline-none placeholder:text-white/14 transition-all" />
                       </div>
                     </div>
                     {inviteCode.length > 0 && (
                       <div className="text-center mt-1.5">
                         {inviteCodeValid === true ? (
-                          <span className="text-green-400/50 font-mono text-[8px] tracking-[0.18em]">◈ CODE_VALID</span>
+                          <span className="text-green-400/55 font-mono text-[9px] tracking-[0.18em]">◈ CODE_VALID</span>
                         ) : (
-                          <span className="text-red-400/45 font-mono text-[8px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
+                          <span className="text-red-400/50 font-mono text-[9px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
                         )}
                       </div>
                     )}
                   </div>
                 ) : (
                   <button type="button" onClick={() => setInviteCodeValid(false)}
-                    className="text-purple-400/35 hover:text-purple-300/60 text-[10px] tracking-[0.22em] uppercase transition-colors border-b border-dashed border-purple-400/20 pb-0.5">
+                    onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
+                    className="text-indigo-300/35 hover:text-indigo-200/55 text-[10px] tracking-[0.22em] uppercase transition-colors border-b border-dashed border-indigo-300/20 pb-0.5">
                     + Enter invite code
                   </button>
                 )}
@@ -224,7 +228,8 @@ export default function GenesisClient() {
                 <div className="flex flex-col items-center space-y-2">
                   <span className="text-white/35 text-[10px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
                   <div className="relative flex items-center gap-2">
-                    <div className="relative group genesis-terminal-glow flex-1">
+                    <div className="relative group genesis-terminal-glow flex-1"
+                      onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
                       <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
                         style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.2), transparent 40%, transparent 60%, rgba(34,211,238,0.2))", filter: "blur(5px)" }} />
                       <div className="relative pl-5 pr-12 py-0.5 overflow-hidden"
