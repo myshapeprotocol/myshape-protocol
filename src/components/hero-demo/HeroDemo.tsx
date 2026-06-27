@@ -659,7 +659,7 @@ export default function HeroDemo() {
               textShadow: `0 0 ${titleGlow}px rgba(144,200,255,0.35), 0 0 ${titleGlow * 1.4}px rgba(144,200,255,0.18)`,
             }}
           >
-            PROOF OF PRESENCE
+            THE NEW IDENTITY
           </h1>
           <p className="hero-demo-tagline">
             Presence is the new identity.<br />The identity layer for the simulation age.
