@@ -264,19 +264,19 @@ cargo run --release --bin myshape-demo -- --verbose`}
         {/* Discussion + More Essays */}
         <div className="mt-12 pt-10 border-t border-white/[0.05] text-center space-y-4">
           <p className="text-white/20 text-[10px]">Discuss on HN or GitHub. More technical essays below.</p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
-              className="px-6 py-2.5 border border-cyan-400/25 text-cyan-300/60 text-[10px] tracking-[0.3em] uppercase hover:bg-cyan-400/[0.04] hover:text-white transition-all"
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all"
               onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>
               View on GitHub →
             </a>
             <a href="/blog/stored-identity-vs-generated-presence"
-              className="px-6 py-2.5 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all"
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
               Stored Identity vs. Generated Presence →
             </a>
             <a href="/architecture"
-              className="px-6 py-2.5 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/30 hover:text-white/45 transition-all"
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
               Protocol Architecture →
             </a>

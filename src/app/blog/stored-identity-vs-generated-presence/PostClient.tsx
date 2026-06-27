@@ -219,20 +219,20 @@ export default function PostClient() {
 
         <div className="mt-16 pt-10 border-t border-white/[0.05] text-center space-y-4">
           <p className="text-white/20 text-[10px]">Discuss this essay on HN or GitHub.</p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
               onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-              className="px-8 py-3 border border-cyan-400/25 text-cyan-300/60 text-[10px] tracking-[0.3em] uppercase hover:bg-cyan-400/[0.04] hover:text-white transition-all">
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all">
               View on GitHub →
             </a>
             <Link href="/evidence"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/45 hover:text-white/80 hover:bg-cyan-400/[0.04] transition-all">
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all">
               Evidence →
             </Link>
             <Link href="/blog"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-              className="px-8 py-3 border border-cyan-400/15 text-white/25 text-[10px] tracking-[0.3em] uppercase hover:border-cyan-400/45 hover:text-white/80 hover:bg-cyan-400/[0.04] transition-all">
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all">
               All Essays →
             </Link>
           </div>
