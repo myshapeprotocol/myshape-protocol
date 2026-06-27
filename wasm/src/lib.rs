@@ -40,6 +40,93 @@ pub fn generate_challenge(session_key_hex: &str) -> Result<String, JsValue> {
         .map_err(|e| JsValue::from_str(&format!("Serialization error: {}", e)))
 }
 
+// ── Flat types for JS-friendly serialization ──────────────────────────
+// nalgebra's DVector serde produces [data, len, null] which is opaque to JS.
+// These flat types use plain Vec<f32> for direct JSON array serialization.
+
+#[derive(serde::Serialize)]
+struct FlatMotionSignature {
+    vector: Vec<f32>,
+    version: u32,
+}
+
+#[derive(serde::Serialize)]
+struct FlatEnrollment {
+    user_id: String,
+    signature: FlatMotionSignature,
+    variance: f64,
+    sample_count: u32,
+    enrolled_at: f64,
+    device_info: DeviceInfo,
+}
+
+impl From<MotionSignature> for FlatMotionSignature {
+    fn from(sig: MotionSignature) -> Self {
+        FlatMotionSignature {
+            vector: sig.vector.iter().copied().collect(),
+            version: sig.version,
+        }
+    }
+}
+
+impl From<Enrollment> for FlatEnrollment {
+    fn from(enr: Enrollment) -> Self {
+        FlatEnrollment {
+            user_id: enr.user_id,
+            signature: FlatMotionSignature::from(enr.signature),
+            variance: enr.variance,
+            sample_count: enr.sample_count,
+            enrolled_at: enr.enrolled_at,
+            device_info: enr.device_info,
+        }
+    }
+}
+
+impl From<FlatMotionSignature> for MotionSignature {
+    fn from(flat: FlatMotionSignature) -> Self {
+        MotionSignature {
+            vector: nalgebra::DVector::from_vec(flat.vector),
+            version: flat.version,
+        }
+    }
+}
+
+// Flat input types for deserialization (accept JS-friendly format)
+#[derive(serde::Deserialize)]
+struct FlatEnrollmentInput {
+    user_id: String,
+    signature: FlatMotionSignatureInput,
+    variance: f64,
+    sample_count: u32,
+    enrolled_at: f64,
+    device_info: DeviceInfo,
+}
+
+#[derive(serde::Deserialize)]
+struct FlatMotionSignatureInput {
+    vector: Vec<f32>,
+    version: u32,
+}
+
+// Explicit conversion helpers (avoid orphan rule issues with From trait)
+fn to_motion_signature(flat: FlatMotionSignatureInput) -> MotionSignature {
+    MotionSignature {
+        vector: nalgebra::DVector::from_vec(flat.vector),
+        version: flat.version,
+    }
+}
+
+fn to_enrollment(flat: FlatEnrollmentInput) -> Enrollment {
+    Enrollment {
+        user_id: flat.user_id,
+        signature: to_motion_signature(flat.signature),
+        variance: flat.variance,
+        sample_count: flat.sample_count,
+        enrolled_at: flat.enrolled_at,
+        device_info: flat.device_info,
+    }
+}
+
 // ── Motion Signature Extraction ──────────────────────────────────────
 
 /// Extract a Motion Signature from a motion sequence.
@@ -47,7 +134,7 @@ pub fn generate_challenge(session_key_hex: &str) -> Result<String, JsValue> {
 /// `motion_json` should be a JSON MotionSequence:
 ///   { "fps": 30, "frames": [{ "t": 0.0, "keypoints": [{ "x": 0, "y": 0, "z": 0 }, ...] }, ...] }
 ///
-/// Returns a JSON MotionSignature: { "vector": [...], "version": 1 }
+/// Returns a JSON FlatMotionSignature: { "vector": [128 floats], "version": 1 }
 #[wasm_bindgen]
 pub fn extract_signature(motion_json: &str) -> Result<String, JsValue> {
     let sequence: MotionSequence = serde_json::from_str(motion_json)
@@ -55,8 +142,9 @@ pub fn extract_signature(motion_json: &str) -> Result<String, JsValue> {
 
     let engine = MotionSignatureEngine::new();
     let signature = engine.extract(&sequence);
+    let flat = FlatMotionSignature::from(signature);
 
-    serde_json::to_string(&signature)
+    serde_json::to_string(&flat)
         .map_err(|e| JsValue::from_str(&format!("Serialization error: {}", e)))
 }
 
@@ -67,11 +155,15 @@ pub fn extract_signature(motion_json: &str) -> Result<String, JsValue> {
 /// Returns -1.0 on parse error.
 #[wasm_bindgen]
 pub fn similarity(enrollment_json: &str, response_json: &str) -> f64 {
-    let enrollment: Option<MotionSignature> = serde_json::from_str(enrollment_json).ok();
-    let response: Option<MotionSignature> = serde_json::from_str(response_json).ok();
+    let enrollment: Option<FlatMotionSignatureInput> = serde_json::from_str(enrollment_json).ok();
+    let response: Option<FlatMotionSignatureInput> = serde_json::from_str(response_json).ok();
 
     match (enrollment, response) {
-        (Some(e), Some(r)) => MotionSignatureEngine::similarity(&e, &r),
+        (Some(e), Some(r)) => {
+            let e_sig = to_motion_signature(e);
+            let r_sig = to_motion_signature(r);
+            MotionSignatureEngine::similarity(&e_sig, &r_sig)
+        }
         _ => -1.0,
     }
 }
@@ -95,9 +187,10 @@ pub fn verify_intent(
     signature_json: &str,
     risk_level: &str,
 ) -> Result<String, JsValue> {
-    // Parse inputs
-    let enrollment: Enrollment = serde_json::from_str(enrollment_json)
+    // Parse inputs (accept flat JS-friendly format)
+    let flat_enrollment: FlatEnrollmentInput = serde_json::from_str(enrollment_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid enrollment: {}", e)))?;
+    let enrollment: Enrollment = to_enrollment(flat_enrollment);
 
     let _challenge: Challenge = serde_json::from_str(challenge_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid challenge: {}", e)))?;
@@ -105,8 +198,9 @@ pub fn verify_intent(
     let response: ChallengeResponse = serde_json::from_str(response_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid response: {}", e)))?;
 
-    let signature: MotionSignature = serde_json::from_str(signature_json)
+    let flat_sig: FlatMotionSignatureInput = serde_json::from_str(signature_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid signature: {}", e)))?;
+    let signature: MotionSignature = to_motion_signature(flat_sig);
 
     let risk = match risk_level {
         "high" => RiskLevel::High,
@@ -154,7 +248,8 @@ pub fn create_enrollment(
         device_info,
     };
 
-    serde_json::to_string(&enrollment)
+    let flat = FlatEnrollment::from(enrollment);
+    serde_json::to_string(&flat)
         .map_err(|e| JsValue::from_str(&format!("Serialization error: {}", e)))
 }
 

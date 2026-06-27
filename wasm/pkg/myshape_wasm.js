@@ -45,7 +45,7 @@ exports.create_enrollment = create_enrollment;
  * `motion_json` should be a JSON MotionSequence:
  *   { "fps": 30, "frames": [{ "t": 0.0, "keypoints": [{ "x": 0, "y": 0, "z": 0 }, ...] }, ...] }
  *
- * Returns a JSON MotionSignature: { "vector": [...], "version": 1 }
+ * Returns a JSON FlatMotionSignature: { "vector": [128 floats], "version": 1 }
  * @param {string} motion_json
  * @returns {string}
  */

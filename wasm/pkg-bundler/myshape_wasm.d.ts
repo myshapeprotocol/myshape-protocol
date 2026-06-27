@@ -18,7 +18,7 @@ export function create_enrollment(signatures_json: string, user_id: string, devi
  * `motion_json` should be a JSON MotionSequence:
  *   { "fps": 30, "frames": [{ "t": 0.0, "keypoints": [{ "x": 0, "y": 0, "z": 0 }, ...] }, ...] }
  *
- * Returns a JSON MotionSignature: { "vector": [...], "version": 1 }
+ * Returns a JSON FlatMotionSignature: { "vector": [128 floats], "version": 1 }
  */
 export function extract_signature(motion_json: string): string;
 

@@ -293,6 +293,7 @@ dependencies = [
  "hex",
  "js-sys",
  "myshape-engine",
+ "nalgebra",
  "serde",
  "serde-wasm-bindgen",
  "serde_json",
