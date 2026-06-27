@@ -93,17 +93,20 @@ export default function ArchitectureClient() {
                 <div key={p.step} className="flex items-start">
                   <div className="flex flex-col items-center group cursor-default"
                     title={p.desc}
-                    onMouseEnter={() => playTick(800, "sine", 0.08, 0.02)}>
+                    onMouseEnter={e => { playTick(800, "sine", 0.08, 0.02); hoverOn(e); }}
+                    onMouseLeave={e => hoverOff(e)}>
                     <div className="w-14 h-14 rounded-full border border-cyan-400/30 flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-500 group-hover:border-cyan-300/90 group-hover:shadow-[0_0_24px_rgba(34,211,238,0.45)] group-hover:scale-110"
                       style={{ color: "rgba(34,211,238,0.55)", background: "#02040a" }}>
                       {p.step}
                     </div>
-                    <span className="text-[11px] tracking-[0.15em] uppercase mt-3 text-center leading-tight font-medium transition-all duration-500 group-hover:text-white/80"
-                      style={{ color: "rgba(255,255,255,0.55)" }}>
+                    <span className="text-[11px] tracking-[0.15em] uppercase mt-3 text-center leading-tight font-medium transition-all duration-500 group-hover:text-white/90"
+                      style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px" }}
+                      data-default="rgba(255,255,255,0.55)" data-hover="rgba(255,255,255,0.95)" data-default-size="11px" data-hover-size="13px">
                       {p.name}
                     </span>
-                    <span className="text-[8px] tracking-[0.1em] font-mono mt-1.5 transition-all duration-500 group-hover:text-cyan-300/60"
-                      style={{ color: "rgba(34,211,238,0.3)" }}>
+                    <span className="text-[8px] tracking-[0.1em] font-mono mt-1.5 transition-all duration-500 group-hover:text-cyan-300/70"
+                      style={{ color: "rgba(34,211,238,0.3)", fontSize: "8px" }}
+                      data-default="rgba(34,211,238,0.3)" data-hover="rgba(34,211,238,0.7)" data-default-size="8px" data-hover-size="10px">
                       {p.output}
                     </span>
                   </div>
