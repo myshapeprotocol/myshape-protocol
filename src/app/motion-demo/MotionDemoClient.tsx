@@ -627,6 +627,21 @@ export default function MotionDemoClient() {
                 <p className="text-white/20 text-[11px] tracking-[0.08em] text-center max-w-xs mt-1">
                   Face the camera. Stand naturally.<br />No specific pose or movement needed.
                 </p>
+                {/* Research Consent — inline before camera button */}
+                <div className="w-full max-w-xs mt-2">
+                  <ResearchConsent
+                    consented={researchConsented}
+                    onConsentChange={setResearchConsented}
+                    lighting={lighting}
+                    onLightingChange={setLighting}
+                    uploadState={uploadState}
+                    uploadError={uploadError}
+                    sessionId={sessionId}
+                    captureActive={phase === "capturing"}
+                    uploadDone={uploadDone}
+                  />
+                </div>
+
                 <div className="flex flex-col items-center gap-5 mt-6">
                   <button onClick={startCapture}
                     onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
@@ -1042,21 +1057,6 @@ export default function MotionDemoClient() {
               </div>
             )}
           </div>
-        </div>
-
-        {/* ── Research Consent (Phase E-1) ── */}
-        <div className="mt-8 max-w-xl mx-auto">
-          <ResearchConsent
-            consented={researchConsented}
-            onConsentChange={setResearchConsented}
-            lighting={lighting}
-            onLightingChange={setLighting}
-            uploadState={uploadState}
-            uploadError={uploadError}
-            sessionId={sessionId}
-            captureActive={phase === "capturing"}
-            uploadDone={uploadDone}
-          />
         </div>
 
         <div className="mt-10 text-center space-y-3">
