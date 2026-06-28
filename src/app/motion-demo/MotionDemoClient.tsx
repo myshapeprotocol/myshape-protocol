@@ -640,7 +640,7 @@ export default function MotionDemoClient() {
                     uploadState={uploadState}
                     uploadError={uploadError}
                     sessionId={sessionId}
-                    captureActive={phase === "capturing"}
+                    captureActive={false}
                     uploadDone={uploadDone}
                   />
                 </div>
