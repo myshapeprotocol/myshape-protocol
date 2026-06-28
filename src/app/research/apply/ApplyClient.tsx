@@ -98,6 +98,18 @@ function ApplyForm() {
       <ProtocolHeader />
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 md:px-6" style={{ paddingTop: "7rem", paddingBottom: "4rem" }}>
+        {/* Edge warning */}
+        {typeof window !== "undefined" && /Edg\//.test(window.navigator.userAgent) && (
+          <div className="px-4 py-3 border border-amber-400/30 bg-amber-400/[0.06] text-center mb-6" style={{ borderRadius: 4 }}>
+            <p className="text-amber-300/80 text-[11px] leading-relaxed">
+              Edge does not support the motion capture demo.
+            </p>
+            <p className="text-white/30 text-[9px] mt-1">
+              Please open this page in <span className="text-white/50">Chrome</span> or <span className="text-white/50">Firefox</span> for the full experience.
+            </p>
+          </div>
+        )}
+
         {/* Header */}
         <div className="space-y-4 mb-10">
           <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">Protocol_Recruitment // Founding_Testers</div>

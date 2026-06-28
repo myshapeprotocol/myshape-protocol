@@ -601,6 +601,17 @@ export default function MotionDemoClient() {
 
             {phase === "idle" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/30 z-10">
+                {/* Edge browser warning */}
+                {typeof window !== "undefined" && /Edg\//.test(window.navigator.userAgent) && (
+                  <div className="px-4 py-3 border border-amber-400/30 bg-amber-400/[0.06] text-center max-w-sm" style={{ borderRadius: 4 }}>
+                    <p className="text-amber-300/80 text-[11px] leading-relaxed">
+                      Edge does not support camera access for this demo.
+                    </p>
+                    <p className="text-white/30 text-[9px] mt-1">
+                      Please switch to <span className="text-white/50">Chrome</span> or <span className="text-white/50">Firefox</span>.
+                    </p>
+                  </div>
+                )}
                 {/* Privacy notice */}
                 <div className="flex items-center gap-2 px-3 py-1.5 border border-cyan-400/20 bg-cyan-400/[0.04] rounded-full">
                   <svg className="w-3 h-3 text-cyan-400/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
