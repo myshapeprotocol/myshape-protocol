@@ -1052,6 +1052,28 @@ export default function MotionDemoClient() {
                     timestamp: Date.now(),
                   }} />
                 )}
+                {/* ── Completion Ceremony ── */}
+                <div className="space-y-3 pt-2">
+                  <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+                  <div className="text-center space-y-2">
+                    <div className="text-cyan-400/30 text-[7px] tracking-[0.4em] uppercase">Genesis Ritual · Motion Captured</div>
+                    <p className="text-white/40 text-[10px] leading-relaxed">
+                      Your kinetic signature has been inscribed.
+                      {researchConsented && " This data now contributes to the protocol's calibration engine."}
+                    </p>
+                    <div className="flex gap-2 justify-center pt-1">
+                      <a href="/research/apply" className="text-cyan-400/30 hover:text-cyan-300/70 text-[7px] tracking-[0.15em] uppercase border-b border-transparent hover:border-cyan-400/30 transition-all pb-0.5">
+                        Join Genesis Cohort →
+                      </a>
+                      <span className="text-white/10">|</span>
+                      <a href="/dashboard" className="text-cyan-400/30 hover:text-cyan-300/70 text-[7px] tracking-[0.15em] uppercase border-b border-transparent hover:border-cyan-400/30 transition-all pb-0.5">
+                        View Dashboard →
+                      </a>
+                    </div>
+                  </div>
+                  <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+                </div>
+
                 <button onClick={stop}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                   className="w-full py-2.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.3em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 hover:bg-cyan-400/[0.03] transition-all">
