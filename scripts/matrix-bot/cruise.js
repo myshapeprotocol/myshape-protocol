@@ -8,6 +8,9 @@
  * Aggregates: matrix_dashboard.html — one local page for all platforms
  */
 
+// 注入环境变量支持与 Bluesky 官方 SDK 组件
+require("dotenv").config();
+const { BskyAgent } = require("@atproto/api");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
@@ -84,7 +87,7 @@ async function generateImage(prompt) {
       timeout: 60000,
     });
     const url = res.data.data?.[0]?.url;
-    if (url) { console.log("    🖼️  Image generated"); return url; }
+    if (url) { console.log("    Look! Image generated"); return url; }
     console.log("    Image API: unexpected response format");
   } catch (e) {
     console.log("    Image API: " + (e.response?.status || e.code));
@@ -140,7 +143,6 @@ async function handleTrollResponse(triggerText) {
 
 // ═══════════════════════════════════════════════════════════════════
 
-// Shared image prompts by platform
 async function attachMedia(platform, topic) {
   const basePrompt = VISUAL_CORE;
   const prompts = {
@@ -301,16 +303,12 @@ const FALLBACKS = {
 
 function fallbackPost(platform) {
   const fb = FALLBACKS[platform];
-  if (platform === "hn") {
-    const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  if (platform === "hn" || platform === "linkedin") {
     return pick(fb.intros) + "\n\n" + pick(fb.bodies) + "\n\n" + pick(fb.endings);
   }
   if (platform === "x" || platform === "bluesky") {
     return fb.posts[Math.floor(Math.random() * fb.posts.length)];
-  }
-  if (platform === "linkedin") {
-    const pick = (a) => a[Math.floor(Math.random() * a.length)];
-    return pick(fb.intros) + "\n\n" + pick(fb.bodies) + "\n\n" + pick(fb.endings);
   }
   return "No content generated.";
 }
@@ -327,7 +325,6 @@ async function generatePost(platform, topic) {
 
 async function generateLinkedInTopics(hnStories) {
   console.log("\n--- LinkedIn Topics ---");
-  // Derive LinkedIn topics from HN stories with enterprise angle
   const linkedInTopics = hnStories
     .filter((s) => s.score > 20)
     .slice(0, 4)
@@ -347,6 +344,49 @@ async function generateLinkedInTopics(hnStories) {
   }
   console.log("  Generated: " + results.length + " LinkedIn posts");
   return results;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  BLUESKY AUTOMATED PUBLISHER (Thread Router)
+// ═══════════════════════════════════════════════════════════════════
+
+async function pushToBluesky(text, replyText) {
+  if (!process.env.BLUESKY_HANDLE || !process.env.BLUESKY_PASSWORD) {
+    console.log("  ⚠️  Bluesky credentials missing in .env. Skipping broadcast.");
+    return { success: false };
+  }
+
+  const agent = new BskyAgent({ service: "https://bsky.social" });
+
+  try {
+    await agent.login({
+      identifier: process.env.BLUESKY_HANDLE,
+      password: process.env.BLUESKY_PASSWORD,
+    });
+    console.log("  🤖 Bluesky Matrix Client authenticated successfully.");
+
+    // 发布第一层（主楼）
+    const rootPost = await agent.post({
+      text: text,
+      createdAt: new Date().toISOString(),
+    });
+    console.log(`  🚀 Bluesky Main Post deployed.`);
+
+    // 发布第二层（锁死引用的回帖）
+    await agent.post({
+      text: replyText,
+      createdAt: new Date().toISOString(),
+      reply: {
+        root: { cid: rootPost.cid, uri: rootPost.uri },
+        parent: { cid: rootPost.cid, uri: rootPost.uri }
+      }
+    });
+    console.log(`  🔗 Bluesky Reply Thread locked down.`);
+    return { success: true };
+  } catch (error) {
+    console.error("  ❌ Bluesky synchronizer encountered an error:", error.message);
+    return { success: false };
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -520,11 +560,22 @@ async function main() {
   }
   data.bluesky = bsPosts.slice(0, 6);
 
-  // 5. Dashboard
+  // 5. 自动执行：同步创世集结文案到 Bluesky
+  console.log("\n--- Matrix Automator: Broadcasting Genesis to Bluesky ---");
+  const mainText = `We leaked the core Rust/WASM code for MYSHAPE PROTOCOL — The Sovereign 3D Identity Layer. 🌐✨\n\nThe 120-dim motion-signature engine is LIVE, but running on "vacuum defaults."\n\nWe need exactly 300 pioneers to ignite the core PCA defense. Drop your specimen. 👇`;
+  const subText = `🔬 The Genesis Calibration Ritual\n\n1️⃣ Go to: myshape.com/motion-demo\n2️⃣ Connect via SIWE or OTP (sets your node_handle)\n3️⃣ Complete a 30-sec anonymous motion scan\n\nWatch the RESEARCH bar dot from 0 to 300. Help us train the ROC defense. ◈ Let's build it.`;
+  
+  const bskyResult = await pushToBluesky(mainText, subText);
+  let bskyCount = data.bluesky.length;
+  if (bskyResult.success) {
+    bskyCount += 1;
+  }
+
+  // 6. Dashboard
   const outPath = path.join(__dirname, "matrix_dashboard.html");
   fs.writeFileSync(outPath, generateDashboard(data), "utf8");
 
-  // 6. Sync to protocol log — all posts become immutable protocol record
+  // 7. Sync to protocol log — all posts become immutable protocol record
   const publishedPath = path.join(__dirname, "..", "agent-workflow", "published.json");
   try {
     const allPosts = [
@@ -540,7 +591,7 @@ async function main() {
   console.log("\n═".repeat(64));
   console.log("  Dashboard -> " + outPath);
   console.log("  HN: " + data.hn.length + " | LinkedIn: " + data.linkedin.length +
-    " | X: " + data.x.length + " | Bluesky: " + data.bluesky.length);
+    " | X: " + data.x.length + " | Bluesky: " + bskyCount);
   console.log("  Protocol log synced -> PROTOCOL_LOG.md");
   console.log("═".repeat(64) + "\n");
 }

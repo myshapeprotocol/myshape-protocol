@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@atproto/api": "^0.20.22",
     "@mediapipe/drawing_utils": "^0.3.1675466124",
     "@mediapipe/pose": "^0.5.1675469404",
     "@react-three/drei": "^10.7.7",
@@ -18,14 +19,18 @@
     "@types/three": "^0.182.0",
     "@vercel/analytics": "^2.0.1",
     "critters": "^0.0.23",
+    "dotenv": "^17.4.2",
     "ethers": "^6.17.0",
     "framer-motion": "^12.36.0",
     "geist": "^1.7.0",
+    "global-agent": "^4.1.3",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "resend": "^6.9.2",
-    "three": "^0.182.0"
+    "three": "^0.182.0",
+    "twitter-api-v2": "^1.29.0",
+    "undici": "^8.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

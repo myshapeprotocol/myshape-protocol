@@ -19,6 +19,7 @@ pub mod types;
 pub mod challenge;
 pub mod motion;
 pub mod verification;
+pub mod calibration;
 
 /// Engine version.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

@@ -12,7 +12,7 @@ import { playTick } from "@/utils/useAudioTick";
    ═══════════════════════════════════════════════ */
 
 interface Props {
-  onSuccess?: (data: { address: string; skip_otp: boolean; is_genesis: boolean }) => void;
+  onSuccess?: (data: { address: string; skip_otp: boolean; is_genesis: boolean; node_handle?: string | null }) => void;
   email?: string;
   className?: string;
 }
@@ -122,12 +122,12 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
       setStatus("done");
       setShowConfirmed(true);
       setTimeout(() => setShowConfirmed(false), 3000);
-      onSuccess?.({ address: addr, skip_otp: data.skip_otp || true, is_genesis: data.is_genesis || false });
+      onSuccess?.({ address: addr, skip_otp: data.skip_otp || true, is_genesis: data.is_genesis || false, node_handle: data.node_handle ?? null });
     } catch {
       setStatus("done");
       setShowConfirmed(true);
       setTimeout(() => setShowConfirmed(false), 3000);
-      onSuccess?.({ address: addr, skip_otp: true, is_genesis: false });
+      onSuccess?.({ address: addr, skip_otp: true, is_genesis: false, node_handle: null });
     }
   }, [email, onSuccess]);
 
@@ -185,7 +185,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
       setStatus("done");
       setShowConfirmed(true);
       setTimeout(() => setShowConfirmed(false), 3000);
-      onSuccess?.({ address: addr, skip_otp: data.skip_otp || false, is_genesis: data.is_genesis || false });
+      onSuccess?.({ address: addr, skip_otp: data.skip_otp || false, is_genesis: data.is_genesis || false, node_handle: data.node_handle ?? null });
     } catch (err: unknown) {
       setErrorMsg((err as Error).message?.slice(0, 100) || "Connection failed");
       setStatus("error");

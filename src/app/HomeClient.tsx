@@ -14,10 +14,40 @@ import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import ParadigmShift from "@/components/paradigm-shift/ParadigmShift";
 import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
 import ProtocolStatus from "@/components/protocol-status/ProtocolStatus";
+import ResearchContributionCTA from "@/components/research-cta/ResearchContributionCTA";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
+
+/** Live research session counter — fetches from /api/research/stats */
+function ResearchLiveCounter() {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/research/stats")
+      .then((r) => r.json())
+      .then((data) => setCount(data.session_count ?? 0))
+      .catch(() => setCount(null));
+    const interval = setInterval(() => {
+      fetch("/api/research/stats")
+        .then((r) => r.json())
+        .then((data) => setCount(data.session_count ?? 0))
+        .catch(() => {});
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (count === null) return <span className="text-white/30">—</span>;
+  return (
+    <span className="text-white/50">
+      {count}
+      {count >= 300 && (
+        <span className="text-cyan-400/50 ml-1" title="Calibration threshold reached">◈</span>
+      )}
+    </span>
+  );
+}
 
 export default function HomeClient() {
   const [activeUser, setActiveUser] = useState("");
@@ -312,8 +342,8 @@ export default function HomeClient() {
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)] animate-pulse shrink-0" />
                 <Typewriter text="PROTOCOL_ENCLAVE: ACTIVE" className="text-cyan-400/50 uppercase" />
                 <span className="text-white/10">|</span>
-                <span className="text-white/30">ENGINES</span>
-                <span className="text-white/50">15</span>
+                <span className="text-white/30">RESEARCH</span>
+                <ResearchLiveCounter />
                 <span className="text-white/10">|</span>
                 <span className="text-white/30">SPEC</span>
                 <span className="text-white/50">§1–40</span>
@@ -325,10 +355,15 @@ export default function HomeClient() {
                 <span className="text-white/50">5L</span>
                 <span className="text-white/10">|</span>
                 <span className="text-white/30">CORE</span>
-                <span className="text-white/50">25/25_PASS</span>
+                <span className="text-white/50">37/37_PASS</span>
             </div>
           </div>
         </section>
+
+        {/* ── Research Contribution CTA (Phase E: Route A) ── */}
+        <div className="hidden md:block">
+          <ResearchContributionCTA />
+        </div>
 
         <div className="hidden md:block">
           <Vision />

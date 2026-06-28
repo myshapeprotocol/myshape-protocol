@@ -57,6 +57,54 @@ impl MotionSignatureEngine {
         }
     }
 
+    /// Create an engine with calibration parameters loaded from a
+    /// TypeScript-generated CalibrationArtifact.
+    ///
+    /// Phase E-4: If the calibration artifact's feature dimension matches
+    /// DIM_RAW (120), the PCA projection matrix and population normalization
+    /// parameters are applied. If dimensions don't match (e.g., 54-dim posture
+    /// calibration), falls back to vacuum defaults with a diagnostic reason.
+    ///
+    /// ROC thresholds are handled separately via `RiskLevel::threshold()`
+    /// and don't require dimension alignment.
+    pub fn with_calibration() -> Self {
+        // Try to get calibration params
+        if let Some((proj, _pca_mean)) = crate::calibration::get_pca_params() {
+            if let Some((means, stds)) = crate::calibration::get_normalization_params() {
+                let calib_dim = means.len();
+
+                if calib_dim == DIM_RAW {
+                    // Full calibration: use PCA projection + population stats
+                    // Check projection dimensions
+                    if proj.ncols() == DIM_RAW && proj.nrows() == DIM_SIGNATURE {
+                        return Self {
+                            projection: proj,
+                            feature_means: means,
+                            feature_stds: stds,
+                        };
+                    }
+                    // PCA dims differ from engine dims — use normalization only
+                    let mut projection = nalgebra::DMatrix::zeros(DIM_SIGNATURE, DIM_RAW);
+                    for i in 0..DIM_RAW {
+                        projection[(i, i)] = 1.0;
+                    }
+                    return Self {
+                        projection,
+                        feature_means: means,
+                        feature_stds: stds,
+                    };
+                }
+
+                // Calibration dimension mismatch — fall through to vacuum
+                // This is expected when using 54-dim posture calibration
+                // with the 120-dim motion feature engine.
+            }
+        }
+
+        // Fallback: vacuum defaults (same as new())
+        Self::new()
+    }
+
     /// Create an engine with normalization parameters learned from enrollment data.
     pub fn with_normalization(
         projection: nalgebra::DMatrix<f32>,
@@ -174,9 +222,26 @@ impl MotionSignatureEngine {
         var
     }
 
+    /// Phase E Route B: Extract the raw 120-dimensional feature vector.
+    ///
+    /// This is the same feature vector used internally by `extract()`.
+    /// Exposing it allows the TypeScript calibration pipeline to compute
+    /// PCA and population statistics on the exact feature space the engine uses.
+    ///
+    /// Returns a 120-dim f32 vector: [K(40) | A(25) | J(25) | J_spec(30)].
+    pub fn extract_feature_vector(&self, sequence: &MotionSequence) -> Vec<f32> {
+        let raw = self.extract_raw_features(sequence);
+        raw.iter().copied().collect()
+    }
+
+    /// Dimension of the raw feature vector.
+    pub fn feature_dim() -> usize {
+        DIM_RAW
+    }
+
     // ── Private helpers ──────────────────────────────────────────────
 
-    /// Extract raw 112-dimensional feature vector.
+    /// Extract raw 120-dimensional feature vector.
     fn extract_raw_features(&self, sequence: &MotionSequence) -> DVector<f32> {
         let k = kinematics::extract_kinematics(sequence);
         let dyn_features = dynamics::extract_dynamics(sequence);

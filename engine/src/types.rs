@@ -261,14 +261,33 @@ pub enum RiskLevel {
 
 impl RiskLevel {
     /// Returns the presence score threshold for this risk level.
-    /// MVP uses a single threshold; interface is future-proofed for
-    /// risk-adaptive thresholds per Multi-Factor spec §2.3.
+    ///
+    /// Phase E-4: Checks calibration first. If a calibration artifact
+    /// has been loaded with ROC operating points, those thresholds
+    /// replace the v0.1 hardcoded values. Falls back to vacuum defaults
+    /// if not calibrated.
     pub fn threshold(&self) -> f64 {
+        // Try calibration first
+        if let Some(calibrated) = self.calibrated_threshold() {
+            return calibrated;
+        }
+        // Vacuum defaults
         match self {
             RiskLevel::Low => 0.70,
             RiskLevel::Medium => 0.75,
             RiskLevel::High => 0.80,
         }
+    }
+
+    /// Get the ROC-calibrated threshold for this risk level.
+    /// Returns None if no calibration is loaded.
+    pub fn calibrated_threshold(&self) -> Option<f64> {
+        let risk_str = match self {
+            RiskLevel::High => "high",
+            RiskLevel::Medium => "medium",
+            RiskLevel::Low => "low",
+        };
+        crate::calibration::get_threshold(risk_str)
     }
 }
 

@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     // 先按钱包地址查
     let { data: node } = await supabase
       .from('protocol_nodes')
-      .select('email, status, wallet_address')
+      .select('email, status, wallet_address, node_handle')
       .eq('wallet_address', normalizedAddress)
       .maybeSingle();
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       // 按邮箱查找 — 绑定钱包到已有节点
       const { data: emailNode } = await supabase
         .from('protocol_nodes')
-        .select('email, status')
+        .select('email, status, node_handle')
         .eq('email', normalizedEmail)
         .maybeSingle();
 
@@ -95,6 +95,7 @@ export async function POST(req: Request) {
       is_genesis: isGenesis,
       is_active: isActive,
       status: node?.status || 'NEW',
+      node_handle: node?.node_handle ?? null,
       // 如果已绑定且激活，前端可跳过邮箱 OTP
       skip_otp: isActive,
     });

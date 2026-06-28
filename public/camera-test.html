@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Camera Wake Test</title>
+  <style>
+    body { margin: 20px; background: #111; color: #eee; font-family: monospace; font-size: 11px; }
+    .section { margin: 12px 0; padding: 10px; border: 1px solid #333; background: #1a1a1a; max-width: 700px; }
+    .ok { color: #0f0; } .err { color: #f44; } .warn { color: #fa0; }
+    video, canvas { display: block; margin: 8px 0; border: 1px solid #444; max-width: 320px; }
+    button { margin: 4px; padding: 8px 14px; background: #222; color: #0ff; border: 1px solid #0ff; cursor: pointer; font-family: monospace; }
+    button:hover { background: #044; }
+  </style>
+</head>
+<body>
+  <h2>🔬 Camera Sensor Wake-Up Attempt</h2>
+  <div id="log" class="section"></div>
+  <div class="section">
+    <button onclick="tryWake()">🔄 Try Wake Sequence</button>
+    <button onclick="tryPhoto()">📸 ImageCapture.takePhoto()</button>
+    <button onclick="tryHighRes()">🔍 Request 1920x1080</button>
+    <button onclick="tryLowRes()">📉 Request 320x240</button>
+  </div>
+  <video id="v" autoplay playsinline muted></video>
+  <canvas id="c"></canvas>
+
+  <script>
+    const logEl = document.getElementById('log');
+    const v = document.getElementById('v');
+    const c = document.getElementById('c');
+    let currentStream = null, track = null;
+
+    function log(msg, cls = '') {
+      logEl.innerHTML += `<div class="${cls}">${msg}</div>`;
+    }
+
+    async function getStream(constraints = null) {
+      if (currentStream) {
+        currentStream.getTracks().forEach(t => t.stop());
+        v.srcObject = null;
+      }
+      logEl.innerHTML = '';
+      const opts = constraints || { video: { width: 640, height: 480, frameRate: 30 } };
+      const stream = await navigator.mediaDevices.getUserMedia(opts);
+      currentStream = stream;
+      track = stream.getVideoTracks()[0];
+      v.srcObject = stream;
+      await v.play();
+      await new Promise(r => setTimeout(r, 1000));
+      log(`Stream ready: ${v.videoWidth}x${v.videoHeight}`, 'ok');
+      return stream;
+    }
+
+    function samplePixel() {
+      if (v.videoWidth === 0) return [0,0,0];
+      c.width = v.videoWidth;
+      c.height = v.videoHeight;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(v, 0, 0);
+      const cx = Math.floor(v.videoWidth/2);
+      const cy = Math.floor(v.videoHeight/2);
+      const px = ctx.getImageData(cx, cy, 1, 1).data;
+      log(`Center pixel: rgba(${px[0]},${px[1]},${px[2]},${px[3]}) ${px[1] > px[0]*2 && px[1] > px[2]*2 ? '🟢 GREEN' : '✅'}`,
+        px[1] > px[0]*2 && px[1] > px[2]*2 ? 'err' : 'ok');
+      return px;
+    }
+
+    async function tryWake() {
+      try {
+        await getStream();
+        samplePixel();
+
+        const caps = track.getCapabilities ? track.getCapabilities() : {};
+        log(`Capabilities: ${JSON.stringify(caps)}`);
+
+        // Attempt 1: toggle exposure mode
+        if (caps.exposureMode && caps.exposureMode.includes('manual')) {
+          log('Trying: set exposureMode=manual...');
+          await track.applyConstraints({ advanced: [{ exposureMode: 'manual' }] });
+          await new Promise(r => setTimeout(r, 500));
+          samplePixel();
+        }
+
+        // Attempt 2: toggle brightness
+        if (caps.brightness) {
+          log(`Trying: brightness ${caps.brightness.min} → ${caps.brightness.max} → 128...`);
+          await track.applyConstraints({ advanced: [{ brightness: caps.brightness.max }] });
+          await new Promise(r => setTimeout(r, 300));
+          await track.applyConstraints({ advanced: [{ brightness: 128 }] });
+          await new Promise(r => setTimeout(r, 500));
+          samplePixel();
+        }
+
+        // Attempt 3: toggle white balance if available
+        if (caps.whiteBalanceMode && caps.whiteBalanceMode.includes('manual')) {
+          log('Trying: whiteBalanceMode=manual...');
+          await track.applyConstraints({ advanced: [{ whiteBalanceMode: 'manual' }] });
+          await new Promise(r => setTimeout(r, 500));
+          samplePixel();
+        }
+
+        // Attempt 4: set exposure time
+        if (caps.exposureTime) {
+          log(`Trying: exposureTime ${caps.exposureTime.min} → ${caps.exposureTime.max}...`);
+          await track.applyConstraints({ advanced: [{ exposureTime: caps.exposureTime.max }] });
+          await new Promise(r => setTimeout(r, 500));
+          await track.applyConstraints({ advanced: [{ exposureTime: 625 }] });
+          await new Promise(r => setTimeout(r, 500));
+          samplePixel();
+        }
+
+      } catch(err) {
+        log(`Error: ${err.message}`, 'err');
+      }
+    }
+
+    async function tryPhoto() {
+      try {
+        await getStream();
+        samplePixel();
+
+        if (!window.ImageCapture) {
+          log('ImageCapture API not available in this browser', 'err');
+          return;
+        }
+
+        const ic = new ImageCapture(track);
+        log('ImageCapture created, calling takePhoto()...');
+        const blob = await ic.takePhoto();
+        log(`Photo taken: ${blob.size} bytes, type=${blob.type}`, 'ok');
+
+        // Show the photo
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(blob);
+        img.style.maxWidth = '320px';
+        img.style.border = '1px solid #0f0';
+        document.body.appendChild(img);
+
+        // Also draw to canvas and sample
+        const bmp = await createImageBitmap(blob);
+        c.width = bmp.width;
+        c.height = bmp.height;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(bmp, 0, 0);
+        const cx = Math.floor(bmp.width/2);
+        const cy = Math.floor(bmp.height/2);
+        const px = ctx.getImageData(cx, cy, 1, 1).data;
+        log(`Photo pixel: rgba(${px[0]},${px[1]},${px[2]},${px[3]}) ${px[1] > px[0]*2 && px[1] > px[2]*2 ? '🟢 GREEN' : '✅ REAL IMAGE!'}`,
+          px[1] > px[0]*2 && px[1] > px[2]*2 ? 'err' : 'ok');
+
+      } catch(err) {
+        log(`Error: ${err.name}: ${err.message}`, 'err');
+      }
+    }
+
+    async function tryHighRes() {
+      try {
+        await getStream({ video: { width: 1920, height: 1080, frameRate: 30 } });
+        samplePixel();
+      } catch(err) {
+        log(`Error: ${err.message}`, 'err');
+        await getStream({ video: { width: { ideal: 1920 }, height: { ideal: 1080 } } });
+        samplePixel();
+      }
+    }
+
+    async function tryLowRes() {
+      try {
+        await getStream({ video: { width: 320, height: 240, frameRate: 30 } });
+        samplePixel();
+      } catch(err) {
+        log(`Error: ${err.message}`, 'err');
+      }
+    }
+
+    // Auto start
+    tryWake();
+  </script>
+</body>
+</html>

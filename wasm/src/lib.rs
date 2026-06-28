@@ -9,6 +9,7 @@ use myshape_engine::challenge::ChallengeGenerator;
 use myshape_engine::motion::signature::MotionSignatureEngine;
 use myshape_engine::verification::PresenceScorer;
 use myshape_engine::types::*;
+use myshape_engine::calibration;
 
 use wasm_bindgen::prelude::*;
 
@@ -17,6 +18,44 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen(start)]
 pub fn init_panic_hook() {
     console_error_panic_hook::set_once();
+}
+
+// ── Phase E-4: Calibration Injection ─────────────────────────────────
+
+/// Load a calibration artifact from JSON.
+///
+/// The artifact is produced by the TypeScript Phase E-2 calibration pipeline
+/// (runCalibration()). Once loaded, the engine uses:
+///   - ROC operating points for verification thresholds
+///   - Population feature statistics for z-score normalization (if dims match)
+///   - PCA projection matrix (if dims match)
+///
+/// Returns `true` if calibration was successfully parsed and activated.
+/// Returns `false` if the JSON represents an empty/vacuum calibration.
+/// Throws a JS error if the JSON is malformed.
+#[wasm_bindgen]
+pub fn load_calibration(artifact_json: &str) -> Result<bool, JsValue> {
+    calibration::load_calibration(artifact_json)
+        .map_err(|e| JsValue::from_str(&format!("Calibration load failed: {}", e)))
+}
+
+/// Check whether a calibration artifact is currently active.
+#[wasm_bindgen]
+pub fn is_calibrated() -> bool {
+    calibration::is_calibrated()
+}
+
+/// Get calibration metadata as a JSON string.
+/// Returns `null` (JS null) if not calibrated.
+#[wasm_bindgen]
+pub fn get_calibration_info() -> Option<String> {
+    calibration::get_calibration_info()
+}
+
+/// Reset calibration to vacuum state (for testing).
+#[wasm_bindgen]
+pub fn reset_calibration() {
+    calibration::reset_calibration();
 }
 
 // ── Challenge Generation ─────────────────────────────────────────────
@@ -134,13 +173,19 @@ fn to_enrollment(flat: FlatEnrollmentInput) -> Enrollment {
 /// `motion_json` should be a JSON MotionSequence:
 ///   { "fps": 30, "frames": [{ "t": 0.0, "keypoints": [{ "x": 0, "y": 0, "z": 0 }, ...] }, ...] }
 ///
+/// Phase E-4: Uses calibration-aware engine. If a calibration artifact is loaded
+/// with matching feature dimensions, PCA projection and population z-score
+/// normalization are applied during extraction. Falls back to vacuum defaults
+/// (identity projection, zero means, unit stds) if not calibrated.
+///
 /// Returns a JSON FlatMotionSignature: { "vector": [128 floats], "version": 1 }
 #[wasm_bindgen]
 pub fn extract_signature(motion_json: &str) -> Result<String, JsValue> {
     let sequence: MotionSequence = serde_json::from_str(motion_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid motion data: {}", e)))?;
 
-    let engine = MotionSignatureEngine::new();
+    // Phase E-4: Use calibration-aware engine if available
+    let engine = MotionSignatureEngine::with_calibration();
     let signature = engine.extract(&sequence);
     let flat = FlatMotionSignature::from(signature);
 
@@ -252,6 +297,34 @@ pub fn create_enrollment(
     let flat = FlatEnrollment::from(enrollment);
     serde_json::to_string(&flat)
         .map_err(|e| JsValue::from_str(&format!("Serialization error: {}", e)))
+}
+
+// ── Phase E Route B: 120-dim Feature Extraction ──────────────────────
+
+/// Extract the raw 120-dimensional feature vector from a motion sequence.
+///
+/// This is the SAME feature vector the engine uses internally for signature
+/// extraction. Exposing it allows the TypeScript calibration pipeline to
+/// compute PCA and population statistics in the engine's native feature space.
+///
+/// Input: JSON MotionSequence (same format as extract_signature)
+/// Returns: JSON number array — [120 f32 values] = [K(40) | A(25) | J(25) | J_spec(30)]
+#[wasm_bindgen]
+pub fn extract_feature_vector(motion_json: &str) -> Result<String, JsValue> {
+    let sequence: MotionSequence = serde_json::from_str(motion_json)
+        .map_err(|e| JsValue::from_str(&format!("Invalid motion data: {}", e)))?;
+
+    let engine = MotionSignatureEngine::new();
+    let features = engine.extract_feature_vector(&sequence);
+
+    serde_json::to_string(&features)
+        .map_err(|e| JsValue::from_str(&format!("Serialization error: {}", e)))
+}
+
+/// Get the raw feature dimension (120 for the current engine).
+#[wasm_bindgen]
+pub fn get_feature_dim() -> u32 {
+    MotionSignatureEngine::feature_dim() as u32
 }
 
 // ── Motion Synthesis (for demo) ──────────────────────────────────────

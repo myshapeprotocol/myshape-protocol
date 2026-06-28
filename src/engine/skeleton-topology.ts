@@ -114,6 +114,51 @@ export function mediaPipeToSST(
   return sst;
 }
 
+// ── SST → MediaPipe reverse mapping (Phase E Route B) ──
+// Inverse of MEDIAPIPE_TO_SST. Used to convert SST-18 landmarks back to
+// 33-keypoint MediaPipe format for Rust engine feature extraction.
+
+const SST_TO_MEDIAPIPE: Record<number, number> = {};
+for (const [mpId, sstId] of Object.entries(MEDIAPIPE_TO_SST)) {
+  if (sstId !== null) {
+    SST_TO_MEDIAPIPE[sstId] = parseInt(mpId);
+  }
+}
+
+/**
+ * Convert an SST-18 frame back to a 33-keypoint MediaPipe-format array.
+ * Joints without an SST mapping are filled with zeros.
+ *
+ * The denormalized SST coordinates (640×480 reference space) are converted
+ * back to normalized 0-1 coordinates for the engine.
+ */
+export function sstToMediaPipe(
+  sstFrame: Record<number, JointPosition>,
+): Array<{ x: number; y: number; z: number }> {
+  const mpLandmarks: Array<{ x: number; y: number; z: number }> = [];
+  for (let i = 0; i < 33; i++) {
+    mpLandmarks.push({ x: 0, y: 0, z: 0 });
+  }
+
+  for (let sstId = 0; sstId < 18; sstId++) {
+    const mpId = SST_TO_MEDIAPIPE[sstId];
+    if (mpId !== undefined) {
+      const pos = sstFrame[sstId];
+      if (pos) {
+        // Denormalize: SST stores in 640×480 reference space.
+        // Convert back to 0-1 normalized for engine consumption.
+        mpLandmarks[mpId] = {
+          x: pos.x / 640,
+          y: pos.y / 480,
+          z: pos.z / 640,
+        };
+      }
+    }
+  }
+
+  return mpLandmarks;
+}
+
 /**
  * Normalize SST frame to pelvis-centered coordinates (§2.7).
  */

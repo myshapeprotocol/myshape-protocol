@@ -114,6 +114,7 @@ export default function GenesisClient() {
       sessionStorage.setItem("genesis_completed", "1");
       sessionStorage.setItem("genesis_email", email.trim());
       if (data.status) sessionStorage.setItem("genesis_status", data.status);
+      if (data.node_handle) sessionStorage.setItem("genesis_node_handle", data.node_handle);
       setStage("success");
     } catch (err: unknown) {
       setStage("error");
@@ -209,6 +210,7 @@ export default function GenesisClient() {
                         onSuccess={(walletData) => {
                           sessionStorage.setItem("wallet_address", walletData.address);
                           setHeaderWallet(walletData.address);
+                          if (walletData.node_handle) sessionStorage.setItem("genesis_node_handle", walletData.node_handle);
                           if (walletData.skip_otp) {
                             sessionStorage.setItem("genesis_completed", "1");
                             sessionStorage.setItem("genesis_email", email.trim().toLowerCase());

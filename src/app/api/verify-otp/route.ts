@@ -127,10 +127,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. 从数据库查询该邮箱的 OTP
+    // 1. 从数据库查询该邮箱的 OTP + node_handle
     const { data, error: dbError } = await supabase
       .from('protocol_nodes')
-      .select('otp_code, status')
+      .select('otp_code, status, node_handle')
       .eq('email', email)
       .single();
 
@@ -175,7 +175,10 @@ export async function POST(req: Request) {
       console.warn('[WELCOME_EMAIL] ⚠️ SKIPPED — RESEND_API_KEY not configured');
     }
 
-    return NextResponse.json({ success: true, status: nodeStatus });
+    // Route C: Return node_handle for identity binding
+    const nodeHandle = data.node_handle ?? null;
+
+    return NextResponse.json({ success: true, status: nodeStatus, node_handle: nodeHandle });
   } catch (error: unknown) {
     console.error('VERIFY_OTP_ERROR:', error);
     return NextResponse.json(

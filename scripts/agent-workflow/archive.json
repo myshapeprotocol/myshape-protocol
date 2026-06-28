@@ -1,0 +1,20 @@
+[
+  {
+    "id": "test-1",
+    "text": "New zero-knowledge proof paper for kinetic identity verification published on arXiv",
+    "source": "arxiv",
+    "timestamp": 1782528063000
+  },
+  {
+    "id": "test-2",
+    "text": "DeepSeek V5 claims to pass visual Turing test with synthetic human motion generation",
+    "source": "techcrunch",
+    "timestamp": 1782528063000
+  },
+  {
+    "id": "test-3",
+    "text": "EU eIDAS regulation mandates sovereign digital identity wallets by 2027",
+    "source": "eu-commission",
+    "timestamp": 1782528063000
+  }
+]

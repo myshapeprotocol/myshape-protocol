@@ -1,0 +1,50 @@
+[
+  {
+    "id": "test-1",
+    "text": "New zero-knowledge proof paper for kinetic identity verification published on arXiv",
+    "source": "arxiv",
+    "timestamp": 1782528063000,
+    "platform": "x",
+    "content": "ArXiv release validates kinetic verification for the sovereign data-body. This paper establishes the mathematical bounds for zero-knowledge presence within the identity mesh. The protocol primitive now supports entropy source integration without compromising wireframe anatomy integrity.",
+    "tags": [
+      "ZeroKnowledgeProof",
+      "KineticVerification",
+      "SovereignDataBody",
+      "ProtocolPrimitive",
+      "ArXiv"
+    ],
+    "processedAt": "2026-06-27T02:41:12.410Z"
+  },
+  {
+    "id": "test-2",
+    "text": "DeepSeek V5 claims to pass visual Turing test with synthetic human motion generation",
+    "source": "techcrunch",
+    "timestamp": 1782528063000,
+    "platform": "x",
+    "content": "Synthetic motion fails the Turing test because it lacks the entropy source of a true sovereign data-body. MyShape’s wireframe anatomy uses kinetic verification to prove non-corporeal agency without relying on visual mimicry. This is zero-knowledge presence, not performance.",
+    "tags": [
+      "MyShape",
+      "sovereign-data-body",
+      "kinetic-verification",
+      "zero-knowledge-presence",
+      "wireframe-anatomy"
+    ],
+    "processedAt": "2026-06-27T02:41:26.744Z"
+  },
+  {
+    "id": "test-3",
+    "text": "EU eIDAS regulation mandates sovereign digital identity wallets by 2027",
+    "source": "eu-commission",
+    "timestamp": 1782528063000,
+    "platform": "linkedin",
+    "content": "The EU eIDAS mandate for sovereign digital identity wallets by 2027 validates the necessity of a decentralized infrastructure. Traditional models rely on centralized authorities, creating single points of failure and privacy risks. MyShape introduces the identity mesh, enabling a zero-knowledge presence where users maintain control via their sovereign data-body. This approach ensures that the motion-signature remains cryptographically secure without exposing underlying personal information. The implication is a shift from compliance-driven identity to protocol-native sovereignty, reducing regulatory friction while enhancing security.",
+    "tags": [
+      "eIDAS",
+      "sovereign identity",
+      "zero-knowledge",
+      "MyShape",
+      "identity mesh"
+    ],
+    "processedAt": "2026-06-27T02:41:42.593Z"
+  }
+]

@@ -14,6 +14,10 @@ import { assessThreat } from "@/engine/threat-assessment";
 import { generateFullProof } from "@/engine/proof-system";
 import { getDeviceSalt } from "@/engine/local-identity";
 import type { JointPosition, SSTJointId } from "@/types/motion-vector";
+import { useResearchUpload } from "@/hooks/useResearchUpload";
+import type { UploadData } from "@/hooks/useResearchUpload";
+import ResearchConsent from "@/components/research-consent/ResearchConsent";
+import type { LightingCondition, PhaseMetadata } from "@/types/research";
 
 type Phase = "idle" | "capturing" | "processing" | "complete";
 
@@ -44,6 +48,9 @@ interface FeatureFrame {
   timestamp: number;
 }
 
+/** Cumulative phase boundary timestamps (ms) — mirrors MotionGuide PHASES */
+const PHASE_BOUNDARIES_MS = [6000, 12000, 19000, 25000, 30000];
+
 export default function MotionDemoClient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,6 +70,15 @@ export default function MotionDemoClient() {
   const [validFrameCount, setValidFrameCount] = useState(0);
   const [allPhasesComplete, setAllPhasesComplete] = useState(false);
   const [currentVelocity, setCurrentVelocity] = useState<VelocitySnapshot | null>(null);
+  // ── Research consent & upload state ──
+  const [researchConsented, setResearchConsented] = useState(false);
+  const [lighting, setLighting] = useState<LightingCondition>("indoor_day");
+  const { state: uploadState, error: uploadError, sessionId, upload, reset: resetUpload } = useResearchUpload();
+  const [uploadDone, setUploadDone] = useState(false);
+  const [witnessData, setWitnessData] = useState<{
+    position_number?: number;
+    cohort?: string;
+  } | null>(null);
   const framesRef = useRef<FeatureFrame[]>([]);
   const animRef = useRef<number>(0);
   const phaseRef = useRef<Phase>("idle");
@@ -76,6 +92,18 @@ export default function MotionDemoClient() {
   const landmarksRef = useRef<Array<{ x: number; y: number; z: number }> | null>(null);
   const sstFramesRef = useRef<Array<{ frame: Record<SSTJointId, JointPosition>; timestamp: number }>>([]);
   const sparkParticlesRef = useRef<SparkParticle[]>([]);
+  // Phase E-1 research: per-phase frame/velocity accumulation
+  const phaseFrameCountsRef = useRef<number[]>([0, 0, 0, 0, 0]);
+  const phaseWristVelRef = useRef<number[]>([0, 0, 0, 0, 0]);
+  const phaseHeadVelRef = useRef<number[]>([0, 0, 0, 0, 0]);
+  const phaseTorsoVelRef = useRef<number[]>([0, 0, 0, 0, 0]);
+
+  function resolvePhaseIndex(elapsedMs: number): number {
+    for (let i = 0; i < PHASE_BOUNDARIES_MS.length; i++) {
+      if (elapsedMs < PHASE_BOUNDARIES_MS[i]) return i;
+    }
+    return 4;
+  }
 
   // ── Real Camera Mode ──
   const startCapture = useCallback(async () => {
@@ -95,6 +123,13 @@ export default function MotionDemoClient() {
     prevTimestampRef.current = 0;
     framesRef.current = [];
     setProofHashes(null);
+    setUploadDone(false);
+    if (researchConsented) resetUpload();
+    // Reset phase tracking
+    phaseFrameCountsRef.current = [0, 0, 0, 0, 0];
+    phaseWristVelRef.current = [0, 0, 0, 0, 0];
+    phaseHeadVelRef.current = [0, 0, 0, 0, 0];
+    phaseTorsoVelRef.current = [0, 0, 0, 0, 0];
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, frameRate: 30 } });
@@ -171,6 +206,12 @@ export default function MotionDemoClient() {
                 headAngVel = Math.atan2(noseDist, 0.15) * (180 / Math.PI) / dt; // approx radius 0.15m
               }
               setCurrentVelocity({ wristVelocity: wristVel, maxJointVelocity: maxVel, headAngularVelocity: headAngVel, torsoVelocity: torsoDrift });
+              // Phase E-1: accumulate per-phase metadata
+              const pIdx = resolvePhaseIndex(elapsed);
+              phaseFrameCountsRef.current[pIdx]++;
+              phaseWristVelRef.current[pIdx] += wristVel;
+              phaseHeadVelRef.current[pIdx] += headAngVel;
+              phaseTorsoVelRef.current[pIdx] += torsoDrift;
             }
           }
           prevLandmarksRef.current = rawLm.map(l => ({ x: l.x, y: l.y, z: l.z ?? 0 })) as Array<{ x: number; y: number; z: number }>;
@@ -447,6 +488,55 @@ export default function MotionDemoClient() {
         mp: zkp.mp.mp_hash,
         ep: zkp.ep.ep_hash,
       });
+
+      // ── Phase E-1: Research upload (fire-and-forget, opt-in only) ──
+      if (researchConsented) {
+        const startTimestamp = sstFrames[0]?.timestamp ?? 0;
+        const landmarkEntries = sstFrames.map(f => ({
+          t: f.timestamp - startTimestamp,
+          joints: f.frame,
+        }));
+        const phaseMeta: PhaseMetadata[] = ([0, 1, 2, 3, 4] as const).map(i => ({
+          phase: (i + 1) as PhaseMetadata["phase"],
+          frameCount: phaseFrameCountsRef.current[i],
+          meanWristVelocity: phaseFrameCountsRef.current[i] > 0
+            ? +(phaseWristVelRef.current[i] / phaseFrameCountsRef.current[i]).toFixed(3)
+            : null,
+          meanHeadAngularVelocity: phaseFrameCountsRef.current[i] > 0
+            ? +(phaseHeadVelRef.current[i] / phaseFrameCountsRef.current[i]).toFixed(1)
+            : null,
+          meanTorsoVelocity: phaseFrameCountsRef.current[i] > 0
+            ? +(phaseTorsoVelRef.current[i] / phaseFrameCountsRef.current[i]).toFixed(3)
+            : null,
+        }));
+        const uploadPayload: UploadData = {
+          landmarks: landmarkEntries,
+          pesScore: pes,
+          pesMicroTiming: components.microTimingVariance,
+          pesNoiseResidual: components.noiseResidual,
+          pesFreqEntropy: components.frequencyEntropy,
+          pesBioPerturb: components.biologicalPerturbation,
+          totalFrames: sstFrames.length,
+          validFrames: validFrameCount,
+          durationMs: captureElapsedMs,
+          lighting,
+          phases: phaseMeta,
+        };
+        upload(uploadPayload).then(success => {
+          if (success) setUploadDone(true);
+          // Fetch witness position from recruitment API
+          const recEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+          if (recEmail) {
+            fetch("/api/recruitment/apply", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: recEmail, source: "motion_demo" }),
+            }).then(r => r.json()).then(d => {
+              if (d.position_number) setWitnessData(d);
+            }).catch(() => {});
+          }
+        });
+      }
     }
     setTimeout(() => {
       playTick(1200, "sine", 0.12, 0.03);
@@ -477,6 +567,8 @@ export default function MotionDemoClient() {
     setAiCompare(null);
     setLivePes(null);
     setCopied(false);
+    setUploadDone(false);
+    resetUpload();
     framesRef.current = [];
     sstFramesRef.current = [];
   };
@@ -854,6 +946,65 @@ export default function MotionDemoClient() {
                     </a>
                   </div>
                 )}
+                {/* ── Witness Badge (recruitment + upload complete) ── */}
+                {witnessData && witnessData.position_number && (
+                  <div
+                    className="p-3 border space-y-2 relative overflow-hidden"
+                    style={{
+                      borderRadius: 4,
+                      borderColor: witnessData.cohort === "genesis" ? "rgba(34,211,238,0.35)" : "rgba(34,211,238,0.15)",
+                      background: witnessData.cohort === "genesis" ? "rgba(34,211,238,0.05)" : "rgba(34,211,238,0.02)",
+                      animation: witnessData.cohort === "genesis" ? "genesisWitnessGlow 3s ease-in-out infinite" : undefined,
+                    }}
+                  >
+                    {/* Genesis scan line */}
+                    {witnessData.cohort === "genesis" && (
+                      <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: "linear-gradient(90deg, transparent 0%, rgba(34,211,238,0.06) 40%, rgba(34,211,238,0.12) 50%, rgba(34,211,238,0.06) 60%, transparent 100%)",
+                          animation: "genesisScanLine 2.5s ease-in-out infinite",
+                        }}
+                      />
+                    )}
+                    <div className="text-cyan-400/40 text-[7px] tracking-[0.2em] uppercase text-center">
+                      {witnessData.cohort === "genesis" ? "Genesis Cohort — Witness Confirmed" : "Protocol Witness"}
+                    </div>
+                    <div className="text-center">
+                      <span
+                        className="text-cyan-200/80 text-[14px] font-light tracking-[0.05em]"
+                        style={witnessData.cohort === "genesis" ? { animation: "genesisBadgePulse 2s ease-in-out infinite" } : undefined}
+                      >
+                        ◈ Witness #{witnessData.position_number}
+                      </span>
+                    </div>
+                    <p className="text-white/25 text-[8px] leading-relaxed text-center">
+                      {witnessData.cohort === "genesis"
+                        ? "You are a founding tester. This status is permanent — not cosmetic, structural."
+                        : "Your motion data is now part of the calibration engine. Share your contribution."}
+                    </p>
+                    {/* Share buttons */}
+                    <div className="flex gap-2 justify-center pt-1">
+                      <a
+                        href={`https://bsky.app/intent/compose?text=I+just+became+MyShape+Protocol+Witness+%23${witnessData.position_number}.+Join+the+first+300+to+calibrate+the+motion-signature+engine.%0A%0Ahttps://myshape.com/research/apply`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="px-2.5 py-1 border border-cyan-400/15 text-cyan-400/40 text-[7px] tracking-[0.1em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 transition-all"
+                        style={{ borderRadius: 2 }}
+                      >
+                        Share on Bluesky
+                      </a>
+                      <a
+                        href={`https://www.linkedin.com/sharing/share-offsite/?url=https://myshape.com/research/apply?ref=witness_share`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="px-2.5 py-1 border border-cyan-400/15 text-cyan-400/40 text-[7px] tracking-[0.1em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 transition-all"
+                        style={{ borderRadius: 2 }}
+                      >
+                        Share on LinkedIn
+                      </a>
+                    </div>
+                  </div>
+                )}
+
                 {/* Presence Signature — 存在证明证书 */}
                 {pesData && proofHashes && (
                   <PresenceSignature proof={{
@@ -879,13 +1030,30 @@ export default function MotionDemoClient() {
           </div>
         </div>
 
-        <div className="mt-14 text-center space-y-3">
+        {/* ── Research Consent (Phase E-1) ── */}
+        <div className="mt-8 max-w-xl mx-auto">
+          <ResearchConsent
+            consented={researchConsented}
+            onConsentChange={setResearchConsented}
+            lighting={lighting}
+            onLightingChange={setLighting}
+            uploadState={uploadState}
+            uploadError={uploadError}
+            sessionId={sessionId}
+            captureActive={phase === "capturing"}
+            uploadDone={uploadDone}
+          />
+        </div>
+
+        <div className="mt-10 text-center space-y-3">
           <div className="flex items-center justify-center gap-2 text-cyan-400/50 text-[8px] tracking-[0.15em] uppercase">
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
-            Your motion data never leaves this device. No cloud upload. No server storage.
+            {researchConsented
+              ? "Camera images stay local. Only joint-position data is uploaded anonymously."
+              : "Your motion data never leaves this device. No cloud upload. No server storage."}
           </div>
           <p className="text-white/15 text-[8px] tracking-[0.15em] uppercase">
-            This is a proof-of-concept prototype. All processing is local. No data stored or transmitted.
+            This is a proof-of-concept prototype. All processing is local{researchConsented ? " except for anonymous joint-position upload" : ". No data stored or transmitted"}.
             For best results, use <span className="text-cyan-400/50">Firefox</span> (Chromium-based browsers may show a green screen with some webcams).
             See the <a href="/papers/technical-spec" className="text-cyan-400/50 hover:text-cyan-300" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>technical spec</a> for the full architecture.
           </p>

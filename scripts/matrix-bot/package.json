@@ -1,0 +1,12 @@
+{
+  "name": "myshape-matrix-bot",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cruise": "node cruise.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "js-yaml": "^4.1.0"
+  }
+}

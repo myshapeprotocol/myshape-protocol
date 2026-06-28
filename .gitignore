@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,7 +13,7 @@
 
 # testing
 /coverage
-s
+
 # next.js
 /.next/
 /out/
@@ -30,7 +31,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
 
 # vercel
@@ -44,12 +45,12 @@ next-env.d.ts
 engine/target/
 cli/target/
 wasm/target/
+wasm/pkg-bundler/
 
-# 🔴 CORE ROOM — never commit
+# CORE ROOM — never commit
 docs/.core/
 
-.vercel
-.env*.local
+# Scripts — dependency artifacts
 scripts/node_modules/
-agent-workflow/node_modules/
-scripts/agent-workflow/node_modules/
+scripts/*/node_modules/
+scripts/*/package-lock.json

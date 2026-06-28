@@ -1,0 +1,13 @@
+{
+  "name": "myshape-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MyShape Protocol — Demo Scripts & SDK",
+  "scripts": {
+    "demo": "npx tsx demo_simulator.ts",
+    "demo:verbose": "npx tsx demo_simulator.ts --verbose"
+  },
+  "dependencies": {
+    "tsx": "^4.0.0"
+  }
+}
