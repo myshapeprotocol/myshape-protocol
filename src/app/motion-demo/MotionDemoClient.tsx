@@ -814,7 +814,7 @@ export default function MotionDemoClient() {
                 </div>
                 {!aiCompare ? (
                   <button onClick={handleAICompare}
-                    className="w-full py-1.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.15em] uppercase hover:border-cyan-400/30 hover:text-cyan-300/60 transition-all">
+                    className="w-full py-1.5 border-2 border-red-500 text-red-400 text-[10px] font-bold tracking-[0.15em] uppercase hover:border-cyan-400/30 hover:text-cyan-300/60 transition-all">
                     {wasmCompare?.loading ? "Loading WASM..." : "Compare with AI →"}
                   </button>
                 ) : (
