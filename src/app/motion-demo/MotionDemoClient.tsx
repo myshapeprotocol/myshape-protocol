@@ -1085,13 +1085,13 @@ export default function MotionDemoClient() {
         </div>
 
         <div className="mt-10 text-center space-y-3">
-          <div className="flex items-center justify-center gap-2 text-cyan-400/50 text-[8px] tracking-[0.15em] uppercase">
-            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+          <div className="flex items-center justify-center gap-2 text-cyan-400/60 text-[12px] tracking-[0.08em]">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
             {researchConsented
               ? "Camera images stay local. Only joint-position data is uploaded anonymously."
               : "Your motion data never leaves this device. No cloud upload. No server storage."}
           </div>
-          <p className="text-white/15 text-[8px] tracking-[0.15em] uppercase">
+          <p className="text-white/25 text-[10px] tracking-[0.08em]">
             This is a proof-of-concept prototype. All processing is local{researchConsented ? " except for anonymous joint-position upload" : ". No data stored or transmitted"}.
             For best results, use <span className="text-cyan-400/50">Firefox</span> (Chromium-based browsers may show a green screen with some webcams).
             See the <a href="/papers/technical-spec" className="text-cyan-400/50 hover:text-cyan-300" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>technical spec</a> for the full architecture.
