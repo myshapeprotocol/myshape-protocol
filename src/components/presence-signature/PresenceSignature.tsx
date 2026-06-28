@@ -34,7 +34,7 @@ export default function PresenceSignature({ proof }: { proof: ProofData }) {
   const handleShare = () => {
     const text = `My Presence has been verified.\nPES: ${pesPct}% | Protocol: MyShape V1.0_GENESIS\nGenerated locally. Zero data uploaded. ZK-verified.\nmyshape.com/motion-demo`;
     if (navigator.share) {
-      navigator.share({ title: "MyShape Presence Proof", text });
+      navigator.share({ title: "MyShape Presence Proof", text }).catch(() => { navigator.clipboard.writeText(text).then(() => { setShared(true); playTick(700,"sine",0.08,0.02); setTimeout(()=>setShared(false),2000); }); });
     } else {
       navigator.clipboard.writeText(text).then(() => { setShared(true); playTick(700, "sine", 0.08, 0.02); setTimeout(()=>setShared(false),2000); });
     }
