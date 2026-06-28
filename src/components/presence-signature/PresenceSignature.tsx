@@ -30,12 +30,13 @@ export default function PresenceSignature({ proof }: { proof: ProofData }) {
     playTick(800, "sine", 0.10, 0.025);
   };
 
+  const [shared, setShared] = React.useState(false);
   const handleShare = () => {
     const text = `My Presence has been verified.\nPES: ${pesPct}% | Protocol: MyShape V1.0_GENESIS\nGenerated locally. Zero data uploaded. ZK-verified.\nmyshape.com/motion-demo`;
     if (navigator.share) {
       navigator.share({ title: "MyShape Presence Proof", text });
     } else {
-      navigator.clipboard.writeText(text).then(() => playTick(700, "sine", 0.08, 0.02));
+      navigator.clipboard.writeText(text).then(() => { setShared(true); playTick(700, "sine", 0.08, 0.02); setTimeout(()=>setShared(false),2000); });
     }
   };
 

@@ -794,10 +794,12 @@ export default function MotionDemoClient() {
                   </div>
                 </div>
                 {!aiCompare ? (
-                  <button onClick={async () => { playTick(700,"sine",0.08,0.02); setWasmCompare({loading:true,similarity:null,sigDim:0}); try { const sdk=await loadWasm(); if(!sdk){setWasmCompare(null);return} const aiM=sdk.generateAIMotion(1,30,0.15); const hM=sdk.generateHumanMotion(1,30,0.15); const hS=sdk.extractSignature(hM); const aS=sdk.extractSignature(aiM); const sim=sdk.similarity(hS,aS); setWasmCompare({loading:false,similarity:sim,sigDim:hS.vector.length}) } catch { setWasmCompare(null) } }}
-                    className="w-full py-1.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.15em] uppercase hover:border-cyan-400/30 hover:text-cyan-300/60 transition-all">Compare with AI →</button>
+                  <button onClick={async () => { playTick(700,"sine",0.08,0.02); setWasmCompare({loading:true,similarity:null,sigDim:0}); try { const sdk=await loadWasm(); if(!sdk){setWasmCompare({loading:false,similarity:null,sigDim:0});return} const aiM=sdk.generateAIMotion(1,30,0.15); const hM=sdk.generateHumanMotion(1,30,0.15); const hS=sdk.extractSignature(hM); const aS=sdk.extractSignature(aiM); const sim=sdk.similarity(hS,aS); setWasmCompare({loading:false,similarity:sim,sigDim:hS.vector.length}) } catch(err) { setWasmCompare({loading:false,similarity:null,sigDim:0}) } }}
+                    className="w-full py-1.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.15em] uppercase hover:border-cyan-400/30 hover:text-cyan-300/60 transition-all">
+                    {wasmCompare?.loading ? "Loading WASM..." : "Compare with AI →"}
+                  </button>
                 ) : (
-                  <div className="text-center text-[9px] text-cyan-400/30">{wasmCompare?.similarity!=null ? `AI similarity: ${(wasmCompare.similarity*100).toFixed(1)}%` : "AI comparison done"}</div>
+                  <div className="text-center text-[9px]">{wasmCompare?.similarity!=null ? <span className="text-cyan-400/50">AI similarity: {(wasmCompare.similarity*100).toFixed(1)}%</span> : <span className="text-amber-400/40">WASM engine unavailable</span>}</div>
                 )}
                 {proofHashes&&(<div className="p-3 border border-cyan-400/20 bg-cyan-400/[0.03] space-y-1 mt-auto"><div className="text-cyan-400/60 text-[9px] tracking-[0.2em] uppercase">ZK-Presence Proof</div><div className="text-cyan-200/80 text-[10px] font-mono break-all leading-relaxed">{proofHashes.zkp}</div><div className="grid grid-cols-3 gap-2 text-[9px] pt-1"><div><span className="text-white/25">PoP</span><div className="text-cyan-300/60 font-mono">{proofHashes.pop.slice(0,6)}</div></div><div><span className="text-white/25">MP</span><div className="text-cyan-300/60 font-mono">{proofHashes.mp.slice(0,6)}</div></div><div><span className="text-white/25">EP</span><div className="text-cyan-300/60 font-mono">{proofHashes.ep.slice(0,6)}</div></div></div></div>)}
               </div>
