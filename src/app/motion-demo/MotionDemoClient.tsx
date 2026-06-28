@@ -540,6 +540,9 @@ export default function MotionDemoClient() {
     }
     setTimeout(() => {
       playTick(1200, "sine", 0.12, 0.03);
+      // Stop camera stream + animation
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
       setPhase("complete");
       // 记录一次成功的 motion 验证，递增 scan_count
       const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
