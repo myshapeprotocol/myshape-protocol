@@ -87,8 +87,10 @@ export default function ResearchConsent({
           <p className="text-white/25 text-[9px] leading-relaxed">
             Only joint-position wireframe data. No camera images. No face.
           </p>
-          {uploadDone && (
+          {uploadDone ? (
             <span className="text-cyan-300/70 text-[9px] font-mono">✓ Contribution recorded</span>
+          ) : (
+            <span className="text-white/15 text-[8px] font-mono">Upload will occur after capture completes</span>
           )}
         </div>
       )}

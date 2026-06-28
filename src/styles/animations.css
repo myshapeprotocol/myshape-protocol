@@ -279,6 +279,28 @@
   90% { opacity: 0.6; }
   100% { transform: translateX(200%); opacity: 0; }
 }
+@keyframes fireworkBurst {
+  0% { opacity: 1; scale: 1; }
+  50% { opacity: 0.8; scale: 2; }
+  100% { opacity: 0; scale: 0; }
+}
+@keyframes ceremonySealEnter {
+  0% { opacity: 0; scale: 0.3; filter: blur(20px); }
+  60% { opacity: 1; scale: 1.08; filter: blur(0); }
+  100% { opacity: 1; scale: 1; filter: blur(0); }
+}
+@keyframes ceremonyRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes ceremonyParticle {
+  0% { opacity: 1; scale: 1; }
+  100% { opacity: 0; scale: 0; }
+}
+@keyframes ceremonyTextFade {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 @keyframes dropletScroll {
   0%   { top: 5%; opacity: 0; }
   10%  { opacity: 1; }

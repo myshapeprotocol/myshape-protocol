@@ -540,9 +540,10 @@ export default function MotionDemoClient() {
     }
     setTimeout(() => {
       playTick(1200, "sine", 0.12, 0.03);
-      // Stop camera stream + animation
+      // Stop camera + video + animation
       if (animRef.current) cancelAnimationFrame(animRef.current);
       if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+      if (videoRef.current) { videoRef.current.srcObject = null; videoRef.current.pause(); }
       setPhase("complete");
       // 记录一次成功的 motion 验证，递增 scan_count
       const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
@@ -706,7 +707,7 @@ export default function MotionDemoClient() {
 
             {phase === "processing" && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60">
-                <div className="text-center space-y-5">
+                <div className="text-center space-y-3.5">
                   <div className="relative w-16 h-16 mx-auto">
                     <div className="absolute inset-0 rounded-full border border-cyan-400/20 animate-ping" style={{ animationDuration: "1.5s" }} />
                     <div className="absolute inset-2 rounded-full border border-cyan-400/30 animate-pulse" />
@@ -724,9 +725,101 @@ export default function MotionDemoClient() {
                 </div>
               </div>
             )}
+            {/* Completion Ceremony */}
+            {phase === "complete" && pesData && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/90 gap-6 overflow-hidden">
+                {/* Particle burst ring */}
+                {[...Array(30)].map((_,i) => {
+                  const a = (i/30)*Math.PI*2;
+                  const x = Math.cos(a)*120; const y = Math.sin(a)*120;
+                  const colors = ["#22d3ee","#d4af37","#34d399","#90c8ff"];
+                  return (
+                    <div key={i} className="absolute left-1/2 top-1/2 pointer-events-none rounded-full"
+                      style={{width:4,height:4,background:colors[i%4],boxShadow:`0 0 10px ${colors[i%4]}`,
+                        animation:`ceremonyParticle 2s ease-out ${i*0.05}s forwards`,
+                        transform:`translate(${x}px,${y}px)`}}/>
+                  );
+                })}
+                {/* Central seal */}
+                <div className="relative w-36 h-36" style={{animation:"ceremonySealEnter 0.8s ease-out forwards"}}>
+                  <svg viewBox="0 0 140 140" className="w-full h-full">
+                    <defs>
+                      <radialGradient id="sealGlow"><stop offset="0%" stopColor="rgba(212,175,55,0.3)"/><stop offset="100%" stopColor="transparent"/></radialGradient>
+                      <linearGradient id="sealGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#d4af37"/><stop offset="50%" stopColor="#f0d060"/><stop offset="100%" stopColor="#b8941f"/></linearGradient>
+                    </defs>
+                    {/* Outer glow */}
+                    <circle cx="70" cy="70" r="62" fill="url(#sealGlow)"/>
+                    {/* Outer ring */}
+                    <circle cx="70" cy="70" r="50" fill="none" stroke="url(#sealGold)" strokeWidth="2" strokeDasharray="4 3" style={{animation:"ceremonyRotate 20s linear infinite",transformOrigin:"70px 70px"}}/>
+                    {/* Inner ring */}
+                    <circle cx="70" cy="70" r="42" fill="rgba(10,8,4,0.8)" stroke="rgba(212,175,55,0.5)" strokeWidth="1.5"/>
+                    {/* Octagon border */}
+                    <polygon points="70,18 107,33 122,70 107,107 70,122 33,107 18,70 33,33" fill="none" stroke="rgba(212,175,55,0.4)" strokeWidth="1"/>
+                    {/* Text */}
+                    <text x="70" y="62" textAnchor="middle" fill="rgba(212,175,55,0.5)" fontSize="6" fontFamily="monospace" letterSpacing="4">MYSHAPE</text>
+                    <text x="70" y="78" textAnchor="middle" fill="rgba(212,175,55,0.95)" fontSize="16" fontFamily="monospace" fontWeight="300" letterSpacing="2">SEALED</text>
+                    <text x="70" y="94" textAnchor="middle" fill="rgba(212,175,55,0.35)" fontSize="5" fontFamily="monospace" letterSpacing="3">PROTOCOL</text>
+                    {/* Star */}
+                    <polygon points="70,24 72,30 78,30 73,34 75,40 70,36 65,40 67,34 62,30 68,30" fill="rgba(212,175,55,0.6)"/>
+                  </svg>
+                </div>
+                <div className="text-center space-y-2" style={{animation:"ceremonyTextFade 1s ease-out 0.5s both"}}>
+                  <div className="text-amber-300/60 text-[14px] font-light tracking-[0.2em] uppercase">◈ Genesis Ritual Complete</div>
+                  <p className="text-white/30 text-[11px] max-w-xs leading-relaxed">Your kinetic signature is now sealed into the sovereign identity layer.</p>
+                  {researchConsented && <p className="text-cyan-400/30 text-[9px]">+ Contributed to calibration engine</p>}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Feature Panel */}
+          {phase === "complete" && pesData ? (
+            <div className="flex flex-row gap-4">
+              <div className="flex-1 border border-white/10 bg-black/40 p-4 flex flex-col space-y-3.5">
+                {/* Box 1: PES + Telemetry + ZK Proof */}
+                <div>
+                  <div className="text-cyan-400/50 text-[10px] tracking-[0.2em] uppercase mb-1.5">Presence Entropy Score</div>
+                  <div className="flex items-center justify-center"><div className="relative w-20 h-20"><svg viewBox="0 0 100 100" className="w-full h-full -rotate-90"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6"/><circle cx="50" cy="50" r="42" fill="none" stroke={pesData.score>0.5?"rgba(52,211,153,0.7)":"rgba(144,200,255,0.6)"} strokeWidth="6" strokeDasharray={`${pesData.score*264} 264`} strokeLinecap="round" style={{filter:`drop-shadow(0 0 8px ${pesData.score>0.5?"rgba(52,211,153,0.5)":"rgba(144,200,255,0.4)"})`}}/></svg><div className="absolute inset-0 flex items-center justify-center"><span className="text-white/90 font-mono text-[20px]" style={{textShadow:pesData.score>0.5?"0 0 14px rgba(52,211,153,0.6)":"0 0 14px rgba(144,200,255,0.5)"}}>{(pesData.score*100).toFixed(0)}</span></div></div></div>
+                  {threatVerdict&&<div className={`text-center text-[10px] tracking-[0.08em] uppercase font-mono mt-2 ${threatVerdict.startsWith("✓")?"text-cyan-300/80":"text-amber-300/80"}`}>{threatVerdict}</div>}
+                </div>
+                <div className="space-y-2">{[{l:"μTiming",v:pesData.timing,h:200},{l:"Noise",v:pesData.noise,h:190},{l:"Frequency",v:pesData.frequency,h:210},{l:"Biological",v:pesData.biological,h:180}].map(g=>(<div key={g.l}><div className="flex justify-between text-[10px]"><span className="text-white/35">{g.l}</span><span className="text-cyan-300/60 font-mono text-[11px]">{(g.v*100).toFixed(0)}%</span></div><div className="h-2 bg-white/5 rounded-full overflow-hidden mt-0.5"><div className="h-full rounded-full transition-all duration-700" style={{width:`${Math.min(g.v*100,100)}%`,background:`linear-gradient(90deg,hsla(${g.h},60%,50%,0.4),hsla(${g.h},70%,60%,0.8))`,boxShadow:`0 0 6px hsla(${g.h},60%,60%,0.3)`}}/></div></div>))}</div>
+                <div className="h-px bg-white/5"/>
+                <div>
+                  <div className="text-cyan-400/50 text-[10px] tracking-[0.2em] uppercase mb-1.5">Telemetry</div>
+                  <div className="space-y-2 text-[11px] font-mono">
+                    <div className="flex justify-between"><span className="text-white/30">SST Frames</span><span className="text-cyan-300/60">{sstFramesRef.current.length}</span></div>
+                    <div className="flex justify-between"><span className="text-white/30">Valid Frames</span><span className="text-cyan-300/60">{validFrameCount}</span></div>
+                    <div className="flex justify-between"><span className="text-white/30">Energy</span><span className="text-cyan-300/60">{features?.features.energy.toFixed(2)??"—"}</span></div>
+                    <div className="flex justify-between"><span className="text-white/30">Phase</span><span className="text-cyan-400/60">COMPLETE</span></div>
+                  </div>
+                </div>
+                {!aiCompare ? (
+                  <button onClick={async () => { playTick(700,"sine",0.08,0.02); setWasmCompare({loading:true,similarity:null,sigDim:0}); try { const sdk=await loadWasm(); if(!sdk){setWasmCompare(null);return} const aiM=sdk.generateAIMotion(1,30,0.15); const hM=sdk.generateHumanMotion(1,30,0.15); const hS=sdk.extractSignature(hM); const aS=sdk.extractSignature(aiM); const sim=sdk.similarity(hS,aS); setWasmCompare({loading:false,similarity:sim,sigDim:hS.vector.length}) } catch { setWasmCompare(null) } }}
+                    className="w-full py-1.5 border border-cyan-400/15 text-cyan-400/35 text-[9px] tracking-[0.15em] uppercase hover:border-cyan-400/30 hover:text-cyan-300/60 transition-all">Compare with AI →</button>
+                ) : (
+                  <div className="text-center text-[9px] text-cyan-400/30">{wasmCompare?.similarity!=null ? `AI similarity: ${(wasmCompare.similarity*100).toFixed(1)}%` : "AI comparison done"}</div>
+                )}
+                {proofHashes&&(<div className="p-3 border border-cyan-400/20 bg-cyan-400/[0.03] space-y-1 mt-auto"><div className="text-cyan-400/60 text-[9px] tracking-[0.2em] uppercase">ZK-Presence Proof</div><div className="text-cyan-200/80 text-[10px] font-mono break-all leading-relaxed">{proofHashes.zkp}</div><div className="grid grid-cols-3 gap-2 text-[9px] pt-1"><div><span className="text-white/25">PoP</span><div className="text-cyan-300/60 font-mono">{proofHashes.pop.slice(0,6)}</div></div><div><span className="text-white/25">MP</span><div className="text-cyan-300/60 font-mono">{proofHashes.mp.slice(0,6)}</div></div><div><span className="text-white/25">EP</span><div className="text-cyan-300/60 font-mono">{proofHashes.ep.slice(0,6)}</div></div></div></div>)}
+              </div>
+              <div className="flex-1 border border-white/10 bg-black/40 p-4 flex flex-col space-y-3.5">
+                {/* Box 2: Presence Signature + Witness + Actions */}
+                <div>
+                  {proofHashes&&(<PresenceSignature proof={{pesScore:pesData.score,timing:pesData.timing,noise:pesData.noise,freq:pesData.frequency,bio:pesData.biological,zkpHash:proofHashes.zkp,popHash:proofHashes.pop,mpHash:proofHashes.mp,epHash:proofHashes.ep,timestamp:Date.now()}}/>)}
+                </div>
+                {witnessData?.position_number&&(<div className="p-3 border border-amber-400/20 bg-amber-400/[0.03] text-center space-y-1"><div className="text-amber-300/60 text-[9px] uppercase tracking-[0.12em]">{witnessData.cohort==="genesis"?"Genesis Witness":"Protocol Witness"}</div><div className="text-amber-200/90 text-[18px] font-light">#{witnessData.position_number}</div></div>)}
+                {/* Genesis status */}
+                {typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1" ? (
+                  <div className="text-center text-cyan-400/40 text-[10px] tracking-[0.1em]">◈ Scan recorded — contributing to orbital evolution</div>
+                ) : (
+                  <div className="text-center text-amber-400/40 text-[10px] tracking-[0.1em]">⚠ Demo mode — scan not bound to identity</div>
+                )}
+                <div className="mt-auto space-y-2">
+                  <button onClick={()=>{const r=`MyShape PES: ${(pesData.score*100).toFixed(0)}% | μT:${(pesData.timing*100).toFixed(0)}% N:${(pesData.noise*100).toFixed(0)}% F:${(pesData.frequency*100).toFixed(0)}% B:${(pesData.biological*100).toFixed(0)}%\nVerified by MyShape Protocol — myshape.com/motion-demo`;navigator.clipboard.writeText(r).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)})}} className="w-full py-2.5 border border-cyan-400/20 text-cyan-400/40 text-[10px] tracking-[0.15em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 transition-all">{copied?"✓ Copied":"📋 Copy Results"}</button>
+                  <button onClick={stop} className="w-full py-2.5 border border-cyan-400/15 text-cyan-400/35 text-[10px] tracking-[0.2em] uppercase hover:border-cyan-400/40 hover:text-cyan-300/70 transition-all">↻ Run Again</button>
+                </div>
+              </div>
+            </div>
+          ) : (
           <div className="border border-white/10 bg-black/40 p-5 space-y-4">
             {/* ── PES Dashboard ── */}
             {pesData && (
@@ -1082,22 +1175,17 @@ export default function MotionDemoClient() {
               </div>
             )}
           </div>
+          )}
         </div>
 
-        <div className="mt-10 text-center space-y-3">
-          <div className="flex items-center justify-center gap-2 text-cyan-400/60 text-[12px] tracking-[0.08em]">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
-            {researchConsented
-              ? "Camera images stay local. Only joint-position data is uploaded anonymously."
-              : "Your motion data never leaves this device. No cloud upload. No server storage."}
-          </div>
-          <p className="text-white/25 text-[10px] tracking-[0.08em]">
-            This is a proof-of-concept prototype. All processing is local{researchConsented ? " except for anonymous joint-position upload" : ". No data stored or transmitted"}.
-            For best results, use <span className="text-cyan-400/50">Firefox</span> (Chromium-based browsers may show a green screen with some webcams).
-            See the <a href="/papers/technical-spec" className="text-cyan-400/50 hover:text-cyan-300" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>technical spec</a> for the full architecture.
-          </p>
-        </div>
       </div>
+
+        <div className="max-w-5xl mx-auto px-4 md:px-6 -mt-4 pb-2">
+          <div className="flex items-center justify-center gap-2 text-cyan-400/50 text-[12px] tracking-[0.05em]">
+            <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+            {researchConsented ? "Camera images stay local. Only joint-position data is uploaded anonymously." : "Your motion data never leaves this device. No cloud upload. No server storage."}
+          </div>
+        </div>
 
       <ProtocolFooter />
     </div>

@@ -302,7 +302,7 @@ export default function MotionGuide({
             PHASE {phase.phase}/5
           </span>
           <span className="text-white/70 text-[11px] tracking-[0.15em] font-medium">
-            {phase.titleCN}
+            {phase.title}
           </span>
           {/* Mini phase dots */}
           <div className="flex gap-1 ml-1">
