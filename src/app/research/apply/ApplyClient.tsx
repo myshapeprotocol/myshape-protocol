@@ -116,18 +116,18 @@ function ApplyForm() {
                   style={{
                     width: 100, height: 100,
                     borderRadius: "50%",
-                    border: isGenesis ? "2px solid rgba(34,211,238,0.5)" : "2px solid rgba(255,255,255,0.15)",
+                    border: isGenesis ? "2px solid rgba(212,175,55,0.6)" : "2px solid rgba(255,255,255,0.15)",
                     background: isGenesis
-                      ? "radial-gradient(circle at 40% 35%, rgba(34,211,238,0.2) 0%, rgba(34,211,238,0.05) 50%, transparent 70%)"
+                      ? "radial-gradient(circle at 40% 35%, rgba(212,175,55,0.22) 0%, rgba(180,140,40,0.06) 50%, transparent 70%)"
                       : "radial-gradient(circle at 40% 35%, rgba(255,255,255,0.05) 0%, transparent 70%)",
-                    boxShadow: isGenesis ? "0 0 40px rgba(34,211,238,0.3), inset 0 0 20px rgba(34,211,238,0.1)" : "0 0 16px rgba(255,255,255,0.05)",
+                    boxShadow: isGenesis ? "0 0 40px rgba(212,175,55,0.3), inset 0 0 20px rgba(212,175,55,0.08)" : "0 0 16px rgba(255,255,255,0.05)",
                     animation: "genesisWitnessGlow 3s ease-in-out infinite",
                   }}
                 >
                   <div className="text-center">
-                    <div className="text-cyan-400/40 text-[7px] tracking-[0.3em] uppercase">Witness</div>
-                    <div className={`font-light tracking-[-0.02em] ${isGenesis ? "text-cyan-200" : "text-white/40"}`}
-                      style={{ fontSize: "28px", textShadow: isGenesis ? "0 0 16px rgba(34,211,238,0.6)" : "none", lineHeight: 1 }}>
+                    <div className="text-amber-400/50 text-[7px] tracking-[0.3em] uppercase">Witness</div>
+                    <div className={`font-light tracking-[-0.02em] ${isGenesis ? "text-amber-200" : "text-white/40"}`}
+                      style={{ fontSize: "28px", textShadow: isGenesis ? "0 0 16px rgba(212,175,55,0.5)" : "none", lineHeight: 1 }}>
                       #{result.position_number}
                     </div>
                   </div>
@@ -135,7 +135,7 @@ function ApplyForm() {
                   {isGenesis && (
                     <div className="absolute inset-0 rounded-full"
                       style={{
-                        border: "1px solid rgba(34,211,238,0.2)",
+                        border: "1px solid rgba(212,175,55,0.25)",
                         animation: "genesisBadgePulse 2s ease-in-out infinite",
                       }} />
                   )}
@@ -143,7 +143,7 @@ function ApplyForm() {
               </div>
 
               {/* ── 标题 ── */}
-              <div className={`text-xl font-light tracking-[0.05em] ${isGenesis ? "text-cyan-300" : "text-white/50"}`} style={isGenesis ? { textShadow: "0 0 24px rgba(34,211,238,0.6)" } : undefined}>
+              <div className={`text-xl font-light tracking-[0.05em] ${isGenesis ? "text-amber-200" : "text-white/50"}`} style={isGenesis ? { textShadow: "0 0 24px rgba(212,175,55,0.5)" } : undefined}>
                 {isGenesis ? "◈ Genesis Cohort — Confirmed" : "✓ Application Received"}
               </div>
 
@@ -154,7 +154,7 @@ function ApplyForm() {
               </p>
 
               {isGenesis && (
-                <div className="inline-block px-3 py-1 border border-cyan-400/20 bg-cyan-400/[0.04] text-cyan-400/60 text-[9px] tracking-[0.15em] uppercase rounded-sm">
+                <div className="inline-block px-3 py-1 border border-amber-400/20 bg-amber-400/[0.04] text-amber-300/60 text-[9px] tracking-[0.15em] uppercase rounded-sm">
                   {result.genesis_slots_remaining} genesis slots remaining
                 </div>
               )}
