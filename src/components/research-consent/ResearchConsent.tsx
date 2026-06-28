@@ -62,7 +62,7 @@ export default function ResearchConsent({
   }, [consented, captureActive, onConsentChange]);
 
   return (
-    <div className="border border-white/5 bg-black/30" style={{ borderRadius: 4 }}>
+    <div className="border border-white/15 bg-black/30" style={{ borderRadius: 4 }}>
       {/* ── Consent Toggle Row ── */}
       <button
         type="button"
@@ -73,7 +73,7 @@ export default function ResearchConsent({
       >
         {/* Custom checkbox */}
         <div
-          className="w-4 h-4 flex items-center justify-center border transition-all shrink-0"
+          className="w-5 h-5 flex items-center justify-center border transition-all shrink-0"
           style={{
             borderRadius: 2,
             borderColor: consented ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.15)",
@@ -95,10 +95,10 @@ export default function ResearchConsent({
         </div>
 
         <div className="flex-1 min-w-0">
-          <span className="text-white/45 text-[10px] tracking-[0.12em] font-mono">
+          <span className="text-white/80 text-[13px] tracking-[0.12em] font-mono">
             Contribute to Anonymous Research
           </span>
-          <span className="text-white/15 text-[8px] tracking-[0.06em] ml-2 hidden sm:inline">
+          <span className="text-white/40 text-[10px] tracking-[0.06em] ml-2 hidden sm:inline">
             Help calibrate the motion-signature engine
           </span>
         </div>
@@ -117,7 +117,7 @@ export default function ResearchConsent({
 
       {/* ── Expanded Details ── */}
       {expanded && consented && (
-        <div className="px-4 pb-4 space-y-4 border-t border-white/5 pt-3">
+        <div className="px-4 pb-4 space-y-4 border-t border-white/15 pt-3">
           {/* Privacy notice */}
           <div className="flex items-start gap-2">
             <svg className="w-3 h-3 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="rgba(34,211,238,0.4)" strokeWidth="2">
