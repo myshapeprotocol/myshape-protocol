@@ -81,48 +81,14 @@ export default function ResearchConsent({
         </div>
       </button>
 
-      {/* Expanded details */}
+      {/* Expanded details — minimal height */}
       {expanded && consented && (
-        <div className="px-5 pb-4 space-y-3 border-t border-cyan-400/10 pt-3">
-          <div className="flex items-start gap-2">
-            <svg className="w-3 h-3 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="rgba(34,211,238,0.5)" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/>
-            </svg>
-            <p className="text-white/35 text-[10px] leading-relaxed tracking-[0.03em]">
-              Only joint-position data (18-point wireframe). No camera images, no face data.
-            </p>
-          </div>
-
-          {/* Lighting */}
-          <div className="space-y-1.5">
-            <div className="text-white/20 text-[8px] tracking-[0.15em] uppercase font-mono">Lighting</div>
-            <div className="grid grid-cols-2 gap-1">
-              {LIGHTING_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" disabled={captureActive}
-                  onClick={() => onLightingChange(opt.value)}
-                  className="text-left px-2 py-1.5 border transition-all disabled:opacity-40"
-                  style={{
-                    borderRadius: 2,
-                    borderColor: lighting === opt.value ? "rgba(34,211,238,0.4)" : "rgba(255,255,255,0.06)",
-                    background: lighting === opt.value ? "rgba(34,211,238,0.06)" : "transparent",
-                  }}>
-                  <div className="text-[9px] tracking-[0.04em]" style={{ color: lighting === opt.value ? "rgba(34,211,238,0.8)" : "rgba(255,255,255,0.35)" }}>
-                    {opt.label}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Upload status */}
+        <div className="px-5 pb-2 space-y-2 border-t border-cyan-400/10 pt-2">
+          <p className="text-white/25 text-[9px] leading-relaxed">
+            Only joint-position wireframe data. No camera images. No face.
+          </p>
           {uploadDone && (
-            <div className="flex items-center gap-2 px-2.5 py-1.5 border border-cyan-400/20 bg-cyan-400/[0.04] rounded-sm">
-              <svg className="w-3 h-3 shrink-0" viewBox="0 0 10 10" fill="none">
-                <circle cx="5" cy="5" r="4" stroke="rgba(34,211,238,0.6)" strokeWidth="1"/>
-                <path d="M3 5l1.5 1.5L7 4" stroke="rgba(34,211,238,0.9)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="text-cyan-300/70 text-[9px] tracking-[0.06em] font-mono">Contribution recorded — thank you.</span>
-            </div>
+            <span className="text-cyan-300/70 text-[9px] font-mono">✓ Contribution recorded</span>
           )}
         </div>
       )}
