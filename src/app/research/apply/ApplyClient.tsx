@@ -108,7 +108,7 @@ function ApplyForm() {
         {status === "done" && (
           <div className="border p-6 space-y-4 mb-8" style={{ borderColor: isGenesis ? "rgba(34,211,238,0.3)" : "rgba(144,200,255,0.15)", borderRadius: 4, background: isGenesis ? "rgba(34,211,238,0.03)" : "transparent" }}>
             <div className="text-center space-y-3">
-              <div className={`text-xl ${isGenesis ? "text-cyan-300" : "text-white/50"}`}>
+              <div className={`text-2xl font-light tracking-[0.05em] ${isGenesis ? "text-cyan-300" : "text-white/50"}`} style={isGenesis ? { textShadow: "0 0 24px rgba(34,211,238,0.6)" } : undefined}>
                 {isGenesis ? "◈ Genesis Cohort — Confirmed" : "✓ Application Received"}
               </div>
               <p className="text-white/35 text-[12px] leading-relaxed">
@@ -121,9 +121,11 @@ function ApplyForm() {
                   {result.genesis_slots_remaining} genesis slots remaining
                 </div>
               )}
-              <p className="text-white/20 text-[10px]">
-                <span style={{ animation: "genesisBadgePulse 1s ease-in-out infinite" }}>Redirecting in {countdown}s...</span>
-                <br /><span className="text-cyan-400/30 text-[9px]">(Complete a 30s motion capture to calibrate the engine)</span>
+              <p>
+                <span className="text-cyan-300/90 text-[16px] font-light tracking-[0.05em]" style={{ textShadow: "0 0 18px rgba(34,211,238,0.5)", animation: "genesisBadgePulse 0.8s ease-in-out infinite" }}>
+                  Redirecting in {countdown}s...
+                </span>
+                <br /><span className="text-white/40 text-[11px]">Complete a 30s motion capture to calibrate the engine</span>
               </p>
             </div>
           </div>
