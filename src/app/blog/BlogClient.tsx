@@ -275,10 +275,10 @@ cargo run --release --bin myshape-demo -- --verbose`}
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
               Stored Identity vs. Generated Presence →
             </a>
-            <a href="/architecture"
+            <a href="/blog/continuity-layer-for-the-simulation-age"
               className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-              Protocol Architecture →
+              Continuity Layer →
             </a>
           </div>
         </div>

@@ -31,18 +31,18 @@ const pillars = [
   },
   {
     id: "PIL_04",
-    title: "CROSS-SPECIES CONTINUITY",
-    subtitle: "Human and AI, one protocol",
-    desc: "The identity layer for the simulation age. Human and AI identities coexist in one protocol. Presence Receipts form a continuous verifiable timeline — infrastructure for all intelligent entities.",
+    title: "PROOF OF CONTINUITY",
+    subtitle: "The verification primitive for the Agent Economy",
+    desc: "Every AI agent — financial, creative, governance — must prove it remains backed by the same sovereign subject. Continuity Proofs form a verifiable timeline that no credential or key can provide. This is not identity. This is the Continuity Layer for the Simulation Age.",
     accent: "from-cyan-400/35 to-cyan-400/0",
     color: "rgba(34,211,238,0.25)",
   },
 ];
 
 const futureStates = [
-  { label: "TODAY", desc: "Genesis Cohort — 100 founding nodes. Presence verification for sovereign entities.", active: true },
-  { label: "NEXT", desc: "Human-Agent Continuity Layer. Cross-species verification. Presence Receipts as infrastructure." },
-  { label: "THEN", desc: "The protocol disappears. Presence becomes a property of the network itself — invisible, universal, assumed." },
+  { label: "TODAY", desc: "Genesis Cohort — 100 founding nodes. Continuity verification for sovereign digital subjects.", active: true },
+  { label: "NEXT", desc: "The Continuity Layer. Cross-agent verification. Continuity Proofs as infrastructure for the Agent Economy." },
+  { label: "THEN", desc: "The protocol disappears. Continuity becomes a property of the network itself — invisible, universal, assumed." },
 ];
 
 export default function VisionClient() {
@@ -52,19 +52,25 @@ export default function VisionClient() {
       secLevel="CLASS_OMEGA" systemStatus="PROTOCOL_EXPANDING"
     >
       <div className="space-y-24 md:space-y-36">
-        {/* ── 0. 行业宣言 ── */}
+        {/* ── 0. 范式宣言：从 Identity 到 Continuity ── */}
         <section className="relative max-w-3xl"
           onMouseEnter={() => playTick(400, "sine", 0.03, 0.01)}>
-          <div className="text-cyan-500/[0.03] text-[140px] font-bold absolute -top-20 -left-10 select-none pointer-events-none leading-none">I</div>
+          <div className="text-cyan-500/[0.03] text-[140px] font-bold absolute -top-20 -left-10 select-none pointer-events-none leading-none">C</div>
           <div className="relative z-10 border-l-2 border-cyan-400/25 pl-6 md:pl-10 py-3">
-            <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase font-mono mb-5">// PROTOCOL_MANIFESTO</div>
-            <p className="text-white/75 text-[15px] md:text-[18px] leading-[1.8] font-light mb-5">
-              AI can generate a face. Clone a voice. Forge a writing style.
-              Every static credential is a snapshot that generative models will eventually learn to reproduce.
+            <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase font-mono mb-5">// THE CONTINUITY THESIS</div>
+            <p className="text-white/80 text-[15px] md:text-[18px] leading-[1.8] font-light mb-5">
+              The digital world spent three decades answering <span className="text-cyan-300/70">Who are you?</span>
+              {' '}Passwords, biometrics, DID, wallets — every identity system verifies a credential at a point in time.
+            </p>
+            <p className="text-white/70 text-[13px] md:text-[15px] leading-[1.9] font-light mb-5">
+              That question is now obsolete. AI can generate your face, clone your voice, forge your behavior.
+              Everything that can be <span className="text-white/40">stored</span> can be <span className="text-white/40">copied</span>.
+              Everything that can be copied can be <span className="text-white/40">forged</span>.
             </p>
             <p className="text-white/60 text-[13px] md:text-[15px] leading-[1.9] font-light">
-              The only signal a machine cannot fabricate is the continuous, irreducible entropy
-              of an entity in motion. <span className="text-cyan-300/80 font-medium">Presence is not stored. Presence is generated.</span>
+              The question that matters now is not who you are. It is{' '}
+              <span className="text-cyan-300/90 font-medium">who continues to be you.</span>
+              {' '}Identity is a snapshot. Continuity is a trajectory. And continuity is the one thing AI cannot fake.
             </p>
           </div>
         </section>
@@ -150,12 +156,12 @@ export default function VisionClient() {
             <div className="flex items-center justify-center gap-3">
               <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-cyan-400/20" />
               <span className="text-white/18 text-[9px] tracking-[0.4em] uppercase font-mono hover:text-cyan-400/40 transition-colors cursor-default"
-                onMouseEnter={() => playTick(450, "sine", 0.03, 0.01)}>Internal_Projection_088</span>
+                onMouseEnter={() => playTick(450, "sine", 0.03, 0.01)}>Continuity_Projection_001</span>
               <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-cyan-400/20" />
             </div>
             <blockquote className="text-white/60 text-[14px] md:text-[16px] tracking-[0.12em] leading-[1.9] font-light italic">
-              &ldquo;The history of identity is the history of control.<br />
-              The future of identity is the geometry of motion.&rdquo;
+              &ldquo;Identity tells us who you claim to be.<br />
+              Continuity tells us that you are still you.&rdquo;
             </blockquote>
             <div className="flex justify-center gap-3">
               {[...Array(5)].map((_, i) => (
@@ -174,11 +180,11 @@ export default function VisionClient() {
         <section className="flex flex-col md:flex-row justify-between items-end gap-8">
           <div className="space-y-3">
             <div className="text-cyan-400/55 text-[11px] tracking-[0.4em] font-bold uppercase">
-              Status: Protocol_Expanding
+              Status: Continuity_Layer_Active
             </div>
             <p className="text-white/30 text-[11px] tracking-[0.12em] max-w-sm leading-relaxed">
-              Current protocol parameters optimized for the Genesis Cohort.
-              Scaling toward a million-node identity mesh.
+              The Continuity Layer is operational. Genesis Cohort validating the first persistent digital subjects.
+              Building toward the verification primitive for the Agent Economy.
             </p>
             <Link href="/genesis"
               onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
@@ -188,14 +194,14 @@ export default function VisionClient() {
             </Link>
           </div>
           <div className="text-[40px] font-extralight text-white/[0.04] tracking-tighter select-none">
-            V1.0_GENESIS
+            CONTINUITY_LAYER
           </div>
         </section>
       </div>
 
       <div className="sr-only">
-        <h2>AI-Native Identity Protocol Vision</h2>
-        <p>MyShape defines a new category of identity: AI-native identity. Motion-Signature verification, ZK-Presence, and sovereign data-body architecture for the decentralized human.</p>
+        <h2>The Continuity Layer for the Simulation Age</h2>
+        <p>MyShape defines a new primitive: verifiable digital continuity. When AI can generate your face, voice, and behavior — what proves that you continue to exist? Motion-Signature verification, ZK-Continuity proofs, and sovereign data-body architecture for persistent digital subjects in the Agent Economy.</p>
         <a href="/genesis">Genesis Identity Protocol</a>
         <a href="/protocol">Protocol Architecture</a>
         <a href="/identity">AI-Native Identity Layer</a>

@@ -230,6 +230,11 @@ export default function PostClient() {
               className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all">
               Evidence →
             </Link>
+            <a href="/blog/continuity-layer-for-the-simulation-age"
+              onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
+              className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all">
+              Continuity Layer →
+            </a>
             <Link href="/blog"
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
               className="px-6 py-3 border border-cyan-400/20 text-cyan-300/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-cyan-400/45 hover:text-white hover:bg-cyan-400/[0.04] transition-all">

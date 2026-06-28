@@ -1,13 +1,13 @@
 import VisionClient from "./VisionClient";
 
 export const metadata = {
-  title: "MyShape Vision — Identity Beyond Surveillance",
+  title: "MyShape Vision — The Continuity Layer for the Simulation Age",
   description:
-    "Explore the MyShape Vision: AI-native identity, spatial sovereignty, and data permanence. A future where digital presence becomes sovereign, private, and human-aligned.",
+    "Identity tells us who you claim to be. Continuity tells us that you are still you. MyShape is the first protocol to make digital continuity verifiable — the missing layer between AI agents and sovereign human subjects.",
   openGraph: {
-    title: "MyShape Vision — The Future of Identity",
+    title: "MyShape Vision — The Continuity Layer for the Simulation Age",
     description:
-      "MyShape envisions a world where identity is sovereign, private, and AI-native. Discover the pillars of the future identity protocol.",
+      "In a world where AI can generate your face, voice, and behavior — what proves that you continue to exist? MyShape answers with verifiable continuity: the protocol that makes digital presence unforgeable.",
     url: "https://www.myshape.com/vision",
     siteName: "MyShape Protocol",
     images: [
@@ -22,9 +22,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Vision — Identity Beyond Surveillance",
+    title: "MyShape Vision — The Continuity Layer for the Simulation Age",
     description:
-      "The future of identity is movement, sovereignty, and AI-native presence. Explore the MyShape Vision.",
+      "Identity is a snapshot. Continuity is a trajectory. MyShape makes digital continuity verifiable — the missing primitive for the Agent Economy.",
     images: ["/og-image.png"],
   },
 };
