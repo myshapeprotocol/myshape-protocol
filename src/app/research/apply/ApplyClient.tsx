@@ -162,11 +162,11 @@ function ApplyForm() {
             {/* Handle */}
             <div>
               <label className="block text-white/25 text-[9px] tracking-[0.15em] uppercase mb-2">
-                Bluesky / Discord / Farcaster Handle
+                Social Platform (optional)
               </label>
               <input
                 type="text"
-                placeholder="@you.bsky.social"
+                placeholder="Bluesky / Discord / Farcaster — anything you like"
                 value={handle}
                 onChange={(e) => setHandle(e.target.value)}
                 className="w-full bg-black/40 border border-white/10 px-4 py-3 text-white/70 text-[13px] outline-none focus:border-cyan-400/30 transition-colors placeholder:text-white/10"
@@ -180,8 +180,24 @@ function ApplyForm() {
               type="submit"
               disabled={status === "submitting" || !email.trim()}
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-              className="w-full py-3.5 border border-cyan-400/30 text-cyan-400/70 text-[11px] tracking-[0.3em] uppercase hover:bg-cyan-400/10 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed"
-              style={{ borderRadius: 3 }}
+              className="w-full py-3.5 border text-[11px] tracking-[0.3em] uppercase transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+              style={{
+                borderRadius: 3,
+                borderColor: "rgba(34,211,238,0.6)",
+                color: "rgba(34,211,238,0.9)",
+                background: "rgba(34,211,238,0.06)",
+                boxShadow: "0 0 16px rgba(34,211,238,0.1)",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = "rgba(34,211,238,0.15)";
+                e.currentTarget.style.color = "#fff";
+                e.currentTarget.style.boxShadow = "0 0 28px rgba(34,211,238,0.25)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = "rgba(34,211,238,0.06)";
+                e.currentTarget.style.color = "rgba(34,211,238,0.9)";
+                e.currentTarget.style.boxShadow = "0 0 16px rgba(34,211,238,0.1)";
+              }}
             >
               {status === "submitting" ? "Submitting..." : "Apply for Early Access"}
             </button>
