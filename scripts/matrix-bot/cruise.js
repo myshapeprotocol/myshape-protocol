@@ -713,6 +713,12 @@ function generateDashboard(data) {
 	  .rd-tag { color:#ff4500; border:1px solid rgba(255,69,0,.3); background:rgba(255,69,0,.06); } .footer { margin-top:40px; padding-top:16px; border-top:1px solid var(--border); color:var(--muted); font-size:10px; text-align:center; }
   .copy-btn { background:var(--cyan); color:#000; border:none; padding:2px 8px; border-radius:3px; font-size:9px; cursor:pointer; float:right; opacity:.6; transition:opacity .2s; }
   .copy-btn:hover { opacity:1; }
+	  .matrix-status { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; padding:14px 18px; border:1px solid rgba(144,200,255,0.1); border-radius:8px; background:rgba(144,200,255,0.02); align-items:center; }
+	  .ms-chip { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:3px; font-size:9px; letter-spacing:.08em; }
+	  .ms-api { background:rgba(63,185,80,0.1); color:#3fb950; border:1px solid rgba(63,185,80,0.2); }
+	  .ms-link { background:rgba(88,166,255,0.1); color:#58a6ff; border:1px solid rgba(88,166,255,0.2); }
+	  .ms-count { font-family:monospace; font-size:11px; margin-left:2px; }
+	  .ms-sep { color:rgba(255,255,255,0.1); margin:0 4px; }
   @media(max-width:900px){ .grid{grid-template-columns:1fr;} }
 </style>
 </head>
@@ -729,7 +735,14 @@ function generateDashboard(data) {
 	    >Authorize / 授权</a>
 	</div>
 
-<div class="grid">
+
+	<div class="matrix-status">
+	  <span class="ms-chip ms-api">⚡ API Auto: <span class="ms-count">5</span></span>
+	  <span class="ms-sep">|</span>
+	  <span class="ms-chip ms-link">🔗 Link Manual: <span class="ms-count">4</span></span>
+	  <span class="ms-sep">|</span>
+	  <span style="font-size:9px;color:#484f58;margin-left:auto">API = 异步推送 &middot; LINK = 剪贴板+跳转</span>
+	</div><div class="grid">
   <div>
     <div class="section-title full">Hacker News — Technical Comments<span class="cn">技术评论</span></div>
     ${hnCards || '<div class="card"><div class="text" style="color:var(--muted)">No HN stories matched this cycle. / 本轮无匹配的 HN 文章。</div></div>'}
