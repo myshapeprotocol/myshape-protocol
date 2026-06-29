@@ -553,6 +553,12 @@ export default function MotionDemoClient() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: genesisEmail }),
         }).catch(() => {});
+        // ── 熵增计算：更新粒子等级 / Entropy growth: update particle level ──
+        fetch("/api/node/entropy", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: genesisEmail, pesScore: pesData?.score ?? 0 }),
+        }).catch(() => {});
       }
     }, 1500);
   }, [phase]);

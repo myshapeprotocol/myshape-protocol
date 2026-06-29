@@ -34,7 +34,7 @@ export async function GET(req: Request) {
 
     const { data: node, error } = await supabase
       .from('protocol_nodes')
-      .select('email, status, scan_count, data_contribution, created_at')
+      .select('email, status, scan_count, data_contribution, created_at, entropy_score, particle_level, streak_days, streak_multiplier, best_pes')
       .eq('email', email.trim())
       .single();
 
@@ -54,6 +54,11 @@ export async function GET(req: Request) {
       data_contribution: node.data_contribution || 0,
       tier: isGenesis ? 'FOUNDING_ENTITY' : isActive ? 'ACTIVE_NODE' : 'SUBSCRIBER',
       early_access: isGenesis, // Genesis 节点始终有优先访问权
+      entropy_score: node.entropy_score ?? 0,
+      particle_level: node.particle_level ?? 1,
+      streak_days: node.streak_days ?? 0,
+      streak_multiplier: node.streak_multiplier ?? 1.0,
+      best_pes: node.best_pes ?? 0,
       registered_at: node.created_at,
     });
   } catch (error: unknown) {
