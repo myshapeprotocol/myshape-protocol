@@ -244,6 +244,101 @@ async function fetchBlueskyPosts() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  DATA SOURCE: 财经新闻 (A股 + 中文财经)
+// ═══════════════════════════════════════════════════════════════════
+
+const AMARKET_API = "https://push2.eastmoney.com/api/qt/ulist.np/get";
+const NETEASE_FINANCE = "https://money.163.com/special/00251G8F/news_json.js";
+
+async function fetchAMarketData() {
+  console.log("\n--- A股行情 ---");
+  const indices = [
+    { secid: "1.000001", name: "上证指数" },
+    { secid: "0.399001", name: "深证成指" },
+    { secid: "0.399006", name: "创业板指" },
+    { secid: "1.000688", name: "科创50" },
+  ];
+  try {
+    const secids = indices.map((i) => i.secid).join(",");
+    const { data } = await axios.get(AMARKET_API, {
+      params: { fltt: 2, fields: "f2,f3,f4,f12,f14", secids },
+      timeout: 10000,
+      proxy: false, // 国内API直连，不走代理
+    });
+    if (data?.data?.diff) {
+      const rows = data.data.diff.map((d) => ({
+        name: d.f14, price: d.f2, changePct: d.f3, change: d.f4,
+      }));
+      console.log("  " + rows.map((r) => `${r.name} ${r.price} (${r.changePct > 0 ? "+" : ""}${r.changePct}%)`).join(" | "));
+      return rows;
+    }
+  } catch (e) {
+    console.log("  A股行情: " + (e.code || "unreachable"));
+  }
+  return [];
+}
+
+async function fetchCNFinanceNews() {
+  console.log("\n--- 中文财经新闻 ---");
+  try {
+    const { data: raw } = await axios.get(NETEASE_FINANCE, { timeout: 10000, proxy: false });
+    // 网易返回 JSONP: var data={...}
+    const json = JSON.parse(raw.replace(/^var data=/, "").replace(/;$/, ""));
+    const allNews = [];
+    for (const cat of json.news || []) {
+      for (const item of cat) {
+        if (item.t && item.p) allNews.push({ title: item.t, url: item.l, time: item.p });
+      }
+    }
+    // 取前 15 条，按时间倒序
+    const latest = allNews.sort((a, b) => b.time.localeCompare(a.time)).slice(0, 15);
+    console.log("  获取 " + latest.length + " 条中文财经新闻");
+    return latest;
+  } catch (e) {
+    console.log("  中文财经: " + (e.code || e.message));
+  }
+  return [];
+}
+
+async function generateFinanceBriefing(marketData, cnNews) {
+  // ── 构建财经早报 Prompt ──
+  const marketStr = marketData.length
+    ? marketData.map((r) => `${r.name}: ${r.price} (${r.changePct > 0 ? "+" : ""}${r.changePct}%)`).join(", ")
+    : "行情数据暂缺";
+  const newsStr = cnNews.length
+    ? cnNews.slice(0, 10).map((n, i) => `${i + 1}. ${n.title}`).join("\n")
+    : "新闻暂缺";
+
+  const systemPrompt = "You are a senior financial analyst. Write concise, insightful market briefings in Chinese (中文). Include key index data, top news highlights, and a short market outlook. Professional tone, no filler.";
+  const userPrompt = `写出今日A股财经早报，双语格式：
+[中文]
+（150-200字中文版：今日行情 — ${marketStr}。重要新闻摘要 — ${newsStr}。简短市场展望。）
+[English]
+（100-150 words English version of the above.）
+
+格式要求：中文在前，英文在后。专业简洁，不要堆砌数据。`;
+
+  try {
+    const briefing = await callAgnes(systemPrompt, userPrompt);
+    if (briefing && briefing.length > 60) return briefing;
+  } catch { /* fallback */ }
+  // Fallback: 简单拼接
+  return [
+    "[中文]",
+    "今日A股行情: " + marketStr,
+    "",
+    "重要新闻:",
+    newsStr,
+    "",
+    "[English]",
+    "A-share market today: " + marketStr,
+    "",
+    "Key headlines:",
+    newsStr,
+  ].join("\n");
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  POST GENERATORS — Platform-specific tones
 // ═══════════════════════════════════════════════════════════════════
 
@@ -466,6 +561,13 @@ function generateDashboard(data) {
     '<div class="text">' + esc(d.text || "") + '</div></div>'
   ).join("");
 
+  const financeCard = data.finance
+    ? '<div class="card finance-card full" style="border-left:3px solid #e84e4c;margin-bottom:20px">' +
+      '<div class="platform-tag fi-tag" style="color:#e84e4c;border:1px solid rgba(232,78,76,.3);background:rgba(232,78,76,.06)">财经早报 / FINANCE BRIEFING</div>' +
+      '<div class="text fi-text" style="font-size:12px;line-height:1.8">' + esc(data.finance.briefing || "未生成") + '</div>' +
+      '<div class="meta" style="margin-left:0;margin-top:10px">A股 / 中文财经 &middot; ' + (data.finance.newsCount || 0) + ' 条新闻</div></div>'
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -531,6 +633,8 @@ function generateDashboard(data) {
   </div>
 </div>
 
+${financeCard}
+
 <div class="footer">
   MyShape Protocol &middot; Social Matrix Cruiser v2.0 &middot; Protocol-First Analysis 协议优先分析 &middot; Generated ${now}
 </div>
@@ -564,7 +668,7 @@ async function main() {
   console.log("  MyShape Protocol — Social Matrix Cruiser v2.0");
   console.log("═".repeat(64));
 
-  const data = { hn: [], linkedin: [], x: [], bluesky: [] };
+  const data = { hn: [], linkedin: [], x: [], bluesky: [], finance: null };
 
   // 1. HN — fetch + generate comments
   const hnStories = await fetchHNStories();
@@ -612,6 +716,20 @@ async function main() {
     bskyCount += 1;
   }
 
+  // ── 5.5 财经早报 (A股 + 中文财经) ──
+  const isWeekday = new Date().getDay();
+  if (isWeekday >= 1 && isWeekday <= 5) {
+    const [marketData, cnNews] = await Promise.all([fetchAMarketData(), fetchCNFinanceNews()]);
+    if (marketData.length || cnNews.length) {
+      console.log("\n--- 财经早报 ---");
+      const briefing = await generateFinanceBriefing(marketData, cnNews);
+      data.finance = { briefing, marketData, newsCount: cnNews.length, generatedAt: new Date().toISOString() };
+      console.log("  财经早报: " + (briefing ? briefing.length + " chars" : "failed"));
+    }
+  } else {
+    console.log("\n--- 财经早报: 周末跳过 ---");
+  }
+
   // 6. Dashboard
   const outPath = path.join(__dirname, "matrix_dashboard.html");
   fs.writeFileSync(outPath, generateDashboard(data), "utf8");
@@ -632,7 +750,8 @@ async function main() {
   console.log("\n═".repeat(64));
   console.log("  Dashboard -> " + outPath);
   console.log("  HN: " + data.hn.length + " | LinkedIn: " + data.linkedin.length +
-    " | X: " + data.x.length + " | Bluesky: " + bskyCount);
+    " | X: " + data.x.length + " | Bluesky: " + bskyCount +
+    " | 财经: " + (data.finance ? "✓" : "—"));
   console.log("  Protocol log synced -> PROTOCOL_LOG.md");
   console.log("═".repeat(64) + "\n");
 }
