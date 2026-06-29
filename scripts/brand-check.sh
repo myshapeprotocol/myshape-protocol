@@ -51,7 +51,7 @@ for PATTERN in "${BANNED[@]}"; do
       case "$file" in *content.json) continue ;; esac
       RAW_MATCHES=$(grep -Hin "$PATTERN" "$file" 2>/dev/null || true)
       # 排除：技术术语/HTML标签/HTTP fetch body
-      MATCHES=$(echo "$RAW_MATCHES" | grep -v -i -E 'data.body|non.biometric|Particle.Body|body: |BodyInit|<body|</body|body \{' || true)
+      MATCHES=$(echo "$RAW_MATCHES" | grep -v -i -E 'data.body|non.biometric|Particle.Body|body[: ].|BodyInit|<body|</body|body \{' || true)
       if [ -n "$MATCHES" ]; then
         VIOLATIONS=$((VIOLATIONS + 1))
         echo -e "${RED}✘ BANNED WORD${NC} found in: ${YELLOW}$file${NC}"

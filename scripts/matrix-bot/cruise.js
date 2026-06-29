@@ -617,6 +617,25 @@ function generateDashboard(data) {
   .footer { margin-top:40px; padding-top:16px; border-top:1px solid var(--border); color:var(--muted); font-size:10px; text-align:center; }
   .copy-btn { background:var(--cyan); color:#000; border:none; padding:2px 8px; border-radius:3px; font-size:9px; cursor:pointer; float:right; opacity:.6; transition:opacity .2s; }
   .copy-btn:hover { opacity:1; }
+	  .cmd-center { margin-bottom:20px;padding:16px 20px;border:1px solid rgba(144,200,255,0.2);border-radius:8px;background:rgba(144,200,255,0.03); }
+	  .cmd-input { width:100%;min-height:80px;background:#02040a;border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:#c9d1d9;padding:10px;font-size:11px;resize:vertical;font-family:inherit;margin-bottom:10px;outline:none }
+	  .cmd-input:focus { border-color:rgba(88,166,255,0.5); }
+	  .cmd-platforms { display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px; }
+	  .cmd-platforms label { display:flex;align-items:center;gap:3px;font-size:9px;color:#8b949e;cursor:pointer;padding:2px 6px;border:1px solid transparent;border-radius:3px;transition:all .2s;user-select:none }
+	  .cmd-platforms label.checked { border-color:rgba(88,166,255,0.3);color:#c9d1d9;background:rgba(88,166,255,0.08) }
+	  .cmd-platforms label input { accent-color:#58a6ff }
+	  .cmd-actions { display:flex;gap:8px;align-items:center;flex-wrap:wrap }
+	  .cmd-btn { padding:6px 14px;border:1px solid;border-radius:4px;font-size:10px;cursor:pointer;letter-spacing:.08em;transition:all .2s; }
+	  .cmd-fire { background:rgba(63,185,80,0.2);color:#3fb950;border-color:rgba(63,185,80,0.3) }
+	  .cmd-fire:hover { background:rgba(63,185,80,0.4);color:#fff }
+	  .cmd-select { background:transparent;color:#8b949e;border-color:rgba(255,255,255,0.1) }
+	  .cmd-select:hover { color:#c9d1d9;border-color:rgba(255,255,255,0.2) }
+	  .cmd-fill { background:transparent;color:#58a6ff;border-color:rgba(88,166,255,0.2);font-size:8px }
+	  .cmd-fill:hover { background:rgba(88,166,255,0.1) }
+	  .cmd-results { margin-top:8px;display:flex;flex-wrap:wrap;gap:6px }
+	  .cmd-res { font-size:9px;padding:2px 8px;border-radius:3px }
+	  .cmd-ok { background:rgba(63,185,80,0.15);color:#3fb950 }
+	  .cmd-fail { background:rgba(232,78,76,0.15);color:#e84e4c }
   @media(max-width:900px){ .grid{grid-template-columns:1fr;} }
 </style>
 </head>
@@ -638,6 +657,33 @@ function generateDashboard(data) {
 <div class="grid">
   <div>
     <div class="section-title full">Hacker News — Technical Comments<span class="cn">技术评论</span></div>
+	<div class="cmd-center">
+	  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+	    <span style="color:#58a6ff;font-size:10px;letter-spacing:.15em;font-weight:600">◈ MEDIA COMMAND CENTER</span>
+	    <span style="font-size:8px;color:#484f58">写文案 → 勾平台 → 发射</span>
+	  </div>
+	  <textarea class="cmd-input" id="cmd-text" placeholder="在此输入/粘贴要发布的文案... 或点击下方卡片旁的 [Fill] 按钮引用AI生成的内容"></textarea>
+	  <div class="cmd-platforms" id="cmd-platforms">
+	    <label data-p="bluesky"><input type="checkbox">Bluesky</label>
+	    <label data-p="linkedin"><input type="checkbox">LinkedIn</label>
+	    <label data-p="farcaster"><input type="checkbox">Farcaster</label>
+	    <label data-p="discord"><input type="checkbox">Discord</label>
+	    <label data-p="telegram"><input type="checkbox">Telegram</label>
+	    <label data-p="reddit"><input type="checkbox">Reddit</label>
+	    <label data-p="x"><input type="checkbox">X</label>
+	    <label data-p="xiaohongshu"><input type="checkbox">小红书</label>
+	    <label data-p="threads"><input type="checkbox">Threads</label>
+	    <label data-p="hn"><input type="checkbox">HN</label>
+	  </div>
+	  <div class="cmd-actions">
+	    <button class="cmd-btn cmd-fire" id="cmd-fire" onclick="fireAll()">▶ 发射 / FIRE</button>
+	    <button class="cmd-btn cmd-select" onclick="selAll()">全选</button>
+	    <button class="cmd-btn cmd-select" onclick="selAPI()">API</button>
+	    <button class="cmd-btn cmd-select" onclick="selLINK()">LINK</button>
+	    <span style="font-size:9px;color:#484f58;margin-left:8px" id="cmd-status"></span>
+	  </div>
+	  <div class="cmd-results" id="cmd-results"></div>
+	</div>
     ${hnCards || '<div class="card"><div class="text" style="color:var(--muted)">No HN stories matched this cycle. / 本轮无匹配的 HN 文章。</div></div>'}
   </div>
   <div>
@@ -664,75 +710,62 @@ ${financeCard}
 </div>
 
 <script>
-	document.querySelectorAll('.card').forEach(card => {
-	  const actions = card.querySelector('.card-actions');
-	  if (!actions) return;
+	var PLATFORM_TYPES = {bluesky:'API',linkedin:'API',farcaster:'API',discord:'API',telegram:'API',reddit:'API',x:'LINK',xiaohongshu:'LINK',threads:'LINK',hn:'LINK'};
+	var PLATFORM_URLS = {x:'https://twitter.com/intent/tweet?text=',xiaohongshu:'https://www.xiaohongshu.com/explore',threads:'https://www.threads.net/intent/post?text=',hn:'https://news.ycombinator.com/submit'};
 
-	  const copyBtn = document.createElement('button');
-	  copyBtn.className = 'copy-btn';
-	  copyBtn.textContent = 'Copy / 复制';
-	  copyBtn.onclick = () => {
-	    const text = card.querySelector('.text')?.textContent || '';
-	    navigator.clipboard.writeText(text.trim()).then(() => {
-	      copyBtn.textContent = 'Copied / 已复制';
-	      setTimeout(() => { copyBtn.textContent = 'Copy / 复制'; }, 1500);
-	    });
-	  };
-	  actions.appendChild(copyBtn);
-
-	  const pubBtn = document.createElement('button');
-	  pubBtn.className = 'publish-btn';
-	  pubBtn.textContent = '批准并分发 / Publish';
-	  pubBtn.style.cssText = 'background:rgba(63,185,80,0.15);color:#3fb950;border:1px solid rgba(63,185,80,0.3);padding:2px 8px;border-radius:3px;font-size:9px;cursor:pointer;transition:all .2s';
-	  pubBtn.onmouseenter = () => { pubBtn.style.background = 'rgba(63,185,80,0.3)'; pubBtn.style.color = '#fff'; };
-	  pubBtn.onmouseleave = () => { pubBtn.style.background = 'rgba(63,185,80,0.15)'; pubBtn.style.color = '#3fb950'; };
-	  pubBtn.onclick = () => {
-	    const payloadStr = card.getAttribute('data-payload') || '{}';
-	    const payload = JSON.parse(payloadStr.replace(/&quot;/g, '"'));
-	    pubBtn.textContent = '分发中...';
-	    pubBtn.disabled = true;
-	    pubBtn.style.opacity = '0.6';
-	    fetch('/api/matrix/publish', {
-	      method: 'POST',
-	      headers: { 'Content-Type': 'application/json' },
-	      body: JSON.stringify(payload),
-	    })
-	    .then(r => r.json())
-	    .then(data => {
-	      if (data.success) {
-	        pubBtn.textContent = '已分发 / Published';
-	        pubBtn.style.background = 'rgba(63,185,80,0.4)';
-	      } else {
-	        pubBtn.textContent = data.error || 'Failed';
-	        pubBtn.style.background = 'rgba(210,153,29,0.3)';
-	        pubBtn.style.color = '#d2991d';
-	      }
-	    })
-	    .catch(() => {
-	      console.log('== Publish Preview ==');
-	      console.log('Platform:', payload.platform);
-	      console.log('Title:', payload.title);
-	      console.log('Content:', payload.content);
-	      console.log('URL:', payload.url);
-	      console.log('== END PREVIEW ==');
-	      pubBtn.textContent = '已预览 / Previewed';
-	      pubBtn.style.background = 'rgba(88,166,255,0.3)';
-	      pubBtn.style.color = '#58a6ff';
-	      pubBtn.style.borderColor = 'rgba(88,166,255,0.4)';
-	    })
-	    .finally(() => {
-	      setTimeout(() => {
-	        pubBtn.disabled = false;
-	        pubBtn.style.opacity = '1';
-	        pubBtn.textContent = '批准并分发 / Publish';
-	        pubBtn.style.background = 'rgba(63,185,80,0.15)';
-	        pubBtn.style.color = '#3fb950';
-	        pubBtn.style.borderColor = 'rgba(63,185,80,0.3)';
-	      }, 3000);
-	    });
-	  };
-	  actions.appendChild(pubBtn);
+	// -- Platform checkbox styling --
+	document.querySelectorAll('#cmd-platforms label').forEach(l=>{
+	  l.querySelector('input').onchange=function(){l.classList.toggle('checked',this.checked)};
 	});
+
+	// -- Card buttons: Copy + Fill --
+	document.querySelectorAll('.card').forEach(card=>{
+	  var a=card.querySelector('.card-actions');if(!a)return;
+	  var cb=document.createElement('button');cb.className='copy-btn';cb.textContent='Copy';
+	  cb.onclick=function(){var t=card.querySelector('.text')?.textContent||'';navigator.clipboard.writeText(t.trim());cb.textContent='Copied';setTimeout(function(){cb.textContent='Copy'},1500)};
+	  a.appendChild(cb);
+	  var fb=document.createElement('button');fb.className='cmd-btn cmd-fill';fb.textContent='Fill';
+	  fb.onclick=function(){var t=card.querySelector('.text')?.textContent||'';document.getElementById('cmd-text').value=t.trim();document.getElementById('cmd-text').scrollIntoView({behavior:'smooth'});};
+	  a.appendChild(fb);
+	});
+
+	// -- Selector shortcuts --
+	function selAll(){var cs=document.querySelectorAll('#cmd-platforms input');cs.forEach(function(c){c.checked=true;c.parentElement.classList.add('checked')})}
+	function selAPI(){var cs=document.querySelectorAll('#cmd-platforms label');cs.forEach(function(l){var p=l.getAttribute('data-p');var t=PLATFORM_TYPES[p]||'API';l.querySelector('input').checked=(t==='API');l.classList.toggle('checked',t==='API')})}
+	function selLINK(){var cs=document.querySelectorAll('#cmd-platforms label');cs.forEach(function(l){var p=l.getAttribute('data-p');var t=PLATFORM_TYPES[p]||'LINK';l.querySelector('input').checked=(t==='LINK');l.classList.toggle('checked',t==='LINK')})}
+
+	// -- Fire! --
+	async function fireAll(){
+	  var text=document.getElementById('cmd-text').value.trim();if(!text)return alert('请先输入文案');
+	  var selected=[];document.querySelectorAll('#cmd-platforms input:checked').forEach(function(c){selected.push(c.parentElement.getAttribute('data-p'))});
+	  if(!selected.length)return alert('请选择至少一个平台');
+	  var status=document.getElementById('cmd-status');var results=document.getElementById('cmd-results');
+	  status.textContent='发射中...';results.innerHTML='';
+	  var ok=[],fail=[];
+	  for(var i=0;i<selected.length;i++){
+	    var p=selected[i];var type=PLATFORM_TYPES[p]||'API';
+	    status.textContent='发射中...('+(i+1)+'/'+selected.length+') '+p;
+	    if(type==='API'){
+	      try{
+	        var res=await fetch('/api/matrix/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({platform:p,content:text,title:'MyShape Update',url:''})});
+	        var d=await res.json();
+	        var tag=document.createElement('span');tag.className='cmd-res '+(d.success?'cmd-ok':'cmd-fail');tag.textContent=(d.success?'OK':'FAIL')+' '+p;results.appendChild(tag);
+	        if(d.success)ok.push(p);else fail.push(p+'('+(d.error||'')+')');
+	      }catch(e){
+	        console.log('Publish preview for '+p+':',text.slice(0,100));
+	        var tag=document.createElement('span');tag.className='cmd-res cmd-ok';tag.textContent='PREVIEW '+p;results.appendChild(tag);
+	        ok.push(p);
+	      }
+	    } else {
+	      try{await navigator.clipboard.writeText(text);if(PLATFORM_URLS[p])window.open(PLATFORM_URLS[p]+encodeURIComponent(text),'_blank');}catch(e){}
+	      var tag=document.createElement('span');tag.className='cmd-res cmd-ok';tag.textContent='LINK '+p;results.appendChild(tag);
+	      ok.push(p);
+	    }
+	    await new Promise(function(r){setTimeout(r,800)});
+	  }
+	  status.textContent='完成! '+ok.length+' 成功'+(fail.length?', '+fail.length+' 失败':'');
+	  if(fail.length)console.log('Failures:',fail.join('; '));
+	}
 	</script>
 </body>
 </html>`;
