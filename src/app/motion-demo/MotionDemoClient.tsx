@@ -557,7 +557,14 @@ export default function MotionDemoClient() {
         fetch("/api/node/entropy", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: genesisEmail, pesScore: pesData?.score ?? 0 }),
+          body: JSON.stringify({
+            email: genesisEmail,
+            pesScore: pesData?.score ?? 0,
+            pesTiming: pesData?.timing ?? 0,
+            pesNoise: pesData?.noise ?? 0,
+            pesFrequency: pesData?.frequency ?? 0,
+            pesBiological: pesData?.biological ?? 0,
+          }),
         }).catch(() => {});
       }
     }, 1500);

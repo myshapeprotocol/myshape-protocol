@@ -13,12 +13,18 @@ const supabase = createClient(
 
 // POST — calculate entropy after a motion scan
 export async function POST(request: Request) {
-  const { email, pesScore } = await request.json();
+  const { email, pesScore, pesTiming, pesNoise, pesFrequency, pesBiological } = await request.json();
   if (!email || typeof pesScore !== "number") {
     return NextResponse.json({ error: "MISSING_FIELDS" }, { status: 400 });
   }
 
   const clampedPes = Math.min(1, Math.max(0, pesScore));
+  const pesComponents = {
+    timing: typeof pesTiming === "number" ? pesTiming : 0,
+    noise: typeof pesNoise === "number" ? pesNoise : 0,
+    frequency: typeof pesFrequency === "number" ? pesFrequency : 0,
+    biological: typeof pesBiological === "number" ? pesBiological : 0,
+  };
 
   try {
     // Read current entropy state + scan_count
@@ -41,7 +47,7 @@ export async function POST(request: Request) {
       lastEntropyDate: node.last_entropy_date ?? "",
     };
 
-    const { entropyGain, newState, leveledUp } = computeEntropyGain(clampedPes, currentState);
+    const { entropyGain, newState, leveledUp, decayApplied, spikeTriggered } = computeEntropyGain(clampedPes, pesComponents, currentState);
 
     // Write back
     const { error: writeErr } = await supabase
@@ -69,6 +75,8 @@ export async function POST(request: Request) {
       ...newState,
       progress,
       leveledUp,
+      decayApplied,
+      spikeTriggered,
     });
   } catch (err) {
     console.error("Entropy calculation failed:", err);
