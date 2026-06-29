@@ -156,6 +156,91 @@ export async function POST(request: Request) {
       }
     }
 
+    // ── Farcaster ──
+    if (platform === "farcaster") {
+      const apiKey = process.env.NEYNAR_API_KEY;
+      const signerUuid = process.env.FARCASTER_SIGNER_UUID;
+      if (!apiKey || !signerUuid) {
+        result.status = "SKIPPED";
+        result.error = "FARCASTER_CREDENTIALS_MISSING (NEYNAR_API_KEY + FARCASTER_SIGNER_UUID in .env.local)";
+        console.log("[matrix/publish] Farcaster skipped — missing credentials");
+        return NextResponse.json({ success: false, ...result });
+      }
+      try {
+        const castRes = await fetch("https://api.neynar.com/v2/farcaster/cast", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "api_key": apiKey },
+          body: JSON.stringify({ signer_uuid: signerUuid, text: content.slice(0, 320) }),
+        });
+        if (!castRes.ok) throw new Error("Farcaster: " + castRes.status + " " + (await castRes.text()).slice(0, 100));
+        const castData = await castRes.json() as { cast?: { hash?: string } };
+        result.status = "PUBLISHED";
+        result.platform_post_id = castData.cast?.hash || "unknown";
+        console.log("[matrix/publish] Farcaster published:", result.platform_post_id);
+        return NextResponse.json({ success: true, ...result });
+      } catch (err: unknown) {
+        result.status = "FAILED";
+        result.error = err instanceof Error ? err.message : "Farcaster error";
+        console.error("[matrix/publish] Farcaster error:", result.error);
+        return NextResponse.json({ success: false, ...result });
+      }
+    }
+
+    // ── Discord ──
+    if (platform === "discord") {
+      const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+      if (!webhookUrl) {
+        result.status = "SKIPPED";
+        result.error = "DISCORD_WEBHOOK_URL not configured in .env.local";
+        console.log("[matrix/publish] Discord skipped — missing webhook URL");
+        return NextResponse.json({ success: false, ...result });
+      }
+      try {
+        const dcRes = await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: content.slice(0, 2000), username: "MyShape Protocol" }),
+        });
+        if (!dcRes.ok) throw new Error("Discord: " + dcRes.status);
+        result.status = "PUBLISHED";
+        console.log("[matrix/publish] Discord published");
+        return NextResponse.json({ success: true, ...result });
+      } catch (err: unknown) {
+        result.status = "FAILED";
+        result.error = err instanceof Error ? err.message : "Discord error";
+        console.error("[matrix/publish] Discord error:", result.error);
+        return NextResponse.json({ success: false, ...result });
+      }
+    }
+
+    // ── Telegram ──
+    if (platform === "telegram") {
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+      if (!botToken || !chatId) {
+        result.status = "SKIPPED";
+        result.error = "TELEGRAM_CREDENTIALS_MISSING (TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in .env.local)";
+        console.log("[matrix/publish] Telegram skipped — missing credentials");
+        return NextResponse.json({ success: false, ...result });
+      }
+      try {
+        const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text: content.slice(0, 4096), parse_mode: "Markdown" }),
+        });
+        if (!tgRes.ok) throw new Error("Telegram: " + tgRes.status + " " + (await tgRes.text()).slice(0, 100));
+        result.status = "PUBLISHED";
+        console.log("[matrix/publish] Telegram published");
+        return NextResponse.json({ success: true, ...result });
+      } catch (err: unknown) {
+        result.status = "FAILED";
+        result.error = err instanceof Error ? err.message : "Telegram error";
+        console.error("[matrix/publish] Telegram error:", result.error);
+        return NextResponse.json({ success: false, ...result });
+      }
+    }
+
     // ── Unknown / LINK-type platforms ──
     result.status = "PREVIEW";
     result.note = "LINK-type platform — handled client-side via clipboard + window.open";
