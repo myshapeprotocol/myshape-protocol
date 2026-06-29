@@ -793,16 +793,15 @@ function esc(s) {
 // ═══════════════════════════════════════════════════════════════════
 
 async function main() {
-  const mode = process.argv.includes("--finance") ? "finance" : process.argv.includes("--social") ? "social" : "full";
-  const runFinance = mode === "finance" || mode === "full";
-  const runSocial  = mode === "social"  || mode === "full";
+  const mode = process.argv.includes("--social") ? "social" : "full";
+  const runSocial = mode === "social" || mode === "full";
 
   console.log("═".repeat(64));
   console.log("  MyShape Protocol — Social Matrix Cruiser v2.0");
-  console.log("  Mode: " + mode.toUpperCase() + (mode==="finance"?" (财经早报 only)":mode==="social"?" (社交平台 only)":" (全平台)"));
+  console.log("  Mode: " + mode.toUpperCase() + (mode==="social"?" (社交平台 only)":" (全平台)"));
   console.log("═".repeat(64));
 
-  const data = { hn: [], linkedin: [], x: [], bluesky: [], finance: null };
+  const data = { hn: [], linkedin: [], x: [], bluesky: [] };
 
   // 1. HN — fetch + generate comments (social only)
   if (runSocial) {
@@ -853,21 +852,6 @@ async function main() {
 
   } // end runSocial
 
-  // ── 5.5 财经早报 (A股 + 中文财经) ──
-  if (runFinance) {
-  const isWeekday = new Date().getDay();
-  if (isWeekday >= 1 && isWeekday <= 5) {
-    const [marketData, cnNews] = await Promise.all([fetchAMarketData(), fetchCNFinanceNews()]);
-    if (marketData.length || cnNews.length) {
-      console.log("\n--- 财经早报 ---");
-      const briefing = await generateFinanceBriefing(marketData, cnNews);
-      data.finance = { briefing, marketData, newsCount: cnNews.length, generatedAt: new Date().toISOString() };
-      console.log("  财经早报: " + (briefing ? briefing.length + " chars" : "failed"));
-    }
-  } else {
-    console.log("\n--- 财经早报: 周末跳过 ---");
-  }
-  } // end runFinance
 
   // 6. Dashboard
   const outPath = path.join(__dirname, "matrix_dashboard.html");
@@ -891,8 +875,7 @@ async function main() {
   console.log("\n═".repeat(64));
   console.log("  Dashboard -> " + outPath);
   console.log("  HN: " + data.hn.length + " | LinkedIn: " + data.linkedin.length +
-    " | X: " + data.x.length + " | Bluesky: " + (data.bluesky ? data.bluesky.length : 0) +
-    " | 财经: " + (data.finance ? "✓" : "—"));
+    " | X: " + data.x.length + " | Bluesky: " + (data.bluesky ? data.bluesky.length : 0));
   console.log("  Protocol log synced -> PROTOCOL_LOG.md");
   console.log("═".repeat(64) + "\n");
 }
