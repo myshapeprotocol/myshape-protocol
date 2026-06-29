@@ -61,7 +61,7 @@ export function createConstitution(): PresenceConstitution {
       {
         number: 2,
         title: "Privacy Rights",
-        text: "No protocol, application, or entity may require the disclosure of raw motion data, biometrics, or identity information as a condition of participation.",
+        text: "No protocol, application, or entity may require the disclosure of raw motion data, presence-verification, or identity information as a condition of participation.",
         rights: ["existence", "privacy" as CitizenshipRight],
       },
       {

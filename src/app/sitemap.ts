@@ -41,6 +41,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/agent", priority: 0.7, changeFreq: "weekly" as const },
     { path: "/ai", priority: 0.5, changeFreq: "monthly" as const },
 
+    // ── Blog ──
+    { path: "/blog", priority: 0.7, changeFreq: "weekly" as const },
+    { path: "/blog/continuity-layer-for-the-simulation-age", priority: 0.75, changeFreq: "monthly" as const },
+    { path: "/blog/stored-identity-vs-generated-presence", priority: 0.75, changeFreq: "monthly" as const },
+
+    // ── Research & Evidence ──
+    { path: "/evidence", priority: 0.7, changeFreq: "weekly" as const },
+    { path: "/research/apply", priority: 0.6, changeFreq: "weekly" as const },
+
     // ── Mirror routes (lower priority, canonical to primary) ──
     { path: "/civ-layer/papers", priority: 0.5, changeFreq: "monthly" as const },
     { path: "/civ-layer/papers/core-protocol", priority: 0.5, changeFreq: "monthly" as const },

@@ -155,7 +155,7 @@ export function grantCitizenship(
 
 export const PRESENCE_RIGHTS_DECLARATION = {
   existence:  "The right to be recognized as a real, present human — not a simulation",
-  privacy:    "The right to prove presence without exposing identity, biometrics, or personal data",
+  privacy:    "The right to prove presence without exposing identity, presence-verification, or personal data",
   participation: "The right to participate in governance proportional to verified presence",
   governance: "The right to vote on protocol evolution, parameter changes, and upgrades",
   economic:   "The right to participate in the presence economy — earn, trade, stake",

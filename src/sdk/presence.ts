@@ -63,6 +63,7 @@ export function generatePresenceProof(
   // Simple hash helpers
   const quickHash = (s: string) => {
     let h = 0x6d797368;
+    // h = h & h clamps to 32-bit integer range (consistent with Java hashCode behavior)
     for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; }
     return Math.abs(h).toString(16).padStart(8, "0");
   };

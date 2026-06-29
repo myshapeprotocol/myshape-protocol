@@ -13,6 +13,7 @@ export default function HeroVisual({ showCore = true }: { showCore?: boolean }) 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let animFrame = 0;
     let stars: { x: number; y: number; z: number }[] = [];
     let coreParticles: { angle: number; radius: number; y: number; speed: number }[] = [];
 
@@ -126,12 +127,13 @@ export default function HeroVisual({ showCore = true }: { showCore?: boolean }) 
         invertRef.current.active = false;
       }
 
-      requestAnimationFrame(draw);
+      animFrame = requestAnimationFrame(draw);
     };
 
-    resize(); init(); draw();
+    resize(); init(); animFrame = requestAnimationFrame(draw);
     window.addEventListener('resize', resize);
     return () => {
+      cancelAnimationFrame(animFrame);
       window.removeEventListener('resize', resize);
       window.removeEventListener('protocol:particle-resonance', handleResonance);
       window.removeEventListener('protocol:invert-flash', handleInvertFlash);

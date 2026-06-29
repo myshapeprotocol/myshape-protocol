@@ -260,13 +260,17 @@ export default function VortexScan() {
         ctx.stroke();
       }
 
-      requestAnimationFrame(draw);
+      animFrame = requestAnimationFrame(draw);
     };
 
+    let animFrame = 0;
     resize();
-    draw();
+    animFrame = requestAnimationFrame(draw);
     window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    return () => {
+      cancelAnimationFrame(animFrame);
+      window.removeEventListener("resize", resize);
+    };
   }, []);
 
   return (

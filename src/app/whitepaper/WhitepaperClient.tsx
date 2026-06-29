@@ -167,7 +167,7 @@ The critical question is not whether these agents are human. The critical questi
 
 Today, there is no protocol that answers this question.
 
-Accounts can be copied. Profiles can be fabricated. Biometrics can be replayed. Continuity cannot be assumed. It must be verified.
+Accounts can be copied. Profiles can be fabricated. Static identity proofs can be replayed. Continuity cannot be assumed. It must be verified.
 
 This is the long arc of MyShape Protocol.
 

@@ -144,7 +144,7 @@ export default function HeroDemo() {
     let prevOrbCount = orbCount;
     const orbGrowTimestamp = { current: 0 };
     // 每 5 秒重新读取（检测扫描后的增长）
-    setInterval(() => {
+    const pollInterval = setInterval(() => {
       const next = readOrbCount();
       if (next.orbCount > orbCount) {
         prevOrbCount = orbCount;
@@ -584,6 +584,7 @@ export default function HeroDemo() {
     window.addEventListener("resize", resize);
     return () => {
       cancelAnimationFrame(raf);
+      clearInterval(pollInterval);
       window.removeEventListener("resize", resize);
     };
   }, []);

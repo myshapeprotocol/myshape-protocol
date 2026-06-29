@@ -60,7 +60,7 @@ export default function VisionClient() {
             <div className="text-cyan-400/50 text-[10px] tracking-[0.3em] uppercase font-mono mb-5">// THE CONTINUITY THESIS</div>
             <p className="text-white/80 text-[15px] md:text-[18px] leading-[1.8] font-light mb-5">
               The digital world spent three decades answering <span className="text-cyan-300/70">Who are you?</span>
-              {' '}Passwords, biometrics, DID, wallets — every identity system verifies a credential at a point in time.
+              {' '}Passwords, presence-verification, DID, wallets — every identity system verifies a credential at a point in time.
             </p>
             <p className="text-white/70 text-[13px] md:text-[15px] leading-[1.9] font-light mb-5">
               That question is now obsolete. AI can generate your face, clone your voice, forge your behavior.
