@@ -529,37 +529,45 @@ async function pushToBluesky(text, replyText) {
 function generateDashboard(data) {
   const now = new Date().toISOString().replace("T", " ").slice(0, 19);
 
-  const hnCards = (data.hn || []).map((d) =>
-    '<div class="card hn">' +
+  const hnCards = (data.hn || []).map((d) => {
+    const payload = JSON.stringify({ platform: "hn", content: d.post || d.comment || "", title: d.title, url: d.url }).replace(/"/g, "&quot;");
+    return '<div class="card hn" data-platform="hn" data-payload="' + payload + '">' +
     '<div class="platform-tag hn-tag">HACKER NEWS</div>' +
     '<div class="source"><a href="' + d.url + '" target="_blank">' + esc(d.title) + '</a>' +
     '<span class="meta">' + d.score + ' pts &middot; ' + d.comments + ' comments</span></div>' +
-    '<div class="text">' + esc(d.post || d.comment || "") + '</div></div>'
-  ).join("");
+    '<div class="text">' + esc(d.post || d.comment || "") + '</div>' +
+    '<div class="card-actions" style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end"></div></div>';
+  }).join("");
 
-  const linkedInCards = (data.linkedin || []).map((d) =>
-    '<div class="card linkedin">' +
+  const linkedInCards = (data.linkedin || []).map((d) => {
+    const payload = JSON.stringify({ platform: "linkedin", content: d.post || "", title: d.title, url: d.source }).replace(/"/g, "&quot;");
+    return '<div class="card linkedin" data-platform="linkedin" data-payload="' + payload + '">' +
     (d.image ? '<img src="' + d.image + '" style="width:100%;max-height:200px;object-fit:cover;border-radius:4px;margin-bottom:12px;" loading="lazy" />' : '') +
     '<div class="platform-tag li-tag">LINKEDIN</div>' +
     '<div class="source"><a href="' + d.source + '" target="_blank">' + esc(d.title) + '</a>' +
     '<span class="meta">' + esc(d.angle || "Industry Insight") + '</span></div>' +
-    '<div class="text li-text">' + esc(d.post || "") + '</div></div>'
-  ).join("");
+    '<div class="text li-text">' + esc(d.post || "") + '</div>' +
+    '<div class="card-actions" style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end"></div></div>';
+  }).join("");
 
-  const xCards = (data.x || []).map((d) =>
-    '<div class="card x-card">' +
+  const xCards = (data.x || []).map((d) => {
+    const payload = JSON.stringify({ platform: "x", content: d.post || "", title: d.topic || "", url: "" }).replace(/"/g, "&quot;");
+    return '<div class="card x-card" data-platform="x" data-payload="' + payload + '">' +
     '<div class="platform-tag x-tag">X / TWITTER</div>' +
     '<div class="text x-text">' + esc(d.post || "") + '</div>' +
-    '<div class="meta">Topic: ' + esc(d.topic || "") + '</div></div>'
-  ).join("");
+    '<div class="meta">Topic: ' + esc(d.topic || "") + '</div>' +
+    '<div class="card-actions" style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end"></div></div>';
+  }).join("");
 
-  const blueskyCards = (data.bluesky || []).map((d) =>
-    '<div class="card bluesky-card">' +
+  const blueskyCards = (data.bluesky || []).map((d) => {
+    const payload = JSON.stringify({ platform: "bluesky", content: d.text || "", title: "@" + (d.author || ""), url: d.url || "" }).replace(/"/g, "&quot;");
+    return '<div class="card bluesky-card" data-platform="bluesky" data-payload="' + payload + '">' +
     '<div class="platform-tag bs-tag">BLUESKY</div>' +
     '<div class="source"><a href="' + (d.url || "#") + '" target="_blank">@' + esc(d.author || "unknown") + '</a>' +
     '<span class="meta">' + (d.likes || 0) + ' likes &middot; ' + (d.reposts || 0) + ' reposts</span></div>' +
-    '<div class="text">' + esc(d.text || "") + '</div></div>'
-  ).join("");
+    '<div class="text">' + esc(d.text || "") + '</div>' +
+    '<div class="card-actions" style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end"></div></div>';
+  }).join("");
 
   const financeCard = data.finance
     ? '<div class="card finance-card full" style="border-left:3px solid #e84e4c;margin-bottom:20px">' +
@@ -640,17 +648,76 @@ ${financeCard}
 </div>
 
 <script>
-document.querySelectorAll('.card').forEach(card => {
-  const btn = document.createElement('button');
-  btn.className = 'copy-btn';
-  btn.textContent = 'Copy / 复制';
-  btn.onclick = () => {
-    const text = card.querySelector('.text')?.textContent || '';
-    navigator.clipboard.writeText(text.trim()).then(() => { btn.textContent = '✓ Copied / 已复制'; setTimeout(() => btn.textContent = 'Copy / 复制', 1500); });
-  };
-  card.appendChild(btn);
-});
-</script>
+	document.querySelectorAll('.card').forEach(card => {
+	  const actions = card.querySelector('.card-actions');
+	  if (!actions) return;
+
+	  const copyBtn = document.createElement('button');
+	  copyBtn.className = 'copy-btn';
+	  copyBtn.textContent = 'Copy / 复制';
+	  copyBtn.onclick = () => {
+	    const text = card.querySelector('.text')?.textContent || '';
+	    navigator.clipboard.writeText(text.trim()).then(() => {
+	      copyBtn.textContent = 'Copied / 已复制';
+	      setTimeout(() => { copyBtn.textContent = 'Copy / 复制'; }, 1500);
+	    });
+	  };
+	  actions.appendChild(copyBtn);
+
+	  const pubBtn = document.createElement('button');
+	  pubBtn.className = 'publish-btn';
+	  pubBtn.textContent = '批准并分发 / Publish';
+	  pubBtn.style.cssText = 'background:rgba(63,185,80,0.15);color:#3fb950;border:1px solid rgba(63,185,80,0.3);padding:2px 8px;border-radius:3px;font-size:9px;cursor:pointer;transition:all .2s';
+	  pubBtn.onmouseenter = () => { pubBtn.style.background = 'rgba(63,185,80,0.3)'; pubBtn.style.color = '#fff'; };
+	  pubBtn.onmouseleave = () => { pubBtn.style.background = 'rgba(63,185,80,0.15)'; pubBtn.style.color = '#3fb950'; };
+	  pubBtn.onclick = () => {
+	    const payloadStr = card.getAttribute('data-payload') || '{}';
+	    const payload = JSON.parse(payloadStr.replace(/&quot;/g, '"'));
+	    pubBtn.textContent = '分发中...';
+	    pubBtn.disabled = true;
+	    pubBtn.style.opacity = '0.6';
+	    fetch('/api/matrix/publish', {
+	      method: 'POST',
+	      headers: { 'Content-Type': 'application/json' },
+	      body: JSON.stringify(payload),
+	    })
+	    .then(r => r.json())
+	    .then(data => {
+	      if (data.success) {
+	        pubBtn.textContent = '已分发 / Published';
+	        pubBtn.style.background = 'rgba(63,185,80,0.4)';
+	      } else {
+	        pubBtn.textContent = data.error || 'Failed';
+	        pubBtn.style.background = 'rgba(210,153,29,0.3)';
+	        pubBtn.style.color = '#d2991d';
+	      }
+	    })
+	    .catch(() => {
+	      console.log('== Publish Preview ==');
+	      console.log('Platform:', payload.platform);
+	      console.log('Title:', payload.title);
+	      console.log('Content:', payload.content);
+	      console.log('URL:', payload.url);
+	      console.log('== END PREVIEW ==');
+	      pubBtn.textContent = '已预览 / Previewed';
+	      pubBtn.style.background = 'rgba(88,166,255,0.3)';
+	      pubBtn.style.color = '#58a6ff';
+	      pubBtn.style.borderColor = 'rgba(88,166,255,0.4)';
+	    })
+	    .finally(() => {
+	      setTimeout(() => {
+	        pubBtn.disabled = false;
+	        pubBtn.style.opacity = '1';
+	        pubBtn.textContent = '批准并分发 / Publish';
+	        pubBtn.style.background = 'rgba(63,185,80,0.15)';
+	        pubBtn.style.color = '#3fb950';
+	        pubBtn.style.borderColor = 'rgba(63,185,80,0.3)';
+	      }, 3000);
+	    });
+	  };
+	  actions.appendChild(pubBtn);
+	});
+	</script>
 </body>
 </html>`;
 }
