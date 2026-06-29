@@ -67,8 +67,8 @@ export default function PresenceNetwork() {
     canvas.height = h;
 
     // Initialize node positions if needed
-    if (positionsRef.current.length === 0) {
-      positionsRef.current = data.nodes.map((n, i) => {
+    if (positionsRef.current.length === 0 && data.nodes?.length > 0) {
+      positionsRef.current = data.nodes.map((n: NetworkNode, i: number) => {
         const angle = (2 * Math.PI * i) / Math.max(1, data.nodes.length);
         const r = Math.min(w, h) * (0.25 + Math.random() * 0.2);
         return {
