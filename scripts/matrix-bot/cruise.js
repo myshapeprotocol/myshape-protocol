@@ -754,13 +754,19 @@ function esc(s) {
 // ═══════════════════════════════════════════════════════════════════
 
 async function main() {
+  const mode = process.argv.includes("--finance") ? "finance" : process.argv.includes("--social") ? "social" : "full";
+  const runFinance = mode === "finance" || mode === "full";
+  const runSocial  = mode === "social"  || mode === "full";
+
   console.log("═".repeat(64));
   console.log("  MyShape Protocol — Social Matrix Cruiser v2.0");
+  console.log("  Mode: " + mode.toUpperCase() + (mode==="finance"?" (财经早报 only)":mode==="social"?" (社交平台 only)":" (全平台)"));
   console.log("═".repeat(64));
 
   const data = { hn: [], linkedin: [], x: [], bluesky: [], finance: null };
 
-  // 1. HN — fetch + generate comments
+  // 1. HN — fetch + generate comments (social only)
+  if (runSocial) {
   const hnStories = await fetchHNStories();
   for (const s of hnStories.slice(0, 8)) {
     console.log('  HN: "' + s.title.slice(0, 55) + '..."');
@@ -806,7 +812,10 @@ async function main() {
     bskyCount += 1;
   }
 
+  } // end runSocial
+
   // ── 5.5 财经早报 (A股 + 中文财经) ──
+  if (runFinance) {
   const isWeekday = new Date().getDay();
   if (isWeekday >= 1 && isWeekday <= 5) {
     const [marketData, cnNews] = await Promise.all([fetchAMarketData(), fetchCNFinanceNews()]);
@@ -819,6 +828,7 @@ async function main() {
   } else {
     console.log("\n--- 财经早报: 周末跳过 ---");
   }
+  } // end runFinance
 
   // 6. Dashboard
   const outPath = path.join(__dirname, "matrix_dashboard.html");
