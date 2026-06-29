@@ -475,7 +475,8 @@ async function generateLinkedInTopics(hnStories) {
 // ═══════════════════════════════════════════════════════════════════
 
 async function pushToBluesky(text, replyText) {
-  if (!process.env.BLUESKY_HANDLE || !process.env.BLUESKY_PASSWORD) {
+  const bskyHandle = process.env.BLUESKY_IDENTIFIER || process.env.BLUESKY_HANDLE;
+  if (!bskyHandle || !process.env.BLUESKY_PASSWORD) {
     console.log("  ⚠️  Bluesky credentials missing in .env. Skipping broadcast.");
     return { success: false };
   }
@@ -490,7 +491,7 @@ async function pushToBluesky(text, replyText) {
 
   try {
     await agent.login({
-      identifier: process.env.BLUESKY_HANDLE,
+      identifier: bskyHandle,
       password: process.env.BLUESKY_PASSWORD,
     });
     console.log("  🤖 Bluesky Matrix Client authenticated successfully.");
