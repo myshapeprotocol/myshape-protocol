@@ -628,7 +628,7 @@ export default function MotionDemoClient() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Particle Panel */}
-          <div className="lg:col-span-2 border border-white/10 bg-black/60 relative overflow-hidden" style={{ minHeight: "min(400px, 60vw)" }}>
+          <div className="lg:col-span-2 border border-white/10 bg-black/60 relative overflow-hidden" style={{ minHeight: "min(500px, 70vw)" }}>
             {/* Video is the main display — camera feed directly visible */}
             <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" playsInline muted
               style={{ transform: "scaleX(-1)" }} />
@@ -636,7 +636,7 @@ export default function MotionDemoClient() {
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10 pointer-events-none" />
 
             {phase === "idle" && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/30 z-10">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/30 z-10 overflow-y-auto py-4">
                 {/* Chromium green screen warning */}
                 {typeof window !== "undefined" && /Chrome|Edg\//.test(window.navigator.userAgent) && !/Firefox/i.test(window.navigator.userAgent) && (
                   <div className="px-4 py-3 border border-amber-400/30 bg-amber-400/[0.06] text-center max-w-sm" style={{ borderRadius: 4 }}>
