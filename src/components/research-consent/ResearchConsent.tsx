@@ -50,7 +50,7 @@ export default function ResearchConsent({
     >
       <button
         type="button" onClick={handleCheckbox} disabled={captureActive}
-        className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-white/[0.04] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-white/[0.04] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ borderRadius: 4 }}
       >
         {/* Large checkbox */}
@@ -81,16 +81,15 @@ export default function ResearchConsent({
         </div>
       </button>
 
-      {/* Expanded details — minimal height */}
+      {/* Expanded details — compact single-line */}
       {expanded && consented && (
-        <div className="px-5 pb-2 space-y-2 border-t border-cyan-400/10 pt-2">
-          <p className="text-white/25 text-[9px] leading-relaxed">
-            Only joint-position wireframe data. No camera images. No face.
-          </p>
+        <div className="px-5 pb-1.5 border-t border-cyan-400/10 pt-1.5">
           {uploadDone ? (
-            <span className="text-cyan-300/70 text-[9px] font-mono">✓ Contribution recorded</span>
+            <span className="text-cyan-300/70 text-[8px] font-mono">✓ Contribution recorded</span>
           ) : (
-            <span className="text-white/15 text-[8px] font-mono">Upload will occur after capture completes</span>
+            <p className="text-white/25 text-[8px] leading-tight">
+              Only joint-position wireframe data. No camera images. No face.
+            </p>
           )}
         </div>
       )}

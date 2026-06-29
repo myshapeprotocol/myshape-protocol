@@ -678,7 +678,7 @@ export default function MotionDemoClient() {
                   />
                 </div>
 
-                <div className="flex flex-col items-center gap-5 mt-6">
+                <div className="flex flex-col items-center gap-3 mt-3">
                   <button onClick={startCapture}
                     onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                     className="px-12 py-4 border border-cyan-400/40 text-cyan-400/80 text-[11px] tracking-[0.4em] uppercase hover:bg-cyan-400/10 hover:text-white transition-all">
