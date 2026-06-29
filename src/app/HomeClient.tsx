@@ -4,10 +4,10 @@ import { createClient } from '@supabase/supabase-js';
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
-import Typewriter from "@/components/ui/Typewriter";
 import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
 import Capabilities from "@/components/capabilities/Capabilities";
+import PresenceNetwork from "@/components/presence-network/PresenceNetwork";
 import HowItWorks from "@/components/howitworks/HowItWorks";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
@@ -19,35 +19,6 @@ import ResearchContributionCTA from "@/components/research-cta/ResearchContribut
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
-
-/** Live research session counter — fetches from /api/research/stats */
-function ResearchLiveCounter() {
-  const [count, setCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    fetch("/api/research/stats")
-      .then((r) => r.json())
-      .then((data) => setCount(data.session_count ?? 0))
-      .catch(() => setCount(null));
-    const interval = setInterval(() => {
-      fetch("/api/research/stats")
-        .then((r) => r.json())
-        .then((data) => setCount(data.session_count ?? 0))
-        .catch(() => {});
-    }, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  if (count === null) return <span className="text-white/30">—</span>;
-  return (
-    <span className="text-white/50">
-      {count}
-      {count >= 300 && (
-        <span className="text-cyan-400/50 ml-1" title="Calibration threshold reached">◈</span>
-      )}
-    </span>
-  );
-}
 
 export default function HomeClient() {
   const [activeUser, setActiveUser] = useState("");
@@ -337,25 +308,9 @@ export default function HomeClient() {
               ))}
             </div>
 
-            {/* Bottom Dashboard — Status + Metrics in one compact row */}
-            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-10 text-[10px] tracking-[0.15em] font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)] animate-pulse shrink-0" />
-                <Typewriter text="PROTOCOL_ENCLAVE: ACTIVE" className="text-cyan-400/50 uppercase" />
-                <span className="text-white/10">|</span>
-                <span className="text-white/30">RESEARCH</span>
-                <ResearchLiveCounter />
-                <span className="text-white/10">|</span>
-                <span className="text-white/30">SPEC</span>
-                <span className="text-white/50">§1–40</span>
-                <span className="text-white/10">|</span>
-                <span className="text-white/30">ATTACK_SIGS</span>
-                <span className="text-white/50">8</span>
-                <span className="text-white/10">|</span>
-                <span className="text-white/30">INTEGRATION</span>
-                <span className="text-white/50">5L</span>
-                <span className="text-white/10">|</span>
-                <span className="text-white/30">CORE</span>
-                <span className="text-white/50">37/37_PASS</span>
+            {/* ── Presence Network — live node mesh ── */}
+            <div className="mt-10 max-w-4xl mx-auto">
+              <PresenceNetwork />
             </div>
           </div>
         </section>
