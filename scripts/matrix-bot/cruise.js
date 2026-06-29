@@ -922,7 +922,9 @@ async function main() {
 
   // 6. Dashboard
   const outPath = path.join(__dirname, "matrix_dashboard.html");
-  fs.writeFileSync(outPath, generateDashboard(data), "utf8");
+  const html = generateDashboard(data);
+  fs.writeFileSync(outPath, html, "utf8");
+  try { const pd = path.join(__dirname, "..", "..", "public"); if (fs.existsSync(pd)) fs.writeFileSync(path.join(pd, "matrix-dashboard.html"), html, "utf8"); } catch {}
 
   // 7. Sync to protocol log — all posts become immutable protocol record
   const publishedPath = path.join(__dirname, "..", "agent-workflow", "published.json");
@@ -1119,7 +1121,9 @@ async function main() {
 
   // 6. Dashboard
   const outPath = path.join(__dirname, "matrix_dashboard.html");
-  fs.writeFileSync(outPath, generateDashboard(data), "utf8");
+  const html = generateDashboard(data);
+  fs.writeFileSync(outPath, html, "utf8");
+  try { const pd = path.join(__dirname, "..", "..", "public"); if (fs.existsSync(pd)) fs.writeFileSync(path.join(pd, "matrix-dashboard.html"), html, "utf8"); } catch {}
 
   // 7. Sync to protocol log — all posts become immutable protocol record
   const publishedPath = path.join(__dirname, "..", "agent-workflow", "published.json");
