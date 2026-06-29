@@ -1,0 +1,143 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Architecture Page — extracted inline styles
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Pipeline nodes ── */
+.arch-pipeline-node {
+  color: rgba(34,211,238,0.55);
+  background: #02040a;
+}
+.arch-pipeline-circle {
+  border-color: rgba(34,211,238,0.3);
+  box-shadow: none;
+  color: rgba(34,211,238,0.55);
+}
+.arch-pipeline-name {
+  color: rgba(255,255,255,0.55);
+  text-shadow: none;
+}
+.arch-pipeline-output {
+  color: rgba(34,211,238,0.3);
+  text-shadow: none;
+}
+/* Hover group: all children respond together */
+.arch-pipeline-node:hover .arch-pipeline-circle {
+  border-color: rgba(34,211,238,1);
+  box-shadow: 0 0 28px rgba(34,211,238,0.55);
+  color: rgba(200,240,255,1);
+}
+.arch-pipeline-node:hover .arch-pipeline-name {
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.3);
+}
+.arch-pipeline-node:hover .arch-pipeline-output {
+  color: rgba(160,230,255,1);
+  text-shadow: 0 0 4px rgba(34,211,238,0.4);
+}
+/* Mobile pulse animation */
+@keyframes nodePulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+.arch-mobile-dot {
+  box-shadow: 0 0 10px rgba(34,211,238,0.35);
+  animation: nodePulse 2.5s ease-in-out infinite;
+}
+
+/* ── Entropy bars ── */
+.arch-entropy-label {
+  color: rgba(255,255,255,0.5);
+}
+.arch-entropy-track {
+  background: rgba(255,255,255,0.03);
+}
+.arch-entropy-fill {
+  transition: width 1s ease-out;
+}
+.arch-entropy-value {
+  transition: color 0.3s;
+}
+
+/* ── 4D Entropy table ── */
+.arch-table-row {
+  border-left: 1px solid transparent;
+  transition: background 0.3s, border-color 0.3s;
+}
+.arch-table-row:hover {
+  background: rgba(144,200,255,0.04);
+  border-left-color: rgba(34,211,238,0.5);
+}
+.arch-col-dim  { color: rgba(34,211,238,0.7); }
+.arch-col-what { color: rgba(255,255,255,0.35); }
+.arch-col-human { color: rgba(255,255,255,0.55); }
+.arch-col-ai   { color: rgba(255,255,255,0.3); }
+
+.arch-table-row:hover .arch-col-dim  { color: rgba(34,211,238,1); font-size: 11px; }
+.arch-table-row:hover .arch-col-what { color: rgba(255,255,255,0.6); font-size: 11px; }
+.arch-table-row:hover .arch-col-human { color: rgba(255,255,255,0.85); font-size: 11px; }
+.arch-table-row:hover .arch-col-ai   { color: rgba(255,255,255,0.55); font-size: 11px; }
+
+/* ── Threat matrix table ── */
+.arch-threat-row {
+  border-left: 1px solid transparent;
+  transition: background 0.3s, border-color 0.3s;
+}
+.arch-threat-row:hover {
+  background: rgba(144,200,255,0.04);
+  border-left-color: rgba(34,211,238,0.5);
+}
+.arch-threat-attack  { color: rgba(255,255,255,0.6); }
+.arch-threat-vector  { color: rgba(255,255,255,0.3); }
+.arch-threat-defense { color: rgba(34,211,238,0.6); }
+
+.arch-threat-row:hover .arch-threat-attack  { color: rgba(255,255,255,0.9); font-size: 12px; }
+.arch-threat-row:hover .arch-threat-vector  { color: rgba(255,255,255,0.55); font-size: 11px; }
+.arch-threat-row:hover .arch-threat-defense { color: rgba(34,211,238,0.9); font-size: 11px; }
+
+/* ── CTA cards ── */
+.arch-cta-card {
+  border: 1px solid rgba(144,200,255,0.15);
+  background: transparent;
+  transition: all 0.4s ease;
+}
+.arch-cta-card:hover {
+  border-color: rgba(144,200,255,0.45);
+  background: radial-gradient(circle at top left, rgba(144,200,255,0.08) 0%, transparent 70%);
+  transform: translateY(-2px);
+}
+.arch-cta-label { color: rgba(34,211,238,0.4); }
+.arch-cta-title { color: rgba(255,255,255,0.75); }
+.arch-cta-desc  { color: rgba(255,255,255,0.3); }
+.arch-cta-arrow { color: rgba(34,211,238,0.35); }
+
+.arch-cta-card:hover .arch-cta-label { color: rgba(34,211,238,0.8); }
+.arch-cta-card:hover .arch-cta-title { color: rgba(255,255,255,1); }
+.arch-cta-card:hover .arch-cta-desc  { color: rgba(255,255,255,0.6); }
+.arch-cta-card:hover .arch-cta-arrow { color: rgba(34,211,238,0.8); }
+
+/* ── Section headings ── */
+.arch-section-h {
+  color: rgba(255,255,255,0.3);
+}
+@media (min-width: 768px) {
+  .arch-section-h { color: rgba(255,255,255,0.35); }
+  .arch-col-dim:hover { font-size: 11px; }
+}
+
+/* ── Container backgrounds ── */
+.arch-code-block {
+  border-color: rgba(34,211,238,0.15);
+  background: rgba(34,211,238,0.02);
+  transition: border-color 0.3s;
+}
+.arch-code-block:hover {
+  border-color: rgba(34,211,238,0.4);
+}
+.arch-dist-block {
+  border-color: rgba(34,211,238,0.15);
+  background: rgba(34,211,238,0.02);
+  transition: border-color 0.3s;
+}
+.arch-dist-block:hover {
+  border-color: rgba(34,211,238,0.4);
+}

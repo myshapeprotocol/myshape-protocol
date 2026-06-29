@@ -2,6 +2,7 @@
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
+import "./architecture.css";
 
 const PIPELINE = [
   { step: "01", name: "Camera", desc: "Local webcam input. On-device only. MediaPipe Pose extracts 33 skeletal landmarks. Nothing uploaded — raw frames discarded after processing.", output: "33 Landmarks" },
@@ -43,21 +44,6 @@ function confBrightness(c: number) {
   return 0.4;
 }
 
-const hoverOn = (e: React.MouseEvent<HTMLElement>) => {
-  const kids = e.currentTarget.querySelectorAll<HTMLElement>('[data-hover]');
-  kids.forEach(k => {
-    k.style.color = k.dataset.hover || '';
-    if (k.dataset.hoverSize) k.style.fontSize = k.dataset.hoverSize;
-  });
-};
-const hoverOff = (e: React.MouseEvent<HTMLElement>) => {
-  const kids = e.currentTarget.querySelectorAll<HTMLElement>('[data-hover]');
-  kids.forEach(k => {
-    k.style.color = k.dataset.default || '';
-    if (k.dataset.defaultSize) k.style.fontSize = k.dataset.defaultSize;
-  });
-};
-
 export default function ArchitectureClient() {
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-cyan-500/30">
@@ -81,7 +67,7 @@ export default function ArchitectureClient() {
 
         {/* Pipeline */}
         <section className="mb-14 md:mb-20">
-          <h2 className="section-h text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-6 md:mb-10"
+          <h2 className="arch-section-h text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-6 md:mb-10"
             onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             // PIPELINE
           </h2>
@@ -91,38 +77,16 @@ export default function ArchitectureClient() {
             <div className="flex items-start justify-between gap-0 max-w-3xl mx-auto">
               {PIPELINE.map((p, i) => (
                 <div key={p.step} className="flex items-start">
-                  <div className="flex flex-col items-center cursor-default"
+                  <div className="flex flex-col items-center cursor-default arch-pipeline-node"
                     title={p.desc}
-                    onMouseEnter={e => {
-                      playTick(800, "sine", 0.08, 0.02);
-                      const c = e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!;
-                      c.style.borderColor = "rgba(34,211,238,1)";
-                      c.style.boxShadow = "0 0 28px rgba(34,211,238,0.55)";
-                      c.style.color = "rgba(200,240,255,1)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.color = "#fff";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.textShadow = "0 0 6px rgba(255,255,255,0.3)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.color = "rgba(160,230,255,1)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.textShadow = "0 0 4px rgba(34,211,238,0.4)";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.borderColor = "rgba(34,211,238,0.3)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.boxShadow = "none";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="circle"]')!.style.color = "rgba(34,211,238,0.55)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.color = "rgba(255,255,255,0.55)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="name"]')!.style.textShadow = "none";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.color = "rgba(34,211,238,0.3)";
-                      e.currentTarget.querySelector<HTMLElement>('[data-node="output"]')!.style.textShadow = "none";
-                    }}>
-                    <div data-node="circle" className="w-14 h-14 rounded-full border border-cyan-400/30 flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-300"
-                      style={{ color: "rgba(34,211,238,0.55)", background: "#02040a" }}>
+                    onMouseEnter={() => playTick(800, "sine", 0.08, 0.02)}>
+                    <div className="w-14 h-14 rounded-full border flex items-center justify-center font-mono text-[13px] tracking-[0.05em] transition-all duration-300 arch-pipeline-circle">
                       {p.step}
                     </div>
-                    <span data-node="name" className="text-[11px] tracking-[0.15em] uppercase mt-3 text-center leading-tight font-medium transition-all duration-300"
-                      style={{ color: "rgba(255,255,255,0.55)" }}>
+                    <span className="text-[11px] tracking-[0.15em] uppercase mt-3 text-center leading-tight font-medium transition-all duration-300 arch-pipeline-name">
                       {p.name}
                     </span>
-                    <span data-node="output" className="text-[8px] tracking-[0.1em] font-mono mt-1.5 transition-all duration-300"
-                      style={{ color: "rgba(34,211,238,0.3)" }}>
+                    <span className="text-[8px] tracking-[0.1em] font-mono mt-1.5 transition-all duration-300 arch-pipeline-output">
                       {p.output}
                     </span>
                   </div>
@@ -144,14 +108,11 @@ export default function ArchitectureClient() {
             {PIPELINE.map((p, i) => (
               <div key={p.step} className="relative flex gap-3 pb-3 last:pb-0"
                 onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                <div className="absolute left-[14px] top-[20px] w-3.5 h-3.5 rounded-full border-2 border-cyan-400/50 bg-[#02040a] z-10 transition-all duration-500"
-                  style={{
-                    boxShadow: "0 0 10px rgba(34,211,238,0.35)",
-                    animation: `nodePulse 2.5s ease-in-out ${i * 0.5}s infinite`,
-                  }} />
+                <div className="absolute left-[14px] top-[20px] w-3.5 h-3.5 rounded-full border-2 border-cyan-400/50 bg-[#02040a] z-10 transition-all duration-500 arch-mobile-dot"
+                  style={{ animationDelay: `${i * 0.5}s` }} />
                 <div className="flex-1 pl-10 py-1.5">
-                  <span className="text-[11px] tracking-[0.2em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>{p.step}. {p.name}</span>
-                  <span className="block text-[9px] mt-0.5 font-mono" style={{ color: "rgba(34,211,238,0.45)" }}>→ {p.output}</span>
+                  <span className="text-[11px] tracking-[0.2em] uppercase font-medium text-white/60">{p.step}. {p.name}</span>
+                  <span className="block text-[9px] mt-0.5 font-mono text-cyan-400/45">→ {p.output}</span>
                 </div>
               </div>
             ))}
@@ -160,7 +121,7 @@ export default function ArchitectureClient() {
 
         {/* Protocol Artifacts — What the outputs actually look like */}
         <section className="mb-14 md:mb-20">
-          <h2 className="section-h text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4 md:mb-6"
+          <h2 className="arch-section-h text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4 md:mb-6"
             onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             // PROTOCOL ARTIFACTS
           </h2>
@@ -171,7 +132,7 @@ export default function ArchitectureClient() {
           {/* Identity Vector */}
           <div className="mb-6 md:mb-8">
             <h3 className="text-cyan-400/50 text-[9px] md:text-[10px] tracking-[0.2em] uppercase mb-3">Identity Vector <span className="text-white/15">— 128-dim, Poseidon-hashed, non-invertible</span></h3>
-            <div className="border border-cyan-400/15 bg-cyan-400/[0.02] p-4 md:p-5 overflow-x-auto font-mono transition-all duration-300 hover:border-cyan-400/40"
+            <div className="border p-4 md:p-5 overflow-x-auto font-mono arch-code-block"
               onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
               <pre className="text-cyan-300/70 text-[9px] md:text-[10px] leading-relaxed whitespace-pre-wrap">
 {`// Motion Vector hash — the geometric signature
@@ -189,7 +150,7 @@ export default function ArchitectureClient() {
           {/* Presence Proof */}
           <div className="mb-6 md:mb-8">
             <h3 className="text-cyan-400/50 text-[9px] md:text-[10px] tracking-[0.2em] uppercase mb-3">Presence Proof <span className="text-white/15">— &lt; 512 bytes, verifiable in &lt; 1ms</span></h3>
-            <div className="border border-cyan-400/15 bg-cyan-400/[0.02] p-4 md:p-5 overflow-x-auto font-mono transition-all duration-300 hover:border-cyan-400/40"
+            <div className="border p-4 md:p-5 overflow-x-auto font-mono arch-code-block"
               onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
               <pre className="text-cyan-300/70 text-[9px] md:text-[10px] leading-relaxed whitespace-pre-wrap">
 {`// ZK-Presence composite proof
@@ -209,16 +170,16 @@ export default function ArchitectureClient() {
           {/* Entropy Gap Distribution */}
           <div>
             <h3 className="text-cyan-400/50 text-[9px] md:text-[10px] tracking-[0.2em] uppercase mb-3">Entropy Gap Distribution <span className="text-white/15">— zero overlap between human and AI</span></h3>
-            <div className="border border-cyan-400/15 bg-cyan-400/[0.02] p-5 md:p-6 transition-all duration-300 hover:border-cyan-400/40"
+            <div className="border p-5 md:p-6 arch-dist-block"
               onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
               <div className="space-y-5">
                 {/* Human distribution */}
                 <div>
                   <div className="flex justify-between text-[8px] md:text-[9px] mb-1.5">
-                    <span style={{ color: "rgba(255,255,255,0.5)" }}>Human PES</span>
-                    <span className="font-mono" style={{ color: "rgba(34,211,238,0.7)" }}>0.65 — 0.99</span>
+                    <span className="text-white/50">Human PES</span>
+                    <span className="font-mono text-cyan-400/70">0.65 — 0.99</span>
                   </div>
-                  <div className="h-5 md:h-6 rounded-sm flex overflow-hidden" style={{ background: "rgba(255,255,255,0.03)" }}>
+                  <div className="h-5 md:h-6 rounded-sm flex overflow-hidden arch-entropy-track">
                     <div className="w-[5%] h-full" style={{ background: "rgba(255,255,255,0.03)" }} />
                     <div className="w-[30%] h-full" style={{ background: "rgba(34,211,238,0.1)" }} />
                     <div className="w-[35%] h-full" style={{ background: "rgba(34,211,238,0.35)" }} />
@@ -229,17 +190,17 @@ export default function ArchitectureClient() {
                 {/* Threshold line */}
                 <div className="relative h-0">
                   <div className="absolute left-[65%] -top-1 w-[1px] h-12" style={{ background: "rgba(34,211,238,0.5)" }} />
-                  <span className="absolute left-[65%] -top-4 text-[8px] tracking-[0.15em] uppercase font-mono -translate-x-1/2 whitespace-nowrap" style={{ color: "rgba(34,211,238,0.7)" }}>
+                  <span className="absolute left-[65%] -top-4 text-[8px] tracking-[0.15em] uppercase font-mono -translate-x-1/2 whitespace-nowrap text-cyan-400/70">
                     threshold 0.65
                   </span>
                 </div>
                 {/* AI distribution */}
                 <div>
                   <div className="flex justify-between text-[8px] md:text-[9px] mb-1.5 mt-2">
-                    <span style={{ color: "rgba(255,255,255,0.4)" }}>AI / Synthetic PES</span>
-                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.3)" }}>0.01 — 0.15</span>
+                    <span className="text-white/40">AI / Synthetic PES</span>
+                    <span className="font-mono text-white/30">0.01 — 0.15</span>
                   </div>
-                  <div className="h-5 md:h-6 rounded-sm flex overflow-hidden" style={{ background: "rgba(255,255,255,0.03)" }}>
+                  <div className="h-5 md:h-6 rounded-sm flex overflow-hidden arch-entropy-track">
                     <div className="w-[5%] h-full" style={{ background: "rgba(255,255,255,0.03)" }} />
                     <div className="w-[15%] h-full" style={{ background: "rgba(34,211,238,0.2)" }} />
                     <div className="w-[80%] h-full" style={{ background: "rgba(255,255,255,0.02)" }} />
@@ -255,7 +216,7 @@ export default function ArchitectureClient() {
 
         {/* The Entropy Gap */}
         <section className="mb-14 md:mb-20">
-          <h2 className="section-h text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4 md:mb-6"
+          <h2 className="arch-section-h text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4 md:mb-6"
             onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             // THE ENTROPY GAP
           </h2>
@@ -266,17 +227,16 @@ export default function ArchitectureClient() {
             {ENTROPY_BARS.map(bar => (
               <div key={bar.label} className="flex items-center gap-3 md:gap-4"
                 onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-                <span className="text-[9px] md:text-[11px] tracking-[0.15em] uppercase w-28 md:w-36 text-right shrink-0 font-medium"
-                  style={{ color: "rgba(255,255,255,0.5)" }}>{bar.label}</span>
-                <div className="flex-1 h-4 md:h-5 rounded-sm overflow-hidden" style={{ background: "rgba(255,255,255,0.03)" }}>
-                  <div className="h-full rounded-sm transition-all duration-1000"
+                <span className="text-[9px] md:text-[11px] tracking-[0.15em] uppercase w-28 md:w-36 text-right shrink-0 font-medium arch-entropy-label">{bar.label}</span>
+                <div className="flex-1 h-4 md:h-5 rounded-sm overflow-hidden arch-entropy-track">
+                  <div className="h-full rounded-sm arch-entropy-fill"
                     style={{
                       width: `${bar.pct}%`,
                       background: `linear-gradient(90deg, rgba(34,211,238,${bar.opacity * 0.5}), rgba(34,211,238,${bar.opacity}))`,
                       boxShadow: bar.pct > 50 ? "0 0 12px rgba(34,211,238,0.25)" : "none",
                     }} />
                 </div>
-                <span className="text-[10px] md:text-[12px] font-mono w-16 shrink-0 font-medium"
+                <span className="text-[10px] md:text-[12px] font-mono w-16 shrink-0 font-medium arch-entropy-value"
                   style={{ color: `rgba(34,211,238,${0.4 + bar.opacity * 0.6})` }}>{bar.pct}%</span>
               </div>
             ))}
@@ -288,7 +248,7 @@ export default function ArchitectureClient() {
 
         {/* 4D Entropy */}
         <section className="mb-14 md:mb-20">
-          <h2 className="section-h text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4 md:mb-6"
+          <h2 className="arch-section-h text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4 md:mb-6"
             onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             // 4D ENTROPY SCORING
           </h2>
@@ -298,23 +258,21 @@ export default function ArchitectureClient() {
           <div className="overflow-x-auto">
             <table className="w-full text-[9px] md:text-[10px]">
               <thead>
-                <tr className="border-b border-white/10" style={{ color: "rgba(255,255,255,0.35)" }}>
+                <tr className="border-b border-white/10 text-white/35">
                   <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase w-[28%]">Dimension</th>
                   <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase hidden md:table-cell">Measures</th>
-                  <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>Human</th>
-                  <th className="text-left py-3 font-medium tracking-[0.15em] uppercase" style={{ color: "rgba(255,255,255,0.25)" }}>AI</th>
+                  <th className="text-left py-3 pr-2 font-medium tracking-[0.15em] uppercase text-white/50">Human</th>
+                  <th className="text-left py-3 font-medium tracking-[0.15em] uppercase text-white/25">AI</th>
                 </tr>
               </thead>
               <tbody>
                 {ENTROPY_DIMS.map(d => (
-                  <tr key={d.dim} className="border-b border-white/[0.03] transition-all duration-300"
-                    onMouseEnter={e => { playTick(550, "sine", 0.05, 0.012); hoverOn(e); e.currentTarget.style.background = "rgba(144,200,255,0.04)"; e.currentTarget.style.borderLeft = "1px solid rgba(34,211,238,0.5)"; }}
-                    onMouseLeave={e => { hoverOff(e); e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderLeft = "1px solid transparent"; }}
-                    style={{ borderLeft: "1px solid transparent" }}>
-                    <td className="py-3 pr-2 align-top font-medium" style={{ color: "rgba(34,211,238,0.7)", fontSize: "9px" }} data-default="rgba(34,211,238,0.7)" data-hover="rgba(34,211,238,1)" data-default-size="9px" data-hover-size="11px">{d.dim}</td>
-                    <td className="py-3 pr-2 align-top hidden md:table-cell" style={{ color: "rgba(255,255,255,0.35)", fontSize: "9px" }} data-default="rgba(255,255,255,0.35)" data-hover="rgba(255,255,255,0.6)" data-default-size="9px" data-hover-size="11px">{d.what}</td>
-                    <td className="py-3 pr-2 align-top" style={{ color: "rgba(255,255,255,0.55)", fontSize: "9px" }} data-default="rgba(255,255,255,0.55)" data-hover="rgba(255,255,255,0.85)" data-default-size="9px" data-hover-size="11px">{d.human}</td>
-                    <td className="py-3 align-top" style={{ color: "rgba(255,255,255,0.3)", fontSize: "9px" }} data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.55)" data-default-size="9px" data-hover-size="11px">{d.ai}</td>
+                  <tr key={d.dim} className="border-b border-white/[0.03] arch-table-row"
+                    onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
+                    <td className="py-3 pr-2 align-top font-medium arch-col-dim text-[9px]">{d.dim}</td>
+                    <td className="py-3 pr-2 align-top hidden md:table-cell arch-col-what text-[9px]">{d.what}</td>
+                    <td className="py-3 pr-2 align-top arch-col-human text-[9px]">{d.human}</td>
+                    <td className="py-3 align-top arch-col-ai text-[9px]">{d.ai}</td>
                   </tr>
                 ))}
               </tbody>
@@ -324,7 +282,7 @@ export default function ArchitectureClient() {
 
         {/* Threat Matrix */}
         <section className="mb-14 md:mb-20">
-          <h2 className="section-h text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-3 md:mb-4"
+          <h2 className="arch-section-h text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-3 md:mb-4"
             onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
             // THREAT MATRIX
           </h2>
@@ -334,7 +292,7 @@ export default function ArchitectureClient() {
           <div className="overflow-x-auto">
             <table className="w-full text-[9px] md:text-[10px]">
               <thead>
-                <tr className="border-b border-white/10" style={{ color: "rgba(255,255,255,0.35)" }}>
+                <tr className="border-b border-white/10 text-white/35">
                   <th className="text-left py-3 pr-3 font-medium tracking-[0.15em] uppercase">Attack</th>
                   <th className="text-left py-3 pr-3 font-medium tracking-[0.15em] uppercase hidden md:table-cell">Vector</th>
                   <th className="text-left py-3 pr-3 font-medium tracking-[0.15em] uppercase">Defense</th>
@@ -343,14 +301,15 @@ export default function ArchitectureClient() {
               </thead>
               <tbody>
                 {THREATS.map(t => (
-                  <tr key={t.attack} className="border-b border-white/[0.03] transition-all duration-300"
-                    onMouseEnter={e => { playTick(550, "sine", 0.05, 0.012); hoverOn(e); e.currentTarget.style.background = "rgba(144,200,255,0.04)"; e.currentTarget.style.borderLeft = "1px solid rgba(34,211,238,0.5)"; }}
-                    onMouseLeave={e => { hoverOff(e); e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderLeft = "1px solid transparent"; }}
-                    style={{ borderLeft: "1px solid transparent" }}>
-                    <td className="py-3 pr-3 font-medium" style={{ color: "rgba(255,255,255,0.6)", fontSize: "9px" }} data-default="rgba(255,255,255,0.6)" data-hover="rgba(255,255,255,0.9)" data-default-size="9px" data-hover-size="12px">{t.attack}</td>
-                    <td className="py-3 pr-3 hidden md:table-cell" style={{ color: "rgba(255,255,255,0.3)", fontSize: "9px" }} data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.55)" data-default-size="9px" data-hover-size="11px">{t.vector}</td>
-                    <td className="py-3 pr-3" style={{ color: "rgba(34,211,238,0.6)", fontSize: "9px" }} data-default="rgba(34,211,238,0.6)" data-hover="rgba(34,211,238,0.9)" data-default-size="9px" data-hover-size="11px">{t.defense}</td>
-                    <td className="py-3 text-right font-mono font-medium" style={{ color: `rgba(34,211,238,${confBrightness(t.confidence)})`, fontSize: "9px" }} data-default={`rgba(34,211,238,${confBrightness(t.confidence)})`} data-hover={`rgba(34,211,238,1)`} data-default-size="9px" data-hover-size="12px">{(t.confidence * 100).toFixed(1)}%</td>
+                  <tr key={t.attack} className="border-b border-white/[0.03] arch-threat-row"
+                    onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
+                    <td className="py-3 pr-3 font-medium arch-threat-attack text-[9px]">{t.attack}</td>
+                    <td className="py-3 pr-3 hidden md:table-cell arch-threat-vector text-[9px]">{t.vector}</td>
+                    <td className="py-3 pr-3 arch-threat-defense text-[9px]">{t.defense}</td>
+                    <td className="py-3 text-right font-mono font-medium text-[9px]"
+                      style={{ color: `rgba(34,211,238,${confBrightness(t.confidence)})` }}>
+                      {(t.confidence * 100).toFixed(1)}%
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -366,14 +325,12 @@ export default function ArchitectureClient() {
             { label: "Build", title: "Developer SDK", desc: "Integrate in 5 lines", href: "/developers" },
           ].map(card => (
             <a key={card.href} href={card.href}
-              onMouseEnter={e => { playTick(700, "sine", 0.10, 0.025); e.currentTarget.style.borderColor = "rgba(144,200,255,0.45)"; e.currentTarget.style.background = "radial-gradient(circle at top left, rgba(144,200,255,0.08) 0%, transparent 70%)"; e.currentTarget.style.transform = "translateY(-2px)"; hoverOn(e); }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.15)"; e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; hoverOff(e); }}
-              className="block p-5 md:p-6 transition-all duration-400 text-center"
-              style={{ border: "1px solid rgba(144,200,255,0.15)", background: "transparent" }}>
-              <div className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase mb-2 font-mono" style={{ color: "rgba(34,211,238,0.4)" }} data-default="rgba(34,211,238,0.4)" data-hover="rgba(34,211,238,0.8)">{card.label}</div>
-              <div className="text-[11px] md:text-[13px] tracking-[0.2em] uppercase mb-1.5 font-medium" style={{ color: "rgba(255,255,255,0.75)" }} data-default="rgba(255,255,255,0.75)" data-hover="rgba(255,255,255,1)">{card.title}</div>
-              <div className="text-[9px] md:text-[10px]" style={{ color: "rgba(255,255,255,0.3)" }} data-default="rgba(255,255,255,0.3)" data-hover="rgba(255,255,255,0.6)">{card.desc}</div>
-              <div className="mt-3 inline-block text-[11px]" style={{ color: "rgba(34,211,238,0.35)" }} data-default="rgba(34,211,238,0.35)" data-hover="rgba(34,211,238,0.8)">→</div>
+              onMouseEnter={() => playTick(700, "sine", 0.10, 0.025)}
+              className="block p-5 md:p-6 text-center arch-cta-card">
+              <div className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase mb-2 font-mono arch-cta-label">{card.label}</div>
+              <div className="text-[11px] md:text-[13px] tracking-[0.2em] uppercase mb-1.5 font-medium arch-cta-title">{card.title}</div>
+              <div className="text-[9px] md:text-[10px] arch-cta-desc">{card.desc}</div>
+              <div className="mt-3 inline-block text-[11px] arch-cta-arrow">→</div>
             </a>
           ))}
         </section>
