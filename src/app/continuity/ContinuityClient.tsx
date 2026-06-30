@@ -46,8 +46,12 @@ export default function ContinuityClient() {
     const fetchData = () => {
       fetch("/api/presence/network")
         .then(r => r.json())
-        .then(d => { setData(d); setLoading(false); })
-        .catch(() => setLoading(false));
+        .then(d => {
+          if (d.error) { setData(null); setLoading(false); return; }
+          setData(d);
+          setLoading(false);
+        })
+        .catch(() => { setData(null); setLoading(false); });
     };
     fetchData();
     const interval = setInterval(fetchData, 15000);
