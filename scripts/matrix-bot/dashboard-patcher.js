@@ -7,6 +7,61 @@
 
 function patchDashboard(html) {
 
+  // ── CSS: status freshness indicator ──
+  html = html.replace(
+    '.cmd-input:focus { border-color:rgba(88,166,255,0.5); }',
+    '.cmd-input:focus { border-color:rgba(88,166,255,0.5); }\n' +
+    '\t  .status-fresh { display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:4px;font-size:10px;margin-left:12px }\n' +
+    '\t  .status-fresh.green { background:rgba(63,185,80,0.12);color:#3fb950;border:1px solid rgba(63,185,80,0.25) }\n' +
+    '\t  .status-fresh.yellow { background:rgba(210,153,29,0.12);color:#d2991d;border:1px solid rgba(210,153,29,0.25) }\n' +
+    '\t  .status-fresh.red { background:rgba(248,81,73,0.12);color:#f85149;border:1px solid rgba(248,81,73,0.25);animation:pulse-warn 2s infinite }\n' +
+    '\t  @keyframes pulse-warn { 0%,100%{opacity:1} 50%{opacity:0.5} }\n' +
+    '\t  .status-dot { width:6px;height:6px;border-radius:50% }\n' +
+    '\t  .green .status-dot { background:#3fb950;box-shadow:0 0 6px #3fb950 }\n' +
+    '\t  .yellow .status-dot { background:#d2991d;box-shadow:0 0 6px #d2991d }\n' +
+    '\t  .red .status-dot { background:#f85149;box-shadow:0 0 6px #f85149 }\n' +
+    '\t  .gen-time { font-family:monospace;font-size:9px;color:#6e7681 }'
+  );
+
+  // ── HTML: inject status freshness badge after subtitle ──
+  var genTimeMatch = html.match(/Generated \/ [^<]+ UTC/);
+  var genTimeStr = genTimeMatch ? genTimeMatch[0] : 'Generated / 未知时间 UTC';
+  var statusBadge =
+    '<span id="freshness-badge" class="status-fresh green">' +
+    '<span class="status-dot"></span>' +
+    '<span id="freshness-text">Checking...</span>' +
+    '</span>';
+  html = html.replace(
+    'Live</div>',
+    'Live ' + statusBadge + '</div>'
+  );
+
+  // ── JS: calculate data age on page load ──
+  var freshnessJS =
+    '\t\t// -- Data Freshness Indicator --\n' +
+    '\t\t(function(){\n' +
+    '\t\t  var genStr = "' + genTimeStr.replace(/"/g, '\\"') + '";\n' +
+    '\t\t  var m = genStr.match(/(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2})/);\n' +
+    '\t\t  if (!m) { document.getElementById("freshness-text").textContent = "Unknown"; return; }\n' +
+    '\t\t  var genTime = new Date(m[1] + "T" + m[2] + "Z");\n' +
+    '\t\t  var now = new Date();\n' +
+    '\t\t  var ageMin = Math.floor((now - genTime) / 60000);\n' +
+    '\t\t  var badge = document.getElementById("freshness-badge");\n' +
+    '\t\t  var text = document.getElementById("freshness-text");\n' +
+    '\t\t  var ageStr, cssClass;\n' +
+    '\t\t  if (ageMin < 60) { ageStr = ageMin + " min ago"; cssClass = "green"; }\n' +
+    '\t\t  else if (ageMin < 360) { ageStr = Math.floor(ageMin/60) + "h ago"; cssClass = "green"; }\n' +
+    '\t\t  else if (ageMin < 1440) { ageStr = Math.floor(ageMin/60) + "h ago"; cssClass = "yellow"; }\n' +
+    '\t\t  else { ageStr = Math.floor(ageMin/1440) + "d ago — STALE"; cssClass = "red"; }\n' +
+    '\t\t  badge.className = "status-fresh " + cssClass;\n' +
+    '\t\t  text.textContent = ageStr;\n' +
+    '\t\t  // Also update gen time display\n' +
+    '\t\t  var genEl = document.querySelector(".subtitle");\n' +
+    '\t\t  if (genEl) genEl.title = "Data generated: " + m[1] + " " + m[2] + " UTC";\n' +
+    '\t\t})();\n';
+
+  html = html.replace('// -- Selector shortcuts --', freshnessJS + '\t\t// -- Selector shortcuts --');
+
   // ── CSS: progress bar + image picker ──
   html = html.replace(
     '.cmd-input:focus { border-color:rgba(88,166,255,0.5); }',
