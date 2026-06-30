@@ -112,15 +112,87 @@ function ApplyForm() {
 
         {/* Header */}
         <div className="space-y-4 mb-10">
-          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">Protocol_Recruitment // Founding_Testers</div>
+          <div className="text-cyan-500/50 text-[10px] tracking-[0.5em] uppercase">Continuity Research Program</div>
           <h1 className="text-2xl md:text-3xl font-light tracking-[0.12em] text-white uppercase">
-            Shape the <span style={{ color: "rgba(144,200,255,0.7)" }}>Protocol</span>
+            Genesis <span style={{ color: "rgba(144,200,255,0.7)" }}>100</span>
           </h1>
-          <p className="text-white/40 text-[13px] leading-relaxed max-w-lg">
-            We are recruiting the first 300 participants to calibrate the
-            motion-signature verification engine. First 50 applicants receive
-            <span style={{ color: "rgba(144,200,255,0.7)" }}> Genesis Cohort</span> status — a permanent protocol-level identity anchor.
+          <p className="text-white/50 text-[15px] leading-relaxed max-w-lg">
+            We are not looking for users.
           </p>
+          <p className="text-white/35 text-[13px] leading-relaxed max-w-lg">
+            We are looking for the first 100 people who believe that
+            <span style={{ color: "rgba(144,200,255,0.7)" }}> digital continuity should be verifiable</span>.
+          </p>
+        </div>
+
+        {/* ── Research Question ── */}
+        <div className="border p-6 mb-8 space-y-3" style={{ borderColor: "rgba(144,200,255,0.15)", borderRadius: 4, background: "rgba(144,200,255,0.02)" }}>
+          <div className="text-cyan-400/40 text-[9px] tracking-[0.3em] uppercase">Research Question</div>
+          <p className="text-white/60 text-[14px] font-light leading-relaxed">
+            We are studying a fundamental question:
+          </p>
+          <p className="text-white/80 text-[16px] font-light tracking-[0.03em]" style={{ textShadow: "0 0 20px rgba(144,200,255,0.2)" }}>
+            Can digital continuity be verified?
+          </p>
+        </div>
+
+        {/* ── What We Collect ── */}
+        <div className="border p-6 mb-8 space-y-4" style={{ borderColor: "rgba(144,200,255,0.1)", borderRadius: 4, background: "transparent" }}>
+          <div className="text-white/25 text-[9px] tracking-[0.3em] uppercase">Privacy Protocol</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px]">
+            <div className="space-y-2">
+              <div className="text-cyan-400/60 text-[9px] tracking-[0.15em] uppercase">What We Collect</div>
+              <ul className="text-white/40 space-y-1">
+                <li>✓ Motion signal (joint positions)</li>
+                <li>✓ Presence receipt (entropy proof)</li>
+                <li>✓ Device type & lighting conditions</li>
+                <li>✓ Session timestamps</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <div className="text-amber-400/50 text-[9px] tracking-[0.15em] uppercase">What We Never Collect</div>
+              <ul className="text-white/30 space-y-1">
+                <li>✗ Raw camera images or video</li>
+                <li>✗ Facial data or biometrics</li>
+                <li>✗ Personal identity documents</li>
+                <li>✗ IP address or location</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Three Phases ── */}
+        <div className="border p-6 mb-8 space-y-5" style={{ borderColor: "rgba(144,200,255,0.1)", borderRadius: 4, background: "transparent" }}>
+          <div className="text-white/25 text-[9px] tracking-[0.3em] uppercase">Research Roadmap</div>
+          <div className="space-y-4">
+            <div className="flex gap-4">
+              <div className="w-10 h-10 flex items-center justify-center border shrink-0" style={{ borderColor: "rgba(34,211,238,0.4)", borderRadius: 2, background: "rgba(34,211,238,0.06)" }}>
+                <span className="text-cyan-400 text-[11px] font-mono">I</span>
+              </div>
+              <div>
+                <div className="text-white/60 text-[12px] font-light">Founding Cohort <span className="text-cyan-400/60 text-[10px]">— 100 participants</span></div>
+                <p className="text-white/25 text-[10px] leading-relaxed mt-1">Validate multi-device, multi-session, longitudinal presence stability. You come back. Your data proves continuity.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-10 h-10 flex items-center justify-center border shrink-0" style={{ borderColor: "rgba(144,200,255,0.2)", borderRadius: 2, background: "rgba(144,200,255,0.03)" }}>
+                <span className="text-cyan-400/50 text-[11px] font-mono">II</span>
+              </div>
+              <div>
+                <div className="text-white/40 text-[12px] font-light">Research Network <span className="text-white/20 text-[10px]">— 1,000 participants</span></div>
+                <p className="text-white/20 text-[10px] leading-relaxed mt-1">Validate across age, geography, lighting, device, and behavior diversity.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-10 h-10 flex items-center justify-center border shrink-0" style={{ borderColor: "rgba(255,255,255,0.08)", borderRadius: 2, background: "rgba(255,255,255,0.01)" }}>
+                <span className="text-white/25 text-[11px] font-mono">III</span>
+              </div>
+              <div>
+                <div className="text-white/30 text-[12px] font-light">Open Protocol <span className="text-white/15 text-[10px]">— 10,000+ participants</span></div>
+                <p className="text-white/15 text-[10px] leading-relaxed mt-1">Continuity at scale.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Status: done */}
@@ -139,7 +211,7 @@ function ApplyForm() {
                     {/* 内圈 */}
                     <circle cx="80" cy="72" r="38" fill={isGenesis ? "rgba(20,16,8,0.9)" : "rgba(255,255,255,0.02)"} stroke={isGenesis ? "url(#goldGradInner)" : "rgba(255,255,255,0.1)"} strokeWidth="1" />
                     {/* 文字 */}
-                    <text x="80" y="64" textAnchor="middle" fill={isGenesis ? "rgba(212,175,55,0.5)" : "rgba(255,255,255,0.2)"} fontSize="6" fontFamily="monospace" letterSpacing="3">WITNESS</text>
+                    <text x="80" y="64" textAnchor="middle" fill={isGenesis ? "rgba(212,175,55,0.5)" : "rgba(255,255,255,0.2)"} fontSize="5" fontFamily="monospace" letterSpacing="3">PIONEER</text>
                     <text x="80" y="84" textAnchor="middle" fill={isGenesis ? "rgba(212,175,55,0.95)" : "rgba(255,255,255,0.25)"} fontSize="22" fontFamily="monospace" fontWeight="300" style={{ textShadow: isGenesis ? "0 0 12px rgba(212,175,55,0.6)" : "none" }}>#{result.position_number}</text>
                     {/* 星标 */}
                     {isGenesis && (
@@ -173,13 +245,13 @@ function ApplyForm() {
 
               {/* ── 标题 ── */}
               <div className={`text-xl font-light tracking-[0.05em] ${isGenesis ? "text-amber-200" : "text-white/50"}`} style={isGenesis ? { textShadow: "0 0 24px rgba(212,175,55,0.5)" } : undefined}>
-                {isGenesis ? "◈ Genesis Cohort — Confirmed" : "✓ Application Received"}
+                {isGenesis ? "◈ Early Presence Pioneer — Confirmed" : "✓ Application Received"}
               </div>
 
               <p className="text-white/35 text-[12px] leading-relaxed max-w-sm mx-auto">
                 {isGenesis
-                  ? `You are founding tester #${result.position_number}. This status is permanent — not cosmetic, structural.`
-                  : `You are applicant #${result.position_number}. Genesis slots are filled, but you are part of the public calibration cohort.`}
+                  ? `You are Early Presence Pioneer #${result.position_number}. This status is permanent — not cosmetic, structural. You are part of the first 100 helping to answer whether digital continuity can be made verifiable.`
+                  : `You are research participant #${result.position_number}. Genesis slots may be filled, but you are still part of the calibration cohort.`}
               </p>
 
               {isGenesis && (
@@ -192,7 +264,7 @@ function ApplyForm() {
                 <span className="text-cyan-300/90 text-[16px] font-light tracking-[0.05em]" style={{ textShadow: "0 0 18px rgba(34,211,238,0.5)", animation: "genesisBadgePulse 0.8s ease-in-out infinite" }}>
                   Redirecting in {countdown}s...
                 </span>
-                <br /><span className="text-white/40 text-[11px]">Complete a 30s motion capture to calibrate the engine</span>
+                <br /><span className="text-white/40 text-[11px]">Complete a 30s motion capture to contribute your first presence receipt</span>
               </p>
             </div>
           </div>
@@ -244,11 +316,11 @@ function ApplyForm() {
             {/* Handle */}
             <div>
               <label className="block text-white/25 text-[9px] tracking-[0.15em] uppercase mb-2">
-                Social Platform (optional)
+                How did you find us? (optional)
               </label>
               <input
                 type="text"
-                placeholder="Bluesky / Discord / Farcaster — anything you like"
+                placeholder="X / Discord / HN / Friend / Other"
                 value={handle}
                 onChange={(e) => setHandle(e.target.value)}
                 className="w-full bg-black/40 border border-white/10 px-4 py-3 text-white/70 text-[13px] outline-none focus:border-cyan-400/30 transition-colors placeholder:text-white/10"
@@ -281,12 +353,12 @@ function ApplyForm() {
                 e.currentTarget.style.boxShadow = "0 0 16px rgba(34,211,238,0.1)";
               }}
             >
-              {status === "submitting" ? "Submitting..." : "Apply for Early Access"}
+              {status === "submitting" ? "Submitting..." : "Become an Early Presence Pioneer"}
             </button>
 
             <p className="text-white/15 text-[9px] text-center tracking-[0.05em]">
-              First 50 applicants receive Genesis Cohort status.
-              After submitting, you will be redirected to the Motion Demo.
+              First 50 receive Genesis Cohort status — a permanent protocol-level identity anchor.
+              After applying, complete a 30-second motion capture to contribute to the research.
             </p>
           </form>
         )}
