@@ -99,6 +99,7 @@ export default function GenesisClient() {
         sessionStorage.setItem("genesis_completed", "1");
         sessionStorage.setItem("genesis_email", cleanEmail || "wallet@" + headerWallet!.slice(2, 10));
         sessionStorage.setItem("genesis_status", "GENESIS_NODE");
+        window.dispatchEvent(new CustomEvent("genesis:updated"));
         finalizeGenesis(cleanEmail || "wallet@" + headerWallet!.slice(2, 10));
         return;
       }
@@ -141,6 +142,7 @@ export default function GenesisClient() {
       sessionStorage.setItem("genesis_email", email.trim());
       if (data.status) sessionStorage.setItem("genesis_status", data.status);
       if (data.node_handle) sessionStorage.setItem("genesis_node_handle", data.node_handle);
+      window.dispatchEvent(new CustomEvent("genesis:updated"));
       finalizeGenesis(email);
     } catch (err: unknown) {
       setStage("error");
@@ -241,6 +243,7 @@ export default function GenesisClient() {
                             sessionStorage.setItem("genesis_completed", "1");
                             sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
                             sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
+                            window.dispatchEvent(new CustomEvent("genesis:updated"));
                             finalizeGenesis(email.trim().toLowerCase());
                           }
                         }}

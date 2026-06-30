@@ -38,26 +38,32 @@ export default function GenesisBadge() {
       .catch(() => {});
   };
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
+  const tryShow = () => {
     const storedEmail = sessionStorage.getItem("genesis_email") || "";
     const walletAddr = sessionStorage.getItem("wallet_address") || "";
     const isCompleted = sessionStorage.getItem("genesis_completed") === "1";
     const storedStatus = sessionStorage.getItem("genesis_status") || "";
 
-    // Use email if available, fall back to wallet address as identity
     const identityKey = storedEmail || walletAddr;
     if (isCompleted && identityKey) {
       setStatus(storedStatus || "ACTIVE");
       setVisible(true);
-      if (storedEmail) {
-        fetchStats(storedEmail);
-        const interval = setInterval(() => fetchStats(storedEmail), 30000);
-        return () => clearInterval(interval);
-      }
+      if (storedEmail) fetchStats(storedEmail);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    tryShow();
+    const interval = setInterval(() => { if (!visible) tryShow(); }, 30000);
+    window.addEventListener("genesis:updated", tryShow);
+    window.addEventListener("wallet:connected", tryShow);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("genesis:updated", tryShow);
+      window.removeEventListener("wallet:connected", tryShow);
+    };
+  }, [visible]);
 
   // 鼠标视差倾斜
   useEffect(() => {

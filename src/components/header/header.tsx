@@ -195,6 +195,8 @@ const ProtocolHeader = () => {
       if (data.status) {
         sessionStorage.setItem("genesis_status", data.status);
       }
+      // Notify badge components that wallet is connected
+      window.dispatchEvent(new CustomEvent("wallet:connected"));
     } catch (err: unknown) {
       setWalletError((err as Error).message?.slice(0, 60) || "Connect failed");
       setWalletStatus("idle");
