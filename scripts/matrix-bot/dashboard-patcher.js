@@ -36,28 +36,47 @@ function patchDashboard(html) {
     'Live ' + statusBadge + '</div>'
   );
 
-  // ── JS: calculate data age on page load ──
+  // ── JS: calculate data age + fetch running status ──
   var freshnessJS =
-    '\t\t// -- Data Freshness Indicator --\n' +
+    '\t\t// -- Data Freshness + Bot Status --\n' +
     '\t\t(function(){\n' +
-    '\t\t  var genStr = "' + genTimeStr.replace(/"/g, '\\"') + '";\n' +
-    '\t\t  var m = genStr.match(/(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2})/);\n' +
-    '\t\t  if (!m) { document.getElementById("freshness-text").textContent = "Unknown"; return; }\n' +
-    '\t\t  var genTime = new Date(m[1] + "T" + m[2] + "Z");\n' +
-    '\t\t  var now = new Date();\n' +
-    '\t\t  var ageMin = Math.floor((now - genTime) / 60000);\n' +
     '\t\t  var badge = document.getElementById("freshness-badge");\n' +
     '\t\t  var text = document.getElementById("freshness-text");\n' +
-    '\t\t  var ageStr, cssClass;\n' +
-    '\t\t  if (ageMin < 60) { ageStr = ageMin + " min ago"; cssClass = "green"; }\n' +
-    '\t\t  else if (ageMin < 360) { ageStr = Math.floor(ageMin/60) + "h ago"; cssClass = "green"; }\n' +
-    '\t\t  else if (ageMin < 1440) { ageStr = Math.floor(ageMin/60) + "h ago"; cssClass = "yellow"; }\n' +
-    '\t\t  else { ageStr = Math.floor(ageMin/1440) + "d ago — STALE"; cssClass = "red"; }\n' +
-    '\t\t  badge.className = "status-fresh " + cssClass;\n' +
-    '\t\t  text.textContent = ageStr;\n' +
-    '\t\t  // Also update gen time display\n' +
-    '\t\t  var genEl = document.querySelector(".subtitle");\n' +
-    '\t\t  if (genEl) genEl.title = "Data generated: " + m[1] + " " + m[2] + " UTC";\n' +
+    '\t\t  var dot = badge.querySelector(".status-dot");\n' +
+    '\t\t\n' +
+    '\t\t  // Check bot running status from server\n' +
+    '\t\t  fetch("/matrix-status.json?t=" + Date.now())\n' +
+    '\t\t    .then(function(r){ return r.ok ? r.json() : null; })\n' +
+    '\t\t    .then(function(status){\n' +
+    '\t\t      if (status && status.status === "running") {\n' +
+    '\t\t        badge.className = "status-fresh yellow";\n' +
+    '\t\t        text.textContent = "BOT RUNNING...";\n' +
+    '\t\t        dot.style.animation = "pulse-warn 1s infinite";\n' +
+    '\t\t        return;\n' +
+    '\t\t      }\n' +
+    '\t\t      if (status && status.status === "error") {\n' +
+    '\t\t        badge.className = "status-fresh red";\n' +
+    '\t\t        text.textContent = "BOT ERROR";\n' +
+    '\t\t        return;\n' +
+    '\t\t      }\n' +
+    '\t\t      // Idle or no status file — show data age\n' +
+    '\t\t      var genStr = "' + genTimeStr.replace(/"/g, '\\"') + '";\n' +
+    '\t\t      var m = genStr.match(/(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2})/);\n' +
+    '\t\t      if (!m) { text.textContent = "Unknown"; return; }\n' +
+    '\t\t      var genTime = new Date(m[1] + "T" + m[2] + "Z");\n' +
+    '\t\t      var now = new Date();\n' +
+    '\t\t      var ageMin = Math.floor((now - genTime) / 60000);\n' +
+    '\t\t      var ageStr, cssClass;\n' +
+    '\t\t      if (ageMin < 60) { ageStr = ageMin + "m ago"; cssClass = "green"; }\n' +
+    '\t\t      else if (ageMin < 360) { ageStr = Math.floor(ageMin/60) + "h ago"; cssClass = "green"; }\n' +
+    '\t\t      else if (ageMin < 1440) { ageStr = Math.floor(ageMin/60) + "h ago"; cssClass = "yellow"; }\n' +
+    '\t\t      else { ageStr = Math.floor(ageMin/1440) + "d ago"; cssClass = "red"; }\n' +
+    '\t\t      badge.className = "status-fresh " + cssClass;\n' +
+    '\t\t      text.textContent = ageStr;\n' +
+    '\t\t    })\n' +
+    '\t\t    .catch(function(){\n' +
+    '\t\t      text.textContent = "offline";\n' +
+    '\t\t    });\n' +
     '\t\t})();\n';
 
   html = html.replace('// -- Selector shortcuts --', freshnessJS + '\t\t// -- Selector shortcuts --');
