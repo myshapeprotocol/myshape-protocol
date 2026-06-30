@@ -390,14 +390,17 @@ const ProtocolHeader = () => {
                   </div>
                 )}
                 {genesisDone ? (
-                  <a href="/identity" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                    <span className="link-icon">›</span> ENTER_IDENTITY_LAYER
+                  <a href="/dashboard" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                    <span className="link-icon">›</span> EVOLUTIONARY_DASHBOARD
                   </a>
                 ) : (
                   <a href="/genesis" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
                     <span className="link-icon">›</span> INITIALIZE_GENESIS
                   </a>
                 )}
+                <a href="/continuity" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                  <span className="link-icon">›</span> CONTINUITY_NETWORK
+                </a>
                 <a href="/protocol" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
                   <span className="link-icon">›</span> PROTOCOL_ARCHITECTURE
                 </a>

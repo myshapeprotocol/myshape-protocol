@@ -45,6 +45,7 @@ export default function ProtocolFooter() {
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
         { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" },
         { name: "GENESIS", href: "/genesis" },
+        { name: "CONTINUITY_NETWORK", href: "/continuity" },
         { name: "EVIDENCE", href: "/evidence" }
       ]
     },
@@ -54,6 +55,7 @@ export default function ProtocolFooter() {
         { name: "DEVELOPERS", href: "/developers" },
         { name: "DASHBOARD", href: "/dashboard" },
         { name: "MOTION_DEMO", href: "/motion-demo" },
+        { name: "RESEARCH_APPLY", href: "/research/apply" },
         { name: "AI_AGENT", href: "/agent" }
       ]
     },
