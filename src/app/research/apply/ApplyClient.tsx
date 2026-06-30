@@ -367,7 +367,7 @@ function ApplyForm() {
             </button>
 
             <div className="text-center">
-              <a href="/genesis-100.md" target="_blank" className="text-cyan-400/25 text-[8px] tracking-[0.15em] uppercase hover:text-cyan-400/50 transition-colors">
+              <a href="/genesis-100.html" target="_blank" className="text-cyan-400/25 text-[8px] tracking-[0.15em] uppercase hover:text-cyan-400/50 transition-colors">
                 Read the full Genesis 100 Manifesto ↗
               </a>
             </div>

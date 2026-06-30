@@ -65,7 +65,7 @@ export default function ProtocolFooter() {
         { name: "WHITEPAPER", href: "/whitepaper" },
         { name: "TECHNICAL_SPEC", href: "/papers/technical-spec" },
         { name: "THREAT_MODEL", href: "/papers/threat-model" },
-        { name: "GENESIS_100_MANIFESTO", href: "/genesis-100.md" },
+        { name: "GENESIS_100_MANIFESTO", href: "/genesis-100.html" },
         { name: "ARCHITECTURE", href: "/papers/protocol-architecture" },
         { name: "BLOG", href: "/blog" },
         { name: "ALL_PAPERS", href: "/papers" }
