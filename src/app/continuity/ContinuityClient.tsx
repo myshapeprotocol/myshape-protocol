@@ -61,7 +61,7 @@ export default function ContinuityClient() {
   const evoEntropy = data ? computeEvolutionaryEntropy(data) : 0;
 
   return (
-    <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono">
+    <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
       <ProtocolHeader />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 space-y-10">

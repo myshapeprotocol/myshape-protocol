@@ -132,7 +132,7 @@ export default function HomeClient() {
         </div>
       </div>
 
-      <main className="relative z-0 w-full overflow-x-hidden">
+      <main className="relative z-0 w-full overflow-x-clip">
         <HeroDemo />
 
         {/* ── Genesis Cohort Progress ── */}

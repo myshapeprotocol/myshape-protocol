@@ -139,7 +139,7 @@ export default function MotionGeometryClient() {
             <Gauge label="μTiming" value={data.timing} color="#90c8ff" />
             <Gauge label="Noise" value={data.noise} color="#a78bfa" />
             <Gauge label="Freq" value={data.freq} color="#f472b6" />
-            <Gauge label="Bio" value={data.bio} color="#34d399" />
+            <Gauge label="Bio" value={data.bio} color="#a78bfa" />
             <div className="pt-3 border-t border-white/5 flex justify-between items-center">
               <span className="text-white/20 text-[8px] tracking-[0.2em] uppercase">PES Score</span>
               <span className="text-[#90c8ff]/80 font-mono text-[18px] font-light">{(data.score * 100).toFixed(0)}</span>

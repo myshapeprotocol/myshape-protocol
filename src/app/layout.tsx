@@ -165,7 +165,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         style={{
           margin: 0,
           padding: 0,
-          overflowX: "hidden",
+          overflowX: "clip",
           width: "100%",
           display: "flex",
           flexDirection: "column",

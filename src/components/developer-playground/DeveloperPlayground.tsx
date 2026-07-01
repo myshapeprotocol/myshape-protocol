@@ -91,7 +91,7 @@ export default function DeveloperPlayground() {
               <br />
               <span className="text-[#90c8ff]/50">if</span>
               <span className="text-white/40"> (threat.overallVerdict === </span>
-              <span className="text-green-400/60">"human"</span>
+              <span className="text-[#90c8ff]/60">"human"</span>
               <span className="text-white/40">) {"{"}</span>
               <br />
               <span className="text-white/30">  {"// ✓ Real human presence confirmed"}</span>
@@ -103,7 +103,7 @@ export default function DeveloperPlayground() {
             <div className="mt-3 flex gap-3">
               {step === "idle" && (
                 <button onClick={handleRun}
-                  className="px-5 py-2 border border-green-400/30 text-green-300/70 text-[10px] tracking-[0.2em] uppercase hover:bg-green-400/[0.06] hover:text-green-200 hover:border-green-400/50 transition-all">
+                  className="px-5 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/70 text-[10px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/[0.06] hover:text-white hover:border-[#90c8ff]/50 transition-all">
                   ▶ Run Verification
                 </button>
               )}
@@ -119,8 +119,8 @@ export default function DeveloperPlayground() {
                     className="px-5 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/70 text-[10px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/[0.06] hover:text-[#90c8ff] transition-all">
                     ↻ Run Again
                   </button>
-                  <span className="flex items-center text-green-400/60 text-[10px] tracking-[0.15em]">
-                    <span className="inline-block w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5" />
+                  <span className="flex items-center text-[#90c8ff]/60 text-[10px] tracking-[0.15em]">
+                    <span className="inline-block w-1.5 h-1.5 bg-[#90c8ff] rounded-full mr-1.5" />
                     Complete
                   </span>
                 </>
@@ -154,7 +154,7 @@ export default function DeveloperPlayground() {
                   {/* PES */}
                   <div>
                     <span className="text-white/30">pes_score:</span>
-                    <span className="text-green-400/70 ml-2">{SAMPLE_DATA.pes}</span>
+                    <span className="text-[#90c8ff]/70 ml-2">{SAMPLE_DATA.pes}</span>
                     <span className="text-white/15 ml-2">{"// >0.70 → HUMAN"}</span>
                   </div>
 
@@ -174,7 +174,7 @@ export default function DeveloperPlayground() {
                   {/* Threat */}
                   <div className="pt-1 border-t border-white/5">
                     <span className="text-white/30">threat_verdict:</span>
-                    <span className="text-green-400/80 ml-2 font-bold">{SAMPLE_DATA.threatVerdict}</span>
+                    <span className="text-[#90c8ff]/80 ml-2 font-bold">{SAMPLE_DATA.threatVerdict}</span>
                   </div>
 
                   {/* Proof */}

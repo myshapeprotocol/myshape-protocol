@@ -27,7 +27,7 @@ export default function ProtocolLayout({
   transparentBg = false,
 }: ProtocolLayoutProps) {
   return (
-    <div className={`min-h-screen text-white font-mono selection:bg-[#90c8ff]/30 overflow-x-hidden flex flex-col ${transparentBg ? 'bg-transparent' : 'bg-[#02040a]'}`}>
+    <div className={`min-h-screen text-white font-mono selection:bg-[#90c8ff]/30 overflow-x-clip flex flex-col ${transparentBg ? 'bg-transparent' : 'bg-[#02040a]'}`}>
       {/* 1. 桌面端：背景動畫裝飾 */}
       <div className="hidden md:block fixed inset-0 pointer-events-none opacity-10"
            style={{

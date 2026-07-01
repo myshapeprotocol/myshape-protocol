@@ -766,7 +766,7 @@ export default function MotionDemoClient() {
                 {[...Array(30)].map((_,i) => {
                   const a = (i/30)*Math.PI*2;
                   const x = Math.cos(a)*120; const y = Math.sin(a)*120;
-                  const colors = ["#90c8ff","#d4af37","#34d399","#90c8ff"];
+                  const colors = ["#90c8ff","#d4af37","#a78bfa","#90c8ff"];
                   return (
                     <div key={i} className="absolute left-1/2 top-1/2 pointer-events-none rounded-full"
                       style={{width:4,height:4,background:colors[i%4],boxShadow:`0 0 10px ${colors[i%4]}`,
