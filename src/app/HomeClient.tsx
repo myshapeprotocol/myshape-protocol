@@ -145,7 +145,7 @@ export default function HomeClient() {
         <ParadigmShift />
 
         {/* ── Protocol Stack ── */}
-        <section className="relative py-16 md:py-32">
+        <section className="relative pt-16 md:pt-32 pb-12 md:pb-20">
           <div className="max-w-5xl mx-auto px-6">
             <div className="text-center mb-16">
               <div className="text-white/35 text-[9px] tracking-[0.6em] uppercase mb-4">Protocol_Stack</div>
@@ -286,7 +286,7 @@ export default function HomeClient() {
             </div>
 
             {/* ── Presence Network — live node mesh ── */}
-            <div className="mt-6 max-w-4xl mx-auto">
+            <div className="mt-10 max-w-4xl mx-auto">
               <PresenceNetwork />
             </div>
           </div>
