@@ -44,7 +44,6 @@ export default function ProtocolFooter() {
         { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
         { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" },
-        { name: "GENESIS", href: "/genesis" },
         { name: "CONTINUITY_NETWORK", href: "/continuity" },
         { name: "EVIDENCE", href: "/evidence" }
       ]
