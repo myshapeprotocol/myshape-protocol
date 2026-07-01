@@ -223,15 +223,15 @@ export default function GenesisClient() {
                         <span className="w-1.5 h-1.5 rounded-full bg-[#90c8ff] shadow-[0_0_8px_rgba(144,200,255,0.8)]" />
                         <span className="text-[#90c8ff]/80 font-mono text-[10px] tracking-[0.2em] uppercase">Wallet Connected</span>
                       </div>
-                      <span className="text-[#90c8ff]/30 text-[8px] tracking-[0.15em] uppercase font-mono">
+                      <span className="text-[#90c8ff]/50 text-[10px] tracking-[0.15em] uppercase font-mono">
                         {headerWallet.slice(0, 8)}...{headerWallet.slice(-6)}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleCommence()}
                         onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-                        className="relative group px-6 py-2.5 transition-all duration-500 overflow-hidden font-mono text-[9px] tracking-[0.3em] uppercase border border-[#90c8ff]/30 text-[#90c8ff]/70 hover:text-white hover:border-[#90c8ff]"
-                        style={{ background: "rgba(144,200,255,0.04)" }}>
+                        className="relative group px-8 py-3 transition-all duration-500 overflow-hidden font-mono text-[11px] tracking-[0.3em] uppercase border border-[#90c8ff]/40 text-[#90c8ff]/80 hover:text-white hover:border-[#90c8ff] hover:shadow-[0_0_20px_rgba(144,200,255,0.2)]"
+                        style={{ background: "rgba(144,200,255,0.06)" }}>
                         Begin Genesis →
                       </button>
                     </div>
@@ -305,7 +305,7 @@ export default function GenesisClient() {
                 ) : (
                   <button type="button" onClick={() => setInviteCodeValid(false)}
                     onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
-                    className="text-indigo-300/35 hover:text-indigo-200/55 text-[9px] md:text-[10px] tracking-[0.15em] md:tracking-[0.22em] uppercase transition-colors border-b border-dashed border-indigo-300/20 pb-0.5">
+                    className="text-[#90c8ff]/45 hover:text-[#90c8ff]/80 text-[10px] md:text-[11px] tracking-[0.15em] uppercase transition-colors border-b border-dashed border-[#90c8ff]/25 pb-0.5">
                     + Invite code
                   </button>
                 )}
@@ -343,7 +343,7 @@ export default function GenesisClient() {
                       </div>
                     </div>
                   </div>
-                  <span className="text-white/25 text-[9px] tracking-[0.1em]">                  <span className="text-white/18 text-[8px] tracking-[0.1em]">For restricted environments only</span></span>
+                  <span className="text-white/30 text-[9px] tracking-[0.1em]">For restricted environments only</span>
                 </div>
 
                 </form>
@@ -357,7 +357,7 @@ export default function GenesisClient() {
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
               className="flex flex-col items-center space-y-8">
               <VortexScan />
-              <span className="text-[#90c8ff] font-mono text-[10px] tracking-[1em] uppercase">Extracting_Kinetic_Hash...</span>
+              <span className="text-[#90c8ff] font-mono text-[12px] tracking-[1em] uppercase">Extracting_Kinetic_Hash...</span>
               <div className="w-48 h-[1px] bg-[#90c8ff]/10 relative overflow-hidden">
                 <div className="absolute inset-0 genesis-progress" />
               </div>
@@ -373,7 +373,7 @@ export default function GenesisClient() {
               <div className="relative w-10 h-10">
                 <div className="absolute inset-0 rounded-full border border-[#90c8ff]/30 animate-spin" style={{ borderTopColor: "rgba(144,200,255,0.8)" }} />
               </div>
-              <span className="text-[#90c8ff]/60 font-mono text-[9px] tracking-[0.5em] uppercase">Transmitting_Challenge...</span>
+              <span className="text-[#90c8ff]/70 font-mono text-[11px] tracking-[0.5em] uppercase">Transmitting_Challenge...</span>
             </motion.div>
           )}
 
@@ -389,16 +389,16 @@ export default function GenesisClient() {
                 <div className="flex items-center justify-between px-5 py-2 border-b border-[#90c8ff]/10">
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#90c8ff] animate-pulse shadow-[0_0_6px_rgba(144,200,255,0.8)]" />
-                    <span className="text-[#90c8ff]/50 font-mono text-[7px] tracking-[0.4em] uppercase">IDENTITY_CHALLENGE</span>
+                    <span className="text-[#90c8ff]/60 font-mono text-[9px] tracking-[0.4em] uppercase">IDENTITY_CHALLENGE</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-white/15 font-mono text-[7px] tracking-[0.2em]">SIG_006</span>
+                    <span className="text-white/30 font-mono text-[9px] tracking-[0.2em]">SIG_006</span>
                   </div>
                 </div>
                 {/* 内容区 */}
                 <div className="px-5 md:px-8 py-6 md:py-8">
-                  <div className="text-white/25 font-mono text-[8px] tracking-[0.2em] mb-1 text-center uppercase">VERIFICATION CODE SENT TO</div>
-                  <div className="text-white/45 font-mono text-[9px] tracking-[0.15em] mb-8 text-center truncate">{email}</div>
+                  <div className="text-white/40 font-mono text-[10px] tracking-[0.2em] mb-1 text-center uppercase">VERIFICATION CODE SENT TO</div>
+                  <div className="text-white/60 font-mono text-[11px] tracking-[0.15em] mb-8 text-center truncate">{email}</div>
                   <form onSubmit={handleVerifyOTP}>
                     <div className="flex justify-center gap-2 md:gap-3 mb-8">
                       {Array.from({ length: 6 }).map((_, i) => (
@@ -499,7 +499,7 @@ export default function GenesisClient() {
                 transition={{ delay: 1.8, duration: 0.5 }}
                 href="/motion-demo"
                 onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="hidden md:block text-[#90c8ff]/25 hover:text-[#90c8ff]/60 text-[8px] tracking-[0.25em] uppercase font-mono transition-colors">
+                className="hidden md:block text-[#90c8ff]/40 hover:text-[#90c8ff]/80 text-[10px] tracking-[0.25em] uppercase font-mono transition-colors">
                 See_How_It_Works → Motion_Demo
               </motion.a>
             </motion.div>
