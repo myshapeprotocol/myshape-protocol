@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { playTick } from "@/utils/useAudioTick";
 
 interface Status { total_nodes: number; genesis_nodes: number; genesis_remaining: number; active_humans: number; agents: number; last_scan: string | null; cohort_sealed: boolean; status: string; }
@@ -28,9 +28,6 @@ export default function ProtocolStatus() {
   const [loading, setLoading] = useState(true);
   const [pulse, setPulse] = useState(false);
   const [hover, setHover] = useState(false);
-  const scanRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => { const el = scanRef.current; if (!el) return; let p = 0; const t = setInterval(() => { p = (p + 0.5) % 100; el.style.top = `${p}%`; }, 60); return () => clearInterval(t); }, []);
 
   useEffect(() => {
     const f = () => window.fetch("/api/nodes/status").then(r => r.json()).then(d => { if (d.status) { setStatus(prev => { if (prev && d.total_nodes > prev.total_nodes) { setPulse(true); setTimeout(() => setPulse(false), 1500); } return d; }); } setLoading(false); }).catch(() => setLoading(false));
@@ -38,8 +35,8 @@ export default function ProtocolStatus() {
   }, []);
 
   const wrap = (children: React.ReactNode, border?: string) => (
-    <div className="mx-auto w-fit transition-all duration-700" style={{ border: border ? `1px solid ${border}` : `1px solid ${BORDER}`, clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)" }}>
-      <div className="px-3 md:px-5 py-1.5 flex items-center justify-center">{children}</div>
+    <div className="mx-auto w-fit" style={{ border: border ? `1px solid ${border}` : `1px solid ${BORDER}` }}>
+      <div className="px-3 md:px-4 py-1.5 flex items-center justify-center">{children}</div>
     </div>
   );
 
@@ -50,26 +47,14 @@ export default function ProtocolStatus() {
   const daysUp = Math.max(1, Math.floor((Date.now() - new Date("2026-06-01").getTime()) / 86400000));
 
   return (
-    <div className="relative mx-auto w-fit transition-all duration-700"
+    <div className="relative mx-auto w-fit transition-all duration-500"
       style={{
         border: `1px solid ${hover ? BORDER_HOVER : BORDER}`,
-        clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)",
-        boxShadow: hover ? `0 4px 20px -4px ${ICE}0.08)` : "none",
+        boxShadow: hover ? `0 2px 12px -2px ${ICE}0.06)` : "none",
       }}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
     >
-      {/* Corner accents — smaller */}
-      <div className="absolute top-0 left-0 w-4 h-[1px] bg-gradient-to-r from-[#90c8ff]/20 to-transparent" />
-      <div className="absolute top-0 left-0 w-[1px] h-4 bg-gradient-to-b from-[#90c8ff]/20 to-transparent" />
-      <div className="absolute bottom-0 right-0 w-4 h-[1px] bg-gradient-to-l from-[#90c8ff]/20 to-transparent" />
-      <div className="absolute bottom-0 right-0 w-[1px] h-4 bg-gradient-to-t from-[#90c8ff]/20 to-transparent" />
-
-      {/* Scan line — thinner */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-50">
-        <div ref={scanRef} className="absolute w-full h-px" style={{ background: `linear-gradient(90deg, transparent, ${ICE}0.02) 50%, transparent)` }} />
-      </div>
-
-      <div className="px-3 md:px-5 py-1.5">
+      <div className="px-3 md:px-4 py-1.5">
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
           <Stat label="PROTOCOL" value={status.status} color={hasNodes ? "green" : "cyan"} pulse={hasNodes} freq={450} />
           <span className="text-white/[0.06] select-none text-[10px]">·</span>
