@@ -103,7 +103,7 @@ export default function BlogClient() {
             <br />
             <span className="text-[#90c8ff]/80">We proved it. Here is the evidence.</span>
           </h1>
-          <p className="text-white/35 text-[13px] leading-relaxed">
+          <p className="text-white/45 text-[14px] leading-relaxed">
             AI can fake a face. AI can clone a voice. But AI cannot generate your motion — the specific,
             irreducibly biological pattern of your nervous system. Here are the numbers.
           </p>
@@ -141,23 +141,23 @@ export default function BlogClient() {
         <div className="space-y-16 md:space-y-20">
           {/* The Experiment */}
           <section>
-            <h2 id="experiment" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
+            <h2 id="experiment" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Experiment</h2>
             <div className="space-y-5">
-              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+              <p className="text-white/55 text-[14px] leading-[1.9] font-light">
                 We built a Rust-based verification engine that analyzes human motion through four independent feature dimensions. Then we ran a simple test:
               </p>
-              <ol className="list-decimal pl-6 space-y-3 text-white/40 text-[13px] leading-[1.9] font-light">
-                <li><strong className="text-white/65 font-normal">Enroll a human:</strong> 20 motion samples → one cryptographic signature.</li>
-                <li><strong className="text-white/65 font-normal">Issue a challenge:</strong> "Draw a circle with your right hand. Tilt your torso 12 degrees. Keep your head still." — unpredictable, multi-joint, with a coupling constraint that shares a kinetic chain.</li>
-                <li><strong className="text-white/65 font-normal">Test three responses:</strong> genuine human, AI-generated forgery, and a different human.</li>
+              <ol className="list-decimal pl-6 space-y-3 text-white/55 text-[14px] leading-[1.9] font-light">
+                <li><strong className="text-white/70 font-normal">Enroll a human:</strong> 20 motion samples → one cryptographic signature.</li>
+                <li><strong className="text-white/70 font-normal">Issue a challenge:</strong> "Draw a circle with your right hand. Tilt your torso 12 degrees. Keep your head still." — unpredictable, multi-joint, with a coupling constraint that shares a kinetic chain.</li>
+                <li><strong className="text-white/70 font-normal">Test three responses:</strong> genuine human, AI-generated forgery, and a different human.</li>
               </ol>
             </div>
           </section>
 
           {/* The Results */}
           <section>
-            <h2 id="results" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
+            <h2 id="results" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Results</h2>
             <div className="space-y-5">
               <div className="border p-5 my-6 transition-all duration-300 hover:border-[#90c8ff]/40"
@@ -173,7 +173,7 @@ Impostor                0.0000           FAIL ✗
 Human—AI Gap: 0.3960`}
                 </pre>
               </div>
-              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+              <p className="text-white/55 text-[14px] leading-[1.9] font-light">
                 The engine rejected the AI-generated motion across four independent dimensions:
               </p>
               <div className="space-y-2">
@@ -196,9 +196,9 @@ Human—AI Gap: 0.3960`}
 
           {/* Why This Matters */}
           <section>
-            <h2 id="why" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
+            <h2 id="why" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Why This Matters</h2>
-            <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
+            <div className="space-y-5 text-white/55 text-[14px] leading-[1.9] font-light">
               <p>Every identity system in production today — passwords, KYC, hardware wallets — answers one question: "Does the credential match?"</p>
               <p>None of them answer: "Is the human who enrolled that credential physically present right now?"</p>
               <p>This gap has existed for decades. AI makes it fatal.</p>
@@ -209,26 +209,26 @@ Human—AI Gap: 0.3960`}
 
           {/* How It Works */}
           <section>
-            <h2 id="how" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
+            <h2 id="how" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>How It Works</h2>
             <div className="space-y-5">
-              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+              <p className="text-white/55 text-[14px] leading-[1.9] font-light">
                 The engine extracts a 128-dimensional signature from four feature groups:
               </p>
-              <ul className="list-disc pl-6 space-y-3 text-white/40 text-[13px] leading-[1.9] font-light">
-                <li><strong className="text-white/65 font-normal">Kinematics (40 dims):</strong> Skeletal ratios between 14 bone segments. Your bone-length ratios are physically unique — AI does not know them.</li>
-                <li><strong className="text-white/65 font-normal">Acceleration Profile (25 dims):</strong> Statistical distribution including Hurst exponent. Human: H ≈ 0.6–0.8. AI: H ≈ 0.5.</li>
-                <li><strong className="text-white/65 font-normal">Jerk Profile (25 dims):</strong> The third derivative of position. The single most unforgeable kinematic dimension.</li>
-                <li><strong className="text-white/65 font-normal">Jerk Spectrum (30 dims):</strong> Frequency-domain analysis. Human: 1/f^α scaling (α ≈ 1.0–1.5). AI: α &gt; 2.0 or α ≈ 0.</li>
+              <ul className="list-disc pl-6 space-y-3 text-white/55 text-[14px] leading-[1.9] font-light">
+                <li><strong className="text-white/70 font-normal">Kinematics (40 dims):</strong> Skeletal ratios between 14 bone segments. Your bone-length ratios are physically unique — AI does not know them.</li>
+                <li><strong className="text-white/70 font-normal">Acceleration Profile (25 dims):</strong> Statistical distribution including Hurst exponent. Human: H ≈ 0.6–0.8. AI: H ≈ 0.5.</li>
+                <li><strong className="text-white/70 font-normal">Jerk Profile (25 dims):</strong> The third derivative of position. The single most unforgeable kinematic dimension.</li>
+                <li><strong className="text-white/70 font-normal">Jerk Spectrum (30 dims):</strong> Frequency-domain analysis. Human: 1/f^α scaling (α ≈ 1.0–1.5). AI: α &gt; 2.0 or α ≈ 0.</li>
               </ul>
             </div>
           </section>
 
           {/* The Deeper Truth */}
           <section>
-            <h2 id="truth" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
+            <h2 id="truth" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Deeper Truth</h2>
-            <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
+            <div className="space-y-5 text-white/55 text-[14px] leading-[1.9] font-light">
               <p>Every AI motion model — diffusion, transformer, VAE — is trained with L2 loss. L2 loss penalizes the square of the error. A 1 mm tremor deviation is penalized 100× less than a 10 mm trajectory error. The model learns to suppress high-frequency, low-amplitude signals — exactly the signals that make human motion human.</p>
               <p>This is not a temporary AI limitation. It is a structural consequence of neural network optimization. The better AI gets at generating realistic motion, the more aggressively it smooths — and the more detectable it becomes.</p>
               <p><strong className="text-white/65">The AI Paradox:</strong> Every improvement in visual fidelity comes at the cost of spectral fidelity. AI faces an impossible tradeoff: look more real, or be more real. It cannot do both.</p>
@@ -237,10 +237,10 @@ Human—AI Gap: 0.3960`}
 
           {/* Run It */}
           <section>
-            <h2 id="run" className="text-white/65 text-[17px] md:text-[19px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
+            <h2 id="run" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
               onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Run It Yourself</h2>
             <div className="space-y-5">
-              <p className="text-white/40 text-[13px] leading-[1.9] font-light">The core engine is open source:</p>
+              <p className="text-white/55 text-[14px] leading-[1.9] font-light">The core engine is open source:</p>
               <div className="border p-5 transition-all duration-300 hover:border-[#90c8ff]/35"
                 style={{ borderColor: "rgba(144,200,255,0.1)", background: "rgba(2,4,10,0.6)" }}
                 onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
@@ -250,7 +250,7 @@ cd cli
 cargo run --release --bin myshape-demo -- --verbose`}
                 </pre>
               </div>
-              <p className="text-white/40 text-[13px] leading-[1.9] font-light">
+              <p className="text-white/55 text-[14px] leading-[1.9] font-light">
                 25 tests. Zero dependencies beyond the Rust standard library and audited crypto crates.
                 See the live dashboard at <a href="/developers" className="text-[#90c8ff]/50 hover:text-[#90c8ff] transition-colors">myshape.com/developers</a>.
               </p>
@@ -260,7 +260,7 @@ cargo run --release --bin myshape-demo -- --verbose`}
           {/* What We're Building */}
           <section>
             <h2 id="building" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug scroll-mt-28">What We're Building</h2>
-            <div className="space-y-5 text-white/40 text-[13px] leading-[1.9] font-light">
+            <div className="space-y-5 text-white/55 text-[14px] leading-[1.9] font-light">
               <p>MyShape is a presence verification protocol. Not proof of identity — proof of presence.</p>
               <p>World (the orb) proves you are a human. MyShape proves you are <em className="text-white/55">this</em> human — physically present, authorizing this specific operation.</p>
               <p>We are in active development. If you build in identity, security, agent infrastructure, or applied cryptography — we would like to talk.</p>
