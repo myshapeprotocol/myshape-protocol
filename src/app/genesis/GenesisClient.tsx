@@ -180,13 +180,13 @@ export default function GenesisClient() {
         <div className="fixed inset-0 z-0 pointer-events-none genesis-scan-bg" />
       )}
 
-      <div className="relative z-10 flex flex-col items-center justify-center text-center mt-0 md:mt-8 pb-4" style={{ flex: 1, gap: "clamp(3rem, 15vh, 10rem)" }}>
+      <div className="relative z-10 flex flex-col items-center justify-center text-center mt-0 md:mt-8 pb-4" style={{ flex: 1, gap: "clamp(1.5rem, 5vh, 3rem)" }}>
         <div className={`transition-all duration-1000 shrink-0 ${isActive ? "opacity-20 blur-sm scale-90" : "opacity-100"}`}>
           <h2 className="text-white text-xl md:text-4xl font-light tracking-tight mb-2 md:mb-3"
             style={{ textShadow: "0 0 40px rgba(144,200,255,0.3), 0 0 80px rgba(144,200,255,0.1)" }}>
             {stage === "success" ? "Genesis Confirmed." : stage === "error" ? "Uplink Interrupted." : "Initialize Genesis."}
           </h2>
-          <p className="text-[#90c8ff]/60 font-mono text-[8px] md:text-[10px] tracking-[0.3em] md:tracking-[0.6em] uppercase mb-4 md:mb-8"
+          <p className="text-[#90c8ff]/60 font-mono text-[8px] md:text-[10px] tracking-[0.3em] md:tracking-[0.6em] uppercase mb-2 md:mb-4"
             style={{ textShadow: "0 0 16px rgba(144,200,255,0.3)" }}>
             ESTABLISHING_IDENTITY_LAYER_PROTOCOL
           </p>
