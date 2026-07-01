@@ -13,7 +13,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -21,7 +21,7 @@ body {
   color: var(--foreground);
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   font-family: sans-serif;
   width: 100%;
   min-height: 100vh;
@@ -242,7 +242,7 @@ a, button, [role="button"], input, textarea, select {
 /* ── Mobile safety — prevent overflow on deep pages ── */
 @media (max-width: 768px) {
   main, .max-w-3xl, .max-w-4xl, .max-w-5xl, .max-w-6xl {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   table, pre, .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
