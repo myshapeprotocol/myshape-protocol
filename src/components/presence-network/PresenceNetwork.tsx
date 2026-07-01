@@ -62,11 +62,11 @@ function ConsoleRow({
   children?: React.ReactNode;
 }) {
   const accentColor = {
-    cyan:  { dot: "bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.5)]", val: "text-cyan-400/70", sub: "text-cyan-400/30" },
-    amber: { dot: "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.4)]", val: "text-amber-400/70", sub: "text-amber-400/30" },
-    green: { dot: "bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.4)]", val: "text-green-400/70", sub: "text-green-400/30" },
-    muted: { dot: "bg-white/10", val: "text-white/30", sub: "text-white/22" },
-    red:   { dot: "bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.4)]", val: "text-red-400/70", sub: "text-red-400/30" },
+    cyan:  { dot: "bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.5)]", val: "text-cyan-400/70 group-hover/row:text-cyan-300/90", sub: "text-cyan-400/30 group-hover/row:text-cyan-400/60" },
+    amber: { dot: "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.4)]", val: "text-amber-400/70 group-hover/row:text-amber-300/90", sub: "text-amber-400/30 group-hover/row:text-amber-400/60" },
+    green: { dot: "bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.4)]", val: "text-green-400/70 group-hover/row:text-green-300/90", sub: "text-green-400/30 group-hover/row:text-green-400/60" },
+    muted: { dot: "bg-white/10", val: "text-white/30 group-hover/row:text-white/55", sub: "text-white/22 group-hover/row:text-white/40" },
+    red:   { dot: "bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.4)]", val: "text-red-400/70 group-hover/row:text-red-300/90", sub: "text-red-400/30 group-hover/row:text-red-400/60" },
   };
   const c = accentColor[accent];
 
@@ -78,9 +78,9 @@ function ConsoleRow({
       {!pulse && <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${c.dot}`} />}
       <span className="text-cyan-400/25 group-hover/row:text-cyan-400/60 text-[13px] tracking-[0.1em] font-mono shrink-0 w-4 text-right transition-colors duration-300">{">"}</span>
       <span className="text-white/30 group-hover/row:text-white/55 text-[13px] tracking-[0.12em] uppercase font-mono shrink-0 w-[80px] transition-colors duration-300">{label}</span>
-      <span className={`text-[15px] tracking-[0.02em] font-mono font-light ${c.val} group-hover/row:brightness-125 transition-all duration-300`}>{value}</span>
+      <span className={`text-[15px] tracking-[0.02em] font-mono font-light transition-colors duration-300 ${c.val}`}>{value}</span>
       {children}
-      {sub && <span className={`text-[11px] tracking-[0.1em] font-mono ${c.sub} group-hover/row:brightness-150 transition-all duration-300`}>{sub}</span>}
+      {sub && <span className={`text-[11px] tracking-[0.1em] font-mono transition-colors duration-300 ${c.sub}`}>{sub}</span>}
     </div>
   );
 }
