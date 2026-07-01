@@ -132,7 +132,7 @@ export default function ProtocolManifesto() {
           opacity: tocShow ? 1 : 0, pointerEvents: tocShow ? "auto" : "none",
           transition: "opacity 0.3s", zIndex: 10,
         }}>
-          <div className="text-[9px] text-[#90c8ff]/40 mb-12 tracking-[0.5em] uppercase font-bold">ARCHIVE_INDEX</div>
+          <div className="text-[10px] text-[#90c8ff]/40 mb-12 tracking-[0.5em] uppercase font-bold">ARCHIVE_INDEX</div>
           <ul className="space-y-10 border-l border-white/5 pl-6">
             {sections.map(s => {
               const isActive = s.id === activeIndex;
@@ -146,7 +146,7 @@ export default function ProtocolManifesto() {
                       {s.id}
                     </div>
                     <div
-                      className={(isActive ? 'text-[#90c8ff] font-bold opacity-100' : 'text-white/20 group-hover:text-[#90c8ff]/80') + ' text-[11px] uppercase tracking-[0.2em] transition-all duration-300'}>
+                      className={(isActive ? 'text-[#90c8ff] font-bold opacity-100' : 'text-white/20 group-hover:text-[#90c8ff]/80') + ' text-[12px] uppercase tracking-[0.2em] transition-all duration-300'}>
                       {s.title}
                     </div>
                     {isActive && (

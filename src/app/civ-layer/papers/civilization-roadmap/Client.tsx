@@ -48,11 +48,11 @@ export default function Client() {
           opacity: tocShow ? 1 : 0, pointerEvents: tocShow ? "auto" : "none",
           transition: "opacity 0.3s", zIndex: 10,
         }}>
-          <div className="text-[9px] text-[#90c8ff]/40 mb-10 tracking-[0.4em] uppercase font-bold">PAPER_INDEX</div>
+          <div className="text-[10px] text-[#90c8ff]/40 mb-10 tracking-[0.4em] uppercase font-bold">PAPER_INDEX</div>
           <ul className="space-y-6">
             {sections.map((s) => {
               const isActive = s.anchor === activeId;
-              return (<li key={s.id} className="group cursor-pointer"><a href={"#" + s.anchor} className="block"><div className={`text-[10px] font-bold mb-1 transition-colors duration-300 ${isActive ? "text-[#90c8ff]" : "text-white/10 group-hover:text-[#90c8ff]"}`}>{s.id}</div><div className={`text-[11px] uppercase tracking-[0.2em] transition-all duration-300 ${isActive ? "text-[#90c8ff]" : "text-white/20 group-hover:text-[#90c8ff]"}`}>{s.title}</div></a></li>);
+              return (<li key={s.id} className="group cursor-pointer"><a href={"#" + s.anchor} className="block"><div className={`text-[10px] font-bold mb-1 transition-colors duration-300 ${isActive ? "text-[#90c8ff]" : "text-white/10 group-hover:text-[#90c8ff]"}`}>{s.id}</div><div className={`text-[12px] uppercase tracking-[0.2em] transition-all duration-300 ${isActive ? "text-[#90c8ff]" : "text-white/20 group-hover:text-[#90c8ff]"}`}>{s.title}</div></a></li>);
             })}
           </ul>
         </aside>
