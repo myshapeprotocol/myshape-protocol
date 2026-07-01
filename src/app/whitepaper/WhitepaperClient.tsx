@@ -189,6 +189,7 @@ This is not a product roadmap. It is the definition of a new protocol layer — 
 
 export default function WhitepaperClient() {
   const [activeId, setActiveId] = useState("proposition");
+  const [tocShow, setTocShow] = useState(true);
   const [genesisNodes, setGenesisNodes] = useState<{ total: number; remaining: number; nodes: Array<{ index: number; id: string; joined: string }> } | null>(null);
   const [prevTotal, setPrevTotal] = useState(0);
   const [nodePulse, setNodePulse] = useState(false);
@@ -248,6 +249,15 @@ export default function WhitepaperClient() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const check = () => {
+      const footer = document.querySelector("footer");
+      if (footer) setTocShow(footer.getBoundingClientRect().top > window.innerHeight * 0.5);
+    };
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -264,8 +274,15 @@ export default function WhitepaperClient() {
         </div>
       )}
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
+        {/* Spacer */}
+        <div className="md:w-56 shrink-0 hidden md:block" />
         {/* ── Sidebar Nav ── */}
-        <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
+        <aside className="hidden md:block" style={{
+          position: "fixed", top: "128px", width: "224px",
+          left: "max(24px, calc((100vw - 1152px) / 2 + 24px))",
+          opacity: tocShow ? 1 : 0, pointerEvents: tocShow ? "auto" : "none",
+          transition: "opacity 0.3s", zIndex: 10,
+        }}>
           <div className="text-[#90c8ff]/30 text-[9px] tracking-[0.5em] uppercase mb-10 font-mono italic">
             // ON_THIS_PAGE
           </div>
