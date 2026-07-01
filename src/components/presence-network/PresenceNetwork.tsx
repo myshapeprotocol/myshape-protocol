@@ -97,30 +97,46 @@ function EmptyTopology() {
         }} />
 
       {/* Central cluster */}
-      <div className="relative z-10 flex flex-col items-center gap-3">
-        {/* Pulse rings */}
-        <div className="relative w-16 h-16 flex items-center justify-center">
-          <div className="absolute inset-0 rounded-full border border-cyan-400/10 animate-ping opacity-30"
-            style={{ animationDuration: "3s" }} />
-          <div className="absolute inset-2 rounded-full border border-cyan-400/[0.06]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400/30 shadow-[0_0_10px_rgba(34,211,238,0.25)]" />
+      <div className="relative z-10 flex flex-col items-center gap-4">
+        {/* Multi-ring core */}
+        <div className="relative w-20 h-20 flex items-center justify-center">
+          {/* Outer ring - slow pulse */}
+          <div className="absolute inset-0 rounded-full border border-cyan-400/[0.06] animate-ping"
+            style={{ animationDuration: "4s", animationDelay: "0s" }} />
+          {/* Mid ring - reverse pulse */}
+          <div className="absolute inset-2 rounded-full border border-cyan-400/10 animate-ping opacity-70"
+            style={{ animationDuration: "3s", animationDelay: "1s" }} />
+          {/* Inner ring - static */}
+          <div className="absolute inset-4 rounded-full border border-cyan-400/[0.08]"
+            style={{ borderStyle: "dashed" }} />
+          {/* Orbit ring - rotating */}
+          <div className="absolute inset-[-4px] rounded-full border border-cyan-400/[0.04] animate-spin"
+            style={{ animationDuration: "12s", borderWidth: "0.5px", borderStyle: "dashed" }} />
+          {/* Core glow */}
+          <div className="absolute inset-6 rounded-full bg-cyan-400/[0.04] blur-[6px] animate-pulse"
+            style={{ animationDuration: "2s" }} />
+          {/* Center dot */}
+          <div className="relative w-2.5 h-2.5 rounded-full bg-cyan-400/40 shadow-[0_0_12px_rgba(34,211,238,0.3)] z-10">
+            <div className="absolute inset-0 rounded-full bg-cyan-400/60 animate-ping"
+              style={{ animationDuration: "2.5s" }} />
+          </div>
         </div>
 
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-1.5">
           <p className="text-white/22 text-[11px] tracking-[0.2em] uppercase font-mono">
-            TOPOLOGY_AWAITING_GENESIS
+            NETWORK_TOPOLOGY
           </p>
-          <p className="text-white/15 text-[10px] tracking-[0.15em] uppercase font-mono max-w-[260px] leading-relaxed">
+          <p className="text-white/15 text-[10px] tracking-[0.15em] uppercase font-mono max-w-[280px] leading-relaxed">
             mesh initializes when first node completes genesis ritual
           </p>
         </div>
       </div>
 
       {/* Bracket corners */}
-      <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-cyan-400/[0.06]" />
-      <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-cyan-400/[0.06]" />
-      <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-cyan-400/[0.06]" />
-      <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-cyan-400/[0.06]" />
+      <div className="absolute top-4 left-4 w-5 h-5 border-t border-l border-cyan-400/[0.06]" />
+      <div className="absolute top-4 right-4 w-5 h-5 border-t border-r border-cyan-400/[0.06]" />
+      <div className="absolute bottom-4 left-4 w-5 h-5 border-b border-l border-cyan-400/[0.06]" />
+      <div className="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-cyan-400/[0.06]" />
     </div>
   );
 }
@@ -392,10 +408,22 @@ export default function PresenceNetwork() {
             <div className="text-[10px] tracking-[0.25em] text-white/30 uppercase font-light">SCANS</div>
             <div className="text-[15px] font-mono text-cyan-400/70 tracking-[0.06em]">{data.totalScans}</div>
           </div>
-          <div className="absolute bottom-4 left-4 flex items-center gap-3 text-[7px] tracking-[0.12em] pointer-events-none">
-            <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-white/80 shadow-[0_0_3px_rgba(255,255,255,0.4)]" /><span className="text-white/25">GENESIS</span></div>
-            <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-cyan-400/50" /><span className="text-white/15">ACTIVE</span></div>
-            <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-purple-400/30" /><span className="text-white/10">AGENT</span></div>
+          <div className="absolute bottom-4 left-4 flex items-center gap-4 text-[9px] tracking-[0.12em] pointer-events-none">
+            <div className="flex items-center gap-1.5">
+              <span className="relative flex w-2 h-2">
+                <span className="absolute inset-0 rounded-full bg-white animate-ping" style={{ animationDuration: "2s" }} />
+                <span className="relative w-2 h-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.6)]" />
+              </span>
+              <span className="text-white/30">GENESIS</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-400/60 shadow-[0_0_4px_rgba(34,211,238,0.4)]" />
+              <span className="text-white/20">ACTIVE</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-purple-400/40 shadow-[0_0_3px_rgba(168,85,247,0.3)]" />
+              <span className="text-white/15">AGENT</span>
+            </div>
           </div>
         </div>
       ) : (
