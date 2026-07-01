@@ -87,7 +87,7 @@ export default function ProtocolStatus() {
   // Loading / empty state
   if (loading) {
     return (
-      <div className="w-full border border-white/[0.04] bg-gradient-to-b from-white/[0.005] to-transparent"
+      <div className="w-full border border-cyan-400/[0.10] bg-gradient-to-b from-white/[0.005] to-transparent"
         style={{ clipPath: "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)" }}>
         <div className="max-w-6xl mx-auto px-4 md:px-10 py-4 flex items-center justify-center gap-2">
           <span className="w-1.5 h-1.5 bg-cyan-400/40 rounded-full animate-pulse" />
@@ -99,7 +99,7 @@ export default function ProtocolStatus() {
 
   if (!status) {
     return (
-      <div className="w-full border border-red-400/[0.06] bg-gradient-to-b from-red-400/[0.005] to-transparent"
+      <div className="w-full border border-red-400/[0.12] bg-gradient-to-b from-red-400/[0.005] to-transparent"
         style={{ clipPath: "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)" }}>
         <div className="max-w-6xl mx-auto px-4 md:px-10 py-4 flex items-center justify-center">
           <span className="text-red-400/30 text-[10px] tracking-[0.15em] uppercase font-mono">PROTOCOL_SIGNAL_LOST</span>
@@ -112,10 +112,10 @@ export default function ProtocolStatus() {
   const daysUp = Math.max(1, Math.floor((Date.now() - new Date("2026-06-01").getTime()) / 86400000));
 
   return (
-    <div className="relative w-full border border-white/[0.04] bg-gradient-to-b from-white/[0.008] to-transparent"
+    <div className="relative w-full border border-cyan-400/[0.10] bg-gradient-to-b from-white/[0.008] to-transparent"
       style={{
         clipPath: "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)",
-        boxShadow: `inset 0 1px 0 rgba(34,211,238,${hasNodes ? 0.04 : 0.015})`,
+        boxShadow: `inset 0 1px 0 rgba(34,211,238,${hasNodes ? 0.08 : 0.03})`,
       }}>
       {/* CSS-driven scan line */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
