@@ -46,7 +46,7 @@ export default function ResearchContributionCTA() {
 
           <div className="relative overflow-hidden transition-all duration-700 p-6 md:p-8"
             style={{
-              border: `1px solid ${hover ? ICE}0.35)` : ICE}0.10)`,
+              border: `1px solid ${hover ? ICE + "0.35)" : ICE + "0.10)"}`,
               clipPath: "polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)",
               background: `radial-gradient(ellipse at 80% 20%, ${ICE}0.04) 0%, transparent 50%), radial-gradient(ellipse at 20% 80%, ${ICE}0.02) 0%, transparent 50%)`,
               boxShadow: hover ? `0 12px 32px -8px ${ICE}0.12)` : "none",
