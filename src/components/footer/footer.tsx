@@ -36,15 +36,14 @@ export default function ProtocolFooter() {
 
   // 注意：這裡的所有鏈接必須使用 href 鍵名
   const navGroups = [
-    { 
+    {
       title: "PROTOCOL",
       links: [
-        { name: "PROTOCOL_INDEX", href: "/protocol" },
-        { name: "ARCHITECTURE", href: "/architecture" },
+        { name: "OVERVIEW", href: "/protocol" },
         { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
         { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" },
-        { name: "CONTINUITY_NETWORK", href: "/continuity" },
+        { name: "CONTINUITY", href: "/continuity" },
         { name: "EVIDENCE", href: "/evidence" }
       ]
     },
@@ -53,8 +52,8 @@ export default function ProtocolFooter() {
       links: [
         { name: "DEVELOPERS", href: "/developers" },
         { name: "DASHBOARD", href: "/dashboard" },
+        { name: "NODE_HANDSHAKE", href: "/handshake" },
         { name: "MOTION_DEMO", href: "/motion-demo" },
-        { name: "RESEARCH_APPLY", href: "/research/apply" },
         { name: "AI_AGENT", href: "/agent" }
       ]
     },
@@ -62,12 +61,10 @@ export default function ProtocolFooter() {
       title: "PAPERS",
       links: [
         { name: "WHITEPAPER", href: "/whitepaper" },
-        { name: "TECHNICAL_SPEC", href: "/papers/technical-spec" },
+        { name: "TECH_SPEC", href: "/papers/technical-spec" },
         { name: "THREAT_MODEL", href: "/papers/threat-model" },
-        { name: "GENESIS_100_MANIFESTO", href: "/genesis-100.html" },
-        { name: "ARCHITECTURE", href: "/papers/protocol-architecture" },
-        { name: "BLOG", href: "/blog" },
-        { name: "ALL_PAPERS", href: "/papers" }
+        { name: "PROTOCOL_ARCH", href: "/papers/protocol-architecture" },
+        { name: "BLOG", href: "/blog" }
       ]
     },
     {
