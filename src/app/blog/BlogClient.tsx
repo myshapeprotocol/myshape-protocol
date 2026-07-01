@@ -18,16 +18,12 @@ const SECTIONS = [
 
 export default function BlogClient() {
   const [active, setActive] = useState("experiment");
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY + 120;
       for (let i = SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(SECTIONS[i].id);
-        if (el && el.offsetTop <= scrollY) {
-          setActive(SECTIONS[i].id);
-          break;
-        }
+        if (el && el.offsetTop <= scrollY) { setActive(SECTIONS[i].id); break; }
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -45,9 +41,9 @@ export default function BlogClient() {
       <ProtocolHeader />
       <BackgroundParticles />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24 md:items-start">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
         {/* ── Desktop TOC: sidebar ── */}
-        <aside className="md:w-56 shrink-0 hidden md:block" style={{ position: "sticky", top: "35vh" }}>
+        <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
           <div className="text-[#90c8ff]/30 text-[9px] tracking-[0.5em] uppercase mb-8 font-mono italic">// ON_THIS_PAGE</div>
           <ul className="space-y-6 border-l" style={{ borderColor: "rgba(144,200,255,0.08)" }}>
             {SECTIONS.map(s => {

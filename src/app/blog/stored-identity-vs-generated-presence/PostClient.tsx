@@ -125,9 +125,9 @@ export default function PostClient() {
       <ProtocolHeader />
       <BackgroundParticles />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24 md:items-start">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
         {/* TOC sidebar */}
-        <aside className="md:w-56 shrink-0 hidden md:block" style={{ position: "sticky", top: "35vh" }}>
+        <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
           <div className="text-[#90c8ff]/30 text-[9px] tracking-[0.5em] uppercase mb-8 font-mono italic">// ON_THIS_PAGE</div>
           <ul className="space-y-6 border-l" style={{ borderColor: "rgba(144,200,255,0.08)" }}>
             {TOC_ITEMS.map(s => {

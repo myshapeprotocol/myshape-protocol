@@ -263,9 +263,9 @@ export default function WhitepaperClient() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#90c8ff]/[0.04] to-transparent" />
         </div>
       )}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24 md:items-start">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
         {/* ── Sidebar Nav ── */}
-        <aside className="md:w-56 shrink-0 hidden md:block" style={{ position: "sticky", top: "35vh" }}>
+        <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
           <div className="text-[#90c8ff]/30 text-[9px] tracking-[0.5em] uppercase mb-10 font-mono italic">
             // ON_THIS_PAGE
           </div>
