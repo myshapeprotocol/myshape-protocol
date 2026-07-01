@@ -18,6 +18,8 @@ const SECTIONS = [
 
 export default function BlogClient() {
   const [active, setActive] = useState("experiment");
+  const [tocShow, setTocShow] = useState(true);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY + 120;
@@ -25,6 +27,8 @@ export default function BlogClient() {
         const el = document.getElementById(SECTIONS[i].id);
         if (el && el.offsetTop <= scrollY) { setActive(SECTIONS[i].id); break; }
       }
+      const footer = document.querySelector("footer");
+      if (footer) setTocShow(footer.getBoundingClientRect().top > window.innerHeight * 0.5);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -42,8 +46,19 @@ export default function BlogClient() {
       <BackgroundParticles />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
+        {/* Spacer — keeps article position when TOC is fixed */}
+        <div className="md:w-56 shrink-0 hidden md:block" />
         {/* ── Desktop TOC: sidebar ── */}
-        <aside className="md:w-56 shrink-0 h-fit md:sticky md:top-32 hidden md:block">
+        <aside className="hidden md:block" style={{
+          position: "fixed",
+          top: "128px",
+          left: "max(24px, calc((100vw - 1024px) / 2 + 24px))",
+          width: "224px",
+          opacity: tocShow ? 1 : 0,
+          pointerEvents: tocShow ? "auto" : "none",
+          transition: "opacity 0.3s",
+          zIndex: 10,
+        }}>
           <div className="text-[#90c8ff]/30 text-[9px] tracking-[0.5em] uppercase mb-8 font-mono italic">// ON_THIS_PAGE</div>
           <ul className="space-y-6 border-l" style={{ borderColor: "rgba(144,200,255,0.08)" }}>
             {SECTIONS.map(s => {
