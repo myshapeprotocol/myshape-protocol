@@ -13,12 +13,31 @@ interface HandshakeResponse {
   retry_after_s?: number;
 }
 
+const PROTOCOL_STAGES = [
+  "Initializing local entropy sandbox...",
+  "Establishing cryptographic boundary...",
+  "Synchronizing with Genesis Cohort...",
+  "Verifying network topology integrity...",
+  "Handshake complete. You are now a verified node.",
+];
+
 export default function GenesisNodeInit({ onClose }: { onClose: () => void }) {
   const [stage, setStage] = useState<Stage>("input");
   const [email, setEmail] = useState("");
   const [result, setResult] = useState<HandshakeResponse | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
+  const [protocolStep, setProtocolStep] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Cycle through protocol stage messages during initialization
+  useEffect(() => {
+    if (stage !== "initializing") return;
+    setProtocolStep(0);
+    const timer = setInterval(() => {
+      setProtocolStep(p => Math.min(p + 1, PROTOCOL_STAGES.length - 1));
+    }, 1200);
+    return () => clearInterval(timer);
+  }, [stage]);
 
   const handleHandshake = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,19 +135,25 @@ export default function GenesisNodeInit({ onClose }: { onClose: () => void }) {
             <div className="flex flex-col items-center gap-4 py-6">
               <div className="relative w-10 h-10">
                 <div className="absolute inset-0 rounded-full border border-[#90c8ff]/20 animate-spin" style={{ borderTopColor: "rgba(144,200,255,0.7)" }} />
+                <div className="absolute inset-0 rounded-full border border-[#90c8ff]/[0.04] animate-ping opacity-50" style={{ animationDuration: "2s" }} />
               </div>
-              <div className="text-center space-y-1">
+              <div className="text-center space-y-2">
                 <p className="text-[#90c8ff]/60 text-[10px] tracking-[0.3em] uppercase font-mono animate-pulse">
                   PROVISIONING_ACCESS_TOKEN...
                 </p>
-                <p className="text-white/15 text-[9px] tracking-[0.1em] font-mono">
-                  Establishing protocol handshake
-                </p>
+                {PROTOCOL_STAGES.slice(0, protocolStep + 1).map((msg, i) => (
+                  <p key={i} className="text-white/20 text-[9px] tracking-[0.08em] font-mono transition-all duration-500"
+                    style={{ opacity: i === protocolStep ? 0.5 : 0.2 }}>
+                    {msg}
+                  </p>
+                ))}
               </div>
             </div>
           )}
 
-          {stage === "done" && result && (
+          {stage === "done" && result && (() => {
+            const identityHash = result.node_token!.slice(8, 24).split("").reduce((h, c) => h + c.charCodeAt(0).toString(16).slice(-1), "").slice(0, 16).toUpperCase();
+            return (
             <div className="space-y-4">
               <div className="flex flex-col items-center gap-3 py-2">
                 <div className="relative w-12 h-12 flex items-center justify-center">
@@ -145,6 +170,10 @@ export default function GenesisNodeInit({ onClose }: { onClose: () => void }) {
                   <span className="text-[#90c8ff]/60 text-[9px] tracking-[0.05em] font-mono">{result.node_token!.slice(0, 20)}...</span>
                 </div>
                 <div className="flex justify-between items-center">
+                  <span className="text-white/30 text-[9px] tracking-[0.15em] uppercase font-mono">IDENTITY_HASH</span>
+                  <span className="text-[#90c8ff]/45 text-[9px] tracking-[0.1em] font-mono">{identityHash}</span>
+                </div>
+                <div className="flex justify-between items-center">
                   <span className="text-white/30 text-[9px] tracking-[0.15em] uppercase font-mono">INITIALIZED</span>
                   <span className="text-white/40 text-[9px] tracking-[0.05em] font-mono">{result.initialized_at}</span>
                 </div>
@@ -158,11 +187,10 @@ export default function GenesisNodeInit({ onClose }: { onClose: () => void }) {
                 </button>
               </div>
               <p className="text-white/20 text-[10px] leading-relaxed text-center font-light">
-                Use in <span className="text-white/35 font-mono">Authorization: Bearer</span> header.
-                Welcome to the protocol mesh.
+                Handshake complete. You are now a verified node.
               </p>
             </div>
-          )}
+          )})()}
 
           {stage === "error" && (
             <div className="space-y-4 text-center">
