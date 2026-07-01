@@ -68,12 +68,14 @@ export default function ResearchContributionCTA() {
           className="block group"
         >
           <div
-            className="relative overflow-hidden transition-all duration-700 p-6 md:p-8"
+            className="relative overflow-hidden transition-all duration-700 p-6 md:p-8 group-hover:shadow-[0_12px_32px_-8px_rgba(144,200,255,0.12)]"
             style={{
-              border: "1px solid rgba(144,200,255,0.08)",
-              borderRadius: "12px",
+              border: "1px solid rgba(144,200,255,0.10)",
+              clipPath: "polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)",
               background: "radial-gradient(ellipse at 70% 30%, rgba(144,200,255,0.03) 0%, transparent 60%)",
             }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.10)"; }}
           >
             {/* Top label */}
             <div className="flex items-center gap-3 mb-4">
@@ -81,12 +83,8 @@ export default function ResearchContributionCTA() {
                 <div
                   className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
                   style={{
-                    background: meetsThreshold
-                      ? "rgba(34,211,238,0.8)"
-                      : "rgba(144,200,255,0.5)",
-                    boxShadow: meetsThreshold
-                      ? "0 0 8px rgba(34,211,238,0.5)"
-                      : "0 0 6px rgba(144,200,255,0.3)",
+                    background: meetsThreshold ? "rgba(144,200,255,0.8)" : "rgba(144,200,255,0.5)",
+                    boxShadow: meetsThreshold ? "0 0 8px rgba(144,200,255,0.5)" : "0 0 6px rgba(144,200,255,0.3)",
                   }}
                 />
                 <span className="text-white/20 text-[8px] tracking-[0.3em] uppercase font-mono">
@@ -95,7 +93,7 @@ export default function ResearchContributionCTA() {
               </div>
               {/* Live counter */}
               {count > 0 && (
-                <span className="text-cyan-400/40 text-[9px] font-mono tracking-[0.1em] ml-auto">
+                <span className="text-[#90c8ff]/40 text-[9px] font-mono tracking-[0.1em] ml-auto">
                   {count} <span className="text-white/15">contributions</span>
                 </span>
               )}
@@ -121,7 +119,7 @@ export default function ResearchContributionCTA() {
                   <span className="text-white/15">
                     CALIBRATION THRESHOLD
                   </span>
-                  <span className="text-cyan-400/30">
+                  <span className="text-[#90c8ff]/30">
                     {progressPct}% — {stats?.sessions_needed ?? 300} to go
                   </span>
                 </div>
@@ -130,9 +128,8 @@ export default function ResearchContributionCTA() {
                     className="h-full rounded-full transition-all duration-1000 ease-out"
                     style={{
                       width: `${progressPct}%`,
-                      background:
-                        "linear-gradient(90deg, rgba(34,211,238,0.3), rgba(34,211,238,0.6))",
-                      boxShadow: "0 0 8px rgba(34,211,238,0.2)",
+                      background: "linear-gradient(90deg, rgba(144,200,255,0.3), rgba(144,200,255,0.6))",
+                      boxShadow: "0 0 8px rgba(144,200,255,0.2)",
                     }}
                   />
                 </div>
@@ -140,7 +137,7 @@ export default function ResearchContributionCTA() {
             )}
 
             {/* CTA line */}
-            <div className="flex items-center gap-2 text-cyan-400/30 group-hover:text-cyan-400/60 group-hover:gap-3 transition-all duration-500">
+            <div className="flex items-center gap-2 text-[#90c8ff]/30 group-hover:text-[#90c8ff]/60 group-hover:gap-3 transition-all duration-500">
               <span className="text-[9px] tracking-[0.2em] uppercase font-mono">
                 Apply for Early Access →
               </span>
