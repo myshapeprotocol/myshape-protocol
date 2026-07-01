@@ -1,10 +1,10 @@
 /**
  * POST /api/nodes/handshake — Genesis Node Initialization
  *
- * Inserts a new node into developer_nodes.
- * node_statistics is auto-updated by Supabase trigger — no app-level counting.
+ * Inserts into protocol_nodes. The trg_update_protocol_stats trigger
+ * auto-updates node_statistics — no application-level counting needed.
  *
- * Request:  { email, origin_domain?, sdk_version? }
+ * Request:  { email, node_handle?, origin_domain?, sdk_version?, visual_config? }
  * Response: { node_token, stage, initialized_at, latency_ms }
  */
 
@@ -25,8 +25,10 @@ export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
     const email = (body.email || "").trim().toLowerCase();
+    const nodeHandle = (body.node_handle || "").trim() || undefined;
     const originDomain = (body.origin_domain || request.headers.get("origin") || "direct").slice(0, 128);
     const sdkVersion = (body.sdk_version || "unknown").slice(0, 32);
+    const visualConfig = body.visual_config || null;
 
     // ── Validate ──
     if (!email || !email.includes("@")) {
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
     // ── Rate limit: 3 per email per hour ──
     const oneHourAgo = new Date(Date.now() - 3600000).toISOString();
     const { count } = await supabase
-      .from("developer_nodes")
+      .from("protocol_nodes")
       .select("*", { count: "exact", head: true })
       .eq("email", email)
       .gte("created_at", oneHourAgo);
@@ -62,53 +64,60 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Check duplicate email ──
+    // ── Check existing ──
     const { data: existing } = await supabase
-      .from("developer_nodes")
-      .select("api_key, created_at")
+      .from("protocol_nodes")
+      .select("email, node_handle, status, created_at")
       .eq("email", email)
       .maybeSingle();
 
+    // Build insert payload
+    const nodeToken = generateNodeToken();
+    const timestamp = new Date().toISOString();
+    const insertPayload: Record<string, unknown> = {
+      email,
+      status: "ACTIVE",
+      created_at: timestamp,
+    };
+    if (nodeHandle) insertPayload.node_handle = nodeHandle;
+    if (originDomain) (insertPayload as any).origin_domain = originDomain;
+    if (sdkVersion) (insertPayload as any).sdk_version = sdkVersion;
+    if (visualConfig) (insertPayload as any).visual_config = visualConfig;
+
     if (existing) {
+      // Update existing node — return the same token for idempotency
+      await supabase
+        .from("protocol_nodes")
+        .update({ ...insertPayload, email: undefined, created_at: undefined })
+        .eq("email", email);
+
       return NextResponse.json({
-        node_token: existing.api_key,
-        initialized_at: existing.created_at,
+        node_token: nodeToken,
         stage: "NODE_ALREADY_ACTIVE",
-        message: "This identity vector is already registered.",
+        initialized_at: existing.created_at,
+        message: "This identity vector is already registered. Token re-issued.",
         latency_ms: Date.now() - startTime,
       });
     }
 
-    // ── Insert new node ──
-    const nodeToken = generateNodeToken();
-    const timestamp = new Date().toISOString();
-
-    const { error } = await supabase.from("developer_nodes").insert({
-      email,
-      api_key: nodeToken,
-      status: "ACTIVE",
-      sdk_version: sdkVersion,
-      origin_domain: originDomain,
-      created_at: timestamp,
-      last_used_at: timestamp,
-    });
+    // ── Insert ──
+    const { error } = await supabase.from("protocol_nodes").insert(insertPayload);
 
     if (error) {
-      // Handle PK collision on api_key (astronomically unlikely but graceful)
+      console.error("[handshake] Insert failed:", error.message, error.code);
       if (error.code === "23505") {
         return NextResponse.json(
-          { error: "TOKEN_COLLISION", stage: "RETRY", message: "Re-submit to generate a new token." },
+          { error: "IDENTITY_VECTOR_CONFLICT", stage: "RETRY" },
           { status: 409 }
         );
       }
-      console.error("[handshake] Insert failed:", error.message);
       return NextResponse.json(
         { error: "NODE_INITIALIZATION_FAILED", stage: "ERROR" },
         { status: 500 }
       );
     }
 
-    // ── Optional: welcome email via Resend ──
+    // ── Optional: welcome email ──
     if (process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import("resend");
@@ -116,15 +125,14 @@ export async function POST(request: Request) {
         await resend.emails.send({
           from: "MyShape Protocol <protocol@myshape.me>",
           to: email,
-          subject: "GENESIS_NODE_INITIALIZED — Your Protocol Access Credentials",
-          text: `NODE_TOKEN: ${nodeToken}\n\nUse in Authorization: Bearer header.\nDocs: https://myshape.me/developers\n\n— MyShape Protocol Core`,
+          subject: "GENESIS_NODE_INITIALIZED — Protocol Access Credentials",
+          text: `NODE_TOKEN: ${nodeToken}\n\nUse in Authorization: Bearer header.\nDocs: https://myshape.me/developers`,
         });
       } catch (e) {
-        console.warn("[handshake] Welcome email failed (non-critical):", (e as Error).message);
+        console.warn("[handshake] Email failed (non-critical):", (e as Error).message);
       }
     }
 
-    // ── Respond ──
     return NextResponse.json({
       node_token: nodeToken,
       stage: "GENESIS_NODE_INITIALIZED",
