@@ -38,8 +38,8 @@ export default function ProtocolStatus() {
   }, []);
 
   const wrap = (children: React.ReactNode, border?: string) => (
-    <div className="w-full transition-all duration-700" style={{ border: border ? `1px solid ${border}` : `1px solid ${BORDER}`, clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)" }}>
-      <div className="max-w-6xl mx-auto px-3 md:px-6 py-2 flex items-center justify-center">{children}</div>
+    <div className="mx-auto w-fit transition-all duration-700" style={{ border: border ? `1px solid ${border}` : `1px solid ${BORDER}`, clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)" }}>
+      <div className="px-3 md:px-5 py-1.5 flex items-center justify-center">{children}</div>
     </div>
   );
 
@@ -50,7 +50,7 @@ export default function ProtocolStatus() {
   const daysUp = Math.max(1, Math.floor((Date.now() - new Date("2026-06-01").getTime()) / 86400000));
 
   return (
-    <div className="relative w-full transition-all duration-700"
+    <div className="relative mx-auto w-fit transition-all duration-700"
       style={{
         border: `1px solid ${hover ? BORDER_HOVER : BORDER}`,
         clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)",
@@ -69,29 +69,26 @@ export default function ProtocolStatus() {
         <div ref={scanRef} className="absolute w-full h-px" style={{ background: `linear-gradient(90deg, transparent, ${ICE}0.02) 50%, transparent)` }} />
       </div>
 
-      <div className="max-w-6xl mx-auto px-3 md:px-6 py-2">
-        <div className="flex flex-wrap items-center justify-center md:justify-between gap-x-4 gap-y-1">
-          <div className="flex items-center gap-3">
-            <Stat label="PROTOCOL" value={status.status} color={hasNodes ? "green" : "cyan"} pulse={hasNodes} freq={450} />
-            <span className="text-white/[0.05] select-none">·</span>
-            <Stat label="GENESIS" value={<>{status.genesis_nodes}<span className="text-white/15">/100</span></>} color={status.cohort_sealed ? "green" : status.genesis_nodes > 0 ? "amber" : "muted"} pulse={!status.cohort_sealed && status.genesis_nodes > 0} freq={500} />
-            <span className="text-white/[0.05] select-none">·</span>
-            <Stat label="NODES" value={<>{status.active_humans}<span className="text-white/20">h</span> <span className="text-white/[0.06]">+</span> {status.agents}<span className="text-white/20">a</span></>} color={hasNodes ? "cyan" : "muted"} pulse={hasNodes} freq={550} />
-          </div>
-          <div className="flex items-center gap-3">
-            {status.last_scan ? (
-              <>
-                <div className="flex items-center gap-1.5 cursor-default group/s" onMouseEnter={() => playTick(400, "sine", 0.03, 0.008)}>
-                  <span className="text-white/18 group-hover/s:text-white/40 text-[9px] tracking-[0.1em] uppercase font-mono transition-colors duration-300">LAST_SCAN</span>
-                  <span className="text-white/45 group-hover/s:text-white/75 text-[9px] tracking-[0.05em] font-mono transition-colors duration-300">{status.last_scan}</span>
-                </div>
-                <span className="text-white/[0.04] select-none">|</span>
-              </>
-            ) : <span className="text-white/[0.03] select-none hidden md:inline">—</span>}
-            <div className="flex items-center gap-1.5 cursor-default group/s" onMouseEnter={() => playTick(350, "sine", 0.03, 0.008)}>
-              <span className="text-white/18 group-hover/s:text-white/40 text-[9px] tracking-[0.12em] uppercase font-mono transition-colors duration-300">T+{daysUp}d</span>
-              <span className={`text-[9px] tracking-[0.08em] uppercase font-mono transition-colors duration-300 ${hasNodes ? "text-[#90c8ff]/40 group-hover/s:text-[#90c8ff]/70" : "text-white/18 group-hover/s:text-white/40"}`}>{hasNodes ? "MESH_ACTIVE" : "PRE_GENESIS"}</span>
-            </div>
+      <div className="px-3 md:px-5 py-1.5">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
+          <Stat label="PROTOCOL" value={status.status} color={hasNodes ? "green" : "cyan"} pulse={hasNodes} freq={450} />
+          <span className="text-white/[0.06] select-none text-[10px]">·</span>
+          <Stat label="GENESIS" value={<>{status.genesis_nodes}<span className="text-white/15">/100</span></>} color={status.cohort_sealed ? "green" : status.genesis_nodes > 0 ? "amber" : "muted"} pulse={!status.cohort_sealed && status.genesis_nodes > 0} freq={500} />
+          <span className="text-white/[0.06] select-none text-[10px]">·</span>
+          <Stat label="NODES" value={<>{status.active_humans}<span className="text-white/20">h</span> <span className="text-white/[0.06]">+</span> {status.agents}<span className="text-white/20">a</span></>} color={hasNodes ? "cyan" : "muted"} pulse={hasNodes} freq={550} />
+          {status.last_scan && (
+            <>
+              <span className="text-white/[0.06] select-none text-[10px]">·</span>
+              <div className="flex items-center gap-1 cursor-default group/s" onMouseEnter={() => playTick(400, "sine", 0.03, 0.008)}>
+                <span className="text-white/18 group-hover/s:text-white/40 text-[9px] tracking-[0.1em] uppercase font-mono transition-colors duration-300">LAST</span>
+                <span className="text-white/45 group-hover/s:text-white/75 text-[9px] tracking-[0.05em] font-mono transition-colors duration-300">{status.last_scan}</span>
+              </div>
+            </>
+          )}
+          <span className="text-white/[0.06] select-none text-[10px]">·</span>
+          <div className="flex items-center gap-1 cursor-default group/s" onMouseEnter={() => playTick(350, "sine", 0.03, 0.008)}>
+            <span className="text-white/18 group-hover/s:text-white/40 text-[9px] tracking-[0.1em] uppercase font-mono transition-colors duration-300">T+{daysUp}d</span>
+            <span className={`text-[9px] tracking-[0.08em] uppercase font-mono transition-colors duration-300 ${hasNodes ? "text-[#90c8ff]/40 group-hover/s:text-[#90c8ff]/70" : "text-white/18 group-hover/s:text-white/40"}`}>{hasNodes ? "MESH_ACTIVE" : "PRE_GENESIS"}</span>
           </div>
         </div>
       </div>
