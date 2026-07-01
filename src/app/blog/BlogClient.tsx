@@ -59,15 +59,22 @@ export default function BlogClient() {
                     onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
                     className="block text-left w-full transition-all duration-300"
                     style={{
-                      borderLeft: isActive ? "2px solid rgba(144,200,255,0.6)" : "2px solid transparent",
+                      borderLeft: isActive ? "2px solid rgba(144,200,255,0.8)" : "2px solid transparent",
                       marginLeft: "-1px",
-                      paddingLeft: "20px",
+                      paddingLeft: isActive ? "20px" : "20px",
+                      background: isActive ? "linear-gradient(90deg, rgba(144,200,255,0.06), transparent)" : "transparent",
                     }}
                   >
-                    <div className="text-[11px] tracking-[0.15em] uppercase transition-colors duration-300"
-                      style={{ color: isActive ? "rgba(144,200,255,0.9)" : "rgba(255,255,255,0.2)" }}>
-                      {s.label}
-                    </div>
+                    <span className="flex items-center gap-2">
+                      <span className={`w-1 h-1 rounded-full shrink-0 transition-all duration-300 ${isActive ? "bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.6)] scale-100" : "bg-transparent scale-0"}`} />
+                      <span className="text-[11px] tracking-[0.15em] uppercase transition-all duration-300"
+                        style={{
+                          color: isActive ? "rgba(144,200,255,0.95)" : "rgba(255,255,255,0.2)",
+                          textShadow: isActive ? "0 0 12px rgba(144,200,255,0.4)" : "none",
+                        }}>
+                        {s.label}
+                      </span>
+                    </span>
                   </button>
                 </li>
               );
