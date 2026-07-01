@@ -200,7 +200,7 @@ export default function GenesisClient() {
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}>
               <div className="mb-4 md:mb-8 flex items-center gap-3 justify-center">
                 <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#90c8ff]/30" />
-                <span className="text-[#90c8ff]/20 font-mono text-[7px] tracking-[0.5em] uppercase">Genesis_Protocol</span>
+                <span className="text-[#90c8ff]/40 font-mono text-[9px] tracking-[0.5em] uppercase">Genesis_Protocol</span>
                 <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#90c8ff]/30" />
               </div>
               <form onSubmit={handleCommence} className="flex flex-col items-center space-y-3 md:space-y-5">
@@ -208,7 +208,7 @@ export default function GenesisClient() {
                 <div className="flex items-center justify-center gap-2">
                   <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#90c8ff]/30" />
                   <div className="cohort-marquee">
-                    <span className="cohort-marquee-inner text-[#90c8ff]/70 font-mono text-[8px] tracking-[0.25em] uppercase">
+                    <span className="cohort-marquee-inner text-[#90c8ff]/80 font-mono text-[10px] tracking-[0.25em] uppercase">
                       ◈ Genesis_Cohort — First 100 only&nbsp;&nbsp;&nbsp;◈ Genesis_Cohort — First 100 only&nbsp;&nbsp;&nbsp;
                     </span>
                   </div>
@@ -256,7 +256,7 @@ export default function GenesisClient() {
                           }
                         }}
                       />
-                      <span className="text-[#90c8ff]/40 text-[8px] md:text-[9px] tracking-[0.12em] md:tracking-[0.18em] uppercase font-light">Recommended: Trustless on-chain binding</span>
+                      <span className="text-[#90c8ff]/55 text-[10px] md:text-[11px] tracking-[0.12em] uppercase font-light">Recommended: Trustless on-chain binding</span>
                     </>
                   )}
                 </div>
@@ -264,7 +264,7 @@ export default function GenesisClient() {
                 {/* ── 分隔（桌面端专属）── */}
                 <div className="hidden md:flex items-center gap-3 w-full max-w-[260px]">
                   <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-                  <span className="text-white/25 text-[10px] tracking-[0.3em] uppercase font-light">or</span>
+                  <span className="text-white/40 text-[12px] tracking-[0.3em] uppercase font-light">or</span>
                   <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
                 </div>
 
@@ -312,7 +312,7 @@ export default function GenesisClient() {
                 </div>
               {/* ── 备选路径：Legacy Email（桌面端专属）── */}
                 <div className="hidden md:flex flex-col items-center space-y-2">
-                  <span className="text-white/35 text-[10px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
+                  <span className="text-white/50 text-[11px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
                   <div className="relative flex items-center gap-2">
                     <div className="relative group genesis-terminal-glow flex-1"
                       onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
@@ -343,7 +343,7 @@ export default function GenesisClient() {
                       </div>
                     </div>
                   </div>
-                  <span className="text-white/12 text-[7px] tracking-[0.1em]">                  <span className="text-white/18 text-[8px] tracking-[0.1em]">For restricted environments only</span></span>
+                  <span className="text-white/25 text-[9px] tracking-[0.1em]">                  <span className="text-white/18 text-[8px] tracking-[0.1em]">For restricted environments only</span></span>
                 </div>
 
                 </form>
@@ -524,7 +524,7 @@ export default function GenesisClient() {
 
       {/* 桌面端专属：协议参考信息 */}
       <div className={`fixed bottom-6 left-4 md:bottom-12 md:left-12 transition-opacity duration-1000 hidden md:block ${stage !== "input" ? "opacity-0" : "opacity-20"}`}>
-        <div className="text-[7px] font-mono text-white tracking-[0.6em] leading-relaxed uppercase text-left">
+        <div className="text-[9px] font-mono text-white/30 tracking-[0.6em] leading-relaxed uppercase text-left">
           Protocol_Ref: 005_GEN <br />
           Node: Origin_Verified <br />
           Status: {stage === "input" ? "STANDBY" : stage.toUpperCase()}
