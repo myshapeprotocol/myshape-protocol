@@ -17,13 +17,13 @@ export default function HowItWorks() {
           <div className="max-w-[650px]">
             <span className="text-[9px] tracking-[0.6em] text-white/20 block mb-4 uppercase">HOW IT WORKS</span>
             <h2 className="text-[clamp(2rem,5vw,3.2rem)] font-extralight -tracking-[0.02em] leading-[1.1] text-white m-0">
-              The protocol behind <span className="text-cyan-400/90">your identity.</span>
+              The protocol behind <span className="text-[#90c8ff]/90">your identity.</span>
             </h2>
             <p className="text-[1.2rem] font-light text-white/85 mt-6 max-w-[600px] leading-[1.6]">
               A motion-native pipeline that turns how you move into a zero-knowledge identity.
             </p>
           </div>
-          <div className="text-[0.9rem] text-cyan-400/40 text-right border-r border-cyan-400/20 pr-6 leading-[1.6] font-mono mb-[5px]">
+          <div className="text-[0.9rem] text-[#90c8ff]/40 text-right border-r border-[#90c8ff]/20 pr-6 leading-[1.6] font-mono mb-[5px]">
             SYSTEM_PROCESS_V2.0<br />// PIPELINE: ACTIVE
           </div>
         </div>
@@ -42,7 +42,7 @@ export default function HowItWorks() {
               <div className="w-3 h-3 bg-white rounded-full mb-12 z-[2] relative animate-[pulseDot_2s_infinite]"
                 style={{ animationDelay: `${i * 0.5}s` }} />
               <div className="text-motion-wrapper">
-                <span className="text-item index-num font-mono text-[0.8rem] text-cyan-400/50">0{i + 1}</span>
+                <span className="text-item index-num font-mono text-[0.8rem] text-[#90c8ff]/50">0{i + 1}</span>
                 <h3 className="text-item text-[1.2rem] font-extralight text-white my-4">{s.title}</h3>
                 <p className="text-item text-[0.95rem] text-white/60 leading-[1.7] font-light">{s.desc}</p>
               </div>

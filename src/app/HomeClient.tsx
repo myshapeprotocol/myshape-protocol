@@ -95,7 +95,7 @@ export default function HomeClient() {
       <div className="fixed inset-0 z-[999] pointer-events-none hidden md:block">
         <div className="absolute top-10 right-10 pointer-events-auto">
           <div className="flex items-center gap-2">
-             <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_cyan]" />
+             <div className="w-1 h-1 bg-[#90c8ff] rounded-full animate-pulse shadow-[0_0_8px_#90c8ff]" />
              <span className="font-mono text-[9px] tracking-[0.3em] text-white/60 uppercase">LIVE_FEED</span>
           </div>
         </div>
@@ -108,21 +108,21 @@ export default function HomeClient() {
               </div>
             )}
             {isGenesisUser ? (
-              <div className="pr-3 border-r border-cyan-400/20 text-[7px] text-cyan-300/30 space-y-1 tracking-[0.1em] font-mono">
+              <div className="pr-3 border-r border-[#90c8ff]/20 text-[7px] text-[#90c8ff]/30 space-y-1 tracking-[0.1em] font-mono">
                 <p>STATUS: {activeUser ? "GENESIS_NODE" : "ACTIVE"}</p>
                 <p className="opacity-50">HASH: {clientHash}</p>
               </div>
             ) : activeUser ? (
               <>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[7px] tracking-[0.3em] text-cyan-500/50 uppercase font-light">LAST_NODE_INBOUND</span>
-                  <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_cyan]" />
+                  <span className="text-[7px] tracking-[0.3em] text-[#90c8ff]/50 uppercase font-light">LAST_NODE_INBOUND</span>
+                  <div className="w-1 h-1 bg-[#90c8ff] rounded-full animate-pulse shadow-[0_0_8px_#90c8ff]" />
                 </div>
                 <div className="text-[12px] font-extralight text-white/90 tracking-[0.4em] uppercase leading-none mb-2 font-mono">
                   {displayText}
-                  {isTyping && <span className="inline-block w-1.5 h-3 bg-cyan-400 ml-1 animate-pulse" />}
+                  {isTyping && <span className="inline-block w-1.5 h-3 bg-[#90c8ff] ml-1 animate-pulse" />}
                 </div>
-                <div className="pr-3 border-r border-cyan-500/30 text-[7px] text-cyan-400/40 space-y-1 tracking-[0.1em] font-mono">
+                <div className="pr-3 border-r border-[#90c8ff]/30 text-[7px] text-[#90c8ff]/40 space-y-1 tracking-[0.1em] font-mono">
                   <p className="animate-pulse">HASH: {clientHash}</p>
                   <p>STATUS: STREAMING</p>
                 </div>
@@ -177,7 +177,7 @@ export default function HomeClient() {
                       <span className="text-white/80 text-[15px] font-light tracking-[0.02em] group-hover:text-white transition-colors duration-500">{layer.name}</span>
                     </div>
                     <p className="text-white/30 text-[13px] font-light leading-relaxed mb-2 group-hover:text-white/55 transition-colors duration-500">{layer.desc}</p>
-                    <div className="inline-block px-2 py-0.5 font-mono text-[8px] tracking-[0.1em] rounded border border-cyan-400/10 text-cyan-400/40 bg-cyan-400/[0.02] group-hover:border-cyan-400/30 group-hover:text-cyan-300/70 transition-all duration-500">{layer.meta}</div>
+                    <div className="inline-block px-2 py-0.5 font-mono text-[8px] tracking-[0.1em] rounded border border-[#90c8ff]/15 text-[#90c8ff]/40 bg-[#90c8ff]/[0.03] group-hover:border-[#90c8ff]/35 group-hover:text-[#90c8ff]/70 transition-all duration-500">{layer.meta}</div>
                   </div>
                 ))}
               </div>
@@ -252,7 +252,7 @@ export default function HomeClient() {
 
                       <div className={`${layer.side === "left" ? "pl-5 pr-4" : "pr-5 pl-4"} py-4`}>
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="font-mono text-[11px] tracking-[0.3em] shrink-0 group-hover:text-cyan-300/80 transition-all duration-500"
+                          <span className="font-mono text-[11px] tracking-[0.3em] shrink-0 group-hover:text-[#90c8ff]/80 transition-all duration-500"
                             style={{
                               color: "rgba(144, 200, 255, 0.4)",
                               textShadow: "0 0 6px rgba(144,200,255,0.15)",
@@ -267,7 +267,7 @@ export default function HomeClient() {
                         <p className="text-white/35 text-[13px] font-light leading-relaxed mb-2 group-hover:text-white/55 transition-colors duration-500">
                           {layer.desc}
                         </p>
-                        <div className="inline-block px-2 py-0.5 font-mono text-[8px] tracking-[0.1em] rounded group-hover:border-cyan-400/30 group-hover:text-cyan-300/70 transition-all duration-500"
+                        <div className="inline-block px-2 py-0.5 font-mono text-[8px] tracking-[0.1em] rounded group-hover:border-[#90c8ff]/30 group-hover:text-[#90c8ff]/70 transition-all duration-500"
                           style={{
                             border: "1px solid rgba(144, 200, 255, 0.15)",
                             color: "rgba(144, 200, 255, 0.5)",

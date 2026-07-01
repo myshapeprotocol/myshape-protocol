@@ -46,7 +46,7 @@ export default function ParadigmShift() {
         </div>
         <div className="text-right text-[9px] tracking-widest hidden md:block pb-1">
           <span className="text-white/15">STATUS:</span>{" "}
-          <span className="text-cyan-400/50">MATRIX_DECODING_ACTIVE</span>
+          <span className="text-[#90c8ff]/50">MATRIX_DECODING_ACTIVE</span>
         </div>
       </div>
 
@@ -85,15 +85,15 @@ export default function ParadigmShift() {
                 <div className="absolute inset-y-0 w-[1px] bg-white/[0.04]" />
                 <div className={`w-2 h-2 rounded-full border transition-all duration-500 z-10 ${
                   isHovered
-                    ? "bg-cyan-400 border-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.8)] scale-125"
+                    ? "bg-[#90c8ff] border-[#90c8ff] shadow-[0_0_12px_rgba(144,200,255,0.8)] scale-125"
                     : "bg-transparent border-white/10"
                 }`} />
-                <div className={`absolute h-[1px] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent transition-all duration-500 ${
+                <div className={`absolute h-[1px] bg-gradient-to-r from-transparent via-[#90c8ff]/20 to-transparent transition-all duration-500 ${
                   isHovered ? "w-[120%] opacity-100" : "w-0 opacity-0"
                 }`} />
                 <span className={`absolute -top-2 text-[9px] font-mono tracking-[0.2em] px-2 transition-all duration-300 z-20 ${
                   isHovered
-                    ? "text-cyan-400/80 opacity-100 translate-y-0"
+                    ? "text-[#90c8ff]/80 opacity-100 translate-y-0"
                     : "text-white/10 opacity-0 -translate-y-1"
                 }`}
                 style={{ background: "#02040a" }}>
@@ -109,14 +109,14 @@ export default function ParadigmShift() {
               {/* 右：MyShape 主权区 */}
               <div className="w-full md:w-[42%] flex flex-col justify-center items-start text-left pl-6">
                 <span className={`text-[9px] tracking-[0.3em] mb-1 transition-colors duration-300 ${
-                  isHovered ? "text-cyan-400/70" : "text-cyan-400/25"
+                  isHovered ? "text-[#90c8ff]/70" : "text-[#90c8ff]/25"
                 }`}>
                   {isHovered ? "▶ INSTANTIATED_TRUE" : "• PROTOCOL_PRIMITIVE"}
                 </span>
                 <span className={`text-[13px] tracking-[0.04em] transition-all duration-300 ${
                   isHovered
-                    ? "text-cyan-200/90 translate-x-1"
-                    : "text-cyan-400/40"
+                    ? "text-[#90c8ff]/90 translate-x-1"
+                    : "text-[#90c8ff]/40"
                 }`}
                 style={{
                   textShadow: isHovered ? "0 0 12px rgba(144,200,255,0.5)" : "none",
@@ -127,7 +127,7 @@ export default function ParadigmShift() {
 
               {/* 整行辉光边界 */}
               <div className={`absolute inset-0 pointer-events-none transition-all duration-500 ${
-                isHovered ? "bg-gradient-to-r from-transparent via-cyan-500/[0.03] to-transparent" : ""
+                isHovered ? "bg-gradient-to-r from-transparent via-[#90c8ff]/[0.03] to-transparent" : ""
               }`}
               style={{
                 borderTop: isHovered ? "1px solid rgba(144,200,255,0.08)" : "1px solid transparent",

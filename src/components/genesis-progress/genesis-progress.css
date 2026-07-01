@@ -18,14 +18,14 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22d3ee;
-  box-shadow: 0 0 8px rgba(34, 211, 238, 0.7);
+  background: #90c8ff;
+  box-shadow: 0 0 8px rgba(144, 200, 255, 0.7);
   animation: genesisProgressDotPulse 2s ease-in-out infinite;
 }
 
 @keyframes genesisProgressDotPulse {
-  0%, 100% { opacity: 0.6; box-shadow: 0 0 6px rgba(34, 211, 238, 0.4); }
-  50% { opacity: 1; box-shadow: 0 0 14px rgba(34, 211, 238, 0.9); }
+  0%, 100% { opacity: 0.6; box-shadow: 0 0 6px rgba(144, 200, 255, 0.4); }
+  50% { opacity: 1; box-shadow: 0 0 14px rgba(144, 200, 255, 0.9); }
 }
 
 .genesis-progress-label {
@@ -33,7 +33,7 @@
   font-size: 9px;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(34, 211, 238, 0.5);
+  color: rgba(144, 200, 255, 0.5);
 }
 
 .genesis-progress-count {
@@ -43,7 +43,7 @@
 }
 
 .genesis-progress-current {
-  color: rgba(34, 211, 238, 0.9);
+  color: rgba(144, 200, 255, 0.9);
   font-weight: 500;
 }
 
@@ -58,7 +58,7 @@
 
 .genesis-progress-remaining {
   font-size: 8px;
-  color: rgba(34, 211, 238, 0.35);
+  color: rgba(144, 200, 255, 0.35);
   letter-spacing: 0.2em;
 }
 
@@ -77,11 +77,11 @@
   border-radius: 2px;
   background: linear-gradient(
     90deg,
-    rgba(34, 211, 238, 0.5),
-    rgba(34, 211, 238, 0.7),
+    rgba(144, 200, 255, 0.5),
+    rgba(144, 200, 255, 0.7),
     rgba(144, 200, 255, 0.6)
   );
-  box-shadow: 0 0 12px rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 12px rgba(144, 200, 255, 0.3);
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -90,8 +90,8 @@
 }
 
 @keyframes genesisProgressGlow {
-  0% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.8); }
-  100% { box-shadow: 0 0 12px rgba(34, 211, 238, 0.3); }
+  0% { box-shadow: 0 0 20px rgba(144, 200, 255, 0.8); }
+  100% { box-shadow: 0 0 12px rgba(144, 200, 255, 0.3); }
 }
 
 .genesis-progress-scan {
