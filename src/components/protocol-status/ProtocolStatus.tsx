@@ -15,10 +15,10 @@ function Dot({ color = "cyan", pulse }: { color?: "cyan" | "green" | "amber" | "
 
 function Stat({ label, value, color = "cyan", pulse, freq = 500 }: { label: string; value: React.ReactNode; color?: "cyan" | "green" | "amber" | "muted"; pulse?: boolean; freq?: number }) {
   return (
-    <div className="flex items-center gap-2 cursor-default group/s" onMouseEnter={() => playTick(freq, "sine", 0.04, 0.01)}>
+    <div className="flex items-center gap-1.5 cursor-default group/s" onMouseEnter={() => playTick(freq, "sine", 0.04, 0.01)}>
       <Dot color={color} pulse={pulse} />
-      <span className="text-white/55 group-hover/s:text-white/85 text-[12px] tracking-[0.15em] uppercase font-mono transition-colors duration-300">{label}</span>
-      <span className={`text-[12px] tracking-[0.12em] uppercase font-mono transition-colors duration-300 ${color === "muted" ? "text-white/30 group-hover/s:text-white/55" : "text-white/80 group-hover/s:text-white"}`}>{value}</span>
+      <span className="text-white/40 group-hover/s:text-white/75 text-[10px] tracking-[0.12em] uppercase font-mono transition-colors duration-300">{label}</span>
+      <span className={`text-[10px] tracking-[0.1em] uppercase font-mono transition-colors duration-300 ${color === "muted" ? "text-white/25 group-hover/s:text-white/50" : "text-white/70 group-hover/s:text-white"}`}>{value}</span>
     </div>
   );
 }
@@ -38,39 +38,39 @@ export default function ProtocolStatus() {
   }, []);
 
   const wrap = (children: React.ReactNode, border?: string) => (
-    <div className="w-full transition-all duration-700" style={{ border: border ? `1px solid ${border}` : `1px solid ${BORDER}`, clipPath: "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)" }}>
-      <div className="max-w-6xl mx-auto px-4 md:px-10 py-4 flex items-center justify-center">{children}</div>
+    <div className="w-full transition-all duration-700" style={{ border: border ? `1px solid ${border}` : `1px solid ${BORDER}`, clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)" }}>
+      <div className="max-w-6xl mx-auto px-3 md:px-6 py-2 flex items-center justify-center">{children}</div>
     </div>
   );
 
-  if (loading) return wrap(<><span className="w-1.5 h-1.5 bg-[#90c8ff]/40 rounded-full animate-pulse" /><span className="text-white/20 text-[10px] tracking-[0.2em] uppercase font-mono ml-2">SYNCHRONIZING...</span></>);
-  if (!status) return wrap(<span className="text-red-400/30 text-[10px] tracking-[0.15em] uppercase font-mono">PROTOCOL_SIGNAL_LOST</span>, "rgba(248,113,113,0.12)");
+  if (loading) return wrap(<><span className="w-1 h-1 bg-[#90c8ff]/40 rounded-full animate-pulse" /><span className="text-white/15 text-[9px] tracking-[0.15em] uppercase font-mono ml-1.5">SYNC...</span></>);
+  if (!status) return wrap(<span className="text-red-400/25 text-[9px] tracking-[0.12em] uppercase font-mono">SIGNAL_LOST</span>, "rgba(248,113,113,0.1)");
 
   const hasNodes = status.total_nodes > 0;
   const daysUp = Math.max(1, Math.floor((Date.now() - new Date("2026-06-01").getTime()) / 86400000));
 
   return (
-    <div className="relative w-full bg-gradient-to-b from-[rgba(144,200,255,0.01)] to-transparent transition-all duration-700"
+    <div className="relative w-full transition-all duration-700"
       style={{
         border: `1px solid ${hover ? BORDER_HOVER : BORDER}`,
-        clipPath: "polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)",
-        boxShadow: hover ? `0 8px 32px -8px ${ICE}0.10), inset 0 1px 0 ${ICE}${hasNodes ? 0.08 : 0.03})` : `inset 0 1px 0 ${ICE}${hasNodes ? 0.08 : 0.03})`,
+        clipPath: "polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px)",
+        boxShadow: hover ? `0 4px 20px -4px ${ICE}0.08)` : "none",
       }}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
     >
-      {/* Corner accents */}
-      <div className="absolute top-0 left-0 w-6 h-[1px] bg-gradient-to-r from-[#90c8ff]/20 to-transparent" />
-      <div className="absolute top-0 left-0 w-[1px] h-6 bg-gradient-to-b from-[#90c8ff]/20 to-transparent" />
-      <div className="absolute bottom-0 right-0 w-6 h-[1px] bg-gradient-to-l from-[#90c8ff]/20 to-transparent" />
-      <div className="absolute bottom-0 right-0 w-[1px] h-6 bg-gradient-to-t from-[#90c8ff]/20 to-transparent" />
+      {/* Corner accents — smaller */}
+      <div className="absolute top-0 left-0 w-4 h-[1px] bg-gradient-to-r from-[#90c8ff]/20 to-transparent" />
+      <div className="absolute top-0 left-0 w-[1px] h-4 bg-gradient-to-b from-[#90c8ff]/20 to-transparent" />
+      <div className="absolute bottom-0 right-0 w-4 h-[1px] bg-gradient-to-l from-[#90c8ff]/20 to-transparent" />
+      <div className="absolute bottom-0 right-0 w-[1px] h-4 bg-gradient-to-t from-[#90c8ff]/20 to-transparent" />
 
-      {/* Scan line */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div ref={scanRef} className="absolute w-full h-px" style={{ background: `linear-gradient(90deg, transparent, ${ICE}0.03) 50%, transparent)` }} />
+      {/* Scan line — thinner */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-50">
+        <div ref={scanRef} className="absolute w-full h-px" style={{ background: `linear-gradient(90deg, transparent, ${ICE}0.02) 50%, transparent)` }} />
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-10 py-4">
-        <div className="flex flex-wrap items-center justify-center md:justify-between gap-x-5 gap-y-2">
+      <div className="max-w-6xl mx-auto px-3 md:px-6 py-2">
+        <div className="flex flex-wrap items-center justify-center md:justify-between gap-x-4 gap-y-1">
           <div className="flex items-center gap-3">
             <Stat label="PROTOCOL" value={status.status} color={hasNodes ? "green" : "cyan"} pulse={hasNodes} freq={450} />
             <span className="text-white/[0.05] select-none">·</span>
@@ -81,16 +81,16 @@ export default function ProtocolStatus() {
           <div className="flex items-center gap-3">
             {status.last_scan ? (
               <>
-                <div className="flex items-center gap-2 cursor-default group/s" onMouseEnter={() => playTick(400, "sine", 0.03, 0.008)}>
-                  <span className="text-white/22 group-hover/s:text-white/45 text-[10px] tracking-[0.12em] uppercase font-mono transition-colors duration-300">LAST_SCAN</span>
-                  <span className="text-white/55 group-hover/s:text-white/85 text-[10px] tracking-[0.06em] font-mono transition-colors duration-300">{status.last_scan}</span>
+                <div className="flex items-center gap-1.5 cursor-default group/s" onMouseEnter={() => playTick(400, "sine", 0.03, 0.008)}>
+                  <span className="text-white/18 group-hover/s:text-white/40 text-[9px] tracking-[0.1em] uppercase font-mono transition-colors duration-300">LAST_SCAN</span>
+                  <span className="text-white/45 group-hover/s:text-white/75 text-[9px] tracking-[0.05em] font-mono transition-colors duration-300">{status.last_scan}</span>
                 </div>
-                <span className="text-white/[0.05] select-none">|</span>
+                <span className="text-white/[0.04] select-none">|</span>
               </>
-            ) : <span className="text-white/[0.04] select-none hidden md:inline">—</span>}
-            <div className="flex items-center gap-2 cursor-default group/s" onMouseEnter={() => playTick(350, "sine", 0.03, 0.008)}>
-              <span className="text-white/22 group-hover/s:text-white/45 text-[10px] tracking-[0.15em] uppercase font-mono transition-colors duration-300">T+{daysUp}d</span>
-              <span className={`text-[10px] tracking-[0.1em] uppercase font-mono transition-colors duration-300 ${hasNodes ? "text-[#90c8ff]/50 group-hover/s:text-[#90c8ff]/80" : "text-white/22 group-hover/s:text-white/45"}`}>{hasNodes ? "MESH_ACTIVE" : "PRE_GENESIS"}</span>
+            ) : <span className="text-white/[0.03] select-none hidden md:inline">—</span>}
+            <div className="flex items-center gap-1.5 cursor-default group/s" onMouseEnter={() => playTick(350, "sine", 0.03, 0.008)}>
+              <span className="text-white/18 group-hover/s:text-white/40 text-[9px] tracking-[0.12em] uppercase font-mono transition-colors duration-300">T+{daysUp}d</span>
+              <span className={`text-[9px] tracking-[0.08em] uppercase font-mono transition-colors duration-300 ${hasNodes ? "text-[#90c8ff]/40 group-hover/s:text-[#90c8ff]/70" : "text-white/18 group-hover/s:text-white/40"}`}>{hasNodes ? "MESH_ACTIVE" : "PRE_GENESIS"}</span>
             </div>
           </div>
         </div>
