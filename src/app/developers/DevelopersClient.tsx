@@ -118,19 +118,25 @@ pose.onResults((results) => {
               },
             ].map((s, i) => (
               <div key={s.step}
-                onMouseEnter={e => { playTick(500 + i * 100, "sine", 0.08, 0.02); e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; e.currentTarget.style.boxShadow = "0 8px 32px -8px rgba(144,200,255,0.10)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "translateY(0)"; }}
+                onMouseEnter={e => { playTick(500 + i * 100, "sine", 0.08, 0.02); hoverOn(e); e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; e.currentTarget.style.boxShadow = "0 8px 32px -8px rgba(144,200,255,0.10)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={e => { hoverOff(e); e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "translateY(0)"; }}
                 className="border border-white/5 bg-white/[0.01] transition-all duration-500 overflow-hidden cursor-default">
                 <div className="flex items-center gap-4 px-5 py-3 border-b border-white/5">
-                  <span className="text-[#90c8ff]/40 text-[18px] font-light tracking-[0.1em]">{s.step}</span>
+                  <span className="text-[#90c8ff]/40 text-[18px] font-light tracking-[0.1em]"
+                    data-default="rgba(144,200,255,0.4)" data-hover="rgba(144,200,255,0.8)">{s.step}</span>
                   <div className="flex-1">
-                    <span className="text-white/55 text-[11px] tracking-[0.2em] uppercase">{s.title}</span>
+                    <span className="text-white/55 text-[11px] tracking-[0.2em] uppercase"
+                      data-default="rgba(255,255,255,0.55)" data-hover="rgba(255,255,255,0.9)">{s.title}</span>
                   </div>
-                  <span className="text-white/22 text-[9px] tracking-[0.1em]">{s.time}</span>
+                  <span className="text-white/22 text-[9px] tracking-[0.1em]"
+                    data-default="rgba(255,255,255,0.22)" data-hover="rgba(255,255,255,0.5)">{s.time}</span>
                 </div>
                 {!s.isAction && (
                   <div className="p-5 bg-black/30 relative group/code">
-                    <pre className="text-[#90c8ff]/60 text-[10px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">
+                    <pre className="text-[10px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto"
+                      style={{ color: "rgba(144,200,255,0.6)", fontSize: "10px" }}
+                      data-default="rgba(144,200,255,0.6)" data-hover="rgba(144,200,255,0.9)"
+                      data-default-size="10px" data-hover-size="11px">
                       {s.code}
                     </pre>
                     <button onClick={() => { navigator.clipboard.writeText(s.code.trim()); playTick(600, "sine", 0.06, 0.015); }}
@@ -154,7 +160,10 @@ pose.onResults((results) => {
                   </div>
                 )}
                 {s.desc && (
-                  <div className="px-5 pb-3 text-white/30 text-[9px] tracking-[0.08em]">{s.desc}</div>
+                  <div className="px-5 pb-3 text-[9px] tracking-[0.08em]"
+                    style={{ color: "rgba(255,255,255,0.30)", fontSize: "9px" }}
+                    data-default="rgba(255,255,255,0.30)" data-hover="rgba(255,255,255,0.6)"
+                    data-default-size="9px" data-hover-size="10px">{s.desc}</div>
                 )}
               </div>
             ))}
