@@ -233,7 +233,7 @@ export default function PaperCoreProtocolClient() {
                       style={{ color: isActive ? "rgba(144,200,255,0.8)" : "rgba(255,255,255,0.12)" }}>
                       {s.id}
                     </div>
-                    <div className="text-[11px] uppercase tracking-[0.15em] transition-all duration-300"
+                    <div className="text-[12px] uppercase tracking-[0.2em] transition-all duration-300"
                       style={{ color: isActive ? "rgba(144,200,255,0.9)" : "rgba(255,255,255,0.22)" }}>
                       {s.title}
                     </div>
