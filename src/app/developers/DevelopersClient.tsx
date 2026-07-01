@@ -1,9 +1,11 @@
 "use client";
 import ProtocolHeader from "@/components/header/header";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
+import { useState } from "react";
 import ProtocolFooter from "@/components/footer/footer";
 import VerificationDashboard from "@/components/verification/VerificationDashboard";
 import DeveloperPlayground from "@/components/developer-playground/DeveloperPlayground";
+import GenesisNodeInit from "@/components/genesis-node-init/GenesisNodeInit";
 import { playTick } from "@/utils/useAudioTick";
 
 const hoverOn = (e: React.MouseEvent<HTMLElement>) => {
@@ -48,6 +50,7 @@ const isValid = MyShape.verifyReceipt(receipt);
 // Done. Your app now has presence verification.`;
 
 export default function DevelopersClient() {
+  const [showNodeInit, setShowNodeInit] = useState(false);
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
       <ProtocolHeader />
@@ -72,20 +75,10 @@ export default function DevelopersClient() {
               className="inline-flex items-center gap-2 px-6 py-2.5 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.25em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/80 hover:bg-[#90c8ff]/[0.03] transition-all">
               GitHub →
             </a>
-            <button onClick={async () => {
-              const email = prompt("Enter your developer email to receive an API key:");
-              if (!email) return;
-              playTick(600, "sine", 0.06, 0.015);
-              try {
-                const r = await fetch("/api/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
-                const d = await r.json();
-                if (d.api_key) alert(`Your API Key:\n\n${d.api_key}\n\nUse in Authorization: Bearer header.`);
-                else alert(d.error || "Registration failed");
-              } catch { alert("Network error. Try again."); }
-            }}
+            <button onClick={() => { setShowNodeInit(true); playTick(600, "sine", 0.06, 0.015); }}
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
               className="inline-flex items-center gap-2 px-6 py-2.5 border border-[#d4af37]/30 text-[#d4af37]/70 text-[10px] tracking-[0.25em] uppercase hover:bg-[#d4af37]/[0.06] hover:text-[#d4af37] transition-all">
-              ◈ Get API Key →
+              ◈ Connect Node →
             </button>
           </div>
         </div>
@@ -389,6 +382,7 @@ if (threat.overallVerdict === "human") {
         </section>
       </div>
 
+      {showNodeInit && <GenesisNodeInit onClose={() => setShowNodeInit(false)} />}
       <ProtocolFooter />
     </div>
   );
