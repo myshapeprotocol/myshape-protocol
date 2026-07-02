@@ -15,6 +15,7 @@ import ParadigmShift from "@/components/paradigm-shift/ParadigmShift";
 import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
 import ProtocolStatus from "@/components/protocol-status/ProtocolStatus";
 import GenesisCohortBadge from "@/components/genesis-cohort-badge/GenesisCohortBadge";
+import MotionPreview from "@/components/motion-preview/MotionPreview";
 import ResearchContributionCTA from "@/components/research-cta/ResearchContributionCTA";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -135,8 +136,13 @@ export default function HomeClient() {
 
       <main className="relative z-0 w-full overflow-x-clip">
         <HeroDemo />
-        <div className="relative z-10 flex justify-center -mt-6 pb-8">
-          <GenesisCohortBadge />
+        <div className="relative z-10 -mt-6 pb-8 space-y-3">
+          <div className="flex justify-center">
+            <GenesisCohortBadge />
+          </div>
+          <div className="max-w-lg mx-auto px-4">
+            <MotionPreview />
+          </div>
         </div>
 
         {/* ── Genesis Cohort Progress ── */}
