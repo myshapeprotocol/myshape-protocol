@@ -48,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/blog", priority: 0.7, changeFreq: "weekly" as const },
     { path: "/blog/continuity-layer-for-the-simulation-age", priority: 0.75, changeFreq: "monthly" as const },
     { path: "/blog/stored-identity-vs-generated-presence", priority: 0.75, changeFreq: "monthly" as const },
+    { path: "/blog/genesis-001-why-identity-is-not-enough", priority: 0.80, changeFreq: "weekly" as const },
 
     // ── Research & Evidence ──
     { path: "/evidence", priority: 0.7, changeFreq: "weekly" as const },
