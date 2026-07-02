@@ -99,9 +99,6 @@ export default function HomeClient() {
              <div className="w-1 h-1 bg-[#90c8ff] rounded-full animate-pulse shadow-[0_0_8px_#90c8ff]" />
              <span className="font-mono text-[9px] tracking-[0.3em] text-white/60 uppercase">LIVE_FEED</span>
           </div>
-          <div className="mt-3">
-            <GenesisCohortBadge />
-          </div>
         </div>
 
         <div className="absolute bottom-10 right-10 text-right pointer-events-auto">
@@ -138,6 +135,9 @@ export default function HomeClient() {
 
       <main className="relative z-0 w-full overflow-x-clip">
         <HeroDemo />
+        <div className="relative z-10 flex justify-center -mt-6 pb-8">
+          <GenesisCohortBadge />
+        </div>
 
         {/* ── Genesis Cohort Progress ── */}
         <section className="relative z-10 -mt-6 mb-8">
