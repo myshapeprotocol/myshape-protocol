@@ -5,10 +5,8 @@ PROTOCOL_LOG.md
 scripts/agent-workflow/published.json
 scripts/matrix-bot/matrix_dashboard.html
 
-# Development
+# Development (keep wasm/ — required by API routes)
 docs/
 scripts/
-engine/
 cli/
-wasm/
 .claude/
