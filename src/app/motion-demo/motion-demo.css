@@ -1,0 +1,54 @@
+/* ============================================================
+   MotionDemo — Component-level styles
+   Extracted from MotionDemoClient.tsx inline styles.
+   ============================================================ */
+
+/* ── Layout ── */
+.motion-demo__container {
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+}
+
+/* ── Arrows in title ── */
+.motion-demo__arrow {
+  color: rgba(144, 200, 255, 0.8);
+}
+
+/* ── Video panel ── */
+.motion-demo__video-panel {
+  min-height: min(500px, 70vw);
+}
+
+/* Mirror the webcam feed (user sees themselves like a mirror) */
+.motion-demo__video {
+  transform: scaleX(-1);
+}
+
+/* ── Chromium warning box ── */
+.motion-demo__chromium-warning {
+  border-radius: 4px;
+}
+
+/* ── Ceremony animation classes ── */
+.motion-demo__ceremony-seal {
+  animation: ceremonySealEnter 0.8s ease-out forwards;
+}
+
+.motion-demo__ceremony-ring {
+  animation: ceremonyRotate 20s linear infinite;
+  transform-origin: 70px 70px;
+}
+
+.motion-demo__ceremony-text {
+  animation: ceremonyTextFade 1s ease-out 0.5s both;
+}
+
+/* ── ZK proof hash glow ── */
+.motion-demo__proof-hash {
+  text-shadow: 0 0 8px rgba(144, 200, 255, 0.3);
+}
+
+/* ── Verification status card radius ── */
+.motion-demo__card-sm {
+  border-radius: 2px;
+}

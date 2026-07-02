@@ -93,8 +93,7 @@ export default function ArchitectureClient() {
                   {i < PIPELINE.length - 1 && (
                     <div className="flex items-center pt-7 mx-2">
                       <div className="w-8 h-[1px] bg-gradient-to-r from-[#90c8ff]/35 to-[#90c8ff]/15" />
-                      <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px]"
-                        style={{ borderLeftColor: "rgba(144,200,255,0.4)" }} />
+                      <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-[rgba(144,200,255,0.4)]" />
                     </div>
                   )}
                 </div>
@@ -180,16 +179,16 @@ export default function ArchitectureClient() {
                     <span className="font-mono text-[#90c8ff]/70">0.65 — 0.99</span>
                   </div>
                   <div className="h-5 md:h-6 rounded-sm flex overflow-hidden arch-entropy-track">
-                    <div className="w-[5%] h-full" style={{ background: "rgba(255,255,255,0.03)" }} />
-                    <div className="w-[30%] h-full" style={{ background: "rgba(144,200,255,0.1)" }} />
-                    <div className="w-[35%] h-full" style={{ background: "rgba(144,200,255,0.35)" }} />
-                    <div className="w-[25%] h-full" style={{ background: "rgba(144,200,255,0.6)", boxShadow: "0 0 8px rgba(144,200,255,0.3)" }} />
-                    <div className="w-[5%] h-full" style={{ background: "rgba(144,200,255,0.15)" }} />
+                    <div className="w-[5%] h-full bg-[rgba(255,255,255,0.03)]" />
+                    <div className="w-[30%] h-full bg-[rgba(144,200,255,0.1)]" />
+                    <div className="w-[35%] h-full bg-[rgba(144,200,255,0.35)]" />
+                    <div className="w-[25%] h-full bg-[rgba(144,200,255,0.6)]" style={{ boxShadow: "0 0 8px rgba(144,200,255,0.3)" }} />
+                    <div className="w-[5%] h-full bg-[rgba(144,200,255,0.15)]" />
                   </div>
                 </div>
                 {/* Threshold line */}
                 <div className="relative h-0">
-                  <div className="absolute left-[65%] -top-1 w-[1px] h-12" style={{ background: "rgba(144,200,255,0.5)" }} />
+                  <div className="absolute left-[65%] -top-1 w-[1px] h-12 bg-[rgba(144,200,255,0.5)]" />
                   <span className="absolute left-[65%] -top-4 text-[8px] tracking-[0.15em] uppercase font-mono -translate-x-1/2 whitespace-nowrap text-[#90c8ff]/70">
                     threshold 0.65
                   </span>
@@ -201,9 +200,9 @@ export default function ArchitectureClient() {
                     <span className="font-mono text-white/30">0.01 — 0.15</span>
                   </div>
                   <div className="h-5 md:h-6 rounded-sm flex overflow-hidden arch-entropy-track">
-                    <div className="w-[5%] h-full" style={{ background: "rgba(255,255,255,0.03)" }} />
-                    <div className="w-[15%] h-full" style={{ background: "rgba(144,200,255,0.2)" }} />
-                    <div className="w-[80%] h-full" style={{ background: "rgba(255,255,255,0.02)" }} />
+                    <div className="w-[5%] h-full bg-[rgba(255,255,255,0.03)]" />
+                    <div className="w-[15%] h-full bg-[rgba(144,200,255,0.2)]" />
+                    <div className="w-[80%] h-full bg-[rgba(255,255,255,0.02)]" />
                   </div>
                 </div>
                 <p className="text-white/20 text-[8px] tracking-[0.15em] uppercase mt-3">

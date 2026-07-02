@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { otpVerifyLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
  * Validate invite code API — checks if a beta invite code is valid and unused.
@@ -7,6 +8,11 @@ import { NextResponse } from 'next/server';
  * POST /api/invite/validate
  * Request: { code: string }
  * Response: { valid: boolean, code?: string, error?: string }
+ *
+ * Security:
+ * - Rate limit: 5 attempts/IP/5min (prevents enumeration)
+ * - Format validation before DB query
+ * - PGRST116 distinguished from genuine DB errors
  */
 
 function validateEnv() {
@@ -21,6 +27,12 @@ function validateEnv() {
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIP(req);
+  const { allowed } = otpVerifyLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ valid: false, error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   try {
     const { supabaseUrl, supabaseKey } = validateEnv();
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -52,11 +64,15 @@ export async function POST(req: Request) {
       .eq('code', normalized)
       .single();
 
-    if (dbError || !data) {
-      return NextResponse.json(
-        { valid: false, error: "INVITE_CODE_NOT_FOUND" },
-        { status: 404 }
-      );
+    if (dbError) {
+      if (dbError.code === "PGRST116") {
+        return NextResponse.json({ valid: false, error: "INVITE_CODE_NOT_FOUND" }, { status: 404 });
+      }
+      console.error("[/api/invite/validate] Supabase error:", dbError.code, dbError.message);
+      return NextResponse.json({ valid: false, error: "DATABASE_ERROR" }, { status: 500 });
+    }
+    if (!data) {
+      return NextResponse.json({ valid: false, error: "INVITE_CODE_NOT_FOUND" }, { status: 404 });
     }
 
     if (data.status === 'USED') {

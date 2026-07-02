@@ -93,6 +93,14 @@ AI-native identity | zero-knowledge presence | motion-signature verification
 - 密钥从 `process.env` 读取，运行时校验
 - 禁止在源代码中硬编码任何凭据
 - 客户端在 handler 内延迟初始化（不用模块级 placeholder）
+- **所有路由必须接入 rate limiter** — 使用 `@/lib/rate-limiter` 中的对应实例
+- **`.single()` 查询必须区分 PGRST116**（无行）和其他错误
+
+### Security
+- CSP + HSTS + X-Content-Type-Options + X-Frame-Options + Referrer-Policy 已在 `next.config.ts` 配置
+- Rate limiter 实例: `apiLookupLimiter`(10/min) / `otpSendLimiter`(3/5min) / `otpVerifyLimiter`(5/5min) / `formSubmitLimiter`(3/hr) / `nodeCreationLimiter`(3/hr) / `researchUploadLimiter`(5/day)
+- Error boundaries: `error.tsx`(page) + `global-error.tsx`(layout) + `ErrorFallback`(shared UI)
+- 无硬编码凭据 — 所有密钥通过 `validateEnv()` 运行时校验
 
 ---
 
@@ -160,5 +168,21 @@ chore: upgrade Next.js to 16.1.6
 4. ✅ ~~`useSound.ts` hook~~ — 已移除
 5. ✅ ~~`public/protocol-b-o-d-y.glb`~~ — 已移除
 6. ✅ ~~`src/components/joinwaitlist/index.tsx`~~ — 已移除
-7. Architecture 页面大量内联 `style={{}}` — 后续可提取为 CSS 类，但非紧急（不影响功能）
+7. ✅ ~~Architecture 页面大量内联 `style={{}}`~~ — 14→5，剩余全为动态值（2026-07-02）
 8. ✅ ~~主路由纯客户端页面~~ — 全部已拆分：`page.tsx`（Server + metadata）+ `*Client.tsx`（交互）
+9. ✅ ~~SHA-256 哈希为 stub~~ — 已替换为 `@noble/hashes`（2026-07-02）
+10. ✅ ~~ZK 模幂纯 JS 实现~~ — 已替换为 `@noble/curves`（2026-07-02）
+11. ✅ ~~4 个死引擎文件~~ — 已移至 `docs/engine-concepts/`（2026-07-02）
+12. ✅ ~~API rate limiting 碎片化~~ — 已提取共享 `RateLimiter` 类（2026-07-02）
+13. ✅ ~~PGRST116 错误被静默吞掉~~ — 已修复 3 个路由（2026-07-02）
+14. ✅ ~~无自动化测试~~ — 已搭建 Vitest + 145 tests / 11 suites（2026-07-02）
+15. ✅ ~~MotionDemo 1229 行~~ — 已拆分为 11 子组件 → 1066 行（2026-07-02）
+16. ✅ ~~HeroDemo 779 行~~ — 已提取 2 模块 → 680 行（2026-07-02）
+17. ✅ ~~无生产 Error Boundary~~ — 已添加 3 层（global/root/page）（2026-07-02）
+18. ✅ ~~加载页全内联样式~~ — 已 Tailwind 化（2026-07-02）
+19. ✅ ~~安全头缺失~~ — 已添加 CSP/HSTS（2026-07-02）
+20. ✅ ~~8 个 API 路由缺 rate limit~~ — 已加固 OTP/verify/subscribe 等（2026-07-02）
+21. ✅ ~~LinkedIn 数据丢失 bug~~ — `data.linkedin` 从未赋值 → 已修复（2026-07-02）
+22. ✅ ~~设计令牌缺失~~ — 已添加 19 CSS 变量（2026-07-02）
+23. Supabase 执行 `010_entropy_growth.sql` — 迁移文件已就绪，待执行
+24. ✅ ~~Architecture 页面内联样式~~ — 14→5，原 7 条技术债已全部解决（2026-07-02）

@@ -80,13 +80,13 @@ export async function POST(request: Request) {
     const responseText = await res.text();
 
     if (!res.ok) {
-      console.error("SUPABASE_UPLINK_ERROR:", res.status, responseText);
-      return NextResponse.json({ error: `UPSTREAM_ERROR: ${responseText}` }, { status: res.status });
+      console.error("[/api/uplink] Supabase error:", res.status, responseText);
+      return NextResponse.json({ error: "UPSTREAM_ERROR" }, { status: 502 });
     }
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
-    console.error("UPLINK_ERROR:", (err as Error).message);
-    return NextResponse.json({ error: (err as Error).message || "INTERNAL_SERVER_ERROR" }, { status: 500 });
+    console.error("[/api/uplink]", err);
+    return NextResponse.json({ error: "INTERNAL_SERVER_ERROR" }, { status: 500 });
   }
 }

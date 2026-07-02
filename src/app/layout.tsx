@@ -50,6 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
+        <meta name="color-scheme" content="dark" />
+        <meta name="theme-color" content="#02040a" />
 
         {/* -------------------------------
             Schema.org 结构化数据 — 传统 SEO + GEO 双优化

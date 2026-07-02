@@ -1,20 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-
-// ── Rate limiter: 10 lookups per IP per minute ──
-const rateMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRate(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateMap.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
+import { apiLookupLimiter, getClientIP } from "@/lib/rate-limiter";
 
 /**
  * GET /api/node/privileges?email=... — 查询节点的权限标记
@@ -37,9 +23,16 @@ function validateEnv() {
 
 export async function GET(req: Request) {
   try {
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-    if (!checkRate(ip)) {
-      return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+    const ip = getClientIP(req);
+    const { allowed, remaining } = apiLookupLimiter.check(ip);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "RATE_LIMIT" },
+        {
+          status: 429,
+          headers: { "X-RateLimit-Remaining": String(remaining) },
+        },
+      );
     }
 
     const { supabaseUrl, supabaseKey } = validateEnv();
@@ -58,7 +51,14 @@ export async function GET(req: Request) {
       .eq('email', email.trim())
       .single();
 
-    if (error || !node) {
+    if (error) {
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
+      }
+      console.error("[/api/node/privileges] Supabase error:", error.code, error.message);
+      return NextResponse.json({ error: "DATABASE_ERROR" }, { status: 500 });
+    }
+    if (!node) {
       return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
     }
 

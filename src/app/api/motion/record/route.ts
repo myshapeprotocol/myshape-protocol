@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { apiLookupLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
  * POST /api/motion/record — 记录一次成功的 motion-signature 验证
- * 每日限制：每个节点每天最多 3 次有效扫描
+ * 每日限制：每个节点每天最多 3 次有效扫描（DB层）
+ * Rate limit: 10 req/IP/min（API层）
  */
 
 const DAILY_LIMIT = 3;
@@ -22,6 +24,12 @@ function today(): string {
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIP(req);
+  const { allowed } = apiLookupLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   try {
     const { supabaseUrl, supabaseKey } = validateEnv();
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -82,7 +90,7 @@ export async function POST(req: Request) {
   } catch (error: unknown) {
     console.error('MOTION_RECORD_ERROR:', error);
     return NextResponse.json(
-      { error: (error as Error).message || 'INTERNAL_SERVER_ERROR' },
+      { error: 'INTERNAL_SERVER_ERROR' },
       { status: 500 }
     );
   }

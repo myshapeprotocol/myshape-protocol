@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { randomBytes } from "crypto";
+import { nodeCreationLimiter, getClientIP } from "@/lib/rate-limiter";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,13 +11,19 @@ function randomHex(len: number): string {
 }
 
 export async function POST(request: Request) {
+  const ip = getClientIP(request);
+  const { allowed } = nodeCreationLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   // 1. 获取并校验环境变量
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   // 调试日志：如果此处报错，说明进程没有读到 .env.local
   if (!supabaseUrl || !supabaseKey) {
-    console.error("DEBUG_CONFIG: 环境变量缺失!", { 
+    console.error("[handshake] Missing environment variables:", {
       SUPABASE_URL: !!supabaseUrl, 
       SUPABASE_SERVICE_ROLE_KEY: !!supabaseKey 
     });
@@ -69,7 +76,7 @@ export async function POST(request: Request) {
     });
 
   } catch (err: any) {
-    console.error("DEBUG_HANDSHAKE_CRASH:", err);
+    console.error("[handshake] Crash:", err);
     return NextResponse.json(
       { error: "PROTOCOL_CORE_INTERRUPT", details: err.message },
       { status: 500 }

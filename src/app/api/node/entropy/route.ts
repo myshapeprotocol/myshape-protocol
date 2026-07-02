@@ -5,32 +5,29 @@ import {
   getLevelProgress,
   type EntropyState,
 } from "@/engine/entropy-growth";
+import { apiLookupLimiter, getClientIP } from "@/lib/rate-limiter";
 
-// ── Rate limiter: 10 requests per IP per minute ──
-const rateMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRate(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateMap.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) {
+    throw new Error("SERVER_CONFIGURATION_INCOMPLETE: Missing Supabase credentials");
   }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
+  return createClient(url, key);
 }
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // POST — calculate entropy after a motion scan
 export async function POST(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (!checkRate(ip)) {
-    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  const ip = getClientIP(request);
+  const { allowed, remaining } = apiLookupLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "RATE_LIMIT" },
+      {
+        status: 429,
+        headers: { "X-RateLimit-Remaining": String(remaining) },
+      },
+    );
   }
 
   const { email, pesScore, pesTiming, pesNoise, pesFrequency, pesBiological } = await request.json();
@@ -48,13 +45,21 @@ export async function POST(request: Request) {
 
   try {
     // Read current entropy state + scan_count
-    const { data: node, error: readErr } = await supabase
+    const { data: node, error: readErr } = await getSupabase()
       .from("protocol_nodes")
       .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count")
       .eq("email", email)
       .single();
 
-    if (readErr || !node) {
+    if (readErr) {
+      // PGRST116 = no rows found — legitimate not-found
+      if (readErr.code === "PGRST116") {
+        return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
+      }
+      console.error("[/api/node/entropy POST] Supabase error:", readErr.code, readErr.message);
+      return NextResponse.json({ error: "DATABASE_ERROR" }, { status: 500 });
+    }
+    if (!node) {
       return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
     }
 
@@ -70,7 +75,7 @@ export async function POST(request: Request) {
     const { entropyGain, newState, leveledUp, decayApplied, spikeTriggered } = computeEntropyGain(clampedPes, pesComponents, currentState);
 
     // Write back
-    const { error: writeErr } = await supabase
+    const { error: writeErr } = await getSupabase()
       .from("protocol_nodes")
       .update({
         entropy_score: newState.entropyScore,
@@ -106,9 +111,16 @@ export async function POST(request: Request) {
 
 // GET — read current entropy state
 export async function GET(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (!checkRate(ip)) {
-    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  const ip = getClientIP(request);
+  const { allowed, remaining } = apiLookupLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "RATE_LIMIT" },
+      {
+        status: 429,
+        headers: { "X-RateLimit-Remaining": String(remaining) },
+      },
+    );
   }
 
   const { searchParams } = new URL(request.url);
@@ -118,13 +130,20 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from("protocol_nodes")
       .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count")
       .eq("email", email)
       .single();
 
-    if (error || !data) {
+    if (error) {
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
+      }
+      console.error("[/api/node/entropy GET] Supabase error:", error.code, error.message);
+      return NextResponse.json({ error: "DATABASE_ERROR" }, { status: 500 });
+    }
+    if (!data) {
       return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
     }
 

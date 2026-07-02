@@ -1,11 +1,13 @@
 import { Resend } from 'resend';
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { formSubmitLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
  * Subscribe API — 将邮箱加入协议节点等待列表
  *
  * 新订阅者将收到一封确认邮件，告知他们已被列入 Genesis 邀请队列。
+ * Rate limit: 3 req/IP/hour — prevents form spam.
  */
 
 function validateEnv() {
@@ -81,6 +83,12 @@ async function sendSubscriptionConfirmation(
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIP(req);
+  const { allowed } = formSubmitLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   try {
     const { supabaseUrl, supabaseKey, resendKey } = validateEnv();
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -123,8 +131,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
+    console.error("[/api/subscribe]", err);
     return NextResponse.json(
-      { error: (err as Error).message || "INTERNAL_SERVER_ERROR" },
+      { error: "INTERNAL_SERVER_ERROR" },
       { status: 500 }
     );
   }

@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/motion-geometry", priority: 0.8, changeFreq: "weekly" as const },
 
     // ── Protocol & Architecture ──
+    { path: "/handshake", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/protocol", priority: 0.9, changeFreq: "weekly" as const },
     { path: "/protocol/identity-layer", priority: 0.8, changeFreq: "weekly" as const },
     { path: "/protocol/motion-pipeline", priority: 0.85, changeFreq: "weekly" as const },
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── Papers ──
     { path: "/whitepaper", priority: 0.9, changeFreq: "weekly" as const },
     { path: "/papers", priority: 0.8, changeFreq: "weekly" as const },
+    { path: "/papers/core-protocol", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/papers/technical-spec", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/papers/threat-model", priority: 0.8, changeFreq: "weekly" as const },
     { path: "/papers/protocol-architecture", priority: 0.7, changeFreq: "monthly" as const },
@@ -34,6 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/vision", priority: 0.8, changeFreq: "monthly" as const },
     { path: "/roadmap", priority: 0.7, changeFreq: "monthly" as const },
     { path: "/contact", priority: 0.5, changeFreq: "monthly" as const },
+    { path: "/continuity", priority: 0.75, changeFreq: "weekly" as const },
 
     // ── Build ──
     { path: "/developers", priority: 0.8, changeFreq: "weekly" as const },
@@ -51,8 +54,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/research/apply", priority: 0.6, changeFreq: "weekly" as const },
 
     // ── Mirror routes (lower priority, canonical to primary) ──
+    { path: "/civ-layer/genesis", priority: 0.4, changeFreq: "monthly" as const },
     { path: "/civ-layer/papers", priority: 0.5, changeFreq: "monthly" as const },
     { path: "/civ-layer/papers/core-protocol", priority: 0.5, changeFreq: "monthly" as const },
+    { path: "/civ-layer/papers/civilization-roadmap", priority: 0.3, changeFreq: "monthly" as const },
     { path: "/civ-layer/papers/manifesto", priority: 0.3, changeFreq: "monthly" as const },
     { path: "/civ-layer/vision/manifesto", priority: 0.3, changeFreq: "monthly" as const },
     { path: "/civ-layer/genesis/manifesto", priority: 0.3, changeFreq: "monthly" as const },

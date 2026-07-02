@@ -127,18 +127,26 @@ export default function About() {
           <div className="absolute -inset-4 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none about-lab-glow" />
           {/* 冷色调粒子点阵 */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 rounded-full bg-[#90c8ff]/30"
-                style={{
-                  left: `${10 + Math.random() * 80}%`,
-                  top: `${Math.random() * 100}%`,
-                  animation: `particleDrift ${2 + Math.random() * 3}s ease-out infinite`,
-                  animationDelay: `${Math.random() * 2}s`,
-                }}
-              />
-            ))}
+            {Array.from({ length: 12 }).map((_, i) => {
+              // Deterministic pseudo-random from index — avoids SSR hydration mismatch
+              const seed = (i * 2654435761) & 0xFFFFFFFF;
+              const rand1 = ((seed * 1103515245 + 12345) & 0x7FFFFFFF) / 0x7FFFFFFF;
+              const rand2 = ((rand1 * 1103515245 + 12345) & 0x7FFFFFFF) / 0x7FFFFFFF;
+              const rand3 = ((rand2 * 1103515245 + 12345) & 0x7FFFFFFF) / 0x7FFFFFFF;
+              const rand4 = ((rand3 * 1103515245 + 12345) & 0x7FFFFFFF) / 0x7FFFFFFF;
+              return (
+                <div
+                  key={i}
+                  className="absolute w-1 h-1 rounded-full bg-[#90c8ff]/30"
+                  style={{
+                    left: `${10 + rand1 * 80}%`,
+                    top: `${rand2 * 100}%`,
+                    animation: `particleDrift ${2 + rand3 * 3}s ease-out infinite`,
+                    animationDelay: `${rand4 * 2}s`,
+                  }}
+                />
+              );
+            })}
           </div>
 
           <div className="absolute inset-0 border scale-[1.02] group-hover:scale-100 transition-transform duration-700 about-lab-border" />

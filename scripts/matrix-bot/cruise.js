@@ -806,18 +806,16 @@ async function main() {
 
   // 1. HN — fetch + generate comments (social only)
   if (runSocial) {
-  const hnStories = await fetchHNStories();
+  const hnStories = await fetchHNStories().catch(e => { console.log("HN fetch failed:", e.message); return []; });
   for (const s of hnStories.slice(0, 8)) {
     console.log('  HN: "' + s.title.slice(0, 55) + '..."');
-    const post = await generatePost("hn", s.title);
-    data.hn.push({ ...s, post });
+    try { const post = await generatePost("hn", s.title); data.hn.push({ ...s, post }); } catch (e) { console.log('  HN post failed:', e.message); }
     await DELAY(1200);
   }
   console.log("  HN done: " + data.hn.length + " drafts");
 
   // 2. LinkedIn — derived from HN enterprise-angle
-  const liTopics = await generateLinkedInTopics(hnStories);
-  data.linkedin = liTopics;
+  data.linkedin = await generateLinkedInTopics(hnStories);
 
   // 3. X — generate short tweets from HN topics
   console.log("\n--- X / Twitter ---");

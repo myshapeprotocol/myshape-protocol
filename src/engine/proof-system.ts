@@ -11,6 +11,8 @@
 import type { MotionVectorFinal } from "@/types/motion-vector";
 import type { PESComponents } from "./presence-entropy";
 import { generateZKPresenceProof as generateCircuitProof } from "./zk-circuit";
+import { sha256 as nobleSha256 } from "@noble/hashes/sha2.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
 
 // ── §6.2 — Presence Proof (PoP) ──
 // H(FV) — hash of the Feature Vector. The smallest verifiable unit.
@@ -86,15 +88,8 @@ export interface VerificationResult {
 }
 
 // ── Hash utilities ──
-function sha256Sync(data: string): string {
-  // Deterministic stub for environments without Web Crypto
-  let hash = 0x6d797368; // "mysh"
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // convert to 32-bit
-  }
-  return Math.abs(hash).toString(16).padStart(8, "0");
+function sha256(data: string): string {
+  return bytesToHex(nobleSha256(new TextEncoder().encode(data)));
 }
 
 // ── §6.2 — Generate Presence Proof ──
@@ -107,7 +102,7 @@ export function generatePresenceProof(
   return {
     version: 1,
     proof_type: "PoP",
-    pop_hash: sha256Sync(proofData),
+    pop_hash: sha256(proofData),
     mv_hash: mv.mv_hash,
     timestamp: mv.timestamp,
     window_seconds: mv.window,
@@ -128,7 +123,7 @@ export function generateMotionProof(
   return {
     version: 1,
     proof_type: "MP",
-    mp_hash: sha256Sync(proofData),
+    mp_hash: sha256(proofData),
     fps,
     window_seconds: windowSeconds,
     nodes,
@@ -148,7 +143,7 @@ export function generateEntropyProof(
   return {
     version: 1,
     proof_type: "EP",
-    ep_hash: sha256Sync(proofData),
+    ep_hash: sha256(proofData),
     pes,
     frequency_entropy: components.frequencyEntropy,
     micro_timing_variance: components.microTimingVariance,
@@ -167,7 +162,7 @@ export function generateZKPresenceProof(
   deviceSalt?: string,
 ): ZKPresenceProof {
   const rootData = `${pop.pop_hash}:${mp.mp_hash}:${ep.ep_hash}`;
-  const zkp_hash = sha256Sync(rootData);
+  const zkp_hash = sha256(rootData);
 
   // Generate real ZK commitment via Pedersen + Schnorr circuit
   const zkResult = generateCircuitProof(
@@ -200,7 +195,7 @@ export function verifyZKPresenceProof(
   const maxAge = options.max_age_seconds ?? 300; // default 5 min
 
   // §6.8.1 ZKP validity — recompute root hash
-  const recomputedRoot = sha256Sync(`${proof.pop.pop_hash}:${proof.mp.mp_hash}:${proof.ep.ep_hash}`);
+  const recomputedRoot = sha256(`${proof.pop.pop_hash}:${proof.mp.mp_hash}:${proof.ep.ep_hash}`);
 
   // §6.8.2 Entropy threshold
   const entropyCheck = proof.ep.pes >= pesMin;

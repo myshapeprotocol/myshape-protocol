@@ -1,11 +1,13 @@
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { otpSendLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
  * Send OTP API — 生成 6 位验证码并发送邮件
  *
  * 安全策略：
+ * - Rate limit: 3 req/IP/5min (prevents email spam)
  * - 所有凭据从环境变量注入，运行时校验缺失则拒绝请求
  * - Supabase 和 Resend 客户端在 handler 内延迟初始化，避免构建时误用 placeholder
  */
@@ -28,6 +30,13 @@ function validateEnv(): { supabaseUrl: string; supabaseKey: string; resendKey: s
 }
 
 export async function POST(req: Request) {
+  // Rate limit — prevents OTP email spam
+  const ip = getClientIP(req);
+  const { allowed } = otpSendLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   try {
     const { supabaseUrl, supabaseKey, resendKey } = validateEnv();
     const resend = new Resend(resendKey);

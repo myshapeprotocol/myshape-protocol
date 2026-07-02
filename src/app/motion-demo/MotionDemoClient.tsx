@@ -18,6 +18,15 @@ import { useResearchUpload } from "@/hooks/useResearchUpload";
 import type { UploadData } from "@/hooks/useResearchUpload";
 import ResearchConsent from "@/components/research-consent/ResearchConsent";
 import type { LightingCondition, PhaseMetadata } from "@/types/research";
+import "./motion-demo.css";
+import ProcessingOverlay from "@/components/motion-demo/ProcessingOverlay";
+import IdlePanel from "@/components/motion-demo/IdlePanel";
+import CompletionCeremony from "@/components/motion-demo/CompletionCeremony";
+import PESGauge from "@/components/motion-demo/PESGauge";
+import PESBars, { buildPESBars } from "@/components/motion-demo/PESBars";
+import ThreatVerdict from "@/components/motion-demo/ThreatVerdict";
+import ZKProofBox from "@/components/motion-demo/ZKProofBox";
+import TelemetryPanel from "@/components/motion-demo/TelemetryPanel";
 
 type Phase = "idle" | "capturing" | "processing" | "complete";
 
@@ -106,6 +115,23 @@ export default function MotionDemoClient() {
     }
     return 4;
   }
+
+  // ── Quick Preview (demo mode with canned data) ──
+  const handleQuickPreview = useCallback(() => {
+    playTick(800, "sine", 0.10, 0.025);
+    setPesData({ score: 0.64, timing: 0.38, noise: 0.72, frequency: 0.15, biological: 0.55 });
+    setThreatVerdict("✓ HUMAN_PRESENCE_VERIFIED");
+    setProofHashes({ zkp: "a1b2c3d4", pop: "e5f6a7b8", mp: "c9d0e1f2", ep: "3a4b5c6d" });
+    setPhase("complete");
+    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+    if (genesisEmail) {
+      fetch("/api/motion/record", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: genesisEmail }),
+      }).catch(() => {});
+    }
+  }, []);
 
   // ── Real Camera Mode ──
   const startCapture = useCallback(async () => {
@@ -617,11 +643,11 @@ export default function MotionDemoClient() {
       <ProtocolHeader />
       
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6" style={{ paddingTop: "6rem", paddingBottom: "4rem" }}>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 motion-demo__container">
         <div className="space-y-6 mb-12">
           <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.5em] uppercase">Presence_Engine // Live_Demo</div>
           <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">
-            Motion <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>→</span> Geometry <span style={{ color: "rgba(144, 200, 255, 0.8)" }}>→</span> Signature
+            Motion <span className="motion-demo__arrow">→</span> Geometry <span className="motion-demo__arrow">→</span> Signature
           </h1>
           <p className="text-white/40 text-[12px] leading-relaxed max-w-xl">
             Real-time Presence Entropy Score via webcam. Motion Vector → SST 18-pt → 4D Entropy → ZK-Proof.
@@ -631,83 +657,26 @@ export default function MotionDemoClient() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Particle Panel */}
-          <div className="lg:col-span-2 border border-white/10 bg-black/60 relative overflow-hidden" style={{ minHeight: "min(500px, 70vw)" }}>
+          <div className="lg:col-span-2 border border-white/10 bg-black/60 relative overflow-hidden motion-demo__video-panel">
             {/* Video is the main display — camera feed directly visible */}
-            <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" playsInline muted
-              style={{ transform: "scaleX(-1)" }} />
+            <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover motion-demo__video" playsInline muted />
             {/* Canvas overlay: particles + skeleton only */}
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10 pointer-events-none" />
 
             {phase === "idle" && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/30 z-10 overflow-y-auto py-4">
-                {/* Chromium green screen warning */}
-                {isChromium && (
-                  <div className="px-4 py-3 border border-amber-400/30 bg-amber-400/[0.06] text-center max-w-sm" style={{ borderRadius: 4 }}>
-                    <p className="text-amber-300/80 text-[11px] leading-relaxed">
-                      Green screen or no camera? Chromium browsers (Chrome/Edge) often have WebGL webcam issues.
-                    </p>
-                    <p className="text-white/50 text-[10px] mt-1.5">
-                      <span className="text-[#90c8ff]">Firefox</span> is recommended — it works reliably with MediaPipe.
-                    </p>
-                    <p className="text-white/20 text-[8px] mt-1">
-                      On Chrome, try <span className="text-white/30">chrome://flags/#use-angle → OpenGL → Relaunch</span>
-                    </p>
-                  </div>
-                )}
-                {/* Privacy notice */}
-                <div className="flex items-center gap-2 px-3 py-1.5 border border-[#90c8ff]/20 bg-[#90c8ff]/[0.04] rounded-full">
-                  <svg className="w-3 h-3 text-[#90c8ff]/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
-                  <span className="text-[#90c8ff]/60 text-[8px] tracking-[0.15em] uppercase">100% Local Processing — Nothing Uploaded</span>
-                </div>
-                <p className="text-white/30 text-[13px] tracking-[0.12em] text-center max-w-md leading-relaxed">
-                  Activate your camera to generate a real-time<br />
-                  Presence Entropy Score from your motion geometry.
-                </p>
-                <p className="text-white/20 text-[11px] tracking-[0.08em] text-center max-w-xs mt-1">
-                  Face the camera. Stand naturally.<br />No specific pose or movement needed.
-                </p>
-                {/* Research Consent — inline before camera button */}
-                <div className="w-full max-w-xs mt-2">
-                  <ResearchConsent
-                    consented={researchConsented}
-                    onConsentChange={setResearchConsented}
-                    lighting={lighting}
-                    onLightingChange={setLighting}
-                    uploadState={uploadState}
-                    uploadError={uploadError}
-                    sessionId={sessionId}
-                    captureActive={false}
-                    uploadDone={uploadDone}
-                  />
-                </div>
-
-                <div className="flex flex-col items-center gap-3 mt-3">
-                  <button onClick={startCapture}
-                    onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-                    className="px-10 py-5 border border-[#90c8ff]/40 text-[#90c8ff]/80 text-[13px] tracking-[0.25em] uppercase hover:bg-[#90c8ff]/10 hover:text-white transition-all">
-                    Activate_Camera
-                  </button>
-                  <button onClick={() => {
-                    playTick(800, "sine", 0.10, 0.025);
-                    setPesData({ score: 0.64, timing: 0.38, noise: 0.72, frequency: 0.15, biological: 0.55 });
-                    setThreatVerdict("✓ HUMAN_PRESENCE_VERIFIED");
-                    setProofHashes({ zkp: "a1b2c3d4", pop: "e5f6a7b8", mp: "c9d0e1f2", ep: "3a4b5c6d" });
-                    setPhase("complete");
-                    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
-                    if (genesisEmail) {
-                      fetch("/api/motion/record", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email: genesisEmail }),
-                      }).catch(() => {});
-                    }
-                  }}
-                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                    className="text-[#90c8ff]/35 hover:text-[#90c8ff]/70 text-[10px] tracking-[0.15em] uppercase transition-colors border-b border-transparent hover:border-[#90c8ff]/30 pb-0.5">
-                    Quick Preview →
-                  </button>
-                </div>
-              </div>
+              <IdlePanel
+                isChromium={isChromium}
+                researchConsented={researchConsented}
+                onConsentChange={setResearchConsented}
+                lighting={lighting}
+                onLightingChange={setLighting}
+                uploadState={uploadState}
+                uploadError={uploadError}
+                sessionId={sessionId}
+                uploadDone={uploadDone}
+                onStartCapture={startCapture}
+                onQuickPreview={handleQuickPreview}
+              />
             )}
 
             {phase === "capturing" && (
@@ -740,71 +709,13 @@ export default function MotionDemoClient() {
               </>
             )}
 
-            {phase === "processing" && (
-              <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60">
-                <div className="text-center space-y-3.5">
-                  <div className="relative w-16 h-16 mx-auto">
-                    <div className="absolute inset-0 rounded-full border border-[#90c8ff]/20 animate-ping" style={{ animationDuration: "1.5s" }} />
-                    <div className="absolute inset-2 rounded-full border border-[#90c8ff]/30 animate-pulse" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-3 h-3 rounded-full bg-[#90c8ff] shadow-[0_0_12px_rgba(144,200,255,0.6)] animate-pulse" />
-                    </div>
-                  </div>
-                  <span className="text-[#90c8ff]/70 text-[10px] tracking-[0.3em] uppercase block animate-pulse">Generating ZK-Proof...</span>
-                  <div className="flex gap-1.5 justify-center">
-                    {[0, 1, 2].map(i => (
-                      <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#90c8ff]/50 animate-pulse"
-                        style={{ animationDelay: `${i * 0.25}s` }} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+            {phase === "processing" && <ProcessingOverlay />}
             {/* Completion Ceremony */}
             {phase === "complete" && pesData && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/90 gap-6 overflow-hidden">
-                {/* Particle burst ring */}
-                {[...Array(30)].map((_,i) => {
-                  const a = (i/30)*Math.PI*2;
-                  const x = Math.cos(a)*120; const y = Math.sin(a)*120;
-                  const colors = ["#90c8ff","#d4af37","#a78bfa","#90c8ff"];
-                  return (
-                    <div key={i} className="absolute left-1/2 top-1/2 pointer-events-none rounded-full"
-                      style={{width:4,height:4,background:colors[i%4],boxShadow:`0 0 10px ${colors[i%4]}`,
-                        animation:`ceremonyParticle 2s ease-out ${i*0.05}s forwards`,
-                        transform:`translate(${x}px,${y}px)`}}/>
-                  );
-                })}
-                {/* Central seal */}
-                <div className="relative w-36 h-36" style={{animation:"ceremonySealEnter 0.8s ease-out forwards"}}>
-                  <svg viewBox="0 0 140 140" className="w-full h-full">
-                    <defs>
-                      <radialGradient id="sealGlow"><stop offset="0%" stopColor="rgba(212,175,55,0.3)"/><stop offset="100%" stopColor="transparent"/></radialGradient>
-                      <linearGradient id="sealGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#d4af37"/><stop offset="50%" stopColor="#f0d060"/><stop offset="100%" stopColor="#b8941f"/></linearGradient>
-                    </defs>
-                    {/* Outer glow */}
-                    <circle cx="70" cy="70" r="62" fill="url(#sealGlow)"/>
-                    {/* Outer ring */}
-                    <circle cx="70" cy="70" r="50" fill="none" stroke="url(#sealGold)" strokeWidth="2" strokeDasharray="4 3" style={{animation:"ceremonyRotate 20s linear infinite",transformOrigin:"70px 70px"}}/>
-                    {/* Inner ring */}
-                    <circle cx="70" cy="70" r="42" fill="rgba(10,8,4,0.8)" stroke="rgba(212,175,55,0.5)" strokeWidth="1.5"/>
-                    {/* Octagon border */}
-                    <polygon points="70,18 107,33 122,70 107,107 70,122 33,107 18,70 33,33" fill="none" stroke="rgba(212,175,55,0.4)" strokeWidth="1"/>
-                    {/* Text */}
-                    <text x="70" y="62" textAnchor="middle" fill="rgba(212,175,55,0.5)" fontSize="6" fontFamily="monospace" letterSpacing="4">MYSHAPE</text>
-                    <text x="70" y="78" textAnchor="middle" fill="rgba(212,175,55,0.95)" fontSize="16" fontFamily="monospace" fontWeight="300" letterSpacing="2">SEALED</text>
-                    <text x="70" y="94" textAnchor="middle" fill="rgba(212,175,55,0.35)" fontSize="5" fontFamily="monospace" letterSpacing="3">PROTOCOL</text>
-                    {/* Star */}
-                    <polygon points="70,24 72,30 78,30 73,34 75,40 70,36 65,40 67,34 62,30 68,30" fill="rgba(212,175,55,0.6)"/>
-                  </svg>
-                </div>
-                <div className="text-center space-y-2" style={{animation:"ceremonyTextFade 1s ease-out 0.5s both"}}>
-                  <div className="text-amber-300/60 text-[14px] font-light tracking-[0.2em] uppercase">◈ Genesis Ritual Complete</div>
-                  <p className="text-white/30 text-[11px] max-w-xs leading-relaxed">Your kinetic signature is now sealed into the sovereign identity layer.</p>
-                  {researchConsented && uploadState === "success" && <p className="text-[#90c8ff]/30 text-[9px]">✓ Contributed to calibration engine</p>}
-                  {researchConsented && uploadState === "error" && <p className="text-red-400/40 text-[9px]">⚠ Research upload failed — data kept local</p>}
-                </div>
-              </div>
+              <CompletionCeremony
+                researchConsented={researchConsented}
+                uploadState={uploadState}
+              />
             )}
           </div>
 
@@ -815,25 +726,31 @@ export default function MotionDemoClient() {
                 {/* Box 1: PES + Telemetry + ZK Proof */}
                 <div>
                   <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.2em] uppercase mb-1.5">Presence Entropy Score</div>
-                  <div className="flex items-center justify-center"><div className="relative w-20 h-20"><svg viewBox="0 0 100 100" className="w-full h-full -rotate-90"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6"/><circle cx="50" cy="50" r="42" fill="none" stroke={pesData.score>0.5?"rgba(52,211,153,0.7)":"rgba(144,200,255,0.6)"} strokeWidth="6" strokeDasharray={`${pesData.score*264} 264`} strokeLinecap="round" style={{filter:`drop-shadow(0 0 8px ${pesData.score>0.5?"rgba(52,211,153,0.5)":"rgba(144,200,255,0.4)"})`}}/></svg><div className="absolute inset-0 flex items-center justify-center"><span className="text-white/90 font-mono text-[20px]" style={{textShadow:pesData.score>0.5?"0 0 14px rgba(52,211,153,0.6)":"0 0 14px rgba(144,200,255,0.5)"}}>{(pesData.score*100).toFixed(0)}</span></div></div></div>
-                  {threatVerdict&&<div className={`text-center text-[10px] tracking-[0.08em] uppercase font-mono mt-2 ${threatVerdict.startsWith("✓")?"text-[#90c8ff]/80":"text-amber-300/80"}`}>{threatVerdict}</div>}
+                  <div className="flex items-center justify-center">
+                    <PESGauge score={pesData.score} />
+                  </div>
+                  <ThreatVerdict verdict={threatVerdict} />
                 </div>
-                <div className="space-y-2">{[{l:"μTiming",v:pesData.timing,h:200},{l:"Noise",v:pesData.noise,h:190},{l:"Frequency",v:pesData.frequency,h:210},{l:"Biological",v:pesData.biological,h:180}].map(g=>(<div key={g.l}><div className="flex justify-between text-[10px]"><span className="text-white/35">{g.l}</span><span className="text-[#90c8ff]/60 font-mono text-[11px]">{(g.v*100).toFixed(0)}%</span></div><div className="h-2 bg-white/5 rounded-full overflow-hidden mt-0.5"><div className="h-full rounded-full transition-all duration-700" style={{width:`${Math.min(g.v*100,100)}%`,background:`linear-gradient(90deg,hsla(${g.h},60%,50%,0.4),hsla(${g.h},70%,60%,0.8))`,boxShadow:`0 0 6px hsla(${g.h},60%,60%,0.3)`}}/></div></div>))}</div>
+                <PESBars bars={buildPESBars(pesData)} />
                 <div className="h-px bg-white/5"/>
                 <div>
                   <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.2em] uppercase mb-1.5">Telemetry</div>
-                  <div className="space-y-2 text-[11px] font-mono">
-                    <div className="flex justify-between"><span className="text-white/30">SST Frames</span><span className="text-[#90c8ff]/60">{sstFramesRef.current.length}</span></div>
-                    <div className="flex justify-between"><span className="text-white/30">Valid Frames</span><span className="text-[#90c8ff]/60">{validFrameCount}</span></div>
-                    <div className="flex justify-between"><span className="text-white/30">Energy</span><span className="text-[#90c8ff]/60">{features?.features.energy.toFixed(2)??"—"}</span></div>
-                    <div className="flex justify-between"><span className="text-white/30">Phase</span><span className="text-[#90c8ff]/60">COMPLETE</span></div>
-                  </div>
+                  <TelemetryPanel
+                    sstFrames={sstFramesRef.current.length}
+                    validFrames={validFrameCount}
+                    energy={features?.features.energy ?? null}
+                    phase="COMPLETE"
+                  />
                 </div>
                 <button onClick={handleAICompare}
                   className="w-full py-1.5 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[9px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all">
                   {wasmCompare?.loading ? "Loading WASM..." : wasmCompare?.similarity != null ? `AI: ${(wasmCompare.similarity*100).toFixed(0)}%` : "Compare with AI →"}
                 </button>
-                {proofHashes&&(<div className="p-3 border border-[#90c8ff]/20 bg-[#90c8ff]/[0.03] space-y-1 mt-auto"><div className="text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase">ZK-Presence Proof</div><div className="text-[#90c8ff]/80 text-[10px] font-mono break-all leading-relaxed">{proofHashes.zkp}</div><div className="grid grid-cols-3 gap-2 text-[9px] pt-1"><div><span className="text-white/25">PoP</span><div className="text-[#90c8ff]/60 font-mono">{proofHashes.pop.slice(0,6)}</div></div><div><span className="text-white/25">MP</span><div className="text-[#90c8ff]/60 font-mono">{proofHashes.mp.slice(0,6)}</div></div><div><span className="text-white/25">EP</span><div className="text-[#90c8ff]/60 font-mono">{proofHashes.ep.slice(0,6)}</div></div></div></div>)}
+                {proofHashes && (
+                  <div className="mt-auto">
+                    <ZKProofBox zkp={proofHashes.zkp} pop={proofHashes.pop} mp={proofHashes.mp} ep={proofHashes.ep} />
+                  </div>
+                )}
               </div>
               <div className="flex-1 border border-white/10 bg-black/40 p-4 flex flex-col space-y-3.5">
                 {/* Box 2: Presence Signature + Witness + Actions */}
@@ -859,54 +776,12 @@ export default function MotionDemoClient() {
             {pesData && (
               <>
                 <div className="text-[#90c8ff]/40 text-[8px] tracking-[0.3em] uppercase">Presence_Entropy_Score (PES)</div>
-                {/* PES Ring */}
                 <div className="flex items-center justify-center py-2">
-                  <div className="relative w-20 h-20">
-                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
-                      <circle cx="50" cy="50" r="42" fill="none" stroke={pesData.score > 0.5 ? "rgba(52,211,153,0.7)" : "rgba(144,200,255,0.6)"} strokeWidth="6"
-                        strokeDasharray={`${pesData.score * 264} 264`} strokeLinecap="round"
-                        style={{ filter: `drop-shadow(0 0 6px ${pesData.score > 0.5 ? "rgba(52,211,153,0.5)" : "rgba(144,200,255,0.4)"})` }} />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-white/80 font-mono text-[16px] tracking-tighter"
-                        style={{ textShadow: pesData.score > 0.5 ? "0 0 10px rgba(52,211,153,0.5)" : "0 0 10px rgba(144,200,255,0.4)" }}>
-                        {(pesData.score * 100).toFixed(0)}
-                      </span>
-                    </div>
-                  </div>
+                  <PESGauge score={pesData.score} size="sm" />
                 </div>
-                {threatVerdict && (
-                  <div className={`text-center text-[9px] tracking-[0.15em] uppercase font-mono py-1 ${
-                    threatVerdict.startsWith("✓") ? "text-[#90c8ff]/80" :
-                    threatVerdict.startsWith("⚠") ? "text-amber-300/80" : "text-red-300/80"
-                  }`} style={{ textShadow: threatVerdict.startsWith("✓") ? "0 0 8px rgba(52,211,153,0.4)" : "0 0 8px rgba(252,211,77,0.4)" }}>
-                    {threatVerdict}
-                  </div>
-                )}
+                <ThreatVerdict verdict={threatVerdict} />
                 <div className="h-px bg-white/5" />
-                {/* 4D Gauge Bars */}
-                {[
-                  { label: "μTiming", value: pesData.timing, hue: 200 },
-                  { label: "Noise", value: pesData.noise, hue: 190 },
-                  { label: "Freq", value: pesData.frequency, hue: 210 },
-                  { label: "Bio", value: pesData.biological, hue: 180 },
-                ].map(g => (
-                  <div key={g.label} className="space-y-1">
-                    <div className="flex justify-between text-[8px]">
-                      <span className="text-white/25">{g.label}</span>
-                      <span className="text-[#90c8ff]/50 font-mono">{(g.value * 100).toFixed(0)}%</span>
-                    </div>
-                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-1000 ease-out"
-                        style={{
-                          width: `${Math.min(g.value * 100, 100)}%`,
-                          background: `linear-gradient(90deg, hsla(${g.hue},60%,50%,0.4), hsla(${g.hue},70%,60%,0.8))`,
-                          boxShadow: `0 0 6px hsla(${g.hue},60%,60%,0.3)`,
-                        }} />
-                    </div>
-                  </div>
-                ))}
+                <PESBars bars={buildPESBars(pesData)} />
               </>
             )}
 
@@ -942,51 +817,16 @@ export default function MotionDemoClient() {
             )}
 
             <div className="text-[#90c8ff]/40 text-[8px] tracking-[0.3em] uppercase">Motion_Telemetry</div>
-            <div className="space-y-2.5 text-[10px] font-mono">
-              <div className="flex justify-between">
-                <span className="text-white/25">SST Frames</span>
-                <span className="text-[#90c8ff]/60">{sstFramesRef.current.length}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-white/25">Valid Frames</span>
-                <span className="text-[#90c8ff]/60">{validFrameCount} <span className="text-white/15">/ {sstFramesRef.current.length || 0}</span></span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-white/25">Energy</span>
-                <span className="text-[#90c8ff]/60">{features?.features.energy.toFixed(2) ?? "—"}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-white/25">Phase</span>
-                <span className="text-[#90c8ff]/50">{phase.toUpperCase()}</span>
-              </div>
-              {phase === "capturing" && sstFramesRef.current.length < 30 && (
-                <div className="text-[#90c8ff]/30 text-[8px] italic">Collecting frames... ({sstFramesRef.current.length}/30)</div>
-              )}
-            </div>
+            <TelemetryPanel
+              sstFrames={sstFramesRef.current.length}
+              validFrames={validFrameCount}
+              energy={features?.features.energy ?? null}
+              phase={phase}
+              showCollectingHint
+            />
 
             {proofHashes && (
-              <div className="mt-4 p-3 border border-[#90c8ff]/20 bg-[#90c8ff]/[0.03] space-y-2">
-                <div className="text-[#90c8ff]/50 text-[8px] tracking-[0.3em] uppercase">ZK-Presence_Proof</div>
-                <div className="text-[#90c8ff]/70 text-[9px] font-mono break-all leading-relaxed"
-                  style={{ textShadow: "0 0 8px rgba(144,200,255,0.3)" }}>
-                  {proofHashes.zkp}
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-[8px]">
-                  <div>
-                    <span className="text-white/20">PoP</span>
-                    <div className="text-[#90c8ff]/50 font-mono truncate">{proofHashes.pop.slice(0,6)}</div>
-                  </div>
-                  <div>
-                    <span className="text-white/20">MP</span>
-                    <div className="text-[#90c8ff]/50 font-mono truncate">{proofHashes.mp.slice(0,6)}</div>
-                  </div>
-                  <div>
-                    <span className="text-white/20">EP</span>
-                    <div className="text-[#90c8ff]/50 font-mono truncate">{proofHashes.ep.slice(0,6)}</div>
-                  </div>
-                </div>
-                <div className="text-white/15 text-[8px] mt-1 tracking-[0.15em]">§6 ZK-PRESENCE — PROOF-OF-CONCEPT</div>
-              </div>
+              <ZKProofBox zkp={proofHashes.zkp} pop={proofHashes.pop} mp={proofHashes.mp} ep={proofHashes.ep} />
             )}
 
             {phase === "complete" && (
@@ -1147,16 +987,14 @@ export default function MotionDemoClient() {
                       <a
                         href={`https://bsky.app/intent/compose?text=I+just+became+MyShape+Protocol+Witness+%23${witnessData.position_number}.+Join+the+first+300+to+calibrate+the+motion-signature+engine.%0A%0Ahttps://myshape.com/research/apply`}
                         target="_blank" rel="noopener noreferrer"
-                        className="px-2.5 py-1 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[7px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all"
-                        style={{ borderRadius: 2 }}
+                        className="px-2.5 py-1 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[7px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all motion-demo__card-sm"
                       >
                         Share on Bluesky
                       </a>
                       <a
                         href={`https://www.linkedin.com/sharing/share-offsite/?url=https://myshape.com/research/apply?ref=witness_share`}
                         target="_blank" rel="noopener noreferrer"
-                        className="px-2.5 py-1 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[7px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all"
-                        style={{ borderRadius: 2 }}
+                        className="px-2.5 py-1 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[7px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all motion-demo__card-sm"
                       >
                         Share on LinkedIn
                       </a>

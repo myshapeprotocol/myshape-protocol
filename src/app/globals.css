@@ -7,8 +7,32 @@
    ============================================================ */
 
 :root {
+  /* ── Base ── */
   --background: #02040a;
   --foreground: #ededed;
+
+  /* ── Accent system (DESIGN.md §2.1) ── */
+  --accent-ice: #90c8ff;        /* Ice Blue — static accent */
+  --accent-cyan: #22d3ee;       /* Cyan — active/interactive accent */
+  --accent-gold: #d4af37;       /* Gold — genesis/ritual/achievement */
+  --accent-ice-light: #80bfff;  /* Light Ice Blue — input borders, pulse */
+  --accent-cursor: #88ccff;     /* Cursor Blue — starfield, vortex glow */
+
+  /* ── Semantic (DESIGN.md §2.2) ── */
+  --semantic-success: #34d399;
+  --semantic-success-glow: rgba(80, 255, 170, 0.5);
+  --semantic-error: #ef4444;
+  --semantic-warning: rgba(251, 146, 60, 1);
+  --semantic-violet: #a78bfa;
+  --semantic-pink: #f472b6;
+
+  /* ── Opacity scale (DESIGN.md §2.3) ── */
+  --opacity-subtle: 0.03;
+  --opacity-border: 0.10;
+  --opacity-dim: 0.20;
+  --opacity-muted: 0.35;
+  --opacity-body: 0.60;
+  --opacity-active: 0.80;
 }
 
 html {

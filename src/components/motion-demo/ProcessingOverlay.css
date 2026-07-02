@@ -1,0 +1,10 @@
+/* ProcessingOverlay — loading animation styles */
+
+.motion-demo__ping-fast {
+  animation-duration: 1.5s;
+}
+
+.motion-demo__status-dot-0 { animation-delay: 0s; }
+.motion-demo__status-dot-1 { animation-delay: 0.25s; }
+.motion-demo__status-dot-2 { animation-delay: 0.5s; }
+.motion-demo__status-dot-3 { animation-delay: 0.75s; }

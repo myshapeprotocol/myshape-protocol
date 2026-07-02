@@ -5,52 +5,16 @@ import GlowVortexButton from "@/components/hero/GlowVortexButton";
 import NarrativeText from "@/components/hero/NarrativeText";
 import { playTick } from "@/utils/useAudioTick";
 import "./hero-demo.css";
+import { SCENES, SCENE_DURATION, FADE_MS } from "./scenes";
+import { getTorusCount, makeBaseParticle, initParticles } from "./particles";
 
 /* ═══════════════════════════════════════════════
-   HeroDemo v3 — 分两步验证
-   Step 1: 纯 HeroVisual torus 渲染（不含场景切换）
-   Step 2: 确认粒子可见后再叠加场景系统
-
+   HeroDemo v3
    粒子渲染数学：100% 复制 HeroVisual
    ═══════════════════════════════════════════════ */
 
-const SCENE_DURATION = 10000;
-const FADE_MS = 600;
-
-function getTorusCount(): number {
-  if (typeof window === "undefined") return 1500;
-  return window.innerWidth < 768 ? 600 : 1500;
-}
-
-const SCENES = [
-  {
-    name: "formation" as const,
-    label: "PRESENCE",
-    subtitle:
-      "Your motion is the key. No password. No physical scan. No stored data. Presence is the proof — and the proof is the identity.",
-  },
-  {
-    name: "motion" as const,
-    label: "ENTROPY",
-    subtitle:
-      "AI cannot forge biological motion. The 4D entropy gap — timing, noise, frequency, perturbation — is mathematically irreducible.",
-  },
-  {
-    name: "genesis" as const,
-    label: "SOVEREIGNTY",
-    subtitle:
-      "Your identity vector is yours alone. Non-invertible. Non-custodial. No platform can revoke what you generate through your own motion.",
-  },
-  {
-    name: "mesh" as const,
-    label: "CONTINUITY",
-    subtitle:
-      "Human and AI identities coexist in one protocol. Presence Receipts form a continuous verifiable timeline — your identity infrastructure.",
-  },
-];
-
 /* ── 粒子结构（与 HeroVisual 完全一致）── */
-interface Particle {
+export interface Particle {
   angle: number;
   radius: number;
   y: number;
@@ -171,68 +135,6 @@ export default function HeroDemo() {
     }
     initStars();
 
-    /* ── 粒子工厂（基础 torus）── */
-    function makeBaseParticle(): Particle {
-      const r = Math.random() * 120;
-      const y = (Math.random() - 0.5) * 300;
-      const s = 0.008 + Math.random() * 0.022;
-      return {
-        angle: Math.random() * Math.PI * 2,
-        radius: r, y, speed: s,
-        baseRadius: r, baseY: y, baseSpeed: s,
-        targetRadius: r, targetY: y,
-        wavePhase: Math.random() * Math.PI * 2,
-        clusterIdx: -1, clusterX: 0, clusterY: 0,
-      };
-    }
-
-    /* ── 按场景生成粒子 ── */
-    function initParticles(name: string) {
-      if (name === "formation") {
-        // S1: 粒子从散落 → 聚合为目标 torus
-        // 散落范围限制在视野内（半径 ≤ 280，确保 sc 始终为正）
-        particlesRef.current = Array.from({ length: getTorusCount() }, () => {
-          const p = makeBaseParticle();
-          p.radius = 80 + Math.random() * 200; // 80-280（视野内）
-          p.y = (Math.random() - 0.5) * H * 0.8; // ±40% 视口高度
-          p.targetRadius = p.baseRadius;
-          p.targetY = p.baseY;
-          return p;
-        });
-      } else if (name === "mesh") {
-        // S4: 4 节点 — 东西南北十字布局
-        const clusters = [
-          { x: 0, y: -120, s: 0.50 },   // 北
-          { x: -130, y: 30, s: 0.45 },  // 西
-          { x: 130, y: 30, s: 0.45 },   // 东
-          { x: 0, y: 130, s: 0.48 },    // 南
-        ];
-        const per = Math.floor(1500 / clusters.length);
-        particlesRef.current = [];
-        for (let ci = 0; ci < clusters.length; ci++) {
-          const cl = clusters[ci];
-          for (let i = 0; i < per; i++) {
-            const p = makeBaseParticle();
-            p.baseRadius *= cl.s;
-            p.radius = p.baseRadius;
-            p.targetRadius = p.baseRadius;
-            p.baseY *= cl.s;
-            p.y = p.baseY;
-            p.targetY = p.baseY;
-            p.baseSpeed *= 1 + Math.random() * 0.5;
-            p.speed = p.baseSpeed;
-            p.clusterIdx = ci;
-            p.clusterX = cl.x;
-            p.clusterY = cl.y;
-            particlesRef.current.push(p);
-          }
-        }
-      } else {
-        // S2/S3: 标准 torus
-        particlesRef.current = Array.from({ length: getTorusCount() }, () => makeBaseParticle());
-      }
-    }
-
     /* ── resize（HeroVisual 同款）── */
     function resize() {
       if (!canvas) return;
@@ -251,7 +153,7 @@ export default function HeroDemo() {
       sceneNameRef.current = SCENES[idx].name;
       sceneStartRef.current = performance.now();
       switchingRef.current = false;
-      initParticles(sceneNameRef.current);
+      initParticles(sceneNameRef.current, particlesRef.current, H);
       setUiScene(idx);
     }
 
@@ -577,7 +479,7 @@ export default function HeroDemo() {
 
     /* ── 初始化（对标 HeroVisual: resize → init → draw）── */
     resize();
-    initParticles(sceneNameRef.current);
+    initParticles(sceneNameRef.current, particlesRef.current, H);
     sceneStartRef.current = performance.now();
     raf = requestAnimationFrame(draw);
 

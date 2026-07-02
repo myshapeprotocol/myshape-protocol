@@ -72,8 +72,9 @@ export async function POST(req: Request) {
       message: "AGENT_DECLARATION_ACCEPTED",
     });
   } catch (err: unknown) {
+    console.error("[/api/agent/declare]", err);
     return NextResponse.json(
-      { error: (err as Error).message || "INTERNAL_SERVER_ERROR" },
+      { error: "INTERNAL_SERVER_ERROR" },
       { status: 500 }
     );
   }

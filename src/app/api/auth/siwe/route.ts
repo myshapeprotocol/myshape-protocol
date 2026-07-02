@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { ethers } from 'ethers';
+import { apiLookupLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
  * POST /api/auth/siwe — EIP-4361 Sign-In with Ethereum
@@ -12,6 +13,8 @@ import { ethers } from 'ethers';
  * 2. 对账：recoveredAddress === address
  * 3. 写入/更新 protocol_nodes 的 wallet_address
  * 4. 返回节点状态（genesis/active/new）
+ *
+ * Rate limit: 10 req/IP/min — prevents auth spam
  */
 
 function validateEnv() {
@@ -24,6 +27,12 @@ function validateEnv() {
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIP(req);
+  const { allowed } = apiLookupLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   try {
     const { supabaseUrl, supabaseKey } = validateEnv();
     const supabase = createClient(supabaseUrl, supabaseKey);

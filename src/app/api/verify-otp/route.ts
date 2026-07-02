@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { otpVerifyLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
  * Verify OTP API — 校验 6 位验证码并激活节点
@@ -8,6 +9,7 @@ import { NextResponse } from 'next/server';
  * 验证成功后发送祝贺邮件（Genesis 确认函）
  *
  * 安全策略：
+ * - Rate limit: 5 attempts/IP/5min (prevents brute force)
  * - Supabase / Resend 客户端在 handler 内延迟初始化
  * - 运行时校验环境变量
  */
@@ -112,6 +114,12 @@ async function sendWelcomeEmail(
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIP(req);
+  const { allowed } = otpVerifyLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+  }
+
   try {
     const { supabaseUrl, supabaseKey, resendKey } = validateEnv();
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -182,7 +190,7 @@ export async function POST(req: Request) {
   } catch (error: unknown) {
     console.error('VERIFY_OTP_ERROR:', error);
     return NextResponse.json(
-      { error: (error as Error).message || 'INTERNAL_SERVER_ERROR' },
+      { error: 'INTERNAL_SERVER_ERROR' },
       { status: 500 }
     );
   }

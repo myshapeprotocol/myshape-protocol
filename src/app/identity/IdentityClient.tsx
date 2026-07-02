@@ -19,7 +19,11 @@ export default function IdentityClient() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorHint, setErrorHint] = useState("");
-  const [genesisId] = useState(() => makeGenesisId());
+  const [genesisId, setGenesisId] = useState("GNS_------_--------");
+
+  useEffect(() => {
+    setGenesisId(makeGenesisId());
+  }, []);
   const [isGenesisUser, setIsGenesisUser] = useState(false);
 
   useEffect(() => {

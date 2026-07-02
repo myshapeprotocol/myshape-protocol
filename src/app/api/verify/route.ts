@@ -20,10 +20,18 @@
  * Runtime: Node.js (required for WASM)
  */
 
+import { apiLookupLimiter, getClientIP } from '@/lib/rate-limiter';
+
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
+  const ip = getClientIP(request);
+  const { allowed } = apiLookupLimiter.check(ip);
+  if (!allowed) {
+    return Response.json({ error: 'RATE_LIMIT' }, { status: 429 });
+  }
+
   try {
     const payload = await request.json();
     const { enrollment, challenge, response, signature, risk_level } = payload;

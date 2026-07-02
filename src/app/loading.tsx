@@ -1,44 +1,21 @@
 /**
- * Root Loading UI — 路由切换时的全局加载状态
- * Next.js App Router 约定：loading.tsx 自动包裹所有 page.tsx 的 Suspense 边界
+ * Root Loading UI — global loading state during route transitions.
+ * Next.js App Router: loading.tsx wraps all page.tsx Suspense boundaries.
  */
 import "./loading.css";
 
 export default function RootLoading() {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 99999,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#02040a",
-        gap: "24px",
-      }}
-    >
-      {/* 简单的脉冲指示器 — 保持品牌调性 */}
+    <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#02040a] gap-6">
+      {/* Pulse indicator — brand-consistent Ice Blue glow */}
       <div
+        className="w-1 h-1 rounded-full bg-[#90c8ff]"
         style={{
-          width: "4px",
-          height: "4px",
-          borderRadius: "50%",
-          background: "#90c8ff",
           boxShadow: "0 0 12px #90c8ff, 0 0 24px rgba(144, 200, 255, 0.5)",
           animation: "myshape-loading-pulse 1.2s ease-in-out infinite",
         }}
       />
-      <span
-        style={{
-          fontFamily: "monospace",
-          fontSize: "9px",
-          letterSpacing: "0.6em",
-          color: "rgba(144, 200, 255, 0.4)",
-          textTransform: "uppercase",
-        }}
-      >
+      <span className="font-mono text-[9px] tracking-[0.6em] text-[#90c8ff]/40 uppercase">
         SYNCHRONIZING
       </span>
     </div>

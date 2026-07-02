@@ -1,26 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-
-// ── Rate limiter: 10 lookups per IP per minute ──
-const rateMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRate(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateMap.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
+import { apiLookupLimiter, getClientIP } from "@/lib/rate-limiter";
 
 export async function GET(req: Request) {
   try {
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-    if (!checkRate(ip)) {
-      return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
+    const ip = getClientIP(req);
+    const { allowed, remaining } = apiLookupLimiter.check(ip);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "RATE_LIMIT" },
+        {
+          status: 429,
+          headers: { "X-RateLimit-Remaining": String(remaining) },
+        },
+      );
     }
 
     const { searchParams } = new URL(req.url);
@@ -43,7 +36,17 @@ export async function GET(req: Request) {
       .eq("email", email.trim())
       .single();
 
-    if (error || !data) {
+    // PGRST116 = no rows — legitimate "not found"
+    if (error) {
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ found: false, email: email.trim() });
+      }
+      // Any other DB error is a genuine failure
+      console.error("[/api/identity] Supabase error:", error.code, error.message);
+      return NextResponse.json({ error: "DATABASE_ERROR" }, { status: 500 });
+    }
+
+    if (!data) {
       return NextResponse.json({ found: false, email: email.trim() });
     }
 

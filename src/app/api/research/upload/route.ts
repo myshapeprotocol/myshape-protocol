@@ -16,52 +16,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import type { ResearchUploadPayload, ResearchUploadResponse } from "@/types/research";
+import { researchUploadLimiter, getClientIP } from "@/lib/rate-limiter";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
-
-// ── Rate Limiter (in-memory, per-IP, 24h sliding window) ──
-
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-interface RateEntry {
-  count: number;
-  windowStart: number;
-}
-
-const rateMap = new Map<string, RateEntry>();
-
-// Periodic cleanup — purge expired entries every 15 minutes
-let lastCleanup = Date.now();
-function cleanupRateMap(): void {
-  const now = Date.now();
-  if (now - lastCleanup < 15 * 60 * 1000) return;
-  lastCleanup = now;
-  for (const [key, entry] of rateMap) {
-    if (now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
-      rateMap.delete(key);
-    }
-  }
-}
-
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
-  cleanupRateMap();
-  const now = Date.now();
-  const existing = rateMap.get(ip);
-
-  if (!existing || now - existing.windowStart > RATE_LIMIT_WINDOW_MS) {
-    rateMap.set(ip, { count: 1, windowStart: now });
-    return { allowed: true, remaining: RATE_LIMIT_MAX - 1 };
-  }
-
-  if (existing.count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  existing.count++;
-  return { allowed: true, remaining: RATE_LIMIT_MAX - existing.count };
-}
 
 // ── Validation ──
 
@@ -233,13 +191,10 @@ function getSupabase() {
 
 export async function POST(request: Request): Promise<Response> {
   // ── Rate Limit ──
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    request.headers.get("x-real-ip") ??
-    "unknown";
+  const ip = getClientIP(request);
 
   if (ip !== "unknown") {
-    const { allowed, remaining } = checkRateLimit(ip);
+    const { allowed, remaining } = researchUploadLimiter.check(ip);
     if (!allowed) {
       return NextResponse.json<ResearchUploadResponse>(
         { success: false, session_id: "", error: "RATE_LIMIT_EXCEEDED" },

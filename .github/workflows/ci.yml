@@ -7,22 +7,30 @@ on:
     branches: [master, main]
 
 jobs:
-  check:
+  quality:
+    name: TypeScript + Tests + Build
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: "npm"
 
       - run: npm ci
 
-      - name: Type check
+      - name: TypeScript Check
         run: npx tsc --noEmit
 
-      - name: Lint
-        run: npx eslint . --quiet --max-warnings 50 || true
+      - name: Tests
+        run: npm test
 
-      - name: Brand compliance scan
-        run: bash scripts/brand-check.sh
+      - name: Build
+        run: npx next build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder-anon-key"
+          SUPABASE_SERVICE_ROLE_KEY: "placeholder-service-role-key"
+          RESEND_API_KEY: "placeholder-resend-key"

@@ -6,6 +6,14 @@ import ProtocolFooter from "@/components/footer/footer";
 
 import { playTick } from "@/utils/useAudioTick";
 
+function DemoHash() {
+  const [hash, setHash] = useState("0x--------------");
+  useEffect(() => {
+    setHash(`0x${Math.floor(Math.random() * 0xFFFFFFFFFFFF).toString(16).padStart(12, "0")}`);
+  }, []);
+  return <>{hash}</>;
+}
+
 // ── 模拟数据 ──
 const SIM_STEPS = [
   { t: 0.0, timing: 0.42, noise: 0.88, freq: 0.15, bio: 0.71, score: 0.56 },
@@ -163,7 +171,7 @@ export default function MotionGeometryClient() {
             <div className="mt-4 pt-3 border-t border-white/5">
               <div className="text-white/15 text-[8px] tracking-[0.2em] uppercase mb-1">Proof Hash</div>
               <div className="text-[#90c8ff]/40 font-mono text-[9px] break-all">
-                0x{Math.floor(Math.random() * 0xFFFFFFFFFFFF).toString(16).padStart(12, "0")}
+                <DemoHash />
               </div>
             </div>
           </div>

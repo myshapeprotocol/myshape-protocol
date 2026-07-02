@@ -6,7 +6,9 @@
 // Production path: migrate to circom/Halo2 circuits.
 // ============================================================
 
-// ── Web Crypto wrappers ──
+// ── Crypto wrappers ──
+import { sha256 as nobleSha256 } from "@noble/hashes/sha2.js";
+import { pow as fieldPow } from "@noble/curves/abstract/modular.js";
 
 function randomBytes(length: number): Uint8Array {
   if (typeof window !== "undefined" && window.crypto) {
@@ -18,24 +20,8 @@ function randomBytes(length: number): Uint8Array {
   return arr;
 }
 
-function sha256Sync(data: Uint8Array): Uint8Array {
-  // Deterministic fallback for sync contexts
-  const result = new Uint8Array(32);
-  let h0 = 0x6a09e667, h1 = 0xbb67ae85, h2 = 0x3c6ef372, h3 = 0xa54ff53a;
-  const h4 = 0x510e527f, h5 = 0x9b05688c, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
-  for (let i = 0; i < data.length; i++) {
-    const b = data[i];
-    h0 = ((h0 << 3) ^ b) & 0xffffffff;
-    h1 = ((h1 << 5) ^ b ^ (h0 >>> 2)) & 0xffffffff;
-    h2 = ((h2 << 7) ^ b ^ (h1 >>> 3)) & 0xffffffff;
-    h3 = ((h3 << 11) ^ b ^ (h2 >>> 5)) & 0xffffffff;
-  }
-  const view = new DataView(result.buffer);
-  view.setUint32(0, h0); view.setUint32(4, h1);
-  view.setUint32(8, h2); view.setUint32(12, h3);
-  view.setUint32(16, h4); view.setUint32(20, h5);
-  view.setUint32(24, h6); view.setUint32(28, h7);
-  return result;
+function sha256(data: Uint8Array): Uint8Array {
+  return nobleSha256(data);
 }
 
 // ── Pedersen Commitment Scheme ──
@@ -46,16 +32,9 @@ const PEDERSEN_P = BigInt("0xfffffffffffffffffffffffffffffffffffffffffffffffffff
 const PEDERSEN_G = 2n;  // generator
 const PEDERSEN_H = 3n;  // second generator (independent)
 
+/** Modular exponentiation — delegates to @noble/curves for Barrett-optimized reduction */
 function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
-  let result = 1n;
-  base = base % mod;
-  let e = exp;
-  while (e > 0n) {
-    if (e & 1n) result = (result * base) % mod;
-    base = (base * base) % mod;
-    e >>= 1n;
-  }
-  return result;
+  return fieldPow(base, exp, mod);
 }
 
 function bigintFromBytes(bytes: Uint8Array): bigint {
@@ -74,7 +53,7 @@ export interface PedersenCommitment {
 export function pedersenCommit(message: string): PedersenCommitment {
   const r = randomBytes(32);
   const rBig = bigintFromBytes(r);
-  const mHash = sha256Sync(new TextEncoder().encode(message));
+  const mHash = sha256(new TextEncoder().encode(message));
   const mBig = bigintFromBytes(mHash);
 
   // C = G^m · H^r (mod P)
@@ -94,7 +73,7 @@ export function pedersenVerify(
   blinding: string,
 ): boolean {
   const c = BigInt("0x" + commitment);
-  const mHash = sha256Sync(new TextEncoder().encode(message));
+  const mHash = sha256(new TextEncoder().encode(message));
   const mBig = bigintFromBytes(mHash);
   const rBytes = new Uint8Array(blinding.match(/.{2}/g)!.map(b => parseInt(b, 16)));
   const rBig = bigintFromBytes(rBytes);
@@ -138,11 +117,11 @@ export function schnorrProve(
 
   // Challenge c = H(commitment || t)
   const challengeInput = commitment.commitment + t.toString(16).padStart(64, "0");
-  const challengeHash = sha256Sync(new TextEncoder().encode(challengeInput));
+  const challengeHash = sha256(new TextEncoder().encode(challengeInput));
   const c = bigintFromBytes(challengeHash);
 
   // Responses: s_m = nonce_m + c·message, s_r = nonce_r + c·blinding
-  const mBig = bigintFromBytes(sha256Sync(new TextEncoder().encode(witness.message)));
+  const mBig = bigintFromBytes(sha256(new TextEncoder().encode(witness.message)));
   const rBytes = new Uint8Array(witness.blinding.match(/.{2}/g)!.map(b => parseInt(b, 16)));
   const rBig = bigintFromBytes(rBytes);
 
@@ -173,7 +152,7 @@ export function schnorrVerify(
 
   // Recompute challenge
   const challengeInput = commitment.commitment + tPrime.toString(16).padStart(64, "0");
-  const challengeHash = sha256Sync(new TextEncoder().encode(challengeInput));
+  const challengeHash = sha256(new TextEncoder().encode(challengeInput));
   const cPrime = bigintFromBytes(challengeHash);
 
   return c === cPrime;
