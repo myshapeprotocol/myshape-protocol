@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import BlogClient from "./BlogClient";
 
 export const metadata: Metadata = {
-  title: "AI Cannot Forge Human Motion — MyShape Protocol",
+  title: "Protocol Log — MyShape Genesis Archive",
   description:
-    "We proved it. Here is the evidence. A Rust engine that detects AI-generated human motion with a 0.3960 Human—AI gap. Open source.",
+    "Technical essays on sovereign identity, presence verification, and the protocol layer for verifiable digital continuity.",
   openGraph: {
-    title: "AI Cannot Forge Human Motion — We Proved It",
+    title: "Protocol Log — MyShape Genesis Archive",
     description:
-      "GPT-5 and DeepSeek both failed. Our engine proves AI cannot generate human motion — 0.3960 Human—AI gap.",
+      "Essays on sovereign identity, presence verification, and verifiable digital continuity.",
     url: "https://www.myshape.com/blog",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     locale: "en_US",
-    type: "article",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Cannot Forge Human Motion — We Proved It",
-    description: "GPT-5 and DeepSeek both failed. 0.3960 Human—AI gap. Here is the evidence.",
+    title: "Protocol Log — MyShape Genesis Archive",
+    description: "Essays on sovereign identity, presence verification, and verifiable digital continuity.",
     images: ["/og-image.png"],
   },
 };

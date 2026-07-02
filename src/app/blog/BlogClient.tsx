@@ -1,306 +1,138 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import { playTick } from "@/utils/useAudioTick";
+import Link from "next/link";
 
-const SECTIONS = [
-  { id: "experiment", label: "The Experiment" },
-  { id: "results", label: "The Results" },
-  { id: "why", label: "Why This Matters" },
-  { id: "how", label: "How It Works" },
-  { id: "truth", label: "The Deeper Truth" },
-  { id: "run", label: "Run It Yourself" },
-  { id: "building", label: "What We're Building" },
+interface PostEntry {
+  slug: string;
+  series?: string;
+  title: string;
+  subtitle: string;
+  date: string;
+  tags: string[];
+}
+
+const POSTS: PostEntry[] = [
+  {
+    slug: "/blog/genesis-001-why-identity-is-not-enough",
+    series: "GENESIS 001",
+    title: "Why Identity Is Not Enough",
+    subtitle: "Identity proves existence. Continuity proves evolution. In the age of autonomous agents, we need protocols that verify the trajectory of a subject — not just its snapshot.",
+    date: "2026.07.02",
+    tags: ["identity", "continuity", "agents", "protocol"],
+  },
+  {
+    slug: "/blog/stored-identity-vs-generated-presence",
+    title: "Stored Identity vs. Generated Presence",
+    subtitle: "Every identity system today stores a snapshot. Snapshots can be copied. Presence cannot — because presence is not data. It is physics.",
+    date: "2026.06.27",
+    tags: ["identity", "presence", "AI", "architecture"],
+  },
+  {
+    slug: "/blog/continuity-layer-for-the-simulation-age",
+    title: "The Continuity Layer for the Simulation Age",
+    subtitle: "A technical exploration of presence receipts, ZK-presence proofs, and the protocol architecture for verifiable digital continuity.",
+    date: "2026.06.21",
+    tags: ["continuity", "ZK", "protocol", "architecture"],
+  },
 ];
 
 export default function BlogClient() {
-  const [active, setActive] = useState("experiment");
-  const [tocShow, setTocShow] = useState(true);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY + 120;
-      for (let i = SECTIONS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(SECTIONS[i].id);
-        if (el && el.offsetTop <= scrollY) { setActive(SECTIONS[i].id); break; }
-      }
-      const footer = document.querySelector("footer");
-      if (footer) setTocShow(footer.getBoundingClientRect().top > window.innerHeight * 0.5);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    playTick(600, "sine", 0.06, 0.015);
-  };
-
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
       <ProtocolHeader />
       <BackgroundParticles />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16 flex flex-col md:flex-row gap-12 md:gap-24">
-        {/* Spacer — keeps article position when TOC is fixed */}
-        <div className="md:w-56 shrink-0 hidden md:block" />
-        {/* ── Desktop TOC: sidebar ── */}
-        <aside className="hidden md:block" style={{
-          position: "fixed",
-          top: "128px",
-          left: "max(24px, calc((100vw - 1024px) / 2 + 24px))",
-          width: "224px",
-          opacity: tocShow ? 1 : 0,
-          pointerEvents: tocShow ? "auto" : "none",
-          transition: "opacity 0.3s",
-          zIndex: 10,
-        }}>
-          <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.5em] uppercase mb-8 font-mono font-bold">ARCHIVE_INDEX</div>
-          <ul className="space-y-6 border-l" style={{ borderColor: "rgba(144,200,255,0.08)" }}>
-            {SECTIONS.map(s => {
-              const isActive = s.id === active;
-              return (
-                <li key={s.id}>
-                  <button
-                    onClick={() => scrollTo(s.id)}
-                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                    className="block text-left w-full transition-all duration-300"
-                    style={{
-                      borderLeft: isActive ? "2px solid rgba(144,200,255,0.8)" : "2px solid transparent",
-                      marginLeft: "-1px",
-                      paddingLeft: isActive ? "20px" : "20px",
-                      background: isActive ? "linear-gradient(90deg, rgba(144,200,255,0.06), transparent)" : "transparent",
-                    }}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className={`w-1 h-1 rounded-full shrink-0 transition-all duration-300 ${isActive ? "bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.6)] scale-100" : "bg-transparent scale-0"}`} />
-                      <span className="text-[12px] tracking-[0.2em] uppercase transition-all duration-300"
-                        style={{
-                          color: isActive ? "rgba(144,200,255,0.95)" : "rgba(255,255,255,0.2)",
-                          textShadow: isActive ? "0 0 12px rgba(144,200,255,0.4)" : "none",
-                        }}>
-                        {s.label}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </aside>
-
-        <article className="flex-1 min-w-0" style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
+      <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-6" style={{ paddingTop: "8rem", paddingBottom: "6rem" }}>
         {/* Header */}
-        <div className="mb-12 md:mb-16">
-          <div className="text-[#90c8ff]/40 text-[9px] tracking-[0.4em] uppercase mb-4">TECHNICAL_BLOG // JUNE_2026</div>
-          <h1 className="text-2xl md:text-4xl font-light tracking-[0.04em] text-white leading-tight mb-6"
-            style={{ textShadow: "0 0 40px rgba(144,200,255,0.15)" }}>
-            AI Cannot Forge Human Motion.
-            <br />
-            <span className="text-[#90c8ff]/80">We proved it. Here is the evidence.</span>
+        <div className="space-y-4 mb-20">
+          <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.5em] uppercase">Protocol Log</div>
+          <h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white">
+            GENESIS<span className="text-[#90c8ff]">_ARCHIVE</span>
           </h1>
-          <p className="text-white/40 text-[18px] leading-relaxed">
-            AI can fake a face. AI can clone a voice. But AI cannot generate your motion — the specific,
-            irreducibly biological pattern of your nervous system. Here are the numbers.
-          </p>
-          <div className="flex items-center gap-3 mt-4 text-[9px]">
-            <span className="text-white/20">MyShape Protocol</span>
-            <span className="text-white/10">·</span>
-            <span className="text-white/20">June 2026</span>
-            <span className="text-white/10">·</span>
-            <span className="text-white/20">6 min read</span>
-          </div>
-        </div>
-
-        {/* Visual Hook — Architecture Diagram */}
-        <div className="my-12 md:my-16 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] p-5 md:p-8 font-mono transition-all duration-300 hover:border-[#90c8ff]/35"
-          onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
-          <div className="text-[#90c8ff]/30 text-[8px] tracking-[0.3em] uppercase mb-4 text-center">SYSTEM_SCHEMA: VERIFICATION PIPELINE</div>
-          <pre className="text-[#90c8ff]/40 text-[9px] md:text-[10px] leading-[2.2] tracking-[0.08em] whitespace-pre overflow-x-auto text-center">
-{`CAMERA ──→ SST_18PT ──→ PES_4D ──→ 128D_VECTOR ──→ ZK_PROOF
- 30fps      Skeleton    Entropy     Motion          Presence
- Local      Topology    Scoring     Signature       Verified
-
-   ◄─────────────── 0 DATA UPLOADED ─────────────────►
-          All processing on-device. Nothing stored.`}
-          </pre>
-          <div className="mt-4 flex justify-center gap-4 text-[8px]">
-            <span className="text-[#90c8ff]/25">◈ Engine: Rust + TypeScript</span>
-            <span className="text-white/10">|</span>
-            <span className="text-[#90c8ff]/25">◈ Human—AI Gap: 0.3960</span>
-            <span className="text-white/10">|</span>
-            <span className="text-[#90c8ff]/25">◈ License: MIT</span>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="space-y-16 md:space-y-20">
-          {/* The Experiment */}
-          <section>
-            <h2 id="experiment" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
-              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Experiment</h2>
-            <div className="space-y-5">
-              <p className="text-white/50 text-[18px] leading-[1.85] font-light">
-                We built a Rust-based verification engine that analyzes human motion through four independent feature dimensions. Then we ran a simple test:
-              </p>
-              <ol className="list-decimal pl-6 space-y-3 text-white/50 text-[18px] leading-[1.85] font-light">
-                <li><strong className="text-white/70 font-normal">Enroll a human:</strong> 20 motion samples → one cryptographic signature.</li>
-                <li><strong className="text-white/70 font-normal">Issue a challenge:</strong> "Draw a circle with your right hand. Tilt your torso 12 degrees. Keep your head still." — unpredictable, multi-joint, with a coupling constraint that shares a kinetic chain.</li>
-                <li><strong className="text-white/70 font-normal">Test three responses:</strong> genuine human, AI-generated forgery, and a different human.</li>
-              </ol>
-            </div>
-          </section>
-
-          {/* The Results */}
-          <section>
-            <h2 id="results" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
-              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Results</h2>
-            <div className="space-y-5">
-              <div className="border p-5 my-6 transition-all duration-300 hover:border-[#90c8ff]/40"
-                style={{ borderColor: "rgba(144,200,255,0.1)" }}
-                onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-                <pre className="text-[#90c8ff]/50 text-[11px] md:text-[12px] leading-relaxed font-mono whitespace-pre">
-{`Test Case              Presence Score   Verdict
-─────────────────────────────────────────────────
-Genuine Human           0.9817           PASS ✓
-AI Forgery              0.5857           FAIL ✗
-Impostor                0.0000           FAIL ✗
-
-Human—AI Gap: 0.3960`}
-                </pre>
-              </div>
-              <p className="text-white/50 text-[18px] leading-[1.85] font-light">
-                The engine rejected the AI-generated motion across four independent dimensions:
-              </p>
-              <div className="space-y-2">
-                {[
-                  { tag: "TREMOR_ABSENT", detail: "8–12 Hz physiological tremor missing — AI has no stretch reflex arc." },
-                  { tag: "JERK_SPECTRUM_ANOMALY", detail: "1/f spectral scaling violated — AI jerk is either over-smoothed or white noise." },
-                  { tag: "HURST_ANOMALY", detail: "Long-range dependence absent — AI acceleration is uncorrelated noise." },
-                  { tag: "OVER_SMOOTHED", detail: "Motor micro-perturbations missing — too perfect to be biological." },
-                ].map(r => (
-                  <div key={r.tag} className="border p-4 transition-all duration-300 hover:border-[#90c8ff]/35 hover:bg-[#90c8ff]/[0.02]"
-                    style={{ borderColor: "rgba(144,200,255,0.08)" }}
-                    onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
-                    <span className="text-[#90c8ff]/70 font-mono text-[10px] md:text-[11px] tracking-[0.1em]">{r.tag}</span>
-                    <span className="text-white/40 text-[12px] md:text-[13px] ml-3 font-light">{r.detail}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Why This Matters */}
-          <section>
-            <h2 id="why" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
-              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Why This Matters</h2>
-            <div className="space-y-5 text-white/50 text-[18px] leading-[1.85] font-light">
-              <p>Every identity system in production today — passwords, KYC, hardware wallets — answers one question: "Does the credential match?"</p>
-              <p>None of them answer: "Is the human who enrolled that credential physically present right now?"</p>
-              <p>This gap has existed for decades. AI makes it fatal.</p>
-              <p>In a world where AI agents hold private keys, where deepfakes bypass visual verification, where GPT-5 can generate convincing video of anyone doing anything — the only signal that cannot be forged is the real-time, physics-bound motion of a living human entity.</p>
-              <p>Motion is not a file. Motion is not a template. Motion is a continuous, high-dimensional, noise-driven field generated by the irreducible physics of your nervous system. AI can approximate its output. It cannot replicate its entropy.</p>
-            </div>
-          </section>
-
-          {/* How It Works */}
-          <section>
-            <h2 id="how" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
-              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>How It Works</h2>
-            <div className="space-y-5">
-              <p className="text-white/50 text-[18px] leading-[1.85] font-light">
-                The engine extracts a 128-dimensional signature from four feature groups:
-              </p>
-              <ul className="list-disc pl-6 space-y-3 text-white/50 text-[18px] leading-[1.85] font-light">
-                <li><strong className="text-white/70 font-normal">Kinematics (40 dims):</strong> Skeletal ratios between 14 bone segments. Your bone-length ratios are physically unique — AI does not know them.</li>
-                <li><strong className="text-white/70 font-normal">Acceleration Profile (25 dims):</strong> Statistical distribution including Hurst exponent. Human: H ≈ 0.6–0.8. AI: H ≈ 0.5.</li>
-                <li><strong className="text-white/70 font-normal">Jerk Profile (25 dims):</strong> The third derivative of position. The single most unforgeable kinematic dimension.</li>
-                <li><strong className="text-white/70 font-normal">Jerk Spectrum (30 dims):</strong> Frequency-domain analysis. Human: 1/f^α scaling (α ≈ 1.0–1.5). AI: α &gt; 2.0 or α ≈ 0.</li>
-              </ul>
-            </div>
-          </section>
-
-          {/* The Deeper Truth */}
-          <section>
-            <h2 id="truth" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
-              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>The Deeper Truth</h2>
-            <div className="space-y-5 text-white/50 text-[18px] leading-[1.85] font-light">
-              <p>Every AI motion model — diffusion, transformer, VAE — is trained with L2 loss. L2 loss penalizes the square of the error. A 1 mm tremor deviation is penalized 100× less than a 10 mm trajectory error. The model learns to suppress high-frequency, low-amplitude signals — exactly the signals that make human motion human.</p>
-              <p>This is not a temporary AI limitation. It is a structural consequence of neural network optimization. The better AI gets at generating realistic motion, the more aggressively it smooths — and the more detectable it becomes.</p>
-              <p><strong className="text-white/65">The AI Paradox:</strong> Every improvement in visual fidelity comes at the cost of spectral fidelity. AI faces an impossible tradeoff: look more real, or be more real. It cannot do both.</p>
-            </div>
-          </section>
-
-          {/* Run It */}
-          <section>
-            <h2 id="run" className="text-white/70 text-[18px] md:text-[20px] tracking-[0.06em] font-light mb-6 leading-snug transition-colors duration-300 hover:text-[#90c8ff] scroll-mt-28"
-              onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>Run It Yourself</h2>
-            <div className="space-y-5">
-              <p className="text-white/50 text-[18px] leading-[1.85] font-light">The core engine is open source:</p>
-              <div className="border p-5 transition-all duration-300 hover:border-[#90c8ff]/35"
-                style={{ borderColor: "rgba(144,200,255,0.1)", background: "rgba(2,4,10,0.6)" }}
-                onMouseEnter={() => playTick(550, "sine", 0.05, 0.012)}>
-                <pre className="text-[#90c8ff]/45 text-[10px] md:text-[11px] leading-relaxed font-mono whitespace-pre">
-{`git clone https://github.com/myshapeprotocol
-cd cli
-cargo run --release --bin myshape-demo -- --verbose`}
-                </pre>
-              </div>
-              <p className="text-white/50 text-[18px] leading-[1.85] font-light">
-                25 tests. Zero dependencies beyond the Rust standard library and audited crypto crates.
-                See the live dashboard at <a href="/developers" className="text-[#90c8ff]/50 hover:text-[#90c8ff] transition-colors">myshape.com/developers</a>.
-              </p>
-            </div>
-          </section>
-
-          {/* What We're Building */}
-          <section>
-            <h2 id="building" className="text-white/60 text-[15px] tracking-[0.08em] font-light mb-6 leading-snug scroll-mt-28">What We're Building</h2>
-            <div className="space-y-5 text-white/50 text-[18px] leading-[1.85] font-light">
-              <p>MyShape is a presence verification protocol. Not proof of identity — proof of presence.</p>
-              <p>World (the orb) proves you are a human. MyShape proves you are <em className="text-white/55">this</em> human — physically present, authorizing this specific operation.</p>
-              <p>We are in active development. If you build in identity, security, agent infrastructure, or applied cryptography — we would like to talk.</p>
-            </div>
-          </section>
-        </div>
-
-        {/* Invite adversarial review */}
-        <div className="mt-16 p-6 border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02]">
-          <p className="text-white/30 text-[11px] leading-relaxed mb-4">
-            <strong className="text-white/50">To the skeptic:</strong> every claim in this article is verifiable.
-            The benchmark code is on GitHub. The threat model is published. Attack it. We invite adversarial review.
-          </p>
-          <p className="text-white/20 text-[9px]">
-            Repository: github.com/myshapeprotocol &middot; Threat Model: myshape.com/papers/threat-model &middot; Live Demo: myshape.com/motion-demo
+          <p className="text-white/25 text-[11px] tracking-[0.1em] leading-relaxed max-w-lg">
+            Technical essays on sovereign identity, presence verification,
+            and the protocol layer for verifiable digital continuity.
           </p>
         </div>
 
-        {/* Discussion + More Essays */}
-        <div className="mt-12 pt-10 border-t border-white/[0.05] text-center space-y-4">
-          <p className="text-white/20 text-[10px]">Discuss on HN or GitHub. More technical essays below.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
-              className="px-6 py-3 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-[#90c8ff]/45 hover:text-white hover:bg-[#90c8ff]/[0.04] transition-all"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>
-              View on GitHub →
-            </a>
-            <a href="/blog/stored-identity-vs-generated-presence"
-              className="px-6 py-3 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-[#90c8ff]/45 hover:text-white hover:bg-[#90c8ff]/[0.04] transition-all"
-              onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-              Stored Identity vs. Generated Presence →
-            </a>
-            <a href="/blog/continuity-layer-for-the-simulation-age"
-              className="px-6 py-3 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-[#90c8ff]/45 hover:text-white hover:bg-[#90c8ff]/[0.04] transition-all"
-              onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-              Continuity Layer →
-            </a>
-          </div>
+        {/* Post List */}
+        <div className="space-y-16">
+          {POSTS.map((post, i) => (
+            <Link
+              key={post.slug}
+              href={post.slug}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block group"
+            >
+              <article className="space-y-3">
+                {/* Meta line */}
+                <div className="flex items-center gap-3 text-[9px] tracking-[0.2em] uppercase">
+                  {post.series && (
+                    <>
+                      <span className="text-[#90c8ff]/60">{post.series}</span>
+                      <span className="w-4 h-[1px] bg-[#90c8ff]/20" />
+                    </>
+                  )}
+                  <span className="text-white/20">{post.date}</span>
+                  <span className="w-4 h-[1px] bg-white/10" />
+                  <span className="text-white/15">
+                    {post.tags.map((t) => `#${t}`).join("  ")}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h2 className="text-lg md:text-xl font-light tracking-[0.06em] text-white/80 group-hover:text-white transition-colors leading-snug">
+                  {post.title}
+                </h2>
+
+                {/* Subtitle */}
+                <p className="text-white/25 text-[10px] tracking-[0.08em] leading-relaxed max-w-xl">
+                  {post.subtitle}
+                </p>
+
+                {/* Read link */}
+                <div className="text-[#90c8ff]/30 text-[9px] tracking-[0.15em] uppercase group-hover:text-[#90c8ff]/60 transition-colors pt-1">
+                  Read Protocol →
+                </div>
+              </article>
+
+              {/* Divider */}
+              {i < POSTS.length - 1 && (
+                <div className="mt-12 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+              )}
+            </Link>
+          ))}
         </div>
-        </article>
+
+        {/* CTA */}
+        <div className="mt-24 p-8 border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02] text-center space-y-3">
+          <p className="text-white/20 text-[9px] tracking-[0.2em] uppercase">
+            Subscribe to Protocol Updates
+          </p>
+          <p className="text-white/15 text-[9px]">
+            <a
+              href="https://open.substack.com/pub/myshape"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-colors underline underline-offset-4"
+            >
+              Substack →
+            </a>
+            <span className="mx-3 text-white/10">|</span>
+            <a
+              href="https://github.com/RaymondHWu/myshape-protocol"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-colors underline underline-offset-4"
+            >
+              GitHub →
+            </a>
+          </p>
+        </div>
       </div>
 
       <ProtocolFooter />
