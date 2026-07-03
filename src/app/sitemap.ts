@@ -68,6 +68,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/blog/why-motion-is-the-only-unforgeable-identity-signal", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/blog/how-to-verify-human-online-2026", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/blog/web3-identity-explained-blockchain", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/what-is-did-decentralized-identifiers", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/kyc-vs-decentralized-identity", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/sybil-resistance-explained", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/what-is-presence-verification", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/digital-identity-standards-2026", priority: 0.80, changeFreq: "monthly" as const },
     { path: "/newsletter", priority: 0.65, changeFreq: "monthly" as const },
 
     // ── Research & Evidence ──

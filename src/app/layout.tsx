@@ -50,6 +50,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
+        {/* Performance: preconnect to critical origins */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://vwqytyipwzazxdtbnzne.supabase.co" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="https://va.vercel-scripts.com" />
+
+        {/* Performance: preload critical font */}
+        <link rel="preload" href="/_next/static/media/geist-sans-*.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+
         <meta name="color-scheme" content="dark" />
         <meta name="theme-color" content="#02040a" />
 
