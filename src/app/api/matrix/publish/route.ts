@@ -286,6 +286,67 @@ export async function POST(request: Request) {
       }
     }
 
+    // ── X (Twitter) ──
+    if (platform === "x" || platform === "twitter") {
+      const apiKey = process.env.X_API_KEY;
+      const apiSecret = process.env.X_API_SECRET;
+      const accessToken = process.env.X_ACCESS_TOKEN;
+      const accessSecret = process.env.X_ACCESS_SECRET;
+
+      if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
+        result.status = "SKIPPED";
+        result.error = "X_CREDENTIALS_MISSING (X_API_KEY + X_API_SECRET + X_ACCESS_TOKEN + X_ACCESS_SECRET)";
+        console.log("[matrix/publish] X/Twitter skipped — missing credentials");
+        return NextResponse.json({ success: false, ...result });
+      }
+
+      try {
+        // Auto-detect proxy
+        let proxyUri = "http://127.0.0.1:15236";
+        const { execSync } = await import("child_process");
+        try {
+          execSync('netstat -ano | findstr "127.0.0.1:7890.*LISTENING"', { timeout: 1000, stdio: "ignore" });
+          proxyUri = "http://127.0.0.1:7890";
+        } catch { /* VEE default */ }
+
+        const { TwitterApi } = await import("twitter-api-v2");
+        const { ProxyAgent, fetch: undiciFetch } = await import("undici");
+        const dispatcher = new ProxyAgent(proxyUri);
+
+        // Override global fetch for twitter.com requests to go through proxy
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const origFetch = (globalThis as any).fetch;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (globalThis as any).fetch = (url: string, init?: RequestInit) => {
+          if (typeof url === "string" && url.includes("twitter.com")) {
+            return undiciFetch(url, { ...init, dispatcher } as never) as unknown as Response;
+          }
+          return origFetch(url, init);
+        };
+
+        const client = new TwitterApi({
+          appKey: apiKey,
+          appSecret: apiSecret,
+          accessToken: accessToken,
+          accessSecret: accessSecret,
+        });
+
+        const truncated = content.length > 270 ? content.slice(0, 267) + "..." : content;
+        const tweet = await client.v2.tweet(truncated);
+
+        result.status = "PUBLISHED";
+        result.platform_post_id = tweet.data.id;
+        console.log("[matrix/publish] X/Twitter published:", tweet.data.id);
+        return NextResponse.json({ success: true, ...result });
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Unknown X/Twitter error";
+        result.status = "FAILED";
+        result.error = msg;
+        console.error("[matrix/publish] X/Twitter error:", msg);
+        return NextResponse.json({ success: false, ...result });
+      }
+    }
+
     // ── Unknown / LINK-type platforms ──
     result.status = "PREVIEW";
     result.note = "LINK-type platform — handled client-side via clipboard + window.open";
