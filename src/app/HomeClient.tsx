@@ -6,17 +6,13 @@ import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
 import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
-import Capabilities from "@/components/capabilities/Capabilities";
 import PresenceNetwork from "@/components/presence-network/PresenceNetwork";
-import HowItWorks from "@/components/howitworks/HowItWorks";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
-import ParadigmShift from "@/components/paradigm-shift/ParadigmShift";
 import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
 import ProtocolStatus from "@/components/protocol-status/ProtocolStatus";
 import GenesisCohortBadge from "@/components/genesis-cohort-badge/GenesisCohortBadge";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
-import ResearchContributionCTA from "@/components/research-cta/ResearchContributionCTA";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -151,8 +147,6 @@ export default function HomeClient() {
             <GenesisProgress />
           </div>
         </section>
-
-        <ParadigmShift />
 
         {/* ── Protocol Stack ── */}
         <section className="relative pt-16 md:pt-32 pb-12 md:pb-20">
@@ -302,33 +296,7 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* ── Content Hub — protocol knowledge base ── */}
-        <section className="w-full px-[6%] py-16 bg-transparent relative" style={{ fontFamily: "var(--font-geist-sans), sans-serif" }}>
-          <div className="max-w-[1200px] mx-auto text-center">
-            <div className="text-[#90c8ff]/40 text-[8px] tracking-[0.4em] uppercase mb-6">PROTOCOL_KNOWLEDGE_BASE</div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
-              {[
-                { label: "Protocol Log", desc: "20 technical essays on identity, continuity, and ZK.", href: "/blog" },
-                { label: "SDK Docs", desc: "Integrate in 5 lines. API reference, engine modules.", href: "/docs" },
-                { label: "Comparison", desc: "MyShape vs Worldcoin, Civic, TRIP — 12 dimensions.", href: "/compare" },
-                { label: "Glossary", desc: "30 defined terms. Motion-Signature to ZK-Presence.", href: "/glossary" },
-              ].map(item => (
-                <a key={item.href} href={item.href}
-                  onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                  className="block p-5 border border-white/[0.05] hover:border-[#90c8ff]/20 hover:bg-[#90c8ff]/[0.02] transition-all text-left group">
-                  <p className="text-[#90c8ff]/50 text-[10px] tracking-[0.15em] uppercase mb-2 group-hover:text-[#90c8ff]/70 transition-colors">{item.label}</p>
-                  <p className="text-white/20 text-[9px] tracking-[0.04em] leading-relaxed">{item.desc}</p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Research Contribution CTA (Phase E: Route A) ── */}
-        <ResearchContributionCTA />
         <Vision />
-        <Capabilities />
-        <HowItWorks />
         <JoinWaitlist id="genesis" />
       </main>
 

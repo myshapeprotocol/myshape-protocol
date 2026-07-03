@@ -101,13 +101,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "INVALID_EMAIL" }, { status: 400 });
     }
 
-    // 检查是否已存在
-    const { data: existing } = await supabase
+    // 检查是否已存在 — PGRST116 = no rows (not an error)
+    const { data: existing, error: lookupError } = await supabase
       .from("protocol_nodes")
       .select("email")
       .eq("email", email.trim())
       .single();
 
+    if (lookupError && lookupError.code !== "PGRST116") {
+      throw lookupError;
+    }
     if (existing) {
       return NextResponse.json({ success: true, alreadySubscribed: true });
     }

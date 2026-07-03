@@ -142,7 +142,13 @@ export async function POST(req: Request) {
       .eq('email', email)
       .single();
 
-    if (dbError || !data) {
+    if (dbError) {
+      if (dbError.code === "PGRST116") {
+        return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
+      }
+      throw dbError;
+    }
+    if (!data) {
       return NextResponse.json({ error: "NODE_NOT_FOUND" }, { status: 404 });
     }
 

@@ -107,7 +107,7 @@ export async function POST(request: Request) {
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Verification failed';
     console.error('[verify] Error:', message);
-    return Response.json({ error: message }, { status: 500 });
+    return Response.json({ error: "VERIFICATION_FAILED" }, { status: 500 });
   }
 }
 

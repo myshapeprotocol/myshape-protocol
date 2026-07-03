@@ -17,15 +17,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "RATE_LIMIT" }, { status: 429 });
   }
 
-  // 1. 获取并校验环境变量
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Use the same env-var pattern as all other routes
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // 调试日志：如果此处报错，说明进程没有读到 .env.local
   if (!supabaseUrl || !supabaseKey) {
     console.error("[handshake] Missing environment variables:", {
-      SUPABASE_URL: !!supabaseUrl, 
-      SUPABASE_SERVICE_ROLE_KEY: !!supabaseKey 
+      NEXT_PUBLIC_SUPABASE_URL: !!supabaseUrl,
+      SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
     });
     return NextResponse.json({ error: "SERVER_CONFIG_ERROR" }, { status: 500 });
   }
@@ -38,10 +37,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "INVALID_EMAIL" }, { status: 400 });
     }
 
-    // 2. 初始化 Supabase 客户端
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // 3. 查重：确保该 email 尚未注册
+    // Check for existing node (case-insensitive)
     const { data: existing, error: queryError } = await supabase
       .from("protocol_nodes")
       .select("email")
@@ -53,18 +51,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "NODE_ALREADY_ACTIVE" }, { status: 409 });
     }
 
-    // 4. 生成唯一标识符
+    // Generate identifiers
     const nodeHandle = `SIG_${randomHex(4).toUpperCase()}`;
     const nodeToken = `ms_${randomHex(16)}`;
 
-    // 5. 执行插入
+    // Insert — only columns that exist in the schema
     const { error: insertError } = await supabase.from("protocol_nodes").insert({
       email: email.trim().toLowerCase(),
       node_handle: nodeHandle,
-      node_token: nodeToken,
       status: "GENESIS_CONNECTED",
-      visual_config: { origin_domain: origin_domain || "direct" },
-      created_at: new Date().toISOString(),
     });
 
     if (insertError) throw insertError;
@@ -74,12 +69,12 @@ export async function POST(request: Request) {
       node_handle: nodeHandle,
       stage: "GENESIS_NODE_INITIALIZED",
     });
-
-  } catch (err: any) {
-    console.error("[handshake] Crash:", err);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("[handshake] Crash:", message);
     return NextResponse.json(
-      { error: "PROTOCOL_CORE_INTERRUPT", details: err.message },
-      { status: 500 }
+      { error: "PROTOCOL_CORE_INTERRUPT" },
+      { status: 500 },
     );
   }
 }
