@@ -450,19 +450,11 @@ const ProtocolHeader = () => {
       scrollbarWidth: "none",
     }}>
       {[
-        { label: "Protocol", href: "/protocol", mobile: true },
-        { label: "Vision",   href: "/vision",    mobile: true },
-        { label: "Build",    href: "/developers", mobile: true },
-        { label: "Demo",     href: "/motion-demo", mobile: true },
-        { label: "Arch",     href: "/architecture", mobile: true },
-        { label: "Genesis",  href: "/genesis", mobile: true },
-        { label: "Blog",     href: "/blog",       mobile: true },
-        { label: "Docs",     href: "/docs",       mobile: true },
-        { label: "Compare",  href: "/compare",    mobile: false },
-        { label: "Glossary", href: "/glossary",   mobile: false },
+        { label: "Protocol", href: "/protocol" },
+        { label: "Blog",     href: "/blog" },
+        { label: "Genesis",  href: "/genesis" },
       ].map(link =>
           <Link key={link.href} href={link.href}
-            className={!link.mobile ? "hide-mobile" : ""}
             onMouseEnter={e => {
               playTick(600, "sine", 0.08, 0.02);
               e.currentTarget.style.color = "rgb(34, 211, 238)";
