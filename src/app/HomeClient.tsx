@@ -133,9 +133,15 @@ export default function HomeClient() {
       <main className="relative z-0 w-full overflow-x-clip">
         <HeroDemo />
 
-        {/* Mobile: counter only — wallet is in the header */}
-        <div className="relative z-10 -mt-6 pb-12 md:hidden flex justify-center">
+        {/* Mobile: counter + CTA — wallet lives in header */}
+        <div className="relative z-10 -mt-6 pb-12 md:hidden flex flex-col items-center gap-4 px-6">
           <GenesisCohortBadge />
+          <a
+            href="/genesis"
+            className="px-8 py-3 border border-[#90c8ff]/25 text-[#90c8ff]/60 text-[10px] tracking-[0.2em] uppercase font-mono hover:bg-[#90c8ff]/8 hover:border-[#90c8ff]/40 transition-all"
+          >
+            Join Genesis Cohort
+          </a>
         </div>
 
         {/* Desktop: full experience below */}
