@@ -75,16 +75,12 @@ export default function ContactClient() {
               </p>
             </div>
             {/* 邮箱入口块 */}
-            <div className="border p-12 flex flex-col justify-center space-y-8 transition-all duration-500"
+            <div className="border p-12 flex flex-col justify-center transition-all duration-500"
               style={{ borderColor: "rgba(144,200,255,0.1)", background: "transparent" }}
               onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; }}>
               <div className="group">
-                <span className="block text-white/20 text-[8px] tracking-[0.4em] uppercase mb-2">Core_Inquiries</span>
-                <a href="mailto:hello@myshape.com" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)} className="text-white text-lg tracking-[0.2em] font-light hover:text-[#90c8ff] transition-colors">HELLO@MYSHAPE.COM</a>
-              </div>
-              <div className="group">
-                <span className="block text-white/20 text-[8px] tracking-[0.4em] uppercase mb-2">Technical_Uplink</span>
+                <span className="block text-white/20 text-[8px] tracking-[0.4em] uppercase mb-2">Contact</span>
                 <a href="mailto:protocol@myshape.com" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)} className="text-white text-lg tracking-[0.2em] font-light hover:text-[#90c8ff] transition-colors">PROTOCOL@MYSHAPE.COM</a>
               </div>
             </div>

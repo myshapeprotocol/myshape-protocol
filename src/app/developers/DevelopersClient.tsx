@@ -363,11 +363,11 @@ if (threat.overallVerdict === "human") {
             <div className="text-[#90c8ff]/40 text-[8px] tracking-[0.3em] uppercase mb-4">// RESPONSE_FORMAT</div>
             <div className="space-y-4">
               <div>
-                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/identity?email=hello@myshape.com</div>
+                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/identity?email=protocol@myshape.com</div>
                 <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[9px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">
 {`{
   "found": true,
-  "email": "hello@myshape.com",
+  "email": "protocol@myshape.com",
   "node_handle": null,
   "status": "GENESIS_NODE",
   "registered_at": "2026-06-22T09:12:01.329Z"

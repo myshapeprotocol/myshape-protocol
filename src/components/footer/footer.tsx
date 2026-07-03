@@ -142,7 +142,7 @@ export default function ProtocolFooter() {
               <p className="text-[8px] text-white/35 tracking-[0.2em] leading-relaxed uppercase font-mono">
                 SOVEREIGN 3D IDENTITY LAYER
               </p>
-              <p className="text-[7px] text-white/15 tracking-[0.25em] leading-relaxed uppercase font-mono">
+              <p className="text-[7px] text-white/35 tracking-[0.25em] leading-relaxed uppercase font-mono">
                 AI-NATIVE • ZERO-KNOWLEDGE • MOTION-VERIFIED
               </p>
             </div>
@@ -184,10 +184,10 @@ export default function ProtocolFooter() {
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
         <div className="flex items-center justify-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-[#90c8ff]/60 shadow-[0_0_4px_rgba(144,200,255,0.5)]" />
-          <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 15 Engines · 45 Tests</span>
+          <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 3 Engines · 172 Tests</span>
         </div>
-        <span className="text-[8px] text-white/15 tracking-[0.25em] uppercase font-mono block">
-          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL <span style={{ color: "rgba(255,255,255,0.08)", fontSize: "7px", marginLeft: "4px" }}>// SPEC_VERSION: V1.0_GENESIS</span>
+        <span className="text-[8px] text-white/30 tracking-[0.25em] uppercase font-mono block">
+          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL <span style={{ color: "rgba(255,255,255,0.20)", fontSize: "7px", marginLeft: "4px" }}>// SPEC_VERSION: V1.0_GENESIS</span>
         </span>
       </div>
     </footer>
