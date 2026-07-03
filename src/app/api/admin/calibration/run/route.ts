@@ -22,7 +22,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { fetchResearchSessions } from "@/lib/research-data-loader";
 import { runCalibration, validateArtifact, run120DimCalibration } from "@/engine/calibration/index";
-import { getCalibrationLoader } from "@/lib/calibration-loader";
 import type { CalibrationConfig } from "@/engine/calibration/types";
 
 export const runtime = "nodejs";
@@ -223,6 +222,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     // ── Step 7: Refresh CalibrationLoader ──
+    const { getCalibrationLoader } = await import("@/lib/calibration-loader");
     const loader = await getCalibrationLoader();
     await loader.refresh();
     const newState = loader.getState();

@@ -292,9 +292,13 @@ export class CalibrationLoader {
     }
 
     try {
-      // Try project root first, then current working directory
-      const fs = await import("fs");
-      const path = await import("path");
+      // Use new Function to load Node.js built-ins — completely invisible to
+      // Turbopack's static analysis. This code path only runs in Node.js runtime
+      // (guarded above) where `require` is available as a global.
+      // eslint-disable-next-line no-new-func
+      const nodeRequire = new Function("m", "return require(m)") as (name: string) => unknown;
+      const fs = nodeRequire("fs") as typeof import("fs");
+      const path = nodeRequire("path") as typeof import("path");
 
       const candidates = [
         path.join(process.cwd(), "calibration-artifact-v1.json"),

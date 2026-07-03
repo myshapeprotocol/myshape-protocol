@@ -9,7 +9,6 @@
  */
 
 import { NextResponse } from "next/server";
-import { getCalibrationLoader } from "@/lib/calibration-loader";
 import { getSessionCount } from "@/lib/research-data-loader";
 
 export const runtime = "nodejs";
@@ -28,6 +27,7 @@ export async function GET(request: Request): Promise<Response> {
       return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 });
     }
 
+    const { getCalibrationLoader } = await import("@/lib/calibration-loader");
     const loader = await getCalibrationLoader();
     const state = loader.getState();
 
