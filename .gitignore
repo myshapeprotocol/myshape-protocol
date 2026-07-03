@@ -61,3 +61,6 @@ PROTOCOL_LOG.md
 # Script outputs — runtime artifacts
 scripts/agent-workflow/published.json
 scripts/matrix-bot/matrix_dashboard.html
+
+.vercel
+.env*

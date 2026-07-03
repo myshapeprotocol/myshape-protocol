@@ -263,6 +263,51 @@ export default function PostClient() {
             </Link>
           </div>
         </div>
+
+        {/* Internal link cluster */}
+        <div className="mt-16 pt-12 border-t border-[#90c8ff]/5 space-y-4">
+          <p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">
+            Continue Reading
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Link
+              href="/blog/motion-vs-biometrics-why-your-face-is-not-a-password"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+            >
+              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                Motion vs Biometrics
+              </p>
+              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                Why your face is not a password →
+              </p>
+            </Link>
+            <Link
+              href="/blog/what-is-decentralized-identity-2026"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+            >
+              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                What Is Decentralized Identity?
+              </p>
+              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                2026 guide to DID, SSI →
+              </p>
+            </Link>
+            <Link
+              href="/glossary"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+            >
+              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                Protocol Glossary
+              </p>
+              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                30+ defined terms →
+              </p>
+            </Link>
+          </div>
+        </div>
         </article>
       </div>
 

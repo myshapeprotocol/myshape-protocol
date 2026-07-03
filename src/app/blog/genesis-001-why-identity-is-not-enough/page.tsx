@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import PostClient from "./PostClient";
+import ArticleJsonLd from "@/components/seo/ArticleJsonLd";
+import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
 export const metadata: Metadata = {
   title: "GENESIS 001 — Why Identity Is Not Enough",
-  description: "Identity proves existence. Continuity proves evolution. In the age of autonomous agents, we need protocols that verify the trajectory of a subject — not just its snapshot.",
+  description:
+    "Identity proves existence. Continuity proves evolution. In the age of autonomous agents, we need protocols that verify the trajectory of a subject — not just its snapshot.",
+  alternates: {
+    canonical: "https://www.myshape.com/blog/genesis-001-why-identity-is-not-enough",
+  },
   openGraph: {
     title: "GENESIS 001 — Why Identity Is Not Enough",
-    description: "Identity proves existence. Continuity proves evolution. The missing protocol layer for the agent age.",
+    description:
+      "Identity proves existence. Continuity proves evolution. The missing protocol layer for the agent age.",
     url: "https://www.myshape.com/blog/genesis-001-why-identity-is-not-enough",
     siteName: "MyShape Protocol",
     type: "article",
@@ -23,5 +30,25 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <PostClient />;
+  return (
+    <>
+      <ArticleJsonLd
+        headline="Why Identity Is Not Enough"
+        description="Identity proves existence. Continuity proves evolution. In the age of autonomous agents, we need protocols that verify the trajectory of a subject — not just its snapshot."
+        url="https://www.myshape.com/blog/genesis-001-why-identity-is-not-enough"
+        datePublished="2026-07-02"
+        authorName="MyShape Protocol"
+        articleType="BlogPosting"
+        tags={["identity", "continuity", "agents", "protocol", "sovereign-identity"]}
+      />
+      <BreadcrumbList
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Protocol Log", href: "/blog" },
+          { name: "Why Identity Is Not Enough" },
+        ]}
+      />
+      <PostClient />
+    </>
+  );
 }

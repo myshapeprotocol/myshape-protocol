@@ -1,0 +1,261 @@
+"use client";
+
+import ProtocolHeader from "@/components/header/header";
+import ProtocolFooter from "@/components/footer/footer";
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
+import Link from "next/link";
+import { playTick } from "@/utils/useAudioTick";
+
+interface ComparisonRow {
+  dimension: string;
+  myShape: string;
+  worldcoin: string;
+  civic: string;
+  trip: string;
+}
+
+const COMPARISON_DATA: ComparisonRow[] = [
+  {
+    dimension: "Verification Method",
+    myShape: "Dynamic motion-signature (128-dim vector)",
+    worldcoin: "Static iris biometric (Orb hardware)",
+    civic: "Document/credential verification",
+    trip: "Motion-based post-biometric attestation",
+  },
+  {
+    dimension: "Hardware Required",
+    myShape: "Standard RGB camera (webcam/phone)",
+    worldcoin: "Custom Orb device ($5K+)",
+    civic: "None (document upload)",
+    trip: "Standard RGB camera",
+  },
+  {
+    dimension: "Data Storage",
+    myShape: "Zero-knowledge — raw data never leaves device",
+    worldcoin: "Iris hash stored on-chain",
+    civic: "Encrypted PII with third-party verifiers",
+    trip: "Device-local with remote attestation",
+  },
+  {
+    dimension: "Irreplaceability",
+    myShape: "Motion is generative — infinite fresh proofs",
+    worldcoin: "Iris is static — cannot be replaced if compromised",
+    civic: "Documents can be reissued",
+    trip: "Motion is generative — similar to MyShape",
+  },
+  {
+    dimension: "AI Forgery Resistance",
+    myShape: "Proven via Entropy Gap Theorem (4D analysis)",
+    worldcoin: "Hardware-level (Orb) + liveness detection",
+    civic: "Depends on document issuer security",
+    trip: "Theoretical framework; limited published benchmarks",
+  },
+  {
+    dimension: "Privacy Model",
+    myShape: "ZK-Presence — verify human without identifying who",
+    worldcoin: "ZK identity — verify uniqueness without revealing iris",
+    civic: "Selective disclosure of credentials",
+    trip: "ZK attestation with reputation scoring",
+  },
+  {
+    dimension: "Agent Identity Support",
+    myShape: "Native Agent Declaration protocol (human + AI coexistence)",
+    worldcoin: "Human-only (proof of personhood)",
+    civic: "Human-only (credential-based)",
+    trip: "Human-focused with agent interaction model",
+  },
+  {
+    dimension: "Protocol Maturity",
+    myShape: "Genesis phase — 100-node cohort ongoing",
+    worldcoin: "Production — 18M+ verified users",
+    civic: "Production — enterprise KYC/AML",
+    trip: "IETF draft stage — pre-production",
+  },
+  {
+    dimension: "Open Source",
+    myShape: "Core protocol open; WASM engine source available",
+    worldcoin: "Orb hardware proprietary; SDK open",
+    civic: "Partial — verification layer open",
+    trip: "Specification open; implementation partial",
+  },
+  {
+    dimension: "Token / Incentive",
+    myShape: "None — protocol-native identity only",
+    worldcoin: "WLD token + UBI distribution",
+    civic: "CVC token (governance + settlement)",
+    trip: "None — protocol only",
+  },
+  {
+    dimension: "Decentralization",
+    myShape: "Fully sovereign — user owns Data-Body",
+    worldcoin: "Foundation-governed; Orb operators centralized",
+    civic: "Federated — verifier network with centralized governance",
+    trip: "Specification-level decentralization; implementation TBD",
+  },
+  {
+    dimension: "Continuity Model",
+    myShape: "Core primitive — verifies trajectory across time",
+    worldcoin: "One-time proof of unique personhood",
+    civic: "Per-transaction credential verification",
+    trip: "Session-based continuity with reputation chaining",
+  },
+];
+
+const CATEGORIES = [
+  {
+    title: "The Core Difference",
+    paragraphs: [
+      "MyShape Protocol is a continuity layer, not an identity layer. While Worldcoin, Civic, and SpruceID answer 'who are you?', MyShape answers 'are you still you?' — a fundamentally different question that becomes critical in the age of AI agents.",
+      "Worldcoin proves you are a unique human (once). Civic proves you possess a valid credential (per-transaction). MyShape proves your trajectory is continuous and unforgeable (continuously). This distinction is not semantic — it is the difference between a passport photo and a live heartbeat.",
+    ],
+  },
+  {
+    title: "Why Motion Over Biometrics",
+    paragraphs: [
+      "Static biometrics (iris, fingerprint, face) are fundamentally limited: once compromised, they cannot be replaced. Your iris is your iris forever. Motion is generative — each verification produces a fresh, non-replayable cryptographic proof. Even if one motion-signature is intercepted, it cannot be replayed because the protocol enforces temporal uniqueness.",
+      "Furthermore, motion encodes intent. A face scan proves a face was present. A motion-signature proves a specific intentional movement was executed. This intentionality gap is what separates MyShape from all biometric-first approaches.",
+    ],
+  },
+  {
+    title: "The Agent Economy Is Coming",
+    paragraphs: [
+      "Worldcoin, Civic, and most identity protocols are designed for a world where the primary digital actor is human. But the Agent Economy is already here — autonomous AI agents executing transactions, voting in DAOs, and managing digital assets on behalf of humans.",
+      "MyShape is the only protocol in this comparison that natively supports both human presence verification AND AI agent identity declaration in a unified identity mesh. Human agents and AI agents coexist, interact, and verify each other through the same protocol — with the irreducible entropy gap ensuring that AI cannot impersonate human presence.",
+    ],
+  },
+];
+
+export default function CompareClient() {
+  return (
+    <div className="bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30 min-h-screen flex flex-col">
+      <ProtocolHeader />
+
+      <main className="flex-1 relative">
+        <BackgroundParticles />
+        <div
+          className="relative z-10 max-w-5xl mx-auto px-4 md:px-6"
+          style={{ paddingTop: "8rem", paddingBottom: "6rem" }}
+        >
+          {/* Header */}
+          <div className="space-y-4 mb-12">
+            <div className="flex items-center gap-4 text-[#90c8ff]/40 text-[9px] tracking-[0.3em] uppercase">
+              <span>PROTOCOL ANALYSIS</span>
+              <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
+              <span>2026</span>
+            </div>
+            <h1 className="text-2xl md:text-4xl font-light tracking-[0.06em] text-white leading-tight">
+              Identity Protocol<br />
+              <span className="text-[#90c8ff]">Comparison Matrix</span>
+            </h1>
+            <p className="text-white/35 text-[11px] tracking-[0.08em] leading-relaxed max-w-2xl">
+              A principled comparison of MyShape Protocol with the leading identity
+              verification systems. Not which protocol claims more — but which
+              protocol protects what matters: your sovereignty, your privacy, and
+              your irreplaceable continuity.
+            </p>
+          </div>
+
+          {/* Narrative Sections */}
+          <div className="space-y-16 mb-20">
+            {CATEGORIES.map((cat) => (
+              <section key={cat.title}>
+                <h2 className="text-white/60 text-[11px] tracking-[0.25em] uppercase mb-6 flex items-center gap-3">
+                  <span className="w-6 h-[1px] bg-[#90c8ff]/30" />
+                  {cat.title}
+                </h2>
+                {cat.paragraphs.map((p, i) => (
+                  <p
+                    key={i}
+                    className="text-white/45 text-[12px] leading-relaxed tracking-[0.05em] mb-4"
+                  >
+                    {p}
+                  </p>
+                ))}
+              </section>
+            ))}
+          </div>
+
+          {/* Comparison Table */}
+          <section>
+            <h2 className="text-white/60 text-[11px] tracking-[0.25em] uppercase mb-8 flex items-center gap-3">
+              <span className="w-6 h-[1px] bg-[#90c8ff]/30" />
+              Detailed Feature Comparison
+            </h2>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-[10px] tracking-[0.05em] border-collapse">
+                <thead>
+                  <tr className="border-b border-[#90c8ff]/10">
+                    <th className="text-left py-3 px-3 text-[#90c8ff]/50 uppercase tracking-[0.2em] text-[9px] w-[18%]">
+                      Dimension
+                    </th>
+                    <th className="text-left py-3 px-3 text-[#90c8ff] uppercase tracking-[0.15em] text-[9px] w-[20%]">
+                      MyShape
+                    </th>
+                    <th className="text-left py-3 px-3 text-white/30 uppercase tracking-[0.15em] text-[9px] w-[20%]">
+                      Worldcoin
+                    </th>
+                    <th className="text-left py-3 px-3 text-white/30 uppercase tracking-[0.15em] text-[9px] w-[20%]">
+                      Civic
+                    </th>
+                    <th className="text-left py-3 px-3 text-white/30 uppercase tracking-[0.15em] text-[9px] w-[22%]">
+                      TRIP Protocol
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARISON_DATA.map((row, i) => (
+                    <tr
+                      key={row.dimension}
+                      className={`border-b border-white/[0.03] ${
+                        i % 2 === 0 ? "bg-white/[0.01]" : ""
+                      }`}
+                    >
+                      <td className="py-3 px-3 text-white/35 uppercase tracking-[0.1em] text-[9px]">
+                        {row.dimension}
+                      </td>
+                      <td className="py-3 px-3 text-[#90c8ff]/70">{row.myShape}</td>
+                      <td className="py-3 px-3 text-white/30">{row.worldcoin}</td>
+                      <td className="py-3 px-3 text-white/30">{row.civic}</td>
+                      <td className="py-3 px-3 text-white/30">{row.trip}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <div className="mt-20 p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
+            <p className="text-white/40 text-[10px] tracking-[0.15em] uppercase">
+              The Only Continuity Layer in This Comparison
+            </p>
+            <p className="text-white/25 text-[10px] leading-relaxed max-w-lg mx-auto">
+              All four protocols verify identity. Only MyShape verifies
+              continuity. In the Agent Economy, continuity is the primitive that
+              matters. The Genesis Cohort is onboarding now.
+            </p>
+            <div className="flex justify-center gap-4 pt-2">
+              <Link
+                href="/genesis"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
+              >
+                Begin Genesis →
+              </Link>
+              <Link
+                href="/whitepaper"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
+              >
+                Read Whitepaper →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <ProtocolFooter />
+    </div>
+  );
+}

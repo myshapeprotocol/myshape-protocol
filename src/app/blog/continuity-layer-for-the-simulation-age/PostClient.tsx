@@ -316,6 +316,51 @@ export default function PostClient() {
             </Link>
           </div>
         </div>
+
+        {/* Internal link cluster */}
+        <div className="mt-16 pt-12 border-t border-[#90c8ff]/5 space-y-4">
+          <p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">
+            Continue Reading
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Link
+              href="/blog/what-is-proof-of-continuity"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+            >
+              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                What Is Proof of Continuity?
+              </p>
+              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                The missing primitive →
+              </p>
+            </Link>
+            <Link
+              href="/blog/zero-knowledge-proofs-digital-identity-explained"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+            >
+              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                Zero-Knowledge Proofs Explained
+              </p>
+              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                ZK for digital identity →
+              </p>
+            </Link>
+            <Link
+              href="/compare"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+            >
+              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                Protocol Comparison
+              </p>
+              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                MyShape vs competitors →
+              </p>
+            </Link>
+          </div>
+        </div>
         </article>
       </div>
 

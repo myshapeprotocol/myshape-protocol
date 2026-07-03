@@ -1,29 +1,30 @@
-// /app/identity/page.tsx  ← Server Component (NO "use client")
-
+import type { Metadata } from "next";
 import IdentityClient from "./IdentityClient";
+import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
-/* -----------------------------------------
-   Identity Page SEO Metadata
------------------------------------------- */
-export const metadata = {
+export const metadata: Metadata = {
   title: "MyShape Identity — AI-Native Data-Body Initialization",
   description:
-    "Initialize your AI-native identity through the MyShape Identity Layer. A kinetic, zero-knowledge, non-corporeal activation that forms your sovereign Data-Body.",
+    "Initialize your AI-native identity through the MyShape Identity Layer. A kinetic, zero-knowledge, non-corporeal activation that forms your sovereign Data-Body — controlled entirely by you, verifiable everywhere.",
+  keywords: [
+    "identity layer",
+    "data-body",
+    "AI-native identity",
+    "sovereign identity dashboard",
+    "kinetic verification",
+    "ZK-presence",
+    "MyShape Protocol",
+  ],
+  alternates: { canonical: "https://www.myshape.com/identity" },
   openGraph: {
     title: "MyShape Identity — Data-Body Initialization",
     description:
       "The Identity Layer transforms your presence into a sovereign Data-Body. Begin the AI-native identity formation ritual.",
     url: "https://www.myshape.com/identity",
     siteName: "MyShape Protocol",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     locale: "en_US",
-    type: "article",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
@@ -35,5 +36,15 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <IdentityClient />;
+  return (
+    <>
+      <BreadcrumbList
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Identity" },
+        ]}
+      />
+      <IdentityClient />
+    </>
+  );
 }

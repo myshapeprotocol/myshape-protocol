@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import ProtocolManifesto from "./ProtocolManifestoClient";
+import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
 export const metadata: Metadata = {
   title: "MyShape Protocol Manifesto — The Human Stance",
-  description: "The MyShape Protocol manifesto — identity as a local construct, proof without exposure.",
+  description: "The MyShape Protocol manifesto — identity as a local construct, proof without exposure, and the irreducible sovereignty of the human subject.",
+  alternates: { canonical: "https://www.myshape.com/protocol/manifesto" },
+  keywords: ["protocol manifesto", "sovereign identity", "human stance", "identity philosophy", "MyShape Protocol"],
   openGraph: {
     title: "MyShape Protocol Manifesto — The Human Stance",
     description: "The MyShape Protocol manifesto — identity as a local construct, proof without exposure.",
@@ -22,5 +25,16 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <ProtocolManifesto />;
+  return (
+    <>
+      <BreadcrumbList
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Protocol", href: "/protocol" },
+          { name: "Manifesto" },
+        ]}
+      />
+      <ProtocolManifesto />
+    </>
+  );
 }

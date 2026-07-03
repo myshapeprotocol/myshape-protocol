@@ -115,6 +115,51 @@ export default function PostClient() {
           {/* Divider */}
           <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#90c8ff]/15 to-transparent" />
 
+          {/* Internal link cluster */}
+          <div className="space-y-4 mb-16">
+            <p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">
+              Continue Reading
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Link
+                href="/blog/what-is-proof-of-continuity"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+              >
+                <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                  What Is Proof of Continuity?
+                </p>
+                <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                  The missing primitive →
+                </p>
+              </Link>
+              <Link
+                href="/blog/what-is-decentralized-identity-2026"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+              >
+                <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                  What Is Decentralized Identity?
+                </p>
+                <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                  2026 guide to DID, SSI →
+                </p>
+              </Link>
+              <Link
+                href="/glossary"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
+              >
+                <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                  Protocol Glossary
+                </p>
+                <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                  30+ defined terms →
+                </p>
+              </Link>
+            </div>
+          </div>
+
           {/* CTA */}
           <div className="p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
             <p className="text-white/40 text-[10px] tracking-[0.15em] uppercase">

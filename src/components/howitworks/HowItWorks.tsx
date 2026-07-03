@@ -9,7 +9,7 @@ export default function HowItWorks() {
   return (
     <section className="w-full px-[6%] flex flex-col items-center bg-transparent relative"
       style={{ paddingTop: "clamp(4rem, 10vw, 10rem)", paddingBottom: "clamp(4rem, 10vw, 10rem)", fontFamily: "var(--font-geist-sans), sans-serif" }}>
-      <h1 className="sr-only">How MyShape Works — Motion-Native Zero-Knowledge Identity Pipeline</h1>
+      <h2 className="sr-only">How MyShape Works — Motion-Native Zero-Knowledge Identity Pipeline</h2>
 
       <div className="max-w-[1200px] w-full">
         {/* 标题区 */}

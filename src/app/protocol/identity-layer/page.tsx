@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import IdentityLayer from "./IdentityLayerClient";
+import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
 export const metadata: Metadata = {
   title: "MyShape Identity Layer — Sovereign by Design",
   description: "The MyShape identity layer — local generation, selective expression, zero-knowledge verification.",
+  alternates: { canonical: "https://www.myshape.com/protocol/identity-layer" },
+  keywords: ["identity layer", "sovereign identity", "zero-knowledge", "data-body", "MyShape Protocol"],
   openGraph: {
     title: "MyShape Identity Layer — Sovereign by Design",
     description: "The MyShape identity layer — local generation, selective expression, zero-knowledge verification.",
@@ -22,5 +25,16 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <IdentityLayer />;
+  return (
+    <>
+      <BreadcrumbList
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Protocol", href: "/protocol" },
+          { name: "Identity Layer" },
+        ]}
+      />
+      <IdentityLayer />
+    </>
+  );
 }
