@@ -27,8 +27,8 @@ export async function GET() {
   const redirectUri = `${baseUrl}/api/matrix/auth/linkedin/callback`;
   const scope = "openid profile w_member_social email";
 
-  // Use a random state param for CSRF protection
-  const state = Math.random().toString(36).substring(2, 15);
+  // Cryptographically secure CSRF state, stored in cookie for callback validation
+  const state = crypto.randomUUID();
 
   const authUrl =
     `https://www.linkedin.com/oauth/v2/authorization` +
@@ -38,5 +38,13 @@ export async function GET() {
     `&scope=${encodeURIComponent(scope)}` +
     `&state=${state}`;
 
-  return NextResponse.redirect(authUrl);
+  const response = NextResponse.redirect(authUrl);
+  response.cookies.set("linkedin_oauth_state", state, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    maxAge: 600, // 10 minutes
+    path: "/",
+  });
+  return response;
 }

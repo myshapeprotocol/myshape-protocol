@@ -39,7 +39,9 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
         if (!window.Pose) {
           await new Promise((resolve) => {
             const s = document.createElement('script');
-            s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js";
+            s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js";
+            s.crossOrigin = "anonymous";
+            s.integrity = "sha384-qcJQ+n/ZcF15Xu2EoRupB4Av+GEAGeW0Td1mp2A90u0NdNLzLYQVMUq1Ax1YAHqk";
             s.onload = resolve;
             document.head.appendChild(s);
           });
@@ -49,7 +51,7 @@ export default function LiveCapture({ activeStage }: { activeStage: number }) {
 
         if (!window.Pose) return;
         const poseObj = new window.Pose({
-          locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
+          locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${file}`,
         });
 
         poseObj.setOptions({ 

@@ -26,6 +26,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "No authorization code received" }, { status: 400 });
   }
 
+  // Validate OAuth CSRF state parameter against the cookie set during auth initiation
+  const returnedState = searchParams.get("state");
+  const cookieState = request.headers.get("cookie")?.match(/linkedin_oauth_state=([^;]+)/)?.[1];
+  if (!returnedState || !cookieState || returnedState !== cookieState) {
+    return new Response(
+      `<html><body style="background:#060b12;color:#c9d1d9;font-family:monospace;padding:40px"><h1 style="color:#e84e4c">CSRF Validation Failed</h1><p>The OAuth state parameter does not match. This request may be a cross-site forgery attempt.</p><a href="/" style="color:#58a6ff">← Return</a></body></html>`,
+      { headers: { "Content-Type": "text/html" } },
+    );
+  }
+
   const clientId = process.env.LINKEDIN_CLIENT_ID;
   const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
 

@@ -169,10 +169,19 @@ export default function MotionDemoClient() {
         await videoRef.current.play();
       }
       if (!window.Pose) {
-        await new Promise<void>(resolve => { const s = document.createElement("script"); s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"; s.onload = () => resolve(); document.head.appendChild(s); });
+        await new Promise<void>(resolve => {
+          const s = document.createElement("script");
+          s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js";
+          s.crossOrigin = "anonymous";
+          // SRI ensures CDN file hasn't been tampered with
+          s.integrity = "sha384-qcJQ+n/ZcF15Xu2EoRupB4Av+GEAGeW0Td1mp2A90u0NdNLzLYQVMUq1Ax1YAHqk";
+          s.onload = () => resolve();
+          s.onerror = () => { console.warn("[motion-demo] MediaPipe load failed"); resolve(); };
+          document.head.appendChild(s);
+        });
       }
       if (!window.Pose) { setPhase("idle"); return; }
-      const pose = new window.Pose({ locateFile: (f: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${f}` });
+      const pose = new window.Pose({ locateFile: (f: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}` });
       pose.setOptions({ modelComplexity: 0, smoothLandmarks: true, minDetectionConfidence: 0.5 });
       // ── onResults: extract features + update energy ref for particle engine ──
       pose.onResults((results: PoseResult) => {
