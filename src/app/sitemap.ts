@@ -64,6 +64,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/blog/ai-agent-identity-how-autonomous-agents-prove-who-they-are", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/blog/self-sovereign-identity-explained-2026", priority: 0.85, changeFreq: "weekly" as const },
     { path: "/blog/the-post-biometric-era-2026", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/digital-identity-future-2027", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/blog/why-motion-is-the-only-unforgeable-identity-signal", priority: 0.85, changeFreq: "weekly" as const },
+    { path: "/newsletter", priority: 0.65, changeFreq: "monthly" as const },
 
     // ── Research & Evidence ──
     { path: "/evidence", priority: 0.7, changeFreq: "weekly" as const },
