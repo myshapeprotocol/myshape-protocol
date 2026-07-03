@@ -309,34 +309,65 @@ export async function POST(request: Request) {
           proxyUri = "http://127.0.0.1:7890";
         } catch { /* VEE default */ }
 
-        const { TwitterApi } = await import("twitter-api-v2");
         const { ProxyAgent, fetch: undiciFetch } = await import("undici");
         const dispatcher = new ProxyAgent(proxyUri);
+        const crypto = await import("crypto");
 
-        // Override global fetch for twitter.com requests to go through proxy
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const origFetch = (globalThis as any).fetch;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (globalThis as any).fetch = (url: string, init?: RequestInit) => {
-          if (typeof url === "string" && url.includes("twitter.com")) {
-            return undiciFetch(url, { ...init, dispatcher } as never) as unknown as Response;
-          }
-          return origFetch(url, init);
+        // Build OAuth 1.0a signature manually (avoids twitter-api-v2 HTTP client issues)
+        const oauthParams: Record<string, string> = {
+          oauth_consumer_key: apiKey,
+          oauth_nonce: crypto.randomBytes(16).toString("hex"),
+          oauth_signature_method: "HMAC-SHA1",
+          oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
+          oauth_token: accessToken,
+          oauth_version: "1.0",
         };
 
-        const client = new TwitterApi({
-          appKey: apiKey,
-          appSecret: apiSecret,
-          accessToken: accessToken,
-          accessSecret: accessSecret,
-        });
-
         const truncated = content.length > 270 ? content.slice(0, 267) + "..." : content;
-        const tweet = await client.v2.tweet(truncated);
+        const method = "POST";
+        const baseUrl = "https://api.twitter.com/2/tweets";
+        const bodyParams = JSON.stringify({ text: truncated });
+
+        // Build signature base string
+        const paramStr = Object.keys(oauthParams)
+          .sort()
+          .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(oauthParams[k])}`)
+          .join("&");
+        const sigBase = `${method}&${encodeURIComponent(baseUrl)}&${encodeURIComponent(paramStr)}`;
+        const signingKey = `${encodeURIComponent(apiSecret)}&${encodeURIComponent(accessSecret)}`;
+        oauthParams["oauth_signature"] = crypto
+          .createHmac("sha1", signingKey)
+          .update(sigBase)
+          .digest("base64");
+
+        // Build OAuth header
+        const authHeader =
+          "OAuth " +
+          Object.keys(oauthParams)
+            .map((k) => `${encodeURIComponent(k)}="${encodeURIComponent(oauthParams[k])}"`)
+            .join(", ");
+
+        const tweetRes = await undiciFetch(baseUrl, {
+          method: "POST",
+          headers: {
+            Authorization: authHeader,
+            "Content-Type": "application/json",
+          },
+          body: bodyParams,
+          dispatcher,
+        } as Parameters<typeof undiciFetch>[1]);
+
+        const tweetData = await tweetRes.json() as { data?: { id: string }; errors?: Array<{ message: string }> };
+
+        if (!tweetRes.ok || !tweetData.data) {
+          throw new Error(
+            tweetData.errors?.[0]?.message || `Twitter API ${tweetRes.status}`
+          );
+        }
 
         result.status = "PUBLISHED";
-        result.platform_post_id = tweet.data.id;
-        console.log("[matrix/publish] X/Twitter published:", tweet.data.id);
+        result.platform_post_id = tweetData.data?.id;
+        console.log("[matrix/publish] X/Twitter published:", tweetData.data?.id);
         return NextResponse.json({ success: true, ...result });
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : "Unknown X/Twitter error";
