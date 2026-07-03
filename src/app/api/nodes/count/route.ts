@@ -18,30 +18,41 @@ export async function GET(req: Request) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { count: total } = await supabase
+    // Fetch all emails for accurate case-insensitive dedup.
+    // The table is small (< 1000 rows) so this is fine.
+    const { data: rows, error } = await supabase
       .from("protocol_nodes")
-      .select("*", { count: "exact", head: true });
+      .select("email, status");
 
-    const { count: humans } = await supabase
-      .from("protocol_nodes")
-      .select("*", { count: "exact", head: true })
-      .in("status", ["ACTIVE", "GENESIS_NODE", "SUBSCRIBED"]);
+    if (error) throw error;
 
-    const { count: agents } = await supabase
-      .from("protocol_nodes")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "AGENT_ACTIVE");
+    // Case-insensitive dedup: LOWER(email)
+    const seen = new Set<string>();
+    const uniqueRows: typeof rows = [];
+    for (const r of rows ?? []) {
+      const key = (r.email ?? "").trim().toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      uniqueRows.push(r);
+    }
 
-    const { count: genesisNodes } = await supabase
-      .from("protocol_nodes")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "GENESIS_NODE");
+    // Exclude smoke-test entries
+    const real = uniqueRows.filter(
+      (r) => !r.email?.toLowerCase().includes("smoke-test")
+    );
+
+    const total = real.length;
+    const humans = real.filter((r) =>
+      ["ACTIVE", "GENESIS_NODE", "SUBSCRIBED", "GENESIS_CONNECTED"].includes(r.status ?? "")
+    ).length;
+    const agents = real.filter((r) => r.status === "AGENT_ACTIVE").length;
+    const genesisNodes = real.filter((r) => r.status === "GENESIS_NODE").length;
 
     return NextResponse.json({
-      total: total ?? 0,
-      humans: humans ?? 0,
-      agents: agents ?? 0,
-      genesis_nodes: genesisNodes ?? 0,
+      total,
+      humans,
+      agents,
+      genesis_nodes: genesisNodes,
     });
   } catch (err) {
     console.error("[/api/nodes/count]", err);
