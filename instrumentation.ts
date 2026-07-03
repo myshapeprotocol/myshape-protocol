@@ -1,13 +1,14 @@
 /**
- * Next.js instrumentation hook — required by @sentry/nextjs for
- * server-side error monitoring, performance tracing, and
- * automatic span collection for API routes.
+ * Next.js instrumentation hook.
+ * Only registers Sentry when DSN is configured (skipped in CI).
  */
 export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    await import("./sentry.server.config");
-  }
-  if (process.env.NEXT_RUNTIME === "edge") {
-    await import("./sentry.edge.config");
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    if (process.env.NEXT_RUNTIME === "nodejs") {
+      await import("./sentry.server.config");
+    }
+    if (process.env.NEXT_RUNTIME === "edge") {
+      await import("./sentry.edge.config");
+    }
   }
 }
