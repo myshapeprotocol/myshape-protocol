@@ -184,5 +184,5 @@ chore: upgrade Next.js to 16.1.6
 20. ✅ ~~8 个 API 路由缺 rate limit~~ — 已加固 OTP/verify/subscribe 等（2026-07-02）
 21. ✅ ~~LinkedIn 数据丢失 bug~~ — `data.linkedin` 从未赋值 → 已修复（2026-07-02）
 22. ✅ ~~设计令牌缺失~~ — 已添加 19 CSS 变量（2026-07-02）
-23. Supabase 执行 `010_entropy_growth.sql` — 迁移文件已就绪，待执行
+23. ✅ Supabase 执行 `010_entropy_growth.sql` — 迁移已应用，所有字段已存在（2026-07-03 验证）
 24. ✅ ~~Architecture 页面内联样式~~ — 14→5，原 7 条技术债已全部解决（2026-07-02）

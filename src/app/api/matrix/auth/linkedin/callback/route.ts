@@ -124,7 +124,7 @@ export async function GET(request: Request) {
   ${accessToken ? `<p>Token: <span class="token">${tokenDisplay}</span></p>` : ""}
   ${tokenError ? `<p style="color:#e84e4c;font-size:12px">${tokenError.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</p>` : ""}
   <p style="font-size:11px;color:#6e7681;margin-top:16px">
-    ${saved ? "✅ Token auto-saved to .env.local as LINKEDIN_USER_ACCESS_TOKEN" : "⚠ Could not auto-save to .env.local. Copy this token manually:<br><code style='color:#58a6ff'>LINKEDIN_USER_ACCESS_TOKEN=${accessToken}</code>"}
+    ${saved ? "✅ Token auto-saved to .env.local as LINKEDIN_USER_ACCESS_TOKEN" : "⚠ Could not auto-save to .env.local. Set LINKEDIN_USER_ACCESS_TOKEN manually in Vercel dashboard → Environment Variables."}
   </p>
 </div>
 

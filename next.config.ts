@@ -4,10 +4,10 @@ const IS_PROD = process.env.NODE_ENV === "production";
 
 const CSP_DIRECTIVES = [
   "default-src 'self'",
-  // Scripts: self + eval for dev (Next.js Fast Refresh), MediaPipe CDN
+  // Scripts: self + eval for dev (Next.js Fast Refresh), MediaPipe CDN (scoped)
   IS_PROD
-    ? "script-src 'self' https://cdn.jsdelivr.net https://va.vercel-scripts.com"
-    : "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net https://va.vercel-scripts.com",
+    ? "script-src 'self' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com"
+    : "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com",
   // Styles: Tailwind needs 'unsafe-inline'
   "style-src 'self' 'unsafe-inline'",
   // Images: self + Supabase storage + data URIs
@@ -38,6 +38,9 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(self), microphone=()" },
   { key: "X-DNS-Prefetch-Control", value: "on" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
+  { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
 ];
 
 const nextConfig: NextConfig = {

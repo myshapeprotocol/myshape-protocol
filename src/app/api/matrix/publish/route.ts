@@ -1,17 +1,40 @@
 import { NextResponse } from "next/server";
+import { RateLimiter } from "@/lib/rate-limiter";
+
+// 5 publishes per 15 minutes — enough for batch posting, prevents abuse
+const publishLimiter = new RateLimiter({ maxRequests: 5, windowMs: 15 * 60 * 1000 });
 
 /**
  * POST /api/matrix/publish
  *
- * Dual-mode publish endpoint:
- * - Bluesky: full ATP protocol push via @atproto/api
- * - LinkedIn: placeholder (LinkedIn API v2 requires OAuth user token)
- * - LINK-type platforms are handled client-side (clipboard + window.open)
+ * Protected endpoint — requires x-api-key header matching MATRIX_API_KEY env var.
+ * Rate limited: 5 requests per 15 minutes per IP.
  *
- * Payload: { platform, content, title, url, publishType }
+ * Supported platforms: bluesky, x/twitter, linkedin, farcaster, discord, telegram, reddit
+ * Payload: { platform, content, title, url }
  */
 export async function POST(request: Request) {
   try {
+    // Authentication: require x-api-key header
+    const apiKey = request.headers.get("x-api-key");
+    const expectedKey = process.env.MATRIX_API_KEY;
+    if (!expectedKey || apiKey !== expectedKey) {
+      return NextResponse.json(
+        { success: false, error: "UNAUTHORIZED: valid x-api-key header required" },
+        { status: 401 },
+      );
+    }
+
+    // Rate limit check
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const { allowed, remaining } = publishLimiter.check(ip);
+    if (!allowed) {
+      return NextResponse.json(
+        { success: false, error: "RATE_LIMITED: 5 publishes per 15 minutes" },
+        { status: 429, headers: { "X-RateLimit-Remaining": String(remaining) } },
+      );
+    }
+
     const { platform, content, title, url } = await request.json();
 
     if (!platform || !content) {
