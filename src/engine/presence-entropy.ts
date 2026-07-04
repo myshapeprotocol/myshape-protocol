@@ -159,11 +159,14 @@ export interface PESComponents {
 }
 
 export function computePES(components: PESComponents): number {
-  const w = { timing: 0.20, noise: 0.25, frequency: 0.20, biological: 0.35 };
+  // v2 weights — calibrated on n=54 real human samples (2026-07-04)
+  // Frequency Entropy removed: FFT on MediaPipe joint signals produces negligible
+  // content in 30s windows (mean F=0.065 across 54 real samples).
+  // Weights redistributed: μT 0.25 / N 0.30 / B 0.45
+  const w = { timing: 0.25, noise: 0.30, frequency: 0.0, biological: 0.45 };
   const raw =
     w.timing * components.microTimingVariance +
     w.noise * components.noiseResidual +
-    w.frequency * components.frequencyEntropy +
     w.biological * components.biologicalPerturbation;
   return Math.min(Math.max(raw, 0), 1);
 }

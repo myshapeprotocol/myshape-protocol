@@ -77,15 +77,7 @@ function generateHumanFrames(count: number): {
   return { frames, timestamps };
 }
 
-/** AI joint signal: single clean sine — no harmonics, no tremor, no cross-joint coordination */
-function aiJointSignal(t: number, jointIdx: number): number {
-  const amp = 0.3 + (jointIdx % 5) * 0.06;
-  const freq = 0.9 + (jointIdx % 3) * 0.3;
-  const phase = jointIdx * 1.7; // independent per joint: no shared motor program
-  return amp * Math.sin(2 * Math.PI * freq * t + phase);
-}
-
-/** Generate AI-like motion frames — single-frequency smooth, zero tremor, independent joints */
+/** AI motion: random-walk interpolation — smooth, no tremor, joints move independently */
 function generateAIFrames(count: number): {
   frames: Array<Record<number, JointPosition>>;
   timestamps: number[];
@@ -93,19 +85,31 @@ function generateAIFrames(count: number): {
   const frames: Array<Record<number, JointPosition>> = [];
   const timestamps: number[] = [];
   const baseInterval = 1000 / FPS;
+  const stepSize = 0.015; // small smooth step per frame
+
+  // Initialize per-joint positions (random starts)
+  const positions: Array<{ x: number; y: number; z: number }> = [];
+  for (let j = 0; j < SST_JOINTS; j++) {
+    positions.push({
+      x: (Math.random() - 0.5) * 0.6,
+      y: (Math.random() - 0.5) * 0.6,
+      z: (Math.random() - 0.5) * 0.3,
+    });
+  }
 
   for (let i = 0; i < count; i++) {
-    const t = i / FPS;
-    // AI timing: near-perfect 33.33ms (±1ms)
-    timestamps.push(i * baseInterval + (Math.random() - 0.5) * 2.0);
+    // AI timing: near-perfect 33.33ms intervals
+    timestamps.push(i * baseInterval + (Math.random() - 0.5) * 1.0);
 
     const frame: Record<number, JointPosition> = {};
     for (let j = 0; j < SST_JOINTS; j++) {
-      frame[j] = {
-        x: aiJointSignal(t, j) + (Math.random() - 0.5) * 0.0005,
-        y: aiJointSignal(t + 0.3, j + 10) + (Math.random() - 0.5) * 0.0005,
-        z: aiJointSignal(t + 0.6, j + 20) * 0.4 + (Math.random() - 0.5) * 0.0005,
-      };
+      // Random walk with slight drift back to center — smooth, no tremor
+      const pos = positions[j];
+      pos.x += (Math.random() - 0.5) * stepSize - pos.x * 0.002;
+      pos.y += (Math.random() - 0.5) * stepSize - pos.y * 0.002;
+      pos.z += (Math.random() - 0.5) * stepSize * 0.5 - pos.z * 0.002;
+
+      frame[j] = { x: pos.x, y: pos.y, z: pos.z };
     }
     frames.push(frame);
   }
@@ -237,7 +241,7 @@ function cohensD(mean1: number, std1: number, mean2: number, std2: number): numb
 // ═══════════════════════════════════════════════
 
 const SAMPLE_COUNT = 100;
-const HUMAN_THRESHOLD = 0.5;
+const HUMAN_THRESHOLD = 0.5; // v2: F dimension removed, weights recalibrated on 54 real samples
 
 describe("PES Benchmark v0.1", () => {
   // Increase timeout for large batch

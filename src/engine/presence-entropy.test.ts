@@ -81,8 +81,8 @@ describe("computePES", () => {
       biologicalPerturbation: 0.3,
     };
     const pes = computePES(components);
-    // Weights: timing 20%, noise 25%, frequency 20%, bio 35%
-    const expected = 0.4 * 0.2 + 0.6 * 0.25 + 0.8 * 0.2 + 0.3 * 0.35;
+    // Weights v2: timing 25%, noise 30%, bio 45% (F removed, calibrated on 54 real samples)
+    const expected = 0.4 * 0.25 + 0.6 * 0.30 + 0.3 * 0.45;
     expect(pes).toBeCloseTo(expected, 6);
   });
 
