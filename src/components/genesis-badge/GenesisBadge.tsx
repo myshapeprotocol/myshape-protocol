@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import Link from "next/link";
 import "./genesis-badge.css";
 
 interface Spark {
@@ -44,26 +45,54 @@ export default function GenesisBadge() {
     const isCompleted = sessionStorage.getItem("genesis_completed") === "1";
     const storedStatus = sessionStorage.getItem("genesis_status") || "";
 
-    const identityKey = storedEmail || walletAddr;
-    if (isCompleted && identityKey) {
-      setStatus(storedStatus || "ACTIVE");
+    if (isCompleted) {
+      const identityKey = storedEmail || walletAddr;
+      if (identityKey) {
+        setStatus(storedStatus || "ACTIVE");
+        setVisible(true);
+        if (storedEmail) fetchStats(storedEmail);
+        return;
+      }
+    } else if (walletAddr) {
+      setStatus("WALLET_LINKED");
       setVisible(true);
-      if (storedEmail) fetchStats(storedEmail);
+      return;
     }
+    // Neither genesis nor wallet — hide
+    setVisible(false);
   };
+
+  // Stable refs to avoid effect re-registration on state changes
+  const tryShowRef = useRef(tryShow);
+  tryShowRef.current = tryShow;
+  const handleDisconnect = useCallback(() => {
+    const hasGenesis = sessionStorage.getItem("genesis_completed") === "1";
+    const hasWallet = !!sessionStorage.getItem("wallet_address");
+    if (!hasGenesis && !hasWallet) {
+      setVisible(false);
+    } else {
+      tryShowRef.current();
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    tryShow();
-    const interval = setInterval(() => { if (!visible) tryShow(); }, 30000);
-    window.addEventListener("genesis:updated", tryShow);
-    window.addEventListener("wallet:connected", tryShow);
+    tryShowRef.current();
+    const onUpdate = () => tryShowRef.current();
+    const interval = setInterval(() => {
+      // Re-check visibility every 30s — handles stale scan_count
+      tryShowRef.current();
+    }, 30000);
+    window.addEventListener("genesis:updated", onUpdate);
+    window.addEventListener("wallet:connected", onUpdate);
+    window.addEventListener("wallet:disconnected", handleDisconnect);
     return () => {
       clearInterval(interval);
-      window.removeEventListener("genesis:updated", tryShow);
-      window.removeEventListener("wallet:connected", tryShow);
+      window.removeEventListener("genesis:updated", onUpdate);
+      window.removeEventListener("wallet:connected", onUpdate);
+      window.removeEventListener("wallet:disconnected", handleDisconnect);
     };
-  }, [visible]);
+  }, [handleDisconnect]); // Only re-run if handleDisconnect ref changes (never, due to [])
 
   // 鼠标视差倾斜
   useEffect(() => {
@@ -149,23 +178,27 @@ export default function GenesisBadge() {
   if (!visible) return null;
 
   const isGenesis = status === "GENESIS_NODE";
+  const isWalletOnly = status === "WALLET_LINKED";
 
   return (
     <div className="genesis-badge-wrapper">
       <div
         ref={badgeRef}
         className={`genesis-badge ${isGenesis ? "tier-genesis" : "tier-active"} ${expanded ? "is-expanded" : "is-collapsed"}`}
-        onClick={() => setExpanded(!expanded)}
-        style={{ cursor: "pointer" }}
-        title={expanded ? "Collapse" : "Expand stats"}
+        onClick={() => {
+          if (isWalletOnly) return; // use explicit Link below instead
+          setExpanded(!expanded);
+        }}
+        style={{ cursor: isWalletOnly ? "default" : "pointer" }}
+        title={isWalletOnly ? "Complete Genesis to unlock full badge" : expanded ? "Collapse" : "Expand stats"}
       >
         {/* Microdata — Genesis Cohort */}
         <meta itemProp="hasDefinedTerm" itemScope itemType="https://schema.org/DefinedTerm" />
         <meta itemProp="name" content="Genesis Cohort" />
         <meta itemProp="description" content="The inaugural group of sovereign identity nodes initialized during the MyShape Protocol launch phase. Limited to the first 100 human entities. Permanent tier. Never offered again." />
         <meta itemProp="url" content="https://www.myshape.com/genesis" />
-        {/* 粒子散溢 */}
-        {sparks.map(s => {
+        {/* 粒子散溢 — 仅 genesis 节点 */}
+        {!isWalletOnly && sparks.map(s => {
           const dx = Math.cos(s.angle) * s.distance;
           const dy = Math.sin(s.angle) * s.distance;
           return (
@@ -192,33 +225,62 @@ export default function GenesisBadge() {
         <div className="badge-corner badge-corner-br" />
         <div className="badge-scan" />
 
-        {/* 折叠态：仅显示核心标识 */}
-        <div className="badge-collapsed-view">
-          <span className="badge-dot" />
-          <span className="badge-tier-label-collapsed">GENESIS</span>
-        </div>
+        {/* 折叠态 */}
+        {isWalletOnly ? (
+          <Link href="/genesis" className="badge-collapsed-view" style={{ textDecoration: "none" }}>
+            <span className="badge-dot" />
+            <span className="badge-tier-label-collapsed">WALLET</span>
+          </Link>
+        ) : (
+          <div className="badge-collapsed-view">
+            <span className="badge-dot" />
+            <span className="badge-tier-label-collapsed">GENESIS</span>
+          </div>
+        )}
 
-        {/* 展开态：完整详情 */}
+        {/* 展开态 */}
         <div className="badge-content">
           <div className="badge-topbar">
-            <span className="badge-code">SIG_006_OMEGA</span>
+            <span className="badge-code">
+              {isWalletOnly ? "LINKED" : "SIG_006_OMEGA"}
+            </span>
             <span className="badge-dots">
               <span className="badge-dot" />
               <span className="badge-dot" />
             </span>
           </div>
 
-          <div className="badge-title-main" data-text="GENESIS_COHORT">
-            GENESIS_COHORT
+          <div className="badge-title-main" data-text={isWalletOnly ? "WALLET_LINKED" : "GENESIS_COHORT"}>
+            {isWalletOnly ? "WALLET_LINKED" : "GENESIS_COHORT"}
           </div>
           <div className="badge-title-sub">
-            FOUNDING_ENTITY
+            {isWalletOnly ? (
+              <Link href="/genesis" style={{ color: "rgba(144,200,255,0.7)", textDecoration: "none" }}
+                onClick={(e) => e.stopPropagation()}>
+                INITIALIZE_GENESIS →
+              </Link>
+            ) : (
+              "FOUNDING_ENTITY"
+            )}
           </div>
 
-          <div className="badge-data-row">
-            <span>SCANS: <strong>{scanCount}</strong></span>
-            <span>DATA: <strong>{dataContrib}</strong></span>
-          </div>
+          {isWalletOnly ? (
+            <Link
+              href="/genesis"
+              className="badge-data-row"
+              style={{ justifyContent: "center", textDecoration: "none", display: "flex" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span style={{ color: "rgba(144,200,255,0.7)" }}>
+                Complete Genesis to unlock →
+              </span>
+            </Link>
+          ) : (
+            <div className="badge-data-row">
+              <span>SCANS: <strong>{scanCount}</strong></span>
+              <span>DATA: <strong>{dataContrib}</strong></span>
+            </div>
+          )}
         </div>
       </div>
     </div>

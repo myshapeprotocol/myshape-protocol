@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   try {
     const { restUrl, key, projectRef } = getSupabaseConfig();
 
-    const { email, node_handle } = await request.json();
+    const { email, node_handle, wallet_address } = await request.json();
 
     if (!email || !node_handle) {
       return NextResponse.json(
@@ -40,6 +40,8 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    const normalizedWallet = (wallet_address || "").trim().toLowerCase() || undefined;
 
     // 先检查是否已存在
     const checkUrl = `${restUrl}?email=eq.${encodeURIComponent(email.trim())}&select=email`;
@@ -54,12 +56,34 @@ export async function POST(request: Request) {
     if (checkRes.ok) {
       const existing = await checkRes.json();
       if (existing && existing.length > 0) {
+        // Node exists — update wallet_address if provided
+        if (normalizedWallet) {
+          await fetch(`${restUrl}?email=eq.${encodeURIComponent(email.trim())}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': key,
+              'Authorization': `Bearer ${key}`,
+              'x-supabase-project-ref': projectRef,
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify({ wallet_address: normalizedWallet }),
+          }).catch(() => {});
+        }
         return NextResponse.json({
           success: true,
           alreadyExists: true,
           message: "NODE_ALREADY_REGISTERED: This email is already anchored to the protocol mesh.",
         });
       }
+    }
+
+    const payload: Record<string, string> = {
+      email: email.trim(),
+      node_handle: node_handle,
+    };
+    if (normalizedWallet) {
+      payload.wallet_address = normalizedWallet;
     }
 
     const res = await fetch(restUrl, {
@@ -71,10 +95,7 @@ export async function POST(request: Request) {
         'x-supabase-project-ref': projectRef,
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify({
-        email: email.trim(),
-        node_handle: node_handle
-      })
+      body: JSON.stringify(payload),
     });
 
     const responseText = await res.text();

@@ -665,10 +665,6 @@ export default function HeroDemo() {
             <meta itemProp="actionApplication" content="MyShape Protocol Genesis Initialization" />
             <span className="hero-demo-cta-label">INITIALIZE_GENESIS</span>
           </Link>
-          <Link href="/motion-demo" className="hero-demo-cta secondary"
-            onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>
-            <span className="hero-demo-cta-label">TRY_LIVE_DEMO</span>
-          </Link>
         </div>
       </div>
     </section>

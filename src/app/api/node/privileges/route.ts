@@ -41,9 +41,10 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const email = (searchParams.get('email') || "").trim().toLowerCase();
 
-    if (!email || !email.includes("@")) {
-      return NextResponse.json({ error: "INVALID_EMAIL" }, { status: 400 });
+    if (!email) {
+      return NextResponse.json({ error: "MISSING_IDENTIFIER" }, { status: 400 });
     }
+    // Accept wallet-derived keys (e.g. "wallet:a1b2c3d") and real emails
 
     const { data: node, error } = await supabase
       .from('protocol_nodes')

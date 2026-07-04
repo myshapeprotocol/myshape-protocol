@@ -17,6 +17,9 @@ import MotionPreview from "@/components/motion-preview/MotionPreview";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
+if (!supabase && typeof window !== "undefined") {
+  console.warn("[HomeClient] Supabase not configured — realtime node feed disabled. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+}
 
 export default function HomeClient() {
   const [activeUser, setActiveUser] = useState("");
@@ -32,12 +35,31 @@ export default function HomeClient() {
     return `${name.substring(0, 2)}****${name.slice(-2)}`.toUpperCase();
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
+  const checkGenesisUser = () => {
+    if (typeof window === "undefined") return;
+    const hasGenesis = sessionStorage.getItem("genesis_completed") === "1";
+    const hasWallet = !!sessionStorage.getItem("wallet_address");
+    if (hasGenesis || hasWallet) {
       const email = sessionStorage.getItem("genesis_email") || "";
       setActiveUser(email);
       setIsGenesisUser(true);
+    } else {
+      setIsGenesisUser(false);
     }
+  };
+
+  useEffect(() => {
+    checkGenesisUser();
+    window.addEventListener("wallet:connected", checkGenesisUser);
+    window.addEventListener("genesis:updated", checkGenesisUser);
+    window.addEventListener("wallet:disconnected", checkGenesisUser);
+    const poll = setInterval(checkGenesisUser, 5000);
+    return () => {
+      clearInterval(poll);
+      window.removeEventListener("wallet:connected", checkGenesisUser);
+      window.removeEventListener("genesis:updated", checkGenesisUser);
+      window.removeEventListener("wallet:disconnected", checkGenesisUser);
+    };
   }, []);
 
   useEffect(() => {
@@ -146,10 +168,7 @@ export default function HomeClient() {
 
         {/* Desktop: full experience below */}
         <div className="hidden md:block">
-        <div className="relative z-10 -mt-6 pb-8 space-y-3">
-          <div className="flex justify-center">
-            <GenesisCohortBadge />
-          </div>
+        <div className="relative z-10 -mt-6 pb-8">
           <div className="max-w-lg mx-auto px-4">
             <MotionPreview />
           </div>

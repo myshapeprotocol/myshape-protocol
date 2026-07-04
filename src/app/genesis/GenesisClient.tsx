@@ -10,12 +10,119 @@ import "./genesis.css";
 
 type Stage = "input" | "scanning" | "sending_otp" | "verifying" | "success" | "error";
 
+/* ── 上升光粒子 — 庆祝背景 ── */
+function AscendingParticles() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let raf = 0;
+    let W = 0;
+    let H = 0;
+
+    interface Mote {
+      x: number; y: number; r: number; speed: number; alpha: number;
+      phase: number; pulseSpeed: number; driftAmp: number; driftFreq: number;
+    }
+
+    const motes: Mote[] = [];
+    const COUNT = 50;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = `${W}px`;
+      canvas.style.height = `${H}px`;
+    };
+
+    const seed = () => {
+      motes.length = 0;
+      for (let i = 0; i < COUNT; i++) {
+        motes.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: 1.5 + Math.random() * 3.5,
+          speed: 0.15 + Math.random() * 0.55,
+          alpha: 0.3 + Math.random() * 0.5,
+          phase: Math.random() * Math.PI * 2,
+          pulseSpeed: 1.5 + Math.random() * 3,
+          driftAmp: 0.3 + Math.random() * 0.8,
+          driftFreq: 0.3 + Math.random() * 0.7,
+        });
+      }
+    };
+
+    resize();
+    seed();
+    window.addEventListener("resize", () => { resize(); seed(); });
+
+    const draw = (now: number) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      const t = now * 0.001;
+
+      for (const m of motes) {
+        m.y -= m.speed;
+        m.x += Math.sin(t * m.driftFreq + m.phase) * m.driftAmp;
+        if (m.y < -20) { m.y = H + 20; m.x = Math.random() * W; }
+        if (m.x < -20) m.x = W + 20;
+        if (m.x > W + 20) m.x = -20;
+
+        const pulse = 0.4 + Math.sin(t * m.pulseSpeed + m.phase) * 0.6;
+        const a = m.alpha * pulse;
+
+        // Outer glow
+        const og = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 4);
+        og.addColorStop(0, `rgba(180,220,255,${a})`);
+        og.addColorStop(0.3, `rgba(144,200,255,${a * 0.5})`);
+        og.addColorStop(1, "rgba(144,200,255,0)");
+        ctx.fillStyle = og;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r * 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Bright core
+        ctx.fillStyle = `rgba(255,255,255,${a * 0.9})`;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      raf = requestAnimationFrame(draw);
+    };
+
+    raf = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: 0 }}
+      aria-hidden="true"
+    />
+  );
+}
+
 export default function GenesisClient() {
   const [stage, setStage] = useState<Stage>("input");
   const [email, setEmail] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [inviteCodeValid, setInviteCodeValid] = useState<boolean | null>(null);
   const [otp, setOtp] = useState("");
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [headerWallet, setHeaderWallet] = useState<string | null>(null);
   const [nodeData, setNodeData] = useState<{
@@ -27,10 +134,23 @@ export default function GenesisClient() {
   } | null>(null);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // 检测 Header 是否已连接钱包
-  useEffect(() => {
+  // 检测 Header 是否已连接钱包 — mount + live listener
+  const walletCheckRef = useRef<() => void>(() => {});
+  walletCheckRef.current = () => {
     const saved = sessionStorage.getItem("wallet_address");
-    if (saved) setHeaderWallet(saved);
+    setHeaderWallet(saved || null);
+  };
+
+  useEffect(() => {
+    walletCheckRef.current();
+    const onConnect = () => walletCheckRef.current();
+    const onDisconnect = () => setHeaderWallet(null);
+    window.addEventListener("wallet:connected", onConnect);
+    window.addEventListener("wallet:disconnected", onDisconnect);
+    return () => {
+      window.removeEventListener("wallet:connected", onConnect);
+      window.removeEventListener("wallet:disconnected", onDisconnect);
+    };
   }, []);
 
   // 校验完成 → 拉取节点身份数据
@@ -92,16 +212,21 @@ export default function GenesisClient() {
       };
 
       setStage("scanning");
-      await new Promise((r) => setTimeout(r, 8000));
+      // Brief initialization — wallet mode skips OTP, email mode transitions to OTP send
+      await new Promise((r) => setTimeout(r, 3000));
 
       // 钱包模式：跳过 OTP
       if (hasWallet) {
-        // Ensure the node exists in the database via uplink
+        // Ensure the node exists in the database via uplink — link wallet address at creation time
         const nodeKey = cleanEmail || "wallet:" + headerWallet!.slice(2, 10);
         await fetch("/api/uplink", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: nodeKey, node_handle: "SIG_" + headerWallet!.slice(2, 10) }),
+          body: JSON.stringify({
+            email: nodeKey,
+            node_handle: "SIG_" + headerWallet!.slice(2, 10),
+            wallet_address: headerWallet,
+          }),
         }).catch(() => {});
 
         sessionStorage.setItem("genesis_completed", "1");
@@ -137,8 +262,8 @@ export default function GenesisClient() {
 
   const handleVerifyOTP = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (otp.length !== 6) return;
-    setStage("sending_otp");
+    if (otp.length !== 6 || verifyingOtp) return;
+    setVerifyingOtp(true);
     try {
       const res = await fetch("/api/verify-otp", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -153,6 +278,7 @@ export default function GenesisClient() {
       window.dispatchEvent(new CustomEvent("genesis:updated"));
       finalizeGenesis(email);
     } catch (err: unknown) {
+      setVerifyingOtp(false);
       setStage("error");
       setErrorMsg((err as Error).message?.slice(0, 60) || "VERIFY_FAILED");
     }
@@ -165,7 +291,7 @@ export default function GenesisClient() {
       refId="005" category="CIV_LAYER" title="GENESIS_PROTOCOL"
       secLevel="CLASS_OMEGA"
       systemStatus={
-        stage === "scanning" ? "KINETIC_SCAN_ACTIVE"
+        stage === "scanning" ? "PROTOCOL_NODE_INITIALIZING"
         : stage === "sending_otp" ? "TRANSMITTING_CHALLENGE"
         : stage === "verifying" ? "AWAITING_SIGNATURE"
         : stage === "success" ? "IDENTITY_LAYER_INITIALIZED"
@@ -234,6 +360,9 @@ export default function GenesisClient() {
                         style={{ background: "rgba(144,200,255,0.06)" }}>
                         Begin Genesis →
                       </button>
+                      <span className="text-white/25 text-[9px] tracking-[0.1em] mt-1">
+                        No email required — wallet signature is your identity proof
+                      </span>
                     </div>
                   ) : (
                     <>
@@ -249,106 +378,109 @@ export default function GenesisClient() {
                           if (walletData.node_handle) sessionStorage.setItem("genesis_node_handle", walletData.node_handle);
                           if (walletData.skip_otp) {
                             sessionStorage.setItem("genesis_completed", "1");
-                            sessionStorage.setItem("genesis_email", email.trim().toLowerCase());
+                            sessionStorage.setItem("genesis_email", email.trim().toLowerCase() || "wallet:" + walletData.address.slice(2, 10));
                             sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
                             window.dispatchEvent(new CustomEvent("genesis:updated"));
-                            finalizeGenesis(email.trim().toLowerCase());
+                            finalizeGenesis(email.trim().toLowerCase() || "wallet:" + walletData.address.slice(2, 10));
                           }
                         }}
                       />
                       <span className="text-[#90c8ff]/55 text-[10px] md:text-[11px] tracking-[0.12em] uppercase font-light">Recommended: Trustless on-chain binding</span>
+
+                      {/* ── 分隔（桌面端专属）── */}
+                      <div className="hidden md:flex items-center gap-3 w-full max-w-[260px] mt-2">
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                        <span className="text-white/40 text-[12px] tracking-[0.3em] uppercase font-light">or</span>
+                        <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                      </div>
+
+                      {/* ── 邀请码 — 桌面端专属 ── */}
+                      <div className="hidden md:block">
+                      {inviteCode || inviteCodeValid !== null ? (
+                        <div className="w-52 max-w-[58vw] mt-1">
+                          <div className="relative group"
+                            onMouseEnter={() => playTick(500, "sine", 0.05, 0.015)}>
+                            <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
+                              style={{ background: "linear-gradient(135deg, rgba(99,140,220,0.25), transparent 40%, transparent 60%, rgba(99,140,220,0.25))", filter: "blur(5px)" }} />
+                            <div className="relative px-4 py-0.5 overflow-hidden"
+                              style={{ border: "1px solid rgba(99,140,220,0.3)", background: "rgba(4,10,22,0.85)", boxShadow: "0 0 28px rgba(99,140,220,0.06)" }}>
+                              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-300/60 genesis-invite-corner-tl" />
+                              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-indigo-300/60 genesis-invite-corner-tr" />
+                              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-indigo-300/60 genesis-invite-corner-bl" />
+                              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-300/60 genesis-invite-corner-br" />
+                              <div className="absolute inset-0 pointer-events-none genesis-invite-scan" />
+                              <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.3), transparent)", animation: "dataFlow 2.5s ease-in-out infinite" }} />
+                              <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.25), transparent)", animation: "dataFlow 2.5s ease-in-out 0.8s infinite" }} />
+                              <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
+                                onChange={(e) => handleInviteCodeChange(e.target.value)}
+                                onFocus={() => playTick(600, "sine", 0.06, 0.015)}
+                                maxLength={19}
+                                className="relative z-10 w-full bg-transparent py-3 text-center text-[11px] tracking-[0.2em] text-indigo-200/70 focus:outline-none placeholder:text-white/14 transition-all" />
+                            </div>
+                          </div>
+                          {/* Only validate after 3+ chars typed */}
+                          {inviteCode.length >= 3 && inviteCodeValid === false && (
+                            <div className="text-center mt-1.5">
+                              <span className="text-red-400/50 font-mono text-[9px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
+                            </div>
+                          )}
+                          {inviteCodeValid === true && (
+                            <div className="text-center mt-1.5">
+                              <span className="text-green-400/55 font-mono text-[9px] tracking-[0.18em]">◈ CODE_VALID</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <button type="button" onClick={() => setInviteCodeValid(false)}
+                          onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
+                          className="text-[#90c8ff]/45 hover:text-[#90c8ff]/80 text-[10px] md:text-[11px] tracking-[0.15em] uppercase transition-colors border-b border-dashed border-[#90c8ff]/25 pb-0.5">
+                          + Invite code
+                        </button>
+                      )}
+                      </div>
+
+                      {/* ── 备选路径：Legacy Email（桌面端专属）── */}
+                      <div className="hidden md:flex flex-col items-center space-y-2">
+                        <span className="text-white/50 text-[11px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
+                        <div className="relative flex items-center gap-2">
+                          <div className="relative group genesis-terminal-glow flex-1"
+                            onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
+                            <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
+                              style={{ background: "linear-gradient(135deg, rgba(144,200,255,0.2), transparent 40%, transparent 60%, rgba(144,200,255,0.2))", filter: "blur(5px)" }} />
+                            <div className="relative pl-5 pr-12 py-0.5 overflow-hidden"
+                              style={{ border: "1px solid rgba(144,200,255,0.18)", background: "rgba(2,10,20,0.85)" }}>
+                              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[#90c8ff]/60 genesis-corner-tl" />
+                              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[#90c8ff]/60 genesis-corner-tr" />
+                              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[#90c8ff]/60 genesis-corner-bl" />
+                              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[#90c8ff]/60 genesis-corner-br" />
+                              <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
+                              <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-l" />
+                              <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-r" />
+                              <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                onKeyDown={(e) => { if (e.key === "Enter") handleCommence(); }}
+                                className="relative z-10 w-52 max-w-[50vw] bg-transparent py-3 pr-2 text-center text-[11px] tracking-[0.25em] text-white/85 focus:outline-none placeholder:text-white/18" />
+                              {/* 提交箭头 */}
+                              <button type="button" onClick={() => handleCommence()}
+                                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-8 h-8 transition-all duration-300 group/arrow"
+                                style={{ color: "rgba(144,200,255,0.4)" }}>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="group-hover/arrow:translate-x-0.5 transition-transform">
+                                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-white/30 text-[9px] tracking-[0.1em]">For restricted environments only</span>
+                        <a href="/handshake"
+                          onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
+                          className="text-[#90c8ff]/30 hover:text-[#90c8ff]/60 text-[9px] tracking-[0.12em] uppercase transition-colors mt-1 no-underline inline-block">
+                          Developer? Node_Handshake →
+                        </a>
+                      </div>
                     </>
                   )}
-                </div>
-
-                {/* ── 分隔（桌面端专属）── */}
-                <div className="hidden md:flex items-center gap-3 w-full max-w-[260px]">
-                  <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-                  <span className="text-white/40 text-[12px] tracking-[0.3em] uppercase font-light">or</span>
-                  <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-                </div>
-
-                {/* ── 邀请码 — 桌面端专属 ── */}
-                <div className="hidden md:block">
-                {inviteCode || inviteCodeValid !== null ? (
-                  <div className="w-52 max-w-[58vw] mt-1">
-                    <div className="relative group"
-                      onMouseEnter={() => playTick(500, "sine", 0.05, 0.015)}>
-                      <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
-                        style={{ background: "linear-gradient(135deg, rgba(99,140,220,0.25), transparent 40%, transparent 60%, rgba(99,140,220,0.25))", filter: "blur(5px)" }} />
-                      <div className="relative px-4 py-0.5 overflow-hidden"
-                        style={{ border: "1px solid rgba(99,140,220,0.3)", background: "rgba(4,10,22,0.85)", boxShadow: "0 0 28px rgba(99,140,220,0.06)" }}>
-                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-300/60 genesis-invite-corner-tl" />
-                        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-indigo-300/60 genesis-invite-corner-tr" />
-                        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-indigo-300/60 genesis-invite-corner-bl" />
-                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-300/60 genesis-invite-corner-br" />
-                        <div className="absolute inset-0 pointer-events-none genesis-invite-scan" />
-                        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.3), transparent)", animation: "dataFlow 2.5s ease-in-out infinite" }} />
-                        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.25), transparent)", animation: "dataFlow 2.5s ease-in-out 0.8s infinite" }} />
-                        <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
-                          onChange={(e) => handleInviteCodeChange(e.target.value)}
-                          onFocus={() => playTick(600, "sine", 0.06, 0.015)}
-                          maxLength={19}
-                          className="relative z-10 w-full bg-transparent py-3 text-center text-[11px] tracking-[0.2em] text-indigo-200/70 focus:outline-none placeholder:text-white/14 transition-all" />
-                      </div>
-                    </div>
-                    {inviteCode.length > 0 && (
-                      <div className="text-center mt-1.5">
-                        {inviteCodeValid === true ? (
-                          <span className="text-green-400/55 font-mono text-[9px] tracking-[0.18em]">◈ CODE_VALID</span>
-                        ) : (
-                          <span className="text-red-400/50 font-mono text-[9px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <button type="button" onClick={() => setInviteCodeValid(false)}
-                    onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
-                    className="text-[#90c8ff]/45 hover:text-[#90c8ff]/80 text-[10px] md:text-[11px] tracking-[0.15em] uppercase transition-colors border-b border-dashed border-[#90c8ff]/25 pb-0.5">
-                    + Invite code
-                  </button>
-                )}
-                </div>
-              {/* ── 备选路径：Legacy Email（桌面端专属）── */}
-                <div className="hidden md:flex flex-col items-center space-y-2">
-                  <span className="text-white/50 text-[11px] tracking-[0.15em] uppercase">Legacy Access (Email)</span>
-                  <div className="relative flex items-center gap-2">
-                    <div className="relative group genesis-terminal-glow flex-1"
-                      onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
-                      <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
-                        style={{ background: "linear-gradient(135deg, rgba(144,200,255,0.2), transparent 40%, transparent 60%, rgba(144,200,255,0.2))", filter: "blur(5px)" }} />
-                      <div className="relative pl-5 pr-12 py-0.5 overflow-hidden"
-                        style={{ border: "1px solid rgba(144,200,255,0.18)", background: "rgba(2,10,20,0.85)" }}>
-                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[#90c8ff]/60 genesis-corner-tl" />
-                        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[#90c8ff]/60 genesis-corner-tr" />
-                        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[#90c8ff]/60 genesis-corner-bl" />
-                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[#90c8ff]/60 genesis-corner-br" />
-                        <div className="absolute inset-0 pointer-events-none genesis-scan-line" />
-                        <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-l" />
-                        <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] genesis-data-stream-r" />
-                        <input type="text" placeholder="GENESIS_EMAIL@ADDRESS.IO" value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          onKeyDown={(e) => { if (e.key === "Enter") handleCommence(); }}
-                          className="relative z-10 w-52 max-w-[50vw] bg-transparent py-3 pr-2 text-center text-[11px] tracking-[0.25em] text-white/85 focus:outline-none placeholder:text-white/18" />
-                        {/* 提交箭头 */}
-                        <button type="button" onClick={() => handleCommence()}
-                          onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-8 h-8 transition-all duration-300 group/arrow"
-                          style={{ color: "rgba(144,200,255,0.4)" }}>
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="group-hover/arrow:translate-x-0.5 transition-transform">
-                            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-white/30 text-[9px] tracking-[0.1em]">For restricted environments only</span>
-                  <a href="/handshake"
-                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                    className="text-[#90c8ff]/30 hover:text-[#90c8ff]/60 text-[9px] tracking-[0.12em] uppercase transition-colors mt-1 no-underline inline-block">
-                    Developer? Node_Handshake →
-                  </a>
                 </div>
 
                 </form>
@@ -362,7 +494,7 @@ export default function GenesisClient() {
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
               className="flex flex-col items-center space-y-8">
               <VortexScan />
-              <span className="text-[#90c8ff] font-mono text-[12px] tracking-[1em] uppercase">Extracting_Kinetic_Hash...</span>
+              <span className="text-[#90c8ff] font-mono text-[12px] tracking-[0.5em] uppercase">Initializing_Protocol_Node...</span>
               <div className="w-48 h-[1px] bg-[#90c8ff]/10 relative overflow-hidden">
                 <div className="absolute inset-0 genesis-progress" />
               </div>
@@ -430,7 +562,7 @@ export default function GenesisClient() {
                           }} />
                       ))}
                     </div>
-                    <button type="submit" disabled={otp.length !== 6}
+                    <button type="submit" disabled={otp.length !== 6 || verifyingOtp}
                       onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                       className="w-full py-3 border text-[9px] tracking-[0.4em] uppercase font-mono transition-all duration-500"
                       style={{
@@ -439,9 +571,9 @@ export default function GenesisClient() {
                         background: otp.length === 6 ? "rgba(144,200,255,0.05)" : "transparent",
                         textShadow: otp.length === 6 ? "0 0 8px rgba(144,200,255,0.4)" : "none",
                         boxShadow: otp.length === 6 ? "0 0 20px rgba(144,200,255,0.1)" : "none",
-                        cursor: otp.length === 6 ? "pointer" : "not-allowed",
+                        cursor: otp.length !== 6 || verifyingOtp ? "not-allowed" : "pointer",
                       }}>
-                      Verify_Signature
+                      {verifyingOtp ? "VERIFYING..." : "Verify_Signature"}
                     </button>
                   </form>
                 </div>
@@ -454,25 +586,28 @@ export default function GenesisClient() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-              className="flex flex-col items-center space-y-4 md:space-y-5">
+              className="relative flex flex-col items-center space-y-3 md:space-y-4">
+
+              {/* ── 上升光粒子背景 ── */}
+              <AscendingParticles />
 
               {/* ── 核心确认视觉：光环 + 亮点 ── */}
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.7, ease: [0, 0.6, 0.3, 1] }}
-                className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+                transition={{ delay: 0.2, duration: 0.7, ease: [0, 0.6, 0.3, 1] }}
+                className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full genesis-halo-outer" />
                 <div className="absolute inset-3 rounded-full genesis-halo-mid" />
                 <div className="absolute inset-6 rounded-full genesis-halo-inner" />
                 <motion.div
-                  animate={{ scale: [1, 1.25, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative w-4 h-4 rounded-full genesis-success-core"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative w-5 h-5 rounded-full genesis-success-core"
                   style={{ background: "radial-gradient(circle at 35% 35%, #fff, rgba(120,200,255,0.9))" }} />
               </motion.div>
 
-              {/* ── Genesis 身份卡（含权益+能量体+时间线+治理） ── */}
+              {/* ── Genesis 身份卡 ── */}
               <GenesisIdentityCard
                 email={email}
                 nodeHandle={nodeData?.nodeHandle || sessionStorage.getItem("genesis_node_handle")}
@@ -482,30 +617,30 @@ export default function GenesisClient() {
                 timestamp={nodeData?.timestamp}
               />
 
-              {/* ── 行动按钮 ── */}
+              {/* ── 主 CTA ── */}
               <motion.a
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.6, duration: 0.5 }}
+                transition={{ delay: 1.0, duration: 0.5 }}
                 href="/identity"
                 onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-                className="relative group px-14 py-3.5 font-mono text-[9px] tracking-[0.35em] uppercase transition-all duration-500 overflow-hidden"
+                className="relative group px-12 py-3 font-mono text-[10px] tracking-[0.25em] uppercase transition-all duration-500 overflow-hidden"
                 style={{ border: "1px solid rgba(144,200,255,0.3)", color: "rgba(180,220,255,0.8)", textShadow: "0 0 8px rgba(144,200,255,0.3)" }}>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: "rgba(144,200,255,0.06)", boxShadow: "inset 0 0 30px rgba(144,200,255,0.1)" }} />
                 <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                  Enter_Identity_Layer →
+                  Enter Identity Layer →
                 </span>
               </motion.a>
 
               <motion.a
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.8, duration: 0.5 }}
-                href="/motion-demo"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="hidden md:block text-[#90c8ff]/40 hover:text-[#90c8ff]/80 text-[10px] tracking-[0.25em] uppercase font-mono transition-colors">
-                See_How_It_Works → Motion_Demo
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.4, duration: 0.5 }}
+                href="/dashboard"
+                onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
+                className="text-[#90c8ff]/30 hover:text-[#90c8ff]/60 text-[9px] tracking-[0.15em] uppercase font-mono transition-colors">
+                View Full Privileges →
               </motion.a>
             </motion.div>
           )}

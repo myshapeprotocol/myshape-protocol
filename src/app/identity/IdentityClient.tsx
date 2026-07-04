@@ -27,9 +27,17 @@ export default function IdentityClient() {
   const [isGenesisUser, setIsGenesisUser] = useState(false);
 
   useEffect(() => {
-    setIsGenesisUser(sessionStorage.getItem("genesis_completed") === "1");
-    const savedEmail = sessionStorage.getItem("genesis_email");
-    if (savedEmail) setEmail(savedEmail);
+    const isGenesis = sessionStorage.getItem("genesis_completed") === "1";
+    setIsGenesisUser(isGenesis);
+    const savedEmail = sessionStorage.getItem("genesis_email") || "";
+    // Wallet-derived keys are not real emails — don't pre-fill
+    if (savedEmail && !savedEmail.startsWith("wallet:")) {
+      setEmail(savedEmail);
+    }
+    // If user already completed genesis, skip directly to success — no re-submit needed
+    if (isGenesis) {
+      setStatus("success");
+    }
     setClientReady(true);
   }, []);
 

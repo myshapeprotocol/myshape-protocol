@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
 import ProtocolHeader from "@/components/header/header";
@@ -43,7 +43,12 @@ export default function DashboardClient() {
   const [stats, setStats] = useState<NodeStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [witnessNumber, setWitnessNumber] = useState<number | undefined>(undefined);
-  useEffect(() => { setWitnessNumber(parseInt(sessionStorage.getItem("witness_number") || "0") || undefined); }, []);
+  const witnessNumberRef = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    const n = parseInt(sessionStorage.getItem("witness_number") || "0") || undefined;
+    setWitnessNumber(n);
+    witnessNumberRef.current = n;
+  }, []);
   const [isGenesis, setIsGenesis] = useState(false);
   const [scanPulse, setScanPulse] = useState(false);
   const prevScanRef = { current: 0 };
@@ -100,7 +105,7 @@ export default function DashboardClient() {
               entropy_score: ent.entropyScore,
               particle_level: ent.particleLevel,
               streak_days: ent.streakDays,
-              position_number: priv.position_number || witnessNumber,
+              position_number: priv.position_number || witnessNumberRef.current,
             });
           } else Sentry.captureMessage("Dashboard: empty node data", { extra: { email: email.slice(0, 3) + "***" } });
           setLoading(false);

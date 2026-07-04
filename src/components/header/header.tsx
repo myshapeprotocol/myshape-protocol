@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ethers } from "ethers";
 import { playTick } from "@/utils/useAudioTick";
+import { useWalletAuth } from "@/hooks/useWalletAuth";
 import "./header.css";
 
 /* ============================================================
@@ -34,20 +34,8 @@ const ProtocolHeader = () => {
   const [genesisDone, setGenesisDone] = useState(false);
   const [maskedEmail, setMaskedEmail] = useState("");
 
-  /* ── 钱包连接状态 ── */
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [walletStatus, setWalletStatus] = useState<"idle" | "connecting" | "signing" | "verifying" | "done">("idle");
-  const [walletError, setWalletError] = useState("");
-
-  const SIWE_STATEMENT = "MyShape Protocol — Sovereign Identity Initialization";
-  const BASE_MAINNET = 8453;
-  const BASE_MAINNET_HEX = "0x2105";
-
-  // 初始化时检查是否已连接
-  useEffect(() => {
-    const saved = sessionStorage.getItem("wallet_address");
-    if (saved) { setWalletAddress(saved); setWalletStatus("done"); }
-  }, []);
+  /* ── 钱包连接状态 — shared hook ── */
+  const { address: walletAddress, status: walletStatus, error: walletError, connect: connectWallet, disconnect: disconnectWallet } = useWalletAuth();
 
   useEffect(() => {
     if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
@@ -58,6 +46,21 @@ const ProtocolHeader = () => {
         setMaskedEmail(`${name.slice(0, 2)}****@${domain || ""}`);
       }
     }
+  }, []);
+  // Also listen for genesis:updated in case genesis completes while header is visible
+  useEffect(() => {
+    const update = () => {
+      if (sessionStorage.getItem("genesis_completed") === "1") {
+        setGenesisDone(true);
+        const email = sessionStorage.getItem("genesis_email") || "";
+        if (email) {
+          const [name, domain] = email.split("@");
+          setMaskedEmail(`${name.slice(0, 2)}****@${domain || ""}`);
+        }
+      }
+    };
+    window.addEventListener("genesis:updated", update);
+    return () => window.removeEventListener("genesis:updated", update);
   }, []);
 
   /* ── UTC 时钟 ── */
@@ -116,91 +119,9 @@ const ProtocolHeader = () => {
     setIsPanelOpen(!isPanelOpen);
   };
 
-  const handleConnectWallet = async () => {
-    const isMock = new URLSearchParams(window.location.search).has("mock");
-    try {
-      setWalletStatus("connecting");
-      setWalletError("");
-
-      if (isMock) {
-        await new Promise(r => setTimeout(r, 600));
-        setWalletStatus("signing");
-        await new Promise(r => setTimeout(r, 500));
-        const addr = "0x" + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
-        setWalletAddress(addr);
-        setWalletStatus("done");
-        sessionStorage.setItem("wallet_address", addr);
-        return;
-      }
-
-      if (!window.ethereum) {
-        setWalletError("No wallet detected. Install MetaMask or Rainbow.");
-        setWalletStatus("idle");
-        return;
-      }
-
-      // 切换至 Base 链
-      try {
-        const chainId = await window.ethereum.request({ method: "eth_chainId" }) as string;
-        if (parseInt(chainId, 16) !== BASE_MAINNET) {
-          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: BASE_MAINNET_HEX }] });
-        }
-      } catch { /* 静默 */ }
-
-      // 请求账户
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" }) as string[];
-      if (!accounts?.length) throw new Error("No accounts");
-      const addr = accounts[0];
-
-      // SIWE 签名
-      setWalletStatus("signing");
-      const domain = window.location.host;
-      const now = new Date().toISOString();
-      const message = `${domain} wants you to sign in:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: ${BASE_MAINNET}\nNonce: ${Date.now()}\nIssued At: ${now}`;
-
-      const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
-      const signer = await provider.getSigner();
-      const signature = await signer.signMessage(message);
-
-      // 验证
-      setWalletStatus("verifying");
-      const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
-      const res = await fetch("/api/auth/siwe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message,
-          signature,
-          address: addr,
-          ...(genesisEmail ? { email: genesisEmail } : {}),
-        }),
-      });
-      const data = await res.json();
-
-      setWalletAddress(addr);
-      setWalletStatus("done");
-      sessionStorage.setItem("wallet_address", addr);
-
-      if (data.is_genesis) {
-        sessionStorage.setItem("genesis_completed", "1");
-        setGenesisDone(true);
-      }
-      // Ensure genesis_email is stored — required by GenesisBadge to render
-      if (genesisEmail && !sessionStorage.getItem("genesis_email")) {
-        sessionStorage.setItem("genesis_email", genesisEmail);
-      }
-      if (data.node_handle) {
-        sessionStorage.setItem("genesis_node_handle", data.node_handle);
-      }
-      if (data.status) {
-        sessionStorage.setItem("genesis_status", data.status);
-      }
-      // Notify badge components that wallet is connected
-      window.dispatchEvent(new CustomEvent("wallet:connected"));
-    } catch (err: unknown) {
-      setWalletError((err as Error).message?.slice(0, 60) || "Connect failed");
-      setWalletStatus("idle");
-    }
+  const handleConnectWallet = () => {
+    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+    connectWallet(genesisEmail ? { email: genesisEmail } : undefined);
   };
 
   const handleSync = () => {
@@ -215,10 +136,7 @@ const ProtocolHeader = () => {
 
   const handleDisconnect = () => {
     if (walletAddress) {
-      // 断开钱包
-      setWalletAddress(null);
-      setWalletStatus("idle");
-      sessionStorage.removeItem("wallet_address");
+      disconnectWallet();
       setIsPanelOpen(false);
       return;
     }

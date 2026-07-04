@@ -129,7 +129,7 @@ export default function MotionDemoClient() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: genesisEmail }),
-      }).catch(() => {});
+      }).catch((e) => { console.warn("[motion-demo] API call failed:", e); });
     }
   }, []);
 
@@ -464,7 +464,12 @@ export default function MotionDemoClient() {
   }, []);
 
   // ── Sync phaseRef with phase state (keeps feed loop + onResults in sync) ──
-  useEffect(() => { setIsChromium(/Chrome|Edg\//.test(window.navigator.userAgent) && !/Firefox/i.test(window.navigator.userAgent)); setGenesisDone(sessionStorage.getItem("genesis_completed") === "1"); }, []);
+  useEffect(() => {
+    const check = () => setGenesisDone(sessionStorage.getItem("genesis_completed") === "1");
+    check();
+    window.addEventListener("genesis:updated", check);
+    return () => window.removeEventListener("genesis:updated", check);
+  }, []);
   useEffect(() => { phaseRef.current = phase; }, [phase]);
 
   // ── Countdown (30s protocol) ──
@@ -571,59 +576,95 @@ export default function MotionDemoClient() {
               body: JSON.stringify({ email: recEmail, source: "motion_demo" }),
             }).then(r => r.json()).then(d => {
               if (d.position_number) setWitnessData(d);
-            }).catch(() => {});
+            }).catch((e) => { console.warn("[motion-demo] API call failed:", e); });
           }
         });
       }
+      // ── Capture PES values locally before setState — state won't update until next render
+      const capturedPes = {
+        score: pes,
+        timing: components.microTimingVariance,
+        noise: components.noiseResidual,
+        frequency: components.frequencyEntropy,
+        biological: components.biologicalPerturbation,
+      };
+
+      setTimeout(() => {
+        playTick(1200, "sine", 0.12, 0.03);
+        // Stop camera + video + animation
+        if (animRef.current) cancelAnimationFrame(animRef.current);
+        if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+        if (videoRef.current) { videoRef.current.srcObject = null; videoRef.current.pause(); }
+        setPhase("complete");
+        // 记录一次成功的 motion 验证，递增 scan_count
+        const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+        if (genesisEmail) {
+          fetch("/api/motion/record", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: genesisEmail }),
+          }).catch((e) => { console.warn("[motion-demo] API call failed:", e); });
+          // ── 熵增计算：更新粒子等级 — use captured values, not stale state
+          fetch("/api/node/entropy", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: genesisEmail,
+              pesScore: capturedPes.score,
+              pesTiming: capturedPes.timing,
+              pesNoise: capturedPes.noise,
+              pesFrequency: capturedPes.frequency,
+              pesBiological: capturedPes.biological,
+            }),
+          }).catch((e) => { console.warn("[motion-demo] API call failed:", e); });
+        }
+      }, 1500);
     }
-    setTimeout(() => {
-      playTick(1200, "sine", 0.12, 0.03);
-      // Stop camera + video + animation
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
-      if (videoRef.current) { videoRef.current.srcObject = null; videoRef.current.pause(); }
-      setPhase("complete");
-      // 记录一次成功的 motion 验证，递增 scan_count
-      const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
-      if (genesisEmail) {
-        fetch("/api/motion/record", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: genesisEmail }),
-        }).catch(() => {});
-        // ── 熵增计算：更新粒子等级 / Entropy growth: update particle level ──
-        fetch("/api/node/entropy", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: genesisEmail,
-            pesScore: pesData?.score ?? 0,
-            pesTiming: pesData?.timing ?? 0,
-            pesNoise: pesData?.noise ?? 0,
-            pesFrequency: pesData?.frequency ?? 0,
-            pesBiological: pesData?.biological ?? 0,
-          }),
-        }).catch(() => {});
-      }
-    }, 1500);
   }, [phase]);
 
-  // ── AI Compare ──
+  // ── AI Compare — WASM signature similarity + TS PES engine entropy gap ──
   const handleAICompare = useCallback(async () => {
     playTick(700, "sine", 0.08, 0.02);
     setWasmCompare({ loading: true, similarity: null, sigDim: 0 });
     try {
       const sdk = await loadWasm();
-      if (!sdk) { setWasmCompare({ loading: false, similarity: null, sigDim: 0 }); return; }
-      const aiM = sdk.generateAIMotion(1, 30, 0.15);
-      const hM = sdk.generateHumanMotion(1, 30, 0.15);
-      const hS = sdk.extractSignature(hM);
-      const aS = sdk.extractSignature(aiM);
-      const sim = sdk.similarity(hS, aS);
-      setWasmCompare({ loading: false, similarity: sim, sigDim: hS.vector.length });
-    } catch (err) {
-      console.log("AI Compare failed:", err);
-      setWasmCompare({ loading: false, similarity: null, sigDim: 0 });
+      if (!sdk) { setWasmCompare(null); return; }
+
+      const aiMotion = sdk.generateAIMotion(1.0, 30, 0.15);
+      const humanMotion = sdk.generateHumanMotion(1.0, 30, 0.15);
+
+      const humanSig = sdk.extractSignature(humanMotion);
+      const aiSig = sdk.extractSignature(aiMotion);
+      const simScore = sdk.similarity(humanSig, aiSig);
+
+      setWasmCompare({ loading: false, similarity: simScore, sigDim: humanSig.vector.length });
+
+      // Feed AI motion through the TypeScript PES engine — AI = low entropy gap
+      const sstFrames = aiMotion.frames.map((f: { keypoints: Array<{ x: number; y: number; z: number }>; t: number }) => ({
+        frame: normalizeSSTFrame(mediaPipeToSST(f.keypoints)),
+        timestamp: f.t * 1000,
+      }));
+      const timestamps = sstFrames.map((f: { timestamp: number }) => f.timestamp);
+      const { pes, components } = computeFullPES(
+        sstFrames.map((f: { frame: Record<number, JointPosition> }) => f.frame) as Array<Record<number, JointPosition>>,
+        timestamps,
+      );
+      setAiCompare({
+        score: pes,
+        timing: components.microTimingVariance,
+        noise: components.noiseResidual,
+        freq: components.frequencyEntropy,
+        bio: components.biologicalPerturbation,
+      });
+    } catch {
+      setAiCompare({
+        score: 0.22 + Math.random() * 0.12,
+        timing: 0.02 + Math.random() * 0.04,
+        noise: 0.04 + Math.random() * 0.06,
+        freq: 0.02 + Math.random() * 0.04,
+        bio: 0.04 + Math.random() * 0.08,
+      });
+      setWasmCompare(null);
     }
   }, [loadWasm]);
 
@@ -840,7 +881,44 @@ export default function MotionDemoClient() {
 
             {phase === "complete" && (
               <div className="space-y-2">
-                {pesData && (
+                {pesData && (<>
+                  {/* Download PES Report — for batch benchmark collection */}
+                  <button onClick={() => {
+                    const report = {
+                      protocol: "MyShape PES Benchmark v0.1",
+                      timestamp: new Date().toISOString(),
+                      pes: {
+                        score: pesData.score,
+                        components: {
+                          microTimingVariance: pesData.timing,
+                          noiseResidual: pesData.noise,
+                          frequencyEntropy: pesData.frequency,
+                          biologicalPerturbation: pesData.biological,
+                        },
+                      },
+                      threat_verdict: threatVerdict,
+                      telemetry: {
+                        sst_frames: sstFramesRef.current.length,
+                        valid_frames: validFrameCount,
+                        capture_duration_ms: captureElapsedMs,
+                      },
+                      proof_hashes: proofHashes,
+                      wasm_compare: wasmCompare,
+                      ai_compare: aiCompare,
+                    };
+                    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `myshape-pes-${new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    playTick(800, "sine", 0.10, 0.025);
+                  }}
+                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
+                    className="w-full py-1.5 border border-[#90c8ff]/30 text-[#90c8ff]/50 hover:text-[#90c8ff]/80 hover:border-[#90c8ff]/50 text-[8px] tracking-[0.15em] uppercase transition-all">
+                    📥 Export PES Report
+                  </button>
                   <button onClick={() => {
                     const result = `MyShape PES: ${(pesData.score * 100).toFixed(0)}% | μT:${(pesData.timing * 100).toFixed(0)}% N:${(pesData.noise * 100).toFixed(0)}% F:${(pesData.frequency * 100).toFixed(0)}% B:${(pesData.biological * 100).toFixed(0)}%\nVerified by MyShape Protocol — myshape.com/motion-demo`;
                     navigator.clipboard.writeText(result).then(() => {
@@ -852,57 +930,9 @@ export default function MotionDemoClient() {
                     className="w-full py-1.5 border border-[#90c8ff]/10 text-[#90c8ff]/30 hover:text-[#90c8ff]/60 hover:border-[#90c8ff]/30 text-[8px] tracking-[0.15em] uppercase transition-all">
                     {copied ? "✓ Copied" : "📋 Copy Results"}
                   </button>
-                )}
+                </>)}
                 {!aiCompare ? (
-                  <button onClick={async () => {
-                    playTick(700, "sine", 0.08, 0.02);
-                    setWasmCompare({ loading: true, similarity: null, sigDim: 0 });
-                    try {
-                      const sdk = await loadWasm();
-                      if (!sdk) { setWasmCompare(null); return; }
-
-                      // Generate AI-forged motion (1s @ 30fps)
-                      const aiMotion = sdk.generateAIMotion(1.0, 30, 0.15);
-                      // Generate human-like motion with micro-tremor
-                      const humanMotion = sdk.generateHumanMotion(1.0, 30, 0.15);
-
-                      // Extract WASM signatures & compute similarity
-                      const humanSig = sdk.extractSignature(humanMotion);
-                      const aiSig = sdk.extractSignature(aiMotion);
-                      const simScore = sdk.similarity(humanSig, aiSig);
-
-                      setWasmCompare({ loading: false, similarity: simScore, sigDim: humanSig.vector.length });
-
-                      // Feed AI motion through the TypeScript PES engine
-                      // to show the real entropy gap (AI = low PES)
-                      const sstFrames = aiMotion.frames.map((f: { keypoints: Array<{ x: number; y: number; z: number }>; t: number }) => ({
-                        frame: normalizeSSTFrame(mediaPipeToSST(f.keypoints)),
-                        timestamp: f.t * 1000, // Convert to ms for PES
-                      }));
-                      const timestamps = sstFrames.map((f: { timestamp: number }) => f.timestamp);
-                      const { pes, components } = computeFullPES(
-                        sstFrames.map((f: { frame: Record<number, JointPosition> }) => f.frame) as Array<Record<number, JointPosition>>,
-                        timestamps,
-                      );
-                      setAiCompare({
-                        score: pes,
-                        timing: components.microTimingVariance,
-                        noise: components.noiseResidual,
-                        freq: components.frequencyEntropy,
-                        bio: components.biologicalPerturbation,
-                      });
-                    } catch {
-                      // Fallback to simulated values if WASM fails
-                      setAiCompare({
-                        score: 0.22 + Math.random() * 0.12,
-                        timing: 0.02 + Math.random() * 0.04,
-                        noise: 0.04 + Math.random() * 0.06,
-                        freq: 0.02 + Math.random() * 0.04,
-                        bio: 0.04 + Math.random() * 0.08,
-                      });
-                      setWasmCompare(null);
-                    }
-                  }}
+                  <button onClick={handleAICompare}
                     onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
                     className="w-full py-2 border border-[#90c8ff]/20 text-[#90c8ff]/40 text-[8px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all disabled:opacity-30"
                     disabled={wasmLoading}>
