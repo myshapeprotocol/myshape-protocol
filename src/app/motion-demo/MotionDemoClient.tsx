@@ -75,6 +75,7 @@ export default function MotionDemoClient() {
   const [wasmCompare, setWasmCompare] = useState<{ loading: boolean; similarity: number | null; sigDim: number } | null>(null);
   const { engine, loading: wasmLoading, load: loadWasm } = useMyShapeEngine();
   const [copied, setCopied] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [countdown, setCountdown] = useState(30);
   const [landmarkVisibility, setLandmarkVisibility] = useState<(number | undefined)[]>([]);
   const [captureElapsedMs, setCaptureElapsedMs] = useState(0);
@@ -688,6 +689,114 @@ export default function MotionDemoClient() {
     sstFramesRef.current = [];
   };
 
+  // ── Video File Import — same MediaPipe→SST→PES pipeline as camera ──
+  const handleVideoFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    resumeAudio();
+    playTick(800, "sine", 0.10, 0.025);
+
+    // Reset state for new capture
+    setPhase("capturing");
+    phaseRef.current = "capturing";
+    setCountdown(0); // Will update when video metadata loads
+    captureStartRef.current = performance.now();
+    setCaptureElapsedMs(0);
+    setValidFrameCount(0);
+    setAllPhasesComplete(false);
+    setCurrentVelocity(null);
+    setProofHashes(null);
+    setPesData(null);
+    setThreatVerdict("");
+    setAiCompare(null);
+    setWasmCompare(null);
+    setUploadDone(false);
+    prevLandmarksRef.current = null;
+    prevTimestampRef.current = 0;
+    framesRef.current = [];
+    sstFramesRef.current = [];
+    phaseFrameCountsRef.current = [0, 0, 0, 0, 0];
+    phaseWristVelRef.current = [0, 0, 0, 0, 0];
+    phaseHeadVelRef.current = [0, 0, 0, 0, 0];
+    phaseTorsoVelRef.current = [0, 0, 0, 0, 0];
+    if (researchConsented) resetUpload();
+
+    const url = URL.createObjectURL(file);
+    const videoEl = videoRef.current;
+    if (!videoEl) { setPhase("idle"); return; }
+
+    // Load MediaPipe if needed
+    if (!window.Pose) {
+      await new Promise<void>(resolve => {
+        const s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js";
+        s.crossOrigin = "anonymous";
+        s.integrity = "sha384-qcJQ+n/ZcF15Xu2EoRupB4Av+GEAGeW0Td1mp2A90u0NdNLzLYQVMUq1Ax1YAHqk";
+        s.onload = () => resolve();
+        s.onerror = () => { console.warn("[motion-demo] MediaPipe load failed"); resolve(); };
+        document.head.appendChild(s);
+      });
+    }
+    if (!window.Pose) { setPhase("idle"); URL.revokeObjectURL(url); return; }
+
+    const pose = new window.Pose({ locateFile: (f: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}` });
+    pose.setOptions({ modelComplexity: 0, smoothLandmarks: true, minDetectionConfidence: 0.5 });
+
+    pose.onResults((results: PoseResult) => {
+      if (results.poseLandmarks && phaseRef.current === "capturing") {
+        const now = Date.now();
+        const lm = results.poseLandmarks;
+        landmarksRef.current = lm.map((l: { x: number; y: number; z: number }) => ({ x: l.x, y: l.y, z: l.z }));
+        const rawLm = lm as Array<{ x: number; y: number; z: number; visibility?: number }>;
+        setLandmarkVisibility(rawLm.map(l => l.visibility));
+        const elapsed = performance.now() - captureStartRef.current;
+        setCaptureElapsedMs(elapsed);
+        const anchorIndices = [0, 11, 12, 13, 14, 15, 16, 23, 24];
+        const allAnchorsVisible = anchorIndices.every(i => (rawLm[i]?.visibility ?? 0) > 0.5);
+        if (allAnchorsVisible) setValidFrameCount(c => c + 1);
+        // ── SST collection ──
+        const sstFrame = normalizeSSTFrame(mediaPipeToSST(lm));
+        sstFramesRef.current.push({ frame: sstFrame, timestamp: now });
+        prevLandmarksRef.current = rawLm;
+        prevTimestampRef.current = now;
+      }
+    });
+
+    // Start processing
+    videoEl.srcObject = null;
+    videoEl.src = url;
+    videoEl.playsInline = true;
+    videoEl.muted = true;
+    videoEl.loop = false;
+
+    const onEnded = () => {
+      setAllPhasesComplete(true);
+      videoEl.removeEventListener("ended", onEnded);
+      URL.revokeObjectURL(url);
+    };
+    videoEl.addEventListener("ended", onEnded);
+
+    try {
+      await videoEl.play();
+      // Send frames to MediaPipe
+      const sendFrames = () => {
+        if (phaseRef.current !== "capturing" || videoEl.paused || videoEl.ended) return;
+        if (pose && videoEl.readyState >= 2) {
+          pose.send({ image: videoEl });
+        }
+        if (!videoEl.ended) requestAnimationFrame(sendFrames);
+      };
+      sendFrames();
+    } catch (err) {
+      console.warn("[motion-demo] Video play failed:", err);
+      setPhase("idle");
+      URL.revokeObjectURL(url);
+    }
+
+    // Reset file input so same file can be re-selected
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }, [researchConsented]);
+
   return (
     <div className="bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
       <ProtocolHeader />
@@ -714,19 +823,31 @@ export default function MotionDemoClient() {
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10 pointer-events-none" />
 
             {phase === "idle" && (
-              <IdlePanel
-                isChromium={isChromium}
-                researchConsented={researchConsented}
-                onConsentChange={setResearchConsented}
-                lighting={lighting}
-                onLightingChange={setLighting}
-                uploadState={uploadState}
-                uploadError={uploadError}
-                sessionId={sessionId}
-                uploadDone={uploadDone}
-                onStartCapture={startCapture}
-                onQuickPreview={handleQuickPreview}
-              />
+              <>
+                <IdlePanel
+                  isChromium={isChromium}
+                  researchConsented={researchConsented}
+                  onConsentChange={setResearchConsented}
+                  lighting={lighting}
+                  onLightingChange={setLighting}
+                  uploadState={uploadState}
+                  uploadError={uploadError}
+                  sessionId={sessionId}
+                  uploadDone={uploadDone}
+                  onStartCapture={startCapture}
+                  onQuickPreview={handleQuickPreview}
+                />
+                {/* ── Video File Import ── */}
+                <input ref={fileInputRef} type="file" accept="video/mp4,video/webm,video/quicktime"
+                  onChange={handleVideoFile} className="hidden" />
+                <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center">
+                  <button onClick={() => fileInputRef.current?.click()}
+                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
+                    className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[9px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/35 hover:text-[#90c8ff]/60 transition-all">
+                    📁 Import Video File
+                  </button>
+                </div>
+              </>
             )}
 
             {phase === "capturing" && (
