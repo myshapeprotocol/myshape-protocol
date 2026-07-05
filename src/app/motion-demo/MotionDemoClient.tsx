@@ -798,15 +798,30 @@ export default function MotionDemoClient() {
 
     try {
       await videoEl.play();
-      // Send frames to MediaPipe
-      const sendFrames = () => {
-        if (phaseRef.current !== "capturing" || videoEl.paused || videoEl.ended) return;
-        if (pose && videoEl.readyState >= 2) {
+      // Process video frame-by-frame at the video's native frame rate
+      // requestAnimationFrame runs at 60fps — too fast for MediaPipe to keep up
+      // Use setInterval at ~15fps to give MediaPipe time to process each frame
+      const frameInterval = setInterval(() => {
+        if (phaseRef.current !== "capturing" || videoEl.ended) {
+          clearInterval(frameInterval);
+          if (videoEl.ended) setAllPhasesComplete(true);
+          return;
+        }
+        if (pose && videoEl.readyState >= 2 && !videoEl.paused) {
           pose.send({ image: videoEl });
         }
-        if (!videoEl.ended) requestAnimationFrame(sendFrames);
-      };
-      sendFrames();
+      }, 67); // ~15fps — allows MediaPipe ~67ms per frame
+
+      // Safety: if video stalls, force complete after 10s of no progress
+      let lastFrameCount = 0;
+      const safetyInterval = setInterval(() => {
+        const currentCount = sstFramesRef.current.length;
+        if (currentCount === lastFrameCount && videoEl.ended) {
+          clearInterval(safetyInterval);
+          setAllPhasesComplete(true);
+        }
+        lastFrameCount = currentCount;
+      }, 3000);
     } catch (err) {
       console.warn("[motion-demo] Video play failed:", err);
       setPhase("idle");
