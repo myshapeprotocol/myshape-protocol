@@ -634,7 +634,9 @@ export default function MotionDemoClient() {
         }
       }, 1500);
     } else {
-      // Not enough frames — still clean up and show results
+      // Not enough frames — set minimal PES data so export button still appears
+      setPesData({ score: 0, timing: 0, noise: 0, frequency: 0, biological: 0 });
+      // Clean up and transition
       setTimeout(() => {
         if (animRef.current) cancelAnimationFrame(animRef.current);
         if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
@@ -1266,6 +1268,15 @@ export default function MotionDemoClient() {
                   <div className="h-px bg-gradient-to-r from-transparent via-[#90c8ff]/20 to-transparent" />
                 </div>
 
+                {pesData && (
+                  <button onClick={()=>{
+                    const report={protocol:"MyShape PES Benchmark v0.1",timestamp:new Date().toISOString(),pes:{score:pesData.score,components:{microTimingVariance:pesData.timing,noiseResidual:pesData.noise,frequencyEntropy:pesData.frequency,biologicalPerturbation:pesData.biological}},threat_verdict:threatVerdict,telemetry:{sst_frames:sstFramesRef.current.length,valid_frames:validFrameCount,capture_duration_ms:captureElapsedMs},proof_hashes:proofHashes,wasm_compare:wasmCompare,ai_compare:aiCompare};
+                    const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
+                    const url=URL.createObjectURL(blob);
+                    const a=document.createElement("a");a.href=url;a.download=`myshape-pes-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}.json`;a.click();URL.revokeObjectURL(url);
+                    playTick(800,"sine",0.10,0.025);
+                  }} className="w-full py-3 border-2 border-[#90c8ff]/60 text-[#90c8ff] text-[11px] tracking-[0.15em] uppercase font-bold hover:bg-[#90c8ff]/15 transition-all" style={{textShadow:"0 0 10px rgba(144,200,255,0.3)"}}>📥 Export PES Report</button>
+                )}
                 <button onClick={stop}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
                   className="w-full py-2.5 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[9px] tracking-[0.3em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 hover:bg-[#90c8ff]/[0.03] transition-all">
