@@ -144,6 +144,12 @@ export default function MotionDemoClient() {
     setCountdown(30);
     captureStartRef.current = performance.now();
     setCaptureElapsedMs(0);
+    // Drive countdown independently of MediaPipe — ensures timer always ticks
+    const timerInterval = setInterval(() => {
+      setCaptureElapsedMs(performance.now() - captureStartRef.current);
+    }, 250);
+    // Store for cleanup
+    (window as unknown as Record<string, unknown>).__motionTimer = timerInterval;
     setValidFrameCount(0);
     setLandmarkVisibility([]);
     setAllPhasesComplete(false);
@@ -592,10 +598,12 @@ export default function MotionDemoClient() {
 
       setTimeout(() => {
         playTick(1200, "sine", 0.12, 0.03);
-        // Stop camera + video + animation
+        // Stop camera + video + animation + timer
         if (animRef.current) cancelAnimationFrame(animRef.current);
         if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
         if (videoRef.current) { videoRef.current.srcObject = null; videoRef.current.pause(); }
+        const t = (window as unknown as Record<string, unknown>).__motionTimer as ReturnType<typeof setInterval>;
+        if (t) { clearInterval(t); (window as unknown as Record<string, unknown>).__motionTimer = undefined; }
         setPhase("complete");
         // 记录一次成功的 motion 验证，递增 scan_count
         const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
@@ -674,6 +682,8 @@ export default function MotionDemoClient() {
     if (animRef.current) cancelAnimationFrame(animRef.current);
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     if (poseRef.current) { try { poseRef.current.close(); } catch { /* ok */ } }
+    const t = (window as unknown as Record<string, unknown>).__motionTimer as ReturnType<typeof setInterval>;
+    if (t) { clearInterval(t); (window as unknown as Record<string, unknown>).__motionTimer = undefined; }
     setPhase("idle");
     phaseRef.current = "idle";
     setFeatures(null);
