@@ -35,7 +35,7 @@ export const GITHUB_REPOS = [
 ];
 
 /** Polling interval in minutes */
-export const POLL_INTERVAL_MINUTES = 15;
+export const POLL_INTERVAL_MINUTES = 30;
 
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";

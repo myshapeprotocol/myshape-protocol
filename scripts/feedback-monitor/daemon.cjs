@@ -8,6 +8,7 @@ const child = spawn(tsx, ["src/index.ts", "--daemon"], {
   stdio: "inherit",
   env: { ...process.env },
   shell: true,
+  windowsHide: true,
 });
 
 child.on("exit", (code) => {

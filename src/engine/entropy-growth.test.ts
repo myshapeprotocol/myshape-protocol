@@ -199,11 +199,11 @@ describe("computeEntropyGain", () => {
       entropyScore: 100,
       streakDays: 7,
       streakMultiplier: STREAK_7_DAYS,
-      lastEntropyDate: "2026-07-01",
+      lastEntropyDate: new Date(Date.now() - 86400000).toISOString().slice(0, 10),
     };
-    const result = computeEntropyGain(0.60, midComponents, streakState);
-    const normalGain = BASE_ENTROPY; // no PES bonus at 0.60, no spike
-    expect(result.entropyGain).toBeGreaterThanOrEqual(Math.floor(normalGain * STREAK_7_DAYS));
+    const result = computeEntropyGain(0.75, midComponents, streakState);
+    // PES ≥ 0.70 triggers good bonus: (BASE 1 + bonus 3) × streak 1.5 = 6
+    expect(result.entropyGain).toBeGreaterThanOrEqual(6);
   });
 
   it("applies streak multiplier at 30 days", () => {
@@ -212,11 +212,10 @@ describe("computeEntropyGain", () => {
       entropyScore: 100,
       streakDays: 30,
       streakMultiplier: STREAK_30_DAYS,
-      lastEntropyDate: "2026-07-01",
+      lastEntropyDate: new Date(Date.now() - 86400000).toISOString().slice(0, 10),
     };
     const result = computeEntropyGain(0.60, midComponents, streakState);
-    const normalGain = BASE_ENTROPY;
-    expect(result.entropyGain).toBeGreaterThanOrEqual(Math.floor(normalGain * STREAK_30_DAYS));
+    expect(result.entropyGain).toBeGreaterThanOrEqual(Math.floor(BASE_ENTROPY * STREAK_30_DAYS));
   });
 
   it("triggers spike multiplier for high-entropy motion", () => {

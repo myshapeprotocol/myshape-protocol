@@ -20,25 +20,44 @@ if (proxy) {
 }
 
 import cron from "node-cron";
-import { FEEDS, POLL_INTERVAL_MINUTES } from "./config";
-import { fetchFeed, type ParsedItem } from "./rss";
+import { FEEDS, POLL_INTERVAL_MINUTES, INTER_FEED_DELAY_MS, RATE_LIMIT_COOLDOWN_MINUTES } from "./config";
+import { fetchFeed, type ParsedItem, wasRateLimited, resetRateLimitFlag } from "./rss";
 import { isSeen, markSeen, flush } from "./dedup";
 import { sendToDiscord } from "./discord";
+
+// ── 429 cooldown state ────────────────────────────────────────────
+let cooldownUntil: number | null = null;
 
 // ── Core Loop ──────────────────────────────────────────────────────
 
 async function runOnce(): Promise<number> {
+  // If we're in 429 cooldown, skip this cycle
+  if (cooldownUntil !== null && Date.now() < cooldownUntil) {
+    const remaining = Math.ceil((cooldownUntil - Date.now()) / 60000);
+    console.log(`[monitor] Skipping cycle — rate-limit cooldown (${remaining} min remaining)`);
+    return 0;
+  }
+
   console.log(`\n[monitor] Checking ${FEEDS.length} feed(s) at ${new Date().toISOString()}`);
 
   const allNew: ParsedItem[] = [];
+  resetRateLimitFlag();
 
-  // Rate-limit guard: 5s pause between feeds to avoid Reddit 429
+  // Rate-limit guard: N-second pause between feeds to avoid Reddit 429
   let first = true;
   for (const feedConfig of FEEDS) {
-    if (!first) await new Promise((r) => setTimeout(r, 5000));
+    if (!first) await new Promise((r) => setTimeout(r, INTER_FEED_DELAY_MS));
     first = false;
 
     const items = await fetchFeed(feedConfig);
+
+    // If any feed gets 429, stop processing remaining feeds and enter cooldown
+    if (wasRateLimited) {
+      cooldownUntil = Date.now() + RATE_LIMIT_COOLDOWN_MINUTES * 60_000;
+      console.warn(`[monitor] Entering ${RATE_LIMIT_COOLDOWN_MINUTES}min cooldown due to 429`);
+      break;
+    }
+
     if (items.length === 0) continue;
 
     // Filter: only unseen items

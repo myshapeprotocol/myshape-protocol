@@ -1,0 +1,43 @@
+{
+  "name": "@myshapeprotocol/sdk",
+  "version": "0.1.0",
+  "description": "MyShape Protocol SDK — integrate sovereign identity verification in 5 lines of code",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "wasm/"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "myshape",
+    "identity",
+    "motion-signature",
+    "ZK-presence",
+    "sovereign-identity",
+    "verification",
+    "WASM"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myshapeprotocol/myshape-protocol.git",
+    "directory": "packages/sdk"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  }
+}

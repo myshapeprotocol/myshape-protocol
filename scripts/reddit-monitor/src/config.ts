@@ -44,10 +44,16 @@ export const FEEDS: FeedConfig[] = [
 ];
 
 /** Polling interval in minutes */
-export const POLL_INTERVAL_MINUTES = 15;
+export const POLL_INTERVAL_MINUTES = 30;
 
 /** RSS fetch timeout in milliseconds */
-export const FETCH_TIMEOUT_MS = 10_000;
+export const FETCH_TIMEOUT_MS = 15_000;
+
+/** Inter-feed delay in ms (was 5000 — too aggressive for Reddit RSS) */
+export const INTER_FEED_DELAY_MS = 15_000;
+
+/** Minutes to skip all feeds after a 429 response */
+export const RATE_LIMIT_COOLDOWN_MINUTES = 60;
 
 /** Maximum GUIDs to retain in dedup store */
 export const MAX_DEDUP_ENTRIES = 1000;

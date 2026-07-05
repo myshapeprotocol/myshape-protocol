@@ -83,7 +83,7 @@ export async function searchReddit(since: Date): Promise<RedditMention[]> {
     } catch (err) {
       console.error(`[reddit] search "${kw}":`, err instanceof Error ? err.message : err);
     }
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 10_000));
   }
 
   // Post-filter: only keep items with relevant titles

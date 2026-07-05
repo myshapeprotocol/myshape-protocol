@@ -68,3 +68,10 @@ scripts/matrix-bot/matrix_dashboard.html
 # --- ai-dev-setup: vendor (managed) ---
 /vendor/
 # --- end ai-dev-setup vendor ---
+
+# Monitor logs
+scripts/feedback-monitor/logs/
+scripts/reddit-monitor/logs/
+
+# Test coverage
+coverage/

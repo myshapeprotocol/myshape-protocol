@@ -74,6 +74,14 @@ export interface ParsedItem {
   feedKeywords: string[];
 }
 
+/** Flag set true when any feed returns 429 — caller should back off */
+export let wasRateLimited = false;
+
+/** Reset the rate-limit flag (call at start of each cycle) */
+export function resetRateLimitFlag(): void {
+  wasRateLimited = false;
+}
+
 /** Fetch one feed. Returns [] on any error — never throws. */
 export async function fetchFeed(config: FeedConfig): Promise<ParsedItem[]> {
   try {
@@ -94,9 +102,10 @@ export async function fetchFeed(config: FeedConfig): Promise<ParsedItem[]> {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
 
-    // 429: respect rate limits, log quietly
+    // 429: respect rate limits, log quietly, signal cooldown
     if (message.includes("429")) {
-      console.warn(`[rss] ${config.name}: HTTP 429 — rate limited, skipping this cycle`);
+      console.warn(`[rss] ${config.name}: HTTP 429 — rate limited, triggering cooldown`);
+      wasRateLimited = true;
       return [];
     }
 
