@@ -215,9 +215,8 @@ export default function GenesisClient() {
       // Brief initialization — wallet mode skips OTP, email mode transitions to OTP send
       await new Promise((r) => setTimeout(r, 3000));
 
-      // 钱包模式：跳过 OTP
+      // 钱包模式：跳过 OTP，但勋章由 PES 扫描决定（不在此处分发）
       if (hasWallet) {
-        // Ensure the node exists in the database via uplink — link wallet address at creation time
         const nodeKey = cleanEmail || "wallet:" + headerWallet!.slice(2, 10);
         await fetch("/api/uplink", {
           method: "POST",
@@ -229,9 +228,11 @@ export default function GenesisClient() {
           }),
         }).catch(() => {});
 
+        // Wallet connection = identity registration, not Genesis tier assignment
+        // Genesis Cohort status is minted by first PES scan (POST /api/node/entropy)
         sessionStorage.setItem("genesis_completed", "1");
         sessionStorage.setItem("genesis_email", nodeKey);
-        sessionStorage.setItem("genesis_status", "GENESIS_NODE");
+        sessionStorage.setItem("genesis_status", "ACTIVE"); // PES scan will upgrade if < 100
         window.dispatchEvent(new CustomEvent("genesis:updated"));
         finalizeGenesis(nodeKey);
         return;

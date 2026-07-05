@@ -157,16 +157,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "SIGNATURE_INVALID" }, { status: 401 });
     }
 
-    // 3. 验证成功——前 100 名标记为 GENESIS_NODE
+    // 3. 验证成功——升级为 ACTIVE（勋章由 PES 扫描时 mint，不在此处分发）
     const previousStatus = data.status;
     const isFirstActivation = !['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(previousStatus);
 
-    const { count } = await supabase
-      .from('protocol_nodes')
-      .select('*', { count: 'exact', head: true })
-      .in('status', ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE']);
-
-    const nodeStatus = (count ?? 0) < 100 ? 'GENESIS_NODE' : 'ACTIVE';
+    // OTP 只验证邮箱所有权，不分配 Genesis 层级
+    // Genesis Cohort 身份由 PES 动作扫描结果决定（POST /api/node/entropy）
+    const nodeStatus = isFirstActivation ? 'ACTIVE' : previousStatus;
 
     const { error: updateError } = await supabase
       .from('protocol_nodes')

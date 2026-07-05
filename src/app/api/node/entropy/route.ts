@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     // Read current entropy state + scan_count
     const { data: node, error: readErr } = await getSupabase()
       .from("protocol_nodes")
-      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count")
+      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count, status")
       .eq("email", email)
       .single();
 
@@ -74,22 +74,57 @@ export async function POST(request: Request) {
 
     const { entropyGain, newState, leveledUp, decayApplied, spikeTriggered } = computeEntropyGain(clampedPes, pesComponents, currentState);
 
-    // Write back
-    const { error: writeErr } = await getSupabase()
-      .from("protocol_nodes")
-      .update({
-        entropy_score: newState.entropyScore,
-        particle_level: newState.particleLevel,
-        streak_days: newState.streakDays,
-        streak_multiplier: newState.streakMultiplier,
-        best_pes: newState.bestPes,
-        last_entropy_date: newState.lastEntropyDate,
-        scan_count: (node.scan_count ?? 0) + 1,
-      })
-      .eq("email", email);
+    // ── Genesis Badge Minting: first PES scan that passes threshold unlocks identity tier ──
+    const currentStatus = node.status ?? "PENDING_VERIFICATION";
+    const isFirstVerification = !["GENESIS_NODE", "ACTIVE", "AGENT_ACTIVE"].includes(currentStatus);
+    let badgeMinted: string | null = null;
 
-    if (writeErr) {
-      return NextResponse.json({ error: "UPDATE_FAILED" }, { status: 500 });
+    if (isFirstVerification && clampedPes > 0.5) {
+      // Count existing verified nodes to determine tier
+      const { count: verifiedCount } = await getSupabase()
+        .from("protocol_nodes")
+        .select("*", { count: "exact", head: true })
+        .in("status", ["GENESIS_NODE", "ACTIVE", "AGENT_ACTIVE"]);
+
+      const newNodeStatus = (verifiedCount ?? 0) < 100 ? "GENESIS_NODE" : "ACTIVE";
+      badgeMinted = newNodeStatus;
+
+      // Update status along with entropy
+      const { error: writeErr } = await getSupabase()
+        .from("protocol_nodes")
+        .update({
+          entropy_score: newState.entropyScore,
+          particle_level: newState.particleLevel,
+          streak_days: newState.streakDays,
+          streak_multiplier: newState.streakMultiplier,
+          best_pes: newState.bestPes,
+          last_entropy_date: newState.lastEntropyDate,
+          scan_count: (node.scan_count ?? 0) + 1,
+          status: newNodeStatus,
+        })
+        .eq("email", email);
+
+      if (writeErr) {
+        return NextResponse.json({ error: "UPDATE_FAILED" }, { status: 500 });
+      }
+    } else {
+      // Regular update — no badge change
+      const { error: writeErr } = await getSupabase()
+        .from("protocol_nodes")
+        .update({
+          entropy_score: newState.entropyScore,
+          particle_level: newState.particleLevel,
+          streak_days: newState.streakDays,
+          streak_multiplier: newState.streakMultiplier,
+          best_pes: newState.bestPes,
+          last_entropy_date: newState.lastEntropyDate,
+          scan_count: (node.scan_count ?? 0) + 1,
+        })
+        .eq("email", email);
+
+      if (writeErr) {
+        return NextResponse.json({ error: "UPDATE_FAILED" }, { status: 500 });
+      }
     }
 
     const progress = getLevelProgress(newState.entropyScore);
@@ -102,6 +137,8 @@ export async function POST(request: Request) {
       leveledUp,
       decayApplied,
       spikeTriggered,
+      badge_minted: badgeMinted,
+      status: badgeMinted ?? currentStatus,
     });
   } catch (err) {
     console.error("Entropy calculation failed:", err);
@@ -132,7 +169,7 @@ export async function GET(request: Request) {
   try {
     const { data, error } = await getSupabase()
       .from("protocol_nodes")
-      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count")
+      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count, status")
       .eq("email", email)
       .single();
 
