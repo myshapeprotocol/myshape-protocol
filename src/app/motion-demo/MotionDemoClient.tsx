@@ -1066,12 +1066,52 @@ export default function MotionDemoClient() {
                     ◈ Scan recorded — contributing to your orbital evolution
                   </div>
                 ) : (
-                  <div className="text-center space-y-1">
+                  <div className="text-center space-y-2">
                     <div className="text-amber-400/25 text-[8px] tracking-[0.15em] uppercase">
                       ⚠ Demo mode — scan not bound to identity
                     </div>
-                    <a href="/genesis" className="inline-block text-[#90c8ff]/25 hover:text-[#90c8ff]/50 text-[8px] tracking-[0.2em] uppercase transition-colors">
-                      Complete Genesis to bind scans →
+                    <button
+                      onClick={async () => {
+                        const wallet = sessionStorage.getItem("wallet_address");
+                        const email = sessionStorage.getItem("genesis_email");
+                        const identityKey = email || (wallet ? "wallet:" + wallet.slice(2, 10) : null);
+                        if (identityKey && pesData) {
+                          // Bind this scan to the user's identity via entropy API
+                          playTick(800, "sine", 0.10, 0.025);
+                          try {
+                            const res = await fetch("/api/node/entropy", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                email: identityKey,
+                                pesScore: pesData.score,
+                                pesTiming: pesData.timing,
+                                pesNoise: pesData.noise,
+                                pesFrequency: pesData.frequency,
+                                pesBiological: pesData.biological,
+                              }),
+                            });
+                            const data = await res.json();
+                            if (data.badge_minted) {
+                              sessionStorage.setItem("genesis_completed", "1");
+                              sessionStorage.setItem("genesis_email", identityKey);
+                              sessionStorage.setItem("genesis_status", data.status);
+                              window.dispatchEvent(new CustomEvent("genesis:updated"));
+                              setGenesisDone(true);
+                              playTick(1200, "sine", 0.12, 0.03);
+                            }
+                          } catch { /* silent */ }
+                        } else {
+                          // No identity yet — guide to genesis
+                          window.location.href = "/genesis";
+                        }
+                      }}
+                      onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                      className="px-6 py-2 border border-[#90c8ff]/40 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all">
+                      Verify My Presence
+                    </button>
+                    <a href="/genesis" className="inline-block text-[#90c8ff]/25 hover:text-[#90c8ff]/50 text-[8px] tracking-[0.15em] uppercase transition-colors">
+                      Initialize Genesis identity →
                     </a>
                   </div>
                 )}
