@@ -76,6 +76,7 @@ export default function MotionDemoClient() {
   const { engine, loading: wasmLoading, load: loadWasm } = useMyShapeEngine();
   const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isVideoImportRef = useRef(false); // Flag: video import uses uniform timestamps
   const [countdown, setCountdown] = useState(30);
   const [landmarkVisibility, setLandmarkVisibility] = useState<(number | undefined)[]>([]);
   const [captureElapsedMs, setCaptureElapsedMs] = useState(0);
@@ -762,9 +763,11 @@ export default function MotionDemoClient() {
     const pose = new window.Pose({ locateFile: (f: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}` });
     pose.setOptions({ modelComplexity: 0, smoothLandmarks: true, minDetectionConfidence: 0.5 });
 
+    // Store current frame index for timestamp calculation
+    const frameIndexRef = { current: 0 };
+
     pose.onResults((results: PoseResult) => {
       if (results.poseLandmarks && phaseRef.current === "capturing") {
-        const now = Date.now();
         const lm = results.poseLandmarks;
         landmarksRef.current = lm.map((l: { x: number; y: number; z: number }) => ({ x: l.x, y: l.y, z: l.z }));
         const rawLm = lm as Array<{ x: number; y: number; z: number; visibility?: number }>;
@@ -774,11 +777,13 @@ export default function MotionDemoClient() {
         const anchorIndices = [0, 11, 12, 13, 14, 15, 16, 23, 24];
         const allAnchorsVisible = anchorIndices.every(i => (rawLm[i]?.visibility ?? 0) > 0.5);
         if (allAnchorsVisible) setValidFrameCount(c => c + 1);
-        // ── SST collection ──
+        // ── SST collection — use uniform timestamps for video import (avoid seek-jitter as bio signal) ──
         const sstFrame = normalizeSSTFrame(mediaPipeToSST(lm));
-        sstFramesRef.current.push({ frame: sstFrame, timestamp: now });
+        const uniformTs = frameIndexRef.current * (1000 / fps); // synthetic uniform timing
+        sstFramesRef.current.push({ frame: sstFrame, timestamp: uniformTs });
         prevLandmarksRef.current = rawLm;
-        prevTimestampRef.current = now;
+        prevTimestampRef.current = uniformTs;
+        frameIndexRef.current++;
       }
     });
 
@@ -797,49 +802,45 @@ export default function MotionDemoClient() {
     videoEl.addEventListener("ended", onEnded);
 
     try {
-      // Create a dedicated canvas for video frame extraction
-      // Using canvas.drawImage + canvas.send is more reliable than video.send
+      // Seek-based frame extraction — draws each frame to canvas, sends to MediaPipe
+      // Uses uniform synthetic timestamps to avoid seek-jitter being misread as biological variance
       const offCtx = document.createElement("canvas").getContext("2d");
       if (!offCtx) { setPhase("idle"); URL.revokeObjectURL(url); return; }
 
-      await videoEl.play();
-      videoEl.pause(); // We'll seek manually — don't rely on playback
-
-      const fps = 10; // Process 10 frames per second
+      const fps = 12;
       const duration = videoEl.duration || 5;
       const totalFrames = Math.floor(duration * fps);
       let frameIndex = 0;
       setCountdown(totalFrames);
 
-      const processNextFrame = () => {
+      const seekAndProcess = () => {
         if (phaseRef.current !== "capturing" || frameIndex >= totalFrames) {
           setAllPhasesComplete(true);
           URL.revokeObjectURL(url);
           return;
         }
-        isSeeking = true;
+        // Seek to exact timestamp — uniform intervals for clean timing
         videoEl.currentTime = frameIndex / fps;
-        frameIndex++;
-        setCountdown(totalFrames - frameIndex);
-        setCaptureElapsedMs((frameIndex / fps) * 1000);
       };
 
-      // When seeking completes, capture the frame and send to MediaPipe
-      let isSeeking = false;
-      videoEl.addEventListener("seeked", function onSeek() {
-        if (phaseRef.current !== "capturing" || !isSeeking) return;
-        isSeeking = false;
-        // Draw video frame to canvas and send to MediaPipe
+      const onSeeked = () => {
+        if (phaseRef.current !== "capturing") return;
+        // Draw current frame to canvas
         offCtx.canvas.width = videoEl.videoWidth || 640;
         offCtx.canvas.height = videoEl.videoHeight || 480;
         offCtx.drawImage(videoEl, 0, 0);
+        // Send to MediaPipe
         if (pose) pose.send({ image: offCtx.canvas as unknown as HTMLVideoElement });
-        // Schedule next frame
-        setTimeout(processNextFrame, 100);
-      });
+        frameIndex++;
+        setCountdown(totalFrames - frameIndex);
+        setCaptureElapsedMs((frameIndex / fps) * 1000);
+        // Schedule next — 50ms gives 20fps max throughput, stable on most machines
+        setTimeout(seekAndProcess, 50);
+      };
 
-      // Start the first seek
-      processNextFrame();
+      videoEl.addEventListener("seeked", onSeeked);
+      // Start
+      videoEl.currentTime = 0;
     } catch (err) {
       console.warn("[motion-demo] Video play failed:", err);
       setPhase("idle");
