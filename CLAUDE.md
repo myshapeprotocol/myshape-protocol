@@ -5,6 +5,14 @@
 
 ---
 
+## Wiki 知识库（claude-obsidian · LLM Wiki 模式）
+
+> 持久化知识库位于 `~/claude-obsidian/`（Karpathy LLM Wiki 模式）。
+> 启动时读取 `wiki/hot.md` 恢复上下文。
+> 技能位于 `.claude/skills/` — `/wiki`, `/save`, `wiki-ingest`, `wiki-query` 等。
+
+---
+
 ## 0. AI Agent 行为准则（最高优先级 · Karpathy 四原则）
 
 ### 0.1 先想再写
