@@ -797,31 +797,49 @@ export default function MotionDemoClient() {
     videoEl.addEventListener("ended", onEnded);
 
     try {
+      // Create a dedicated canvas for video frame extraction
+      // Using canvas.drawImage + canvas.send is more reliable than video.send
+      const offCtx = document.createElement("canvas").getContext("2d");
+      if (!offCtx) { setPhase("idle"); URL.revokeObjectURL(url); return; }
+
       await videoEl.play();
-      // Process video frame-by-frame at the video's native frame rate
-      // requestAnimationFrame runs at 60fps — too fast for MediaPipe to keep up
-      // Use setInterval at ~15fps to give MediaPipe time to process each frame
-      const frameInterval = setInterval(() => {
-        if (phaseRef.current !== "capturing" || videoEl.ended) {
-          clearInterval(frameInterval);
-          if (videoEl.ended) setAllPhasesComplete(true);
+      videoEl.pause(); // We'll seek manually — don't rely on playback
+
+      const fps = 10; // Process 10 frames per second
+      const duration = videoEl.duration || 5;
+      const totalFrames = Math.floor(duration * fps);
+      let frameIndex = 0;
+      setCountdown(totalFrames);
+
+      const processNextFrame = () => {
+        if (phaseRef.current !== "capturing" || frameIndex >= totalFrames) {
+          setAllPhasesComplete(true);
+          URL.revokeObjectURL(url);
           return;
         }
-        if (pose && videoEl.readyState >= 2 && !videoEl.paused) {
-          pose.send({ image: videoEl });
-        }
-      }, 67); // ~15fps — allows MediaPipe ~67ms per frame
+        isSeeking = true;
+        videoEl.currentTime = frameIndex / fps;
+        frameIndex++;
+        setCountdown(totalFrames - frameIndex);
+        setCaptureElapsedMs((frameIndex / fps) * 1000);
+      };
 
-      // Safety: if video stalls, force complete after 10s of no progress
-      let lastFrameCount = 0;
-      const safetyInterval = setInterval(() => {
-        const currentCount = sstFramesRef.current.length;
-        if (currentCount === lastFrameCount && videoEl.ended) {
-          clearInterval(safetyInterval);
-          setAllPhasesComplete(true);
-        }
-        lastFrameCount = currentCount;
-      }, 3000);
+      // When seeking completes, capture the frame and send to MediaPipe
+      let isSeeking = false;
+      videoEl.addEventListener("seeked", function onSeek() {
+        if (phaseRef.current !== "capturing" || !isSeeking) return;
+        isSeeking = false;
+        // Draw video frame to canvas and send to MediaPipe
+        offCtx.canvas.width = videoEl.videoWidth || 640;
+        offCtx.canvas.height = videoEl.videoHeight || 480;
+        offCtx.drawImage(videoEl, 0, 0);
+        if (pose) pose.send({ image: offCtx.canvas as unknown as HTMLVideoElement });
+        // Schedule next frame
+        setTimeout(processNextFrame, 100);
+      });
+
+      // Start the first seek
+      processNextFrame();
     } catch (err) {
       console.warn("[motion-demo] Video play failed:", err);
       setPhase("idle");
