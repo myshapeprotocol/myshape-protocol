@@ -8,6 +8,7 @@ import GenesisIdentityCard from "@/components/genesis-identity-card/GenesisIdent
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import GenesisCTA from "@/components/genesis-cta/GenesisCTA";
 import { playTick } from "@/utils/useAudioTick";
+import { useGenesisSlots } from "@/hooks/useGenesisSlots";
 import "./genesis.css";
 
 type Stage = "input" | "scanning" | "sending_otp" | "verifying" | "success" | "error";
@@ -153,6 +154,29 @@ export default function GenesisClient() {
     };
   }, []);
 
+  // Cohort state — auto-detect when Genesis is full
+  const { isFull, genesisNodes } = useGenesisSlots();
+  const [liveStats, setLiveStats] = useState<{ totalNodes: number; totalScans: number } | null>(null);
+
+  useEffect(() => {
+    if (!isFull) return;
+    let cancelled = false;
+    async function poll() {
+      try {
+        const res = await fetch("/api/nodes/status");
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        setLiveStats({
+          totalNodes: data.total_nodes ?? 0,
+          totalScans: data.total_scans ?? 0,
+        });
+      } catch { /* silent */ }
+    }
+    poll();
+    const id = setInterval(poll, 30_000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [isFull]);
+
   // 校验完成 → 拉取节点身份数据
   const finalizeGenesis = async (targetEmail: string) => {
     try {
@@ -265,6 +289,73 @@ export default function GenesisClient() {
   };
 
   const isActive = stage === "scanning" || stage === "sending_otp";
+
+  // ── Cohort full: Genesis Phase Finalized ──
+  if (isFull) {
+    return (
+      <ProtocolLayout
+        refId="005" category="CIV_LAYER" title="GENESIS_PROTOCOL"
+        secLevel="SEALED" systemStatus="CONTINUITY_PHASE"
+      >
+        <div className="min-h-screen bg-[#02040a] flex flex-col items-center justify-center px-6 py-24">
+          <VortexScan />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="relative z-10 text-center max-w-lg"
+          >
+            <div className="text-[#d2991d]/60 text-[10px] tracking-[0.4em] uppercase mb-4 font-mono">
+              GENESIS_COHORT // SEALED
+            </div>
+            <h1 className="text-3xl md:text-5xl font-light tracking-[0.08em] text-white mb-4">
+              Genesis Phase Finalized
+            </h1>
+            <p className="text-white/40 text-[13px] leading-relaxed mb-8 font-light">
+              The 100 sovereign identity anchors are now in place. Your node remains
+              active — motion-signature verification, entropy accumulation, and presence
+              proof generation continue for all protocol participants.
+            </p>
+
+            {/* Live network counter */}
+            {liveStats && (
+              <div className="flex items-center justify-center gap-6 mb-8 font-mono">
+                <div className="border border-[#d2991d]/15 bg-[#d2991d]/[0.03] px-5 py-3">
+                  <div className="text-[#d2991d]/70 text-[20px] font-light">{liveStats.totalNodes}</div>
+                  <div className="text-[#d2991d]/40 text-[8px] tracking-[0.2em] uppercase mt-1">Active Nodes</div>
+                </div>
+                <div className="border border-[#d2991d]/15 bg-[#d2991d]/[0.03] px-5 py-3">
+                  <div className="text-[#d2991d]/70 text-[20px] font-light">{liveStats.totalScans.toLocaleString()}</div>
+                  <div className="text-[#d2991d]/40 text-[8px] tracking-[0.2em] uppercase mt-1">Total Scans</div>
+                </div>
+                <div className="border border-[#d2991d]/15 bg-[#d2991d]/[0.03] px-5 py-3">
+                  <div className="flex items-center gap-1.5 text-[#3fb950]/70 text-[20px] font-light">
+                    <span className="w-2 h-2 rounded-full bg-[#3fb950]" style={{ boxShadow: "0 0 6px rgba(63,185,80,0.5)" }} />
+                  </div>
+                  <div className="text-[#d2991d]/40 text-[8px] tracking-[0.2em] uppercase mt-1">Live</div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col items-center gap-3">
+              <a
+                href="/specs"
+                className="px-8 py-3 border border-[#d2991d]/30 text-[#d2991d]/70 text-[10px] tracking-[0.2em] uppercase hover:bg-[#d2991d]/10 hover:border-[#d2991d]/60 transition-all font-mono"
+              >
+                ◈ Read Protocol Specs
+              </a>
+              <a
+                href="/dashboard"
+                className="text-[#d2991d]/40 text-[9px] tracking-[0.15em] hover:text-[#d2991d]/70 transition-colors"
+              >
+                View my Node →
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </ProtocolLayout>
+    );
+  }
 
   return (
     <ProtocolLayout
