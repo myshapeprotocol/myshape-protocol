@@ -7,6 +7,8 @@ import ProtocolFooter from "@/components/footer/footer";
 import DashboardHero from "@/components/dashboard/DashboardHero";
 import CapabilityMatrix from "@/components/dashboard/CapabilityMatrix";
 import ActionCall from "@/components/dashboard/ActionCall";
+import DashboardErrorBoundary from "@/components/dashboard/DashboardErrorBoundary";
+import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import type { ProtocolProgress } from "@/types/protocol-progress";
 import "@/components/dashboard/dashboard.css";
 
@@ -123,35 +125,22 @@ export default function DashboardClient() {
           </div>
         )}
 
-        {/* ── Loading ── */}
-        {loading && (
-          <div className="text-center py-16 space-y-3">
-            <div className="flex items-center justify-center gap-2">
-              <span
-                className="w-2 h-2 rounded-full animate-pulse"
-                style={{
-                  background: "#90c8ff",
-                  boxShadow: "0 0 10px rgba(144,200,255,0.9)",
-                }}
-              />
-              <span className="text-white/20 text-[10px] tracking-[0.3em] uppercase">
-                Decrypting identity stream...
-              </span>
-            </div>
-          </div>
-        )}
+        {/* ── Loading: three-layer skeleton mirrors the dashboard structure ── */}
+        {loading && <DashboardSkeleton />}
 
-        {/* ── Three-Layer Dashboard ── */}
+        {/* ── Three-Layer Dashboard (render-guarded) ── */}
         {progress && !loading && (
           <>
-            {/* Layer 1: Hero — Stage + Particle Progress */}
-            <DashboardHero progress={progress} />
+            <DashboardErrorBoundary>
+              {/* Layer 1: Hero — Stage + Particle Progress */}
+              <DashboardHero progress={progress} />
 
-            {/* Layer 2: Capability Matrix — isEligibleFor */}
-            <CapabilityMatrix progress={progress} />
+              {/* Layer 2: Capability Matrix — isEligibleFor */}
+              <CapabilityMatrix progress={progress} />
 
-            {/* Layer 3: Action Call — Next Step */}
-            <ActionCall progress={progress} />
+              {/* Layer 3: Action Call — Next Step */}
+              <ActionCall progress={progress} />
+            </DashboardErrorBoundary>
 
             {/* ── Quick nav ── */}
             <div className="flex flex-wrap gap-3 justify-center pt-4">

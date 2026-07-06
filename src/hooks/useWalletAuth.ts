@@ -33,6 +33,7 @@ export interface WalletConnectResult {
   skip_otp: boolean;
   is_genesis: boolean;
   node_handle: string | null;
+  email: string | null;
   status: string;
 }
 
@@ -202,6 +203,7 @@ export function useWalletAuth(): WalletAuthState {
       skip_otp: (data.skip_otp as boolean) || false,
       is_genesis: (data.is_genesis as boolean) || false,
       node_handle: (data.node_handle as string) ?? null,
+      email: (data.email as string) ?? null,
       status: (data.status as string) || "ACTIVE",
     };
   };

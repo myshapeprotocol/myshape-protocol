@@ -42,17 +42,24 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const email = (searchParams.get('email') || "").trim().toLowerCase();
+    const wallet = (searchParams.get('wallet') || "").trim().toLowerCase();
 
-    if (!email) {
+    if (!email && !wallet) {
       return NextResponse.json({ error: "MISSING_IDENTIFIER" }, { status: 400 });
     }
-    // Accept wallet-derived keys (e.g. "wallet:a1b2c3d") and real emails
 
-    const { data: node, error } = await supabase
+    let query = supabase
       .from('protocol_nodes')
-      .select('email, status, scan_count, data_contribution, created_at, entropy_score, particle_level, streak_days, streak_multiplier, best_pes')
-      .eq('email', email.trim())
-      .single();
+      .select('email, status, scan_count, data_contribution, created_at, entropy_score, particle_level, streak_days, streak_multiplier, best_pes, node_handle, wallet_address');
+
+    if (wallet) {
+      query = query.eq('wallet_address', wallet);
+    } else {
+      // Accept wallet-derived keys (e.g. "wallet:a1b2c3d") and real emails
+      query = query.eq('email', email);
+    }
+
+    const { data: node, error } = await query.single();
 
     if (error) {
       if (error.code === "PGRST116") {

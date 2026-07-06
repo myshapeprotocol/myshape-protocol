@@ -11,7 +11,7 @@ import { useWalletAuth } from "@/hooks/useWalletAuth";
    ═══════════════════════════════════════════════ */
 
 interface Props {
-  onSuccess?: (data: { address: string; skip_otp: boolean; is_genesis: boolean; node_handle?: string | null }) => void;
+  onSuccess?: (data: { address: string; skip_otp: boolean; is_genesis: boolean; node_handle?: string | null; email?: string | null }) => void;
   email?: string;
   className?: string;
 }
@@ -42,6 +42,7 @@ export default function ConnectWallet({ onSuccess, email, className = "" }: Prop
         skip_otp: result.skip_otp,
         is_genesis: result.is_genesis,
         node_handle: result.node_handle,
+        email: result.email,
       });
     }
   }, [connect, email, onSuccess]);

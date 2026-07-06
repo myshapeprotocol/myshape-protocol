@@ -105,6 +105,7 @@ export async function POST(req: Request) {
       is_active: isActive,
       status: node?.status || 'NEW',
       node_handle: node?.node_handle ?? null,
+      email: node?.email ?? null,
       // 如果已绑定且激活，前端可跳过邮箱 OTP
       skip_otp: isActive,
     });

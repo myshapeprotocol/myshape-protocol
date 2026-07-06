@@ -133,6 +133,15 @@ export default function GenesisClient() {
     particleLevel?: number;
     timestamp?: string;
   } | null>(null);
+  const [returningNode, setReturningNode] = useState<{
+    nodeHandle: string;
+    status: string;
+    isGenesis: boolean;
+    particleLevel: number;
+    entropyScore: number;
+    registeredAt: string;
+  } | null>(null);
+  const [checkingReturning, setCheckingReturning] = useState(false);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // 检测 Header 是否已连接钱包 — mount + live listener
@@ -153,6 +162,42 @@ export default function GenesisClient() {
       window.removeEventListener("wallet:disconnected", onDisconnect);
     };
   }, []);
+
+  // 检测回头节点 — 钱包已连接时查询是否已有协议身份
+  useEffect(() => {
+    if (!headerWallet || stage !== "input") return;
+    let cancelled = false;
+
+    async function check() {
+      setCheckingReturning(true);
+      try {
+        const res = await fetch(`/api/node/privileges?wallet=${encodeURIComponent(headerWallet!)}`);
+        if (cancelled) return;
+        if (res.ok) {
+          const data = await res.json();
+          setReturningNode({
+            nodeHandle: data.node_handle || "UNNAMED",
+            status: data.status || "ACTIVE",
+            isGenesis: data.is_genesis || false,
+            particleLevel: data.particle_level ?? 1,
+            entropyScore: data.entropy_score ?? 0,
+            registeredAt: data.registered_at || "",
+          });
+          // 同步 sessionStorage，确保 header/dashboard 也能识别
+          sessionStorage.setItem("genesis_completed", "1");
+          sessionStorage.setItem("genesis_status", data.status || "ACTIVE");
+          if (data.email) sessionStorage.setItem("genesis_email", data.email);
+          if (data.node_handle) sessionStorage.setItem("genesis_node_handle", data.node_handle);
+          window.dispatchEvent(new CustomEvent("genesis:updated"));
+        }
+        // 404 = 新用户，正常留空
+      } catch { /* silent — network issues shouldn't block the form */ }
+      if (!cancelled) setCheckingReturning(false);
+    }
+
+    check();
+    return () => { cancelled = true; };
+  }, [headerWallet, stage]);
 
   // Cohort state — auto-detect when Genesis is full
   const { isFull, genesisNodes } = useGenesisSlots();
@@ -254,6 +299,16 @@ export default function GenesisClient() {
       if (!res.ok) {
         setStage("error");
         setErrorMsg(data.error || "OTP_SEND_FAILED");
+        return;
+      }
+
+      // 钱包已绑定的回头用户：跳过 OTP
+      if (data.skip_otp) {
+        sessionStorage.setItem("genesis_completed", "1");
+        sessionStorage.setItem("genesis_email", cleanEmail);
+        if (data.status) sessionStorage.setItem("genesis_status", data.status);
+        window.dispatchEvent(new CustomEvent("genesis:updated"));
+        finalizeGenesis(cleanEmail);
         return;
       }
 
@@ -406,6 +461,88 @@ export default function GenesisClient() {
                 <GenesisProgress />
               </div>
 
+              {checkingReturning ? (
+                /* ── 检测协议身份中 ── */
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative w-8 h-8">
+                    <div className="absolute inset-0 rounded-full border border-[#90c8ff]/30 animate-spin" style={{ borderTopColor: "rgba(144,200,255,0.8)" }} />
+                  </div>
+                  <span className="text-[#90c8ff]/50 font-mono text-[10px] tracking-[0.3em] uppercase">Detecting_Protocol_Identity...</span>
+                </div>
+              ) : returningNode ? (
+                /* ── 回头节点：Welcome Back 卡片 ── */
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative"
+                    style={{ border: "1px solid rgba(144,200,255,0.2)", background: "rgba(2,10,20,0.8)", boxShadow: "0 0 60px rgba(144,200,255,0.06)" }}>
+                    {/* 顶部状态条 */}
+                    <div className="flex items-center justify-between px-5 py-2.5 border-b border-[#90c8ff]/10">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#3fb950] shadow-[0_0_6px_rgba(63,185,80,0.6)]" />
+                        <span className="text-[#90c8ff]/60 font-mono text-[9px] tracking-[0.4em] uppercase">PROTOCOL_IDENTITY_DETECTED</span>
+                      </div>
+                      <span className="text-white/25 font-mono text-[9px] tracking-[0.2em]">WALLET_BOUND</span>
+                    </div>
+                    {/* 内容区 */}
+                    <div className="px-6 md:px-10 py-5 md:py-7 flex flex-col items-center">
+                      {returningNode.isGenesis && (
+                        <div className="text-[#d2991d]/70 font-mono text-[8px] tracking-[0.35em] uppercase mb-3 px-3 py-1 border border-[#d2991d]/20 bg-[#d2991d]/[0.04]">
+                          ◈ Genesis Cohort — Founding Entity
+                        </div>
+                      )}
+                      <div className="text-white/85 font-light text-2xl md:text-3xl tracking-[0.06em] mb-1"
+                        style={{ textShadow: "0 0 20px rgba(144,200,255,0.3)" }}>
+                        {returningNode.nodeHandle}
+                      </div>
+                      <div className="text-[#90c8ff]/40 font-mono text-[10px] tracking-[0.15em] mb-4">
+                        {returningNode.status === "GENESIS_NODE" ? "SOVEREIGN_IDENTITY_ANCHOR" : "ACTIVE_PROTOCOL_NODE"}
+                        {returningNode.registeredAt && (
+                          <> · Since {new Date(returningNode.registeredAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</>
+                        )}
+                      </div>
+
+                      {/* 迷你状态指标 */}
+                      <div className="flex items-center gap-4 mb-6 font-mono">
+                        <div className="text-center">
+                          <div className="text-[#90c8ff]/70 text-sm font-light">{returningNode.particleLevel}</div>
+                          <div className="text-[#90c8ff]/30 text-[7px] tracking-[0.2em] uppercase">Particle Lv.</div>
+                        </div>
+                        <div className="w-[1px] h-8 bg-[#90c8ff]/10" />
+                        <div className="text-center">
+                          <div className="text-[#90c8ff]/70 text-sm font-light">{returningNode.entropyScore.toLocaleString()}</div>
+                          <div className="text-[#90c8ff]/30 text-[7px] tracking-[0.2em] uppercase">Entropy</div>
+                        </div>
+                      </div>
+
+                      {/* CTA */}
+                      <div className="flex flex-col items-center gap-2.5">
+                        <a
+                          href="/dashboard"
+                          onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
+                          className="relative group px-10 py-3 font-mono text-[10px] tracking-[0.25em] uppercase transition-all duration-500 overflow-hidden"
+                          style={{ border: "1px solid rgba(144,200,255,0.35)", color: "rgba(180,220,255,0.85)", textShadow: "0 0 8px rgba(144,200,255,0.3)" }}>
+                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            style={{ background: "rgba(144,200,255,0.06)", boxShadow: "inset 0 0 30px rgba(144,200,255,0.1)" }} />
+                          <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                            Continue to Dashboard →
+                          </span>
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setReturningNode(null);
+                            sessionStorage.removeItem("wallet_address");
+                            setHeaderWallet(null);
+                            window.dispatchEvent(new CustomEvent("wallet:disconnected"));
+                          }}
+                          onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
+                          className="text-white/15 hover:text-white/30 text-[8px] tracking-[0.2em] uppercase transition-colors font-mono">
+                          Not you? Disconnect &amp; start fresh
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
               <form onSubmit={handleCommence} className="flex flex-col items-center space-y-3 md:space-y-5">
                 {/* Genesis Cohort 标签 — 滚动数据流 */}
                 <div className="flex items-center justify-center gap-2">
@@ -454,11 +591,12 @@ export default function GenesisClient() {
                           setHeaderWallet(walletData.address);
                           if (walletData.node_handle) sessionStorage.setItem("genesis_node_handle", walletData.node_handle);
                           if (walletData.skip_otp) {
+                            const nodeEmail = walletData.email || email.trim().toLowerCase() || "wallet:" + walletData.address.slice(2, 10);
                             sessionStorage.setItem("genesis_completed", "1");
-                            sessionStorage.setItem("genesis_email", email.trim().toLowerCase() || "wallet:" + walletData.address.slice(2, 10));
+                            sessionStorage.setItem("genesis_email", nodeEmail);
                             sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
                             window.dispatchEvent(new CustomEvent("genesis:updated"));
-                            finalizeGenesis(email.trim().toLowerCase() || "wallet:" + walletData.address.slice(2, 10));
+                            finalizeGenesis(nodeEmail);
                           }
                         }}
                       />
@@ -472,6 +610,13 @@ export default function GenesisClient() {
                       </div>
 
                       {/* Invite code section removed — admission is now governed by PES threshold */}
+
+                      {/* ── 回头用户引导：已有节点？用钱包免验证码 ── */}
+                      <div className="hidden md:flex items-center gap-2">
+                        <span className="text-[#90c8ff]/25 text-[9px] tracking-[0.1em] uppercase font-light">
+                          ◈ Already a node? Connect wallet ↑ to skip OTP
+                        </span>
+                      </div>
 
                       {/* ── 备选路径：Legacy Email（桌面端专属）── */}
                       <div className="hidden md:flex flex-col items-center space-y-2">
@@ -523,6 +668,7 @@ export default function GenesisClient() {
                 </div>
 
                 </form>
+              )}
             </motion.div>
           )}
 
