@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useGenesisSlots } from "@/hooks/useGenesisSlots";
 
 interface NetworkStats {
   total: number;
@@ -14,6 +15,7 @@ export default function ProtocolStatusBar() {
   const [live, setLive] = useState(true);
   const [latency, setLatency] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const { isFull } = useGenesisSlots();
 
   useEffect(() => {
     let cancelled = false;
@@ -118,15 +120,18 @@ export default function ProtocolStatusBar() {
                 Genesis:{" "}
                 <span
                   style={{
-                    color:
-                      stats.slots_remaining > 0
-                        ? "rgba(144,200,255,0.8)"
-                        : "rgba(210,153,29,0.8)",
+                    color: isFull
+                      ? "rgba(210,153,29,0.8)"
+                      : stats.slots_remaining <= 10
+                        ? "rgba(210,153,29,0.8)"
+                        : "rgba(144,200,255,0.8)",
                   }}
                 >
                   {stats.genesis_nodes}/100
                 </span>
-                {stats.slots_remaining > 0 && stats.slots_remaining <= 10 && (
+                {isFull ? (
+                  <span style={{ color: "rgba(210,153,29,0.5)", marginLeft: 4 }}>SEALED</span>
+                ) : stats.slots_remaining > 0 && stats.slots_remaining <= 10 && (
                   <span style={{ color: "rgba(210,153,29,0.6)", marginLeft: 4 }}>
                     ({stats.slots_remaining})
                   </span>
