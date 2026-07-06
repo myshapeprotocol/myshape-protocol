@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "./footer.css";
 
 export default function ProtocolFooter() {
   const [email, setEmail] = useState("");
@@ -187,7 +188,7 @@ export default function ProtocolFooter() {
           <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 3 Engines · 172 Tests</span>
         </div>
         <span className="text-[8px] text-white/30 tracking-[0.25em] uppercase font-mono block">
-          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL <span style={{ color: "rgba(255,255,255,0.20)", fontSize: "7px", marginLeft: "4px" }}>// SPEC_VERSION: V1.0_GENESIS</span>
+          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL <span className="footer-spec-version">// SPEC_VERSION: V1.0_GENESIS</span>
         </span>
       </div>
     </footer>

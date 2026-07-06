@@ -5,6 +5,8 @@ import ProtocolLayout from "@/components/layout/ProtocolLayout";
 import VortexScan from "@/components/ritual/VortexScan";
 import ConnectWallet from "@/components/auth/ConnectWallet";
 import GenesisIdentityCard from "@/components/genesis-identity-card/GenesisIdentityCard";
+import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
+import GenesisCTA from "@/components/genesis-cta/GenesisCTA";
 import { playTick } from "@/utils/useAudioTick";
 import "./genesis.css";
 
@@ -330,6 +332,12 @@ export default function GenesisClient() {
                 <span className="text-[#90c8ff]/40 font-mono text-[9px] tracking-[0.5em] uppercase">Genesis_Protocol</span>
                 <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#90c8ff]/30" />
               </div>
+
+              {/* Genesis Cohort 进度条 */}
+              <div className="w-full max-w-md mx-auto mb-6">
+                <GenesisProgress />
+              </div>
+
               <form onSubmit={handleCommence} className="flex flex-col items-center space-y-3 md:space-y-5">
                 {/* Genesis Cohort 标签 — 滚动数据流 */}
                 <div className="flex items-center justify-center gap-2">
@@ -482,6 +490,11 @@ export default function GenesisClient() {
                       </div>
                     </>
                   )}
+                </div>
+
+                {/* Genesis Pioneer CTA — Discord + social links */}
+                <div className="w-full flex justify-center mt-6">
+                  <GenesisCTA />
                 </div>
 
                 </form>

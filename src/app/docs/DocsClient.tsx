@@ -79,6 +79,8 @@ export default function DocsClient() {
               <span className="text-white/10">|</span>
               <Link href="/developers" className="text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:text-[#90c8ff] transition-colors">Developer Portal →</Link>
               <span className="text-white/10">|</span>
+              <a href="/openapi.json" target="_blank" rel="noopener noreferrer" className="text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:text-[#90c8ff] transition-colors">OpenAPI Spec ↗</a>
+              <span className="text-white/10">|</span>
               <Link href="/papers/technical-spec" className="text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:text-[#90c8ff] transition-colors">Technical Spec →</Link>
             </div>
           </div>

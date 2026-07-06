@@ -4,6 +4,7 @@ import Link from "next/link";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
+import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import { playTick } from "@/utils/useAudioTick";
 
 interface GenesisStatus {
@@ -37,6 +38,11 @@ export default function CohortClient() {
       <BackgroundParticles />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-16">
+        {/* Genesis Progress */}
+        <div className="max-w-md mx-auto mb-16">
+          <GenesisProgress />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-20">
           <div className="text-[#90c8ff]/45 text-[10px] tracking-[0.5em] uppercase mb-6">GENESIS_COHORT // THE_FIRST_100</div>

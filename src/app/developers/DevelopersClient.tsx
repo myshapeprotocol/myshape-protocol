@@ -6,6 +6,7 @@ import ProtocolFooter from "@/components/footer/footer";
 import VerificationDashboard from "@/components/verification/VerificationDashboard";
 import DeveloperPlayground from "@/components/developer-playground/DeveloperPlayground";
 import GenesisNodeInit from "@/components/genesis-node-init/GenesisNodeInit";
+import DevQuickstart from "@/components/dev-quickstart/DevQuickstart";
 import { playTick } from "@/utils/useAudioTick";
 
 const hoverOn = (e: React.MouseEvent<HTMLElement>) => {
@@ -75,6 +76,11 @@ export default function DevelopersClient() {
               onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
               className="inline-flex items-center gap-2 px-6 py-2.5 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.25em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/80 hover:bg-[#90c8ff]/[0.03] transition-all">
               GitHub →
+            </a>
+            <a href="https://discord.gg/zr8Tczard" target="_blank" rel="noopener noreferrer"
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.25em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/80 hover:bg-[#90c8ff]/[0.03] transition-all">
+              Discord #api #agents →
             </a>
             <button onClick={() => { setShowNodeInit(true); playTick(600, "sine", 0.06, 0.015); }}
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
@@ -177,6 +183,39 @@ pose.onResults((results) => {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ── REST API: curl examples ── */}
+        <section className="mb-14">
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// REST_API (CURL_READY)</h2>
+          <div className="space-y-3">
+            {[
+              { label: "CHECK_PROTOCOL_HEALTH", curl: "curl https://www.myshape.com/api/health", response: '{ "status": "healthy", "services": { "supabase": { "ok": true }, "wasm": { "ok": true } } }' },
+              { label: "GET_NETWORK_STATUS", curl: "curl https://www.myshape.com/api/nodes/status", response: '{ "total_nodes": 42, "genesis_nodes": 23, "genesis_remaining": 77, "active_nodes": 12 }' },
+              { label: "LOOKUP_NODE", curl: "curl https://www.myshape.com/api/identity?email=user@example.com", response: '{ "handle": "SIG_XXXX", "status": "GENESIS_NODE", "pes": 0.87 }' },
+            ].map((ex) => (
+              <div key={ex.label} className="border border-[#90c8ff]/10 bg-black/30 overflow-hidden transition-all"
+                onMouseEnter={e => { playTick(600, "sine", 0.06, 0.015); e.currentTarget.style.borderColor = "rgba(144,200,255,0.3)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; }}>
+                <div className="flex items-center justify-between px-4 py-2 border-b border-[#90c8ff]/5 bg-[#90c8ff]/[0.02]">
+                  <span className="text-[#90c8ff]/45 text-[8px] tracking-[0.25em] uppercase">{ex.label}</span>
+                  <button onClick={() => { navigator.clipboard.writeText(ex.curl); playTick(600, "sine", 0.06, 0.015); }}
+                    className="text-white/10 hover:text-[#90c8ff]/60 text-[7px] tracking-[0.15em] uppercase transition-colors">
+                    COPY
+                  </button>
+                </div>
+                <div className="p-4 space-y-2">
+                  <pre className="text-[#90c8ff]/55 text-[10px] font-mono whitespace-pre-wrap overflow-x-auto m-0">{ex.curl}</pre>
+                  <div className="text-white/15 text-[8px] tracking-[0.1em] uppercase mb-1">→ RESPONSE</div>
+                  <pre className="text-white/30 text-[9px] font-mono whitespace-pre-wrap overflow-x-auto m-0 bg-[#02040a] p-2 border border-white/[0.03]">{ex.response}</pre>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-white/15 text-[8px] tracking-[0.12em] uppercase mt-3">
+            Full OpenAPI spec: <a href="/openapi.json" target="_blank" className="text-[#90c8ff]/35 hover:text-[#90c8ff]/60 transition-colors">openapi.json</a>
+            &nbsp;·&nbsp; Complete reference: <a href="/docs" className="text-[#90c8ff]/35 hover:text-[#90c8ff]/60 transition-colors">/docs →</a>
+          </p>
         </section>
 
         {/* ── SDK Reference ── */}
@@ -401,6 +440,88 @@ if (threat.overallVerdict === "human") {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* ── Two Paths: Protocol Boundary ── */}
+        <section className="mb-14">
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// PROTOCOL_PATHS</h2>
+          <div className="border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02] overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#90c8ff]/8">
+              {/* Dev Path */}
+              <div className="p-6 md:p-8 space-y-4"
+                onMouseEnter={e => { playTick(500, "sine", 0.04, 0.01); e.currentTarget.style.background = "rgba(144,200,255,0.04)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                style={{ transition: "background 0.4s" }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="w-5 h-5 flex items-center justify-center text-[#90c8ff]/70 text-[10px]">◆</span>
+                  <span className="text-[#90c8ff]/60 text-[10px] tracking-[0.3em] uppercase font-bold">DEV_NODE</span>
+                  <span className="text-white/10 text-[9px] tracking-[0.2em] uppercase ml-auto">YOU_ARE_HERE</span>
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { label: "Purpose", value: "Protocol Access — Build & Deploy" },
+                    { label: "Setup", value: "60 seconds. No wallet. No invite." },
+                    { label: "Scope", value: "API / Agent Layer — productivity & integration" },
+                    { label: "Status", value: "Renewable. Sandbox-first. Scaleable." },
+                    { label: "Path", value: "Deploy → Call API → Build Agents" },
+                  ].map((r) => (
+                    <div key={r.label} className="flex gap-2 text-[9px]">
+                      <span className="text-white/15 shrink-0 w-16 text-right">{r.label}</span>
+                      <span className="text-white/40">{r.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Genesis Path */}
+              <div className="p-6 md:p-8 space-y-4"
+                onMouseEnter={e => { playTick(800, "sine", 0.10, 0.025); e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                style={{ transition: "background 0.4s" }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="w-5 h-5 flex items-center justify-center text-[#d4af37]/70 text-[12px]">◈</span>
+                  <span className="text-[#d4af37]/60 text-[10px] tracking-[0.3em] uppercase font-bold">GENESIS_NODE</span>
+                  <span className="text-white/10 text-[9px] tracking-[0.2em] uppercase ml-auto">INVITE_ONLY</span>
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { label: "Purpose", value: "Sovereign Identity — Governance & Trust" },
+                    { label: "Setup", value: "40-second kinetic ceremony + OTP verification" },
+                    { label: "Scope", value: "Identity Layer — protocol root & entropy anchor" },
+                    { label: "Status", value: "Permanent. Immutable. Never offered again." },
+                    { label: "Path", value: "Verify Presence → Claim Slot → Anchor Identity" },
+                  ].map((r) => (
+                    <div key={r.label} className="flex gap-2 text-[9px]">
+                      <span className="text-white/15 shrink-0 w-16 text-right">{r.label}</span>
+                      <span className="text-white/40">{r.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <a
+                  href="/genesis"
+                  onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
+                  className="inline-block mt-3 px-5 py-2 border border-[#d4af37]/30 text-[#d4af37]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#d4af37]/[0.06] hover:text-[#d4af37] transition-all no-underline"
+                >
+                  Enter Genesis →
+                </a>
+              </div>
+            </div>
+
+            {/* Boundary line */}
+            <div className="hidden md:flex items-center justify-center py-2 border-t border-[#90c8ff]/5 bg-[#02040a]/50">
+              <div className="flex items-center gap-3">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#90c8ff]/15" />
+                <span className="text-white/10 text-[7px] tracking-[0.4em] uppercase">Protocol_Boundary</span>
+                <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#90c8ff]/15" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Get Started: Dev Sandbox ── */}
+        <section className="mb-14">
+          <h2 className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-4">// DEPLOY_ANCHOR_NOW</h2>
+          <DevQuickstart />
         </section>
       </div>
 

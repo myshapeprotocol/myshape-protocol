@@ -6,6 +6,7 @@ import MotionGuide, { TOTAL_DURATION_MS, type VelocitySnapshot } from "@/compone
 import SkeletonOverlay from "@/components/motion-guide/SkeletonOverlay";
 
 import ProtocolFooter from "@/components/footer/footer";
+import ProtocolStatusWall from "@/components/status-wall/ProtocolStatusWall";
 import { playTick, resumeAudio } from "@/utils/useAudioTick";
 import PresenceSignature from "@/components/presence-signature/PresenceSignature";
 import { mediaPipeToSST, normalizeSSTFrame } from "@/engine/skeleton-topology";
@@ -75,7 +76,6 @@ export default function MotionDemoClient() {
   const [wasmCompare, setWasmCompare] = useState<{ loading: boolean; similarity: number | null; sigDim: number } | null>(null);
   const { engine, loading: wasmLoading, load: loadWasm } = useMyShapeEngine();
   const [copied, setCopied] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [countdown, setCountdown] = useState(30);
   const [landmarkVisibility, setLandmarkVisibility] = useState<(number | undefined)[]>([]);
   const [captureElapsedMs, setCaptureElapsedMs] = useState(0);
@@ -116,23 +116,6 @@ export default function MotionDemoClient() {
     }
     return 4;
   }
-
-  // ── Quick Preview (demo mode with canned data) ──
-  const handleQuickPreview = useCallback(() => {
-    playTick(800, "sine", 0.10, 0.025);
-    setPesData({ score: 0.64, timing: 0.38, noise: 0.72, frequency: 0.15, biological: 0.55 });
-    setThreatVerdict("✓ HUMAN_PRESENCE_VERIFIED");
-    setProofHashes({ zkp: "a1b2c3d4", pop: "e5f6a7b8", mp: "c9d0e1f2", ep: "3a4b5c6d" });
-    setPhase("complete");
-    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
-    if (genesisEmail) {
-      fetch("/api/motion/record", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: genesisEmail }),
-      }).catch((e) => { console.warn("[motion-demo] API call failed:", e); });
-    }
-  }, []);
 
   // ── Real Camera Mode ──
   const startCapture = useCallback(async () => {
@@ -716,148 +699,6 @@ export default function MotionDemoClient() {
     sstFramesRef.current = [];
   };
 
-  // ── Video File Import — same MediaPipe→SST→PES pipeline as camera ──
-  const handleVideoFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    resumeAudio();
-    playTick(800, "sine", 0.10, 0.025);
-
-    // Reset state for new capture
-    setPhase("capturing");
-    phaseRef.current = "capturing";
-    setCountdown(0); // Will update when video metadata loads
-    captureStartRef.current = performance.now();
-    setCaptureElapsedMs(0);
-    setValidFrameCount(0);
-    setAllPhasesComplete(false);
-    setCurrentVelocity(null);
-    setProofHashes(null);
-    setPesData(null);
-    setThreatVerdict("");
-    setAiCompare(null);
-    setWasmCompare(null);
-    setUploadDone(false);
-    prevLandmarksRef.current = null;
-    prevTimestampRef.current = 0;
-    framesRef.current = [];
-    sstFramesRef.current = [];
-    phaseFrameCountsRef.current = [0, 0, 0, 0, 0];
-    phaseWristVelRef.current = [0, 0, 0, 0, 0];
-    phaseHeadVelRef.current = [0, 0, 0, 0, 0];
-    phaseTorsoVelRef.current = [0, 0, 0, 0, 0];
-    if (researchConsented) resetUpload();
-
-    const url = URL.createObjectURL(file);
-    const videoEl = videoRef.current;
-    if (!videoEl) { setPhase("idle"); return; }
-
-    // Load MediaPipe if needed
-    if (!window.Pose) {
-      await new Promise<void>(resolve => {
-        const s = document.createElement("script");
-        s.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js";
-        s.crossOrigin = "anonymous";
-        s.integrity = "sha384-qcJQ+n/ZcF15Xu2EoRupB4Av+GEAGeW0Td1mp2A90u0NdNLzLYQVMUq1Ax1YAHqk";
-        s.onload = () => resolve();
-        s.onerror = () => { console.warn("[motion-demo] MediaPipe load failed"); resolve(); };
-        document.head.appendChild(s);
-      });
-    }
-    if (!window.Pose) { setPhase("idle"); URL.revokeObjectURL(url); return; }
-
-    const pose = new window.Pose({ locateFile: (f: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}` });
-    pose.setOptions({ modelComplexity: 0, smoothLandmarks: true, minDetectionConfidence: 0.5 });
-
-    // Store frame index + FPS for synthetic uniform timestamps
-    const videoFps = 12;
-    const frameIndexRef = { current: 0 };
-
-    pose.onResults((results: PoseResult) => {
-      if (results.poseLandmarks && phaseRef.current === "capturing") {
-        const lm = results.poseLandmarks;
-        landmarksRef.current = lm.map((l: { x: number; y: number; z: number }) => ({ x: l.x, y: l.y, z: l.z }));
-        const rawLm = lm as Array<{ x: number; y: number; z: number; visibility?: number }>;
-        setLandmarkVisibility(rawLm.map(l => l.visibility));
-        const elapsed = performance.now() - captureStartRef.current;
-        setCaptureElapsedMs(elapsed);
-        const anchorIndices = [0, 11, 12, 13, 14, 15, 16, 23, 24];
-        const allAnchorsVisible = anchorIndices.every(i => (rawLm[i]?.visibility ?? 0) > 0.5);
-        if (allAnchorsVisible) setValidFrameCount(c => c + 1);
-        // ── SST collection — synthetic uniform timestamps (avoid seek-jitter as bio signal) ──
-        const sstFrame = normalizeSSTFrame(mediaPipeToSST(lm));
-        const uniformTs = frameIndexRef.current * (1000 / videoFps);
-        sstFramesRef.current.push({ frame: sstFrame, timestamp: uniformTs });
-        prevLandmarksRef.current = rawLm;
-        prevTimestampRef.current = uniformTs;
-        frameIndexRef.current++;
-      }
-    });
-
-    // Ensure video is visible on top of canvas during import
-    videoEl.style.zIndex = "50";
-    videoEl.srcObject = null;
-    videoEl.src = url;
-    videoEl.playsInline = true;
-    videoEl.muted = true;
-    videoEl.loop = false;
-
-    const onEnded = () => {
-      setAllPhasesComplete(true);
-      videoEl.removeEventListener("ended", onEnded);
-      URL.revokeObjectURL(url);
-    };
-    videoEl.addEventListener("ended", onEnded);
-
-    try {
-      // Seek-based frame extraction — draws each frame to canvas, sends to MediaPipe
-      // Uses uniform synthetic timestamps to avoid seek-jitter being misread as biological variance
-      const offCtx = document.createElement("canvas").getContext("2d");
-      if (!offCtx) { setPhase("idle"); URL.revokeObjectURL(url); return; }
-
-      const duration = videoEl.duration || 5;
-      const totalFrames = Math.floor(duration * videoFps);
-      let frameIndex = 0;
-      setCountdown(totalFrames);
-
-      const seekAndProcess = () => {
-        if (phaseRef.current !== "capturing" || frameIndex >= totalFrames) {
-          setAllPhasesComplete(true);
-          URL.revokeObjectURL(url);
-          return;
-        }
-        // Seek to exact timestamp — uniform intervals for clean timing
-        videoEl.currentTime = frameIndex / videoFps;
-      };
-
-      const onSeeked = () => {
-        if (phaseRef.current !== "capturing") return;
-        // Draw current frame to canvas
-        offCtx.canvas.width = videoEl.videoWidth || 640;
-        offCtx.canvas.height = videoEl.videoHeight || 480;
-        offCtx.drawImage(videoEl, 0, 0);
-        // Send to MediaPipe
-        if (pose) pose.send({ image: offCtx.canvas as unknown as HTMLVideoElement });
-        frameIndex++;
-        setCountdown(totalFrames - frameIndex);
-        setCaptureElapsedMs((frameIndex / videoFps) * 1000);
-        // Schedule next — 30ms between frames for smoother processing
-        setTimeout(seekAndProcess, 30);
-      };
-
-      videoEl.addEventListener("seeked", onSeeked);
-      // Start
-      videoEl.currentTime = 0;
-    } catch (err) {
-      console.warn("[motion-demo] Video play failed:", err);
-      setPhase("idle");
-      URL.revokeObjectURL(url);
-    }
-
-    // Reset file input so same file can be re-selected
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  }, [researchConsented]);
-
   return (
     <div className="bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
       <ProtocolHeader />
@@ -896,18 +737,7 @@ export default function MotionDemoClient() {
                   sessionId={sessionId}
                   uploadDone={uploadDone}
                   onStartCapture={startCapture}
-                  onQuickPreview={handleQuickPreview}
                 />
-                {/* ── Video File Import ── */}
-                <input ref={fileInputRef} type="file" accept="video/mp4,video/webm,video/quicktime"
-                  onChange={handleVideoFile} className="hidden" />
-                <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center">
-                  <button onClick={() => fileInputRef.current?.click()}
-                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                    className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[9px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/35 hover:text-[#90c8ff]/60 transition-all">
-                    📁 Import Video File
-                  </button>
-                </div>
               </>
             )}
 
@@ -1289,6 +1119,11 @@ export default function MotionDemoClient() {
           )}
         </div>
 
+      </div>
+
+      {/* Protocol Status Wall — live command center dashboard */}
+      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pb-8">
+        <ProtocolStatusWall />
       </div>
 
         <div className="max-w-5xl mx-auto px-4 md:px-6 -mt-4 pb-2">

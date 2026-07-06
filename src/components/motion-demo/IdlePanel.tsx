@@ -16,10 +16,9 @@ interface IdlePanelProps {
   sessionId: string;
   uploadDone: boolean;
   onStartCapture: () => void;
-  onQuickPreview: () => void;
 }
 
-/** Idle state — camera activation UI with research consent and preview. */
+/** Idle state — camera activation UI with research consent. */
 export default function IdlePanel({
   isChromium,
   researchConsented,
@@ -31,7 +30,6 @@ export default function IdlePanel({
   sessionId,
   uploadDone,
   onStartCapture,
-  onQuickPreview,
 }: IdlePanelProps) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/30 z-10 overflow-y-auto py-4">
@@ -64,13 +62,6 @@ export default function IdlePanel({
           className="px-10 py-5 border border-[#90c8ff]/40 text-[#90c8ff]/80 text-[13px] tracking-[0.25em] uppercase hover:bg-[#90c8ff]/10 hover:text-white transition-all"
         >
           Activate_Camera
-        </button>
-        <button
-          onClick={onQuickPreview}
-          onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-          className="text-[#90c8ff]/35 hover:text-[#90c8ff]/70 text-[10px] tracking-[0.15em] uppercase transition-colors border-b border-transparent hover:border-[#90c8ff]/30 pb-0.5"
-        >
-          Quick Preview →
         </button>
       </div>
     </div>
