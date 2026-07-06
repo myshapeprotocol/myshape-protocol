@@ -121,8 +121,6 @@ function AscendingParticles() {
 export default function GenesisClient() {
   const [stage, setStage] = useState<Stage>("input");
   const [email, setEmail] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
-  const [inviteCodeValid, setInviteCodeValid] = useState<boolean | null>(null);
   const [otp, setOtp] = useState("");
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -173,19 +171,6 @@ export default function GenesisClient() {
     setStage("success");
   };
 
-  // 实时校验邀请码格式
-  const handleInviteCodeChange = (value: string) => {
-    const upper = value.toUpperCase();
-    setInviteCode(upper);
-    if (upper.length >= 19) {
-      setInviteCodeValid(/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(upper));
-    } else if (upper.length === 0) {
-      setInviteCodeValid(null);
-    } else {
-      setInviteCodeValid(false);
-    }
-  };
-
   const handleCommence = async (e?: React.FormEvent<HTMLFormElement> | React.MouseEvent) => {
     if (e && "preventDefault" in e) e.preventDefault();
 
@@ -200,17 +185,9 @@ export default function GenesisClient() {
         return;
       }
 
-      const normalizedCode = (inviteCode || "").trim().toUpperCase();
-      if (normalizedCode && !/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedCode)) {
-        setStage("error");
-        setErrorMsg("INVITE_CODE_FORMAT_INVALID: Expected MYSHAPE-XXXX-XXXX");
-        return;
-      }
-
       const requestBody: Record<string, string | undefined> = {
         wallet_address: headerWallet || undefined,
         email: cleanEmail || undefined,
-        invite_code: normalizedCode || undefined,
       };
 
       setStage("scanning");
@@ -403,50 +380,7 @@ export default function GenesisClient() {
                         <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
                       </div>
 
-                      {/* ── 邀请码 — 桌面端专属 ── */}
-                      <div className="hidden md:block">
-                      {inviteCode || inviteCodeValid !== null ? (
-                        <div className="w-52 max-w-[58vw] mt-1">
-                          <div className="relative group"
-                            onMouseEnter={() => playTick(500, "sine", 0.05, 0.015)}>
-                            <div className="absolute -inset-[1px] rounded-sm opacity-35 group-focus-within:opacity-70 transition-opacity duration-700"
-                              style={{ background: "linear-gradient(135deg, rgba(99,140,220,0.25), transparent 40%, transparent 60%, rgba(99,140,220,0.25))", filter: "blur(5px)" }} />
-                            <div className="relative px-4 py-0.5 overflow-hidden"
-                              style={{ border: "1px solid rgba(99,140,220,0.3)", background: "rgba(4,10,22,0.85)", boxShadow: "0 0 28px rgba(99,140,220,0.06)" }}>
-                              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-300/60 genesis-invite-corner-tl" />
-                              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-indigo-300/60 genesis-invite-corner-tr" />
-                              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-indigo-300/60 genesis-invite-corner-bl" />
-                              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-300/60 genesis-invite-corner-br" />
-                              <div className="absolute inset-0 pointer-events-none genesis-invite-scan" />
-                              <div className="absolute left-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.3), transparent)", animation: "dataFlow 2.5s ease-in-out infinite" }} />
-                              <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px]" style={{ background: "linear-gradient(to bottom, transparent, rgba(99,140,220,0.25), transparent)", animation: "dataFlow 2.5s ease-in-out 0.8s infinite" }} />
-                              <input type="text" placeholder="INVITE_CODE_XXXX-XXXX-XXXX" value={inviteCode}
-                                onChange={(e) => handleInviteCodeChange(e.target.value)}
-                                onFocus={() => playTick(600, "sine", 0.06, 0.015)}
-                                maxLength={19}
-                                className="relative z-10 w-full bg-transparent py-3 text-center text-[11px] tracking-[0.2em] text-indigo-200/70 focus:outline-none placeholder:text-white/14 transition-all" />
-                            </div>
-                          </div>
-                          {/* Only validate after 3+ chars typed */}
-                          {inviteCode.length >= 3 && inviteCodeValid === false && (
-                            <div className="text-center mt-1.5">
-                              <span className="text-red-400/50 font-mono text-[9px] tracking-[0.15em]">FORMAT: MYSHAPE-XXXX-XXXX</span>
-                            </div>
-                          )}
-                          {inviteCodeValid === true && (
-                            <div className="text-center mt-1.5">
-                              <span className="text-green-400/55 font-mono text-[9px] tracking-[0.18em]">◈ CODE_VALID</span>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <button type="button" onClick={() => setInviteCodeValid(false)}
-                          onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
-                          className="text-[#90c8ff]/45 hover:text-[#90c8ff]/80 text-[10px] md:text-[11px] tracking-[0.15em] uppercase transition-colors border-b border-dashed border-[#90c8ff]/25 pb-0.5">
-                          + Invite code
-                        </button>
-                      )}
-                      </div>
+                      {/* Invite code section removed — admission is now governed by PES threshold */}
 
                       {/* ── 备选路径：Legacy Email（桌面端专属）── */}
                       <div className="hidden md:flex flex-col items-center space-y-2">
@@ -666,7 +600,7 @@ export default function GenesisClient() {
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
               className="flex flex-col items-center space-y-6">
               <div className="text-red-300/80 font-mono text-[10px] tracking-[0.3em] uppercase animate-pulse">{`> ${errorMsg}`}</div>
-              <button onClick={() => { setStage("input"); setErrorMsg(""); setOtp(""); setInviteCode(""); setInviteCodeValid(null); }}
+              <button onClick={() => { setStage("input"); setErrorMsg(""); setOtp(""); }}
                 onMouseEnter={() => playTick(600, "sine", 0.08, 0.02)}
                 className="px-8 py-3 border border-white/20 text-white/60 font-mono text-[9px] tracking-[0.3em] uppercase hover:border-white/50 hover:text-white transition-all">
                 Retry_Initialization

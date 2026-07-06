@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     const resend = new Resend(resendKey);
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { email: rawEmail, invite_code } = await req.json();
+    const { email: rawEmail } = await req.json();
     const email = (rawEmail || "").trim().toLowerCase();
 
     if (!email || !email.includes("@")) {
@@ -75,68 +75,9 @@ export async function POST(req: Request) {
       .eq('email', email.trim())
       .maybeSingle();
 
-    const isReturningUser = existingNode && ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(existingNode.status);
-
-    if (!isReturningUser) {
-      // 新用户：必须提供有效的邀请码
-      if (!invite_code) {
-        return NextResponse.json(
-          { error: "INVITE_CODE_REQUIRED: New entity initialization requires a Genesis invite code" },
-          { status: 403 }
-        );
-      }
-
-      const normalized = String(invite_code).trim().toUpperCase();
-
-      if (!/^MYSHAPE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalized)) {
-        return NextResponse.json(
-          { error: "INVITE_CODE_FORMAT_INVALID: Expected MYSHAPE-XXXX-XXXX" },
-          { status: 400 }
-        );
-      }
-
-      const { data: inviteData, error: inviteLookupError } = await supabase
-        .from('invite_codes')
-        .select('code, status')
-        .eq('code', normalized)
-        .single();
-
-      if (inviteLookupError || !inviteData) {
-        return NextResponse.json(
-          { error: "INVITE_CODE_INVALID: This invite code was not found" },
-          { status: 403 }
-        );
-      }
-
-      if (inviteData.status === 'USED') {
-        return NextResponse.json(
-          { error: "INVITE_CODE_ALREADY_USED: This invite code has already been claimed" },
-          { status: 409 }
-        );
-      }
-
-      if (inviteData.status === 'REVOKED') {
-        return NextResponse.json(
-          { error: "INVITE_CODE_REVOKED: This invite code is no longer active" },
-          { status: 410 }
-        );
-      }
-
-      // 消耗邀请码 — 绑定到此邮箱
-      const { error: consumeError } = await supabase
-        .from('invite_codes')
-        .update({ status: 'USED', used_by: email.trim(), used_at: new Date().toISOString() })
-        .eq('code', normalized);
-
-      if (consumeError) {
-        console.error('INVITE_CODE_CONSUME_ERROR:', consumeError);
-        return NextResponse.json(
-          { error: "INVITE_CODE_CONSUME_FAILED" },
-          { status: 500 }
-        );
-      }
-    }
-    // 老用户：跳过邀请码校验，直接进入 OTP 流程
+    // Invite code requirement removed — admission is now governed by PES threshold.
+    // See docs/genesis-governance.md for the current algorithmic admission rules.
+    // Returning users are detected by existing node status and skip OTP if wallet-bound.
 
     // 1b. 生成 6 位随机验证码
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
