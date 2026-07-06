@@ -70,8 +70,8 @@ export async function POST(request: Request) {
 
     if (insertError) throw insertError;
 
-    // Single-line curl: cross-shell compatible (bash/zsh/Git Bash/PowerShell via curl.exe)
-    const curlExample = `curl -X POST https://www.myshape.com/api/dev/activate -H "Content-Type: application/json" -d '{"node_handle":"${nodeHandle}","node_token":"${nodeToken}"}'`;
+    // Cross-shell curl: works in bash, zsh, Git Bash, PowerShell (curl.exe), and cmd.exe
+    const curlExample = `curl -X POST https://www.myshape.com/api/dev/activate -H "Content-Type: application/json" -d "{\\"node_handle\\":\\"${nodeHandle}\\",\\"node_token\\":\\"${nodeToken}\\"}"`;
 
     return NextResponse.json({
       node_token: nodeToken,
