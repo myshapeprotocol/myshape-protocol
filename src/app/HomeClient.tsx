@@ -10,7 +10,6 @@ import PresenceNetwork from "@/components/presence-network/PresenceNetwork";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
-import ProtocolStatus from "@/components/protocol-status/ProtocolStatus";
 import GenesisCohortBadge from "@/components/genesis-cohort-badge/GenesisCohortBadge";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
 
@@ -336,7 +335,6 @@ export default function HomeClient() {
         <JoinWaitlist id="genesis" />
       </main>
 
-      <ProtocolStatus />
       <ProtocolFooter />
     </>
   );
