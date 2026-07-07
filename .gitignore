@@ -76,11 +76,47 @@ scripts/reddit-monitor/logs/
 # Test coverage
 coverage/
 
-# AI agent memory — internal session records, never commit
-/memory/
+# ═══════════════════════════════════════════
+# 核心 IP 保护 — 以下目录和文件永远不提交
+# ═══════════════════════════════════════════
 
-# Claude project memory — internal session state, never commit
+# AI agent memory — internal session records
+/memory/
 .claude/projects/
 
-# Public directory — only allow static assets, no markdown
-public/*.md
+# Internal documentation suites
+/MyShape_Documentation/
+/myshape-context/
+
+# Root-level internal docs
+/GENESIS_001_DISCUSSION.md
+/PES-Benchmark-v0.2.md
+/PROTOCOL_CORE_SNAPSHOT.md
+/DESIGN.md
+/gen-papers.mjs
+/scripts/verify-pipeline.mjs
+/scripts/verify-recruitment.mjs
+
+# docs/ — internal only (public docs live in docs/public/)
+/docs/Threat-Model.md
+/docs/e1-e2-uniqueness-stability-experiment-v0.1.md
+/docs/key-management-enrollment-v0.1.md
+/docs/PHASE_E_ARCHITECTURE.md
+/docs/reddit-v0.2.md
+/docs/reddit-hn-v0.2-final.md
+/docs/substack-v0.2-longform.md
+/docs/x-post-v0.2.md
+/docs/DEMO_GUIDE.md
+/docs/testing/
+
+# public/ — non-static-asset HTML tools
+/public/cmd.html
+/public/genesis-100.html
+/public/matrix-dashboard.html
+/public/*.md
+
+# AI agent rules (.ai/ is internal contract)
+/.ai/
+
+# Supabase — only migrations are public
+/supabase/MIGRATION_GUIDE.md
