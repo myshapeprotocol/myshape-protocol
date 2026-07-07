@@ -142,6 +142,9 @@ export default function GenesisClient() {
     registeredAt: string;
   } | null>(null);
   const [checkingReturning, setCheckingReturning] = useState(false);
+  const [bindEmailInput, setBindEmailInput] = useState("");
+  const [bindEmailSaving, setBindEmailSaving] = useState(false);
+  const [bindEmailDone, setBindEmailDone] = useState(false);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // 检测 Header 是否已连接钱包 — mount + live listener
@@ -344,6 +347,32 @@ export default function GenesisClient() {
   };
 
   const isActive = stage === "scanning" || stage === "sending_otp";
+
+  // 钱包用户绑定真实邮箱（可选，无 OTP）
+  const handleBindEmail = async () => {
+    const clean = bindEmailInput.trim().toLowerCase();
+    if (!clean.includes("@") || bindEmailSaving) return;
+    setBindEmailSaving(true);
+    try {
+      const currentEmail = sessionStorage.getItem("genesis_email") || email;
+      const res = await fetch("/api/node/email", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentEmail,
+          newEmail: clean,
+          walletAddress: headerWallet || undefined,
+        }),
+      });
+      if (res.ok) {
+        sessionStorage.setItem("genesis_email", clean);
+        setEmail(clean);
+        setBindEmailDone(true);
+      }
+    } catch { /* silent */ }
+    setBindEmailSaving(false);
+  };
+
 
   // ── Cohort full: Genesis Phase Finalized ──
   if (isFull) {
@@ -801,6 +830,40 @@ export default function GenesisClient() {
                 particleLevel={nodeData?.particleLevel}
                 timestamp={nodeData?.timestamp}
               />
+
+              {/* ── 钱包用户：可选绑定真实邮箱（无 OTP）── */}
+              {(() => {
+                const storedEmail = sessionStorage.getItem("genesis_email") || email;
+                return storedEmail.startsWith("wallet:") && !bindEmailDone;
+              })() && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                  className="flex flex-col items-center gap-2 max-w-xs w-full">
+                  <span className="text-[#90c8ff]/40 text-[9px] tracking-[0.15em] uppercase font-light">
+                    Optionally bind a real email for protocol updates
+                  </span>
+                  <div className="flex items-center gap-2 w-full">
+                    <input
+                      type="email"
+                      placeholder="you@email.io"
+                      value={bindEmailInput}
+                      onChange={(e) => setBindEmailInput(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") handleBindEmail(); }}
+                      className="flex-1 bg-transparent border border-[#90c8ff]/15 px-3 py-2 text-center text-[11px] tracking-[0.1em] text-white/70 focus:outline-none focus:border-[#90c8ff]/40 transition-colors placeholder:text-white/12"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleBindEmail}
+                      disabled={bindEmailSaving || !bindEmailInput.includes("@")}
+                      className="px-4 py-2 border border-[#90c8ff]/25 text-[#90c8ff]/50 font-mono text-[9px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/50 hover:text-[#90c8ff]/80 disabled:opacity-20 disabled:cursor-not-allowed transition-all whitespace-nowrap"
+                      style={{ background: "rgba(144,200,255,0.03)" }}>
+                      {bindEmailSaving ? "Saving..." : "Bind"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
 
               {/* ── 主 CTA ── */}
               <motion.a
