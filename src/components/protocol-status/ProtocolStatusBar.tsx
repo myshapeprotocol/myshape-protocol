@@ -10,7 +10,7 @@ interface NetworkStats {
   genesis_remaining: number;
 }
 
-/** Compact protocol telemetry — fixed bottom-left, single-letter prefixes, color-coded. */
+/** Compact protocol telemetry — fixed bottom-left. Short words, color-coded values. */
 export default function ProtocolStatusBar() {
   const [stats, setStats] = useState<NetworkStats | null>(null);
   const [live, setLive] = useState(true);
@@ -45,95 +45,73 @@ export default function ProtocolStatusBar() {
     return () => { cancelled = true; clearInterval(id); };
   }, []);
 
-  const compact = stats
-    ? (live ? "◉" : "○") +
-      ` N${stats.total_nodes}` +
-      ` H${stats.active_humans}` +
-      ` A${stats.agents}` +
-      ` S${stats.total_scans}` +
-      ` G${stats.genesis_nodes}/100` +
-      (latency !== null ? ` ${latency}ms` : "")
-    : live
-      ? "◉ —"
-      : "○ offline";
+  const dim = "rgba(255,255,255,0.18)";
+  const sep = <span style={{ color: dim, margin: "0 2px" }}>·</span>;
 
   return (
     <div
-      className="fixed bottom-3 left-3 z-[998] font-mono text-[9px] tracking-[0.06em] select-none"
+      className="fixed bottom-3 left-3 z-[998] font-mono text-[9px] tracking-[0.04em] select-none"
       style={{ lineHeight: 1 }}
     >
       <span
         style={{
           display: "inline-block",
-          background: "rgba(2,4,10,0.8)",
-          border: "1px solid rgba(144,200,255,0.1)",
+          background: "rgba(2,4,10,0.82)",
+          border: "1px solid rgba(144,200,255,0.08)",
           borderRadius: 4,
-          padding: "3px 8px",
+          padding: "3px 7px",
           backdropFilter: "blur(6px)",
-          color: "rgba(255,255,255,0.35)",
           whiteSpace: "nowrap",
         }}
       >
+        {/* Live dot */}
+        <span
+          style={{
+            color: live ? "#3fb950" : "#f85149",
+            marginRight: 3,
+          }}
+        >
+          ◉
+        </span>
+
         {!stats ? (
           <span style={{ color: live ? "rgba(144,200,255,0.4)" : "rgba(248,81,73,0.5)" }}>
-            {compact}
+            {live ? "syncing…" : "offline"}
           </span>
         ) : (
           <>
-            {/* Live dot */}
-            <span
-              style={{
-                color: live ? "#3fb950" : "#f85149",
-                marginRight: 2,
-              }}
-            >
-              ◉
-            </span>
+            <span style={{ color: dim }}>nodes </span>
+            <span style={{ color: "rgba(144,200,255,0.65)" }}>{stats.total_nodes}</span>
+            {sep}
 
-            {/* Nodes */}
-            <span>
-              N<span style={{ color: "rgba(144,200,255,0.7)" }}>{stats.total_nodes}</span>
-            </span>
-            <span style={{ color: "rgba(255,255,255,0.1)", margin: "0 3px" }}>·</span>
+            <span style={{ color: dim }}>humans </span>
+            <span style={{ color: stats.active_humans > 0 ? "rgba(74,222,128,0.6)" : dim }}>{stats.active_humans}</span>
+            {sep}
 
-            {/* Humans */}
-            <span>
-              H<span style={{ color: stats.active_humans > 0 ? "rgba(74,222,128,0.65)" : "rgba(255,255,255,0.2)" }}>{stats.active_humans}</span>
-            </span>
-            <span style={{ color: "rgba(255,255,255,0.1)", margin: "0 3px" }}>·</span>
+            <span style={{ color: dim }}>agents </span>
+            <span style={{ color: stats.agents > 0 ? "rgba(167,139,250,0.6)" : dim }}>{stats.agents}</span>
+            {sep}
 
-            {/* Agents */}
-            <span>
-              A<span style={{ color: stats.agents > 0 ? "rgba(167,139,250,0.65)" : "rgba(255,255,255,0.2)" }}>{stats.agents}</span>
-            </span>
-            <span style={{ color: "rgba(255,255,255,0.1)", margin: "0 3px" }}>·</span>
+            <span style={{ color: dim }}>scans </span>
+            <span style={{ color: stats.total_scans > 0 ? "rgba(251,191,36,0.6)" : dim }}>{stats.total_scans}</span>
+            {sep}
 
-            {/* Scans */}
-            <span>
-              S<span style={{ color: stats.total_scans > 0 ? "rgba(251,191,36,0.65)" : "rgba(255,255,255,0.2)" }}>{stats.total_scans}</span>
+            <span style={{ color: dim }}>genesis </span>
+            <span style={{ color: stats.genesis_remaining <= 10 ? "rgba(210,153,29,0.7)" : "rgba(144,200,255,0.55)" }}>
+              {stats.genesis_nodes}/100
             </span>
-            <span style={{ color: "rgba(255,255,255,0.1)", margin: "0 3px" }}>·</span>
+            {stats.genesis_remaining <= 10 && stats.genesis_remaining > 0 && (
+              <span style={{ color: "rgba(210,153,29,0.4)" }}> ‑{stats.genesis_remaining}</span>
+            )}
 
-            {/* Genesis */}
-            <span>
-              G<span style={{ color: stats.genesis_remaining <= 10 ? "rgba(210,153,29,0.75)" : "rgba(144,200,255,0.6)" }}>{stats.genesis_nodes}/100</span>
-              {stats.genesis_remaining <= 10 && stats.genesis_remaining > 0 && (
-                <span style={{ color: "rgba(210,153,29,0.4)", marginLeft: 1 }}>‑{stats.genesis_remaining}</span>
-              )}
-            </span>
-
-            {/* Ping */}
             {latency !== null && (
               <>
-                <span style={{ color: "rgba(255,255,255,0.1)", margin: "0 3px" }}>·</span>
-                <span
-                  style={{
-                    color:
-                      latency < 150 ? "rgba(74,222,128,0.55)" :
-                      latency < 400 ? "rgba(251,191,36,0.55)" :
-                      "rgba(248,81,73,0.55)",
-                  }}
-                >
+                {sep}
+                <span style={{
+                  color: latency < 150 ? "rgba(74,222,128,0.5)" :
+                         latency < 400 ? "rgba(251,191,36,0.5)" :
+                         "rgba(248,81,73,0.5)",
+                }}>
                   {latency}ms
                 </span>
               </>
