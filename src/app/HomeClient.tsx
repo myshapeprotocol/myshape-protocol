@@ -112,7 +112,7 @@ export default function HomeClient() {
 
       {/* 桌面端专属：LIVE_FEED + 节点信息浮层 */}
       <div className="fixed inset-0 z-[999] pointer-events-none hidden md:block">
-        <div className="absolute top-10 right-10 pointer-events-auto">
+        <div className="absolute top-24 right-10 pointer-events-auto">
           <div className="flex items-center gap-2">
              <div className="w-1 h-1 bg-[#90c8ff] rounded-full animate-pulse shadow-[0_0_8px_#90c8ff]" />
              <span className="font-mono text-[9px] tracking-[0.3em] text-white/60 uppercase">LIVE_FEED</span>
