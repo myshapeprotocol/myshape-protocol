@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { createClient } from '@supabase/supabase-js';
+import React from "react";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
@@ -9,147 +8,14 @@ import Vision from "@/components/vision/Vision";
 import PresenceNetwork from "@/components/presence-network/PresenceNetwork";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
-import GenesisBadge from "@/components/genesis-badge/GenesisBadge";
 import GenesisCohortBadge from "@/components/genesis-cohort-badge/GenesisCohortBadge";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
-if (!supabase && typeof window !== "undefined") {
-  console.warn("[HomeClient] Supabase not configured — realtime node feed disabled. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
-}
-
 export default function HomeClient() {
-  const [activeUser, setActiveUser] = useState("");
-  const [displayText, setDisplayText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [clientHash, setClientHash] = useState("0X7B2E1A9C");
-  const [isGenesisUser, setIsGenesisUser] = useState(false);
-
-  const maskIdentifier = (id: string) => {
-    if (!id) return "";
-    const name = id.includes('@') ? id.split('@')[0] : id;
-    if (name.length <= 4) return name.toUpperCase();
-    return `${name.substring(0, 2)}****${name.slice(-2)}`.toUpperCase();
-  };
-
-  const checkGenesisUser = () => {
-    if (typeof window === "undefined") return;
-    const hasGenesis = sessionStorage.getItem("genesis_completed") === "1";
-    const hasWallet = !!sessionStorage.getItem("wallet_address");
-    if (hasGenesis || hasWallet) {
-      const email = sessionStorage.getItem("genesis_email") || "";
-      setActiveUser(email);
-      setIsGenesisUser(true);
-    } else {
-      setIsGenesisUser(false);
-    }
-  };
-
-  useEffect(() => {
-    checkGenesisUser();
-    window.addEventListener("wallet:connected", checkGenesisUser);
-    window.addEventListener("genesis:updated", checkGenesisUser);
-    window.addEventListener("wallet:disconnected", checkGenesisUser);
-    const poll = setInterval(checkGenesisUser, 5000);
-    return () => {
-      clearInterval(poll);
-      window.removeEventListener("wallet:connected", checkGenesisUser);
-      window.removeEventListener("genesis:updated", checkGenesisUser);
-      window.removeEventListener("wallet:disconnected", checkGenesisUser);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!supabase || isGenesisUser) return;
-
-    const fetchLastNode = async () => {
-      const { data } = await supabase
-        .from("protocol_nodes")
-        .select("email")
-        .order("created_at", { ascending: false })
-        .limit(1);
-      if (data && data.length > 0) setActiveUser(data[0].email);
-    };
-
-    fetchLastNode();
-
-    const channel = supabase
-      .channel("realtime_nodes")
-      .on("postgres_changes",
-        { event: "INSERT", schema: "public", table: "protocol_nodes" },
-        (payload) => { setActiveUser(payload.new.email); }
-      )
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
-  }, [isGenesisUser]);
-
-  useEffect(() => {
-    let i = 0;
-    const targetID = activeUser ? maskIdentifier(activeUser) : "RODDOG03";
-    setDisplayText("");
-    setIsTyping(true);
-    const timer = setInterval(() => {
-      setDisplayText(targetID.slice(0, i));
-      i++;
-      if (i > targetID.length) { setIsTyping(false); clearInterval(timer); }
-    }, 100);
-    return () => clearInterval(timer);
-  }, [activeUser]);
-
-  useEffect(() => {
-    const hashInterval = setInterval(() => {
-      setClientHash(`0X${Math.random().toString(16).substring(2, 10).toUpperCase()}`);
-    }, 3000);
-    return () => clearInterval(hashInterval);
-  }, []);
-
   return (
     <>
       <ProtocolHeader />
 
-      {/* 桌面端专属：LIVE_FEED + 节点信息浮层 */}
-      <div className="fixed inset-0 z-[999] pointer-events-none hidden md:block">
-        <div className="absolute top-24 right-10 pointer-events-auto">
-          <div className="flex items-center gap-2">
-             <div className="w-1 h-1 bg-[#90c8ff] rounded-full animate-pulse shadow-[0_0_8px_#90c8ff]" />
-             <span className="font-mono text-[9px] tracking-[0.3em] text-white/60 uppercase">LIVE_FEED</span>
-          </div>
-        </div>
-
-        <div className="absolute bottom-10 right-10 text-right pointer-events-auto">
-          <div className="flex flex-col items-end">
-            {isGenesisUser && (
-              <div className="pr-1 mb-2">
-                <GenesisBadge />
-              </div>
-            )}
-            {isGenesisUser ? (
-              <div className="pr-3 border-r border-[#90c8ff]/20 text-[7px] text-[#90c8ff]/30 space-y-1 tracking-[0.1em] font-mono">
-                <p>STATUS: {activeUser ? "GENESIS_NODE" : "ACTIVE"}</p>
-                <p className="opacity-50">HASH: {clientHash}</p>
-              </div>
-            ) : activeUser ? (
-              <>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[7px] tracking-[0.3em] text-[#90c8ff]/50 uppercase font-light">LAST_NODE_INBOUND</span>
-                  <div className="w-1 h-1 bg-[#90c8ff] rounded-full animate-pulse shadow-[0_0_8px_#90c8ff]" />
-                </div>
-                <div className="text-[12px] font-extralight text-white/90 tracking-[0.4em] uppercase leading-none mb-2 font-mono">
-                  {displayText}
-                  {isTyping && <span className="inline-block w-1.5 h-3 bg-[#90c8ff] ml-1 animate-pulse" />}
-                </div>
-                <div className="pr-3 border-r border-[#90c8ff]/30 text-[7px] text-[#90c8ff]/40 space-y-1 tracking-[0.1em] font-mono">
-                  <p className="animate-pulse">HASH: {clientHash}</p>
-                  <p>STATUS: STREAMING</p>
-                </div>
-              </>
-            ) : null}
-          </div>
-        </div>
-      </div>
 
       <main className="relative z-0 w-full overflow-x-clip">
         <HeroDemo />
