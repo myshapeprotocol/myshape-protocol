@@ -1,16 +1,69 @@
 "use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import { playTick } from "@/utils/useAudioTick";
 import "@/app/research/research.css";
 
+const TOC_ITEMS = [
+  { id: "part-1", label: "Part 1 — The World Has Solved Identity" },
+  { id: "part-2", label: "Part 2 — The AI Era Creates a New Problem" },
+  { id: "part-3", label: "Part 3 — A Hypothesis" },
+  { id: "part-4", label: "Part 4 — Research Roadmap" },
+];
+
 export default function NoteClient() {
+  const [activeSection, setActiveSection] = useState("part-1");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: "-20% 0px -70% 0px" },
+    );
+
+    for (const item of TOC_ITEMS) {
+      const el = document.getElementById(item.id);
+      if (el) observer.observe(el);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
       <ProtocolHeader />
-      <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-6 pt-28 pb-16">
-        <article className="note-article">
+      <BackgroundParticles />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-6 pt-28 pb-16">
+        <div className="note-layout">
+          {/* ── TOC Sidebar ── */}
+          <nav className="note-toc" aria-label="Table of Contents">
+            <div className="note-toc-title">Contents</div>
+            {TOC_ITEMS.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`note-toc-item ${activeSection === item.id ? "active" : ""}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* ── Article ── */}
+          <article className="note-article">
           <div className="note-meta">
             <span>Research Note #001</span>
             <span className="note-meta-sep" />
@@ -24,7 +77,7 @@ export default function NoteClient() {
           </p>
 
           {/* ── Part 1 ── */}
-          <section className="note-section">
+          <section id="part-1" className="note-section">
             <h2>Part 1 — The World Has Solved Identity</h2>
 
             <p>
@@ -64,7 +117,7 @@ export default function NoteClient() {
           </section>
 
           {/* ── Part 2 ── */}
-          <section className="note-section">
+          <section id="part-2" className="note-section">
             <h2>Part 2 — The AI Era Creates a New Problem</h2>
 
             <p>
@@ -136,7 +189,7 @@ export default function NoteClient() {
           </section>
 
           {/* ── Part 3 ── */}
-          <section className="note-section">
+          <section id="part-3" className="note-section">
             <h2>Part 3 — A Hypothesis</h2>
 
             <p>
@@ -166,7 +219,7 @@ export default function NoteClient() {
           </section>
 
           {/* ── Part 4 ── */}
-          <section className="note-section">
+          <section id="part-4" className="note-section">
             <h2>Part 4 — Research Roadmap</h2>
 
             <p>
@@ -221,6 +274,7 @@ export default function NoteClient() {
             </p>
           </div>
         </article>
+        </div>{/* closes note-layout */}
       </div>
       <ProtocolFooter />
     </div>
