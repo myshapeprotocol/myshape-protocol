@@ -1,0 +1,414 @@
+/* ============================================================
+   MyShape Protocol — Identity Layer Page
+   High-polish: hover glow, text lift, border shift, gradients.
+   ============================================================ */
+
+:root {
+  --il-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --il-duration: 0.4s;
+}
+
+/* ============================================================
+   Identity Card
+   ============================================================ */
+
+.il-card {
+  position: relative;
+  padding: 1.5rem;
+  border: 1px solid rgba(144, 200, 255, 0.1);
+  background: transparent;
+  transition:
+    border-color var(--il-duration) var(--il-ease),
+    background var(--il-duration) var(--il-ease),
+    transform var(--il-duration) var(--il-ease),
+    box-shadow var(--il-duration) var(--il-ease);
+}
+
+@media (min-width: 768px) {
+  .il-card {
+    padding: 2rem;
+  }
+}
+
+.il-card:hover {
+  border-color: rgba(144, 200, 255, 0.35);
+  background: rgba(144, 200, 255, 0.02);
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 32px -4px rgba(144, 200, 255, 0.1),
+    0 0 0 1px rgba(144, 200, 255, 0.04);
+}
+
+.il-card-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--il-duration) var(--il-ease);
+  background: radial-gradient(ellipse at 30% 20%, rgba(144, 200, 255, 0.04) 0%, transparent 60%);
+}
+
+.il-card:hover .il-card-glow {
+  opacity: 1;
+}
+
+.il-card-accent-line {
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 1px;
+  opacity: 0.3;
+  transition: opacity var(--il-duration) var(--il-ease);
+}
+
+.il-card:hover .il-card-accent-line {
+  opacity: 0.8;
+}
+
+/* Card header */
+.il-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.il-card-title {
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  transition:
+    color var(--il-duration) var(--il-ease),
+    letter-spacing var(--il-duration) var(--il-ease);
+}
+
+.il-card:hover .il-card-title {
+  color: rgba(144, 200, 255, 0.9);
+  letter-spacing: 0.35em;
+}
+
+.il-card-status {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: monospace;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid rgba(144, 200, 255, 0.25);
+  color: rgba(144, 200, 255, 0.55);
+  text-shadow: 0 0 6px rgba(144, 200, 255, 0.15);
+  transition:
+    border-color var(--il-duration) var(--il-ease),
+    color var(--il-duration) var(--il-ease),
+    text-shadow var(--il-duration) var(--il-ease),
+    box-shadow var(--il-duration) var(--il-ease);
+}
+
+.il-card:hover .il-card-status {
+  border-color: rgba(144, 200, 255, 0.5);
+  color: rgba(144, 200, 255, 0.85);
+  text-shadow: 0 0 10px rgba(144, 200, 255, 0.3);
+  box-shadow: 0 0 12px rgba(144, 200, 255, 0.08);
+}
+
+/* Card body */
+.il-card-desc {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  transition:
+    color var(--il-duration) var(--il-ease),
+    font-size var(--il-duration) var(--il-ease);
+}
+
+.il-card:hover .il-card-desc {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 11.5px;
+}
+
+/* Card divider */
+.il-card-divider {
+  height: 1px;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.il-card-divider-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, rgba(144, 200, 255, 0.25), transparent);
+  width: 0;
+  transition: width var(--il-duration) var(--il-ease);
+}
+
+.il-card:hover .il-card-divider-sweep {
+  width: 100%;
+}
+
+/* Card detail */
+.il-card-detail {
+  color: rgba(255, 255, 255, 0.18);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  transition:
+    color var(--il-duration) var(--il-ease),
+    font-size var(--il-duration) var(--il-ease);
+}
+
+.il-card:hover .il-card-detail {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 9.5px;
+}
+
+/* ============================================================
+   Section Headers
+   ============================================================ */
+
+.il-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.il-section-label {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 7px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.25rem;
+  transition:
+    color var(--il-duration) var(--il-ease),
+    border-color var(--il-duration) var(--il-ease);
+}
+
+.il-section-label:hover {
+  color: rgba(144, 200, 255, 0.5);
+  border-color: rgba(144, 200, 255, 0.2);
+}
+
+.il-section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.08), transparent);
+}
+
+/* ============================================================
+   Page Header (Core Concept)
+   ============================================================ */
+
+.il-page-header-label {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 10px;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.il-page-header-accent {
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(to right, rgba(144, 200, 255, 0.5), transparent);
+}
+
+.il-page-header-hook {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.il-page-header-accent-text {
+  color: rgba(144, 200, 255, 0.85);
+  transition:
+    color var(--il-duration) var(--il-ease),
+    text-shadow var(--il-duration) var(--il-ease);
+}
+
+.il-page-header-accent-text:hover {
+  color: rgba(180, 220, 255, 1);
+  text-shadow: 0 0 12px rgba(144, 200, 255, 0.3);
+}
+
+.il-page-header-tagline {
+  margin-top: 1rem;
+  color: rgba(144, 200, 255, 0.5);
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.il-page-header-text {
+  margin-top: 1.5rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ============================================================
+   Geometric Primitive Box
+   ============================================================ */
+
+.il-geometric-box {
+  padding: 1.5rem;
+  border: 1px solid rgba(144, 200, 255, 0.08);
+  background: rgba(144, 200, 255, 0.015);
+  transition:
+    border-color var(--il-duration) var(--il-ease),
+    background var(--il-duration) var(--il-ease),
+    box-shadow var(--il-duration) var(--il-ease);
+}
+
+.il-geometric-box:hover {
+  border-color: rgba(144, 200, 255, 0.2);
+  background: rgba(144, 200, 255, 0.03);
+  box-shadow: 0 0 40px rgba(144, 200, 255, 0.03);
+}
+
+.il-geometric-label {
+  color: rgba(144, 200, 255, 0.35);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.il-geometric-text {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.875rem;
+  line-height: 1.9;
+  font-weight: 300;
+  transition: color var(--il-duration) var(--il-ease);
+}
+
+.il-geometric-box:hover .il-geometric-text {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.il-geometric-text + .il-geometric-text {
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   Pipeline
+   ============================================================ */
+
+.il-pipeline {
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 3rem;
+}
+
+.il-pipeline-label {
+  color: rgba(255, 255, 255, 0.08);
+  font-size: 7px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.il-pipeline-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.5rem;
+}
+
+.il-pipeline-step {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.18);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: monospace;
+  cursor: default;
+  transition:
+    color var(--il-duration) var(--il-ease),
+    border-color var(--il-duration) var(--il-ease),
+    background var(--il-duration) var(--il-ease),
+    box-shadow var(--il-duration) var(--il-ease),
+    font-size var(--il-duration) var(--il-ease);
+}
+
+.il-pipeline-step:hover {
+  color: rgba(144, 200, 255, 0.7);
+  border-color: rgba(144, 200, 255, 0.3);
+  background: rgba(144, 200, 255, 0.04);
+  box-shadow: 0 0 8px rgba(144, 200, 255, 0.08);
+  font-size: 11px;
+}
+
+.il-pipeline-step.il-step-highlight {
+  color: rgba(144, 200, 255, 0.35);
+  border-color: rgba(144, 200, 255, 0.18);
+}
+
+.il-pipeline-step.il-step-highlight:hover {
+  color: rgba(144, 200, 255, 0.8);
+  border-color: rgba(144, 200, 255, 0.5);
+  box-shadow: 0 0 14px rgba(144, 200, 255, 0.12);
+}
+
+.il-pipeline-step.il-step-glow {
+  color: rgba(144, 200, 255, 0.45);
+  border-color: rgba(144, 200, 255, 0.28);
+  background: rgba(144, 200, 255, 0.03);
+}
+
+.il-pipeline-step.il-step-glow:hover {
+  color: #fff;
+  border-color: rgba(144, 200, 255, 0.6);
+  background: rgba(144, 200, 255, 0.08);
+  box-shadow: 0 0 20px rgba(144, 200, 255, 0.15);
+}
+
+.il-pipeline-arrow {
+  color: rgba(144, 200, 255, 0.12);
+  font-size: 1.125rem;
+}
+
+.il-pipeline-footer {
+  color: rgba(255, 255, 255, 0.12);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+}
+
+/* ============================================================
+   Card Grid
+   ============================================================ */
+
+.il-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .il-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
