@@ -209,7 +209,7 @@ const HandshakeRitual: React.FC = () => {
   return (
     <>
       <ProtocolHeader />
-      <div className="fixed inset-0 overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <h1 className="sr-only">
         MyShape Protocol — Node Handshake — Sovereign Identity Initialization
       </h1>
