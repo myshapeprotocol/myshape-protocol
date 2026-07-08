@@ -1,0 +1,91 @@
+# MyShape Protocol — Learned Instincts
+# Auto-generated from 200 commits of git history
+# For use with continuous-learning-v2 / /instinct-import / /evolve
+
+instincts:
+  - id: myshape-commit-convention
+    trigger: "when writing a commit message"
+    confidence: 0.95
+    domain: git
+    source: local-repo-analysis
+    evidence:
+      commits_analyzed: 200
+      conventional_commit_rate: "99%"
+    action: |
+      Prefix commits with one of: feat:, fix:, refactor:, chore:, docs:, security:
+      Most common: fix (77), feat (66), refactor (37), chore (14)
+
+  - id: myshape-css-hover
+    trigger: "when adding hover effects to components"
+    confidence: 0.90
+    domain: css
+    source: local-repo-analysis
+    action: |
+      Use CSS :hover selectors, NOT data-hover attributes or JS hoverOn/hoverOff.
+      Standard transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1).
+      Standard hover: border-color brighten + translateY(-2px) + box-shadow glow.
+      Standard text hover: color brighten + font-size slight increase.
+
+  - id: myshape-no-inline-styles
+    trigger: "when writing JSX"
+    confidence: 0.88
+    domain: react
+    source: local-repo-analysis
+    action: |
+      Static styles → CSS file. Dynamic values → inline style={{}} OK.
+      NEVER use <style> tags in components.
+      NEVER use querySelector for style manipulation.
+      @keyframes → src/styles/animations.css ONLY.
+
+  - id: myshape-component-structure
+    trigger: "when creating a new component"
+    confidence: 0.85
+    domain: react
+    source: local-repo-analysis
+    action: |
+      Co-locate: component.tsx + component.css in same directory.
+      Extract sub-components when file exceeds 200 lines.
+      Server/page.tsx: metadata + JSON-LD + BreadcrumbList.
+      Client/PageClient.tsx: "use client" + interactive logic.
+
+  - id: myshape-brand-compliance
+    trigger: "when writing visible text or CSS class names"
+    confidence: 0.92
+    domain: content
+    source: local-repo-analysis
+    action: |
+      Banned: biological-recognition terms, physical-form terms, appearance terms, gendered terms.
+      Approved: static-feature, entity, silhouette, wireframe anatomy, ethereal data energy.
+      CSS class names also scanned — avoid physical-form or recognition-related stems.
+
+  - id: myshape-git-push
+    trigger: "when pushing code"
+    confidence: 0.85
+    domain: git
+    source: local-repo-analysis
+    action: |
+      Push to BOTH remotes: git push origin master && git push org master
+      org = myshapeprotocol/myshape-protocol (Vercel auto-deploy)
+      origin = RaymondHWu/myshape-site (backup fork)
+
+  - id: myshape-deploy
+    trigger: "after pushing to org remote"
+    confidence: 0.80
+    domain: devops
+    source: local-repo-analysis
+    action: |
+      Vercel auto-deploys from org master. Verify at myshape.com.
+      If auto-deploy fails: npx vercel deploy --prod --cwd .
+      Don't commit .env.local (gitignored).
+
+  - id: myshape-page-pattern
+    trigger: "when adding a new page route"
+    confidence: 0.82
+    domain: nextjs
+    source: local-repo-analysis
+    action: |
+      1. page.tsx (Server): export metadata + render client component
+      2. PageClient.tsx: "use client" + ProtocolHeader/Footer
+      3. Add JSON-LD structured data
+      4. Add BreadcrumbList
+      5. Page-specific CSS file if needed
