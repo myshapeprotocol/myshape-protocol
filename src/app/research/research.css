@@ -11,6 +11,18 @@
 .research-tagline span { color: rgba(144,200,255,0.8); }
 .research-subtitle { color: rgba(255,255,255,0.35); font-size: 13px; line-height: 1.7; max-width: 36rem; }
 
+/* ── Agenda entry link ── */
+.agenda-entry-link {
+  display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem;
+  color: rgba(212,175,55,0.5); font-size: 11px; letter-spacing: 0.08em;
+  text-decoration: none; transition: color 0.35s;
+}
+.agenda-entry-link:hover { color: rgba(212,175,55,0.8); }
+.agenda-entry-arrow {
+  color: rgba(212,175,55,0.35); font-size: 13px; transition: transform 0.35s, color 0.35s;
+}
+.agenda-entry-link:hover .agenda-entry-arrow { transform: translateX(3px); color: rgba(212,175,55,0.7); }
+
 .research-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 768px) { .research-grid { grid-template-columns: repeat(3, 1fr); } }
 

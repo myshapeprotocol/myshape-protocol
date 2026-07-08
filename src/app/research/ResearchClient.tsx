@@ -37,6 +37,13 @@ export default function ResearchClient() {
           <div className="research-label">The Continuity Lab</div>
           <h1 className="research-tagline">Investigating whether <span>continuity</span> can become a verifiable property of digital existence.</h1>
           <p className="research-subtitle">We are not building a product. We are investigating a question. If the answer is yes, continuity becomes a new cryptographic primitive — alongside identity, encryption, and consensus.</p>
+          <Link
+            href="/research/agenda"
+            className="agenda-entry-link"
+            onMouseEnter={() => playTick(700, "sine", 0.05, 0.015)}
+          >
+            <span className="agenda-entry-arrow">→</span> Research Agenda — four open questions driving our investigation
+          </Link>
         </div>
 
         <div className="research-grid">
