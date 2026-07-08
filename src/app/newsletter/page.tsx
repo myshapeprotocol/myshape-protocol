@@ -22,6 +22,14 @@ export default function NewsletterPage() {
   return (
     <>
       <BreadcrumbList items={[{ name: "Home", href: "/" }, { name: "Newsletter" }]} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "WebPage",
+        "@id": "https://www.myshape.com/newsletter/#webpage",
+        url: "https://www.myshape.com/newsletter",
+        name: "MyShape Protocol Newsletter — Signal Subscription",
+        description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign identity, motion-signature verification, and the Agent Economy.",
+        isPartOf: { "@type": "WebSite", "@id": "https://www.myshape.com/#website", name: "MyShape Protocol", url: "https://www.myshape.com" },
+      }) }} />
       <NewsletterClient />
     </>
   );
