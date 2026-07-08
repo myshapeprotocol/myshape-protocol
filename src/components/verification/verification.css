@@ -1,0 +1,124 @@
+/* Verification Dashboard */
+
+.vd-gap-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 1.5rem;
+  transition: border-color 0.35s;
+}
+.vd-gap-card:hover { border-color: rgba(144,200,255,0.35); }
+
+.vd-gap-label {
+  color: rgba(144,200,255,0.4); font-size: 8px; letter-spacing: 0.4em;
+  text-transform: uppercase; font-family: monospace; margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+.vd-gap-card:hover .vd-gap-label { color: rgba(144,200,255,0.7); }
+
+.vd-gap-title {
+  color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; font-family: monospace;
+  transition: color 0.35s;
+}
+.vd-gap-card:hover .vd-gap-title { color: rgba(255,255,255,0.6); }
+
+.vd-gap-desc {
+  color: rgba(255,255,255,0.4); font-size: 10px; line-height: 1.5; max-width: 28rem; font-family: monospace;
+  transition: color 0.35s;
+}
+.vd-gap-card:hover .vd-gap-desc { color: rgba(255,255,255,0.65); }
+
+.vd-score-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 1.25rem;
+  transition: border-color 0.35s;
+}
+.vd-score-card:hover { border-color: rgba(144,200,255,0.35); }
+
+.vd-score-label {
+  color: rgba(255,255,255,0.2); font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase;
+  transition: color 0.35s;
+}
+.vd-score-card:hover .vd-score-label { color: rgba(255,255,255,0.5); }
+
+.vd-verdict {
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+
+.vd-subtitle {
+  color: rgba(255,255,255,0.25); font-size: 10px; line-height: 1.5; margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+.vd-score-card:hover .vd-subtitle { color: rgba(255,255,255,0.55); }
+
+.vd-threshold-label {
+  color: rgba(255,255,255,0.2); font-size: 9px;
+  transition: color 0.35s;
+}
+.vd-score-card:hover .vd-threshold-label { color: rgba(255,255,255,0.5); }
+
+.vd-threshold-value {
+  color: rgba(255,255,255,0.4); font-size: 9px; font-family: monospace;
+  transition: color 0.35s;
+}
+.vd-score-card:hover .vd-threshold-value { color: rgba(255,255,255,0.7); }
+
+.vd-factor-label {
+  color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  width: 4rem; flex-shrink: 0;
+  transition: color 0.35s;
+}
+
+.vd-factor-value {
+  color: rgba(255,255,255,0.5); font-family: monospace; font-size: 10px; width: 3rem; text-align: right;
+  transition: color 0.35s;
+}
+
+/* AI rejection */
+.vd-rejection {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 1.5rem;
+  transition: border-color 0.35s;
+}
+.vd-rejection:hover { border-color: rgba(144,200,255,0.35); }
+
+.vd-rejection-label {
+  color: rgba(248,113,113,0.6); font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+  transition: color 0.35s;
+}
+.vd-rejection:hover .vd-rejection-label { color: rgba(248,113,113,0.9); }
+
+.vd-rejection-desc {
+  color: rgba(255,255,255,0.3); font-size: 11px; line-height: 1.5; max-width: 48rem;
+  transition: color 0.35s;
+}
+.vd-rejection:hover .vd-rejection-desc { color: rgba(255,255,255,0.55); }
+
+.vd-tag-btn { transition: all 0.3s; }
+
+.vd-tag-icon { color: rgba(248,113,113,0.5); font-size: 14px; }
+
+.vd-tag-label {
+  color: rgba(252,165,165,0.7); font-family: monospace; font-size: 10px; letter-spacing: 0.15em;
+  transition: color 0.35s;
+}
+
+.vd-tag-detail {
+  color: rgba(255,255,255,0.4); font-size: 9px; line-height: 1.5; margin-top: 0.25rem; margin-left: 1.5rem;
+  transition: color 0.35s;
+}
+
+/* Footer */
+.vd-footer {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 1.25rem;
+  transition: border-color 0.35s;
+}
+.vd-footer:hover { border-color: rgba(144,200,255,0.35); }
+
+.vd-footer-label {
+  color: rgba(255,255,255,0.2); font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+  transition: color 0.35s;
+}
+.vd-footer:hover .vd-footer-label { color: rgba(255,255,255,0.5); }
+
+.vd-footer-value {
+  color: rgba(144,200,255,0.7); font-family: monospace; font-size: 9px;
+  transition: color 0.35s;
+}
+.vd-footer:hover .vd-footer-value { color: rgba(144,200,255,0.95); }

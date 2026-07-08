@@ -1,0 +1,296 @@
+/* Papers hub + tech spec shared styles */
+
+.pp-card {
+  display: block;
+  padding: 1.5rem;
+  border: 1px solid rgba(144,200,255,0.1);
+  background: transparent;
+  text-decoration: none;
+  transition: border-color 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.pp-card:hover { border-color: rgba(144,200,255,0.35); }
+
+.pp-tag {
+  font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.125rem 0.5rem; border: 1px solid rgba(144,200,255,0.1);
+  color: rgba(144,200,255,0.3);
+}
+
+.pp-title {
+  color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 0.5rem;
+  transition: color 0.35s;
+}
+.pp-card:hover .pp-title { color: rgba(255,255,255,0.95); }
+
+.pp-desc {
+  color: rgba(255,255,255,0.25); font-size: 10px; line-height: 1.5;
+  margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+.pp-card:hover .pp-desc { color: rgba(255,255,255,0.5); }
+
+.pp-author { color: rgba(255,255,255,0.12); font-size: 8px; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+
+.pp-arrow {
+  display: inline-block; font-size: 10px; color: rgba(144,200,255,0.3);
+  transition: color 0.35s;
+}
+.pp-card:hover .pp-arrow { color: rgba(144,200,255,0.7); }
+
+/* Tech spec */
+
+.ts-metric-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent;
+  padding: 0.75rem; text-align: center;
+  transition: border-color 0.35s;
+}
+.ts-metric-card:hover { border-color: rgba(144,200,255,0.4); }
+@media (min-width: 768px) { .ts-metric-card { padding: 1rem; } }
+
+.ts-metric-value {
+  color: rgba(200,240,255,0.8); font-size: 1.125rem; font-weight: 300;
+  letter-spacing: 0.05em;
+  transition: color 0.35s;
+}
+.ts-metric-card:hover .ts-metric-value { color: #fff; }
+@media (min-width: 768px) { .ts-metric-value { font-size: 1.25rem; } }
+
+.ts-metric-label {
+  color: rgba(255,255,255,0.2); font-size: 8px; letter-spacing: 0.15em;
+  text-transform: uppercase; margin-top: 0.25rem;
+  transition: color 0.35s;
+}
+.ts-metric-card:hover .ts-metric-label { color: rgba(255,255,255,0.5); }
+
+.ts-layer-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent;
+  padding: 1rem;
+  transition: border-color 0.35s, background 0.35s;
+}
+.ts-layer-card:hover { border-color: rgba(144,200,255,0.4); background: rgba(144,200,255,0.03); }
+
+.ts-layer-name {
+  color: rgba(144,200,255,0.6); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 0.25rem;
+  transition: color 0.35s;
+}
+.ts-layer-card:hover .ts-layer-name { color: #90c8ff; }
+
+.ts-layer-detail {
+  color: rgba(255,255,255,0.3); font-size: 10px; line-height: 1.5;
+  transition: color 0.35s;
+}
+.ts-layer-card:hover .ts-layer-detail { color: rgba(255,255,255,0.6); }
+
+.ts-spec-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent;
+  overflow: hidden;
+  transition: border-color 0.35s;
+}
+.ts-spec-card:hover { border-color: rgba(144,200,255,0.4); }
+
+.ts-spec-q {
+  color: rgba(144,200,255,0.7); font-size: 11px; letter-spacing: 0.15em;
+  text-transform: uppercase; font-weight: 500;
+  transition: color 0.35s;
+}
+.ts-spec-card:hover .ts-spec-q { color: #90c8ff; }
+@media (min-width: 768px) { .ts-spec-q { font-size: 12px; } }
+
+.ts-spec-a {
+  color: rgba(255,255,255,0.35); font-size: 11px; line-height: 1.6;
+  transition: color 0.35s;
+}
+.ts-spec-card:hover .ts-spec-a { color: rgba(255,255,255,0.6); }
+
+.ts-cite {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent;
+  padding: 1.25rem;
+  transition: border-color 0.35s;
+}
+.ts-cite:hover { border-color: rgba(144,200,255,0.4); }
+
+.ts-cite-label {
+  color: rgba(255,255,255,0.25); font-size: 8px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 0.5rem;
+  transition: color 0.35s;
+}
+.ts-cite:hover .ts-cite-label { color: rgba(255,255,255,0.5); }
+
+.ts-cite-text {
+  color: rgba(255,255,255,0.3); font-size: 9px; line-height: 1.5; font-family: monospace;
+  transition: color 0.35s;
+}
+.ts-cite:hover .ts-cite-text { color: rgba(255,255,255,0.6); }
+
+.ts-ref-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent;
+  padding: 1.5rem; text-align: center;
+  transition: border-color 0.35s;
+}
+.ts-ref-card:hover { border-color: rgba(144,200,255,0.4); }
+
+.ts-ref-title {
+  color: rgba(144,200,255,0.5); font-size: 10px; letter-spacing: 0.3em;
+  text-transform: uppercase; margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+.ts-ref-card:hover .ts-ref-title { color: rgba(144,200,255,0.9); }
+
+.ts-ref-text {
+  color: rgba(255,255,255,0.3); font-size: 11px; line-height: 1.5; margin-bottom: 1rem;
+  transition: color 0.35s;
+}
+.ts-ref-card:hover .ts-ref-text { color: rgba(255,255,255,0.6); }
+
+/* Threat model */
+
+.tm-stat-card {
+  border: 1px solid rgba(144,200,255,0.1); padding: 1rem; text-align: center;
+  background: rgba(144,200,255,0.02);
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.tm-stat-card:hover { border-color: rgba(144,200,255,0.3); box-shadow: 0 0 20px rgba(144,200,255,0.05); }
+
+.tm-stat-value {
+  color: rgba(144,200,255,0.7); font-size: 22px; font-weight: 300; font-family: monospace; margin-bottom: 0.25rem;
+}
+
+.tm-stat-label {
+  color: rgba(255,255,255,0.3); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+}
+
+.tm-stat-sub { color: rgba(255,255,255,0.12); font-size: 8px; margin-top: 0.25rem; }
+
+.tm-attack-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; overflow: hidden;
+  transition: border-color 0.35s;
+}
+.tm-attack-card:hover { border-color: rgba(144,200,255,0.35); }
+
+.tm-attack-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02);
+}
+
+.tm-attack-class {
+  color: rgba(144,200,255,0.7); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  transition: color 0.35s;
+}
+.tm-attack-card:hover .tm-attack-class { color: #90c8ff; }
+
+.tm-severity {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.125rem 0.5rem; border: 1px solid;
+  transition: color 0.35s;
+}
+
+.tm-attack-content { padding: 1.25rem; }
+
+.tm-section-label {
+  color: rgba(255,255,255,0.25); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  transition: color 0.35s;
+}
+.tm-attack-card:hover .tm-section-label { color: rgba(255,255,255,0.45); }
+
+.tm-attack-tag {
+  color: rgba(255,255,255,0.3); font-size: 10px; padding: 0.125rem 0.5rem; border: 1px solid rgba(255,255,255,0.08);
+  transition: color 0.35s;
+}
+.tm-attack-card:hover .tm-attack-tag { color: rgba(255,255,255,0.55); }
+
+.tm-detection {
+  color: rgba(255,255,255,0.35); font-size: 11px;
+  transition: color 0.35s;
+}
+.tm-attack-card:hover .tm-detection { color: rgba(255,255,255,0.6); }
+
+.tm-success-label {
+  color: rgba(255,255,255,0.2); font-size: 9px;
+  transition: color 0.35s;
+}
+.tm-attack-card:hover .tm-success-label { color: rgba(255,255,255,0.4); }
+
+.tm-success-rate {
+  color: rgba(144,200,255,0.6); font-size: 9px;
+  transition: color 0.35s;
+}
+.tm-attack-card:hover .tm-success-rate { color: rgba(144,200,255,0.9); }
+
+/* Cost table */
+.tm-cost-row { transition: background 0.35s; }
+.tm-cost-row:hover { background: rgba(144,200,255,0.02); }
+
+.tm-cost-tier {
+  color: rgba(144,200,255,0.6); font-size: 10px;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-cost-row:hover .tm-cost-tier { color: rgba(144,200,255,0.9); font-size: 13px; }
+
+.tm-cost-amount {
+  color: rgba(255,255,255,0.4); font-size: 10px;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-cost-row:hover .tm-cost-amount { color: rgba(255,255,255,0.7); font-size: 13px; }
+
+.tm-cost-attacks {
+  color: rgba(255,255,255,0.3); font-size: 10px;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-cost-row:hover .tm-cost-attacks { color: rgba(255,255,255,0.55); font-size: 13px; }
+
+.tm-cost-result {
+  color: rgba(144,200,255,0.5); font-size: 10px;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-cost-row:hover .tm-cost-result { color: rgba(144,200,255,0.85); font-size: 13px; }
+
+/* Defense layers */
+.tm-defense-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 1rem;
+  transition: border-color 0.35s;
+}
+.tm-defense-card:hover { border-color: rgba(144,200,255,0.35); }
+
+.tm-defense-layer {
+  color: rgba(144,200,255,0.6); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-defense-card:hover .tm-defense-layer { color: rgba(144,200,255,0.9); font-size: 13px; }
+
+.tm-defense-boundary {
+  color: rgba(255,255,255,0.15); font-size: 8px; letter-spacing: 0.1em;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-defense-card:hover .tm-defense-boundary { color: rgba(255,255,255,0.35); font-size: 11px; }
+
+.tm-defense-mech {
+  color: rgba(255,255,255,0.3); font-size: 10px; line-height: 1.5;
+  transition: color 0.35s, font-size 0.35s;
+}
+.tm-defense-card:hover .tm-defense-mech { color: rgba(255,255,255,0.55); font-size: 13px; }
+
+/* Theorem */
+.tm-theorem {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 1.5rem; text-align: center;
+  transition: border-color 0.35s;
+}
+.tm-theorem:hover { border-color: rgba(144,200,255,0.35); }
+
+.tm-theorem-title {
+  color: rgba(144,200,255,0.5); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+.tm-theorem:hover .tm-theorem-title { color: rgba(144,200,255,0.9); }
+
+.tm-theorem-eq {
+  color: rgba(255,255,255,0.4); font-size: 11px; line-height: 1.5; margin-bottom: 0.5rem;
+  transition: color 0.35s;
+}
+.tm-theorem:hover .tm-theorem-eq { color: rgba(255,255,255,0.7); }
+
+.tm-theorem-desc {
+  color: rgba(255,255,255,0.2); font-size: 10px; line-height: 1.5;
+  transition: color 0.35s;
+}
+.tm-theorem:hover .tm-theorem-desc { color: rgba(255,255,255,0.4); }
