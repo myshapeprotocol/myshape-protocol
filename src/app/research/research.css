@@ -73,7 +73,10 @@
 .note-title {
   font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em;
   color: #fff; line-height: 1.1; margin-bottom: 1rem; text-transform: uppercase;
+  transition: color 0.5s;
+  cursor: default;
 }
+.note-title:hover { color: rgba(144,200,255,0.85); }
 @media (min-width: 768px) { .note-title { font-size: 3.5rem; } }
 
 /* Subtitle */
@@ -90,13 +93,15 @@
   color: rgba(144,200,255,0.5); font-size: 10px; letter-spacing: 0.6em;
   text-transform: uppercase; margin-bottom: 2.5rem; font-weight: 700;
   display: flex; align-items: center; gap: 1rem;
+  transition: color 0.4s;
 }
 .note-section h2::after {
   content: ""; flex: 1; height: 1px;
   background: rgba(255,255,255,0.08);
   transition: background 0.5s;
 }
-.note-section h2:hover::after { background: rgba(144,200,255,0.2); }
+.note-section h2:hover { color: rgba(144,200,255,0.9); }
+.note-section h2:hover::after { background: rgba(144,200,255,0.25); }
 
 /* Body — manifesto: text-[18px] leading-[1.85] font-light text-white/50 */
 .note-section p {
