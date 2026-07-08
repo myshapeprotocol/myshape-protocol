@@ -1,0 +1,21 @@
+/* Motion Geometry — visual pipeline demo */
+
+.mg-panel {
+  border: 1px solid rgba(144,200,255,0.1); padding: 1.5rem;
+  transition: border-color 0.35s, background 0.35s, box-shadow 0.35s;
+}
+.mg-panel:hover { border-color: rgba(144,200,255,0.3); background: rgba(144,200,255,0.015); box-shadow: 0 0 20px rgba(144,200,255,0.04); }
+.mg-panel-label { color: rgba(144,200,255,0.3); font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 1rem; text-align: center; }
+.mg-gauge-label { color: rgba(255,255,255,0.2); font-size: 8px; letter-spacing: 0.1em; width: 3rem; flex-shrink: 0; }
+.mg-gauge-value { color: rgba(255,255,255,0.4); font-family: monospace; font-size: 9px; width: 2.5rem; text-align: right; }
+.mg-vec-line { color: rgba(144,200,255,0.25); transition: color 0.3s, background 0.3s; cursor: default; padding: 0.125rem 0.5rem; }
+.mg-vec-line:hover { color: rgba(144,200,255,0.5); background: rgba(144,200,255,0.02); }
+.mg-cta {
+  display: inline-block; padding: 0.625rem 2.5rem;
+  border: 1px solid rgba(144,200,255,0.3); color: rgba(144,200,255,0.7);
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; font-family: monospace; text-decoration: none;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  background: rgba(144,200,255,0.03);
+  transition: background 0.35s, color 0.35s, border-color 0.35s;
+}
+.mg-cta:hover { background: rgba(144,200,255,0.04); color: #fff; }

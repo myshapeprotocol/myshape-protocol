@@ -22,5 +22,18 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <About />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "Organization",
+        "@id": "https://www.myshape.com/about-myshape/#organization",
+        url: "https://www.myshape.com/about-myshape",
+        name: "MyShape Protocol",
+        description: "MyShape Protocol builds AI-native identity on motion-signature verification and zero-knowledge presence. Sovereign identity for the decentralized human.",
+        foundingDate: "2025",
+        sameAs: ["https://x.com/myshapeprotocol","https://github.com/myshapeprotocol","https://discord.gg/zr8Tczard","https://linkedin.com/company/111557251/"],
+      }) }} />
+      <About />
+    </>
+  );
 }

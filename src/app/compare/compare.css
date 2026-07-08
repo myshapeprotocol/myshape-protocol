@@ -1,0 +1,23 @@
+/* Compare page */
+
+.cmp-table { width: 100%; font-size: 10px; letter-spacing: 0.05em; border-collapse: collapse; }
+.cmp-th { text-align: left; padding: 0.75rem; color: rgba(144,200,255,0.5); text-transform: uppercase; letter-spacing: 0.2em; font-size: 9px; }
+.cmp-th-myshape { color: #90c8ff; }
+.cmp-th-other { color: rgba(255,255,255,0.3); }
+.cmp-row { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.3s; }
+.cmp-row:hover { background: rgba(144,200,255,0.03); }
+.cmp-row:nth-child(even) { background: rgba(255,255,255,0.01); }
+.cmp-row:nth-child(even):hover { background: rgba(144,200,255,0.03); }
+.cmp-dim { color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; font-size: 9px; }
+.cmp-myshape { color: rgba(144,200,255,0.7); }
+.cmp-other { color: rgba(255,255,255,0.3); }
+.cmp-section-title { color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; transition: color 0.35s; }
+.cmp-section-title:hover { color: rgba(144,200,255,0.8); }
+.cmp-section-accent { width: 1.5rem; height: 1px; background: rgba(144,200,255,0.3); }
+.cmp-cta { padding: 2rem; border: 1px solid rgba(144,200,255,0.12); background: rgba(144,200,255,0.015); text-align: center; transition: border-color 0.35s, box-shadow 0.35s; }
+.cmp-cta:hover { border-color: rgba(144,200,255,0.25); box-shadow: 0 0 30px rgba(144,200,255,0.04); }
+.cmp-cta-btn { display: inline-block; padding: 0.5rem 1.5rem; border: 1px solid rgba(144,200,255,0.3); color: rgba(144,200,255,0.6); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: all 0.35s; }
+.cmp-cta-btn:hover { background: rgba(144,200,255,0.1); color: #90c8ff; border-color: rgba(144,200,255,0.5); }
+.cmp-cta-btn-dim { border-color: rgba(144,200,255,0.15); color: rgba(144,200,255,0.4); }
+.cmp-cta-btn-dim:hover { border-color: rgba(144,200,255,0.3); color: rgba(144,200,255,0.6); }
+.cmp-narrative-text { color: rgba(255,255,255,0.45); font-size: 12px; line-height: 1.6; letter-spacing: 0.05em; margin-bottom: 1rem; }

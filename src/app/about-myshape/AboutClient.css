@@ -48,3 +48,29 @@
 .about-lab-panel:hover {
   border-color: rgba(144,200,255,0.25);
 }
+
+/* Enhanced hover — matching site standard */
+.decrypt-card {
+  transition: border-color 0.35s cubic-bezier(0.4,0,0.2,1),
+              transform 0.35s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.decrypt-card.visible:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px -4px rgba(144,200,255,0.1);
+}
+.decrypt-card:hover .decrypt-content h4 { color: rgba(255,255,255,0.9); }
+.decrypt-card:hover .decrypt-content p { color: rgba(255,255,255,0.5); }
+
+.about-lab-panel {
+  transition: border-color 0.35s, background 0.35s, box-shadow 0.35s;
+}
+.about-lab-panel:hover {
+  box-shadow: 0 0 40px rgba(144,200,255,0.04);
+}
+.about-spectrum-bar {
+  transition: height 0.7s, box-shadow 0.7s, transform 0.7s;
+}
+.group:hover .about-spectrum-bar {
+  transform: scaleY(1.3);
+}

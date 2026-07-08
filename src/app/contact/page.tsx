@@ -22,5 +22,17 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  return <ContactClient />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "ContactPage",
+        "@id": "https://www.myshape.com/contact/#webpage",
+        url: "https://www.myshape.com/contact",
+        name: "MyShape Contact — Connect Nodes",
+        description: "Establish a secure uplink with the MyShape Protocol team for partnerships and integration.",
+        isPartOf: { "@type": "WebSite", "@id": "https://www.myshape.com/#website", name: "MyShape Protocol", url: "https://www.myshape.com" },
+      }) }} />
+      <ContactClient />
+    </>
+  );
 }

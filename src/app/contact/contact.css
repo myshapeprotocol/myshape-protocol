@@ -1,0 +1,61 @@
+/* Contact page */
+
+.ct-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 3rem;
+  transition: border-color 0.35s;
+}
+.ct-card:hover { border-color: rgba(144,200,255,0.35); }
+
+.ct-node-card {
+  border: 1px solid rgba(144,200,255,0.1); background: transparent; padding: 2.5rem;
+  transition: border-color 0.35s, background 0.35s, box-shadow 0.35s;
+  position: relative; overflow: hidden; display: block;
+}
+.ct-node-card:hover { border-color: rgba(144,200,255,0.35); background: rgba(144,200,255,0.015); }
+
+.ct-node-dot {
+  color: #90c8ff; font-size: 9px; font-family: monospace; font-weight: 700;
+  letter-spacing: 0.1em; margin-bottom: 2rem; text-transform: uppercase;
+  animation: ctPulse 2s ease-in-out infinite;
+}
+@keyframes ctPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.ct-node-name {
+  color: #fff; font-size: 13px; letter-spacing: 0.3em; font-weight: 700; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  transition: color 0.35s;
+}
+.ct-node-card:hover .ct-node-name { color: #90c8ff; }
+
+.ct-node-desc {
+  color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 0.2em; line-height: 1.5; text-transform: uppercase;
+  margin-bottom: 3rem; min-height: 4rem;
+}
+
+.ct-node-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem;
+}
+
+.ct-node-status {
+  font-size: 8px; color: #90c8ff; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
+}
+
+.ct-node-arrow {
+  color: rgba(255,255,255,0.2); transition: all 0.35s; transform: translateX(0);
+}
+.ct-node-card:hover .ct-node-arrow { color: #90c8ff; transform: translateX(3px); }
+
+.ct-node-bg-num {
+  position: absolute; bottom: -1rem; right: -0.5rem;
+  font-size: 60px; font-weight: 700; color: rgba(255,255,255,0.02);
+  pointer-events: none; user-select: none;
+  transition: color 0.35s;
+}
+.ct-node-card:hover .ct-node-bg-num { color: rgba(144,200,255,0.05); }
+
+.ct-email {
+  color: #fff; font-size: 1.125rem; letter-spacing: 0.2em; font-weight: 300;
+  transition: color 0.35s;
+}
+.ct-email:hover { color: #90c8ff; }

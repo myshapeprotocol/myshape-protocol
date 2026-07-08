@@ -22,5 +22,17 @@ export const metadata: Metadata = {
 };
 
 export default function EvidencePage() {
-  return <EvidenceClient />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "WebPage",
+        "@id": "https://www.myshape.com/evidence/#webpage",
+        url: "https://www.myshape.com/evidence",
+        name: "MyShape Evidence — Verifiable Protocol Proofs",
+        description: "Empirical evidence for the MyShape Protocol: PES benchmarks, attack model verification, identity vector examples, and live verification results.",
+        isPartOf: { "@type": "WebSite", "@id": "https://www.myshape.com/#website", name: "MyShape Protocol", url: "https://www.myshape.com" },
+      }) }} />
+      <EvidenceClient />
+    </>
+  );
 }

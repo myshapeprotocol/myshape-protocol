@@ -22,5 +22,17 @@ export const metadata: Metadata = {
 };
 
 export default function MotionGeometryPage() {
-  return <MotionGeometryClient />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "WebPage",
+        "@id": "https://www.myshape.com/motion-geometry/#webpage",
+        url: "https://www.myshape.com/motion-geometry",
+        name: "MyShape Motion Geometry — Visual Pipeline Demo",
+        description: "Visual demonstration of the Motion Geometry pipeline: camera capture → Skeleton Topology → 4D Entropy Scoring → Motion Signature vector.",
+        isPartOf: { "@type": "WebSite", "@id": "https://www.myshape.com/#website", name: "MyShape Protocol", url: "https://www.myshape.com" },
+      }) }} />
+      <MotionGeometryClient />
+    </>
+  );
 }
