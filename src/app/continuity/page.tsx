@@ -44,6 +44,33 @@ export default function ContinuityPage() {
           { name: "Continuity Network" },
         ]}
       />
+      {/* JSON-LD: CollectionPage for the continuity network */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": "https://www.myshape.com/continuity/#webpage",
+            url: "https://www.myshape.com/continuity",
+            name: "MyShape — Global Continuity Network",
+            description:
+              "Live network of verified trajectories across the MyShape Protocol. The State Chain of Subject Evolution — real-time presence receipts and evolutionary entropy.",
+            isPartOf: {
+              "@type": "WebSite",
+              "@id": "https://www.myshape.com/#website",
+              name: "MyShape Protocol",
+              url: "https://www.myshape.com",
+            },
+            about: {
+              "@type": "Thing",
+              name: "Continuity Network",
+              description:
+                "A decentralized network of verified digital subject trajectories, each node representing a sovereign entity whose continuity is cryptographically proven across time.",
+            },
+          }),
+        }}
+      />
       <ContinuityClient />
     </>
   );
