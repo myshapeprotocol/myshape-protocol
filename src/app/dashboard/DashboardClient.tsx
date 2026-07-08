@@ -10,18 +10,8 @@ import ActionCall from "@/components/dashboard/ActionCall";
 import DashboardErrorBoundary from "@/components/dashboard/DashboardErrorBoundary";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import type { ProtocolProgress } from "@/types/protocol-progress";
+import type { PrivilegesResponse } from "@/types/api";
 import "@/components/dashboard/dashboard.css";
-
-interface PrivilegesResponse {
-  email: string;
-  status: string;
-  is_genesis: boolean;
-  is_active: boolean;
-  scan_count: number;
-  tier: string;
-  protocol_progress: ProtocolProgress;
-  registered_at: string;
-}
 
 export default function DashboardClient() {
   const [progress, setProgress] = useState<ProtocolProgress | null>(null);

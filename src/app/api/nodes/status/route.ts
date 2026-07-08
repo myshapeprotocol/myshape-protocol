@@ -1,5 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import type { NodesStatusResponse } from "@/types/api";
+import { CURRENT_API_VERSION } from "@/types/api";
 
 /**
  * GET /api/nodes/status — Public protocol health dashboard
@@ -11,7 +13,7 @@ export async function GET() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: "SERVER_CONFIGURATION_INCOMPLETE" }, { status: 500 });
+      return NextResponse.json({ error: "SERVER_CONFIGURATION_INCOMPLETE" } satisfies { error: string }, { status: 500 });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -26,7 +28,8 @@ export async function GET() {
     const { data: scanRows } = await supabase.from("protocol_nodes").select("scan_count");
     const totalScans = (scanRows ?? []).reduce((sum, r) => sum + (r.scan_count ?? 0), 0);
 
-    return NextResponse.json({
+    const response: NodesStatusResponse = {
+      apiVersion: CURRENT_API_VERSION,
       total_nodes: total ?? 0,
       genesis_nodes: genesisNodes ?? 0,
       genesis_remaining: Math.max(0, 100 - (genesisNodes ?? 0)),
@@ -37,7 +40,8 @@ export async function GET() {
       cohort_sealed: (genesisNodes ?? 0) >= 100,
       status: "OPERATIONAL",
       timestamp: new Date().toISOString(),
-    });
+    };
+    return NextResponse.json(response);
   } catch (err) {
     console.error("[/api/nodes/status]", err);
     return NextResponse.json({ error: "INTERNAL_ERROR", status: "DEGRADED" }, { status: 500 });

@@ -325,6 +325,27 @@
   transition: width 0.8s ease;
 }
 
+/* Dimmed variant — non-target locked cards */
+.card-requirement-dim {
+  gap: 0.15rem;
+}
+
+.req-label-dim {
+  font-family: monospace;
+  font-size: 6px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, white 12%, transparent);
+}
+
+.req-detail-dim {
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 0.03em;
+  color: color-mix(in oklch, white 15%, transparent);
+  line-height: 1.4;
+}
+
 /* Card: checkmark */
 .card-check {
   position: absolute;

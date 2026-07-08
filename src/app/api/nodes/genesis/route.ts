@@ -1,6 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { apiLookupLimiter, getClientIP } from "@/lib/rate-limiter";
+import type { GenesisNodesResponse } from "@/types/api";
+import { CURRENT_API_VERSION } from "@/types/api";
 
 /**
  * GET /api/nodes/genesis — 返回 Genesis Cohort 匿名列表
@@ -45,11 +47,13 @@ export async function GET(req: Request) {
       joined: n.created_at,
     }));
 
-    return NextResponse.json({
+    const response: GenesisNodesResponse = {
+      apiVersion: CURRENT_API_VERSION,
       total: count ?? 0,
       remaining: Math.max(0, 100 - (count ?? 0)),
       nodes,
-    });
+    };
+    return NextResponse.json(response);
   } catch (err) {
     console.error("[/api/nodes/genesis]", err);
     return NextResponse.json({ error: "INTERNAL_ERROR" }, { status: 500 });

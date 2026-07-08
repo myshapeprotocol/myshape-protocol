@@ -1,0 +1,3282 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Snapshot — computeApproximateReputationTier > produces deterministic tier for all boundary cases 1`] = `
+[
+  {
+    "input": {
+      "bestPes": 0.95,
+      "scanCount": 150,
+    },
+    "tier": "genesis",
+  },
+  {
+    "input": {
+      "bestPes": 0.8,
+      "scanCount": 100,
+    },
+    "tier": "genesis",
+  },
+  {
+    "input": {
+      "bestPes": 0.79,
+      "scanCount": 100,
+    },
+    "tier": "established",
+  },
+  {
+    "input": {
+      "bestPes": 0.8,
+      "scanCount": 99,
+    },
+    "tier": "established",
+  },
+  {
+    "input": {
+      "bestPes": 0.65,
+      "scanCount": 50,
+    },
+    "tier": "established",
+  },
+  {
+    "input": {
+      "bestPes": 0.6,
+      "scanCount": 30,
+    },
+    "tier": "established",
+  },
+  {
+    "input": {
+      "bestPes": 0.59,
+      "scanCount": 30,
+    },
+    "tier": "regular",
+  },
+  {
+    "input": {
+      "bestPes": 0.45,
+      "scanCount": 20,
+    },
+    "tier": "regular",
+  },
+  {
+    "input": {
+      "bestPes": 0.4,
+      "scanCount": 10,
+    },
+    "tier": "regular",
+  },
+  {
+    "input": {
+      "bestPes": 0.39,
+      "scanCount": 15,
+    },
+    "tier": "new",
+  },
+  {
+    "input": {
+      "bestPes": 0.5,
+      "scanCount": 9,
+    },
+    "tier": "new",
+  },
+  {
+    "input": {
+      "bestPes": 0.1,
+      "scanCount": 3,
+    },
+    "tier": "new",
+  },
+  {
+    "input": {
+      "bestPes": 0,
+      "scanCount": 1,
+    },
+    "tier": "new",
+  },
+  {
+    "input": {
+      "bestPes": 0.9,
+      "scanCount": 0,
+    },
+    "tier": "untrusted",
+  },
+  {
+    "input": {
+      "bestPes": 0,
+      "scanCount": 0,
+    },
+    "tier": "untrusted",
+  },
+]
+`;
+
+exports[`Snapshot — computeEligibility > produces deterministic eligibility across boundary conditions 1`] = `
+[
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 0,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 1,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 10,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 30,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 100,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 0,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 1,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 10,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 30,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 100,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 0,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 1,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 10,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 30,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 100,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 0,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 1,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 10,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 30,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 100,
+      "rep": "untrusted",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 0,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 1,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 10,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 30,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 100,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 0,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 1,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 10,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 30,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 100,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 0,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 1,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 10,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 30,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 100,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 0,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 1,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 10,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 30,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 100,
+      "rep": "new",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 0,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 1,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 10,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 30,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 100,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 0,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 1,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 10,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 30,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 100,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 0,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 1,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 10,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 30,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 100,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 0,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 1,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 10,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 30,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 100,
+      "rep": "regular",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 0,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 1,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 10,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 30,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 100,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 0,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 1,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 10,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 30,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 100,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 0,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 1,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 10,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 30,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 100,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 0,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 1,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 10,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 30,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 100,
+      "rep": "established",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 0,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 1,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 10,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 30,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 1,
+      "proofs": 100,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 0,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 1,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 10,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 30,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 3,
+      "proofs": 100,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 0,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 1,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 10,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 30,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 5,
+      "proofs": 100,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": false,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 0,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": false,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 1,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": false,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 10,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": false,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 30,
+      "rep": "genesis",
+    },
+  },
+  {
+    "eligible": {
+      "genesisKey": true,
+      "governance": true,
+      "protocolCouncil": true,
+      "zkOps": true,
+    },
+    "input": {
+      "level": 7,
+      "proofs": 100,
+      "rep": "genesis",
+    },
+  },
+]
+`;
+
+exports[`Snapshot — computeProtocolProgress (canonical inputs) > produces deterministic full DTO for reference inputs 1`] = `
+[
+  {
+    "name": "new_genesis_seed",
+    "output": {
+      "economy": {
+        "presenceValue": 0.35,
+        "tokenTier": "basic",
+      },
+      "identity": {
+        "canGovern": false,
+        "canParticipate": false,
+        "rights": [
+          "existence",
+          "mobility",
+        ],
+        "stage": "genesis",
+        "votingPower": 0.1,
+      },
+      "isEligibleFor": {
+        "genesisKey": true,
+        "governance": false,
+        "protocolCouncil": false,
+        "zkOps": false,
+      },
+      "narrative": {
+        "nextUnlock": {
+          "label": "🔐 ZK Presence Proof",
+          "progress": 0.31111111111111106,
+          "requirement": "Reputation: new → regular · Particle Level: 1/3 · 1/10 proofs",
+        },
+        "summary": "Building your presence — 50 more entropy to SPROUT",
+      },
+      "particle": {
+        "entropyScore": 50,
+        "glow": 0.08,
+        "label": "SEED",
+        "level": 1,
+        "levelProgress": 0.5,
+        "nextLabel": "SPROUT",
+        "particleCount": 0,
+        "remainingToNext": 50,
+      },
+      "reputation": {
+        "avgPes": 0.35,
+        "requiredForNext": {
+          "minProofs": 10,
+          "minScore": 0.4,
+          "tier": "regular",
+        },
+        "score": 0.1,
+        "tier": "new",
+        "totalProofs": 1,
+      },
+      "stage": "GENESIS",
+      "streak": {
+        "days": 1,
+        "daysToNextMilestone": 6,
+        "multiplier": 1,
+        "nextMilestone": 7,
+      },
+    },
+  },
+  {
+    "name": "formation_pulse",
+    "output": {
+      "economy": {
+        "presenceValue": 0.55,
+        "tokenTier": "presence",
+      },
+      "identity": {
+        "canGovern": false,
+        "canParticipate": true,
+        "rights": [
+          "existence",
+          "mobility",
+          "participation",
+        ],
+        "stage": "accumulation",
+        "votingPower": 0.5,
+      },
+      "isEligibleFor": {
+        "genesisKey": true,
+        "governance": false,
+        "protocolCouncil": false,
+        "zkOps": true,
+      },
+      "narrative": {
+        "nextUnlock": {
+          "label": "⚖️ Governance Voting",
+          "progress": 0.5888888888888889,
+          "requirement": "Reputation: regular → established · Particle Level: 3/5 · 15/30 proofs",
+        },
+        "summary": "Pattern crystallizing — 15 proofs submitted, 15 to established",
+      },
+      "particle": {
+        "entropyScore": 1200,
+        "glow": 0.22,
+        "label": "PULSE",
+        "level": 3,
+        "levelProgress": 0.3333333333333333,
+        "nextLabel": "CORE_FORMING",
+        "particleCount": 2,
+        "remainingToNext": 800,
+      },
+      "reputation": {
+        "avgPes": 0.55,
+        "requiredForNext": {
+          "minProofs": 30,
+          "minScore": 0.6,
+          "tier": "established",
+        },
+        "score": 0.5,
+        "tier": "regular",
+        "totalProofs": 15,
+      },
+      "stage": "FORMATION",
+      "streak": {
+        "days": 7,
+        "daysToNextMilestone": 23,
+        "multiplier": 1.5,
+        "nextMilestone": 30,
+      },
+    },
+  },
+  {
+    "name": "formation_established",
+    "output": {
+      "economy": {
+        "presenceValue": 0.68,
+        "tokenTier": "validator",
+      },
+      "identity": {
+        "canGovern": false,
+        "canParticipate": true,
+        "rights": [
+          "existence",
+          "mobility",
+          "participation",
+          "economic",
+        ],
+        "stage": "formation",
+        "votingPower": 0.7,
+      },
+      "isEligibleFor": {
+        "genesisKey": true,
+        "governance": true,
+        "protocolCouncil": false,
+        "zkOps": true,
+      },
+      "narrative": {
+        "nextUnlock": {
+          "label": "🏛️ Protocol Council",
+          "progress": 0.6214285714285714,
+          "requirement": "Reputation: established → genesis · Particle Level: 5/7 · 40/100 proofs",
+        },
+        "summary": "Sovereign presence active — governance weight 70%",
+      },
+      "particle": {
+        "entropyScore": 5000,
+        "glow": 0.4,
+        "label": "FIELD_ACTIVE",
+        "level": 5,
+        "levelProgress": 0,
+        "nextLabel": "SOVEREIGN",
+        "particleCount": 4,
+        "remainingToNext": 7000,
+      },
+      "reputation": {
+        "avgPes": 0.68,
+        "requiredForNext": {
+          "minProofs": 100,
+          "minScore": 0.8,
+          "tier": "genesis",
+        },
+        "score": 0.7,
+        "tier": "established",
+        "totalProofs": 40,
+      },
+      "stage": "SOVEREIGN",
+      "streak": {
+        "days": 14,
+        "daysToNextMilestone": 16,
+        "multiplier": 2,
+        "nextMilestone": 30,
+      },
+    },
+  },
+  {
+    "name": "sovereign_genesis",
+    "output": {
+      "economy": {
+        "presenceValue": 0.85,
+        "tokenTier": "genesis",
+      },
+      "identity": {
+        "canGovern": true,
+        "canParticipate": true,
+        "rights": [
+          "existence",
+          "mobility",
+          "participation",
+          "economic",
+          "governance",
+        ],
+        "stage": "maturity",
+        "votingPower": 0.95,
+      },
+      "isEligibleFor": {
+        "genesisKey": true,
+        "governance": true,
+        "protocolCouncil": true,
+        "zkOps": true,
+      },
+      "narrative": {
+        "nextUnlock": null,
+        "summary": "Sovereign presence active — governance weight 95%",
+      },
+      "particle": {
+        "entropyScore": 15000,
+        "glow": 0.7,
+        "label": "ARCHITECT",
+        "level": 7,
+        "levelProgress": 0.16666666666666666,
+        "nextLabel": "PROTOCOL_ELDER",
+        "particleCount": 6,
+        "remainingToNext": 15000,
+      },
+      "reputation": {
+        "avgPes": 0.82,
+        "requiredForNext": null,
+        "score": 0.85,
+        "tier": "genesis",
+        "totalProofs": 120,
+      },
+      "stage": "SOVEREIGN",
+      "streak": {
+        "days": 30,
+        "daysToNextMilestone": null,
+        "multiplier": 3,
+        "nextMilestone": null,
+      },
+    },
+  },
+  {
+    "name": "zero_state_untrusted",
+    "output": {
+      "economy": {
+        "presenceValue": 0,
+        "tokenTier": "basic",
+      },
+      "identity": {
+        "canGovern": false,
+        "canParticipate": false,
+        "rights": [
+          "existence",
+          "mobility",
+        ],
+        "stage": "genesis",
+        "votingPower": 0,
+      },
+      "isEligibleFor": {
+        "genesisKey": false,
+        "governance": false,
+        "protocolCouncil": false,
+        "zkOps": false,
+      },
+      "narrative": {
+        "nextUnlock": {
+          "label": "🔑 Genesis Key Minting",
+          "progress": 0.3333333333333333,
+          "requirement": "Reputation: untrusted → new · 0/1 proofs",
+        },
+        "summary": "Complete your first motion scan to begin the Genesis ritual",
+      },
+      "particle": {
+        "entropyScore": 0,
+        "glow": 0.08,
+        "label": "SEED",
+        "level": 1,
+        "levelProgress": 0,
+        "nextLabel": "SPROUT",
+        "particleCount": 0,
+        "remainingToNext": 100,
+      },
+      "reputation": {
+        "avgPes": 0,
+        "requiredForNext": {
+          "minProofs": 1,
+          "minScore": 0,
+          "tier": "new",
+        },
+        "score": 0,
+        "tier": "untrusted",
+        "totalProofs": 0,
+      },
+      "stage": "GENESIS",
+      "streak": {
+        "days": 0,
+        "daysToNextMilestone": 7,
+        "multiplier": 1,
+        "nextMilestone": 7,
+      },
+    },
+  },
+]
+`;
+
+exports[`Snapshot — computeStage > produces deterministic stage at all tier × level crossings 1`] = `
+[
+  {
+    "input": {
+      "level": 1,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 2,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 3,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 4,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 5,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 7,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 8,
+      "rep": "untrusted",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 1,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 2,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 3,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 4,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 5,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 7,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 8,
+      "rep": "new",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 1,
+      "rep": "regular",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 2,
+      "rep": "regular",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 3,
+      "rep": "regular",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 4,
+      "rep": "regular",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 5,
+      "rep": "regular",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 7,
+      "rep": "regular",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 8,
+      "rep": "regular",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 1,
+      "rep": "established",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 2,
+      "rep": "established",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 3,
+      "rep": "established",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 4,
+      "rep": "established",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 5,
+      "rep": "established",
+    },
+    "stage": "SOVEREIGN",
+  },
+  {
+    "input": {
+      "level": 7,
+      "rep": "established",
+    },
+    "stage": "SOVEREIGN",
+  },
+  {
+    "input": {
+      "level": 8,
+      "rep": "established",
+    },
+    "stage": "SOVEREIGN",
+  },
+  {
+    "input": {
+      "level": 1,
+      "rep": "genesis",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 2,
+      "rep": "genesis",
+    },
+    "stage": "GENESIS",
+  },
+  {
+    "input": {
+      "level": 3,
+      "rep": "genesis",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 4,
+      "rep": "genesis",
+    },
+    "stage": "FORMATION",
+  },
+  {
+    "input": {
+      "level": 5,
+      "rep": "genesis",
+    },
+    "stage": "SOVEREIGN",
+  },
+  {
+    "input": {
+      "level": 7,
+      "rep": "genesis",
+    },
+    "stage": "SOVEREIGN",
+  },
+  {
+    "input": {
+      "level": 8,
+      "rep": "genesis",
+    },
+    "stage": "SOVEREIGN",
+  },
+]
+`;
+
+exports[`Snapshot — deriveIdentityStage > produces deterministic stage for all status × level combos 1`] = `
+[
+  {
+    "input": {
+      "level": 1,
+      "status": "GENESIS_NODE",
+    },
+    "stage": "formation",
+  },
+  {
+    "input": {
+      "level": 2,
+      "status": "GENESIS_NODE",
+    },
+    "stage": "formation",
+  },
+  {
+    "input": {
+      "level": 3,
+      "status": "GENESIS_NODE",
+    },
+    "stage": "formation",
+  },
+  {
+    "input": {
+      "level": 6,
+      "status": "GENESIS_NODE",
+    },
+    "stage": "formation",
+  },
+  {
+    "input": {
+      "level": 7,
+      "status": "GENESIS_NODE",
+    },
+    "stage": "maturity",
+  },
+  {
+    "input": {
+      "level": 8,
+      "status": "GENESIS_NODE",
+    },
+    "stage": "maturity",
+  },
+  {
+    "input": {
+      "level": 1,
+      "status": "ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 2,
+      "status": "ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 3,
+      "status": "ACTIVE",
+    },
+    "stage": "accumulation",
+  },
+  {
+    "input": {
+      "level": 6,
+      "status": "ACTIVE",
+    },
+    "stage": "accumulation",
+  },
+  {
+    "input": {
+      "level": 7,
+      "status": "ACTIVE",
+    },
+    "stage": "accumulation",
+  },
+  {
+    "input": {
+      "level": 8,
+      "status": "ACTIVE",
+    },
+    "stage": "accumulation",
+  },
+  {
+    "input": {
+      "level": 1,
+      "status": "PENDING_VERIFICATION",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 2,
+      "status": "PENDING_VERIFICATION",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 3,
+      "status": "PENDING_VERIFICATION",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 6,
+      "status": "PENDING_VERIFICATION",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 7,
+      "status": "PENDING_VERIFICATION",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 8,
+      "status": "PENDING_VERIFICATION",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 1,
+      "status": "AGENT_ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 2,
+      "status": "AGENT_ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 3,
+      "status": "AGENT_ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 6,
+      "status": "AGENT_ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 7,
+      "status": "AGENT_ACTIVE",
+    },
+    "stage": "genesis",
+  },
+  {
+    "input": {
+      "level": 8,
+      "status": "AGENT_ACTIVE",
+    },
+    "stage": "genesis",
+  },
+]
+`;
+
+exports[`Snapshot — deriveRights > produces deterministic rights for all status × rep combos 1`] = `
+[
+  {
+    "input": {
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+    ],
+  },
+  {
+    "input": {
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+    ],
+  },
+  {
+    "input": {
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+    ],
+  },
+  {
+    "input": {
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+    ],
+  },
+  {
+    "input": {
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+      "governance",
+    ],
+  },
+  {
+    "input": {
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+    ],
+  },
+  {
+    "input": {
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+      "participation",
+      "economic",
+    ],
+  },
+  {
+    "input": {
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+  {
+    "input": {
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "rights": [
+      "existence",
+      "mobility",
+    ],
+  },
+]
+`;
+
+exports[`Snapshot — deriveTokenTier > produces deterministic tier across all status × rep × pes combinations 1`] = `
+[
+  {
+    "input": {
+      "pes": 0,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "untrusted",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "new",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "regular",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "established",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "genesis",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "genesis",
+      "status": "GENESIS_NODE",
+    },
+    "tier": "genesis",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "untrusted",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "new",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "regular",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "established",
+      "status": "ACTIVE",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "genesis",
+      "status": "ACTIVE",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "untrusted",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "new",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "regular",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "established",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "validator",
+  },
+  {
+    "input": {
+      "pes": 0,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.29,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "basic",
+  },
+  {
+    "input": {
+      "pes": 0.3,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.49,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.5,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.74,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.75,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+  {
+    "input": {
+      "pes": 0.95,
+      "rep": "genesis",
+      "status": "PENDING_VERIFICATION",
+    },
+    "tier": "presence",
+  },
+]
+`;

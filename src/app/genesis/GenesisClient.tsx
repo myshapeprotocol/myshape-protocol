@@ -865,7 +865,7 @@ export default function GenesisClient() {
                 </motion.div>
               )}
 
-              {/* ── 主 CTA ── */}
+              {/* ── 主 CTA：Identity Layer ── */}
               <motion.a
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -881,14 +881,20 @@ export default function GenesisClient() {
                 </span>
               </motion.a>
 
+              {/* ── 二级 CTA：Sovereign Dashboard（视觉对等、叙事互补）── */}
               <motion.a
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4, duration: 0.5 }}
                 href="/dashboard"
-                onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                className="text-[#90c8ff]/30 hover:text-[#90c8ff]/60 text-[9px] tracking-[0.15em] uppercase font-mono transition-colors">
-                View Full Privileges →
+                onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
+                className="relative group px-12 py-3 font-mono text-[10px] tracking-[0.25em] uppercase transition-all duration-500 overflow-hidden"
+                style={{ border: "1px solid rgba(144,200,255,0.15)", color: "rgba(144,200,255,0.5)", background: "rgba(144,200,255,0.015)" }}>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: "rgba(144,200,255,0.04)", boxShadow: "inset 0 0 20px rgba(144,200,255,0.06)" }} />
+                <span className="relative z-10 group-hover:text-[#90c8ff]/80 transition-colors duration-500">
+                  Enter Sovereign Dashboard →
+                </span>
               </motion.a>
             </motion.div>
           )}

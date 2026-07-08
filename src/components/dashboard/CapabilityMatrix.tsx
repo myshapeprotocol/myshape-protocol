@@ -71,18 +71,27 @@ function EligibilityCard({
         {unlocked ? labels.body : labels.lockedBody}
       </p>
 
-      {/* Locked: show requirement tooltip */}
-      {!unlocked && progress.narrative.nextUnlock && isCurrentTarget && (
-        <div className="card-requirement">
-          <span className="req-label">Requires</span>
-          <span className="req-detail">{progress.narrative.nextUnlock.requirement}</span>
-          <div className="req-progress-track">
-            <div
-              className="req-progress-fill"
-              style={{ width: `${progress.narrative.nextUnlock.progress * 100}%` }}
-            />
-          </div>
-        </div>
+      {/* Locked: show requirement info — target gets highlight, non-target gets gray hint */}
+      {!unlocked && (
+        <>
+          {isCurrentTarget && progress.narrative.nextUnlock ? (
+            <div className="card-requirement">
+              <span className="req-label">Next Unlock →</span>
+              <span className="req-detail">{progress.narrative.nextUnlock.requirement}</span>
+              <div className="req-progress-track">
+                <div
+                  className="req-progress-fill"
+                  style={{ width: `${progress.narrative.nextUnlock.progress * 100}%` }}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="card-requirement card-requirement-dim">
+              <span className="req-label-dim">Requires</span>
+              <span className="req-detail-dim">{labels.lockedBody}</span>
+            </div>
+          )}
+        </>
       )}
 
       {/* Unlocked: visual confirmation */}

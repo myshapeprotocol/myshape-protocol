@@ -25,24 +25,24 @@ import {
   STAGE_BOUNDARIES,
   UNLOCK_GATES,
 } from "@/types/protocol-progress";
+import {
+  REPUTATION_TIER_ORDER,
+  ENGINE_REPUTATION_REQUIREMENTS,
+  APPROX_REPUTATION_THRESHOLDS,
+  APPROX_TOKEN_TIER_THRESHOLDS,
+  IDENTITY_STAGE_THRESHOLDS,
+  RIGHT_GRANT_RULES,
+  VOTING_POWER_CAP,
+} from "@/protocol/constants";
 
 // ── Reputation tier ordering (ascending) ──
 
-const REPUTATION_ORDER: ReputationTier[] = [
-  "untrusted",
-  "new",
-  "regular",
-  "established",
-  "genesis",
-];
+const REPUTATION_ORDER: readonly ReputationTier[] = REPUTATION_TIER_ORDER;
 
-const REPUTATION_REQUIREMENTS: Record<ReputationTier, { minScore: number; minProofs: number }> = {
-  untrusted:   { minScore: 0,   minProofs: 0 },
-  new:         { minScore: 0,   minProofs: 1 },
-  regular:     { minScore: 0.4, minProofs: 10 },
-  established: { minScore: 0.6, minProofs: 30 },
-  genesis:     { minScore: 0.8, minProofs: 100 },
-};
+const REPUTATION_REQUIREMENTS = ENGINE_REPUTATION_REQUIREMENTS as Record<
+  ReputationTier,
+  { minScore: number; minProofs: number }
+>;
 
 // ── 1. Stage determination ──
 
@@ -191,18 +191,21 @@ export function computeApproximateReputationTier(
   bestPes: number,
   scanCount: number,
 ): ReputationTier {
-  // Simplified tier logic — bestPes proxies for PRS, scanCount for totalProofs
-  if (bestPes >= 0.80 && scanCount >= 100) return "genesis";
-  if (bestPes >= 0.60 && scanCount >= 30) return "established";
-  if (bestPes >= 0.40 && scanCount >= 10) return "regular";
-  if (scanCount > 0) return "new";
+  // Simplified tier logic — bestPes proxies for PRS, scanCount for totalProofs.
+  // Thresholds from APPROX_REPUTATION_THRESHOLDS (single source of truth).
+  for (const entry of APPROX_REPUTATION_THRESHOLDS) {
+    if (bestPes >= entry.minBestPes && scanCount >= entry.minScanCount) {
+      return entry.tier as ReputationTier;
+    }
+  }
   return "untrusted";
 }
 
 export function deriveIdentityStage(status: string, particleLevel: number): IdentityStage {
-  if (status === "GENESIS_NODE" && particleLevel >= 7) return "maturity";
+  // Thresholds from IDENTITY_STAGE_THRESHOLDS (single source of truth).
+  if (status === "GENESIS_NODE" && particleLevel >= IDENTITY_STAGE_THRESHOLDS.maturityMinParticleLevel) return "maturity";
   if (status === "GENESIS_NODE") return "formation";
-  if (status === "ACTIVE" && particleLevel >= 3) return "accumulation";
+  if (status === "ACTIVE" && particleLevel >= IDENTITY_STAGE_THRESHOLDS.accumulationMinParticleLevel) return "accumulation";
   return "genesis";
 }
 
@@ -219,12 +222,18 @@ export function deriveRights(
   status: string,
   reputationTier: ReputationTier,
 ): CitizenshipRight[] {
-  const rights: CitizenshipRight[] = ["existence", "mobility"];
+  // Right grant rules from RIGHT_GRANT_RULES (single source of truth).
+  const rights: CitizenshipRight[] = [...RIGHT_GRANT_RULES.baseRights] as CitizenshipRight[];
   const genesisRep = reputationTier === "genesis" || reputationTier === "established";
+  // Genesis override: ALL Genesis nodes get participation + economic (by design)
   if (status === "GENESIS_NODE" || (status === "ACTIVE" && genesisRep)) {
-    rights.push("participation", "economic");
+    rights.push(...RIGHT_GRANT_RULES.genesisOverrideRights as CitizenshipRight[]);
   }
-  if (status === "GENESIS_NODE" && reputationTier === "genesis") {
+  if (
+    RIGHT_GRANT_RULES.governanceRequiresGenesisRep &&
+    status === "GENESIS_NODE" &&
+    reputationTier === "genesis"
+  ) {
     rights.push("governance");
   }
   return rights;
@@ -243,9 +252,15 @@ export function deriveTokenTier(
   reputationTier: ReputationTier,
   bestPes: number,
 ): TokenTier {
-  if (status === "GENESIS_NODE" && reputationTier === "genesis" && bestPes >= 0.75) return "genesis";
-  if (reputationTier === "established" && bestPes >= 0.50) return "validator";
-  if (bestPes >= 0.30) return "presence";
+  // Thresholds from APPROX_TOKEN_TIER_THRESHOLDS (single source of truth).
+  for (const entry of APPROX_TOKEN_TIER_THRESHOLDS) {
+    if (entry.requiresGenesisNode && status !== "GENESIS_NODE") continue;
+    if (
+      entry.requiresReputation !== null &&
+      reputationTier !== entry.requiresReputation
+    ) continue;
+    if (bestPes >= entry.minBestPes) return entry.tier as TokenTier;
+  }
   return "basic";
 }
 
@@ -259,8 +274,8 @@ export function computeProtocolProgressFromDb(row: DbNodeRow): ProtocolProgress 
   const rights = deriveRights(row.status, reputationTier);
   const tokenTier = deriveTokenTier(row.status, reputationTier, row.bestPes);
 
-  // Voting power: approximate from bestPes × streak
-  const votingPower = Math.min(1, row.bestPes * row.streakMultiplier);
+  // Voting power: approximate from bestPes × streak, capped at VOTING_POWER_CAP
+  const votingPower = Math.min(VOTING_POWER_CAP, row.bestPes * row.streakMultiplier);
 
   const input: ProtocolProgressInput = {
     entropyScore: row.entropyScore,

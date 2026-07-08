@@ -2,6 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { apiLookupLimiter, getClientIP } from "@/lib/rate-limiter";
 import { computeProtocolProgressFromDb } from "@/lib/protocol-progress";
+import type { PrivilegesResponse } from "@/types/api";
+import { CURRENT_API_VERSION } from "@/types/api";
 
 /**
  * GET /api/node/privileges?email=... — 查询节点的权限标记 + 协议进度
@@ -50,7 +52,7 @@ export async function GET(req: Request) {
 
     let query = supabase
       .from('protocol_nodes')
-      .select('email, status, scan_count, data_contribution, created_at, entropy_score, particle_level, streak_days, streak_multiplier, best_pes, node_handle, wallet_address');
+      .select('email, status, scan_count, data_contribution, created_at, entropy_score, particle_level, streak_days, streak_multiplier, best_pes');
 
     if (wallet) {
       query = query.eq('wallet_address', wallet);
@@ -85,7 +87,8 @@ export async function GET(req: Request) {
       bestPes: node.best_pes ?? 0,
     });
 
-    return NextResponse.json({
+    const response: PrivilegesResponse = {
+      apiVersion: CURRENT_API_VERSION,
       email: node.email,
       status: node.status,
       is_genesis: isGenesis,
@@ -101,7 +104,8 @@ export async function GET(req: Request) {
       best_pes: node.best_pes ?? 0,
       registered_at: node.created_at,
       protocol_progress: protocolProgress,
-    });
+    };
+    return NextResponse.json(response);
   } catch (error: unknown) {
     console.error('NODE_PRIVILEGES_ERROR:', error);
     return NextResponse.json(

@@ -1,17 +1,9 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { playTick } from "@/utils/useAudioTick";
+import type { HandshakeResponse } from "@/types/api";
 
 type Stage = "idle" | "input" | "initializing" | "done" | "error";
-
-interface HandshakeResponse {
-  node_token?: string;
-  initialized_at?: string;
-  stage?: string;
-  message?: string;
-  error?: string;
-  retry_after_s?: number;
-}
 
 const PROTOCOL_STAGES = [
   "Initializing local entropy sandbox...",
