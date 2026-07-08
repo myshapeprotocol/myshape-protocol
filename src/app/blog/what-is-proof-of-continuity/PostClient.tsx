@@ -5,6 +5,7 @@ import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "@/app/blog/blog.css";
 
 const SECTIONS = [
   {
@@ -12,7 +13,7 @@ const SECTIONS = [
     heading: "The Problem Identity Cannot Solve",
     content: `Every digital identity system in production today — from OAuth to DIDs to verifiable credentials — answers a single question: "Who are you?"
 
-They verify a snapshot. A passport. A wallet address. A biometric hash. These are all point-in-time assertions: at moment t₀, we confirm that entity E possesses attribute A.
+They verify a snapshot. A passport. A wallet address. A static-feature hash. These are all point-in-time assertions: at moment t₀, we confirm that entity E possesses attribute A.
 
 This was sufficient for Web2. It is catastrophically insufficient for the Agent Economy.
 
@@ -30,7 +31,7 @@ Identity protocols cannot answer this. They can verify that a credential is vali
 It has three components:
 
 1. Presence Receipts
-Notarized, privacy-preserving assertions that a specific entity was present at a specific moment. Unlike a credential, a Presence Receipt is not based on a secret (what you know) or a biometric (what you are). It is based on physics — the irreducible entropy of human motion captured as a 128-dimensional vector that AI cannot simulate.
+Notarized, privacy-preserving assertions that a specific entity was present at a specific moment. Unlike a credential, a Presence Receipt is not based on a secret (what you know) or a static-feature (what you are). It is based on physics — the irreducible entropy of human motion captured as a 128-dimensional vector that AI cannot simulate.
 
 2. Entropy Transformation Chain
 A verifiable sequence linking each Presence Receipt to its predecessor. The entropy signature of each receipt propagates forward cryptographically. If a gap appears — if an agent acts without a valid Presence Receipt — the chain breaks. The continuity is proven to be violated.
@@ -76,7 +77,7 @@ MyShape is building that architecture. The motion-signature engine, the entropy 
 
 The Genesis Cohort is not just early access. It is the root entropy source for an entire protocol — the cryptographic trust anchor from which all future continuity proofs will derive their statistical significance. One hundred founding nodes. One hundred root entropy sources. Never offered again.
 
-This is what Proof of Continuity looks like. Not a better password. Not a more secure biometric. A fundamentally new primitive for a fundamentally new era of digital existence.`,
+This is what Proof of Continuity looks like. Not a better password. Not a more secure static-feature. A fundamentally new primitive for a fundamentally new era of digital existence.`,
   },
 ];
 
@@ -112,8 +113,8 @@ export default function PostClient() {
           <div className="space-y-20">
             {SECTIONS.map((section) => (
               <section key={section.id} id={section.id}>
-                <h2 className="text-white/60 text-[11px] tracking-[0.25em] uppercase mb-6 flex items-center gap-3">
-                  <span className="w-6 h-[1px] bg-[#90c8ff]/30" />
+                <h2 className="blog-section-heading">
+                  <span className="blog-section-accent" />
                   {section.heading}
                 </h2>
                 <div className="text-white/50 text-[12px] leading-relaxed tracking-[0.06em] space-y-5 whitespace-pre-line">
@@ -127,41 +128,22 @@ export default function PostClient() {
           <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#90c8ff]/15 to-transparent" />
 
           {/* CTA */}
-          <div className="p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
+          <div className="blog-cta space-y-4">
             <p className="text-white/40 text-[10px] tracking-[0.15em] uppercase">
               Proof of Continuity Is Live — Genesis Cohort Curating
             </p>
             <p className="text-white/25 text-[10px] leading-relaxed max-w-md mx-auto">
-              The first 100 human nodes form the root entropy source of the
-              MyShape Protocol. Your presence is the proof. Your continuity is
-              the anchor.
+              The first 100 human nodes form the root entropy source of the MyShape Protocol. Your presence is the proof. Your continuity is the anchor.
             </p>
             <div className="flex justify-center gap-4 pt-2">
-              <Link
-                href="/genesis"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
-              >
-                Begin Genesis →
-              </Link>
-              <Link
-                href="/compare"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
-              >
-                See Comparison →
-              </Link>
+              <Link href="/genesis" className="blog-cta-btn" onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>Begin Genesis →</Link>
+              <Link href="/compare" className="blog-cta-btn blog-cta-btn-dim" onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>See Comparison →</Link>
             </div>
           </div>
 
           {/* Back link */}
           <div className="mt-12 text-center">
-            <Link
-              href="/blog"
-              className="text-white/15 text-[9px] tracking-[0.2em] uppercase hover:text-white/40 transition-colors"
-            >
-              ← Protocol Log
-            </Link>
+            <Link href="/blog" className="blog-back-link">← Protocol Log</Link>
           </div>
         </div>
       </main>

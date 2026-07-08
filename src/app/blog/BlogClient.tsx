@@ -6,6 +6,7 @@ import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import { playTick } from "@/utils/useAudioTick";
 import Link from "next/link";
 import { useState } from "react";
+import "./blog.css";
 
 interface PostEntry {
   slug: string;
@@ -35,14 +36,14 @@ const POSTS: PostEntry[] = [
   { slug: "/blog/genesis-001-why-identity-is-not-enough", series: "GENESIS 001", title: "Why Identity Is Not Enough", subtitle: "The crisis of continuity. Why static identity fails in the age of autonomous agents.", date: "2026.07.02", tags: ["identity","continuity","agents"], category: "Identity" },
   { slug: "/blog/stored-identity-vs-generated-presence", title: "Stored Identity vs. Generated Presence", subtitle: "Every identity system stores a snapshot. Snapshots can be copied. Presence cannot.", date: "2026.06.27", tags: ["identity","presence","AI"], category: "Identity" },
   // ── Security ──
-  { slug: "/blog/the-post-biometric-era-2026", series: "GENESIS 011", title: "The Post-Biometric Era", subtitle: "Why 2026 is the year we stop scanning faces. Biometrics created the largest unchangeable password database.", date: "2026.07.03", tags: ["biometrics","security","privacy"], category: "Security" },
-  { slug: "/blog/motion-vs-biometrics-why-your-face-is-not-a-password", series: "GENESIS 005", title: "Motion vs Biometrics — Why Your Face Is Not a Password", subtitle: "Static biometrics are broken. Motion offers a post-biometric alternative that is generative and non-replayable.", date: "2026.07.03", tags: ["motion","biometrics","authentication"], category: "Security" },
+  { slug: "/blog/the-post-recognition-era-2026", series: "GENESIS 011", title: "The Post-Recognition Era", subtitle: "Why 2026 is the year we stop scanning faces. Static Recognition created the largest unchangeable password database.", date: "2026.07.03", tags: ["recognition","security","privacy"], category: "Security" },
+  { slug: "/blog/motion-vs-recognition-why-your-face-is-not-a-password", series: "GENESIS 005", title: "Motion vs Static Recognition — Why Your Face Is Not a Password", subtitle: "Static recognition are broken. Motion offers a post-recognition alternative that is generative and non-replayable.", date: "2026.07.03", tags: ["motion","recognition","authentication"], category: "Security" },
   { slug: "/blog/proof-of-personhood-vs-proof-of-continuity", series: "GENESIS 008", title: "Proof of Personhood vs Proof of Continuity", subtitle: "Two different problems, two different protocols. Why the Agent Economy needs both.", date: "2026.07.03", tags: ["PoP","PoC","sybil"], category: "Security" },
   { slug: "/blog/kyc-vs-decentralized-identity", series: "GENESIS 017", title: "KYC vs Decentralized Identity", subtitle: "Why document verification fails at scale — and how SSI solves the problem.", date: "2026.07.03", tags: ["KYC","SSI","regulation"], category: "Security" },
   { slug: "/blog/sybil-resistance-explained", series: "GENESIS 018", title: "Sybil Resistance Explained", subtitle: "Why one person one vote is hard online. Every approach ranked from CAPTCHA to Proof of Continuity.", date: "2026.07.03", tags: ["sybil","PoP","voting"], category: "Security" },
   // ── Guides ──
   { slug: "/blog/how-to-verify-human-online-2026", series: "GENESIS 014", title: "How to Verify a Human Online in 2026", subtitle: "The complete guide. Every method ranked by security, privacy, and AI-resistance.", date: "2026.07.03", tags: ["verification","guide","security"], category: "Guides" },
-  { slug: "/blog/digital-identity-future-2027", series: "GENESIS 012", title: "Digital Identity Future 2027", subtitle: "Five trends reshaping the identity layer. SSI mainstream, biometrics collapse, continuity as primitive.", date: "2026.07.03", tags: ["future","trends","predictions"], category: "Guides" },
+  { slug: "/blog/digital-identity-future-2027", series: "GENESIS 012", title: "Digital Identity Future 2027", subtitle: "Five trends reshaping the identity layer. SSI mainstream, recognition collapse, continuity as primitive.", date: "2026.07.03", tags: ["future","trends","predictions"], category: "Guides" },
   { slug: "/blog/ai-agent-identity-how-autonomous-agents-prove-who-they-are", series: "GENESIS 009", title: "AI Agent Identity", subtitle: "How autonomous agents prove who they are. Agent declaration, continuity binding, human-AI coexistence.", date: "2026.07.03", tags: ["agents","AI","identity"], category: "Guides" },
 ];
 
@@ -50,7 +51,7 @@ const CATEGORIES = [
   { key: "featured", label: "Featured", desc: "Start here — the three essential essays that define the MyShape thesis." },
   { key: "Continuity", label: "Continuity", desc: "Proof of continuity, motion-signature, presence verification." },
   { key: "Identity", label: "Identity", desc: "DID, SSI, verifiable credentials, Web3 identity infrastructure." },
-  { key: "Security", label: "Security", desc: "Post-biometric, Sybil resistance, KYC vs decentralized identity." },
+  { key: "Security", label: "Security", desc: "Post-recognition, Sybil resistance, KYC vs decentralized identity." },
   { key: "Standards", label: "Standards", desc: "W3C, ISO, IETF, eIDAS — the standards landscape." },
   { key: "Guides", label: "Guides", desc: "Practical guides for verification, future trends, and agent identity." },
 ];
@@ -78,7 +79,7 @@ export default function BlogClient() {
         <div className="flex flex-wrap gap-2 mb-12">
           {CATEGORIES.map(cat => (
             <button key={cat.key} onClick={() => { setActiveCategory(cat.key); playTick(500, "sine", 0.06, 0.015); }}
-              className={`px-3 py-1.5 border text-[9px] tracking-[0.15em] uppercase transition-all ${activeCategory === cat.key ? "border-[#90c8ff]/40 text-[#90c8ff] bg-[#90c8ff]/[0.04]" : "border-white/[0.06] text-white/25 hover:border-[#90c8ff]/20 hover:text-white/50"}`}>
+              className={activeCategory === cat.key ? "blog-filter-btn blog-filter-btn-active" : "blog-filter-btn"}>
               {cat.label}
             </button>
           ))}
@@ -93,15 +94,15 @@ export default function BlogClient() {
           {filtered.map(post => (
             <Link key={post.slug} href={post.slug}
               onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-              className={`block p-5 border transition-all ${post.featured && activeCategory === "featured" ? "border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] hover:border-[#90c8ff]/35" : "border-white/[0.04] hover:border-[#90c8ff]/20 hover:bg-white/[0.005]"}`}>
+              className={`blog-post-card ${post.featured && activeCategory === "featured" ? "blog-post-card-featured" : ""}`}>
               <div className="flex items-center gap-3 mb-2">
-                {post.series && <span className="text-[#90c8ff]/40 text-[8px] tracking-[0.2em]">{post.series}</span>}
-                <span className="text-white/15 text-[8px] tracking-[0.1em]">{post.date}</span>
-                {post.featured && <span className="text-[#90c8ff]/30 text-[7px] tracking-[0.2em] border border-[#90c8ff]/20 px-1.5 py-0.5">FEATURED</span>}
+                {post.series && <span className="blog-post-series">{post.series}</span>}
+                <span className="blog-post-date">{post.date}</span>
+                {post.featured && <span className="blog-post-featured-badge">FEATURED</span>}
               </div>
-              <h2 className="text-white/75 text-[13px] tracking-[0.04em] mb-1.5 group-hover:text-white transition-colors">{post.title}</h2>
-              <p className="text-white/25 text-[10px] tracking-[0.04em] leading-relaxed">{post.subtitle}</p>
-              <div className="flex gap-2 mt-2">{post.tags.map(t => (<span key={t} className="text-[#90c8ff]/15 text-[7px] tracking-[0.1em]">#{t}</span>))}</div>
+              <h2 className="blog-post-title">{post.title}</h2>
+              <p className="blog-post-subtitle">{post.subtitle}</p>
+              <div className="flex gap-2 mt-2">{post.tags.map(t => (<span key={t} className="blog-post-tag">#{t}</span>))}</div>
             </Link>
           ))}
         </div>

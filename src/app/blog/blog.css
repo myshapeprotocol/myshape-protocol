@@ -1,0 +1,190 @@
+/* ============================================================
+   MyShape Protocol — Blog Page
+   ============================================================ */
+
+/* ── Category filter ── */
+
+.blog-filter-btn {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-filter-btn:hover {
+  border-color: rgba(144, 200, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+}
+.blog-filter-btn-active {
+  border-color: rgba(144, 200, 255, 0.4);
+  color: #90c8ff;
+  background: rgba(144, 200, 255, 0.04);
+}
+
+/* ── Post card ── */
+
+.blog-post-card {
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: transparent;
+  text-decoration: none;
+  transition:
+    border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-post-card:hover {
+  border-color: rgba(144, 200, 255, 0.2);
+  background: rgba(255, 255, 255, 0.005);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px -4px rgba(144, 200, 255, 0.06);
+}
+
+.blog-post-card-featured {
+  border-color: rgba(144, 200, 255, 0.15);
+  background: rgba(144, 200, 255, 0.02);
+}
+.blog-post-card-featured:hover {
+  border-color: rgba(144, 200, 255, 0.35);
+  box-shadow: 0 6px 20px -4px rgba(144, 200, 255, 0.1);
+}
+
+.blog-post-series {
+  color: rgba(144, 200, 255, 0.4);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+}
+
+.blog-post-date {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
+.blog-post-featured-badge {
+  color: rgba(144, 200, 255, 0.3);
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  border: 1px solid rgba(144, 200, 255, 0.2);
+  padding: 0.125rem 0.375rem;
+}
+
+.blog-post-title {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.375rem;
+  transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-post-card:hover .blog-post-title {
+  color: #fff;
+}
+
+.blog-post-subtitle {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-post-card:hover .blog-post-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.blog-post-tag {
+  color: rgba(144, 200, 255, 0.15);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  transition: color 0.3s;
+}
+.blog-post-card:hover .blog-post-tag {
+  color: rgba(144, 200, 255, 0.4);
+}
+
+/* ── Post page sections ── */
+
+.blog-section-heading {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: color 0.35s;
+}
+.blog-section-heading:hover { color: rgba(144, 200, 255, 0.8); }
+
+.blog-section-accent {
+  width: 1.5rem;
+  height: 1px;
+  background: rgba(144, 200, 255, 0.3);
+  transition: width 0.35s, background 0.35s;
+}
+.blog-section-heading:hover .blog-section-accent {
+  width: 2.5rem;
+  background: rgba(144, 200, 255, 0.6);
+}
+
+/* ── CTA box ── */
+
+.blog-cta {
+  padding: 2rem;
+  border: 1px solid rgba(144, 200, 255, 0.12);
+  background: rgba(144, 200, 255, 0.015);
+  text-align: center;
+  transition:
+    border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-cta:hover {
+  border-color: rgba(144, 200, 255, 0.25);
+  background: rgba(144, 200, 255, 0.03);
+  box-shadow: 0 0 30px rgba(144, 200, 255, 0.04);
+}
+
+.blog-cta-btn {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(144, 200, 255, 0.3);
+  color: rgba(144, 200, 255, 0.6);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-cta-btn:hover {
+  background: rgba(144, 200, 255, 0.1);
+  color: #90c8ff;
+  border-color: rgba(144, 200, 255, 0.5);
+  box-shadow: 0 0 16px rgba(144, 200, 255, 0.08);
+}
+
+.blog-cta-btn-dim {
+  border-color: rgba(144, 200, 255, 0.15);
+  color: rgba(144, 200, 255, 0.4);
+}
+.blog-cta-btn-dim:hover {
+  border-color: rgba(144, 200, 255, 0.3);
+  color: rgba(144, 200, 255, 0.6);
+  background: rgba(144, 200, 255, 0.04);
+}
+
+.blog-back-link {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.35s;
+}
+.blog-back-link:hover { color: rgba(255, 255, 255, 0.4); }
