@@ -1,0 +1,93 @@
+/* MyShape Research — The Continuity Lab */
+
+.research-hero { max-width: 48rem; margin-bottom: 4rem; }
+.research-label { color: rgba(144,200,255,0.45); font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; margin-bottom: 1rem; }
+.research-tagline { font-size: clamp(1.5rem,3vw,2.5rem); font-weight: 300; letter-spacing: 0.04em; color: #fff; line-height: 1.3; margin-bottom: 1.5rem; }
+.research-tagline span { color: rgba(144,200,255,0.8); }
+.research-subtitle { color: rgba(255,255,255,0.35); font-size: 13px; line-height: 1.7; max-width: 36rem; }
+
+/* Three-column grid */
+.research-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 768px) { .research-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.research-column { display: flex; flex-direction: column; gap: 1rem; }
+.research-column-title {
+  color: rgba(144,200,255,0.5); font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+  padding-bottom: 0.75rem; border-bottom: 1px solid rgba(144,200,255,0.1);
+  margin-bottom: 0.25rem;
+}
+
+/* Research Note card */
+.rn-card {
+  display: block; padding: 1.25rem;
+  border: 1px solid rgba(144,200,255,0.08); background: rgba(144,200,255,0.01);
+  text-decoration: none;
+  transition: border-color 0.35s cubic-bezier(0.4,0,0.2,1), background 0.35s, transform 0.35s, box-shadow 0.35s;
+}
+.rn-card:hover { border-color: rgba(144,200,255,0.3); background: rgba(144,200,255,0.03); transform: translateY(-1px); box-shadow: 0 4px 16px -4px rgba(144,200,255,0.06); }
+.rn-card-num { color: rgba(144,200,255,0.5); font-family: monospace; font-size: 9px; letter-spacing: 0.2em; margin-bottom: 0.5rem; }
+.rn-card-title { color: rgba(255,255,255,0.75); font-size: 13px; letter-spacing: 0.04em; margin-bottom: 0.375rem; transition: color 0.35s; }
+.rn-card:hover .rn-card-title { color: #fff; }
+.rn-card-subtitle { color: rgba(255,255,255,0.3); font-size: 10px; line-height: 1.5; transition: color 0.35s; }
+.rn-card:hover .rn-card-subtitle { color: rgba(255,255,255,0.5); }
+.rn-card-date { color: rgba(255,255,255,0.12); font-size: 8px; letter-spacing: 0.15em; margin-top: 0.5rem; }
+
+/* Benchmark card */
+.bm-card {
+  padding: 1rem; border: 1px solid rgba(144,200,255,0.06); background: transparent;
+  transition: border-color 0.35s, background 0.35s;
+}
+.bm-card:hover { border-color: rgba(144,200,255,0.2); background: rgba(144,200,255,0.015); }
+.bm-card-name { color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+.bm-card-status { color: rgba(144,200,255,0.4); font-family: monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; }
+.bm-card-meta { color: rgba(255,255,255,0.15); font-size: 8px; margin-top: 0.375rem; }
+
+/* Open Question card */
+.oq-card {
+  padding: 1rem; border: 1px solid rgba(212,175,55,0.1); background: rgba(212,175,55,0.01);
+  transition: border-color 0.35s, background 0.35s;
+}
+.oq-card:hover { border-color: rgba(212,175,55,0.25); background: rgba(212,175,55,0.03); }
+.oq-card-num { color: rgba(212,175,55,0.5); font-family: monospace; font-size: 8px; letter-spacing: 0.2em; margin-bottom: 0.375rem; }
+.oq-card-q { color: rgba(255,255,255,0.55); font-size: 11px; letter-spacing: 0.04em; line-height: 1.5; margin-bottom: 0.375rem; }
+.oq-card-status { color: rgba(144,200,255,0.4); font-family: monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; }
+
+/* Note article page */
+.note-article { max-width: 40rem; }
+.note-meta { color: rgba(144,200,255,0.4); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; }
+.note-meta-sep { width: 1.5rem; height: 1px; background: rgba(144,200,255,0.2); }
+.note-title { font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 300; letter-spacing: 0.04em; color: #fff; line-height: 1.25; margin-bottom: 1rem; }
+.note-subtitle { color: rgba(255,255,255,0.4); font-size: 14px; line-height: 1.6; max-width: 34rem; margin-bottom: 2rem; font-style: italic; }
+
+.note-section { margin-bottom: 2.5rem; }
+.note-section h2 { color: rgba(144,200,255,0.65); font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1rem; font-weight: 500; }
+.note-section p { color: rgba(255,255,255,0.45); font-size: 13px; line-height: 1.85; margin-bottom: 1rem; }
+.note-section p strong { color: rgba(255,255,255,0.7); }
+
+.note-blockquote {
+  border-left: 2px solid rgba(144,200,255,0.2); padding: 0.5rem 0 0.5rem 1.25rem;
+  margin: 1.5rem 0; color: rgba(255,255,255,0.35); font-size: 13px; line-height: 1.7; font-style: italic;
+}
+
+.note-roadmap-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; }
+.note-roadmap-num { color: rgba(144,200,255,0.4); font-family: monospace; font-size: 10px; letter-spacing: 0.15em; width: 4rem; flex-shrink: 0; }
+.note-roadmap-label { color: rgba(255,255,255,0.55); font-size: 12px; letter-spacing: 0.06em; }
+.note-roadmap-arrow { color: rgba(144,200,255,0.15); font-size: 14px; text-align: center; padding: 0.125rem 0; }
+
+.note-footer { border-top: 1px solid rgba(144,200,255,0.08); padding-top: 2rem; margin-top: 3rem; }
+.note-footer-text { color: rgba(255,255,255,0.2); font-size: 9px; letter-spacing: 0.15em; }
+.note-footer-text a { color: rgba(144,200,255,0.4); text-decoration: none; transition: color 0.3s; }
+.note-footer-text a:hover { color: rgba(144,200,255,0.7); }
+
+/* Homepage signal — compact */
+.research-signal {
+  border: 1px solid rgba(144,200,255,0.1); background: rgba(144,200,255,0.015);
+  padding: 1.25rem 1.5rem; max-width: 36rem;
+  transition: border-color 0.35s, background 0.35s;
+}
+.research-signal:hover { border-color: rgba(144,200,255,0.25); background: rgba(144,200,255,0.03); }
+.research-signal-label { color: rgba(144,200,255,0.4); font-family: monospace; font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.research-signal-title { color: rgba(255,255,255,0.7); font-size: 13px; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.research-signal-desc { color: rgba(255,255,255,0.3); font-size: 10px; line-height: 1.5; }
+.research-signal-link { color: rgba(144,200,255,0.5); text-decoration: none; font-size: 9px; letter-spacing: 0.15em; margin-top: 0.5rem; display: inline-block; transition: color 0.3s; }
+.research-signal-link:hover { color: rgba(144,200,255,0.8); }

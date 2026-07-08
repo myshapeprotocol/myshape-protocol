@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import { playTick } from "@/utils/useAudioTick";
@@ -10,6 +11,7 @@ import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import GenesisCohortBadge from "@/components/genesis-cohort-badge/GenesisCohortBadge";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
+import "@/app/research/research.css";
 
 export default function HomeClient() {
   return (
@@ -195,6 +197,20 @@ export default function HomeClient() {
         </section>
 
         <Vision />
+
+        {/* Latest Research — The Continuity Lab signal */}
+        <section className="relative z-10 max-w-3xl mx-auto px-6 mb-12">
+          <div className="text-white/15 text-[8px] tracking-[0.4em] uppercase mb-4">Latest Research</div>
+          <Link href="/research/notes/001-the-continuity-problem" className="research-signal block">
+            <div className="research-signal-label">Research Note #001 · 2026.07.09</div>
+            <div className="research-signal-title">The Continuity Problem</div>
+            <div className="research-signal-desc">Why proving &ldquo;I am still me&rdquo; may become the missing cryptographic primitive of the AI era.</div>
+            <span className="research-signal-link">Read Research Note →</span>
+          </Link>
+          <div className="mt-3 text-center">
+            <Link href="/research" className="text-white/10 text-[8px] tracking-[0.2em] uppercase hover:text-white/25 transition-colors">The Continuity Lab →</Link>
+          </div>
+        </section>
         </div>{/* end desktop-only */}
 
         {/* CTA — both mobile and desktop */}
