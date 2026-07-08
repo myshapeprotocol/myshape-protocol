@@ -1,9 +1,11 @@
-# MyShape Protocol
+# The Continuity Lab
 
-> **The Sovereign Continuity Layer for the Simulation Age.**
+> **Investigating whether continuity can become a verifiable property of digital existence.**
 >
-> Identity tells you who someone claims to be. Continuity tells you they are still them.
+> We publish the MyShape Protocol — a sovereign continuity layer for the simulation age.
 > Motion-signature verification. Zero-knowledge presence. AI-native identity.
+>
+> 📄 **[Research Note #001 — The Continuity Problem](https://www.myshape.com/research/notes/001-the-continuity-problem)**
 
 [![Protocol Status](https://img.shields.io/badge/Protocol_Activity-v2.0_Genesis-22d3ee?style=flat)](https://www.myshape.com)
 [![Spec Version](https://img.shields.io/badge/Spec-v1.0__GENESIS-6e7681?style=flat)](https://www.myshape.com/papers/technical-spec)
@@ -17,7 +19,7 @@
 
 ## Overview
 
-MyShape Protocol is the **first continuity layer for digital identity** — a protocol that verifies not just who you are, but that you are still you, continuously.
+The Continuity Lab investigates whether continuity — the unbroken chain of sovereign existence — can be made a verifiable cryptographic primitive. The MyShape Protocol is our first publication: a continuity layer for digital identity that verifies not just who you are, but that you are still you, continuously.
 
 In an era where AI can generate faces, clone voices, and forge fingerprints, static identity verification is broken. MyShape introduces **Proof of Continuity**: a cryptographic primitive anchored in the irreducible entropy of human motion.
 
@@ -186,7 +188,7 @@ All code, copy, metadata follows de-corporealized identity language:
 | wireframe anatomy, data-outline | biological signifiers |
 | ethereal data energy, particle body | aesthetic judgments |
 | motion-signature, kinetic verification | profile images, avatars |
-| non-binary aesthetic, non-corporeal | biometric identification |
+| non-binary aesthetic, non-corporeal | traditional ID verification |
 
 Pre-commit hooks enforce these rules automatically.
 
