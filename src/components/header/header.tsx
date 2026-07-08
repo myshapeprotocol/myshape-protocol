@@ -416,9 +416,10 @@ const styles: { [key: string]: React.CSSProperties } = {
       "linear-gradient(to bottom, rgba(2, 4, 10, 0.95) 0%, rgba(2, 4, 10, 0) 100%)",
     backdropFilter: "blur(8px)",
     WebkitBackdropFilter: "blur(8px)",
-    zIndex: 9999,
+    zIndex: 99999,
     fontFamily: "monospace",
     color: "#90c8ff",
+    isolation: "isolate" as React.CSSProperties["isolation"],
   },
   gradientOverlay: {
     position: "absolute",
