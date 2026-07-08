@@ -88,11 +88,32 @@ These 100 identities define the root entropy source of the protocol. Like Bitcoi
 
 ---
 
+### Technical Participant Notice
+
+> **You are not signing up for an app. You are joining a protocol with enforceable contracts.**
+
+As a Genesis Node operator, you should understand:
+
+1. **Numerical stability takes precedence over feature velocity.** Any code change affecting reputation computation, token tiers, identity stages, or entitlement grants leaves a permanent audit trail in the protocol changelog. Undocumented algorithm changes are blocked by CI.
+
+2. **Contract breaks require one version of advance notice.** API response field deletions or renames must run old routes in parallel for at least one migration cycle. Nodes should never lose data visibility due to a protocol upgrade.
+
+3. **Tests are the living specification.** 3,282 lines of snapshot data are the protocol's authoritative spec — more binding than any README or wiki. If a behavior is not covered by a snapshot, it is not a protocol promise.
+
+4. **Transparency is the only source of trust.** All approximation functions, proxy assumptions, and known bias ceilings are publicly documented. We do not hide the protocol's limitations — we document them, set tolerance intervals, and continuously narrow the gap.
+
+5. **Genesis 100 is permanent.** `GENESIS_NODE` status is immutable protocol-level metadata, not a marketing label. No downgrade. No expiry. No revocation. Governance weight may be adjusted, but founding entity status is inalienable.
+
+> Read the full [Genesis Stability Audit v1.0](https://github.com/myshapeprotocol/myshape-protocol/blob/master/docs/genesis-stability-audit-v1.0.md) for the independent verification of these claims.
+
+---
+
 ### What We Ask of You
 
 - Complete a 30-second motion capture session.
 - Return at least once more — continuity requires time.
 - Preferably, return across days, weeks, or months.
+- Run the [Protocol Onboarding Check](https://github.com/myshapeprotocol/myshape-protocol/blob/master/scripts/onboarding-check.sh) to verify your environment meets protocol requirements.
 
 A single session proves presence.
 Multiple sessions prove continuity.
