@@ -444,9 +444,14 @@
 
 /* ── 手机端适配 ── */
 
+.hide-mobile {
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
   .hide-mobile {
-    display: none;
+    display: none !important;
   }
 
   /* 二级导航：移动端左对齐 + 横向滚动 */

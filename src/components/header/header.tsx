@@ -214,7 +214,7 @@ const ProtocolHeader = () => {
         </a>
 
         {/* Genesis Phase Indicator — desktop only */}
-        <span className="hide-mobile" style={{ fontSize: "9px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)", fontFamily: "monospace", display: "flex", alignItems: "center", gap: "3px" }}>
+        <span className="hide-mobile" style={{ fontSize: "9px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)", fontFamily: "monospace", gap: "3px" }}>
           <span style={{ fontSize: "7px" }}>◈</span>
           Genesis Alpha
         </span>
