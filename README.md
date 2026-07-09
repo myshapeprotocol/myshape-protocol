@@ -10,8 +10,8 @@
 [![Protocol Status](https://img.shields.io/badge/Protocol_Activity-v2.0_Genesis-22d3ee?style=flat)](https://www.myshape.com)
 [![Spec Version](https://img.shields.io/badge/Spec-v1.0__GENESIS-6e7681?style=flat)](https://www.myshape.com/papers/technical-spec)
 [![Genesis Cohort](https://img.shields.io/badge/Genesis_Cohort-0/100-58a6ff?style=flat)](https://www.myshape.com/genesis)
-[![Build](https://img.shields.io/badge/build-81_pages_|_172_tests-22d3ee?style=flat)](https://github.com/RaymondHWu/myshape-site)
-[![SEO](https://img.shields.io/badge/SEO-7_schema_types_|_9_blog_posts-8957e5?style=flat)](https://www.myshape.com)
+[![Build](https://img.shields.io/badge/build-81_pages_|_172_tests-22d3ee?style=flat)](https://github.com/myshapeprotocol)
+[![SEO](https://img.shields.io/badge/SEO-7_schema_types_|_21_essays-8957e5?style=flat)](https://www.myshape.com)
 [![Substack](https://img.shields.io/badge/Substack-The_Entropy_Gap-ff6600?style=flat)](https://open.substack.com/pub/myshape/p/the-entropy-gap-why-ai-cannot-forge)
 [![Paragraph](https://img.shields.io/badge/Paragraph-On--Chain_Post-8b5cf6?style=flat)](https://paragraph.com/@myshape/the-entropy-gap-%E2%80%94-why-ai-cannot-forge-human-motion)
 
@@ -84,7 +84,7 @@ The website implements a comprehensive Schema.org semantic layer for both tradit
 | Schema Type | Pages | Purpose |
 |:---|:---|:---|
 | Organization + WebSite + DefinedTermSet | Root layout | Brand entity + knowledge graph |
-| Article / BlogPosting | 9 blog posts + 5 papers + whitepaper | Content indexing + AI citation |
+| Article / BlogPosting | 21 essays + 5 papers + whitepaper | Content indexing + AI citation |
 | BreadcrumbList | 25+ pages | SERP rich results + crawl hierarchy |
 | FAQPage | Homepage, Genesis, Motion Demo, Developers, Compare | Google FAQ rich results + AI Overviews |
 | HowTo | Genesis page | Step-by-step rich results |
@@ -191,6 +191,14 @@ All code, copy, metadata follows de-corporealized identity language:
 | non-binary aesthetic, non-corporeal | traditional ID verification |
 
 Pre-commit hooks enforce these rules automatically.
+
+---
+
+## Authors
+
+Built by **The Continuity Lab** — the research and engineering arm of MyShape Protocol.
+
+[→ View Contributors](https://github.com/myshapeprotocol/myshape-protocol/graphs/contributors)
 
 ---
 

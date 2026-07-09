@@ -51,7 +51,7 @@
 
 .dev-qs-card {
   border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(255, 255, 255, 0.022);
   transition:
     border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -94,7 +94,7 @@
 
 .dev-qs-time {
   color: rgba(255, 255, 255, 0.22);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.1em;
   transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -109,7 +109,7 @@
 
 .dev-qs-desc {
   color: rgba(255, 255, 255, 0.3);
-  font-size: 9px;
+  font-size: 10px;
   transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1), font-size 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .dev-qs-card:hover .dev-qs-desc { color: rgba(255, 255, 255, 0.6); font-size: 10px; }
@@ -136,7 +136,7 @@
   top: 0.75rem;
   right: 0.75rem;
   color: rgba(255, 255, 255, 0.1);
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   background: transparent;
@@ -192,7 +192,7 @@
 
 .dev-api-resp-label {
   color: rgba(255, 255, 255, 0.12);
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 0.25rem;
@@ -200,7 +200,7 @@
 
 .dev-api-resp {
   color: rgba(255, 255, 255, 0.28);
-  font-size: 9px;
+  font-size: 10px;
   font-family: monospace;
   white-space: pre-wrap;
   overflow-x: auto;
@@ -251,7 +251,7 @@
 
 .dev-engine-path {
   color: rgba(144, 200, 255, 0.3);
-  font-size: 9px;
+  font-size: 10px;
   font-family: monospace;
   transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1), font-size 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -288,7 +288,7 @@
 
 .dev-sdk-returns {
   color: rgba(144, 200, 255, 0.4);
-  font-size: 9px;
+  font-size: 10px;
   font-family: monospace;
   transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1), font-size 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -50,7 +50,7 @@
 /* ── Milestones ── */
 
 .rm-milestone-check {
-  font-size: 9px;
+  font-size: 10px;
   flex-shrink: 0;
   margin-top: 0.125rem;
   transition: color 0.35s;

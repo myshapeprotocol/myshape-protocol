@@ -6,6 +6,8 @@ import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "@/app/blog/blog.css";
+import PostNavigation from "@/components/blog/PostNavigation";
 
 const TOC_ITEMS = [
   { id: "crisis", label: "The Simulation Age Crisis" },
@@ -228,7 +230,7 @@ export default function PostClient() {
 
         <article className="flex-1 min-w-0" style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
         <div className="mb-16">
-          <div className="text-[#90c8ff]/40 text-[9px] tracking-[0.4em] uppercase mb-4">PROTOCOL_ESSAY // 002</div>
+          <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.4em] uppercase mb-4">PROTOCOL_ESSAY // 002</div>
           <h1 className="text-2xl md:text-4xl font-light tracking-[0.04em] text-white leading-tight mb-6"
             style={{ textShadow: "0 0 40px rgba(144,200,255,0.15)" }}>
             The Continuity Layer for the Simulation Age
@@ -236,7 +238,7 @@ export default function PostClient() {
           <p className="text-white/35 text-[13px] leading-relaxed">
             Identity tells us who you claim to be. Continuity tells us that you are still you. Why the Simulation Age needs a new primitive.
           </p>
-          <div className="flex items-center gap-3 mt-4 text-[9px]">
+          <div className="flex items-center gap-3 mt-4 text-[10px]">
             <span className="text-white/20">MyShape Protocol</span>
             <span className="text-white/10">·</span>
             <span className="text-white/20">June 29, 2026</span>
@@ -248,7 +250,7 @@ export default function PostClient() {
         {/* Visual Hook — Paradigm Diagram */}
         <div className="my-16 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] p-6 md:p-8 font-mono transition-all duration-300 hover:border-[#90c8ff]/35"
           onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
-          <div className="text-[#90c8ff]/30 text-[8px] tracking-[0.3em] uppercase mb-4 text-center">SYSTEM_SCHEMA: CONTINUITY LAYER</div>
+          <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.25em] uppercase mb-4 text-center">SYSTEM_SCHEMA: CONTINUITY LAYER</div>
           <pre className="text-[#90c8ff]/40 text-[10px] leading-[2.2] tracking-[0.08em] whitespace-pre overflow-x-auto text-center">
 {`IDENTITY                              CONTINUITY
   Who are you?                           Who continues to be you?
@@ -260,7 +262,7 @@ export default function PostClient() {
   ◄─────────── The Continuity Layer bridges this gap ──────────►
          Motion-Signature → Continuity Proof → Agent Verification`}
           </pre>
-          <div className="mt-4 flex justify-center gap-4 text-[8px]">
+          <div className="mt-4 flex justify-center gap-4 text-[10px]">
             <span className="text-[#90c8ff]/25">◈ Pipeline: Capture → Encoding → Vector → Proof → Agent</span>
             <span className="text-white/10">|</span>
             <span className="text-[#90c8ff]/25">◈ Engine: Rust → WASM</span>
@@ -291,7 +293,7 @@ export default function PostClient() {
           <p className="text-white/30 text-[11px] leading-relaxed mb-4">
             <strong className="text-white/50">The Continuity Layer is operational.</strong> The Capture → Encoding → Identity Vector → Continuity Proof pipeline is running. Genesis Cohort is validating the first persistent digital subjects. The protocol is open for inspection.
           </p>
-          <p className="text-white/20 text-[9px]">
+          <p className="text-white/30 text-[10px]">
             Repository: github.com/myshapeprotocol &middot; Live Demo: myshape.com/motion-demo &middot; Vision: myshape.com/vision &middot; Genesis: myshape.com/genesis
           </p>
         </div>
@@ -300,7 +302,7 @@ export default function PostClient() {
           <p className="text-white/20 text-[10px]">Discuss this essay on HN or GitHub.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="px-6 py-3 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-[#90c8ff]/45 hover:text-white hover:bg-[#90c8ff]/[0.04] transition-all">
               View on GitHub →
             </a>
@@ -317,45 +319,47 @@ export default function PostClient() {
           </div>
         </div>
 
+        <PostNavigation slug="/blog/continuity-layer-for-the-simulation-age" />
+
         {/* Internal link cluster */}
         <div className="mt-16 pt-12 border-t border-[#90c8ff]/5 space-y-4">
-          <p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">
+          <p className="text-white/38 text-[10px] tracking-[0.2em] uppercase text-center">
             Continue Reading
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Link
               href="/blog/what-is-proof-of-continuity"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
-              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+              <p className="text-white/55 text-[12px] tracking-[0.08em]">
                 What Is Proof of Continuity?
               </p>
-              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+              <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 The missing primitive →
               </p>
             </Link>
             <Link
               href="/blog/zero-knowledge-proofs-digital-identity-explained"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
-              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+              <p className="text-white/55 text-[12px] tracking-[0.08em]">
                 Zero-Knowledge Proofs Explained
               </p>
-              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+              <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 ZK for digital identity →
               </p>
             </Link>
             <Link
               href="/compare"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
-              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+              <p className="text-white/55 text-[12px] tracking-[0.08em]">
                 Protocol Comparison
               </p>
-              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+              <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 MyShape vs competitors →
               </p>
             </Link>

@@ -242,6 +242,19 @@
   100% { transform: translateY(-20px) scale(0.4); opacity: 0; }
 }
 
+/* ── Continuity Lab: print-entry reveal ── */
+@keyframes specimenReveal {
+  from { opacity: 0; transform: translateY(10px); filter: blur(2px); }
+  to   { opacity: 1; transform: translateY(0);   filter: blur(0); }
+}
+
+/* ── Continuity Lab: research scan sweep ── */
+@keyframes researchScanSweep {
+  0%   { left: -30%; }
+  50%  { left: 50%; }
+  100% { left: 120%; }
+}
+
 /* ── Misc ── */
 @keyframes coreBreath { 0%, 100% { box-shadow: 0 0 8px rgba(144,200,255,0.6); } 50% { box-shadow: 0 0 20px rgba(144,200,255,1); } }
 @keyframes badgePulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }

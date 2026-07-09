@@ -391,7 +391,6 @@ const ProtocolHeader = () => {
     }}>
       {[
         { label: "Protocol", href: "/protocol" },
-        { label: "Research", href: "/research" },
         { label: "Blog",     href: "/blog" },
         { label: "Genesis",  href: "/genesis" },
       ].map(link =>

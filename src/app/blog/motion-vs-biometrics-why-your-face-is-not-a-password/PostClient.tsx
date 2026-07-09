@@ -5,6 +5,8 @@ import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "@/app/blog/blog.css";
+import PostNavigation from "@/components/blog/PostNavigation";
 
 const SECTIONS = [
   {
@@ -103,16 +105,18 @@ export default function PostClient() {
         >
           {/* Header */}
           <div className="space-y-4 mb-16">
-            <div className="flex items-center gap-4 text-[#90c8ff]/40 text-[9px] tracking-[0.3em] uppercase">
+            <div className="flex items-center gap-4 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase">
               <span>GENESIS 005</span>
               <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
               <span>2026.07.03</span>
+              <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
+              <span className="text-white/25">The Continuity Lab</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight">
+            <h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>
               Motion vs<br />
               <span className="text-[#90c8ff]">Biometrics</span>
             </h1>
-            <p className="text-white/30 text-[11px] tracking-[0.1em] leading-relaxed max-w-xl">
+            <p className="text-white/50 text-[14px] tracking-[0.06em] leading-[1.7] max-w-xl">
               Why your face is not a password. Why your fingerprint is not a key.
               And why the post-biometric era begins with how you move.
             </p>
@@ -122,26 +126,28 @@ export default function PostClient() {
           <div className="space-y-20">
             {SECTIONS.map((section) => (
               <section key={section.id} id={section.id}>
-                <h2 className="text-white/60 text-[11px] tracking-[0.25em] uppercase mb-6 flex items-center gap-3">
+                <h2 className="text-white/65 text-[12px] tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
                   <span className="w-6 h-[1px] bg-[#90c8ff]/30" />
                   {section.heading}
                 </h2>
-                <div className="text-white/50 text-[12px] leading-relaxed tracking-[0.06em] space-y-5 whitespace-pre-line">
+                <div className="text-white/55 text-[17px] leading-[1.85] tracking-[0.03em] space-y-5 whitespace-pre-line">
                   {section.content}
                 </div>
               </section>
             ))}
           </div>
 
+          <PostNavigation slug="/blog/motion-vs-biometrics-why-your-face-is-not-a-password" />
+
           {/* Divider */}
           <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#90c8ff]/15 to-transparent" />
 
           {/* CTA */}
           <div className="p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
-            <p className="text-white/40 text-[10px] tracking-[0.15em] uppercase">
+            <p className="text-white/55 text-[13px] tracking-[0.1em] uppercase">
               Experience Post-Biometric Authentication
             </p>
-            <p className="text-white/25 text-[10px] leading-relaxed max-w-md mx-auto">
+            <p className="text-white/45 text-[12px] leading-[1.7] max-w-md mx-auto">
               The Motion Demo is live. See how your unique motion-signature
               generates a cryptographic proof of presence — without ever
               revealing who you are.
@@ -149,15 +155,15 @@ export default function PostClient() {
             <div className="flex justify-center gap-4 pt-2">
               <Link
                 href="/motion-demo"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
+                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/65 text-[10px] tracking-[0.18em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
               >
                 Try Motion Demo →
               </Link>
               <Link
                 href="/whitepaper"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
+                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/50 text-[10px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
               >
                 Read Whitepaper →
               </Link>
@@ -168,7 +174,7 @@ export default function PostClient() {
           <div className="mt-12 text-center">
             <Link
               href="/blog"
-              className="text-white/15 text-[9px] tracking-[0.2em] uppercase hover:text-white/40 transition-colors"
+              className="text-white/30 text-[11px] tracking-[0.18em] uppercase hover:text-white/55 transition-colors"
             >
               ← Protocol Log
             </Link>

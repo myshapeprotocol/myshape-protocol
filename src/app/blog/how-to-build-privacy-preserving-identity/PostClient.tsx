@@ -4,6 +4,8 @@ import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "@/app/blog/blog.css";
+import PostNavigation from "@/components/blog/PostNavigation";
 
 const SECTIONS = [
   { id: "principles", heading: "Privacy by Design — Core Principles",
@@ -25,13 +27,17 @@ export default function PostClient() {
     <div className="bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30 min-h-screen flex flex-col">
       <ProtocolHeader /><main className="flex-1 relative"><BackgroundParticles />
         <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-6" style={{paddingTop:"8rem",paddingBottom:"6rem"}}>
-          <div className="space-y-4 mb-16"><div className="flex items-center gap-4 text-[#90c8ff]/40 text-[9px] tracking-[0.3em] uppercase"><span>GENESIS 023</span><span className="w-8 h-[1px] bg-[#90c8ff]/20" /><span>2026.07.03</span></div><h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight">How to Build<br /><span className="text-[#90c8ff]">Privacy-Preserving Identity</span></h1><p className="text-white/30 text-[11px] tracking-[0.1em] leading-relaxed max-w-xl">A 2026 engineering guide. ZK proofs, selective disclosure, sovereign architecture — and the six principles you cannot skip.</p></div>
-          <div className="space-y-20">{SECTIONS.map(s=>(<section key={s.id} id={s.id}><h2 className="text-white/60 text-[11px] tracking-[0.25em] uppercase mb-6 flex items-center gap-3"><span className="w-6 h-[1px] bg-[#90c8ff]/30" />{s.heading}</h2><div className="text-white/50 text-[12px] leading-relaxed tracking-[0.06em] space-y-5 whitespace-pre-line">{s.content}</div></section>))}</div>
-          <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#90c8ff]/15 to-transparent" /><div className="space-y-4"><p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">Continue Reading</p><div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="space-y-4 mb-16"><div className="flex items-center gap-4 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase"><span>GENESIS 023</span><span className="w-8 h-[1px] bg-[#90c8ff]/20" /><span>2026.07.03</span>
+              <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
+              <span className="text-white/25">The Continuity Lab</span></div><h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>How to Build<br /><span className="text-[#90c8ff]">Privacy-Preserving Identity</span></h1><p className="text-white/50 text-[14px] tracking-[0.06em] leading-[1.7] max-w-xl">A 2026 engineering guide. ZK proofs, selective disclosure, sovereign architecture — and the six principles you cannot skip.</p></div>
+          <div className="space-y-20">{SECTIONS.map(s=>(<section key={s.id} id={s.id}><h2 className="text-white/65 text-[12px] tracking-[0.2em] uppercase mb-6 flex items-center gap-3"><span className="w-6 h-[1px] bg-[#90c8ff]/30" />{s.heading}</h2><div className="text-white/55 text-[17px] leading-[1.85] tracking-[0.03em] space-y-5 whitespace-pre-line">{s.content}</div></section>))}</div>
+          <PostNavigation slug="/blog/how-to-build-privacy-preserving-identity" />
+
+          <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#90c8ff]/15 to-transparent" /><div className="space-y-4"><p className="text-white/38 text-[10px] tracking-[0.2em] uppercase text-center">Continue Reading</p><div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {RELATED_POSTS.map(p => (
-              <Link key={p.href} href={p.href} onMouseEnter={()=>playTick(700,"sine",0.08,0.02)} className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"><p className="text-white/50 text-[10px] tracking-[0.1em]">{p.title}</p><p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">{p.desc}</p></Link>
+              <Link key={p.href} href={p.href} onMouseEnter={()=>playTick(700,"sine",0.08,0.02)} className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"><p className="text-white/55 text-[12px] tracking-[0.08em]">{p.title}</p><p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">{p.desc}</p></Link>
             ))}
           </div></div>
-          <div className="mt-12 text-center"><Link href="/blog" className="text-white/15 text-[9px] tracking-[0.2em] uppercase hover:text-white/40 transition-colors">← Protocol Log</Link></div>
+          <div className="mt-12 text-center"><Link href="/blog" className="text-white/30 text-[11px] tracking-[0.18em] uppercase hover:text-white/55 transition-colors">← Protocol Log</Link></div>
         </div>
       </main><ProtocolFooter /></div>);}

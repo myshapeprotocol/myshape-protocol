@@ -5,10 +5,10 @@
 /* ── Category filter ── */
 
 .blog-filter-btn {
-  padding: 0.375rem 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.25);
-  font-size: 9px;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   background: transparent;
@@ -16,13 +16,14 @@
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .blog-filter-btn:hover {
-  border-color: rgba(144, 200, 255, 0.2);
-  color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(144, 200, 255, 0.25);
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(144, 200, 255, 0.02);
 }
 .blog-filter-btn-active {
-  border-color: rgba(144, 200, 255, 0.4);
+  border-color: rgba(144, 200, 255, 0.45);
   color: #90c8ff;
-  background: rgba(144, 200, 255, 0.04);
+  background: rgba(144, 200, 255, 0.05);
 }
 
 /* ── Post card ── */
@@ -38,7 +39,23 @@
     background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+.blog-post-card:nth-child(1)  { animation-delay: 0.05s; }
+.blog-post-card:nth-child(2)  { animation-delay: 0.1s; }
+.blog-post-card:nth-child(3)  { animation-delay: 0.15s; }
+.blog-post-card:nth-child(4)  { animation-delay: 0.2s; }
+.blog-post-card:nth-child(5)  { animation-delay: 0.25s; }
+.blog-post-card:nth-child(6)  { animation-delay: 0.3s; }
+.blog-post-card:nth-child(7)  { animation-delay: 0.35s; }
+.blog-post-card:nth-child(8)  { animation-delay: 0.4s; }
+.blog-post-card:nth-child(9)  { animation-delay: 0.45s; }
+.blog-post-card:nth-child(10) { animation-delay: 0.5s; }
+.blog-post-card:nth-child(11) { animation-delay: 0.55s; }
+.blog-post-card:nth-child(12) { animation-delay: 0.6s; }
+.blog-post-card:nth-child(13) { animation-delay: 0.65s; }
+.blog-post-card:nth-child(14) { animation-delay: 0.7s; }
 .blog-post-card:hover {
   border-color: rgba(144, 200, 255, 0.2);
   background: rgba(255, 255, 255, 0.005);
@@ -56,30 +73,30 @@
 }
 
 .blog-post-series {
-  color: rgba(144, 200, 255, 0.4);
-  font-size: 8px;
-  letter-spacing: 0.2em;
+  color: rgba(144, 200, 255, 0.5);
+  font-size: 10px;
+  letter-spacing: 0.18em;
 }
 
 .blog-post-date {
-  color: rgba(255, 255, 255, 0.15);
-  font-size: 8px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 10px;
   letter-spacing: 0.1em;
 }
 
 .blog-post-featured-badge {
-  color: rgba(144, 200, 255, 0.3);
-  font-size: 7px;
-  letter-spacing: 0.2em;
-  border: 1px solid rgba(144, 200, 255, 0.2);
-  padding: 0.125rem 0.375rem;
+  color: rgba(144, 200, 255, 0.4);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  border: 1px solid rgba(144, 200, 255, 0.25);
+  padding: 0.15rem 0.45rem;
 }
 
 .blog-post-title {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.375rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
   transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .blog-post-card:hover .blog-post-title {
@@ -87,32 +104,32 @@
 }
 
 .blog-post-subtitle {
-  color: rgba(255, 255, 255, 0.25);
-  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
   letter-spacing: 0.04em;
-  line-height: 1.5;
+  line-height: 1.55;
   transition: color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .blog-post-card:hover .blog-post-subtitle {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .blog-post-tag {
-  color: rgba(144, 200, 255, 0.15);
-  font-size: 7px;
+  color: rgba(144, 200, 255, 0.25);
+  font-size: 9px;
   letter-spacing: 0.1em;
   transition: color 0.3s;
 }
 .blog-post-card:hover .blog-post-tag {
-  color: rgba(144, 200, 255, 0.4);
+  color: rgba(144, 200, 255, 0.5);
 }
 
 /* ── Post page sections ── */
 
 .blog-section-heading {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 11px;
-  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   display: flex;
@@ -120,7 +137,7 @@
   gap: 0.75rem;
   transition: color 0.35s;
 }
-.blog-section-heading:hover { color: rgba(144, 200, 255, 0.8); }
+.blog-section-heading:hover { color: rgba(144, 200, 255, 0.9); }
 
 .blog-section-accent {
   width: 1.5rem;
@@ -153,11 +170,11 @@
 
 .blog-cta-btn {
   display: inline-block;
-  padding: 0.5rem 1.5rem;
+  padding: 0.65rem 1.75rem;
   border: 1px solid rgba(144, 200, 255, 0.3);
-  color: rgba(144, 200, 255, 0.6);
-  font-size: 9px;
-  letter-spacing: 0.2em;
+  color: rgba(144, 200, 255, 0.7);
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -166,25 +183,25 @@
   background: rgba(144, 200, 255, 0.1);
   color: #90c8ff;
   border-color: rgba(144, 200, 255, 0.5);
-  box-shadow: 0 0 16px rgba(144, 200, 255, 0.08);
+  box-shadow: 0 0 16px rgba(144, 200, 255, 0.1);
 }
 
 .blog-cta-btn-dim {
   border-color: rgba(144, 200, 255, 0.15);
-  color: rgba(144, 200, 255, 0.4);
+  color: rgba(144, 200, 255, 0.5);
 }
 .blog-cta-btn-dim:hover {
-  border-color: rgba(144, 200, 255, 0.3);
-  color: rgba(144, 200, 255, 0.6);
-  background: rgba(144, 200, 255, 0.04);
+  border-color: rgba(144, 200, 255, 0.35);
+  color: rgba(144, 200, 255, 0.75);
+  background: rgba(144, 200, 255, 0.05);
 }
 
 .blog-back-link {
-  color: rgba(255, 255, 255, 0.15);
-  font-size: 9px;
-  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   transition: color 0.35s;
 }
-.blog-back-link:hover { color: rgba(255, 255, 255, 0.4); }
+.blog-back-link:hover { color: rgba(255, 255, 255, 0.55); }

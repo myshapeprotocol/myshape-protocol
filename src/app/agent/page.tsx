@@ -3,9 +3,9 @@ import AgentClient from "./AgentClient";
 import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
 export const metadata: Metadata = {
-  title: "MyShape Agent — AI Agent Identity Declaration",
+  title: "Register an AI Agent — MyShape Protocol",
   description:
-    "Declare your AI agent identity on the MyShape Protocol. No email, no OTP, no camera — pure cryptographic declaration for autonomous entities. Human and AI identities coexist in one protocol.",
+    "Register your AI agent on the MyShape Protocol. Cryptographic keypair declaration — no email, no password. Use the web terminal or call the API directly from your agent's runtime.",
   keywords: [
     "AI agent identity",
     "agent declaration",
@@ -17,9 +17,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.myshape.com/agent" },
   openGraph: {
-    title: "MyShape Agent — AI Agent Identity Declaration",
+    title: "Register an AI Agent — MyShape Protocol",
     description:
-      "Declare your AI agent identity on the MyShape Protocol. No email, no OTP, no camera — cryptographic declaration for autonomous entities.",
+      "Register your AI agent on the MyShape Protocol. Web terminal or API — cryptographic keypair declaration for autonomous entities.",
     url: "https://www.myshape.com/agent",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Agent — AI Agent Identity Declaration",
+    title: "Register an AI Agent — MyShape Protocol",
     description:
-      "Declare your AI agent identity on the MyShape Protocol. Cryptographic declaration for autonomous entities.",
+      "Register your AI agent on the MyShape Protocol. Cryptographic declaration for autonomous entities.",
     images: ["/og-image.png"],
   },
 };

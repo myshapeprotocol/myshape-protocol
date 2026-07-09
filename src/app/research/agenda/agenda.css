@@ -7,14 +7,9 @@
 
 .agenda-hero {
   margin-bottom: 3rem;
-}
-
-.agenda-label {
-  color: rgba(144, 200, 255, 0.45);
-  font-size: 10px;
-  letter-spacing: 0.5em;
-  text-transform: uppercase;
-  margin-bottom: 1.25rem;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.05s;
 }
 
 .agenda-tagline {
@@ -41,6 +36,9 @@
   padding: 2.5rem 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.08s;
 }
 
 .agenda-number-card {
@@ -81,15 +79,15 @@
 }
 
 .agenda-number-label {
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 9px;
-  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 10px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   transition: color 0.35s;
 }
 
 .agenda-number-card:hover .agenda-number-label {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .agenda-number-divider {
@@ -119,16 +117,16 @@
 /* ── Primer ── */
 
 .agenda-primer {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.45);
   font-size: 15px;
   line-height: 1.8;
   font-weight: 300;
-  max-width: 36rem;
+  max-width: 38rem;
   margin: 0 auto 0;
 }
 
 .agenda-primer strong {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
 }
 
@@ -143,6 +141,13 @@
   padding: 2.5rem 2rem;
   border-left: 2px solid rgba(144, 200, 255, 0.3);
   background: rgba(144, 200, 255, 0.015);
+  transition: border-color 0.5s, box-shadow 0.5s;
+  cursor: default;
+}
+
+.agenda-blockquote:hover {
+  border-left-color: rgba(144, 200, 255, 0.55);
+  box-shadow: inset 2px 0 20px -8px rgba(144, 200, 255, 0.08);
 }
 
 .agenda-blockquote-text {
@@ -156,7 +161,7 @@
 }
 
 .agenda-blockquote-cite {
-  color: rgba(144, 200, 255, 0.3);
+  color: rgba(144, 200, 255, 0.4);
   font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -212,13 +217,20 @@
   background: rgba(255, 255, 255, 0.01);
   transition: border-color 0.35s, background 0.35s, transform 0.35s,
     box-shadow 0.35s;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.agenda-question-card:nth-child(1) { animation-delay: 0.1s; }
+.agenda-question-card:nth-child(2) { animation-delay: 0.2s; }
+.agenda-question-card:nth-child(3) { animation-delay: 0.3s; }
+.agenda-question-card:nth-child(4) { animation-delay: 0.4s; }
+
 .agenda-question-card:hover {
-  border-color: rgba(144, 200, 255, 0.18);
-  background: rgba(144, 200, 255, 0.02);
+  border-color: rgba(144, 200, 255, 0.2);
+  background: rgba(144, 200, 255, 0.025);
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px -6px rgba(144, 200, 255, 0.04);
+  box-shadow: 0 4px 24px -6px rgba(144, 200, 255, 0.08), inset 0 1px 0 rgba(144, 200, 255, 0.03);
 }
 
 .agenda-question-header {
@@ -229,17 +241,58 @@
 }
 
 .agenda-question-num {
-  color: rgba(144, 200, 255, 0.35);
+  color: rgba(144, 200, 255, 0.45);
   font-family: monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
 }
 
 .agenda-question-status {
   font-family: monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.agenda-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.agenda-question-status[data-status="Active Research"] { color: #4ade80; }
+.agenda-question-status[data-status="Investigating"]   { color: #facc15; }
+.agenda-question-status[data-status="Conceptual"]      { color: #60a5fa; }
+
+.agenda-question-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  color: rgba(144, 200, 255, 0.4);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: color 0.3s, gap 0.3s;
+}
+
+.agenda-question-link:hover {
+  color: rgba(144, 200, 255, 0.7);
+  gap: 0.6rem;
+}
+
+.agenda-question-link-arrow {
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.agenda-question-link:hover .agenda-question-link-arrow {
+  transform: translateX(2px);
 }
 
 .agenda-question-title {
@@ -257,16 +310,16 @@
 }
 
 .agenda-question-detail {
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 14px;
   line-height: 1.7;
   font-weight: 300;
   margin-bottom: 0.75rem;
 }
 
 .agenda-question-note {
-  color: rgba(255, 255, 255, 0.15);
-  font-size: 10px;
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 11px;
   line-height: 1.6;
   font-style: italic;
 }
@@ -290,42 +343,50 @@
   border: 1px solid rgba(255, 255, 255, 0.04);
   background: transparent;
   transition: border-color 0.35s, background 0.35s;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.agenda-method-card:nth-child(1) { animation-delay: 0.45s; }
+.agenda-method-card:nth-child(2) { animation-delay: 0.55s; }
+.agenda-method-card:nth-child(3) { animation-delay: 0.65s; }
+.agenda-method-card:nth-child(4) { animation-delay: 0.75s; }
+
 .agenda-method-card:hover {
-  border-color: rgba(144, 200, 255, 0.15);
-  background: rgba(144, 200, 255, 0.015);
+  border-color: rgba(144, 200, 255, 0.2);
+  background: rgba(144, 200, 255, 0.025);
+  box-shadow: 0 2px 16px -4px rgba(144, 200, 255, 0.06);
 }
 
 .agenda-method-num {
-  color: rgba(144, 200, 255, 0.25);
+  color: rgba(144, 200, 255, 0.35);
   font-family: monospace;
-  font-size: 9px;
-  letter-spacing: 0.3em;
+  font-size: 10px;
+  letter-spacing: 0.25em;
   margin-bottom: 0.5rem;
 }
 
 .agenda-method-title {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  letter-spacing: 0.03em;
   margin-bottom: 0.5rem;
   transition: color 0.35s;
 }
 
 .agenda-method-card:hover .agenda-method-title {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .agenda-method-desc {
-  color: rgba(255, 255, 255, 0.25);
-  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
   line-height: 1.6;
   transition: color 0.35s;
 }
 
 .agenda-method-card:hover .agenda-method-desc {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Footer ── */
@@ -338,26 +399,26 @@
 }
 
 .agenda-footer-text {
-  color: rgba(255, 255, 255, 0.15);
-  font-size: 9px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 10px;
   letter-spacing: 0.2em;
   margin-bottom: 1rem;
 }
 
 .agenda-footer-text a {
-  color: rgba(144, 200, 255, 0.35);
+  color: rgba(144, 200, 255, 0.4);
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .agenda-footer-text a:hover {
-  color: rgba(144, 200, 255, 0.65);
+  color: rgba(144, 200, 255, 0.7);
 }
 
 .agenda-footer-credits {
-  color: rgba(255, 255, 255, 0.12);
-  font-size: 10px;
+  color: rgba(255, 255, 255, 0.22);
+  font-size: 11px;
   line-height: 1.6;
-  max-width: 28rem;
+  max-width: 30rem;
   margin: 0 auto;
 }

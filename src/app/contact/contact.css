@@ -14,21 +14,21 @@
 .ct-node-card:hover { border-color: rgba(144,200,255,0.35); background: rgba(144,200,255,0.015); }
 
 .ct-node-dot {
-  color: #90c8ff; font-size: 9px; font-family: monospace; font-weight: 700;
+  color: #90c8ff; font-size: 10px; font-family: monospace; font-weight: 700;
   letter-spacing: 0.1em; margin-bottom: 2rem; text-transform: uppercase;
   animation: ctPulse 2s ease-in-out infinite;
 }
 @keyframes ctPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
 .ct-node-name {
-  color: #fff; font-size: 13px; letter-spacing: 0.3em; font-weight: 700; text-transform: uppercase;
+  color: #fff; font-size: 14px; letter-spacing: 0.2em; font-weight: 700; text-transform: uppercase;
   margin-bottom: 1.5rem;
   transition: color 0.35s;
 }
 .ct-node-card:hover .ct-node-name { color: #90c8ff; }
 
 .ct-node-desc {
-  color: rgba(255,255,255,0.3); font-size: 9px; letter-spacing: 0.2em; line-height: 1.5; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); font-size: 10px; letter-spacing: 0.15em; line-height: 1.5; text-transform: uppercase;
   margin-bottom: 3rem; min-height: 4rem;
 }
 
@@ -38,11 +38,11 @@
 }
 
 .ct-node-status {
-  font-size: 8px; color: #90c8ff; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
+  font-size: 9px; color: #90c8ff; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
 }
 
 .ct-node-arrow {
-  color: rgba(255,255,255,0.2); transition: all 0.35s; transform: translateX(0);
+  color: rgba(255,255,255,0.3); transition: all 0.35s; transform: translateX(0);
 }
 .ct-node-card:hover .ct-node-arrow { color: #90c8ff; transform: translateX(3px); }
 
@@ -55,7 +55,7 @@
 .ct-node-card:hover .ct-node-bg-num { color: rgba(144,200,255,0.05); }
 
 .ct-email {
-  color: #fff; font-size: 1.125rem; letter-spacing: 0.2em; font-weight: 300;
+  color: #fff; font-size: 1.25rem; letter-spacing: 0.15em; font-weight: 300;
   transition: color 0.35s;
 }
 .ct-email:hover { color: #90c8ff; }

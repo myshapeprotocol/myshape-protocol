@@ -29,7 +29,7 @@ const statusConfig: Record<Status, { dot: string; badge: string; border: string;
   },
   PENDING: {
     dot: "bg-white/10",
-    badge: "border-white/10 text-white/20 bg-transparent",
+    badge: "border-white/10 text-white/30 bg-transparent",
     border: "border-white/5",
     glow: "",
     label: "○ PLANNED",
@@ -105,7 +105,7 @@ export default function RoadmapClient() {
     <ProtocolLayout refId="010" category="SYS_COMP" title="ROADMAP" secLevel="CLASS_GAMMA" systemStatus="EVOLVING">
       <div className="space-y-24 md:space-y-32">
         <section className="max-w-4xl">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4">// FOUR_EPOCH_ROADMAP</h2>
+          <h2 className="text-white/30 text-[10px] tracking-[0.6em] uppercase mb-4">// FOUR_EPOCH_ROADMAP</h2>
           <p className="text-xl md:text-2xl font-light tracking-widest text-white leading-relaxed">
             From <span className="text-[#90c8ff]">geometry</span> → to{" "}
             <span className="text-[#90c8ff]">protocol</span> → to{" "}
@@ -116,7 +116,7 @@ export default function RoadmapClient() {
             Four epochs spanning 20+ years. Each epoch establishes a new layer of identity infrastructure.
             This is not a product roadmap — it is a civilizational blueprint.
           </p>
-          <p className="mt-4 text-[#90c8ff]/20 text-[9px] tracking-[0.3em] uppercase font-mono italic">// ROADMAP_UPDATING_VIA_GENESIS_ENTROPY</p>
+          <p className="mt-4 text-[#90c8ff]/20 text-[10px] tracking-[0.3em] uppercase font-mono italic">// ROADMAP_UPDATING_VIA_GENESIS_ENTROPY</p>
         </section>
 
         <section className="relative">
@@ -153,11 +153,11 @@ export default function RoadmapClient() {
                       <div className="flex items-center justify-between pt-4 border-t border-white/5">
                         <div className="flex items-center gap-2">
                           <div className={`h-[1px] w-8 ${epoch.status === "COMPLETED" ? "bg-gradient-to-r from-[#90c8ff]/60 to-transparent" : epoch.status === "CURRENT" ? "bg-gradient-to-r from-[#90c8ff]/40 to-transparent" : "bg-white/5"}`} />
-                          <span className={`text-[8px] tracking-[0.3em] uppercase font-mono ${epoch.status === "COMPLETED" ? "text-[#90c8ff]/70" : epoch.status === "CURRENT" ? "text-[#90c8ff]/60" : "text-white/15"}`}>
+                          <span className={`text-[10px] tracking-[0.3em] uppercase font-mono ${epoch.status === "COMPLETED" ? "text-[#90c8ff]/70" : epoch.status === "CURRENT" ? "text-[#90c8ff]/60" : "text-white/15"}`}>
                             {epoch.status === "COMPLETED" ? "DELIVERED" : epoch.status === "CURRENT" ? `${epoch.timeframe} — ACTIVE` : `EST. ${epoch.timeframe}`}
                           </span>
                         </div>
-                        <div className={`px-3 py-1 border text-[8px] tracking-[0.25em] uppercase font-mono ${cfg.badge}`}>{cfg.label}</div>
+                        <div className={`px-3 py-1 border text-[10px] tracking-[0.25em] uppercase font-mono ${cfg.badge}`}>{cfg.label}</div>
                       </div>
                     </div>
                   </div>
@@ -168,7 +168,7 @@ export default function RoadmapClient() {
         </section>
 
         <section className="flex flex-col items-center text-center py-8">
-          <p className="text-white/15 text-[9px] tracking-[0.6em] uppercase mb-8">End_Of_Document_Temporal_Projection</p>
+          <p className="text-white/25 text-[10px] tracking-[0.6em] uppercase mb-8">End_Of_Document_Temporal_Projection</p>
           <p className="text-white/50 text-sm tracking-[0.2em] uppercase leading-loose max-w-2xl italic">
             &ldquo;The roadmap is a living protocol. Each completed milestone is a verifiable proof of work.
             The direction is fixed — the timeline adapts.&rdquo;

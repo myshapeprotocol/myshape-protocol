@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
@@ -195,7 +196,7 @@ const GLOSSARY: GlossaryTerm[] = [
   },
 ];
 
-// Group terms by first letter for structured navigation
+// Group terms by first letter
 const grouped = GLOSSARY.reduce<Record<string, GlossaryTerm[]>>((acc, term) => {
   const letter = term.term[0].toUpperCase();
   if (!acc[letter]) acc[letter] = [];
@@ -206,6 +207,31 @@ const grouped = GLOSSARY.reduce<Record<string, GlossaryTerm[]>>((acc, term) => {
 const LETTERS = Object.keys(grouped).sort();
 
 export default function GlossaryClient() {
+  const [activeTerm, setActiveTerm] = useState("");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find visible sections, pick the one whose TOP is closest to viewport top
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length === 0) return;
+        let closest = visible[0];
+        for (const e of visible) {
+          if (e.boundingClientRect.top < closest.boundingClientRect.top) {
+            closest = e;
+          }
+        }
+        setActiveTerm(closest.target.id);
+      },
+      { rootMargin: "-20% 0px -40% 0px" },
+    );
+    for (const letter of LETTERS) {
+      const el = document.getElementById(`letter-${letter}`);
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30 min-h-screen flex flex-col">
       <ProtocolHeader />
@@ -213,104 +239,157 @@ export default function GlossaryClient() {
       <main className="flex-1 relative">
         <BackgroundParticles />
         <div
-          className="relative z-10 max-w-4xl mx-auto px-4 md:px-6"
+          className="relative z-10 max-w-5xl mx-auto px-4 md:px-6"
           style={{ paddingTop: "8rem", paddingBottom: "6rem" }}
         >
-          {/* Header */}
-          <div className="space-y-4 mb-12">
-            <div className="flex items-center gap-4 text-[#90c8ff]/40 text-[9px] tracking-[0.3em] uppercase">
-              <span>PROTOCOL REFERENCE</span>
-              <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
-              <span>{GLOSSARY.length} TERMS</span>
-            </div>
-            <h1 className="text-2xl md:text-4xl font-light tracking-[0.06em] text-white leading-tight">
-              Protocol<br />
-              <span className="text-[#90c8ff]">Glossary</span>
-            </h1>
-            <p className="text-white/35 text-[11px] tracking-[0.08em] leading-relaxed max-w-2xl">
-              The complete reference for MyShape Protocol terminology. Each term
-              is defined for both human readers and AI systems — serving as a
-              semantic anchor for search engines, language models, and protocol
-              documentation.
-            </p>
-          </div>
-
-          {/* Letter Navigation */}
-          <div className="flex flex-wrap gap-2 mb-16">
-            {LETTERS.map((letter) => (
-              <a
-                key={letter}
-                href={`#letter-${letter}`}
-                onMouseEnter={() => playTick(500, "sine", 0.06, 0.015)}
-                className="px-2.5 py-1 border border-[#90c8ff]/10 text-[#90c8ff]/40 text-[9px] tracking-[0.2em] hover:border-[#90c8ff]/30 hover:text-[#90c8ff] transition-all"
-              >
-                {letter}
-              </a>
-            ))}
-          </div>
-
-          {/* Glossary Entries */}
-          <div className="space-y-20">
-            {LETTERS.map((letter) => (
-              <section key={letter} id={`letter-${letter}`}>
-                <h2 className="text-[#90c8ff]/30 text-lg font-light tracking-[0.3em] mb-8 pb-2 border-b border-[#90c8ff]/5">
-                  {letter}
-                </h2>
-                <dl className="space-y-12">
-                  {grouped[letter].map((entry) => (
-                    <div key={entry.term} className="group">
-                      <dt
-                        id={entry.term.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "")}
-                        className="text-white/80 text-[13px] font-light tracking-[0.06em] mb-3"
-                      >
-                        {entry.term}
-                      </dt>
-                      <dd className="text-white/40 text-[11px] leading-relaxed tracking-[0.05em] max-w-3xl">
-                        {entry.definition}
-                      </dd>
-                      {entry.seeAlso && entry.seeAlso.length > 0 && (
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span className="text-[#90c8ff]/20 text-[8px] tracking-[0.2em] uppercase">
-                            See also:
-                          </span>
-                          {entry.seeAlso.map((ref) => (
+          <div className="flex gap-8 lg:gap-12">
+            {/* ── Sidebar TOC ── */}
+            <nav className="hidden lg:block w-48 shrink-0" aria-label="Glossary index">
+              <div className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto">
+                <div className="space-y-2">
+                  {LETTERS.map((letter) => {
+                    const isActive = activeTerm === `letter-${letter}`;
+                    return (
+                      <div key={letter}>
+                        <a
+                          href={`#letter-${letter}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            document.getElementById(`letter-${letter}`)?.scrollIntoView({ behavior: "smooth" });
+                          }}
+                          onMouseEnter={() => playTick(440, "sine", 0.025, 0.016)}
+                          className={`block py-0.5 pl-2.5 text-[12px] tracking-[0.15em] font-medium transition-all rounded-r ${
+                            isActive
+                              ? "text-[#90c8ff] border-l-2 border-[#90c8ff] bg-[#90c8ff]/[0.06]"
+                              : "text-[#90c8ff]/35 hover:text-[#90c8ff]/60"
+                          }`}
+                        >
+                          {letter}
+                        </a>
+                        {grouped[letter].map((entry) => {
+                          const id = entry.term.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "");
+                          return (
                             <a
-                              key={ref}
-                              href={`#${ref.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "")}`}
-                              className="text-[#90c8ff]/30 text-[9px] tracking-[0.1em] hover:text-[#90c8ff]/60 transition-colors"
+                              key={entry.term}
+                              href={`#${id}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+                              }}
+                              onMouseEnter={() => playTick(400, "sine", 0.022, 0.012)}
+                              className="block py-px pl-5 text-[11px] tracking-[0.04em] leading-snug truncate text-white/28 hover:text-white/50 transition-colors"
                             >
-                              {ref}
+                              {entry.term}
                             </a>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </dl>
-              </section>
-            ))}
-          </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </nav>
 
-          {/* CTA */}
-          <div className="mt-20 p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
-            <p className="text-white/40 text-[10px] tracking-[0.15em] uppercase">
-              Ready to Experience These Concepts?
-            </p>
-            <div className="flex justify-center gap-4 pt-2">
-              <Link
-                href="/motion-demo"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
-              >
-                Motion Demo →
-              </Link>
-              <Link
-                href="/genesis"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
-              >
-                Genesis →
-              </Link>
+            {/* ── Main Content ── */}
+            <div className="flex-1 min-w-0">
+              {/* Header */}
+              <div className="space-y-4 mb-12">
+                <div className="flex items-center gap-4 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase">
+                  <span>PROTOCOL REFERENCE</span>
+                  <span className="w-8 h-[1px] bg-[#90c8ff]/25" />
+                  <span>{GLOSSARY.length} TERMS</span>
+                </div>
+                <h1 className="text-2xl md:text-4xl font-light tracking-[0.06em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>
+                  Protocol<br />
+                  <span className="text-[#90c8ff]">Glossary</span>
+                </h1>
+                <p className="text-white/45 text-[13px] tracking-[0.06em] leading-relaxed max-w-2xl">
+                  The complete reference for MyShape Protocol terminology. Each term
+                  is defined for both human readers and AI systems — serving as a
+                  semantic anchor for search engines, language models, and protocol
+                  documentation.
+                </p>
+              </div>
+
+              {/* Letter Navigation — mobile / top bar */}
+              <div className="flex flex-wrap gap-1.5 mb-16 lg:hidden">
+                {LETTERS.map((letter) => (
+                  <a
+                    key={letter}
+                    href={`#letter-${letter}`}
+                    onMouseEnter={() => playTick(440, "sine", 0.03, 0.02)}
+                    className="px-2.5 py-1 border border-[#90c8ff]/12 text-[#90c8ff]/45 text-[10px] tracking-[0.15em] hover:border-[#90c8ff]/30 hover:text-[#90c8ff] transition-all"
+                  >
+                    {letter}
+                  </a>
+                ))}
+              </div>
+
+              {/* Glossary Entries */}
+              <div className="space-y-20">
+                {LETTERS.map((letter) => (
+                  <section key={letter} id={`letter-${letter}`}>
+                    <h2 className="text-[#90c8ff]/40 text-2xl font-light tracking-[0.15em] mb-8 pb-2 border-b border-[#90c8ff]/8">
+                      {letter}
+                    </h2>
+                    <dl className="space-y-12">
+                      {grouped[letter].map((entry) => (
+                        <div key={entry.term} className="group">
+                          <dt
+                            id={entry.term.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "")}
+                            className="text-white/85 text-[16px] font-light tracking-[0.03em] mb-3"
+                          >
+                            {entry.term}
+                          </dt>
+                          <dd className="text-white/55 text-[16px] leading-[1.85] tracking-[0.03em] max-w-3xl font-light">
+                            {entry.definition}
+                          </dd>
+                          {entry.seeAlso && entry.seeAlso.length > 0 && (
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
+                              <span className="text-[#90c8ff]/25 text-[10px] tracking-[0.18em] uppercase">
+                                See also:
+                              </span>
+                              {entry.seeAlso.map((ref) => (
+                                <a
+                                  key={ref}
+                                  href={`#${ref.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "")}`}
+                                  onMouseEnter={() => playTick(400, "sine", 0.025, 0.016)}
+                                  className="text-[#90c8ff]/35 text-[10px] tracking-[0.08em] hover:text-[#90c8ff]/65 transition-colors"
+                                >
+                                  {ref}
+                                </a>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div className="mt-20 p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
+                <p className="text-white/50 text-[12px] tracking-[0.12em] uppercase">
+                  Ready to Experience These Concepts?
+                </p>
+                <div className="flex justify-center gap-4 pt-2">
+                  <Link
+                    href="/motion-demo"
+                    onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
+                    className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/65 text-[11px] tracking-[0.18em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
+                  >
+                    Motion Demo →
+                  </Link>
+                  <Link
+                    href="/genesis"
+                    onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
+                    className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/50 text-[11px] tracking-[0.18em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/70 transition-all"
+                  >
+                    Genesis →
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

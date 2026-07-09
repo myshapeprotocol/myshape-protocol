@@ -56,6 +56,7 @@ export default function NoteClient() {
                   e.preventDefault();
                   document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
                 }}
+                onMouseEnter={() => playTick(420, "sine", 0.03, 0.018)}
               >
                 {item.label}
               </a>
@@ -71,7 +72,7 @@ export default function NoteClient() {
             <span className="note-print-cursor" />
           </div>
 
-          <h1 className="note-title note-print-stage note-print-delay-2">The Continuity Problem</h1>
+          <h1 className="note-title note-print-stage note-print-delay-2" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>The Continuity Problem</h1>
           <p className="note-subtitle note-print-stage note-print-delay-3">
             Why proving &ldquo;I am still me&rdquo; may become the missing
             cryptographic primitive of the AI era.
@@ -230,37 +231,37 @@ export default function NoteClient() {
               cryptographic primitive.
             </p>
 
-            <div className="note-roadmap-item">
+            <div className="note-roadmap-item" onMouseEnter={() => playTick(380, "sine", 0.03, 0.018)}>
               <span className="note-roadmap-num">RN #001</span>
               <span className="note-roadmap-label">The Continuity Problem</span>
             </div>
             <div className="note-roadmap-arrow">↓</div>
 
-            <div className="note-roadmap-item">
+            <div className="note-roadmap-item" onMouseEnter={() => playTick(380, "sine", 0.03, 0.018)}>
               <span className="note-roadmap-num">RN #002</span>
               <span className="note-roadmap-label">Presence Entropy Benchmark — Dataset, Cohen&apos;s d, precision/recall, threats to validity</span>
             </div>
             <div className="note-roadmap-arrow">↓</div>
 
-            <div className="note-roadmap-item">
+            <div className="note-roadmap-item" onMouseEnter={() => playTick(380, "sine", 0.03, 0.018)}>
               <span className="note-roadmap-num">RN #003</span>
               <span className="note-roadmap-label">Replay Attack Analysis — Can continuity proofs be replayed? Under what conditions?</span>
             </div>
             <div className="note-roadmap-arrow">↓</div>
 
-            <div className="note-roadmap-item">
+            <div className="note-roadmap-item" onMouseEnter={() => playTick(380, "sine", 0.03, 0.018)}>
               <span className="note-roadmap-num">RN #004</span>
               <span className="note-roadmap-label">Challenge-Response — Can continuity be verified interactively without storing motion data?</span>
             </div>
             <div className="note-roadmap-arrow">↓</div>
 
-            <div className="note-roadmap-item">
+            <div className="note-roadmap-item" onMouseEnter={() => playTick(380, "sine", 0.03, 0.018)}>
               <span className="note-roadmap-num">RN #005</span>
               <span className="note-roadmap-label">The Continuity Receipt — A proposed format for portable, verifiable continuity proofs</span>
             </div>
             <div className="note-roadmap-arrow">↓</div>
 
-            <div className="note-roadmap-item">
+            <div className="note-roadmap-item" onMouseEnter={() => playTick(380, "sine", 0.03, 0.018)}>
               <span className="note-roadmap-num">RN #006</span>
               <span className="note-roadmap-label">Agent Continuity — Can continuity be transferred between a human and their AI agent?</span>
             </div>
@@ -269,9 +270,9 @@ export default function NoteClient() {
           <div className="note-footer note-print-stage note-print-delay-8">
             <p className="note-footer-text">
               The Continuity Lab · July 2026{" · "}
-              <Link href="/research">← Research Hub</Link>
+              <Link href="/research" onMouseEnter={() => playTick(420, "sine", 0.03, 0.018)}>← Research Hub</Link>
               {" · "}
-              <Link href="/research/notes/002-pes-benchmark">Next: PES Benchmark →</Link>
+              <Link href="/research/notes/002-pes-benchmark" onMouseEnter={() => playTick(480, "sine", 0.03, 0.018)}>Next: PES Benchmark →</Link>
             </p>
           </div>
         </article>

@@ -104,10 +104,10 @@ export default function DevelopersClient() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-16 pb-16">
         <div className="space-y-4 mb-12">
-          <div className="text-[#90c8ff]/60 text-[10px] md:text-[11px] tracking-[0.4em] md:tracking-[0.5em] uppercase"
-            onMouseEnter={() => playTick(500, "sine", 0.05, 0.01)}>DEVELOPER_HUB // V1.0</div>
+          <div className="text-[#90c8ff]/60 text-[10px] md:text-[12px] tracking-[0.4em] md:tracking-[0.5em] uppercase"
+            onMouseEnter={() => playTick(500, "sine", 0.05, 0.022)}>DEVELOPER_HUB // V1.0</div>
           <h1 className="text-3xl md:text-5xl font-light tracking-[0.08em] md:tracking-[0.12em] text-white uppercase">Build with Presence</h1>
-          <p className="text-white/45 md:text-white/50 text-[11px] md:text-[14px] leading-relaxed max-w-xl font-light">
+          <p className="text-white/45 md:text-white/50 text-[12px] md:text-[14px] leading-relaxed max-w-xl font-light">
             Integrate sovereign identity verification into any application.
             Five lines of code. Zero data stored. Real human presence.
           </p>
@@ -155,7 +155,7 @@ export default function DevelopersClient() {
             {API_EXAMPLES.map((ex) => (
               <div key={ex.label} className="dev-api-card" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
                 <div className="dev-api-header">
-                  <span className="text-[#90c8ff]/45 text-[8px] tracking-[0.25em] uppercase">{ex.label}</span>
+                  <span className="text-[#90c8ff]/45 text-[10px] tracking-[0.25em] uppercase">{ex.label}</span>
                   <button onClick={() => { navigator.clipboard.writeText(ex.curl); playTick(600, "sine", 0.06, 0.015); }} className="dev-api-copy">COPY</button>
                 </div>
                 <div className="dev-api-content">
@@ -166,7 +166,7 @@ export default function DevelopersClient() {
               </div>
             ))}
           </div>
-          <p className="text-white/15 text-[8px] tracking-[0.12em] uppercase mt-3">
+          <p className="text-white/25 text-[10px] tracking-[0.12em] uppercase mt-3">
             Full OpenAPI spec: <a href="/openapi.json" target="_blank" className="text-[#90c8ff]/35 hover:text-[#90c8ff]/60 transition-colors">openapi.json</a>
             &nbsp;·&nbsp; Complete reference: <a href="/docs" className="text-[#90c8ff]/35 hover:text-[#90c8ff]/60 transition-colors">/docs →</a>
           </p>
@@ -179,10 +179,10 @@ export default function DevelopersClient() {
             <table className="w-full text-left border-collapse border border-white/5">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.02]">
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal w-20">Module</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Method</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal w-32">Returns</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Description</th>
+                  <th className="p-3 text-white/30 text-[10px] tracking-[0.3em] uppercase font-normal w-20">Module</th>
+                  <th className="p-3 text-white/30 text-[10px] tracking-[0.3em] uppercase font-normal">Method</th>
+                  <th className="p-3 text-white/30 text-[10px] tracking-[0.3em] uppercase font-normal w-32">Returns</th>
+                  <th className="p-3 text-white/30 text-[10px] tracking-[0.3em] uppercase font-normal">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -249,7 +249,7 @@ export default function DevelopersClient() {
                 </p>
                 <div className="space-y-1.5 pt-1">
                   {["Early SDK access before public release", "Direct line to protocol architects", "Your app featured on myshape.com/build", "Genesis Developer badge (on-chain record)"].map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-2 text-white/25 text-[10px]"><span className="text-purple-400/40 text-[8px]">◆</span>{benefit}</div>
+                    <div key={i} className="flex items-center gap-2 text-white/25 text-[10px]"><span className="text-purple-400/40 text-[10px]">◆</span>{benefit}</div>
                   ))}
                 </div>
               </div>
@@ -274,24 +274,24 @@ export default function DevelopersClient() {
               <span className="dev-api-row-method font-bold w-10 shrink-0">{ep.method}</span>
               <span className="dev-api-row-path font-mono shrink-0">{ep.path}</span>
               <span className="dev-api-row-desc flex-1">{ep.desc}</span>
-              {"cta" in ep && <a href={ep.cta} className="shrink-0 px-3 py-1 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[9px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/50 hover:text-[#90c8ff]/90 transition-all no-underline">Try it →</a>}
+              {"cta" in ep && <a href={ep.cta} className="shrink-0 px-3 py-1 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/50 hover:text-[#90c8ff]/90 transition-all no-underline">Try it →</a>}
             </div>
           ))}
 
           <div className="mt-6 border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02] p-5">
-            <div className="text-[#90c8ff]/40 text-[8px] tracking-[0.3em] uppercase mb-4">// RESPONSE_FORMAT</div>
+            <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.3em] uppercase mb-4">// RESPONSE_FORMAT</div>
             <div className="space-y-4">
               <div>
-                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/identity?email=protocol@myshape.com</div>
-                <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[9px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">{'{\n  "found": true,\n  "email": "protocol@myshape.com",\n  "node_handle": null,\n  "status": "GENESIS_NODE",\n  "registered_at": "2026-06-22T09:12:01.329Z"\n}'}</pre>
+                <div className="text-white/25 text-[10px] tracking-[0.1em] mb-1">GET /api/identity?email=protocol@myshape.com</div>
+                <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[10px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">{'{\n  "found": true,\n  "email": "protocol@myshape.com",\n  "node_handle": null,\n  "status": "GENESIS_NODE",\n  "registered_at": "2026-06-22T09:12:01.329Z"\n}'}</pre>
               </div>
               <div>
-                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1">GET /api/nodes/count</div>
-                <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[9px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">{'{\n  "total": 17,\n  "humans": 8,\n  "agents": 3,\n  "genesis_nodes": 4\n}'}</pre>
+                <div className="text-white/25 text-[10px] tracking-[0.1em] mb-1">GET /api/nodes/count</div>
+                <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[10px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">{'{\n  "total": 17,\n  "humans": 8,\n  "agents": 3,\n  "genesis_nodes": 4\n}'}</pre>
               </div>
               <div>
-                <div className="text-white/25 text-[9px] tracking-[0.1em] mb-1 flex items-center gap-2">POST /api/nodes/handshake <a href="/handshake" className="text-[#90c8ff]/40 hover:text-[#90c8ff]/80 text-[8px] tracking-[0.15em] uppercase no-underline transition-colors">→ Live Demo</a></div>
-                <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[9px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">{'// Request\n{ "email": "entity@protocol.io", "origin_domain": "myshape.com" }\n\n// Response (201)\n{\n  "node_token": "ms_a1b2c3d4e5f6...",\n  "node_handle": "SIG_4F7A2C1B",\n  "stage": "GENESIS_NODE_INITIALIZED"\n}'}</pre>
+                <div className="text-white/25 text-[10px] tracking-[0.1em] mb-1 flex items-center gap-2">POST /api/nodes/handshake <a href="/handshake" className="text-[#90c8ff]/40 hover:text-[#90c8ff]/80 text-[10px] tracking-[0.15em] uppercase no-underline transition-colors">→ Live Demo</a></div>
+                <pre className="bg-black/60 p-3 text-[#90c8ff]/50 text-[10px] leading-relaxed font-mono whitespace-pre-wrap overflow-x-auto">{'// Request\n{ "email": "entity@protocol.io", "origin_domain": "myshape.com" }\n\n// Response (201)\n{\n  "node_token": "ms_a1b2c3d4e5f6...",\n  "node_handle": "SIG_4F7A2C1B",\n  "stage": "GENESIS_NODE_INITIALIZED"\n}'}</pre>
               </div>
             </div>
           </div>
@@ -302,32 +302,32 @@ export default function DevelopersClient() {
           <h2 className="dev-section-title">// PROTOCOL_PATHS</h2>
           <div className="border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02] overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#90c8ff]/8">
-              <div className="dev-path-panel dev-path-panel-dev p-6 md:p-8 space-y-4" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
+              <div className="dev-path-panel dev-path-panel-dev p-6 md:p-8 space-y-4" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-[#90c8ff]/70 text-[10px]">◆</span>
                   <span className="text-[#90c8ff]/60 text-[10px] tracking-[0.3em] uppercase font-bold">DEV_NODE</span>
-                  <span className="text-white/10 text-[9px] tracking-[0.2em] uppercase ml-auto">YOU_ARE_HERE</span>
+                  <span className="text-white/30 text-[10px] tracking-[0.2em] uppercase ml-auto">YOU_ARE_HERE</span>
                 </div>
                 {[{ label: "Purpose", value: "Protocol Access — Build & Deploy" }, { label: "Setup", value: "60 seconds. No wallet. No invite." }, { label: "Scope", value: "API / Agent Layer — productivity & integration" }, { label: "Status", value: "Renewable. Sandbox-first. Scaleable." }, { label: "Path", value: "Deploy → Call API → Build Agents" }].map((r) => (
-                  <div key={r.label} className="flex gap-2 text-[9px]"><span className="text-white/15 shrink-0 w-16 text-right">{r.label}</span><span className="text-white/40">{r.value}</span></div>
+                  <div key={r.label} className="flex gap-2 text-[10px]"><span className="text-white/25 shrink-0 w-16 text-right">{r.label}</span><span className="text-white/40">{r.value}</span></div>
                 ))}
               </div>
               <div className="dev-path-panel dev-path-panel-genesis p-6 md:p-8 space-y-4" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-[#d4af37]/70 text-[12px]">◈</span>
                   <span className="text-[#d4af37]/60 text-[10px] tracking-[0.3em] uppercase font-bold">GENESIS_NODE</span>
-                  <span className="text-white/10 text-[9px] tracking-[0.2em] uppercase ml-auto">INVITE_ONLY</span>
+                  <span className="text-white/30 text-[10px] tracking-[0.2em] uppercase ml-auto">INVITE_ONLY</span>
                 </div>
                 {[{ label: "Purpose", value: "Sovereign Identity — Governance & Trust" }, { label: "Setup", value: "40-second kinetic ceremony + OTP verification" }, { label: "Scope", value: "Identity Layer — protocol root & entropy anchor" }, { label: "Status", value: "Permanent. Immutable. Never offered again." }, { label: "Path", value: "Verify Presence → Claim Slot → Anchor Identity" }].map((r) => (
-                  <div key={r.label} className="flex gap-2 text-[9px]"><span className="text-white/15 shrink-0 w-16 text-right">{r.label}</span><span className="text-white/40">{r.value}</span></div>
+                  <div key={r.label} className="flex gap-2 text-[10px]"><span className="text-white/25 shrink-0 w-16 text-right">{r.label}</span><span className="text-white/40">{r.value}</span></div>
                 ))}
-                <a href="/genesis" className="inline-block mt-3 px-5 py-2 border border-[#d4af37]/30 text-[#d4af37]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#d4af37]/[0.06] hover:text-[#d4af37] transition-all no-underline" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Enter Genesis →</a>
+                <a href="/genesis" className="inline-block mt-3 px-5 py-2 border border-[#d4af37]/30 text-[#d4af37]/60 text-[10px] tracking-[0.2em] uppercase hover:bg-[#d4af37]/[0.06] hover:text-[#d4af37] transition-all no-underline" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Enter Genesis →</a>
               </div>
             </div>
             <div className="hidden md:flex items-center justify-center py-2 border-t border-[#90c8ff]/5 bg-[#02040a]/50">
               <div className="flex items-center gap-3">
                 <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#90c8ff]/15" />
-                <span className="text-white/10 text-[7px] tracking-[0.4em] uppercase">Protocol_Boundary</span>
+                <span className="text-white/30 text-[7px] tracking-[0.4em] uppercase">Protocol_Boundary</span>
                 <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#90c8ff]/15" />
               </div>
             </div>

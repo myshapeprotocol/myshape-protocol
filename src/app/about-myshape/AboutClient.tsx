@@ -61,7 +61,7 @@ export default function About() {
       <div className="space-y-32">
         {/* --- 1. 深层叙事 --- */}
         <section className="max-w-4xl">
-          <h2 className="text-white/20 text-[9px] tracking-[0.6em] uppercase mb-4 flex items-center gap-4">
+          <h2 className="text-white/30 text-[10px] tracking-[0.6em] uppercase mb-4 flex items-center gap-4">
             <span className="w-12 h-[1px] bg-[#90c8ff]/30" />
             ORGANIZATION_ETHOS
           </h2>
@@ -84,7 +84,7 @@ export default function About() {
 
         {/* --- 2. 核心原则 — 滚动解密动效 --- */}
         <section className="space-y-12">
-          <h3 className="text-white/20 text-[9px] tracking-[0.6em] uppercase text-center">
+          <h3 className="text-white/30 text-[10px] tracking-[0.6em] uppercase text-center">
             // CORE_VALUES_CONSTITUTION
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -102,10 +102,10 @@ export default function About() {
                   <div className="decrypt-scan absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#90c8ff]/60 to-transparent pointer-events-none" />
 
                   <div className="decrypt-content relative z-10">
-                    <div className="text-[#90c8ff]/70 text-[9px] tracking-[0.4em] font-mono mb-6 group-hover:text-[#90c8ff] transition-colors">
+                    <div className="text-[#90c8ff]/70 text-[10px] tracking-[0.4em] font-mono mb-6 group-hover:text-[#90c8ff] transition-colors">
                       {principle.label}
                     </div>
-                    <h4 className="text-white/70 text-[11px] tracking-[0.2em] uppercase mb-6 group-hover:text-white/90 transition-colors">
+                    <h4 className="text-white/70 text-[12px] tracking-[0.2em] uppercase mb-6 group-hover:text-white/90 transition-colors">
                       {principle.title}
                     </h4>
                     <p className="text-white/30 text-[10px] tracking-widest leading-relaxed uppercase group-hover:text-white/50 transition-colors">
@@ -121,7 +121,7 @@ export default function About() {
         {/* --- 3. THE_LABORATORY — 强化冷色调粒子感 --- */}
         <section
           className="relative group"
-          onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}
+          onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}
         >
           {/* 外围粒子辉光 */}
           <div className="absolute -inset-4 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none about-lab-glow" />
@@ -174,7 +174,7 @@ export default function About() {
                     LOCATION: [ENCRYPTED]
                   </span>
                 </div>
-                <span className="text-white/20 text-[8px] tracking-[0.2em]">EST. TIMESTAMP: 2024.09.12</span>
+                <span className="text-white/30 text-[10px] tracking-[0.2em]">EST. TIMESTAMP: 2024.09.12</span>
                 {/* 频谱条 — 更冷的色调 */}
                 <div className="flex justify-end gap-1">
                   {[...Array(8)].map((_, i) => (

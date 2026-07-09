@@ -6,6 +6,8 @@ import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "@/app/blog/blog.css";
+import PostNavigation from "@/components/blog/PostNavigation";
 
 const TOC_ITEMS = [
   { id: "crisis", label: "The Identity Crisis" },
@@ -172,7 +174,7 @@ export default function PostClient() {
 
         <article className="flex-1 min-w-0" style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
         <div className="mb-16">
-          <div className="text-[#90c8ff]/40 text-[9px] tracking-[0.4em] uppercase mb-4">PROTOCOL_ESSAY // 001</div>
+          <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.4em] uppercase mb-4">PROTOCOL_ESSAY // 001</div>
           <h1 className="text-2xl md:text-4xl font-light tracking-[0.04em] text-white leading-tight mb-6"
             style={{ textShadow: "0 0 40px rgba(144,200,255,0.15)" }}>
             Stored Identity vs. Generated Presence
@@ -180,7 +182,7 @@ export default function PostClient() {
           <p className="text-white/40 text-[18px] leading-relaxed">
             Why your &ldquo;identity&rdquo; is just a copyable database record — and what comes next.
           </p>
-          <div className="flex items-center gap-3 mt-4 text-[9px]">
+          <div className="flex items-center gap-3 mt-4 text-[10px]">
             <span className="text-white/20">MyShape Protocol</span>
             <span className="text-white/10">·</span>
             <span className="text-white/20">June 27, 2026</span>
@@ -192,7 +194,7 @@ export default function PostClient() {
         {/* Visual Hook — Architecture Diagram */}
         <div className="my-16 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] p-6 md:p-8 font-mono transition-all duration-300 hover:border-[#90c8ff]/35"
           onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
-          <div className="text-[#90c8ff]/30 text-[8px] tracking-[0.3em] uppercase mb-4 text-center">SYSTEM_SCHEMA: PRESENCE PIPELINE</div>
+          <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.25em] uppercase mb-4 text-center">SYSTEM_SCHEMA: PRESENCE PIPELINE</div>
           <pre className="text-[#90c8ff]/40 text-[10px] leading-[2.2] tracking-[0.08em] whitespace-pre overflow-x-auto text-center">
 {`CAMERA ──→ SST_18PT ──→ PES_4D ──→ 128D_VECTOR ──→ ZK_PROOF
  30fps      Skeleton    Entropy     Motion          Presence
@@ -201,7 +203,7 @@ export default function PostClient() {
   ◄──────────────── 0 DATA UPLOADED ────────────────►
          All processing on-device. Nothing stored.`}
           </pre>
-          <div className="mt-4 flex justify-center gap-4 text-[8px]">
+          <div className="mt-4 flex justify-center gap-4 text-[10px]">
             <span className="text-[#90c8ff]/25">◈ Benchmark: 0.3960 Human—AI Gap</span>
             <span className="text-white/10">|</span>
             <span className="text-[#90c8ff]/25">◈ Engine: Rust → WASM</span>
@@ -233,7 +235,7 @@ export default function PostClient() {
             <strong className="text-white/50">To the skeptic:</strong> every claim in this essay is verifiable.
             The benchmark code is on GitHub. The threat model is published. Attack it. We invite adversarial review.
           </p>
-          <p className="text-white/20 text-[9px]">
+          <p className="text-white/30 text-[10px]">
             Repository: github.com/myshapeprotocol &middot; Threat Model: myshape.com/papers/threat-model &middot; Live Demo: myshape.com/motion-demo
           </p>
         </div>
@@ -242,7 +244,7 @@ export default function PostClient() {
           <p className="text-white/20 text-[10px]">Discuss this essay on HN or GitHub.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="px-6 py-3 border border-[#90c8ff]/20 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase text-center hover:border-[#90c8ff]/45 hover:text-white hover:bg-[#90c8ff]/[0.04] transition-all">
               View on GitHub →
             </a>
@@ -264,45 +266,47 @@ export default function PostClient() {
           </div>
         </div>
 
+        <PostNavigation slug="/blog/stored-identity-vs-generated-presence" />
+
         {/* Internal link cluster */}
         <div className="mt-16 pt-12 border-t border-[#90c8ff]/5 space-y-4">
-          <p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">
+          <p className="text-white/38 text-[10px] tracking-[0.2em] uppercase text-center">
             Continue Reading
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Link
               href="/blog/motion-vs-biometrics-why-your-face-is-not-a-password"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
-              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+              <p className="text-white/55 text-[12px] tracking-[0.08em]">
                 Motion vs Biometrics
               </p>
-              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+              <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 Why your face is not a password →
               </p>
             </Link>
             <Link
               href="/blog/what-is-decentralized-identity-2026"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
-              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+              <p className="text-white/55 text-[12px] tracking-[0.08em]">
                 What Is Decentralized Identity?
               </p>
-              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+              <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 2026 guide to DID, SSI →
               </p>
             </Link>
             <Link
               href="/glossary"
-              onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+              onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
-              <p className="text-white/50 text-[10px] tracking-[0.1em]">
+              <p className="text-white/55 text-[12px] tracking-[0.08em]">
                 Protocol Glossary
               </p>
-              <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+              <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 30+ defined terms →
               </p>
             </Link>

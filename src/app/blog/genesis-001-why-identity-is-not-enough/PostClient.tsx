@@ -5,6 +5,8 @@ import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import "@/app/blog/blog.css";
+import PostNavigation from "@/components/blog/PostNavigation";
 
 const SECTIONS = [
   {
@@ -81,16 +83,18 @@ export default function PostClient() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-6" style={{ paddingTop: "8rem", paddingBottom: "6rem" }}>
           {/* Header */}
           <div className="space-y-4 mb-16">
-            <div className="flex items-center gap-4 text-[#90c8ff]/40 text-[9px] tracking-[0.3em] uppercase">
+            <div className="flex items-center gap-4 text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase">
               <span>GENESIS 001</span>
               <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
               <span>2026.07.02</span>
+              <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
+              <span className="text-white/25">The Continuity Lab</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight">
+            <h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>
               Why Identity<br />
               <span className="text-[#90c8ff]">Is Not Enough</span>
             </h1>
-            <p className="text-white/30 text-[11px] tracking-[0.1em] leading-relaxed max-w-xl">
+            <p className="text-white/50 text-[14px] tracking-[0.06em] leading-[1.7] max-w-xl">
               Identity proves existence. Continuity proves evolution.
               In the age of autonomous agents, we need protocols that verify
               the trajectory of a subject — not just its snapshot.
@@ -101,59 +105,61 @@ export default function PostClient() {
           <div className="space-y-20">
             {SECTIONS.map((section) => (
               <section key={section.id} id={section.id}>
-                <h2 className="text-white/60 text-[11px] tracking-[0.25em] uppercase mb-6 flex items-center gap-3">
+                <h2 className="text-white/65 text-[12px] tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
                   <span className="w-6 h-[1px] bg-[#90c8ff]/30" />
                   {section.heading}
                 </h2>
-                <div className="text-white/50 text-[12px] leading-relaxed tracking-[0.06em] space-y-5 whitespace-pre-line">
+                <div className="text-white/55 text-[17px] leading-[1.85] tracking-[0.03em] space-y-5 whitespace-pre-line">
                   {section.content}
                 </div>
               </section>
             ))}
           </div>
 
+          <PostNavigation slug="/blog/genesis-001-why-identity-is-not-enough" />
+
           {/* Divider */}
           <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#90c8ff]/15 to-transparent" />
 
           {/* Internal link cluster */}
           <div className="space-y-4 mb-16">
-            <p className="text-white/30 text-[9px] tracking-[0.25em] uppercase text-center">
+            <p className="text-white/38 text-[10px] tracking-[0.2em] uppercase text-center">
               Continue Reading
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <Link
                 href="/blog/what-is-proof-of-continuity"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
                 className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
               >
-                <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                <p className="text-white/55 text-[12px] tracking-[0.08em]">
                   What Is Proof of Continuity?
                 </p>
-                <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                   The missing primitive →
                 </p>
               </Link>
               <Link
                 href="/blog/what-is-decentralized-identity-2026"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
                 className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
               >
-                <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                <p className="text-white/55 text-[12px] tracking-[0.08em]">
                   What Is Decentralized Identity?
                 </p>
-                <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                   2026 guide to DID, SSI →
                 </p>
               </Link>
               <Link
                 href="/glossary"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
                 className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
               >
-                <p className="text-white/50 text-[10px] tracking-[0.1em]">
+                <p className="text-white/55 text-[12px] tracking-[0.08em]">
                   Protocol Glossary
                 </p>
-                <p className="text-white/20 text-[8px] tracking-[0.1em] mt-1">
+                <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                   30+ defined terms →
                 </p>
               </Link>
@@ -162,25 +168,25 @@ export default function PostClient() {
 
           {/* CTA */}
           <div className="p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
-            <p className="text-white/40 text-[10px] tracking-[0.15em] uppercase">
+            <p className="text-white/55 text-[13px] tracking-[0.1em] uppercase">
               Genesis 100 Cohort — Now Curating
             </p>
-            <p className="text-white/25 text-[10px] leading-relaxed max-w-md mx-auto">
+            <p className="text-white/45 text-[12px] leading-[1.7] max-w-md mx-auto">
               We are onboarding the first 100 human nodes to calibrate the motion-signature engine.
               The motion demo is live. Your presence is the proof.
             </p>
             <div className="flex justify-center gap-4 pt-2">
               <Link
                 href="/motion-demo"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
+                className="px-6 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/65 text-[10px] tracking-[0.18em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all"
               >
                 Motion Demo →
               </Link>
               <Link
                 href="/genesis"
-                onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[9px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
+                onMouseEnter={() => playTick(700, "sine", 0.08, 0.025)}
+                className="px-6 py-2 border border-[#90c8ff]/15 text-[#90c8ff]/50 text-[10px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all"
               >
                 Genesis →
               </Link>
@@ -191,7 +197,7 @@ export default function PostClient() {
           <div className="mt-12 text-center">
             <Link
               href="/blog"
-              className="text-white/15 text-[9px] tracking-[0.2em] uppercase hover:text-white/40 transition-colors"
+              className="text-white/30 text-[11px] tracking-[0.18em] uppercase hover:text-white/55 transition-colors"
             >
               ← Protocol Log
             </Link>

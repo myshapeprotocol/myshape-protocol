@@ -54,7 +54,7 @@ export default function VisionClient() {
       <div className="space-y-24 md:space-y-36">
         {/* ── 0. 范式宣言：从 Identity 到 Continuity ── */}
         <section className="relative max-w-3xl"
-          onMouseEnter={() => playTick(400, "sine", 0.03, 0.01)}>
+          onMouseEnter={() => playTick(400, "sine", 0.03, 0.022)}>
           <div className="text-[#90c8ff]/[0.03] text-[140px] font-bold absolute -top-20 -left-10 select-none pointer-events-none leading-none">C</div>
           <div className="relative z-10 border-l-2 border-[#90c8ff]/25 pl-6 md:pl-10 py-3">
             <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.3em] uppercase font-mono mb-5">// THE CONTINUITY THESIS</div>
@@ -95,8 +95,8 @@ export default function VisionClient() {
 
         {/* ── 2. 四大支柱 ── */}
         <section>
-          <div className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-12 text-center hover:text-[#90c8ff]/50 transition-colors cursor-default"
-            onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
+          <div className="text-white/30 md:text-white/35 text-[10px] md:text-[12px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-12 text-center hover:text-[#90c8ff]/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(450, "sine", 0.04, 0.022)}>
             // PROTOCOL_PILLARS
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,16 +106,16 @@ export default function VisionClient() {
                 onMouseEnter={e => { playTick(600, "sine", 0.08, 0.015); e.currentTarget.style.borderColor = pillar.color; e.currentTarget.style.background = "rgba(144,200,255,0.02)"; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.08)"; e.currentTarget.style.background = "transparent"; }}>
                 <div className={`h-[2px] mb-5 bg-gradient-to-r ${pillar.accent} w-12 group-hover:w-full transition-all duration-700`} />
-                <div className="text-[#90c8ff]/40 text-[9px] tracking-[0.4em] font-mono mb-2 group-hover:text-[#90c8ff]/70 transition-colors">
+                <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.4em] font-mono mb-2 group-hover:text-[#90c8ff]/70 transition-colors">
                   {pillar.id}
                 </div>
                 <h3 className="text-white/80 text-[13px] tracking-[0.25em] font-bold uppercase mb-2 group-hover:text-white transition-colors">
                   {pillar.title}
                 </h3>
-                <p className="text-[#90c8ff]/30 text-[9px] tracking-[0.15em] uppercase mb-4 group-hover:text-[#90c8ff]/50 transition-colors">
+                <p className="text-[#90c8ff]/30 text-[10px] tracking-[0.15em] uppercase mb-4 group-hover:text-[#90c8ff]/50 transition-colors">
                   {pillar.subtitle}
                 </p>
-                <p className="text-white/35 text-[11px] tracking-[0.1em] leading-[1.8] group-hover:text-white/55 transition-colors">
+                <p className="text-white/35 text-[12px] tracking-[0.1em] leading-[1.8] group-hover:text-white/55 transition-colors">
                   {pillar.desc}
                 </p>
               </div>
@@ -125,23 +125,23 @@ export default function VisionClient() {
 
         {/* ── 3. 协议轨迹 ── */}
         <section className="border-t border-white/[0.04] pt-16">
-          <div className="text-white/30 md:text-white/35 text-[10px] md:text-[11px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-14 text-center hover:text-[#90c8ff]/50 transition-colors cursor-default"
-            onMouseEnter={() => playTick(450, "sine", 0.04, 0.01)}>
+          <div className="text-white/30 md:text-white/35 text-[10px] md:text-[12px] tracking-[0.5em] md:tracking-[0.6em] uppercase mb-14 text-center hover:text-[#90c8ff]/50 transition-colors cursor-default"
+            onMouseEnter={() => playTick(450, "sine", 0.04, 0.022)}>
             Protocol Trajectory
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {futureStates.map((s, i) => (
               <div key={s.label} className="group text-center"
                 onMouseEnter={() => playTick(500 + i * 120, "sine", 0.06, 0.015)}>
-                <div className={`text-[11px] tracking-[0.3em] uppercase mb-5 font-mono font-bold transition-all duration-500 ${s.active ? "text-[#90c8ff]/70" : "text-white/25 group-hover:text-[#90c8ff]/50"}`}>
+                <div className={`text-[12px] tracking-[0.3em] uppercase mb-5 font-mono font-bold transition-all duration-500 ${s.active ? "text-[#90c8ff]/70" : "text-white/25 group-hover:text-[#90c8ff]/50"}`}>
                   {s.label}
                 </div>
                 <div className={`h-[2px] mx-auto mb-5 transition-all duration-500 ${s.active ? "bg-[#90c8ff]/50 w-16" : "bg-white/10 w-8 group-hover:bg-[#90c8ff]/25 group-hover:w-14"}`} />
-                <p className="text-white/35 text-[11px] leading-[1.8] group-hover:text-white/50 transition-colors">
+                <p className="text-white/35 text-[12px] leading-[1.8] group-hover:text-white/50 transition-colors">
                   {s.desc}
                 </p>
                 {s.active && (
-                  <div className="mt-3 text-[#90c8ff]/30 text-[8px] tracking-[0.2em] uppercase">◈ ACTIVE</div>
+                  <div className="mt-3 text-[#90c8ff]/30 text-[10px] tracking-[0.2em] uppercase">◈ ACTIVE</div>
                 )}
               </div>
             ))}
@@ -150,13 +150,13 @@ export default function VisionClient() {
 
         {/* ── 4. 哲学 ── */}
         <section className="py-20 border-y border-white/[0.04] relative overflow-hidden"
-          onMouseEnter={() => playTick(400, "sine", 0.03, 0.01)}>
+          onMouseEnter={() => playTick(400, "sine", 0.03, 0.022)}>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#90c8ff]/[0.03] to-transparent" />
           <div className="max-w-xl mx-auto text-center space-y-8 relative z-10">
             <div className="flex items-center justify-center gap-3">
               <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#90c8ff]/20" />
-              <span className="text-white/18 text-[9px] tracking-[0.4em] uppercase font-mono hover:text-[#90c8ff]/40 transition-colors cursor-default"
-                onMouseEnter={() => playTick(450, "sine", 0.03, 0.01)}>Continuity_Projection_001</span>
+              <span className="text-white/28 text-[10px] tracking-[0.4em] uppercase font-mono hover:text-[#90c8ff]/40 transition-colors cursor-default"
+                onMouseEnter={() => playTick(450, "sine", 0.03, 0.022)}>Continuity_Projection_001</span>
               <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#90c8ff]/20" />
             </div>
             <blockquote className="text-white/60 text-[14px] md:text-[16px] tracking-[0.12em] leading-[1.9] font-light italic">
@@ -170,7 +170,7 @@ export default function VisionClient() {
                   onMouseEnter={() => playTick(350, "sine", 0.02, 0.005)} />
               ))}
             </div>
-            <p className="text-white/20 text-[9px] tracking-[0.2em] uppercase">
+            <p className="text-white/30 text-[10px] tracking-[0.2em] uppercase">
               — MyShape Protocol &middot; V1.0_GENESIS
             </p>
           </div>
@@ -179,16 +179,16 @@ export default function VisionClient() {
         {/* ── 5. CTA ── */}
         <section className="flex flex-col md:flex-row justify-between items-end gap-8">
           <div className="space-y-3">
-            <div className="text-[#90c8ff]/55 text-[11px] tracking-[0.4em] font-bold uppercase">
+            <div className="text-[#90c8ff]/55 text-[12px] tracking-[0.4em] font-bold uppercase">
               Status: Continuity_Layer_Active
             </div>
-            <p className="text-white/30 text-[11px] tracking-[0.12em] max-w-sm leading-relaxed">
+            <p className="text-white/30 text-[12px] tracking-[0.12em] max-w-sm leading-relaxed">
               The Continuity Layer is operational. Genesis Cohort validating the first persistent digital subjects.
               Building toward the verification primitive for the Agent Economy.
             </p>
             <Link href="/genesis"
               onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-              className="inline-block mt-4 px-10 py-3.5 border border-[#90c8ff]/30 text-[#90c8ff]/70 text-[11px] tracking-[0.3em] uppercase hover:bg-[#90c8ff]/[0.04] hover:text-white hover:border-[#90c8ff]/50 transition-all"
+              className="inline-block mt-4 px-10 py-3.5 border border-[#90c8ff]/30 text-[#90c8ff]/70 text-[12px] tracking-[0.3em] uppercase hover:bg-[#90c8ff]/[0.04] hover:text-white hover:border-[#90c8ff]/50 transition-all"
               style={{ clipPath: "polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)", background: "rgba(144,200,255,0.03)" }}>
               Join the Genesis →
             </Link>

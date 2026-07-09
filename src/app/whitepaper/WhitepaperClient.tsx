@@ -337,7 +337,7 @@ export default function WhitepaperClient() {
               Why DeepSeek and GPT-5<br />
               <span className="text-[#90c8ff]/80">Cannot Forge</span> the Human Kinetic Signature
             </h1>
-            <div className="flex items-center gap-3 text-[11px]">
+            <div className="flex items-center gap-3 text-[12px]">
               <span className="text-white/30">MyShape Protocol</span>
               <span className="text-white/10">·</span>
               <span className="text-white/30">June 2026</span>
@@ -345,14 +345,14 @@ export default function WhitepaperClient() {
               <span className="text-white/30">v0.1</span>
             </div>
             <div className="flex items-center gap-3 mt-4">
-              <span className="flex items-center gap-1.5 text-[#90c8ff]/60 text-[9px] tracking-[0.2em] uppercase">
+              <span className="flex items-center gap-1.5 text-[#90c8ff]/60 text-[10px] tracking-[0.2em] uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.6)] animate-pulse" />
                 Engine v0.1.0
               </span>
               <span className="text-white/10">|</span>
-              <span className="text-white/25 text-[9px]">25/25 tests pass</span>
+              <span className="text-white/25 text-[10px]">25/25 tests pass</span>
               <span className="text-white/10">|</span>
-              <span className="text-white/25 text-[9px]">Human—AI Gap: 0.3960</span>
+              <span className="text-white/25 text-[10px]">Human—AI Gap: 0.3960</span>
             </div>
           </div>
 
@@ -360,7 +360,7 @@ export default function WhitepaperClient() {
           <div className="space-y-52">
             {SECTIONS.map((section) => (
               <section key={section.id} id={section.id} className="scroll-mt-40 pt-16 first:pt-0 group"
-                onMouseEnter={() => playTick(600, "sine", 0.04, 0.01)}>
+                onMouseEnter={() => playTick(600, "sine", 0.04, 0.022)}>
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-white mb-8 uppercase transition-colors duration-500 group-hover:text-[#90c8ff]/80">
                   <span className="text-[#90c8ff]/60 mr-3">{section.num}.</span>
                   {section.heading}
@@ -373,7 +373,7 @@ export default function WhitepaperClient() {
 
                 {section.id === "results" && (
                   <div className="border p-6 my-8" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
-                    <pre className="text-white/45 text-[11px] leading-relaxed font-mono whitespace-pre">
+                    <pre className="text-white/45 text-[12px] leading-relaxed font-mono whitespace-pre">
                       {`  Test Case              Presence Score   Verdict
   ─────────────────────────────────────────────────
   Genuine Human          0.9817           PASS ✓
@@ -391,17 +391,17 @@ export default function WhitepaperClient() {
                     <div className="border p-6" style={{ borderColor: "rgba(144,200,255,0.15)", background: "rgba(4,14,28,0.5)" }}>
                       <div className="flex items-center gap-3 mb-4">
                         <span className={`w-2 h-2 rounded-full ${isSealed ? "bg-[#90c8ff] shadow-[0_0_12px_rgba(144,200,255,0.9)]" : "bg-[#90c8ff] shadow-[0_0_8px_rgba(144,200,255,0.8)] animate-pulse"}`} />
-                        <span className="text-[#90c8ff]/60 text-[9px] tracking-[0.4em] uppercase">
+                        <span className="text-[#90c8ff]/60 text-[10px] tracking-[0.4em] uppercase">
                           {isSealed ? "Genesis Cohort — Sealed & Immutable" : "Genesis Cohort — Live Registry"}
                         </span>
                         {isSealed && (
-                          <span className="text-[#90c8ff]/40 text-[8px] tracking-[0.2em] border border-[#90c8ff]/20 px-2 py-0.5">FINAL</span>
+                          <span className="text-[#90c8ff]/40 text-[10px] tracking-[0.2em] border border-[#90c8ff]/20 px-2 py-0.5">FINAL</span>
                         )}
                       </div>
 
                       <div className="flex items-baseline gap-4 mb-4">
                         <span className="text-5xl font-light font-mono text-[#90c8ff]/80">{genesisNodes.total}</span>
-                        <span className="text-white/20 text-[11px] tracking-[0.2em] uppercase">of 100 slots claimed</span>
+                        <span className="text-white/30 text-[12px] tracking-[0.2em] uppercase">of 100 slots claimed</span>
                         <span className="text-[#90c8ff]/40 text-[10px]">— {genesisNodes.remaining} remaining</span>
                       </div>
 
@@ -410,13 +410,13 @@ export default function WhitepaperClient() {
                         {isSealed ? (
                           <div className="text-center py-3 border border-[#90c8ff]/20 bg-[#90c8ff]/[0.03]">
                             <div className="text-[#90c8ff]/80 text-[10px] tracking-[0.4em] uppercase font-mono mb-1">◈ COHORT_SEALED ◈</div>
-                            <div className="text-white/25 text-[8px] tracking-[0.2em] uppercase">Identity Layer Anchored — Registry Immutable</div>
+                            <div className="text-white/25 text-[10px] tracking-[0.2em] uppercase">Identity Layer Anchored — Registry Immutable</div>
                           </div>
                         ) : (
                           <>
                             <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-white/10 text-[8px] tracking-[0.3em] uppercase">Protocol Sync</span>
-                              <span className="text-[#90c8ff]/30 font-mono text-[8px]">{(genesisNodes.total / 100 * 100).toFixed(1)}%</span>
+                              <span className="text-white/30 text-[10px] tracking-[0.3em] uppercase">Protocol Sync</span>
+                              <span className="text-[#90c8ff]/30 font-mono text-[10px]">{(genesisNodes.total / 100 * 100).toFixed(1)}%</span>
                             </div>
                             <div className="relative h-1 bg-white/[0.04] overflow-hidden">
                               <div
@@ -430,7 +430,7 @@ export default function WhitepaperClient() {
                             </div>
                             <div className="flex items-center gap-1.5 mt-1">
                               <span className={`w-1 h-1 rounded-full transition-all duration-500 ${nodePulse ? "bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.8)]" : "bg-[#90c8ff]/30"}`} />
-                              <span className="text-white/10 text-[8px] tracking-[0.2em] uppercase">
+                              <span className="text-white/30 text-[10px] tracking-[0.2em] uppercase">
                                 {genesisNodes.total === 0 ? "Awaiting genesis initialization" :
                                  genesisNodes.total < 100 ? "Network bootstrapping in progress" :
                                  "Genesis Cohort sealed — network active"}
@@ -443,17 +443,17 @@ export default function WhitepaperClient() {
                       {genesisNodes.nodes.length > 0 && (
                         <div className={`grid ${isSealed ? "grid-cols-3 md:grid-cols-5" : "grid-cols-2 md:grid-cols-4"} gap-2`}>
                           {genesisNodes.nodes.slice(0, isSealed ? 100 : 20).map(n => (
-                            <div key={n.index} className="flex items-center gap-2 p-2 border text-[9px] font-mono transition-all duration-500"
+                            <div key={n.index} className="flex items-center gap-2 p-2 border text-[10px] font-mono transition-all duration-500"
                               style={{
                                 borderColor: isSealed ? "rgba(144,200,255,0.1)" : "rgba(255,255,255,0.04)",
                                 background: isSealed ? "rgba(4,14,28,0.8)" : "rgba(2,4,10,0.6)",
                               }}>
-                              <span className="text-white/10 text-[8px] w-5">#{n.index}</span>
+                              <span className="text-white/30 text-[10px] w-5">#{n.index}</span>
                               <span className="text-white/25 truncate">{n.id}</span>
                             </div>
                           ))}
                           {!isSealed && genesisNodes.total > 20 && (
-                            <div className="flex items-center justify-center p-2 border border-white/[0.02] text-[9px] text-white/10 font-mono">
+                            <div className="flex items-center justify-center p-2 border border-white/[0.02] text-[10px] text-white/30 font-mono">
                               +{genesisNodes.total - 20} more
                             </div>
                           )}
@@ -461,7 +461,7 @@ export default function WhitepaperClient() {
                       )}
                       {isSealed && (
                         <div className="text-center mt-4 pt-3 border-t border-[#90c8ff]/10">
-                          <span className="text-[#90c8ff]/30 text-[8px] tracking-[0.3em] uppercase font-mono">
+                          <span className="text-[#90c8ff]/30 text-[10px] tracking-[0.3em] uppercase font-mono">
                             ◈ Genesis Registry — Permanently Anchored to Protocol Root Index
                           </span>
                         </div>
@@ -483,8 +483,8 @@ export default function WhitepaperClient() {
                 {section.id === "integration" && (
                   <div className="space-y-3 my-8">
                     <div className="border p-5" style={{ borderColor: "rgba(144,200,255,0.1)" }}>
-                      <div className="text-[#90c8ff]/40 text-[8px] tracking-[0.3em] uppercase mb-3 font-mono">TypeScript SDK</div>
-                      <pre className="text-[#90c8ff]/60 text-[11px] leading-relaxed font-mono whitespace-pre-wrap">
+                      <div className="text-[#90c8ff]/40 text-[10px] tracking-[0.3em] uppercase mb-3 font-mono">TypeScript SDK</div>
+                      <pre className="text-[#90c8ff]/60 text-[12px] leading-relaxed font-mono whitespace-pre-wrap">
 {`import { MyShapeSDK } from "myshape-sdk";
 
 const myshape = await MyShapeSDK.init();
@@ -497,8 +497,8 @@ if (result.verified) { executeTransaction(); }`}
                       </pre>
                     </div>
                     <div className="border p-5" style={{ borderColor: "rgba(144,200,255,0.1)", background: "rgba(2,4,10,0.6)" }}>
-                      <div className="text-white/20 text-[8px] tracking-[0.3em] uppercase mb-3 font-mono">Native CLI</div>
-                      <pre className="text-[#90c8ff]/35 text-[11px] leading-relaxed font-mono whitespace-pre-wrap">
+                      <div className="text-white/30 text-[10px] tracking-[0.3em] uppercase mb-3 font-mono">Native CLI</div>
+                      <pre className="text-[#90c8ff]/35 text-[12px] leading-relaxed font-mono whitespace-pre-wrap">
 {`cargo run --release --bin myshape-verify -- \\
   --enrollment alice.enroll.json \\
   --challenge session.challenge.json \\
@@ -516,8 +516,8 @@ if (result.verified) { executeTransaction(); }`}
           <div className="mt-28 pt-12 border-t" style={{ borderColor: "rgba(144,200,255,0.08)" }}>
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="space-y-1">
-                <p className="text-white/20 text-[9px] tracking-[0.3em] uppercase font-mono">Ready to integrate?</p>
-                <p className="text-white/30 text-[11px]">Five lines of code. Zero data stored. Real human presence.</p>
+                <p className="text-white/30 text-[10px] tracking-[0.3em] uppercase font-mono">Ready to integrate?</p>
+                <p className="text-white/30 text-[12px]">Five lines of code. Zero data stored. Real human presence.</p>
               </div>
               <a href="/developers"
                 className="inline-flex items-center gap-2 px-5 py-2.5 border text-[#90c8ff]/70 text-[10px] tracking-[0.2em] uppercase font-mono hover:bg-[#90c8ff]/[0.04] transition-all"

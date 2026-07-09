@@ -57,10 +57,10 @@ export default function ProtocolClient() {
       <div className="space-y-20 md:space-y-28">
         {/* Five-Layer Architecture */}
         <section>
-          <h2 className="proto-section-title mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Five-Layer Architecture</h2>
+          <h2 className="proto-section-title mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>Five-Layer Architecture</h2>
           <div className="space-y-1 max-w-3xl mx-auto">
             {FIVE_LAYERS.map((l) => (
-              <div key={l.layer} className="proto-layer-card" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>
+              <div key={l.layer} className="proto-layer-card" onMouseEnter={() => playTick(600, "sine", 0.06, 0.022)}>
                 <div className="proto-layer-num">L{l.layer}</div>
                 <div className="flex-1 min-w-0">
                   <div className="proto-layer-name">{l.name}</div>
@@ -74,10 +74,10 @@ export default function ProtocolClient() {
 
         {/* Specification Implementation */}
         <section>
-          <h2 className="proto-section-title mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Specification Implementation</h2>
+          <h2 className="proto-section-title mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>Specification Implementation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {SPEC_SECTIONS.map((s) => (
-              <div key={s.id} className="proto-spec-card" onMouseEnter={() => playTick(600, "sine", 0.06, 0.012)}>
+              <div key={s.id} className="proto-spec-card" onMouseEnter={() => playTick(600, "sine", 0.06, 0.02)}>
                 <div className="proto-spec-header">
                   <span className="proto-spec-id">{s.id}</span>
                   <span className="proto-spec-status"><span className="proto-status-dot" />{s.status}</span>
@@ -91,14 +91,14 @@ export default function ProtocolClient() {
 
         {/* Protocol Engines */}
         <section>
-          <h2 className="proto-section-title mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Engines</h2>
+          <h2 className="proto-section-title mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>Protocol Engines</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Engine</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal hidden md:table-cell">Module</th>
-                  <th className="p-3 text-white/30 text-[9px] tracking-[0.3em] uppercase font-normal">Description</th>
+                  <th className="p-3 text-white/40 text-[10px] tracking-[0.25em] uppercase font-normal">Engine</th>
+                  <th className="p-3 text-white/40 text-[10px] tracking-[0.25em] uppercase font-normal hidden md:table-cell">Module</th>
+                  <th className="p-3 text-white/40 text-[10px] tracking-[0.25em] uppercase font-normal">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,7 +117,7 @@ export default function ProtocolClient() {
         {/* Protocol Respiration & Evolution */}
         <section className="proto-divider py-16">
           <div className="max-w-2xl mx-auto text-center">
-            <div className="proto-section-title text-center mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Protocol Respiration &amp; Evolution</div>
+            <div className="proto-section-title text-center mb-6" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>Protocol Respiration &amp; Evolution</div>
             <h2 className="text-2xl md:text-3xl font-light tracking-tight text-white mb-8">
               Identity is not static.<br />
               <span className="text-[#90c8ff]/70">It breathes with you.</span>
@@ -147,7 +147,7 @@ export default function ProtocolClient() {
             <div className="mt-4 text-white/25 hover:text-[#90c8ff]/50 text-[9px] tracking-[0.25em] uppercase transition-colors cursor-default" onMouseEnter={() => playTick(450, "sine", 0.03, 0.01)}>Stillness → Awakening → Genesis Sealed</div>
             <div className="mt-8 text-white/20 text-[9px] tracking-[0.15em]">
               Full evolution specification archived in{" "}
-              <a href="/papers/technical-spec" className="text-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-colors underline decoration-[#90c8ff]/20 hover:decoration-[#90c8ff]/40" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>Technical Specification §12</a>
+              <a href="/papers/technical-spec" className="text-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-colors underline decoration-[#90c8ff]/20 hover:decoration-[#90c8ff]/40" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>Technical Specification §12</a>
             </div>
           </div>
         </section>
