@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "Stored Identity vs. Generated Presence",
     description:
       "Every identity system today stores a snapshot. Snapshots can be copied. Presence cannot.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=Stored%20Identity%20vs.%20Generated%20Presence%20%E2%80%94%20Why%20Your%20'Identity'%20Is%20Just%20a%20Copyable%20Database%20Record"],
   },
 };
 

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["DID","decentralized identifier","DID explained","did:ethr","did:key","W3C DID","self-sovereign identity","MyShape Protocol"],
   alternates: { canonical: "https://www.myshape.com/blog/what-is-did-decentralized-identifiers" },
   openGraph: { title: "What Is a DID? Decentralized Identifiers Explained", description: "The foundation of self-sovereign identity. How DIDs work and why they matter.", url: "https://www.myshape.com/blog/what-is-did-decentralized-identifiers", siteName: "MyShape Protocol", type: "article", publishedTime: "2026-07-03", authors: ["MyShape Protocol"], tags: ["DID","identity","SSI","Web3"] },
-  twitter: { card: "summary_large_image", title: "What Is a DID?", description: "The foundation of self-sovereign identity, explained.", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "What Is a DID?", description: "The foundation of self-sovereign identity, explained.", images: ["/blog/og?title=What%20Is%20a%20DID%3F%20Decentralized%20Identifiers%20Explained%20Simply"] },
 };
 
 export default function Page() {

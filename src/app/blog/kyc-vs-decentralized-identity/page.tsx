@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["KYC vs decentralized identity","KYC problems","document verification","SSI KYC","self-sovereign identity regulation","eIDAS","MyShape Protocol"],
   alternates: { canonical: "https://www.myshape.com/blog/kyc-vs-decentralized-identity" },
   openGraph: { title: "KYC vs Decentralized Identity", description: "Why document verification is broken and how SSI solves it.", url: "https://www.myshape.com/blog/kyc-vs-decentralized-identity", siteName: "MyShape Protocol", type: "article", publishedTime: "2026-07-03", authors: ["MyShape Protocol"], tags: ["KYC","SSI","regulation","identity"] },
-  twitter: { card: "summary_large_image", title: "KYC vs Decentralized Identity", description: "Why document verification fails at scale.", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "KYC vs Decentralized Identity", description: "Why document verification fails at scale.", images: ["/blog/og?title=KYC%20vs%20Decentralized%20Identity%20%E2%80%94%20Why%20Document%20Verification%20Is%20Not%20Sovereignty"] },
 };
 
 export default function Page() {

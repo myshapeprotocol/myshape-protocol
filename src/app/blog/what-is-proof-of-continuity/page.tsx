@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "What Is Proof of Continuity?",
     description:
       "The missing cryptographic primitive for the Agent Economy. Why identity is not enough — and what comes next.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=What%20Is%20Proof%20of%20Continuity%3F%20The%20Missing%20Primitive%20for%20the%20Agent%20Economy"],
   },
 };
 

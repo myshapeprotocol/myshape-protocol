@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: "Motion-Based Authentication vs Biometrics",
     description:
       "Your face is not a password. Here's why motion is the future of authentication.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=Motion-Based%20Authentication%20vs%20Biometrics%20%E2%80%94%20Why%20Your%20Face%20Is%20Not%20a%20Password"],
   },
 };
 

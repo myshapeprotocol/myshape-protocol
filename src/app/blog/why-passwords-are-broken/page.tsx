@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["passwords broken","passwordless authentication","why passwords fail","authentication security","passkeys","biometrics vs passwords","post-password","MyShape Protocol"],
   alternates: { canonical: "https://www.myshape.com/blog/why-passwords-are-broken" },
   openGraph: { title: "Why Passwords Are Broken", description: "The end of 'something you know' — and what comes next.", url: "https://www.myshape.com/blog/why-passwords-are-broken", siteName: "MyShape Protocol", type: "article", publishedTime: "2026-07-03", authors: ["MyShape Protocol"], tags: ["passwords","security","authentication"] },
-  twitter: { card: "summary_large_image", title: "Why Passwords Are Broken", description: "The end of 'something you know.'", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "Why Passwords Are Broken", description: "The end of 'something you know.'", images: ["/blog/og?title=Why%20Passwords%20Are%20Broken%20%E2%80%94%20The%20End%20of%20'Something%20You%20Know'"] },
 };
 
 export default function Page() {

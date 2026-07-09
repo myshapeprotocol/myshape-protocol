@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Self-Sovereign Identity Explained",
     description: "What SSI actually delivers in 2026 — and what comes next.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=Self-Sovereign%20Identity%20Explained%20%E2%80%94%20What%20SSI%20Actually%20Means%20in%202026"],
   },
 };
 

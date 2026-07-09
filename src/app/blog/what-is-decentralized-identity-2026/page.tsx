@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "What Is Decentralized Identity? The 2026 Guide",
     description:
       "The complete guide to DID, SSI, and why proof of continuity is the next evolution.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=What%20Is%20Decentralized%20Identity%3F%20The%202026%20Guide%20to%20Self-Sovereign%20Digital%20Identity"],
   },
 };
 

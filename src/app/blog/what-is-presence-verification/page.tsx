@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["presence verification","proof of presence","liveness detection","motion verification","anti-spoofing","MyShape Protocol"],
   alternates: { canonical: "https://www.myshape.com/blog/what-is-presence-verification" },
   openGraph: { title: "What Is Presence Verification?", description: "The 500-year history of proving someone is really there.", url: "https://www.myshape.com/blog/what-is-presence-verification", siteName: "MyShape Protocol", type: "article", publishedTime: "2026-07-03", authors: ["MyShape Protocol"], tags: ["presence","verification","history","motion"] },
-  twitter: { card: "summary_large_image", title: "What Is Presence Verification?", description: "From wax seals to motion-signature.", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "What Is Presence Verification?", description: "From wax seals to motion-signature.", images: ["/blog/og?title=What%20Is%20Presence%20Verification%3F%20The%20History%20and%20Future%20of%20Proving%20Someone%20Is%20Really%20There"] },
 };
 
 export default function Page() {

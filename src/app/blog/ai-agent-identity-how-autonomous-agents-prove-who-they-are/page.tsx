@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: "AI Agent Identity — How Autonomous Agents Prove Who They Are",
     description:
       "The identity problem for autonomous AI agents — and how MyShape solves it.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=AI%20Agent%20Identity%20%E2%80%94%20How%20Autonomous%20Agents%20Prove%20Who%20They%20Are%20in%202026"],
   },
 };
 

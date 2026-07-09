@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["digital identity standards","W3C DID","VC Data Model","ISO 18013","eIDAS 2.0","IETF SATP","identity standards 2026","MyShape Protocol"],
   alternates: { canonical: "https://www.myshape.com/blog/digital-identity-standards-2026" },
   openGraph: { title: "Digital Identity Standards 2026", description: "W3C, ISO, IETF, eIDAS — the complete map.", url: "https://www.myshape.com/blog/digital-identity-standards-2026", siteName: "MyShape Protocol", type: "article", publishedTime: "2026-07-03", authors: ["MyShape Protocol"], tags: ["standards","W3C","ISO","IETF","eIDAS"] },
-  twitter: { card: "summary_large_image", title: "Digital Identity Standards 2026", description: "The complete map of identity standards.", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "Digital Identity Standards 2026", description: "The complete map of identity standards.", images: ["/blog/og?title=Digital%20Identity%20Standards%202026%20%E2%80%94%20W3C%2C%20ISO%2C%20IETF%2C%20and%20What%20They%20Mean"] },
 };
 
 export default function Page() {

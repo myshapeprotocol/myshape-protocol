@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "The Continuity Layer for the Simulation Age",
     description:
       "Identity is a snapshot. Continuity is a trajectory. MyShape makes digital continuity verifiable.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=The%20Continuity%20Layer%20for%20the%20Simulation%20Age%20%E2%80%94%20MyShape%20Protocol"],
   },
 };
 

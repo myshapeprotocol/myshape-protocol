@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["verify human online","human verification","proof of personhood","liveness detection","how to verify identity","motion-signature","MyShape Protocol"],
   alternates: { canonical: "https://www.myshape.com/blog/how-to-verify-human-online-2026" },
   openGraph: { title: "How to Verify a Human Online in 2026", description: "Every method ranked by security, privacy, and AI-resistance. The complete guide.", url: "https://www.myshape.com/blog/how-to-verify-human-online-2026", siteName: "MyShape Protocol", type: "article", publishedTime: "2026-07-03", authors: ["MyShape Protocol"], tags: ["verification","human","identity","security","guide"] },
-  twitter: { card: "summary_large_image", title: "How to Verify a Human Online in 2026", description: "Every method ranked. The complete guide.", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "How to Verify a Human Online in 2026", description: "Every method ranked. The complete guide.", images: ["/blog/og?title=How%20to%20Verify%20a%20Human%20Online%20in%202026%20%E2%80%94%20The%20Complete%20Guide"] },
 };
 
 export default function Page() {

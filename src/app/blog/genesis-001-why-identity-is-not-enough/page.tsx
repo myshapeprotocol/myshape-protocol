@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GENESIS 001 — Why Identity Is Not Enough",
     description: "Identity proves existence. Continuity proves evolution.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=GENESIS%20001%20%E2%80%94%20Why%20Identity%20Is%20Not%20Enough"],
   },
 };
 

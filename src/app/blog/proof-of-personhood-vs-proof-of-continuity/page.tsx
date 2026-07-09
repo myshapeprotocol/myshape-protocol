@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Proof of Personhood vs Proof of Continuity",
     description:
       "One proves you are human. The other proves you are still you. Why both matter.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=Proof%20of%20Personhood%20vs%20Proof%20of%20Continuity%20%E2%80%94%20Two%20Different%20Problems%2C%20Two%20Different%20Protocols"],
   },
 };
 

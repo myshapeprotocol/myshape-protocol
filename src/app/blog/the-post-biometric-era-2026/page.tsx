@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     authors: ["MyShape Protocol"],
     tags: ["post-biometric", "biometrics", "identity", "motion", "security"],
   },
-  twitter: { card: "summary_large_image", title: "The Post-Biometric Era", description: "Why we stop scanning faces in 2026.", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: "The Post-Biometric Era", description: "Why we stop scanning faces in 2026.", images: ["/blog/og?title=The%20Post-Biometric%20Era%20%E2%80%94%20Why%202026%20Is%20the%20Year%20We%20Stop%20Scanning%20Faces"] },
 };
 
 export default function Page() {

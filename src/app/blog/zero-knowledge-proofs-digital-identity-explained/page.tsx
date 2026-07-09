@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: "Zero-Knowledge Proofs Explained for Digital Identity",
     description:
       "Verify identity without revealing who you are. How ZK enables privacy-first identity.",
-    images: ["/og-image.png"],
+    images: ["/blog/og?title=Zero-Knowledge%20Proofs%20Explained%20%E2%80%94%20What%20ZK%20Means%20for%20Digital%20Identity%20in%202026"],
   },
 };
 
