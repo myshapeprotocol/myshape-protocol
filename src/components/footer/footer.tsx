@@ -126,9 +126,8 @@ export default function ProtocolFooter() {
         ))}
       </div>
 
-      {/* 2. 狀態條 & 訂閱區 */}
-      {/* 桌面端专属：订阅区 */}
-      <div className="max-w-6xl mx-auto px-4 md:px-10 border-t border-white/5 pt-6 md:pt-12 mt-12 md:mt-28">
+      {/* 2. 狀態條 & 訂閱區 — desktop only */}
+      <div className="hidden md:block max-w-6xl mx-auto px-4 md:px-10 border-t border-white/5 pt-6 md:pt-12 mt-12 md:mt-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
@@ -185,12 +184,12 @@ export default function ProtocolFooter() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
-        <div className="flex items-center justify-center gap-1.5">
+        <div className="hidden md:flex items-center justify-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-[#90c8ff]/60 shadow-[0_0_4px_rgba(144,200,255,0.5)]" />
           <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 3 Engines · 172 Tests</span>
         </div>
-        <span className="text-[8px] text-white/30 tracking-[0.25em] uppercase font-mono block">
-          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL <span className="footer-spec-version">// SPEC_VERSION: V1.0_GENESIS</span>
+        <span className="text-[10px] text-white/30 tracking-[0.25em] uppercase font-mono block">
+          &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL
         </span>
       </div>
     </footer>

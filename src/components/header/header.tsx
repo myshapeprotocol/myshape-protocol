@@ -378,7 +378,7 @@ const ProtocolHeader = () => {
          移动：左对齐 3 项 + 横向滚动 */}
     <div className="sub-nav-bar" style={{
       position: "fixed", top: "60px", left: 0, width: "100%", height: "32px",
-      display: "flex", alignItems: "center", gap: "32px",
+      display: "flex", alignItems: "center", justifyContent: "center", gap: "32px",
       background: "rgba(2,4,10,0.85)", backdropFilter: "blur(4px)",
       borderBottom: "1px solid rgba(255,255,255,0.05)", zIndex: 9998,
       fontFamily: "monospace",
