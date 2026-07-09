@@ -255,7 +255,7 @@ export default function DevelopersClient() {
               </div>
               <div className="flex flex-col gap-3 min-w-[220px]">
                 <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-purple-400/30 text-purple-300/70 text-[10px] tracking-[0.2em] uppercase text-center hover:bg-purple-400/[0.06] hover:text-purple-200 transition-all" onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>Star on GitHub →</a>
-                <a href="/genesis" className="px-6 py-3 border border-[#90c8ff]/25 text-[#90c8ff]/60 text-[10px] tracking-[0.2em] uppercase text-center hover:bg-[#90c8ff]/[0.06] hover:text-[#90c8ff] transition-all" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Join Genesis Cohort →</a>
+                <a href="/genesis" className="px-6 py-3 border border-[#90c8ff]/25 text-[#90c8ff]/60 text-[10px] tracking-[0.2em] uppercase text-center hover:bg-[#90c8ff]/[0.06] hover:text-[#90c8ff] transition-all" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Apply for Genesis Node →</a>
               </div>
             </div>
           </div>

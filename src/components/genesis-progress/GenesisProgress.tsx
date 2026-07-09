@@ -68,7 +68,7 @@ export default function GenesisProgress() {
       <div className="genesis-progress-header">
         <div className="flex items-center gap-2">
           <div className="genesis-progress-dot" />
-          <span className="genesis-progress-label">GENESIS_COHORT</span>
+          <span className="genesis-progress-label">PHASE: GENESIS_ALPHA</span>
         </div>
         {showCount ? (
           <span className="genesis-progress-count">

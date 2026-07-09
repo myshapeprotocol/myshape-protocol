@@ -1099,7 +1099,7 @@ export default function MotionDemoClient() {
                     </p>
                     <div className="flex gap-2 justify-center pt-1">
                       <a href="/research/apply" className="text-[#90c8ff]/30 hover:text-[#90c8ff]/70 text-[7px] tracking-[0.15em] uppercase border-b border-transparent hover:border-[#90c8ff]/30 transition-all pb-0.5">
-                        Join Genesis Cohort →
+                        Apply for Genesis Node →
                       </a>
                       <span className="text-white/10">|</span>
                       <a href="/dashboard" className="text-[#90c8ff]/30 hover:text-[#90c8ff]/70 text-[7px] tracking-[0.15em] uppercase border-b border-transparent hover:border-[#90c8ff]/30 transition-all pb-0.5">
