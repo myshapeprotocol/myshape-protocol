@@ -324,6 +324,111 @@
   font-style: italic;
 }
 
+/* ── Research Roadmap ── */
+
+.agenda-roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.agenda-roadmap-phase {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: transparent;
+  transition: border-color 0.35s, background 0.35s;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.agenda-roadmap-phase:nth-child(1) { animation-delay: 0.4s; }
+.agenda-roadmap-phase:nth-child(2) { animation-delay: 0.5s; }
+.agenda-roadmap-phase:nth-child(3) { animation-delay: 0.6s; }
+
+.agenda-roadmap-phase:hover {
+  border-color: rgba(144,200,255,0.15);
+  background: rgba(144,200,255,0.015);
+}
+
+@media (max-width: 640px) {
+  .agenda-roadmap-phase {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.agenda-roadmap-period {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.agenda-roadmap-period-text {
+  color: rgba(144,200,255,0.65);
+  font-family: monospace;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+.agenda-roadmap-period-label {
+  color: rgba(255,255,255,0.2);
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.agenda-roadmap-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agenda-roadmap-item-v2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.agenda-roadmap-check {
+  font-family: monospace;
+  font-size: 11px;
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+}
+
+.agenda-roadmap-check.done {
+  color: rgba(63,185,80,0.6);
+}
+
+.agenda-roadmap-check.pending {
+  color: rgba(255,255,255,0.15);
+}
+
+.agenda-roadmap-item-text {
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  line-height: 1.5;
+  transition: color 0.35s;
+}
+
+.agenda-roadmap-item-text.done {
+  color: rgba(255,255,255,0.35);
+}
+
+.agenda-roadmap-phase:hover .agenda-roadmap-item-text {
+  color: rgba(255,255,255,0.65);
+}
+
+.agenda-roadmap-phase:hover .agenda-roadmap-item-text.done {
+  color: rgba(255,255,255,0.4);
+}
+
 /* ── Methodology ── */
 
 .agenda-methods {

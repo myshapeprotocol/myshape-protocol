@@ -4,6 +4,8 @@ import Link from "next/link";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
+import ResearchMeta from "@/components/research/ResearchMeta";
+import RelatedResearch from "@/components/research/RelatedResearch";
 import { playTick } from "@/utils/useAudioTick";
 import "@/app/research/research.css";
 
@@ -66,10 +68,12 @@ export default function NoteClient() {
           {/* ── Article ── */}
           <article className="note-article">
           <div className="note-meta note-print-stage note-print-delay-1">
-            <span>Research Note #001</span>
-            <span className="note-meta-sep" />
-            <span>2026.07.09</span>
-            <span className="note-print-cursor" />
+            <ResearchMeta
+              artifactId="RN-001"
+              type="Research Note"
+              status="Published"
+              published="2026.07.09"
+            />
           </div>
 
           <h1 className="note-title note-print-stage note-print-delay-2" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>The Continuity Problem</h1>
@@ -267,12 +271,29 @@ export default function NoteClient() {
             </div>
           </section>
 
+          {/* ── Related Research ── */}
+          <RelatedResearch
+            supportedBy={[
+              { id: "BM-001", label: "PES Benchmark v0.2", href: "/research/benchmarks" },
+            ]}
+            referencedDecisions={[
+              { id: "DL-001", label: "PES threshold set at 0.40", href: "/research" },
+              { id: "DL-002", label: "Establish The Continuity Lab", href: "/research" },
+            ]}
+            openQuestions={[
+              { id: "OQ-001", label: "Can continuity exist independently of identity?", href: "/research/open-questions/001" },
+            ]}
+          />
+
           <div className="note-footer note-print-stage note-print-delay-8">
             <p className="note-footer-text">
               The Continuity Lab · July 2026{" · "}
               <Link href="/research" onMouseEnter={() => playTick(420, "sine", 0.03, 0.018)}>← Research Hub</Link>
               {" · "}
               <Link href="/research/notes/002-pes-benchmark" onMouseEnter={() => playTick(480, "sine", 0.03, 0.018)}>Next: PES Benchmark →</Link>
+            </p>
+            <p className="text-white/10 text-[9px] tracking-[0.1em] italic mt-4" style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
+              Every benchmark is temporary. Every question is permanent.
             </p>
           </div>
         </article>

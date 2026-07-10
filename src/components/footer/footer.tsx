@@ -147,6 +147,9 @@ export default function ProtocolFooter() {
               <p className="text-[7px] text-white/35 tracking-[0.25em] leading-relaxed uppercase font-mono">
                 AI-NATIVE • ZERO-KNOWLEDGE • MOTION-VERIFIED
               </p>
+              <p className="text-[8px] text-[#d4af37]/25 tracking-[0.25em] leading-relaxed uppercase font-mono mt-2">
+                Research by <span className="text-[#d4af37]/40">The Continuity Lab</span>
+              </p>
             </div>
           </div>
 
@@ -186,7 +189,7 @@ export default function ProtocolFooter() {
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
         <div className="hidden md:flex items-center justify-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-[#90c8ff]/60 shadow-[0_0_4px_rgba(144,200,255,0.5)]" />
-          <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 3 Engines · 172 Tests</span>
+          <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 7 Engines · 309 Tests · 100% Passing</span>
         </div>
         <span className="text-[10px] text-white/30 tracking-[0.25em] uppercase font-mono block">
           &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL

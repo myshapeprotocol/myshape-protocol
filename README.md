@@ -10,7 +10,8 @@
 [![Protocol Status](https://img.shields.io/badge/Protocol_Activity-v2.0_Genesis-22d3ee?style=flat)](https://www.myshape.com)
 [![Spec Version](https://img.shields.io/badge/Spec-v1.0__GENESIS-6e7681?style=flat)](https://www.myshape.com/papers/technical-spec)
 [![Genesis Cohort](https://img.shields.io/badge/Genesis_Cohort-0/100-58a6ff?style=flat)](https://www.myshape.com/genesis)
-[![Build](https://img.shields.io/badge/build-81_pages_|_172_tests-22d3ee?style=flat)](https://github.com/myshapeprotocol)
+[![Build](https://img.shields.io/badge/build-81_pages_|_309_tests-22d3ee?style=flat)](https://github.com/myshapeprotocol)
+[![Research](https://img.shields.io/badge/Research-Open_for_Peer_Review-3fb950?style=flat)](https://www.myshape.com/research)
 [![SEO](https://img.shields.io/badge/SEO-7_schema_types_|_21_essays-8957e5?style=flat)](https://www.myshape.com)
 [![Substack](https://img.shields.io/badge/Substack-The_Entropy_Gap-ff6600?style=flat)](https://open.substack.com/pub/myshape/p/the-entropy-gap-why-ai-cannot-forge)
 [![Paragraph](https://img.shields.io/badge/Paragraph-On--Chain_Post-8b5cf6?style=flat)](https://paragraph.com/@myshape/the-entropy-gap-%E2%80%94-why-ai-cannot-forge-human-motion)
@@ -164,7 +165,7 @@ Full OpenAPI 3.0 spec: [myshape.com/openapi.json](https://www.myshape.com/openap
 npm install
 npm run dev        # → http://localhost:3000
 npm run build      # production build (81 pages)
-npm test           # Vitest (172 tests)
+npm test           # Vitest (309 tests, 100 suites)
 ```
 
 ### Required Environment Variables
@@ -191,6 +192,35 @@ All code, copy, metadata follows de-corporealized identity language:
 | non-binary aesthetic, non-corporeal | traditional ID verification |
 
 Pre-commit hooks enforce these rules automatically.
+
+---
+
+## Research
+
+**Open for Peer Review & Collaborative Research.**
+
+The Continuity Lab operates on five principles:
+
+1. **We test hypotheses. We do not defend them.**
+2. **We publish limitations before we publish claims.**
+3. **We measure before we assert.**
+4. **Evidence precedes belief.**
+5. **Continuity is not only what we study. It is how we work.**
+
+### Active Research Areas
+
+| Area | Status | Output |
+|:---|:---|:---|
+| Presence Entropy Score (PES) | v0.2 — 54 human samples | [Benchmarks](https://www.myshape.com/research/benchmarks) |
+| Continuity Proofs | v0.1 — 4 attack scenarios | [RN #001](https://www.myshape.com/research/notes/001-the-continuity-problem) |
+| Replay Attack Analysis | Pipeline | [Research Agenda](https://www.myshape.com/research/agenda) |
+| Cross-Device Continuity | Pipeline | [Research Agenda](https://www.myshape.com/research/agenda) |
+
+### Challenge Set
+
+[`entropy-governance.test.ts`](src/app/api/node/__tests__/entropy-governance.test.ts) defines the Genesis minting decision algorithm. We invite the community to propose alternative strategies that improve cohort integrity. Open an issue with your approach — we will benchmark it against the current algorithm and publish results.
+
+→ [Research Hub](https://www.myshape.com/research) · [Benchmarks](https://www.myshape.com/research/benchmarks) · [Research Agenda](https://www.myshape.com/research/agenda)
 
 ---
 

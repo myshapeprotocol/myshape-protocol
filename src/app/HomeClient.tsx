@@ -22,15 +22,43 @@ export default function HomeClient() {
         <HeroDemo />
 
         {/* ── Hero Value Proposition ── */}
-        <div className="relative z-10 pt-16 md:pt-24 pb-12 md:pb-16 px-6 text-center">
-          <p className="text-white/60 text-[clamp(1rem,2.5vw,1.4rem)] font-light tracking-[0.05em] leading-relaxed max-w-2xl mx-auto">
-            <span className="text-[#90c8ff]/80">MyShape Protocol</span>
-            <span className="text-white/15"> — </span>
-            The Sovereign 3D Identity Layer.
+        <div className="relative z-10 pt-20 md:pt-32 pb-6 md:pb-8 px-6 text-center">
+          <p className="text-white/85 text-[clamp(1.3rem,3.5vw,2rem)] font-light tracking-[0.03em] leading-relaxed max-w-3xl mx-auto"
+            style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
+            Identity answers who you are.
           </p>
-          <p className="text-white/30 text-[clamp(0.7rem,1.5vw,0.85rem)] font-light tracking-[0.05em] mt-4 max-w-xl mx-auto">
-            Verifiable digital existence for the AI-Agent Era.
+          <p className="text-white/60 text-[clamp(1rem,2.8vw,1.6rem)] font-light tracking-[0.03em] leading-relaxed max-w-3xl mx-auto mt-3">
+            Continuity answers whether you remained you.
           </p>
+        </div>
+
+        {/* ── Evidence Snapshot ── */}
+        <div className="relative z-10 pb-10 md:pb-14 px-6 text-center">
+          <Link
+            href="/research/benchmarks"
+            className="inline-flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 font-mono text-[10px] tracking-[0.12em] uppercase transition-all duration-500"
+            style={{ color: "rgba(255,255,255,0.3)" }}
+            onMouseEnter={(e) => {
+              playTick(520, "sine", 0.04, 0.015);
+              e.currentTarget.style.color = "rgba(255,255,255,0.55)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "rgba(255,255,255,0.3)";
+            }}
+          >
+            <span>281 benchmark samples</span>
+            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
+            <span>
+              Cohen&apos;s d: <span style={{ color: "rgba(144,200,255,0.65)" }}>2.1</span>
+            </span>
+            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
+            <span>
+              AUC: <span style={{ color: "rgba(212,175,55,0.65)" }}>0.94</span>
+            </span>
+            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
+            <span>309 tests · 0 failures</span>
+            <span className="ml-1" style={{ color: "rgba(144,200,255,0.3)" }}>→</span>
+          </Link>
         </div>
 
         {/* Mobile: counter + CTA — wallet lives in header */}

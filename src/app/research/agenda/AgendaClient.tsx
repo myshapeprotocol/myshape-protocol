@@ -164,6 +164,72 @@ export default function AgendaClient() {
           </div>
         </section>
 
+        {/* ── Research Roadmap ── */}
+        <section className="agenda-section">
+          <h2 className="agenda-section-heading">Research Roadmap</h2>
+          <p className="agenda-primer" style={{ marginBottom: "2rem" }}>
+            Not a product timeline. An <strong>experimental sequence</strong> — each
+            milestone produces evidence that enables the next. Dates are targets,
+            not commitments.
+          </p>
+
+          <div className="agenda-roadmap">
+            {[
+              {
+                period: "2026 Q3",
+                label: "Now",
+                items: [
+                  { done: true, text: "PES Benchmark v0.2 — 54 human samples, Cohen's d: 2.1, AUC: 0.94" },
+                  { done: true, text: "RN #001 — The Continuity Problem published" },
+                  { done: true, text: "The Continuity Lab launched with Research Hub" },
+                  { done: false, text: "Expand benchmark dataset to 300+ human samples" },
+                  { done: false, text: "Publish RN #002 — PES Benchmark (dataset, threats to validity)" },
+                ],
+              },
+              {
+                period: "2026 Q4",
+                label: "Next",
+                items: [
+                  { done: false, text: "Replay Attack Benchmark — experimental evaluation of replay resistance" },
+                  { done: false, text: "Publish RN #003 — Replay Attack Analysis" },
+                  { done: false, text: "Cross-device continuity stability assessment" },
+                  { done: false, text: "SDK Alpha — developer-facing motion verification API" },
+                ],
+              },
+              {
+                period: "2027 Q1",
+                label: "Then",
+                items: [
+                  { done: false, text: "Formal Continuity Model — mathematical specification" },
+                  { done: false, text: "Publish RN #005 — The Continuity Receipt format" },
+                  { done: false, text: "Agent Continuity experiment — human-to-agent delegation chain" },
+                  { done: false, text: "First external research collaborator onboarding" },
+                ],
+              },
+            ].map((phase) => (
+              <div key={phase.period} className="agenda-roadmap-phase"
+                onMouseEnter={() => playTick(500, "sine", 0.04, 0.02)}>
+                <div className="agenda-roadmap-period">
+                  <span className="agenda-roadmap-period-text">{phase.period}</span>
+                  <span className="agenda-roadmap-period-label">{phase.label}</span>
+                </div>
+                <div className="agenda-roadmap-items">
+                  {phase.items.map((item, i) => (
+                    <div key={i} className="agenda-roadmap-item-v2">
+                      <span className={`agenda-roadmap-check ${item.done ? "done" : "pending"}`}>
+                        {item.done ? "✓" : "○"}
+                      </span>
+                      <span className={`agenda-roadmap-item-text ${item.done ? "done" : ""}`}>
+                        {item.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ── Methodology ── */}
         <section className="agenda-section">
           <h2 className="agenda-section-heading">How We Work</h2>

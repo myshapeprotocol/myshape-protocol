@@ -17,11 +17,36 @@ const PUBLISHED_NOTES = [
   },
 ];
 
+const OPEN_QUESTIONS = [
+  {
+    id: "OQ-001",
+    title: "Can continuity exist independently of identity?",
+    subtitle:
+      "If continuity can be verified without persistent identifiers, humans, AI agents, and hybrid entities may share a common verification substrate.",
+    date: "2026.07.10",
+    slug: "/research/open-questions/001",
+    status: "Active",
+  },
+];
+
 const ACTIVE_BENCHMARKS = [
   {
     name: "PES Benchmark",
     status: "v0.2 — 54 samples",
     meta: "Cohen's d: 2.1 · AUC: 0.94",
+    slug: "/research/benchmarks",
+  },
+  {
+    name: "PES Multi-Source",
+    status: "v0.2 — 4 AI strategies",
+    meta: "All AI sources below human floor (0.40)",
+    slug: "/research/benchmarks",
+  },
+  {
+    name: "Motion Pipeline E2E",
+    status: "v0.2 — 128-dim signature",
+    meta: "Human: 100% pass · AI: 0% pass",
+    slug: "/research/benchmarks",
   },
 ];
 
@@ -77,6 +102,150 @@ export default function ResearchClient() {
           </Link>
         </section>
 
+        {/* ── Research Philosophy ── */}
+        <section className="mb-16 mt-12 max-w-2xl mx-auto">
+          <div className="p-6 md:p-8" style={{ border: "1px solid rgba(212,175,55,0.1)", background: "rgba(212,175,55,0.015)" }}>
+            <div className="text-[10px] tracking-[0.3em] uppercase text-[#d4af37]/40 mb-6">Lab Principles</div>
+            <div className="space-y-3">
+              {[
+                "We test hypotheses. We do not defend them.",
+                "We publish limitations before we publish claims.",
+                "We measure before we assert.",
+                "Evidence precedes belief.",
+                "Continuity is not only what we study. It is how we work.",
+              ].map((p, i) => (
+                <p key={i} className="text-white/55 text-[13px] font-light tracking-[0.03em] leading-relaxed flex items-start gap-3"
+                  style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
+                  <span className="text-[#d4af37]/30 text-[10px] mt-0.5 shrink-0">0{i + 1}</span>
+                  {p}
+                </p>
+              ))}
+            </div>
+          </div>
+          <p className="mt-4 text-white/15 text-[10px] tracking-[0.1em] italic text-center">
+            Every benchmark is temporary. Every question is permanent.
+          </p>
+        </section>
+
+        {/* ── Lab Log ── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3fb950]/40 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3fb950] shadow-[0_0_6px_rgba(63,185,80,0.5)]" />
+            </span>
+            <h2 className="text-white/70 text-[12px] tracking-[0.25em] uppercase font-bold">Lab Log</h2>
+            <span className="text-white/15 text-[9px] tracking-[0.15em] ml-2">live</span>
+          </div>
+
+          <div className="space-y-0">
+            {[
+              {
+                date: "2026.07.10",
+                entry: "PES v0.2 recalibration complete. 309 tests across 100 suites — 100% passing. Published <a href='/research/benchmarks' class='underline decoration-[#90c8ff]/20 hover:decoration-[#90c8ff]/50 transition-colors'>Benchmarks</a> dashboard.",
+              },
+              {
+                date: "2026.07.09",
+                entry: "Published <a href='/research/notes/001-the-continuity-problem' class='underline decoration-[#90c8ff]/20 hover:decoration-[#90c8ff]/50 transition-colors'>RN #001 — The Continuity Problem</a>. Four attack scenarios where identity succeeds and continuity fails. The Continuity Lab launched.",
+              },
+              {
+                date: "2026.07.08",
+                entry: "Established <a href='/research/agenda' class='underline decoration-[#90c8ff]/20 hover:decoration-[#90c8ff]/50 transition-colors'>Research Agenda</a> with four core questions. Published the Continuity Lab Manifesto — first principle: test hypotheses, don't defend them.",
+              },
+              {
+                date: "2026.07.04",
+                entry: "PES v0.2 recalibration run across 54 human motion samples. Cohen's d: 2.1, AUC: 0.94. Entropy gap between human and AI motion holds at 0.40 threshold.",
+              },
+            ].map((log, i) => (
+              <div
+                key={log.date}
+                className="flex gap-4 py-3 transition-colors duration-300 hover:bg-white/[0.02]"
+                style={{ borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.03)" : "none" }}
+              >
+                <span className="font-mono text-[10px] tracking-[0.1em] text-white/30 shrink-0 mt-0.5">{log.date}</span>
+                <p
+                  className="text-white/45 text-[11px] leading-relaxed"
+                  style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}
+                  dangerouslySetInnerHTML={{ __html: log.entry }}
+                />
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-4 text-white/15 text-[10px] tracking-[0.1em] italic text-center">
+            Experimental log. Updated as work happens.
+          </p>
+        </section>
+
+        {/* ── Decision Log ── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="font-mono text-[11px] tracking-[0.15em] text-[#a382dd]/40">DL</span>
+            <h2 className="text-white/70 text-[12px] tracking-[0.25em] uppercase font-bold">Decision Log</h2>
+            <span className="text-white/15 text-[9px] tracking-[0.15em] ml-2">institutional memory</span>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                id: "DL-003",
+                date: "2026.07.10",
+                decision: "Adopt artifact ID system across all research outputs.",
+                reason: "Consistent citation identity (RN-001, BM-001, DL-001, OQ-001) transforms a collection of pages into a research ontology. Future collaborators should be able to reference outputs without ambiguity.",
+                status: "Active",
+              },
+              {
+                id: "DL-002",
+                date: "2026.07.08",
+                decision: "Establish The Continuity Lab as MyShape's research entity.",
+                reason: "A protocol without a research arm is a product. A research arm without a protocol is a think tank. Together they form a lab — self-critical, evidence-driven, publish-first.",
+                status: "Active",
+              },
+              {
+                id: "DL-001",
+                date: "2026.07.04",
+                decision: "Set PES human-vs-AI classification threshold at 0.40.",
+                reason: "Empirical finding: all 54 human samples scored ≥ 0.41 across 4D entropy dimensions. All synthetic strategies scored ≤ 0.38. The 0.03 gap is the entropy margin — irreducible under current AI generation models. Threshold will be recalibrated if new AI strategies narrow the gap.",
+                status: "Active",
+              },
+            ].map((d) => (
+              <div
+                key={d.id}
+                className="p-5 transition-all duration-300"
+                style={{ border: "1px solid rgba(160,130,220,0.08)", background: "rgba(160,130,220,0.015)" }}
+                onMouseEnter={(e) => {
+                  playTick(420, "triangle", 0.03, 0.018);
+                  e.currentTarget.style.borderColor = "rgba(160,130,220,0.2)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(160,130,220,0.08)";
+                }}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-mono text-[10px] tracking-[0.12em] text-[#a382dd]/50">{d.id}</span>
+                  <span className="text-white/75 text-[12px] font-light tracking-[0.03em]"
+                    style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
+                    {d.decision}
+                  </span>
+                </div>
+                <p className="text-white/35 text-[11px] leading-relaxed mb-2 ml-[68px]"
+                  style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
+                  <span className="text-white/20 text-[9px] tracking-[0.15em] uppercase">Reason: </span>
+                  {d.reason}
+                </p>
+                <div className="flex items-center gap-3 ml-[68px]">
+                  <span className="font-mono text-[9px] text-white/25">{d.date}</span>
+                  <span className="font-mono text-[9px] tracking-[0.1em] text-[#3fb950]/40">{d.status.toUpperCase()}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-4 text-white/15 text-[10px] tracking-[0.1em] italic text-center">
+            Why we made the choices we made — so future collaborators can understand, challenge, or overturn them.
+          </p>
+        </section>
+
         {/* ── Two-Column Grid ── */}
         <div className="research-grid-v2">
           {/* Left: Published */}
@@ -101,15 +270,35 @@ export default function ResearchClient() {
             ))}
 
             {ACTIVE_BENCHMARKS.map((bm) => (
-              <div
+              <Link
                 key={bm.name}
-                className="bm-card"
+                href={bm.slug}
+                className="bm-card block"
                 onMouseEnter={() => playTick(440, "triangle", 0.045, 0.025)}
               >
                 <div className="bm-card-name">{bm.name}</div>
                 <div className="bm-card-status">{bm.status}</div>
                 <div className="bm-card-meta">{bm.meta}</div>
-              </div>
+              </Link>
+            ))}
+
+            <div className="pipeline-section-label" style={{ color: "rgba(212,175,55,0.4)" }}>Open Questions</div>
+            {OPEN_QUESTIONS.map((oq) => (
+              <Link
+                key={oq.id}
+                href={oq.slug}
+                className="rn-card block"
+                onMouseEnter={() => playTick(560, "sine", 0.05, 0.022)}
+              >
+                <div className="rn-card-num" style={{ color: "rgba(212,175,55,0.6)" }}>
+                  <span className="rn-card-dot" style={{ background: "rgba(212,175,55,0.6)", boxShadow: "0 0 6px rgba(212,175,55,0.3)" }} />
+                  {oq.id}
+                  <span className="ml-2 font-mono text-[9px] tracking-[0.1em] text-[#d4af37]/40">{oq.status.toUpperCase()}</span>
+                </div>
+                <div className="rn-card-title">{oq.title}</div>
+                <div className="rn-card-subtitle">{oq.subtitle}</div>
+                <div className="rn-card-date">{oq.date}</div>
+              </Link>
             ))}
           </div>
 
@@ -163,14 +352,14 @@ export default function ResearchClient() {
 
         {/* ── Due Diligence ── */}
         <div className="mt-20 text-center">
-          <p className="text-white/15 text-[10px] tracking-[0.08em] leading-relaxed">
-            Continuity Lab is the research and engineering arm of MyShape Protocol.
+          <p className="text-white/20 text-[10px] tracking-[0.08em] leading-relaxed">
+            <span className="text-[#d4af37]/30">The Continuity Lab</span> is the research and engineering arm of MyShape Protocol.
           </p>
           <a
             href="https://github.com/myshapeprotocol"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-1.5 text-[#90c8ff]/20 text-[9px] tracking-[0.2em] uppercase hover:text-[#90c8ff]/40 transition-colors"
+            className="inline-block mt-1.5 text-[#90c8ff]/30 text-[9px] tracking-[0.2em] uppercase hover:text-[#90c8ff]/50 transition-colors"
             onMouseEnter={() => playTick(440, "sine", 0.025, 0.012)}
           >
             Explore Contributions →
@@ -181,7 +370,7 @@ export default function ResearchClient() {
         <div className="mt-12 pt-8 border-t border-white/[0.04] text-center">
           <Link
             href="/"
-            className="text-white/25 text-[10px] tracking-[0.2em] uppercase hover:text-white/45 transition-colors"
+            className="text-white/35 text-[10px] tracking-[0.2em] uppercase hover:text-white/55 transition-colors"
             onMouseEnter={() => playTick(400, "sine", 0.03, 0.018)}
           >
             ← Home
