@@ -290,6 +290,7 @@ export default function MotionGuide({
     prevPhaseRef.current = phaseIndex;
 
     const utterance = new SpeechSynthesisUtterance(phase.instruction.replace(/\n/g, ". "));
+    utterance.lang = "en-US";
     utterance.rate = 0.9;
     utterance.pitch = 1.0;
     utterance.volume = 0.7;
