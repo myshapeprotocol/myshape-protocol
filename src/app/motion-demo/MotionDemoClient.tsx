@@ -849,6 +849,38 @@ export default function MotionDemoClient() {
                     const a=document.createElement("a");a.href=url;a.download=`myshape-pes-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}.json`;a.click();URL.revokeObjectURL(url);
                     playTick(800,"sine",0.10,0.025);
                   }} className="w-full py-3 border-2 border-[#90c8ff]/60 text-[#90c8ff] text-[11px] tracking-[0.15em] uppercase font-bold hover:bg-[#90c8ff]/15 hover:border-[#90c8ff] transition-all" style={{ textShadow: "0 0 10px rgba(144,200,255,0.3)" }}>📥 Export PES Report</button>
+                  <button onClick={()=>{
+                    const frames = sstFramesRef.current;
+                    if (frames.length === 0) return;
+                    const startTs = frames[0].timestamp;
+                    const landmarkData = frames.map(f => ({
+                      t: f.timestamp - startTs,
+                      joints: Object.fromEntries(
+                        Object.entries(f.frame).map(([k, v]) => [k, { x: v.x, y: v.y, z: v.z }])
+                      ),
+                    }));
+                    const report = {
+                      session_id: crypto.randomUUID(),
+                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null)?.split("@")[0] || "anonymous",
+                      timestamp: new Date().toISOString(),
+                      landmarks: landmarkData,
+                      pes_score: pesData.score,
+                      pes_micro_timing: pesData.timing,
+                      pes_noise_residual: pesData.noise,
+                      pes_freq_entropy: pesData.frequency,
+                      pes_bio_perturb: pesData.biological,
+                      total_frames: frames.length,
+                      valid_frames: validFrameCount,
+                    };
+                    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "myshape-landmarks-" + new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19) + ".json";
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    playTick(600, "sine", 0.08, 0.02);
+                  }} className="w-full py-2.5 border border-[#3fb950]/40 text-[#3fb950]/60 text-[10px] tracking-[0.12em] uppercase hover:bg-[#3fb950]/10 hover:border-[#3fb950]/70 transition-all">💾 Download Landmark Data</button>
                   <button onClick={()=>{const r=`MyShape PES: ${(pesData.score*100).toFixed(0)}% | μT:${(pesData.timing*100).toFixed(0)}% N:${(pesData.noise*100).toFixed(0)}% F:${(pesData.frequency*100).toFixed(0)}% B:${(pesData.biological*100).toFixed(0)}%\nVerified by MyShape Protocol — myshape.com/motion-demo`;navigator.clipboard.writeText(r).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)})}} className="w-full py-2.5 border border-[#90c8ff]/20 text-[#90c8ff]/40 text-[10px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all">{copied?"✓ Copied":"📋 Copy Results"}</button>
                   <button onClick={stop} className="w-full py-2.5 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[10px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all">↻ Run Again</button>
                 </div>
@@ -1111,6 +1143,7 @@ export default function MotionDemoClient() {
                 </div>
 
                 {pesData && (
+                  <div className="space-y-2">
                   <button onClick={()=>{
                     const report={protocol:"MyShape PES Benchmark v0.1",timestamp:new Date().toISOString(),pes:{score:pesData.score,components:{microTimingVariance:pesData.timing,noiseResidual:pesData.noise,frequencyEntropy:pesData.frequency,biologicalPerturbation:pesData.biological}},threat_verdict:threatVerdict,telemetry:{sst_frames:sstFramesRef.current.length,valid_frames:validFrameCount,capture_duration_ms:captureElapsedMs},proof_hashes:proofHashes,wasm_compare:wasmCompare,ai_compare:aiCompare};
                     const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
@@ -1118,6 +1151,39 @@ export default function MotionDemoClient() {
                     const a=document.createElement("a");a.href=url;a.download=`myshape-pes-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}.json`;a.click();URL.revokeObjectURL(url);
                     playTick(800,"sine",0.10,0.025);
                   }} className="w-full py-3 border-2 border-[#90c8ff]/60 text-[#90c8ff] text-[11px] tracking-[0.15em] uppercase font-bold hover:bg-[#90c8ff]/15 transition-all" style={{textShadow:"0 0 10px rgba(144,200,255,0.3)"}}>📥 Export PES Report</button>
+                  <button onClick={()=>{
+                    const frames = sstFramesRef.current;
+                    if (frames.length === 0) return;
+                    const startTs = frames[0].timestamp;
+                    const landmarkData = frames.map(f => ({
+                      t: f.timestamp - startTs,
+                      joints: Object.fromEntries(
+                        Object.entries(f.frame).map(([k, v]) => [k, { x: v.x, y: v.y, z: v.z }])
+                      ),
+                    }));
+                    const report = {
+                      session_id: crypto.randomUUID(),
+                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null)?.split("@")[0] || "anonymous",
+                      timestamp: new Date().toISOString(),
+                      landmarks: landmarkData,
+                      pes_score: pesData.score,
+                      pes_micro_timing: pesData.timing,
+                      pes_noise_residual: pesData.noise,
+                      pes_freq_entropy: pesData.frequency,
+                      pes_bio_perturb: pesData.biological,
+                      total_frames: frames.length,
+                      valid_frames: validFrameCount,
+                    };
+                    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "myshape-landmarks-" + new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19) + ".json";
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    playTick(600, "sine", 0.08, 0.02);
+                  }} className="w-full py-2.5 border border-[#3fb950]/40 text-[#3fb950]/60 text-[10px] tracking-[0.12em] uppercase hover:bg-[#3fb950]/10 hover:border-[#3fb950]/70 transition-all">💾 Download Landmark Data</button>
+                  </div>
                 )}
                 <button onClick={stop}
                   onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
