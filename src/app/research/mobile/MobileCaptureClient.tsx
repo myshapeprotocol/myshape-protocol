@@ -54,15 +54,12 @@ export default function MobileCaptureClient() {
 
   const requestPermission = useCallback(async () => {
     // iOS 13+ requires explicit permission for DeviceMotionEvent
-    if (
-      typeof DeviceMotionEvent !== "undefined" &&
-      typeof (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<"granted" | "denied">>).requestPermission === "function"
-    ) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const DME = DeviceMotionEvent as any;
+    if (typeof DME !== "undefined" && typeof DME.requestPermission === "function") {
       try {
-        const perm = await (
-          DeviceMotionEvent as unknown as { requestPermission: () => Promise<"granted" | "denied"> }
-        ).requestPermission();
-        setPermission(perm);
+        const perm = await DME.requestPermission();
+        setPermission(perm === "granted" ? "granted" : "denied");
         return perm === "granted";
       } catch {
         setPermission("denied");

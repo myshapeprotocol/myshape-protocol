@@ -121,10 +121,11 @@ export default function ActionPasswordClient() {
   // ── iOS permission ──
 
   const requestIMU = useCallback(async () => {
-    if (typeof DeviceMotionEvent !== "undefined" &&
-      typeof (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission === "function") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const DME = DeviceMotionEvent as any;
+    if (typeof DME !== "undefined" && typeof DME.requestPermission === "function") {
       try {
-        const p = await (DeviceMotionEvent as unknown as { requestPermission: () => Promise<string> }).requestPermission();
+        const p = await DME.requestPermission();
         return p === "granted";
       } catch { return false; }
     }
