@@ -798,8 +798,8 @@ export default function MotionDemoClient() {
 
           {/* Feature Panel */}
           {phase === "complete" && pesData ? (
-            <div className="flex flex-row gap-2">
-              <div className="w-[38%] shrink-0 border border-white/10 bg-black/40 p-2 flex flex-col space-y-1.5">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="sm:w-[38%] border border-white/10 bg-black/40 p-3 flex flex-col space-y-2">
                 {/* Box 1: PES + Telemetry + ZK Proof */}
                 <div>
                   <div className="text-[#90c8ff]/50 text-[10px] tracking-[0.2em] uppercase mb-1.5">Presence Entropy Score</div>
@@ -829,7 +829,7 @@ export default function MotionDemoClient() {
                   </div>
                 )}
               </div>
-              <div className="flex-1 border border-white/10 bg-black/40 p-2 flex flex-col space-y-1.5">
+              <div className="sm:flex-1 border border-white/10 bg-black/40 p-3 flex flex-col space-y-2">
                 {/* Box 2: Presence Signature + Witness + Actions */}
                 <div>
                   {proofHashes&&(<PresenceSignature proof={{pesScore:pesData.score,timing:pesData.timing,noise:pesData.noise,freq:pesData.frequency,bio:pesData.biological,zkpHash:proofHashes.zkp,popHash:proofHashes.pop,mpHash:proofHashes.mp,epHash:proofHashes.ep,timestamp:Date.now()}}/>)}

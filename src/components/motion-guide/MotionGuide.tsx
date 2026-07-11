@@ -265,25 +265,6 @@ export default function MotionGuide({
 
   // ── Voice Guidance ──
   const prevPhaseRef = useRef(-1);
-  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
-
-  // Pre-load US English voice (voices load asynchronously)
-  useEffect(() => {
-    const loadVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length === 0) return;
-      const usVoices = voices.filter(v => v.lang === "en-US");
-    voiceRef.current =
-      usVoices.find(v => v.name === "Alex") ||
-      usVoices.find(v => v.name.includes("Google US English")) ||
-      usVoices.find(v => v.name.includes("Daniel")) ||
-      usVoices[0] ||
-      null;
-    };
-    loadVoice();
-    window.speechSynthesis.onvoiceschanged = loadVoice;
-    return () => { window.speechSynthesis.onvoiceschanged = null; };
-  }, []);
 
   useEffect(() => {
     if (!active) return;
@@ -292,13 +273,13 @@ export default function MotionGuide({
 
     const utterance = new SpeechSynthesisUtterance(phase.instruction.replace(/\n/g, ". "));
     utterance.lang = "en-US";
-    utterance.rate = 0.9;
-    utterance.pitch = 1.0;
-    utterance.volume = 0.7;
-    if (voiceRef.current) utterance.voice = voiceRef.current;
+    utterance.rate = 0.95;
+    utterance.pitch = 0.95;
+    utterance.volume = 0.8;
 
     window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+    // iOS Safari needs a small delay before speak
+    setTimeout(() => window.speechSynthesis.speak(utterance), 100);
   }, [phaseIndex, phase.instruction, active]);
 
   const totalProgress = Math.min(elapsedMs / TOTAL_DURATION_MS, 1);
