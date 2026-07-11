@@ -272,12 +272,13 @@ export default function MotionGuide({
     const loadVoice = () => {
       const voices = window.speechSynthesis.getVoices();
       if (voices.length === 0) return;
-      voiceRef.current =
-        voices.find(v => v.name === "Samantha" && v.lang === "en-US") ||
-        voices.find(v => v.name.includes("Google US English")) ||
-        voices.find(v => v.lang === "en-US" && v.name.includes("English")) ||
-        voices.find(v => v.lang === "en-US") ||
-        null;
+      const usVoices = voices.filter(v => v.lang === "en-US");
+    voiceRef.current =
+      usVoices.find(v => v.name === "Alex") ||
+      usVoices.find(v => v.name.includes("Google US English")) ||
+      usVoices.find(v => v.name.includes("Daniel")) ||
+      usVoices[0] ||
+      null;
     };
     loadVoice();
     window.speechSynthesis.onvoiceschanged = loadVoice;
