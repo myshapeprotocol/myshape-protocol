@@ -18,6 +18,9 @@
 /.next/
 /out/
 
+# HTTPS dev certificates (auto-generated)
+/.certs/
+
 # production
 /build
 

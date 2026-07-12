@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run --config vitest.config.ts",
+    "https": "node scripts/https-dev-proxy.js",
+    "phone": "next build && next start & node scripts/https-dev-proxy.js",
     "test:watch": "vitest --config vitest.config.ts",
     "test:coverage": "vitest run --config vitest.config.ts --coverage",
     "benchmark": "vitest run --config vitest.config.ts src/engine/__benchmark__/",
