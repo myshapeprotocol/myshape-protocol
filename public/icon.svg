@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- MyShape Protocol — Favicon -->
-  <defs>
-    <radialGradient id="g" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#90c8ff" stop-opacity="0.9"/>
-      <stop offset="100%" stop-color="#02040a" stop-opacity="1"/>
-    </radialGradient>
-  </defs>
-  <rect width="100" height="100" rx="20" fill="#02040a"/>
-  <!-- Central diamond — wireframe aesthetic -->
-  <polygon points="50,18 82,50 50,82 18,50" fill="none" stroke="url(#g)" stroke-width="3"/>
-  <!-- Inner dot — presence indicator -->
-  <circle cx="50" cy="50" r="6" fill="#90c8ff" opacity="0.8"/>
-  <!-- Outer ring -->
-  <circle cx="50" cy="50" r="27" fill="none" stroke="#90c8ff" stroke-width="1" opacity="0.25"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><image href="/identity-sigil.jpg" width="100" height="100"/></svg>
