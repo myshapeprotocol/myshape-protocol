@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RN-002 Cover</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { display:flex; justify-content:center; align-items:center; min-height:100vh; background:#111; }
+  .cover {
+    width:1200px; height:630px; position:relative; overflow:hidden;
+    background:radial-gradient(ellipse at 70% 40%, #0a1628 0%, #02040a 70%);
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  /* ── grid lines ── */
+  .grid { position:absolute; inset:0; opacity:0.04; }
+  .grid line { stroke:#90c8ff; }
+  /* ── particle field ── */
+  .particle { position:absolute; border-radius:50%; background:#90c8ff; }
+  /* ── wireframe silhouette ── */
+  .silhouette { position:absolute; right:60px; top:40px; width:380px; height:520px; opacity:0.15; }
+  .silhouette svg { width:100%; height:100%; }
+  /* ── bell curves ── */
+  .curves { position:absolute; left:60px; bottom:140px; width:500px; height:200px; }
+  /* ── typography ── */
+  .title { position:absolute; left:60px; top:60px; color:#f8feff; font-size:52px; font-weight:200; letter-spacing:-0.02em; line-height:1.1; max-width:600px; }
+  .title em { font-style:normal; color:#90c8ff; }
+  .subtitle { position:absolute; left:60px; top:175px; color:rgba(248,254,255,0.45); font-size:20px; font-weight:300; max-width:550px; line-height:1.4; }
+  .brand { position:absolute; left:60px; bottom:50px; color:rgba(248,254,255,0.25); font-size:12px; letter-spacing:0.2em; text-transform:uppercase; }
+  .badge { position:absolute; right:60px; bottom:50px; color:rgba(212,153,34,0.4); font-size:11px; letter-spacing:0.15em; border:1px solid rgba(212,153,34,0.2); padding:6px 14px; border-radius:4px; }
+  .dims { position:absolute; left:60px; bottom:340px; display:flex; gap:16px; }
+  .dim { color:rgba(248,254,255,0.3); font-size:10px; letter-spacing:0.08em; padding:4px 10px; border:1px solid rgba(144,200,255,0.12); border-radius:3px; }
+  .dim:nth-child(2) { border-color:rgba(163,113,247,0.2); color:rgba(163,113,247,0.4); }
+  .dim:nth-child(3) { border-color:rgba(212,153,34,0.2); color:rgba(212,153,34,0.4); }
+  .dim:nth-child(4) { border-color:rgba(63,185,80,0.15); color:rgba(63,185,80,0.35); }
+  /* ── gap indicator ── */
+  .gap-label { position:absolute; left:290px; bottom:310px; color:rgba(212,153,34,0.5); font-size:11px; letter-spacing:0.1em; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <!-- Grid -->
+  <svg class="grid" viewBox="0 0 1200 630"><defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#90c8ff" stroke-width="0.5"/></pattern></defs><rect width="1200" height="630" fill="url(#g)"/></svg>
+
+  <!-- Halo scan — concentric energy rings -->
+  <div style="position:absolute;right:40px;top:60px;width:420px;height:480px;opacity:0.12">
+    <svg viewBox="0 0 420 480" fill="none">
+      <ellipse cx="210" cy="240" rx="200" ry="230" stroke="#90c8ff" stroke-width="0.5"/>
+      <ellipse cx="210" cy="240" rx="160" ry="185" stroke="#a371f7" stroke-width="0.5"/>
+      <ellipse cx="210" cy="240" rx="120" ry="140" stroke="#90c8ff" stroke-width="0.5"/>
+      <ellipse cx="210" cy="240" rx="80" ry="95" stroke="#a371f7" stroke-width="0.5"/>
+      <ellipse cx="210" cy="240" rx="40" ry="48" stroke="#d29922" stroke-width="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Particle field — data-body nodes orbiting the halo -->
+  <div class="particle" style="width:4px;height:4px;top:120px;right:200px;opacity:0.5;box-shadow:0 0 8px #90c8ff"></div>
+  <div class="particle" style="width:3px;height:3px;top:180px;right:120px;opacity:0.6;box-shadow:0 0 6px #a371f7;background:#a371f7"></div>
+  <div class="particle" style="width:5px;height:5px;top:280px;right:260px;opacity:0.45;box-shadow:0 0 10px #90c8ff"></div>
+  <div class="particle" style="width:2.5px;height:2.5px;top:340px;right:150px;opacity:0.55;box-shadow:0 0 5px #a371f7;background:#a371f7"></div>
+  <div class="particle" style="width:3.5px;height:3.5px;top:400px;right:220px;opacity:0.4;box-shadow:0 0 7px #90c8ff"></div>
+  <div class="particle" style="width:4px;height:4px;top:200px;right:320px;opacity:0.5;box-shadow:0 0 8px #d29922;background:#d29922"></div>
+  <div class="particle" style="width:2px;height:2px;top:310px;right:90px;opacity:0.6;box-shadow:0 0 4px #90c8ff"></div>
+  <div class="particle" style="width:3px;height:3px;top:430px;right:280px;opacity:0.35;box-shadow:0 0 6px #a371f7;background:#a371f7"></div>
+  <div class="particle" style="width:2px;height:2px;top:90px;right:250px;opacity:0.3;box-shadow:0 0 4px #90c8ff"></div>
+
+  <!-- Subtle connecting lines between key nodes -->
+  <svg style="position:absolute;right:40px;top:60px;width:420px;height:480px;opacity:0.06" viewBox="0 0 420 480" fill="none" stroke="#90c8ff" stroke-width="0.5">
+    <line x1="150" y1="80" x2="110" y2="180"/>
+    <line x1="150" y1="80" x2="250" y2="180"/>
+    <line x1="110" y1="180" x2="200" y2="290"/>
+    <line x1="250" y1="180" x2="200" y2="290"/>
+    <line x1="200" y1="290" x2="160" y2="400"/>
+    <line x1="200" y1="290" x2="260" y2="380"/>
+  </svg>
+
+  <!-- Bell curves (Gaussian distributions) -->
+  <div class="curves">
+    <svg viewBox="0 0 500 200" fill="none">
+      <!-- Synthetic distribution: sharp, narrow, low entropy -->
+      <defs>
+        <linearGradient id="synth" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f85149" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#f85149" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="human" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#90c8ff" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#90c8ff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- Synthetic curve: sharp peak, narrow spread -->
+      <path d="M 0,180 Q 50,180 90,170 Q 130,60 160,15 Q 190,60 230,170 Q 270,180 320,180" fill="url(#synth)" stroke="#f85149" stroke-width="1.5" opacity="0.7"/>
+      <!-- Human curve: broader spread, higher entropy -->
+      <path d="M 140,180 Q 200,180 240,165 Q 280,80 320,30 Q 360,80 400,165 Q 440,180 500,180" fill="url(#human)" stroke="#90c8ff" stroke-width="1.5" opacity="0.7"/>
+      <!-- Labels -->
+      <text x="140" y="195" fill="#f85149" opacity="0.5" font-size="11" text-anchor="middle" letter-spacing="0.05em">SYNTHETIC</text>
+      <text x="340" y="195" fill="#90c8ff" opacity="0.5" font-size="11" text-anchor="middle" letter-spacing="0.05em">HUMAN</text>
+      <!-- X axis -->
+      <line x1="20" y1="185" x2="480" y2="185" stroke="white" stroke-width="0.5" opacity="0.08"/>
+      <!-- Arrow between curves -->
+      <line x1="230" y1="30" x2="300" y2="30" stroke="#d29922" stroke-width="1" opacity="0.4" stroke-dasharray="6,4"/>
+    </svg>
+  </div>
+
+  <!-- Gap indicator -->
+  <div class="gap-label">← entropy gap →</div>
+
+  <!-- Dimension labels -->
+  <div class="dims">
+    <div class="dim">Micro-timing</div>
+    <div class="dim">Noise residual</div>
+    <div class="dim">Frequency entropy</div>
+    <div class="dim">Biological perturbation</div>
+  </div>
+
+  <!-- Typography -->
+  <h1 class="title">Your Face<br><em>Doesn't Matter</em></h1>
+  <p class="subtitle">How Biological Entropy Replaces Identity Verification</p>
+
+  <!-- Branding -->
+  <div class="brand">The Continuity Lab</div>
+  <div class="badge">RN-002 · PES Benchmark v0.2</div>
+</div>
+
+</body>
+</html>
