@@ -13,7 +13,9 @@
     "test:watch": "vitest --config vitest.config.ts",
     "test:coverage": "vitest run --config vitest.config.ts --coverage",
     "benchmark": "vitest run --config vitest.config.ts src/engine/__benchmark__/",
-    "benchmark:all": "vitest run --config vitest.config.ts"
+    "benchmark:all": "vitest run --config vitest.config.ts",
+    "push": "git push origin master && git push org master",
+    "deploy": "git push origin master && git push org master && npx vercel --prod --yes"
   },
   "dependencies": {
     "@atproto/api": "^0.20.22",
