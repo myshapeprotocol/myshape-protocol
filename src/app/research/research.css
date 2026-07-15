@@ -307,6 +307,9 @@
   font-weight: 300; margin-bottom: 1.5rem;
 }
 .note-section p strong { color: rgba(255,255,255,0.7); font-weight: 500; }
+.note-section li { color: rgba(255,255,255,0.5); font-size: 18px; line-height: 1.85; font-weight: 300; margin-bottom: 0.5rem; }
+.note-section li strong { color: rgba(255,255,255,0.7); font-weight: 500; }
+.note-section h3 { color: rgba(255,255,255,0.65); font-size: 22px; font-weight: 400; letter-spacing: 0.02em; margin: 2.5rem 0 1rem; }
 
 /* Blockquote */
 .note-blockquote {

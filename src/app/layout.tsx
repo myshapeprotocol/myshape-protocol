@@ -25,6 +25,7 @@ export const metadata = {
     "The identity layer for the simulation age. MyShape transforms human motion into verifiable presence — sovereign, zero-knowledge, cross-platform. Human and AI identities coexist in one protocol.",
   icons: {
     icon: [
+      { url: "/identity-sigil.jpg", sizes: "256x256", type: "image/jpeg" },
       { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "32x32", type: "image/x-icon" },
     ],
@@ -204,7 +205,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <SearchDialog />
         <Analytics />
-        <PageTransition />
         <ScrollTop />
       </body>
     </html>

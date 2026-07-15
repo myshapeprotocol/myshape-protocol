@@ -363,9 +363,7 @@ export default function ProtocolVerifyClient() {
         {/* ── Complete ── */}
         {stage === "complete" && finalV && (
           <div className="space-y-6">
-            {debug && (
-              <button onClick={() => { const lines = passive.concat(active || []).flatMap((e) => e.diagnostics); lines.unshift(`Verdict: ${finalV}`, `Passive: ${(score * 100).toFixed(0)}%`); navigator.clipboard.writeText(lines.join("\n")).then(() => { setCopySt("✓ Copied!"); setTimeout(() => setCopySt(""), 2000); }).catch(() => {}); }} className="w-full py-3 border border-[#d29922]/40 text-[#d29922]/70 text-[11px] tracking-[0.1em] uppercase hover:border-[#d29922] transition-all">{copySt || "📋 Copy All"}</button>
-            )}
+            <button onClick={() => { const lines = passive.concat(active || []).flatMap((e) => e.diagnostics); lines.unshift(`Verdict: ${finalV}`, `Passive: ${(score * 100).toFixed(0)}%`); navigator.clipboard.writeText(lines.join("\n")).then(() => { setCopySt("✓ Copied!"); setTimeout(() => setCopySt(""), 2000); }).catch(() => {}); }} className="w-full py-3 border border-[#d29922]/40 text-[#d29922]/70 text-[11px] tracking-[0.1em] uppercase hover:border-[#d29922] transition-all">{copySt || "📋 Copy All"}</button>
             <div className={`text-center p-6 border-2 ${finalV === 'PASS' ? "border-[#3fb950]/40 bg-[#3fb950]/[0.04]" : "border-[#f85149]/40 bg-[#f85149]/[0.04]"} space-y-3`}>
               <div className="text-white/20 text-[9px] tracking-[0.2em] uppercase">Verification Confidence</div>
               <div className="text-[48px] font-light" style={{ color: finalV === "PASS" ? "#3fb950" : finalV === "FAIL" ? "#f85149" : "#d29922" }}>{debug ? `${(score * 100).toFixed(0)}%` : `${(100 * [...passive, ...(active ? [active] : [])].reduce((s, e) => s + (e.confidence || 0), 0) / [...passive, ...(active ? [active] : [])].length).toFixed(0)}%`}</div>
@@ -398,7 +396,6 @@ export default function ProtocolVerifyClient() {
             <button onClick={() => { setStage("idle"); setIsSim(false); setNoSensors(false); }} className="w-full py-4 border border-white/10 text-white/25 text-[11px] tracking-[0.2em] uppercase hover:border-white/30 transition-all">↻ New Session</button>
           </div>
         )}
-        <ExperimentExport engineId="VS-001" />
         <div className="mt-10 pt-5 border-t border-white/[0.04] text-center">
           <p className="text-white/25 text-[9px] tracking-[0.1em]">Research Prototype &middot; The Continuity Lab</p>
           <p className="text-white/20 text-[8px] mt-1">

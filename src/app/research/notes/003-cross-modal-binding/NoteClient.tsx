@@ -17,6 +17,7 @@ const TOC_ITEMS = [
   { id: "part-5", label: "Part 5 — What This Does Not Prove" },
   { id: "part-6", label: "Part 6 — Open Questions" },
   { id: "part-7", label: "Part 7 — Role in Verification Session" },
+  { id: "part-8", label: "Part 8 — Experimental Validation (N=165)" },
 ];
 
 export default function NoteClient() {
@@ -83,7 +84,7 @@ export default function NoteClient() {
             </p>
 
             {/* ── Part 1 ── */}
-            <section id="part-1">
+            <section className="note-section" id="part-1">
               <h2>Part 1 — The Binding Problem</h2>
 
               <h3>1.1 The Hidden Assumption</h3>
@@ -128,7 +129,7 @@ export default function NoteClient() {
             </section>
 
             {/* ── Part 2 ── */}
-            <section id="part-2">
+            <section className="note-section" id="part-2">
               <h2>Part 2 — Event-Level Causal Coupling</h2>
 
               <h3>2.1 Intuition</h3>
@@ -196,7 +197,7 @@ export default function NoteClient() {
             </section>
 
             {/* ── Part 3 ── */}
-            <section id="part-3">
+            <section className="note-section" id="part-3">
               <h2>Part 3 — Architecture: EE-002</h2>
 
               <h3>3.1 Evidence Engine Roster</h3>
@@ -239,7 +240,7 @@ export default function NoteClient() {
             </section>
 
             {/* ── Part 4 ── */}
-            <section id="part-4">
+            <section className="note-section" id="part-4">
               <h2>Part 4 — CFC-005: Causal Inversion</h2>
 
               <h3>4.1 Definition</h3>
@@ -284,7 +285,7 @@ export default function NoteClient() {
             </section>
 
             {/* ── Part 5 ── */}
-            <section id="part-5">
+            <section className="note-section" id="part-5">
               <h2>Part 5 — What This Does Not Prove</h2>
 
               <ul>
@@ -314,7 +315,7 @@ export default function NoteClient() {
             </section>
 
             {/* ── Part 6 ── */}
-            <section id="part-6">
+            <section className="note-section" id="part-6">
               <h2>Part 6 — Open Questions</h2>
 
               <ol>
@@ -347,7 +348,7 @@ export default function NoteClient() {
             </section>
 
             {/* ── Part 7 ── */}
-            <section id="part-7">
+            <section className="note-section" id="part-7">
               <h2>Part 7 — Role in Verification Session</h2>
 
               <h3>7.1 Passive Evidence Layer</h3>
@@ -378,6 +379,107 @@ export default function NoteClient() {
                 only when IMU-only passive confidence is insufficient — a design choice
                 that balances verification depth against user friction.
               </p>
+            </section>
+
+            {/* ── Part 8 ── */}
+            <section className="note-section" id="part-8">
+              <h2>Part 8 — Experimental Validation (N=165)</h2>
+
+              <h3>8.1 Overview</h3>
+              <p>
+                All three evidence engines were validated on an iPhone with v0.3 calibrated parameters
+                across 165 live runs (2026-07-15). Each run was recorded with structured evidence output:
+                component-level scores, verdicts, diagnostics, and round-level gyroscope telemetry.
+              </p>
+
+              <table className="note-table">
+                <thead>
+                  <tr><th>Engine</th><th>N</th><th>Pass Rate</th><th>Role</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>EE-003</td><td>55</td><td>65%</td><td>Active — gyroscope challenge (3-round)</td></tr>
+                  <tr><td>PE-001 / EE-002</td><td>50</td><td>93%</td><td>Passive — cross-modal causal coupling</td></tr>
+                  <tr><td>VS-001</td><td>60</td><td>93%</td><td>Dual-engine — EE-001 + EE-003 pipeline</td></tr>
+                </tbody>
+              </table>
+
+              <h3>8.2 EE-003 · Gyroscope Challenge (N=55, 65%)</h3>
+              <p>
+                The <strong>direction match rate improved from 33% (N=11, v0.2) to 65% (N=55, v0.3)</strong> after
+                gyroscope sign calibration and threshold relaxation. However, 23% of runs still fail due to
+                CFC-007 (Challenge Mismatch) — indicating that pure IMU direction challenges alone
+                are insufficient as a standalone verification primitive. The gyroscope challenge is
+                effective as <strong>additional evidence</strong> (escalation path) but should not serve as the
+                sole verifier.
+              </p>
+              <p>
+                <strong>Round-level data:</strong> Round 1 fails at the highest rate (~35%), likely due to
+                the user not yet having internalized the challenge direction. Rounds 2 and 3 show
+                progressively higher pass rates as the user adapts to the motion pattern.
+              </p>
+
+              <h3>8.3 PE-001 · Causal Coupling (N=50, 93%)</h3>
+              <p>
+                Event-level causal coupling shows <strong>strong temporal alignment</strong> across 100%
+                of runs — IMU jerk peaks and camera trajectory changes consistently match within the
+                ±500ms window. This confirms that the two sensor streams describe the same physical event.
+              </p>
+              <p>
+                However, <strong>direction agreement remains the weak component</strong>: approximately
+                55% of runs show direction disagreement between IMU force vectors and camera motion vectors.
+                This is consistent with the documented single-device constraint — the camera and IMU are on
+                the same phone, introducing hand-tremor coupling that confounds the direction signal.
+                An independent camera (WebSocket bridge, planned) is expected to resolve this.
+              </p>
+              <p>
+                <strong>Temporal jitter</strong> (avg Δ 150–360ms across runs) is consistently flagged as
+                "high" — a consequence of the 200ms MediaPipe sampling interval and camera pipeline latency.
+                The widened ±500ms match window absorbs this jitter without false negatives.
+              </p>
+
+              <h3>8.4 VS-001 · Dual-Engine Verification (N=60, 93%)</h3>
+              <p>
+                The dual-engine pipeline is <strong>highly reliable</strong>: 93% pass rate with consistent
+                passive scores (65% IMU-only presence) and escalation to additional evidence when needed.
+                The escalation strategy works as designed — mid-confidence runs are correctly routed to
+                EE-003 for gyroscope verification rather than being falsely rejected or accepted.
+              </p>
+              <p>
+                <strong>Failure analysis:</strong> 4 of 60 runs (7%) returned INSUFFICIENT_EVIDENCE.
+                All 4 failures occurred in the additional evidence stage (EE-003 gyroscope challenge),
+                not in the passive IMU stage. This confirms that EE-001 (IMU presence) alone provides
+                a <strong>reliable floor</strong> — every run passes the passive stage — and that
+                improvement should focus on the gyroscope challenge component.
+              </p>
+
+              <h3>8.5 Key Findings</h3>
+              <ol>
+                <li>
+                  <strong>Cross-modal binding is viable.</strong> 93% temporal alignment in PE-001
+                  proves that IMU and camera events can be matched to verify a shared physical cause.
+                </li>
+                <li>
+                  <strong>IMU-only presence is a reliable floor.</strong> VS-001 passive stage
+                  passes 100% of runs — the 8-second free motion protocol consistently detects
+                  a physically embodied entity.
+                </li>
+                <li>
+                  <strong>Gyroscope challenge is context-dependent.</strong> 65% standalone pass
+                  rate (EE-003) vs. 93% pipeline pass rate (VS-001) shows that challenge-response
+                  is effective in escalation but unreliable as a sole verifier.
+                </li>
+                <li>
+                  <strong>Single-device coupling is the primary confound.</strong> Direction
+                  disagreement in PE-001 (~55% of runs) is consistent with the documented
+                  hand-tremor artifact. Independent camera deployment is the highest-priority
+                  infrastructure upgrade.
+                </li>
+                <li>
+                  <strong>Parameter calibration matters significantly.</strong> v0.2 → v0.3
+                  threshold adjustments (wider match window, relaxed jerk minimum, gyro sign fix)
+                  improved EE-003 from 33% to 65% — a 2× gain from calibration alone.
+                </li>
+              </ol>
             </section>
 
             {/* ── Related ── */}

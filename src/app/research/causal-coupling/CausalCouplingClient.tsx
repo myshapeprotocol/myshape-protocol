@@ -272,8 +272,7 @@ export default function CausalCouplingClient() {
         {/* ── Results ── */}
         {phase === "complete" && evidence && displayVerdict && (
           <div className="space-y-6">
-            {debug && (
-              <button onClick={() => {
+            <button onClick={() => {
                 const lines = [
                   `Verdict: ${displayVerdict}`,
                   `IMU: ${imuCount} samples, Cam: ${camCount} frames`,
@@ -282,7 +281,6 @@ export default function CausalCouplingClient() {
                 const text = lines.join("\n");
                 navigator.clipboard.writeText(text).then(() => { setCopyStatus("✓ Copied!"); setTimeout(() => setCopyStatus(""), 2000); }).catch(() => setCopyStatus("Failed"));
               }} className="w-full py-3 border border-[#d29922]/40 text-[#d29922]/70 text-[11px] tracking-[0.1em] uppercase hover:border-[#d29922] transition-all">{copyStatus || "📋 Copy All Results"}</button>
-            )}
 
             {/* Verdict */}
             <div className="text-center p-6 border-2 border-[#a371f7]/40 bg-[#a371f7]/[0.04] space-y-3">
