@@ -8,7 +8,7 @@ const CSP_DIRECTIVES = [
   // Scripts: self + eval for dev (Next.js Fast Refresh), MediaPipe CDN (scoped)
   IS_PROD
     ? "script-src 'self' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com"
-    : "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com",
+    : "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com",
   // Styles: Tailwind needs 'unsafe-inline'
   "style-src 'self' 'unsafe-inline'",
   // Images: self + Supabase storage + data URIs

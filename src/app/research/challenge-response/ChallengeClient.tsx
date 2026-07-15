@@ -4,6 +4,8 @@ import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useDebug } from "@/hooks/useDebug";
 import ResearchStatus from "@/components/ResearchStatus";
+import ExperimentExport from "@/components/experiment/ExperimentExport";
+import { saveRun } from "@/lib/experiment-logger";
 import {
   type EngineEvidence,
   type Verdict,
@@ -194,7 +196,19 @@ export default function ChallengeClient() {
     hashEvidence(ev).then((d) => {
       if (d) setEvidence((prev) => (prev ? { ...prev, evidenceDigest: d } : prev));
     });
-    setDisplayVerdict(evaluatePolicy({ policyId: "EE-003", acceptThreshold: 0.70, rejectThreshold: 0.35 }, ev.confidence ?? 0));
+    const verdict = evaluatePolicy({ policyId: "EE-003", acceptThreshold: 0.70, rejectThreshold: 0.35 }, ev.confidence ?? 0);
+    setDisplayVerdict(verdict);
+    saveRun({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      engineId: "EE-003",
+      timestamp: new Date().toISOString(),
+      isSimulated: false,
+      verdict,
+      confidence: ev.confidence ?? 0,
+      components: ev.components.map((c) => ({ metric: c.metric, value: c.value, threshold: c.threshold, status: c.status })),
+      diagnostics: ev.diagnostics,
+      roundResults: allResults.map((r) => ({ round: r.round, direction: r.direction, directionMatch: r.directionMatch, magnitudeStatus: r.magnitudeStatus, angleDeg: r.angleDeg, peakG: r.peakG, sampleCount: r.sampleCount })),
+    });
     setPhase("complete");
   }, [handleIMU]);
 
@@ -466,6 +480,7 @@ export default function ChallengeClient() {
             </button>
           </div>
         )}
+        <ExperimentExport engineId="EE-003" />
         <div className="mt-10 pt-5 border-t border-white/[0.04] text-center">
           <p className="text-white/25 text-[9px] tracking-[0.1em]">Research Prototype &middot; The Continuity Lab</p>
           <p className="text-white/20 text-[8px] mt-1">
