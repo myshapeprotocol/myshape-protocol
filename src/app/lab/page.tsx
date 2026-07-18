@@ -1,15 +1,4 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "The Continuity Lab",
-  description: "Researching continuity as a verifiable property of the digital world.",
-  openGraph: {
-    title: "The Continuity Lab",
-    description: "Researching continuity as a verifiable property of the digital world.",
-    siteName: "The Continuity Lab",
-    type: "website",
-  },
-};
+"use client";
 
 export default function LabPage() {
   return (
@@ -47,8 +36,6 @@ export default function LabPage() {
               letterSpacing: "0.04em", transition: "all 0.3s",
               background: "rgba(144,200,255,0.02)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.35)"; e.currentTarget.style.color = "#90c8ff"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.12)"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; }}
           >
             {l.label}
           </a>
