@@ -1,0 +1,22 @@
+{
+  "name": "myshape",
+  "version": "0.1.0",
+  "description": "MyShape Protocol — verifiable continuity for the digital world. One function: verifyContinuity().",
+  "license": "MIT",
+  "author": "The Continuity Lab",
+  "repository": "github:myshapeprotocol/myshape-protocol",
+  "keywords": ["motion-signature", "continuity", "verification", "presence", "pes", "identity"],
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": ["src/", "README.md"],
+  "scripts": {
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0"
+  }
+}
