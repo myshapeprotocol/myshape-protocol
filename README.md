@@ -112,6 +112,12 @@ We are a research group studying continuity as a verifiable property.
 
 ---
 
+## Roadmap
+
+[Research Roadmap](ROADMAP.md) — what we've built, what we're building, what we aim to prove.
+
+> **Current phase: Build → Validate.** The protocol has enough substance to be scrutinized. We are inviting external feedback.
+
 ## License
 
 MIT
