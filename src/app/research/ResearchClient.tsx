@@ -50,6 +50,15 @@ const PUBLISHED_NOTES = [
     isFD: true,
   },
   {
+    num: "007",
+    title: "DL-001 — Direction Asymmetry in EE-003",
+    subtitle:
+      "Why up/down passes more than left/right. An operator observation, recorded for future calibration.",
+    date: "2026.07.18",
+    slug: "/research/notes/007-ee003-direction-asymmetry",
+    isDL: true,
+  },
+  {
     num: "006",
     title: "RFC-0002 — Continuity Proof Format",
     subtitle:
@@ -329,8 +338,8 @@ export default function ResearchClient() {
                 onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}
               >
                 <div className="rn-card-num">
-                  <span className="rn-card-dot" style={(rn as any).isFD ? { background: "#f85149", boxShadow: "0 0 6px rgba(248,81,73,0.6)" } : (rn as any).isRFC ? { background: "#d29922", boxShadow: "0 0 6px rgba(210,153,34,0.4)" } : undefined} />
-                  {(rn as any).isRFC ? `RFC-${rn.num}` : (rn as any).isFD ? `FD-${rn.num}` : `RN #${rn.num}`}
+                  <span className="rn-card-dot" style={(rn as any).isFD ? { background: "#f85149", boxShadow: "0 0 6px rgba(248,81,73,0.6)" } : (rn as any).isRFC ? { background: "#d29922", boxShadow: "0 0 6px rgba(210,153,34,0.4)" } : (rn as any).isDL ? { background: "#90c8ff", boxShadow: "0 0 6px rgba(144,200,255,0.5)" } : undefined} />
+                  {(rn as any).isRFC ? `RFC-${rn.num}` : (rn as any).isFD ? `FD-${rn.num}` : (rn as any).isDL ? `DL-${rn.num}` : `RN #${rn.num}`}
                 </div>
                 <div className="rn-card-title">{rn.title}</div>
                 <div className="rn-card-subtitle">{rn.subtitle}</div>
