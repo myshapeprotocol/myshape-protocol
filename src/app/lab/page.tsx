@@ -17,7 +17,7 @@ export default function LabPage() {
         <div style={{ width: 48, height: 48, borderRadius: "50%", background: "radial-gradient(circle, rgba(144,200,255,0.2) 0%, rgba(144,200,255,0.04) 60%, transparent 100%)", margin: "0 auto 40px", display: "flex", alignItems: "center", justifyContent: "center", animation: "ringPulse 5s ease-in-out infinite" }}>
           <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#d0e8ff", boxShadow: "0 0 10px #90c8ff, 0 0 28px rgba(144,200,255,0.5), 0 0 56px rgba(144,200,255,0.25)", animation: "breathe 4s ease-in-out infinite" }} />
         </div>
-        <h1 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2rem)", fontWeight: 300, letterSpacing: "0.03em", color: "#fff", margin: "0 0 12px" }}>The Continuity Lab</h1>
+        <h1 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2rem)", fontWeight: 300, letterSpacing: "0.03em", color: "#fff", margin: "0 0 12px" }}>The Continuity Lab™</h1>
         <p style={{ fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)", color: "rgba(255,255,255,0.4)", lineHeight: 1.6, margin: "0 0 32px" }}>
           Researching continuity as a verifiable property of the digital world.
         </p>
@@ -117,9 +117,9 @@ export default function LabPage() {
 
         {/* Footer */}
         <div style={{ fontSize: 10, color: "rgba(255,255,255,0.12)", letterSpacing: "0.08em", textAlign: "center", paddingBottom: 48 }}>
-          <a href="https://www.myshape.com" style={{ color: "rgba(144,200,255,0.25)", textDecoration: "none" }}>MyShape Protocol</a>
+          <a href="https://www.myshape.com" style={{ color: "rgba(144,200,255,0.25)", textDecoration: "none" }}>MyShape Protocol™</a>
           <span style={{ margin: "0 10px" }}>·</span>
-          <span>The Continuity Lab, 2026</span>
+          <span>The Continuity Lab™, 2026</span>
         </div>
       </div>
     </div>

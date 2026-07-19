@@ -1,4 +1,4 @@
-# The Continuity Lab
+# The Continuity Lab™
 
 > **Researching continuity as a verifiable property of the digital world.**
 
@@ -119,7 +119,7 @@ Operational, institutional, and strategic planning remains strictly internal.
 
 ---
 
-## The Continuity Lab
+## The Continuity Lab™
 
 We are a research group studying continuity as a verifiable property.
 
