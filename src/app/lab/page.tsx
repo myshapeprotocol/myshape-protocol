@@ -9,13 +9,13 @@ export default function LabPage() {
 
   return (
     <>
-    <style>{`@keyframes breathe{0%,100%{opacity:0.5;transform:scale(0.8);box-shadow:0 0 6px #90c8ff,0 0 18px rgba(144,200,255,0.3),0 0 36px rgba(144,200,255,0.1)}25%{opacity:0.9;transform:scale(1.1);box-shadow:0 0 8px #a3d3ff,0 0 24px rgba(144,200,255,0.5),0 0 48px rgba(144,200,255,0.2)}50%{opacity:1;transform:scale(1.6);box-shadow:0 0 10px #b8e0ff,0 0 32px rgba(144,200,255,0.6),0 0 64px rgba(144,200,255,0.3)}75%{opacity:0.7;transform:scale(1);box-shadow:0 0 6px #90c8ff,0 0 20px rgba(144,200,255,0.3),0 0 40px rgba(144,200,255,0.1)}}@keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.15}50%{transform:scale(1.3);opacity:0.35}}`}</style>
+    <style>{`@keyframes breathe{0%,100%{opacity:0.7;transform:scale(0.8);box-shadow:0 0 10px #90c8ff,0 0 28px rgba(144,200,255,0.5),0 0 56px rgba(144,200,255,0.25)}25%{opacity:1;transform:scale(1.1);box-shadow:0 0 12px #a3d3ff,0 0 36px rgba(144,200,255,0.7),0 0 72px rgba(144,200,255,0.4)}50%{opacity:1;transform:scale(1.6);box-shadow:0 0 14px #b8e0ff,0 0 44px rgba(144,200,255,0.8),0 0 88px rgba(144,200,255,0.5)}75%{opacity:0.8;transform:scale(1);box-shadow:0 0 10px #90c8ff,0 0 30px rgba(144,200,255,0.5),0 0 60px rgba(144,200,255,0.3)}}@keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.25}50%{transform:scale(1.4);opacity:0.5}}`}</style>
     <div style={{ minHeight: "100vh", background: "#02040a", color: "#f8feff", fontFamily: "system-ui, -apple-system, sans-serif" }}>
 
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "80px 24px 48px", maxWidth: 640, margin: "0 auto" }}>
         <div style={{ width: 48, height: 48, borderRadius: "50%", background: "radial-gradient(circle, rgba(144,200,255,0.2) 0%, rgba(144,200,255,0.04) 60%, transparent 100%)", margin: "0 auto 40px", display: "flex", alignItems: "center", justifyContent: "center", animation: "ringPulse 5s ease-in-out infinite" }}>
-          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#b8e0ff", boxShadow: "0 0 6px #90c8ff, 0 0 18px rgba(144,200,255,0.3), 0 0 36px rgba(144,200,255,0.1)", animation: "breathe 4s ease-in-out infinite" }} />
+          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#d0e8ff", boxShadow: "0 0 10px #90c8ff, 0 0 28px rgba(144,200,255,0.5), 0 0 56px rgba(144,200,255,0.25)", animation: "breathe 4s ease-in-out infinite" }} />
         </div>
         <h1 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2rem)", fontWeight: 300, letterSpacing: "0.03em", color: "#fff", margin: "0 0 12px" }}>The Continuity Lab</h1>
         <p style={{ fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)", color: "rgba(255,255,255,0.4)", lineHeight: 1.6, margin: "0 0 32px" }}>
