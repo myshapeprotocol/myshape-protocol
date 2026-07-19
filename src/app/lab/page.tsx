@@ -88,8 +88,17 @@ export default function LabPage() {
         {/* Open Source */}
         <div style={{ fontSize: 10, color: "rgba(144,200,255,0.4)", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 16 }}>Open Source</div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 56 }}>
-          {["npm install myshape", "MIT License", "121 tests", "Research-first", "RFC-driven"].map((t) => (
-            <span key={t} style={{ padding: "6px 14px", border: "1px solid rgba(144,200,255,0.1)", fontSize: 11, color: "rgba(255,255,255,0.35)", borderRadius: 2 }}>{t}</span>
+          {[
+            { label: "npm install myshape", href: "https://www.npmjs.com/package/myshape" },
+            { label: "MIT License", href: "https://github.com/myshapeprotocol/myshape-protocol/blob/master/LICENSE" },
+            { label: "121 tests", href: "https://github.com/myshapeprotocol/myshape-protocol/tree/master/src/lib/evidence" },
+            { label: "Research-first", href: "https://www.myshape.com/research" },
+            { label: "RFC-driven", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" },
+          ].map((t) => (
+            <a key={t.label} href={t.href} style={{ padding: "6px 14px", border: "1px solid rgba(144,200,255,0.1)", fontSize: 11, color: "rgba(255,255,255,0.35)", borderRadius: 2, textDecoration: "none", transition: "border-color 0.2s, color 0.2s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.4)"; e.currentTarget.style.color = "rgba(144,200,255,0.7)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(144,200,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.35)"; }}
+            >{t.label}</a>
           ))}
         </div>
 
