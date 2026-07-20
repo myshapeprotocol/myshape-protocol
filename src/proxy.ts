@@ -5,7 +5,7 @@ export function proxy(req: NextRequest) {
   const host = req.headers.get("host") || "";
 
   // Route thecontinuitylab.org → /lab
-  if (host === "thecontinuitylab.org" || host.startsWith("thecontinuitylab.")) {
+  if (host === "thecontinuitylab.org" || host === "www.thecontinuitylab.org") {
     const url = req.nextUrl.clone();
     if (url.pathname === "/") {
       url.pathname = "/lab";
