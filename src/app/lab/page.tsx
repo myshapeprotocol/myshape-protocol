@@ -36,67 +36,11 @@ export default function LabPage() {
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "80px 24px 32px", maxWidth: 720, margin: "0 auto" }}>
 
-        {/* Ethereal Halo Scan */}
-        <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 36px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="haloGradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#34D399" />
-                <stop offset="40%" stopColor="#38BDF8" />
-                <stop offset="100%" stopColor="#3B82F6" />
-              </linearGradient>
-              <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
-                <stop offset="0%" stopColor="#e8f4ff" stopOpacity="0.3" />
-                <stop offset="60%" stopColor="#60A5FA" stopOpacity="0.08" />
-                <stop offset="100%" stopColor="transparent" />
-              </radialGradient>
-              <filter id="softGlow">
-                <feGaussianBlur stdDeviation="1.5" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-              <filter id="microGlow">
-                <feGaussianBlur stdDeviation="0.6" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            </defs>
-
-            {/* Outer halo — faint, large, slow-rotating */}
-            <circle cx="60" cy="60" r="52" fill="none" stroke="url(#haloGradient)" strokeWidth="0.6" opacity="0.12"
-              style={{ animation: "haloSpin 18s linear infinite" }} />
-            <circle cx="60" cy="60" r="52" fill="none" stroke="#60A5FA" strokeWidth="0.3" opacity="0.08"
-              style={{ animation: "haloSpin 24s linear infinite reverse" }} />
-
-            {/* Middle ring — breathing glow */}
-            <circle cx="60" cy="60" r="42" fill="none" stroke="url(#haloGradient)" strokeWidth="1" opacity="0.2"
-              strokeLinecap="round" strokeDasharray="226 38"
-              style={{ animation: "haloBreathe 4s ease-in-out infinite, haloSpin 12s linear infinite" }} />
-
-            {/* Scanning arc — thin bright line sweeping around */}
-            <circle cx="60" cy="60" r="36" fill="none" stroke="url(#haloGradient)" strokeWidth="1.5"
-              strokeLinecap="round" strokeDasharray="60 166" strokeDashoffset="0" opacity="0.5"
-              filter="url(#microGlow)"
-              style={{ animation: "scanLine 3s ease-in-out infinite" }} />
-
-            {/* Core glow — radial diffusion */}
-            <circle cx="60" cy="60" r="28" fill="url(#coreGlow)" />
-
-            {/* Evidence Node — pulsing star at center */}
-            <circle cx="60" cy="60" r="2.5" fill="#e8f4ff" opacity="0.7" filter="url(#microGlow)"
-              style={{ animation: "corePulse 3s ease-in-out infinite" }} />
-          </svg>
+        {/* Logo image — includes title, subtitle, and icon */}
+        <div style={{ margin: "0 auto 36px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <img src="/lab-sigil.png" alt="The Continuity Lab · Continuity · Evidence · Trust"
+            style={{ maxWidth: "min(100%, 420px)", height: "auto", objectFit: "contain" }} />
         </div>
-
-        {/* Title */}
-        <h1 className="fade-in fade-in-1"
-          style={{ fontSize: "clamp(1.6rem, 3.5vw, 2rem)", fontWeight: 300, letterSpacing: "0.04em", color: "#E6EDF7", margin: "0 0 6px" }}>
-          The Continuity Lab
-        </h1>
-
-        {/* Subtitle */}
-        <p className="fade-in fade-in-2"
-          style={{ fontSize: 9, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.5em", margin: "0 0 24px" }}>
-          Continuity · Evidence · Trust
-        </p>
 
         {/* Tagline */}
         <p className="fade-in fade-in-2"
