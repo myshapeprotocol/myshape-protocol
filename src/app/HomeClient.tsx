@@ -7,7 +7,6 @@ import { playTick } from "@/utils/useAudioTick";
 import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
 import PresenceNetwork from "@/components/presence-network/PresenceNetwork";
-import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
 
 export default function HomeClient() {
@@ -38,6 +37,8 @@ export default function HomeClient() {
             <span className="font-mono text-[10px] tracking-[0.12em] uppercase" style={{ color: "rgba(96,165,250,0.7)" }}>SDK Released</span>
             <code className="font-mono text-[10px] tracking-[0.05em]" style={{ color: "rgba(255,255,255,0.45)" }}>npm install @thecontinuitylab/myshape</code>
             <a href="/blog/sdk-release-continuity-verification" className="font-mono text-[9px] tracking-[0.1em]" style={{ color: "rgba(96,165,250,0.45)", textDecoration: "none" }}>→ Read</a>
+            <span style={{ color: "rgba(255,255,255,0.08)" }}>|</span>
+            <a href="https://thecontinuitylab.org/lab/playground" className="font-mono text-[9px] tracking-[0.1em]" style={{ color: "rgba(34,211,238,0.5)", textDecoration: "none" }}>▶ Playground</a>
           </div>
         </div>
 
@@ -385,8 +386,15 @@ export default function HomeClient() {
         </section>
         </div>{/* end desktop-only */}
 
-        {/* CTA — both mobile and desktop */}
-        <JoinWaitlist id="genesis" />
+        {/* CTA — Research by The Continuity Lab */}
+        <div className="relative z-10 pb-12 text-center">
+          <a href="https://thecontinuitylab.org" className="inline-flex items-center gap-2 px-6 py-3 border text-[11px] tracking-[0.1em] uppercase transition-all"
+            style={{ borderColor: "rgba(96,165,250,0.15)", color: "rgba(96,165,250,0.5)", background: "rgba(96,165,250,0.03)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(96,165,250,0.4)"; e.currentTarget.style.color = "rgba(96,165,250,0.8)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(96,165,250,0.15)"; e.currentTarget.style.color = "rgba(96,165,250,0.5)"; }}>
+            Research by The Continuity Lab →
+          </a>
+        </div>
       </main>
 
       <ProtocolFooter />

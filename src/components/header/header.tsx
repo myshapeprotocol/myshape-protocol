@@ -213,12 +213,6 @@ const ProtocolHeader = () => {
           </div>
         </a>
 
-        {/* Genesis Phase Indicator — desktop only */}
-        <span className="hide-mobile" style={{ fontSize: "9px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)", fontFamily: "monospace", gap: "3px" }}>
-          <span style={{ fontSize: "7px" }}>◈</span>
-          Genesis Alpha
-        </span>
-
         {/* 钱包按钮 — 全局身份入口 */}
         <button
           onClick={handleWalletClick}
@@ -246,120 +240,43 @@ const ProtocolHeader = () => {
 
             <div className="panel-content">
               <div className="panel-header">
-                {genesisDone ? "IDENTITY_SESSION_ACTIVE" : walletAddress ? "WALLET_CONNECTED — INITIALIZE BELOW" : "PROTOCOL_ACCESS_SESSION"}
+                PROTOCOL_ACCESS
               </div>
-
               <div className="panel-section">
-                {walletAddress ? (
-                  <>
-                    <div className="panel-row">
-                      <span className="label">WALLET</span>
-                      <span className="value font-mono text-[9px]">{walletAddress.slice(0, 8)}...{walletAddress.slice(-6)}</span>
-                    </div>
-                    <div className="panel-row">
-                      <span className="label">NETWORK</span>
-                      <span className="value-cyan">BASE_MAINNET</span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="panel-row">
-                      <span className="label">WALLET</span>
-                      <span className="value" style={{ color: "rgba(255,255,255,0.3)" }}>NOT_CONNECTED</span>
-                    </div>
-                    <div className="panel-row">
-                      <span className="label">NETWORK</span>
-                      <span className="value">BASE_MAINNET</span>
-                    </div>
-                  </>
-                )}
-                {genesisDone && (
-                  <div className="panel-row">
-                    <span className="label">IDENTITY</span>
-                    <span className="value">{maskedEmail || "MYSHAPE.BASE.ETH"}</span>
-                  </div>
-                )}
+                <div className="panel-row">
+                  <span className="label">576</span>
+                  <span className="value">EXPERIMENTS</span>
+                </div>
+                <div className="panel-row">
+                  <span className="label">2</span>
+                  <span className="value">RFCS</span>
+                </div>
                 <div className="panel-row">
                   <span className="label">STATUS</span>
                   <div className="value-group">
                     <div className="status-pulse-cyan-small" />
-                    <span className="value-cyan">
-                      {genesisDone ? "GENESIS_VERIFIED" : walletAddress ? "WALLET_LINKED" : "AWAITING_GENESIS"}
-                    </span>
-                  </div>
-                </div>
-                <div className="panel-row">
-                  <span className="label">SIGNAL</span>
-                  <div className="value-group">
-                    <div className="status-pulse-cyan-small" />
-                    <span className="value-cyan">ENCRYPTED</span>
+                    <span className="value-cyan">ACTIVE_RESEARCH</span>
                   </div>
                 </div>
               </div>
-
-              {walletError && (
-                <div className="text-red-300/50 text-[8px] tracking-[0.1em] uppercase text-center mb-3">{walletError}</div>
-              )}
-
               <div className="panel-divider" />
-
               <div className="panel-actions">
-                {!walletAddress && walletStatus === "idle" && (
-                  <button
-                    onClick={handleConnectWallet}
-                    onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                    className="panel-link w-full text-center"
-                    style={{ border: "1px solid rgba(144,200,255,0.25)", padding: "6px 0", justifyContent: "center" }}>
-                    <span className="link-icon">◈</span> CONNECT_WALLET
-                  </button>
-                )}
-                {walletStatus !== "idle" && walletStatus !== "done" && (
-                  <div className="text-[#90c8ff]/50 text-[9px] tracking-[0.2em] uppercase text-center py-2">
-                    {walletStatus === "connecting" ? "CONNECTING..." : walletStatus === "signing" ? "SIGNING..." : "VERIFYING..."}
-                  </div>
-                )}
-                {genesisDone ? (
-                  <a href="/dashboard" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                    <span className="link-icon">›</span> EVOLUTIONARY_DASHBOARD
-                  </a>
-                ) : (
-                  <a href="/genesis" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                    <span className="link-icon">›</span> INITIALIZE_GENESIS
-                  </a>
-                )}
-                <a href="/continuity" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                  <span className="link-icon">›</span> CONTINUITY_NETWORK
+                <a href="/research" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                  <span className="link-icon">›</span> RESEARCH_HUB
                 </a>
-                <a href="/protocol" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                  <span className="link-icon">›</span> PROTOCOL_ARCHITECTURE
+                <a href="https://thecontinuitylab.org/lab/playground" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                  <span className="link-icon">›</span> PLAYGROUND
                 </a>
-                <a href="/roadmap" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
-                  <span className="link-icon">›</span> DEVELOPMENT_ROADMAP
+                <a href="https://github.com/myshapeprotocol" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                  <span className="link-icon">›</span> GITHUB
+                </a>
+                <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                  <span className="link-icon">›</span> NPM
+                </a>
+                <a href="https://thecontinuitylab.org" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}>
+                  <span className="link-icon">›</span> THE_CONTINUITY_LAB
                 </a>
                 <div className="panel-divider" style={{ opacity: 0.3 }} />
-                <a href="/handshake" className="panel-link" onMouseEnter={() => playTick(700, "sine", 0.06, 0.015)}
-                  style={{ opacity: 0.55, filter: "grayscale(0.3)" }}>
-                  <span className="link-icon" style={{ opacity: 0.5 }}>◇</span> DEV: NODE_HANDSHAKE
-                </a>
-                <button
-                  onClick={handleDisconnect}
-                  className={`panel-btn-disconnect ${
-                    disconnectPhase === "CONFIRM" ? "phase-confirm" : ""
-                  } ${disconnectPhase === "SIGNAL_LOSS" ? "phase-signal-loss" : ""}`}
-                >
-                  <span className="btn-icon">×</span>
-                  <span
-                    className={`disconnect-text ${
-                      disconnectPhase === "SIGNAL_LOSS" ? "text-fade-out" : ""
-                    }`}
-                  >
-                    {walletAddress
-                      ? "DISCONNECT_WALLET"
-                      : disconnectPhase === "CONFIRM"
-                      ? "[ !! RECONFIRM_DISCONNECT !! ]"
-                      : "DISCONNECT_SESSION"}
-                  </span>
-                </button>
               </div>
             </div>
 
@@ -391,7 +308,7 @@ const ProtocolHeader = () => {
         { label: "Protocol", href: "/protocol" },
         { label: "Blog",     href: "/blog" },
         { label: "Research", href: "/research" },
-        { label: "Genesis",  href: "/genesis" },
+        { label: "Playground",  href: "https://thecontinuitylab.org/lab/playground" },
       ].map(link =>
           <Link key={link.href} href={link.href}
             onMouseEnter={e => {

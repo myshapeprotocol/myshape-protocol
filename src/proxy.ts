@@ -17,6 +17,12 @@ export function proxy(req: NextRequest) {
     if (/\.(png|jpg|jpeg|gif|svg|ico|webp|avif|woff2?|ttf|eot|css|js|json|xml|txt|map)$/i.test(path)) {
       return NextResponse.next();
     }
+    // Don't rewrite sub-paths under /lab (like /lab/playground)
+    if (path.startsWith("/lab/")) {
+      const url = req.nextUrl.clone();
+      url.pathname = path;
+      return NextResponse.rewrite(url);
+    }
     // Everything else → /lab
     const url = req.nextUrl.clone();
     url.pathname = "/lab";

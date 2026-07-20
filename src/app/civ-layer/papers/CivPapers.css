@@ -1,5 +1,0 @@
-/* ── CivPapers — Clip-path utility ── */
-
-.clip-path-slant {
-  clip-path: polygon(100% 0, 0 0, 100% 100%);
-}

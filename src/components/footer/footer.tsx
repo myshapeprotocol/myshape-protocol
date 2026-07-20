@@ -41,21 +41,19 @@ export default function ProtocolFooter() {
       title: "PROTOCOL",
       links: [
         { name: "OVERVIEW", href: "/protocol" },
-        { name: "IDENTITY_LAYER", href: "/protocol/identity-layer" },
         { name: "MOTION_PIPELINE", href: "/protocol/motion-pipeline" },
-        { name: "ZERO_KNOWLEDGE", href: "/protocol/zk" },
-        { name: "CONTINUITY", href: "/continuity" },
-        { name: "EVIDENCE", href: "/evidence" }
+        { name: "EVIDENCE", href: "/evidence" },
+        { name: "PLAYGROUND", href: "https://thecontinuitylab.org/lab/playground" },
+        { name: "NPM_SDK", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" }
       ]
     },
     {
       title: "BUILD",
       links: [
         { name: "DEVELOPERS", href: "/developers" },
-        { name: "DASHBOARD", href: "/dashboard" },
-        { name: "NODE_HANDSHAKE", href: "/handshake" },
         { name: "MOTION_DEMO", href: "/motion-demo" },
-        { name: "AI_AGENT", href: "/agent" }
+        { name: "GITHUB", href: "https://github.com/myshapeprotocol" },
+        { name: "THE_CONTINUITY_LAB", href: "https://thecontinuitylab.org" }
       ]
     },
     {
@@ -64,10 +62,8 @@ export default function ProtocolFooter() {
         { name: "RESEARCH_HUB", href: "/research" },
         { name: "RESEARCH_AGENDA", href: "/research/agenda" },
         { name: "WHITEPAPER", href: "/whitepaper" },
-        { name: "TECH_SPEC", href: "/papers/technical-spec" },
-        { name: "THREAT_MODEL", href: "/papers/threat-model" },
-        { name: "PROTOCOL_ARCH", href: "/papers/protocol-architecture" },
-        { name: "BLOG", href: "/blog" }
+        { name: "BLOG", href: "/blog" },
+        { name: "ROADMAP", href: "/roadmap" }
       ]
     },
     {
@@ -137,7 +133,7 @@ export default function ProtocolFooter() {
               </span>
               <span className="text-white/15">|</span>
               <span className="text-white/30 text-[9px] tracking-[0.25em] uppercase font-mono">
-                ZK_VERIFIED
+                RFC-DRIVEN
               </span>
             </div>
             <div className="space-y-1.5">
@@ -189,7 +185,7 @@ export default function ProtocolFooter() {
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
         <div className="hidden md:flex items-center justify-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-[#90c8ff]/60 shadow-[0_0_4px_rgba(144,200,255,0.5)]" />
-          <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v2.0 — 7 Engines · 309 Tests · 100% Passing</span>
+          <span className="text-[9px] text-white/25 tracking-[0.25em] uppercase font-mono">Core v0.1.2 — 4 Engines · 121 Tests · 576 Experiments</span>
         </div>
         <span className="text-[10px] text-white/30 tracking-[0.25em] uppercase font-mono block">
           &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL

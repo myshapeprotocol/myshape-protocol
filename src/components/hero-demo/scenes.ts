@@ -1,7 +1,5 @@
-/** Scene definitions for HeroDemo — extracted from HeroDemo.tsx. */
-
 export interface SceneDef {
-  name: "formation" | "motion" | "genesis" | "mesh";
+  name: "formation" | "motion" | "verification" | "mesh";
   label: string;
   subtitle: string;
 }
@@ -11,25 +9,25 @@ export const SCENES: SceneDef[] = [
     name: "formation",
     label: "PRESENCE",
     subtitle:
-      "Your motion is the key. No password. No physical scan. No stored data. Presence is the proof — and the proof is the identity.",
+      "Your motion is the key. No password. No credentials. No stored data. Presence is the proof — 4-dimensional entropy scoring at 60Hz.",
   },
   {
     name: "motion",
     label: "ENTROPY",
     subtitle:
-      "AI cannot forge biological motion. The 4D entropy gap — timing, noise, frequency, perturbation — is mathematically irreducible.",
+      "AI cannot forge embodied motion. The irreducible gap between biological entropy and synthetic smoothness is mathematically detectable.",
   },
   {
-    name: "genesis",
-    label: "SOVEREIGNTY",
+    name: "verification",
+    label: "VERIFICATION",
     subtitle:
-      "Your identity vector is yours alone. Non-invertible. Non-custodial. No platform can revoke what you generate through your own motion.",
+      "Three evidence engines. Cross-modal binding. Challenge-response. 576 experimental runs. Continuity Failure Conditions detect attacks before they succeed.",
   },
   {
     name: "mesh",
     label: "CONTINUITY",
     subtitle:
-      "Human and AI identities coexist in one protocol. Presence Receipts form a continuous verifiable timeline — your identity infrastructure.",
+      "Hash-chained evidence receipts form a verifiable timeline. Not a snapshot. A trajectory. Proving you remain you — across time, across devices.",
   },
 ];
 

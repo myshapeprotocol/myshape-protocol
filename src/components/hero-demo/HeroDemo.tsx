@@ -42,7 +42,7 @@ export default function HeroDemo() {
 
   // 场景 ref（不触发重渲染）
   const sceneIdxRef = useRef(0);
-  const sceneNameRef = useRef<"formation" | "motion" | "genesis" | "mesh">("formation");
+  const sceneNameRef = useRef<"formation" | "motion" | "verification" | "mesh">("formation");
   const sceneStartRef = useRef(0);
   const switchingRef = useRef(false);
   const particlesRef = useRef<Particle[]>([]);
@@ -248,7 +248,7 @@ export default function HeroDemo() {
         ctx.beginPath();
         ctx.arc(0, 0, 30 * cp, 0, Math.PI * 2);
         ctx.fill();
-      } else if (name === "genesis") {
+      } else if (name === "verification") {
         // S3: 标准 torus + 强烈扫描环
         for (const p of particles) {
           p.angle += p.baseSpeed;
@@ -435,7 +435,7 @@ export default function HeroDemo() {
         }
 
         // 环绕粒子（数量 = orbCount，仅场景 3）
-        if (orbCount > 0 && name === "genesis") {
+        if (orbCount > 0 && name === "verification") {
           ctx.strokeStyle = `rgba(144,200,255,${0.15 * corePulse})`;
           ctx.lineWidth = 0.5;
           ctx.beginPath();
@@ -657,7 +657,7 @@ export default function HeroDemo() {
         </div>
 
         <div className="hero-demo-ctas">
-          <Link href="/genesis" className="hero-demo-cta primary"
+          <Link href="/research" className="hero-demo-cta primary"
             onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
             itemProp="potentialAction" itemScope itemType="https://schema.org/EntryPoint">
             <meta itemProp="name" content="Initialize Genesis Cohort" />

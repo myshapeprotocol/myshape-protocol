@@ -4,7 +4,7 @@
 
 [![RFC-0001](https://img.shields.io/badge/RFC-0001-Motion_Signature-blue)](https://www.myshape.com/research/notes/004-motion-signature-rfc)
 [![npm](https://img.shields.io/badge/npm-myshape-red)](https://www.npmjs.com/package/myshape)
-[![Experiments](https://img.shields.io/badge/experiments-477-green)](https://www.myshape.com/research/notes/003-cross-modal-binding)
+[![Experiments](https://img.shields.io/badge/experiments-576-green)](https://www.myshape.com/research/notes/003-cross-modal-binding)
 [![Tests](https://img.shields.io/badge/tests-121%20passed-brightgreen)](https://github.com/myshapeprotocol/myshape-protocol)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -18,6 +18,19 @@ The **MyShape Protocol** is our first publication: a motion-signature system tha
 
 - **Not biometrics.** Not identity. It doesn't answer "who are you?"
 - It answers: **"Are you still you, continuously?"**
+
+---
+
+## Continuity vs. Traditional Verification
+
+| | Traditional | Continuity Protocol |
+|---|-------------|---------------------|
+| **Question** | Who are you? | Are you still you? |
+| **Data** | Static credentials (keys, tokens, hashes) | Real-time sensor streams (IMU 60Hz, camera 7Hz) |
+| **Attack surface** | Credential theft, replay, deepfake | Requires physical presence + causal consistency |
+| **Time model** | Snapshot — verified at login | Trajectory — verified continuously |
+| **Enrollment** | Required (password, scan, template) | None — extracts entropy from motion alone |
+| **Output** | Token / session | EvidenceReceipt — hash-chained, verifiable |
 
 ---
 
@@ -48,10 +61,10 @@ const result = await verifyContinuity({
 |-------|--------|---|-----------|--------|
 | Presence Detection | EE-001 (PES) | — | 100% floor | Active |
 | Causal Coupling | EE-002 / PE-001 | 316 | 58% | Active |
-| Challenge-Response | EE-003 | 101 | 58% | Active |
+| Challenge-Response | EE-003 | 200 | 59% | Active |
 | Dual-Engine Pipeline | VS-001 | 60 | 93% | Active |
 
-**477 experimental runs** on consumer iPhone hardware. All data, diagnostics, and failure analysis are public.
+**576 experimental runs** on consumer iPhone hardware. All data, diagnostics, and failure analysis are public.
 
 [→ RN-003: Cross-Modal Binding (full data)](https://www.myshape.com/research/notes/003-cross-modal-binding)
 
@@ -62,7 +75,7 @@ const result = await verifyContinuity({
 | Document | Type | Description |
 |----------|------|-------------|
 | [RFC-0001](https://www.myshape.com/research/notes/004-motion-signature-rfc) | Specification | Motion Signature Format — implementable by any team |
-| [RN-003](https://www.myshape.com/research/notes/003-cross-modal-binding) | Research Note | Cross-Modal Binding — 477-run validation |
+| [RN-003](https://www.myshape.com/research/notes/003-cross-modal-binding) | Research Note | Cross-Modal Binding — 576-run validation |
 | [FD-001](https://www.myshape.com/research/notes/005-failure-report-10fps) | Failure Report | Frame Rate Hypothesis — what we tried, what failed |
 | [RN-002](https://www.myshape.com/research/notes/002-pes-benchmark) | Research Note | PES Benchmark v0.2 |
 | [RN-001](https://www.myshape.com/research/notes/001-the-continuity-problem) | Research Note | The Continuity Problem |

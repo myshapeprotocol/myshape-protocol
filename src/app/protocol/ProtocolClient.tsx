@@ -6,45 +6,38 @@ import { playTick } from "@/utils/useAudioTick";
 import "./protocol.css";
 
 const SPEC_SECTIONS = [
-  { id: "§1", title: "Definitions", desc: "Presence, Motion Vector, ZK-Presence — the mathematical vocabulary", status: "implemented" },
-  { id: "§2", title: "Motion Vector Format", desc: "Standardized 18-point skeleton topology, 30fps, 1s window, Poseidon hash", status: "implemented" },
-  { id: "§3", title: "Feature Pipeline", desc: "Five-stage extraction: preprocessing → temporal → kinematic → entropy → hash", status: "implemented" },
-  { id: "§4", title: "Entropy Model", desc: "Micro-timing, noise residual, frequency entropy, biological perturbation", status: "implemented" },
-  { id: "§5", title: "Threat & Attack Model", desc: "Generative / Replay / Imitation / Sensor-spoof — all detectable via PES", status: "implemented" },
-  { id: "§6", title: "Proof System", desc: "PoP + MP + EP → ZK-Presence composite proof, 3-layer architecture", status: "implemented" },
-  { id: "§7", title: "Reference Architecture", desc: "Five engines: LIE, MPE, ZPE, VN, Presence Network — 4 security boundaries", status: "implemented" },
-  { id: "§8", title: "SDK Specification", desc: "Presence / Proof / Verification modules — 5 lines to integrate", status: "implemented" },
-  { id: "§9", title: "Protocol Specification", desc: "Wire format, 6 verification rules, stateless network design", status: "implemented" },
-  { id: "§10", title: "Unforgeability Proof", desc: "Theorem: Pr[AI PES ≥ 0.65] → 0 — 5-step mathematical proof", status: "implemented" },
-  { id: "§11-13", title: "Presence Stream", desc: "Aggregation, multi-device fusion, continuous presence + PSS stability score", status: "implemented" },
-  { id: "§14-16", title: "Reputation & Graph", desc: "Reputation scoring, co-presence graph, network consensus", status: "implemented" },
+  { id: "RFC-0001", title: "Motion Signature Format", desc: "PES, jerk detection, cross-modal matching, challenge-response protocol", status: "draft" },
+  { id: "RFC-0002", title: "Continuity Proof Format", desc: "Evidence receipts, CFC catalog, hash chaining, verification policy", status: "draft" },
+  { id: "EE-001", title: "Presence Detection", desc: "4D entropy scoring: micro-timing, noise residual, frequency entropy, perturbation", status: "active" },
+  { id: "EE-002", title: "Causal Coupling", desc: "IMU + camera event matching ±500ms. Temporal alignment: 100%", status: "active" },
+  { id: "EE-003", title: "Challenge Response", desc: "3-round gyroscope challenge. Jittered timing. Anti-replay.", status: "active" },
+  { id: "VS-001", title: "Verification Session", desc: "Dual-engine pipeline. Passive → escalate → aggregate → verdict", status: "active" },
+  { id: "npm", title: "SDK (v0.1.2)", desc: "verifyContinuity(). One function. npm install. 84 tests. MIT.", status: "published" },
+  { id: "DATASET", title: "576 Experimental Runs", desc: "HuggingFace. Engine summaries. Tracker comparison. Open data.", status: "published" },
 ];
 
 const FIVE_LAYERS = [
-  { layer: 5, name: "IDENTITY LAYER", role: "Sovereign Identity · Presence · Liveness · Sybil Defense", status: "active" },
-  { layer: 4, name: "PROOF LAYER", role: "ZK-MG · ZK-MIP · Succinct Verification · Cross-Platform", status: "active" },
-  { layer: 3, name: "INTEGRITY LAYER", role: "Anti-Synthesis · Anti-Replay · Sensor Fusion · PES Engine", status: "active" },
-  { layer: 2, name: "GEOMETRY LAYER", role: "Invariants · Manifold Projection · SST 18-Point Topology", status: "active" },
-  { layer: 1, name: "CAPTURE LAYER", role: "Real-Time Motion · Sensor Input · On-Device Preprocessing", status: "active" },
+  { layer: "RFC", name: "SPECIFICATION", role: "RFC-0001 Motion Signature · RFC-0002 Continuity Proof", status: "published" },
+  { layer: "EE", name: "EVIDENCE ENGINES", role: "EE-001 Presence · EE-002 Causal Coupling · EE-003 Challenge", status: "active" },
+  { layer: "VS", name: "VERIFICATION", role: "Dual-Engine Pipeline · Escalation Logic · CFC Detection", status: "active" },
+  { layer: "SDK", name: "DEVELOPER SURFACE", role: "npm install @thecontinuitylab/myshape · verifyContinuity()", status: "published" },
+  { layer: "DATA", name: "EXPERIMENTAL DATA", role: "576 Runs · 4 Engines · HuggingFace Dataset · Reproducible", status: "active" },
 ];
 
 const ENGINES = [
-  { name: "Local Identity Engine", file: "local-identity.ts", desc: "Device salt, local key derivation, session anchoring" },
-  { name: "Motion Processing Engine", file: "presence-entropy.ts", desc: "SST mapping, PES computation, feature pipeline" },
-  { name: "ZK-Proof Engine", file: "proof-system.ts", desc: "PoP/MP/EP generation, ZK-Presence composite" },
-  { name: "Threat Assessment", file: "threat-assessment.ts", desc: "8 attack signatures, corroboration logic" },
-  { name: "Protocol Validator", file: "protocol-validator.ts", desc: "6 verification rules, replay registry" },
-  { name: "Presence Stream", file: "presence-stream.ts", desc: "Aggregation, multi-device, PSS stability" },
-  { name: "Reputation Engine", file: "presence-reputation.ts", desc: "PRS scoring, decay model, tier system" },
-  { name: "Unforgeability Proof", file: "unforgeability.ts", desc: "Entropy gap detection, security horizon" },
+  { name: "Presence Detection (EE-001)", file: "N/A — 100% floor", desc: "4D entropy scoring from IMU data. Distinguishes embodied entities from synthetic motion." },
+  { name: "Causal Coupling (EE-002)", file: "316 runs · 58% pass", desc: "Cross-modal event binding. Proves IMU and camera observe the same physical event." },
+  { name: "Gyroscope Challenge (EE-003)", file: "200 runs · 59% pass", desc: "3-round randomized directional challenge with jittered timing. Defeats replay." },
+  { name: "Verification Session (VS-001)", file: "60 runs · 93% pass", desc: "Dual-engine pipeline. Passive presence + active challenge escalation." },
+  { name: "Reference Implementation", file: "121 tests · MIT license", desc: "npm package: verifyContinuity() — one function call." },
 ];
 
 const LIFECYCLE = [
-  { step: "01", label: "Wallet", sub: "EIP-4361 Sign-In", desc: "Connect any EIP-1193 wallet. SIWE signature anchors your address to the protocol." },
-  { step: "02", label: "Verify", sub: "On-Chain Validation", desc: "Signature verified against Base Mainnet. Wallet address bound to protocol node." },
-  { step: "03", label: "Anchor", sub: "Protocol Nodes", desc: "Node created in local registry. Genesis scan initializes Motion Signature entropy." },
-  { step: "04", label: "Prove", sub: "ZK-Presence", desc: "Zero-knowledge proof generated. Presence verified without exposing motion data." },
-  { step: "05", label: "Mesh", sub: "Identity Mesh", desc: "Node joins the decentralized identity mesh. Sovereign. Permanent. Verifiable." },
+  { step: "01", label: "Capture", sub: "Sensor Data", desc: "IMU at 60Hz + camera at 7Hz. All processing on-device. No raw data leaves the device." },
+  { step: "02", label: "Extract", sub: "Evidence Engines", desc: "Jerk peak detection, direction changes, cross-modal matching. Per-component diagnostics." },
+  { step: "03", label: "Evaluate", sub: "Verification Policy", desc: "Confidence thresholds. Escalation logic. CFC checks. Evidence → Verdict." },
+  { step: "04", label: "Receipt", sub: "Evidence Receipt", desc: "SHA-256 hash-chained. Verifiable by any conforming verifier. RFC-0002 compliant." },
+  { step: "05", label: "Verify", sub: "Any Verifier", desc: "Open specification. Reference implementation. Anyone can build a compatible verifier." },
 ];
 
 export default function ProtocolClient() {
