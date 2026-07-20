@@ -1,6 +1,6 @@
 {
   "name": "@thecontinuitylab/myshape",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MyShape Protocol — verifiable continuity. One function: verifyContinuity()",
   "license": "MIT",
   "author": "The Continuity Lab",

@@ -6,7 +6,7 @@
 // analysis and evidence-building logic with different UI wrappers.
 // ═══════════════════════════════════════════════════════════════════
 
-import { type ComponentEvidence, type EngineEvidence, computeHint } from "./types";
+import { type ComponentEvidence, type EngineEvidence, computeHint } from "./types.js";
 
 // ── Types ──
 

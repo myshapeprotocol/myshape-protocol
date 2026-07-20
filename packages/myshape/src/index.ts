@@ -23,7 +23,7 @@ export type {
   Verdict,
   EvidenceReceipt,
   VerificationPolicy,
-} from "./types";
+} from "./types.js";
 
 export type {
   IMUSample,
@@ -31,12 +31,12 @@ export type {
   JerkEvent,
   DirChangeEvent,
   MatchedEvent,
-} from "./causal-coupling";
+} from "./causal-coupling.js";
 
 export type {
   Direction,
   RoundResult,
-} from "./gyro-challenge";
+} from "./gyro-challenge.js";
 
 // ── Core functions ──
 export {
@@ -44,7 +44,7 @@ export {
   computeHint,
   hashEvidence,
   evaluatePolicy,
-} from "./types";
+} from "./types.js";
 
 export {
   median,
@@ -57,7 +57,7 @@ export {
   TEMPORAL_ALIGNMENT_THRESHOLD,
   DIRECTION_AGREEMENT_THRESHOLD,
   EVENT_DENSITY_THRESHOLD,
-} from "./causal-coupling";
+} from "./causal-coupling.js";
 
 export {
   analyzeRound,
@@ -67,14 +67,14 @@ export {
   DIRECTION_ARROW,
   BASE_COUNTDOWN_MS,
   CAPTURE_DURATION_MS,
-} from "./gyro-challenge";
+} from "./gyro-challenge.js";
 
 // ── High-level API ──
 
-import type { IMUSample, CameraSample } from "./causal-coupling";
-import type { EngineEvidence, Verdict, VerificationPolicy } from "./types";
-import { evaluatePolicy } from "./types";
-import { detectJerkPeaks, detectDirectionChanges, matchEvents, buildEvidence } from "./causal-coupling";
+import type { IMUSample, CameraSample } from "./causal-coupling.js";
+import type { EngineEvidence, Verdict, VerificationPolicy } from "./types.js";
+import { evaluatePolicy } from "./types.js";
+import { detectJerkPeaks, detectDirectionChanges, matchEvents, buildEvidence } from "./causal-coupling.js";
 
 export interface VerifyContinuityInput {
   imuSamples: IMUSample[];

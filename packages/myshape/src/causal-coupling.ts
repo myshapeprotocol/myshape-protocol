@@ -13,7 +13,7 @@ import {
   type EngineEvidence,
   computeStatus,
   computeHint,
-} from "./types";
+} from "./types.js";
 
 // ── Internal types ──
 
