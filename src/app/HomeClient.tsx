@@ -8,8 +8,6 @@ import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
 import PresenceNetwork from "@/components/presence-network/PresenceNetwork";
 import JoinWaitlist from "@/components/joinwaitlist/JoinWaitlist";
-import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
-import GenesisCohortBadge from "@/components/genesis-cohort-badge/GenesisCohortBadge";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
 
 export default function HomeClient() {
@@ -72,14 +70,13 @@ export default function HomeClient() {
           </Link>
         </div>
 
-        {/* Mobile: counter + CTA — wallet lives in header */}
+        {/* Mobile: SDK CTA */}
         <div className="relative z-10 -mt-6 pb-12 md:hidden flex flex-col items-center gap-4 px-6">
-          <GenesisCohortBadge />
           <a
-            href="/genesis"
-            className="px-8 py-3 border border-[#90c8ff]/25 text-[#90c8ff]/60 text-[10px] tracking-[0.2em] uppercase font-mono hover:bg-[#90c8ff]/8 hover:border-[#90c8ff]/40 transition-all"
+            href="/research"
+            className="px-8 py-3 border border-[#60A5FA]/25 text-[#60A5FA]/60 text-[10px] tracking-[0.2em] uppercase font-mono hover:bg-[#60A5FA]/8 hover:border-[#60A5FA]/40 transition-all"
           >
-            Apply for Genesis Node
+            Explore Research →
           </a>
         </div>
 
@@ -91,10 +88,13 @@ export default function HomeClient() {
           </div>
         </div>
 
-        {/* ── Genesis Cohort Progress ── */}
+        {/* ── Research Quick Links ── */}
         <section className="relative z-10 -mt-6 mb-8">
-          <div className="max-w-3xl mx-auto px-6">
-            <GenesisProgress />
+          <div className="max-w-3xl mx-auto px-6 flex justify-center gap-4">
+            <a href="/research/notes/004-motion-signature-rfc" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[10px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">RFC-0001</a>
+            <a href="/research/notes/006-continuity-proof-rfc" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[10px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">RFC-0002</a>
+            <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[10px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">npm</a>
+            <a href="https://github.com/myshapeprotocol" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[10px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">GitHub</a>
           </div>
         </section>
 
