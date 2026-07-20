@@ -6,7 +6,6 @@ import { GeistSans, GeistMono } from "geist/font";
 import PageTransition from "@/components/transition/PageTransition";
 import ScrollTop from "@/components/ui/ScrollTop";
 import HeroVisualLoader from "@/components/hero/HeroVisualLoader";
-import ProtocolStatusBar from "@/components/protocol-status/ProtocolStatusBar";
 import SearchDialog from "@/components/search/SearchDialog";
 
 /* -------------------------------
@@ -196,8 +195,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <HeroVisualLoader showCore={false} />
         </div>
 
-        {/* Protocol status — live network state, bottom-left corner */}
-        <ProtocolStatusBar />
 
         {/* Page content */}
         <div style={{ position: "relative", zIndex: 1, width: "100%", flex: 1 }}>
