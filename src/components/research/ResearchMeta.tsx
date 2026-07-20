@@ -8,6 +8,7 @@ import React from "react";
    uses this component as its identity header.
 
    Artifact ID system:
+     CPS-001 → Core Protocol Specifications
      RN-001  → Research Notes
      BM-001  → Benchmarks
      DL-001  → Decision Log
@@ -29,7 +30,7 @@ import React from "react";
 
 type ResearchMetaProps = {
   artifactId?: string;
-  type: "Research Note" | "Benchmark" | "Technical Paper" | "Decision Log" | "Open Question" | "Dataset" | "Request for Comments" | "Failure Report";
+  type: "Research Note" | "Benchmark" | "Technical Paper" | "Decision Log" | "Open Question" | "Dataset" | "Request for Comments" | "Failure Report" | "Core Protocol Specification";
   number?: string;
   status: "Draft" | "Under Review" | "Published" | "Active" | "Deprecated" | "Superseded";
   published: string;
