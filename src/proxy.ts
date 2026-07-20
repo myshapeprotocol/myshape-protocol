@@ -4,6 +4,12 @@ import type { NextRequest } from "next/server";
 export function proxy(req: NextRequest) {
   const host = req.headers.get("host") || "";
 
+  // Force HTTPS redirect
+  if (req.headers.get("x-forwarded-proto") === "http") {
+    const httpsUrl = req.url.replace("http://", "https://");
+    return NextResponse.redirect(httpsUrl, 301);
+  }
+
   // Route thecontinuitylab.org → /lab (only for page requests, not static files)
   if (host === "thecontinuitylab.org" || host === "www.thecontinuitylab.org") {
     const path = req.nextUrl.pathname;
