@@ -4,36 +4,116 @@ export default function LabPage() {
   return (
     <>
     <style>{`
-      @keyframes coreBreathe {
-        0%,100% { opacity: 0.6; }
-        40%     { opacity: 1; }
-        70%     { opacity: 0.8; }
+      @keyframes haloSpin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
       }
+      @keyframes haloBreathe {
+        0%,100% { opacity: 0.18; filter: blur(1.5px); }
+        50%     { opacity: 0.40; filter: blur(0.5px); }
+      }
+      @keyframes corePulse {
+        0%,100% { opacity: 0.4; transform: scale(0.7); }
+        45%     { opacity: 1;   transform: scale(1.5); }
+        70%     { opacity: 0.6; transform: scale(0.9); }
+      }
+      @keyframes scanLine {
+        0%   { stroke-dashoffset: 188; }
+        50%  { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: -188; }
+      }
+      @keyframes textFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in { animation: textFadeIn 0.8s ease-out forwards; opacity: 0; }
+      .fade-in-1 { animation-delay: 0.3s; }
+      .fade-in-2 { animation-delay: 0.5s; }
+      .fade-in-3 { animation-delay: 0.7s; }
     `}</style>
     <div style={{ minHeight: "100vh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, -apple-system, sans-serif" }}>
 
       {/* Hero */}
-      <div style={{ textAlign: "center", padding: "80px 24px 32px", maxWidth: 640, margin: "0 auto" }}>
+      <div style={{ textAlign: "center", padding: "80px 24px 32px", maxWidth: 720, margin: "0 auto" }}>
 
-        {/* Logo sigil */}
-        <div style={{ margin: "0 auto 36px", width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <img src="/lab-sigil.png" alt="The Continuity Lab" style={{ width: 48, height: 48, animation: "coreBreathe 4s ease-in-out infinite", filter: "drop-shadow(0 0 12px rgba(96,165,250,0.5)) drop-shadow(0 0 28px rgba(96,165,250,0.2))" }} />
+        {/* Ethereal Halo Scan */}
+        <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 36px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="haloGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#34D399" />
+                <stop offset="40%" stopColor="#38BDF8" />
+                <stop offset="100%" stopColor="#3B82F6" />
+              </linearGradient>
+              <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stopColor="#e8f4ff" stopOpacity="0.3" />
+                <stop offset="60%" stopColor="#60A5FA" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+              <filter id="softGlow">
+                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+              <filter id="microGlow">
+                <feGaussianBlur stdDeviation="0.6" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+
+            {/* Outer halo — faint, large, slow-rotating */}
+            <circle cx="60" cy="60" r="52" fill="none" stroke="url(#haloGradient)" strokeWidth="0.6" opacity="0.12"
+              style={{ animation: "haloSpin 18s linear infinite" }} />
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#60A5FA" strokeWidth="0.3" opacity="0.08"
+              style={{ animation: "haloSpin 24s linear infinite reverse" }} />
+
+            {/* Middle ring — breathing glow */}
+            <circle cx="60" cy="60" r="42" fill="none" stroke="url(#haloGradient)" strokeWidth="1" opacity="0.2"
+              strokeLinecap="round" strokeDasharray="226 38"
+              style={{ animation: "haloBreathe 4s ease-in-out infinite, haloSpin 12s linear infinite" }} />
+
+            {/* Scanning arc — thin bright line sweeping around */}
+            <circle cx="60" cy="60" r="36" fill="none" stroke="url(#haloGradient)" strokeWidth="1.5"
+              strokeLinecap="round" strokeDasharray="60 166" strokeDashoffset="0" opacity="0.5"
+              filter="url(#microGlow)"
+              style={{ animation: "scanLine 3s ease-in-out infinite" }} />
+
+            {/* Core glow — radial diffusion */}
+            <circle cx="60" cy="60" r="28" fill="url(#coreGlow)" />
+
+            {/* Evidence Node — pulsing star at center */}
+            <circle cx="60" cy="60" r="2.5" fill="#e8f4ff" opacity="0.7" filter="url(#microGlow)"
+              style={{ animation: "corePulse 3s ease-in-out infinite" }} />
+          </svg>
         </div>
 
-        <h1 style={{ fontSize: "clamp(1.6rem, 3.5vw, 2rem)", fontWeight: 300, letterSpacing: "0.03em", color: "#E6EDF7", margin: "0 0 10px" }}>The Continuity Lab</h1>
-        <p style={{ fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)", color: "#94A3B8", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 28px" }}>
+        {/* Title */}
+        <h1 className="fade-in fade-in-1"
+          style={{ fontSize: "clamp(1.6rem, 3.5vw, 2rem)", fontWeight: 300, letterSpacing: "0.04em", color: "#E6EDF7", margin: "0 0 6px" }}>
+          The Continuity Lab
+        </h1>
+
+        {/* Subtitle */}
+        <p className="fade-in fade-in-2"
+          style={{ fontSize: 9, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.5em", margin: "0 0 24px" }}>
+          Continuity · Evidence · Trust
+        </p>
+
+        {/* Tagline */}
+        <p className="fade-in fade-in-2"
+          style={{ fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)", color: "#94A3B8", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 28px" }}>
           Researching continuity<br />
           as a verifiable property<br />
           of the digital world.
         </p>
 
         {/* Narrative hook */}
-        <p style={{ fontSize: 13, color: "#64748B", lineHeight: 1.8, maxWidth: 520, margin: "0 auto 36px" }}>
+        <p className="fade-in fade-in-3"
+          style={{ fontSize: 13, color: "#64748B", lineHeight: 1.8, maxWidth: 520, margin: "0 auto 36px" }}>
           Today's internet can verify identity. It cannot verify continuity — the property that a digital subject is the same physically embodied entity across time. The Continuity Lab explores whether continuity can become a measurable property rather than an assumption.
         </p>
 
         {/* Nav links */}
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+        <div className="fade-in fade-in-3" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a href="https://github.com/myshapeprotocol" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>GitHub</a>
           <a href="https://huggingface.co/ContinuityLab-Org" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>HuggingFace</a>
           <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>npm</a>
@@ -43,15 +123,8 @@ export default function LabPage() {
 
       {/* Content */}
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 56px" }}>
-
-        {/* By the Numbers */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 16, marginBottom: 8 }}>
-          {[
-            { n: "576", label: "Experiments" },
-            { n: "2", label: "RFCs" },
-            { n: "7", label: "Research Notes" },
-            { n: "121", label: "Tests" },
-          ].map((s) => (
+          {[{ n: "576", label: "Experiments" },{ n: "2", label: "RFCs" },{ n: "7", label: "Research Notes" },{ n: "121", label: "Tests" }].map((s) => (
             <div key={s.label} style={{ textAlign: "center", padding: "20px 12px", border: "1px solid #1E293B", background: "#0B1220" }}>
               <div style={{ fontSize: 28, fontWeight: 300, color: "#60A5FA", marginBottom: 4 }}>{s.n}</div>
               <div style={{ fontSize: 10, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.label}</div>
@@ -60,101 +133,55 @@ export default function LabPage() {
         </div>
         <div style={{ textAlign: "right", fontSize: 10, color: "rgba(255,255,255,0.08)", marginBottom: 48 }}>Last updated 2026-07-20</div>
 
-        {/* Specifications */}
         <div style={{ fontSize: 10, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Specifications</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 36 }}>
-          {[
-            { prefix: "RFC-0001", title: "Motion Signature Format", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" },
-            { prefix: "RFC-0002", title: "Continuity Proof Format", href: "https://www.myshape.com/research/notes/006-continuity-proof-rfc" },
-          ].map((p) => (
+          {[{ prefix: "RFC-0001", title: "Motion Signature Format", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" },{ prefix: "RFC-0002", title: "Continuity Proof Format", href: "https://www.myshape.com/research/notes/006-continuity-proof-rfc" }].map((p) => (
             <a key={p.prefix} href={p.href} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #1E293B", fontSize: 12, textDecoration: "none", transition: "background 0.2s" }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-              <div>
-                <span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 10 }}>{p.prefix}</span>
-                <span style={{ color: "#A7B4C6" }}>{p.title}</span>
-              </div>
+              onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+              <div><span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 10 }}>{p.prefix}</span><span style={{ color: "#A7B4C6" }}>{p.title}</span></div>
             </a>
           ))}
         </div>
 
-        {/* Research Notes */}
         <div style={{ fontSize: 10, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Research Notes</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 36 }}>
-          {[
-            { prefix: "RN-003", title: "Cross-Modal Binding — 576-run validation", href: "https://www.myshape.com/research/notes/003-cross-modal-binding" },
-            { prefix: "RN-002", title: "PES Benchmark v0.2", href: "https://www.myshape.com/research/notes/002-pes-benchmark" },
-            { prefix: "RN-001", title: "The Continuity Problem", href: "https://www.myshape.com/research/notes/001-the-continuity-problem" },
-          ].map((p) => (
+          {[{ prefix: "RN-003", title: "Cross-Modal Binding — 576-run validation", href: "https://www.myshape.com/research/notes/003-cross-modal-binding" },{ prefix: "RN-002", title: "PES Benchmark v0.2", href: "https://www.myshape.com/research/notes/002-pes-benchmark" },{ prefix: "RN-001", title: "The Continuity Problem", href: "https://www.myshape.com/research/notes/001-the-continuity-problem" }].map((p) => (
             <a key={p.prefix} href={p.href} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #1E293B", fontSize: 12, textDecoration: "none", transition: "background 0.2s" }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-              <div>
-                <span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 10 }}>{p.prefix}</span>
-                <span style={{ color: "#A7B4C6" }}>{p.title}</span>
-              </div>
+              onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+              <div><span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 10 }}>{p.prefix}</span><span style={{ color: "#A7B4C6" }}>{p.title}</span></div>
             </a>
           ))}
         </div>
 
-        {/* Research Records */}
         <div style={{ fontSize: 10, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Research Records</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 48 }}>
-          {[
-            { prefix: "FD-001", title: "Frame Rate Hypothesis — failed experiment", href: "https://www.myshape.com/research/notes/005-failure-report-10fps" },
-            { prefix: "DL-001", title: "Direction Asymmetry in EE-003", href: "https://www.myshape.com/research/notes/007-ee003-direction-asymmetry" },
-          ].map((p) => (
+          {[{ prefix: "FD-001", title: "Frame Rate Hypothesis — failed experiment", href: "https://www.myshape.com/research/notes/005-failure-report-10fps" },{ prefix: "DL-001", title: "Direction Asymmetry in EE-003", href: "https://www.myshape.com/research/notes/007-ee003-direction-asymmetry" }].map((p) => (
             <a key={p.prefix} href={p.href} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #1E293B", fontSize: 12, textDecoration: "none", transition: "background 0.2s" }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-              <div>
-                <span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 10 }}>{p.prefix}</span>
-                <span style={{ color: "#A7B4C6" }}>{p.title}</span>
-              </div>
+              onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+              <div><span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 10 }}>{p.prefix}</span><span style={{ color: "#A7B4C6" }}>{p.title}</span></div>
             </a>
           ))}
         </div>
 
-        {/* Evidence Engines */}
         <div style={{ fontSize: 10, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Evidence Engines</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 48 }}>
-          {[
-            { name: "Presence Detection", engine: "EE-001", rate: "100% floor", href: "https://www.myshape.com/research/fusion" },
-            { name: "Causal Coupling", engine: "EE-002", rate: "58% · N=316", href: "https://www.myshape.com/research/causal-coupling" },
-            { name: "Gyroscope Challenge", engine: "EE-003", rate: "59% · N=200", href: "https://www.myshape.com/research/challenge-response" },
-            { name: "Dual-Engine Pipeline", engine: "VS-001", rate: "93% · N=60", href: "https://www.myshape.com/research/protocol-verify" },
-          ].map((e) => (
+          {[{ name: "Presence Detection", engine: "EE-001", rate: "100% floor", href: "https://www.myshape.com/research/fusion" },{ name: "Causal Coupling", engine: "EE-002", rate: "58% · N=316", href: "https://www.myshape.com/research/causal-coupling" },{ name: "Gyroscope Challenge", engine: "EE-003", rate: "59% · N=200", href: "https://www.myshape.com/research/challenge-response" },{ name: "Dual-Engine Pipeline", engine: "VS-001", rate: "93% · N=60", href: "https://www.myshape.com/research/protocol-verify" }].map((e) => (
             <a key={e.engine} href={e.href} style={{ display: "block", padding: "16px 14px", border: "1px solid #1E293B", background: "#0B1220", fontSize: 12, textDecoration: "none", transition: "border-color 0.2s, background 0.2s" }}
-              onMouseEnter={(ev) => { ev.currentTarget.style.borderColor = "rgba(96,165,250,0.3)"; ev.currentTarget.style.background = "#0E1624"; }}
-              onMouseLeave={(ev) => { ev.currentTarget.style.borderColor = "#1E293B"; ev.currentTarget.style.background = "#0B1220"; }}>
+              onMouseEnter={(ev) => { ev.currentTarget.style.borderColor = "rgba(96,165,250,0.3)"; ev.currentTarget.style.background = "#0E1624"; }} onMouseLeave={(ev) => { ev.currentTarget.style.borderColor = "#1E293B"; ev.currentTarget.style.background = "#0B1220"; }}>
               <div style={{ color: "#A7B4C6", fontWeight: 400, marginBottom: 6 }}>{e.name}</div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                <span style={{ color: "#60A5FA", fontSize: 10, fontWeight: 500 }}>{e.engine}</span>
-                <span style={{ color: "rgba(96,165,250,0.7)", fontSize: 11 }}>{e.rate}</span>
-              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}><span style={{ color: "#60A5FA", fontSize: 10, fontWeight: 500 }}>{e.engine}</span><span style={{ color: "rgba(96,165,250,0.7)", fontSize: 11 }}>{e.rate}</span></div>
             </a>
           ))}
         </div>
 
-        {/* Open Source */}
         <div style={{ fontSize: 10, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Open Source</div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 48 }}>
-          {[
-            { label: "npm install @thecontinuitylab/myshape", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },
-            { label: "v0.1.1", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },
-            { label: "MIT License", href: "https://github.com/myshapeprotocol/myshape-protocol" },
-            { label: "121 tests", href: "https://github.com/myshapeprotocol/myshape-protocol/tree/master/src/lib/evidence" },
-            { label: "RFC-driven", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" },
-          ].map((t) => (
+          {[{ label: "npm install @thecontinuitylab/myshape", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },{ label: "v0.1.1", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },{ label: "MIT License", href: "https://github.com/myshapeprotocol/myshape-protocol" },{ label: "121 tests", href: "https://github.com/myshapeprotocol/myshape-protocol/tree/master/src/lib/evidence" },{ label: "RFC-driven", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" }].map((t) => (
             <a key={t.label} href={t.href} style={{ padding: "6px 14px", border: "1px solid #1E293B", fontSize: 11, color: "#64748B", borderRadius: 2, textDecoration: "none", transition: "border-color 0.2s, color 0.2s" }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(96,165,250,0.4)"; e.currentTarget.style.color = "#94A3B8"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#1E293B"; e.currentTarget.style.color = "#64748B"; }}>
-              {t.label}
-            </a>
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(96,165,250,0.4)"; e.currentTarget.style.color = "#94A3B8"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#1E293B"; e.currentTarget.style.color = "#64748B"; }}>{t.label}</a>
           ))}
         </div>
 
-        {/* Principles */}
         <div style={{ fontSize: 14, color: "#64748B", lineHeight: 2.4, marginBottom: 48, textAlign: "center" }}>
           <p style={{ margin: 0 }}>We test hypotheses. We do not defend them.</p>
           <p style={{ margin: 0 }}>We publish limitations before we publish claims.</p>
@@ -162,7 +189,6 @@ export default function LabPage() {
           <p style={{ margin: 0 }}>Evidence precedes belief.</p>
         </div>
 
-        {/* Footer */}
         <div style={{ fontSize: 10, color: "rgba(255,255,255,0.08)", letterSpacing: "0.08em", textAlign: "center", paddingBottom: 48 }}>
           <a href="https://www.myshape.com" style={{ color: "rgba(96,165,250,0.3)", textDecoration: "none" }}>MyShape Protocol</a>
           <span style={{ margin: "0 10px" }}>·</span>
