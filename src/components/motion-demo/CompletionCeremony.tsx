@@ -6,7 +6,7 @@ import CeremonySeal from "./CeremonySeal";
 interface CompletionCeremonyProps {
   researchConsented: boolean;
   uploadState: "idle" | "uploading" | "success" | "error";
-  genesisKey?: string | null;
+  sovereignKey?: string | null;
   cohortFull?: boolean;
 }
 
@@ -14,7 +14,7 @@ interface CompletionCeremonyProps {
 export default function CompletionCeremony({
   researchConsented,
   uploadState,
-  genesisKey,
+  sovereignKey,
   cohortFull,
 }: CompletionCeremonyProps) {
   const [notifyState, setNotifyState] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -49,13 +49,13 @@ export default function CompletionCeremony({
           width: 120,
           height: 120,
           borderRadius: "50%",
-          background: genesisKey
+          background: sovereignKey
             ? "radial-gradient(circle, rgba(144,200,255,0.15) 0%, rgba(144,200,255,0.06) 40%, transparent 70%)"
             : "radial-gradient(circle, rgba(144,200,255,0.08) 0%, rgba(144,200,255,0.03) 40%, transparent 70%)",
-          boxShadow: genesisKey
+          boxShadow: sovereignKey
             ? "0 0 40px rgba(144,200,255,0.25), 0 0 80px rgba(144,200,255,0.1), inset 0 0 30px rgba(144,200,255,0.08)"
             : "0 0 20px rgba(144,200,255,0.1), 0 0 40px rgba(144,200,255,0.04)",
-          animation: genesisKey ? "haloDeepen 2s ease-out infinite" : "haloPulse 3s ease-in-out infinite",
+          animation: sovereignKey ? "haloDeepen 2s ease-out infinite" : "haloPulse 3s ease-in-out infinite",
         }}
       >
         <div
@@ -63,10 +63,10 @@ export default function CompletionCeremony({
             position: "absolute",
             inset: 4,
             borderRadius: "50%",
-            border: genesisKey
+            border: sovereignKey
               ? "2px solid rgba(144,200,255,0.4)"
               : "1px solid rgba(144,200,255,0.15)",
-            animation: genesisKey ? "ringScan 1.5s linear infinite" : "ringScan 3s linear infinite",
+            animation: sovereignKey ? "ringScan 1.5s linear infinite" : "ringScan 3s linear infinite",
           }}
         />
         <div
@@ -85,21 +85,21 @@ export default function CompletionCeremony({
         <div
           className="text-[14px] font-light tracking-[0.2em] uppercase"
           style={{
-            color: genesisKey
+            color: sovereignKey
               ? "rgba(144,200,255,0.8)"
               : cohortFull
                 ? "rgba(210,153,29,0.7)"
                 : "rgba(217,179,60,0.6)",
           }}
         >
-          {genesisKey
+          {sovereignKey
             ? "◈ Genesis Node Sealed"
             : cohortFull
               ? "◈ Genesis Phase Finalized"
               : "◈ Genesis Ritual Complete"}
         </div>
 
-        {genesisKey ? (
+        {sovereignKey ? (
           <>
             <p className="text-white/30 text-[11px] max-w-xs leading-relaxed">
               Your kinetic signature is now sealed into the sovereign identity layer.
@@ -112,9 +112,9 @@ export default function CompletionCeremony({
                 borderRadius: 6,
                 textShadow: "0 0 8px rgba(144,200,255,0.3)",
               }}
-              title="Genesis Key — your sovereign identity proof"
+              title="Sovereign Key — your sovereign identity proof"
             >
-              Genesis Key: {genesisKey}
+              Sovereign Key: {sovereignKey}
             </div>
             <p className="text-white/15 text-[11px] max-w-[240px] mx-auto leading-relaxed mt-1">
               This key is your proof of sovereign genesis. Store it. No one else holds it.

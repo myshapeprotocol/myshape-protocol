@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Tier 2: Core product pages (0.9) ──
   const core = [
-    "/genesis",
+    "/verify",
     "/vision",
     "/identity",
     "/protocol",
@@ -44,11 +44,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Tier 3: Protocol sub-pages (0.8) ──
   const protocolSub = [
-    "/protocol/motion-pipeline",
+    "/protocol",
     "/protocol/identity-layer",
-    "/protocol/zk",
+    "/protocol",
     "/protocol/manifesto",
-    "/protocol/motion-pipeline/documentation",
+    "/protocol",
   ];
   protocolSub.forEach((path) => {
     routes.push({ url: `${BASE_URL}${path}`, lastModified: now, changeFrequency: "monthly", priority: 0.8 });
@@ -57,9 +57,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ── Tier 4: Papers (0.7) ──
   const papers = [
     "/papers",
-    "/papers/core-protocol",
-    "/papers/civilization-roadmap",
-    "/papers/protocol-architecture",
+    "/research/notes/008-continuity-protocol-core",
+    "/roadmap",
+    "/protocol",
     "/papers/technical-spec",
     "/papers/threat-model",
   ];
@@ -69,7 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Tier 5: Secondary pages (0.7) ──
   const secondary = [
-    "/about-myshape",
+    "/vision",
     "/ai",
     "/agent",
     "/evidence",
@@ -115,7 +115,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // ── Tier 7: Genesis cohort (0.5) ──
   routes.push({
-    url: `${BASE_URL}/genesis/cohort`,
+    url: `${BASE_URL}/verify`,
     lastModified: now,
     changeFrequency: "monthly",
     priority: 0.5,

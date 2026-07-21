@@ -6,7 +6,6 @@ import MotionGuide, { TOTAL_DURATION_MS, type VelocitySnapshot } from "@/compone
 import SkeletonOverlay from "@/components/motion-guide/SkeletonOverlay";
 
 import ProtocolFooter from "@/components/footer/footer";
-import ProtocolStatusWall from "@/components/status-wall/ProtocolStatusWall";
 import { playTick, resumeAudio } from "@/utils/useAudioTick";
 import PresenceSignature from "@/components/presence-signature/PresenceSignature";
 import { mediaPipeToSST, normalizeSSTFrame } from "@/engine/skeleton-topology";
@@ -26,7 +25,6 @@ import CompletionCeremony from "@/components/motion-demo/CompletionCeremony";
 import PESGauge from "@/components/motion-demo/PESGauge";
 import PESBars, { buildPESBars } from "@/components/motion-demo/PESBars";
 import ThreatVerdict from "@/components/motion-demo/ThreatVerdict";
-import ZKProofBox from "@/components/motion-demo/ZKProofBox";
 import TelemetryPanel from "@/components/motion-demo/TelemetryPanel";
 
 type Phase = "idle" | "capturing" | "processing" | "complete";
@@ -65,8 +63,8 @@ export default function MotionDemoClient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isChromium, setIsChromium] = useState(false);
-  const [sovereignEnrolled, setGenesisDone] = useState(false);
-  const [genesisKey, setGenesisKey] = useState<string | null>(null);
+  const [sovereignEnrolled, setSovereignEnrolled] = useState(false);
+  const [sovereignKey, setSovereignKey] = useState<string | null>(null);
   const [cohortFull, setCohortFull] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
   const [features, setFeatures] = useState<FeatureFrame | null>(null);
@@ -463,7 +461,7 @@ export default function MotionDemoClient() {
 
   // ── Sync phaseRef with phase state (keeps feed loop + onResults in sync) ──
   useEffect(() => {
-    const check = () => setGenesisDone(sessionStorage.getItem("sovereign_enrolled") === "1");
+    const check = () => setSovereignEnrolled(sessionStorage.getItem("sovereign_enrolled") === "1");
     check();
     window.addEventListener("sovereign:updated", check);
     return () => window.removeEventListener("sovereign:updated", check);
@@ -597,19 +595,19 @@ export default function MotionDemoClient() {
         if (t) { clearInterval(t); (window as unknown as Record<string, unknown>).__motionTimer = undefined; }
         setPhase("complete");
         // 记录一次成功的 motion 验证，递增 scan_count
-        const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null;
-        if (genesisEmail) {
+        const sovereignEmail = typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null;
+        if (sovereignEmail) {
           fetch("/api/motion/record", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: genesisEmail }),
+            body: JSON.stringify({ email: sovereignEmail }),
           }).catch((e) => { console.warn("[motion-demo] API call failed:", e); });
           // ── 熵增计算：更新粒子等级 — use captured values, not stale state
           fetch("/api/node/entropy", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              email: genesisEmail,
+              email: sovereignEmail,
               pesScore: capturedPes.score,
               pesTiming: capturedPes.timing,
               pesNoise: capturedPes.noise,
@@ -791,7 +789,7 @@ export default function MotionDemoClient() {
               <CompletionCeremony
                 researchConsented={researchConsented}
                 uploadState={uploadState}
-                genesisKey={genesisKey}
+                sovereignKey={sovereignKey}
                 cohortFull={cohortFull}
               />
             )}
@@ -825,8 +823,8 @@ export default function MotionDemoClient() {
                   {wasmCompare?.loading ? "Loading WASM..." : wasmCompare?.similarity != null ? `AI: ${(wasmCompare.similarity*100).toFixed(0)}%` : "Compare with AI →"}
                 </button>
                 {proofHashes && (
-                  <div className="mt-auto">
-                    <ZKProofBox zkp={proofHashes.zkp} pop={proofHashes.pop} mp={proofHashes.mp} ep={proofHashes.ep} />
+                  <div className="mt-auto text-[11px] text-[#90c8ff]/40 font-mono text-center">
+                    CPS-0001 Receipt generated
                   </div>
                 )}
               </div>
@@ -835,8 +833,8 @@ export default function MotionDemoClient() {
                 <div>
                   {proofHashes&&(<PresenceSignature proof={{pesScore:pesData.score,timing:pesData.timing,noise:pesData.noise,freq:pesData.frequency,bio:pesData.biological,zkpHash:proofHashes.zkp,popHash:proofHashes.pop,mpHash:proofHashes.mp,epHash:proofHashes.ep,timestamp:Date.now()}}/>)}
                 </div>
-                {witnessData?.position_number&&(<div className="p-3 border border-amber-400/20 bg-amber-400/[0.03] text-center space-y-1"><div className="text-amber-300/60 text-[11px] uppercase tracking-[0.12em]">{witnessData.cohort==="genesis"?"Genesis Witness":"Protocol Witness"}</div><div className="text-amber-200/90 text-[18px] font-light">#{witnessData.position_number}</div></div>)}
-                {/* Genesis status */}
+                {witnessData?.position_number&&(<div className="p-3 border border-amber-400/20 bg-amber-400/[0.03] text-center space-y-1"><div className="text-amber-300/60 text-[11px] uppercase tracking-[0.12em]">{witnessData.cohort==="sovereign"?"Protocol Witness":"Protocol Witness"}</div><div className="text-amber-200/90 text-[18px] font-light">#{witnessData.position_number}</div></div>)}
+                {/* Verification status */}
                 {sovereignEnrolled ? (
                   <div className="text-center text-[#90c8ff]/40 text-[11px] tracking-[0.1em]">◈ Scan recorded — contributing to orbital evolution</div>
                 ) : (
@@ -943,7 +941,9 @@ export default function MotionDemoClient() {
             />
 
             {proofHashes && (
-              <ZKProofBox zkp={proofHashes.zkp} pop={proofHashes.pop} mp={proofHashes.mp} ep={proofHashes.ep} />
+              <div className="text-[11px] text-[#90c8ff]/40 font-mono text-center p-4 border border-[#90c8ff]/15">
+                CPS-0001 Continuity Receipt · engine-independent verification
+              </div>
             )}
 
             {phase === "complete" && (
@@ -986,7 +986,7 @@ export default function MotionDemoClient() {
                     )}
                   </div>
                 )}
-                {/* Genesis 状态提示 */}
+                {/* Verification 状态提示 */}
                 {sovereignEnrolled ? (
                   <div className="text-center text-[#90c8ff]/25 text-[11px] tracking-[0.15em] uppercase">
                     ◈ Scan recorded — contributing to your orbital evolution
@@ -1024,27 +1024,27 @@ export default function MotionDemoClient() {
                               sessionStorage.setItem("sovereign_status", data.status);
                               if (data.sovereign_key) {
                                 sessionStorage.setItem("sovereign_key", data.sovereign_key);
-                                setGenesisKey(data.sovereign_key);
+                                setSovereignKey(data.sovereign_key);
                               }
                               if (data.cohort_full) {
                                 setCohortFull(true);
                               }
                               window.dispatchEvent(new CustomEvent("sovereign:updated"));
-                              setGenesisDone(true);
+                              setSovereignEnrolled(true);
                               playTick(1200, "sine", 0.12, 0.03);
                             }
                           } catch { /* silent */ }
                         } else {
                           // No identity yet — guide to genesis
-                          window.location.href = "/genesis";
+                          window.location.href = "/verify";
                         }
                       }}
                       onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
                       className="px-6 py-2 border border-[#90c8ff]/40 text-[#90c8ff]/60 text-[11px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all">
                       Verify My Presence
                     </button>
-                    <a href="/genesis" className="inline-block text-[#90c8ff]/25 hover:text-[#90c8ff]/50 text-[11px] tracking-[0.15em] uppercase transition-colors">
-                      Initialize Genesis identity →
+                    <a href="/verify" className="inline-block text-[#90c8ff]/25 hover:text-[#90c8ff]/50 text-[11px] tracking-[0.15em] uppercase transition-colors">
+                      Initialize protocol identity →
                     </a>
                   </div>
                 )}
@@ -1054,34 +1054,34 @@ export default function MotionDemoClient() {
                     className="p-3 border space-y-2 relative overflow-hidden"
                     style={{
                       borderRadius: 4,
-                      borderColor: witnessData.cohort === "genesis" ? "rgba(144,200,255,0.35)" : "rgba(144,200,255,0.15)",
-                      background: witnessData.cohort === "genesis" ? "rgba(144,200,255,0.05)" : "rgba(144,200,255,0.02)",
-                      animation: witnessData.cohort === "genesis" ? "genesisWitnessGlow 3s ease-in-out infinite" : undefined,
+                      borderColor: witnessData.cohort === "sovereign" ? "rgba(144,200,255,0.35)" : "rgba(144,200,255,0.15)",
+                      background: witnessData.cohort === "sovereign" ? "rgba(144,200,255,0.05)" : "rgba(144,200,255,0.02)",
+                      animation: witnessData.cohort === "sovereign" ? "sovereignWitnessGlow 3s ease-in-out infinite" : undefined,
                     }}
                   >
-                    {/* Genesis scan line */}
-                    {witnessData.cohort === "genesis" && (
+                    {/* Protocol scan line */}
+                    {witnessData.cohort === "sovereign" && (
                       <div
                         className="absolute inset-0 pointer-events-none"
                         style={{
                           background: "linear-gradient(90deg, transparent 0%, rgba(144,200,255,0.06) 40%, rgba(144,200,255,0.12) 50%, rgba(144,200,255,0.06) 60%, transparent 100%)",
-                          animation: "genesisScanLine 2.5s ease-in-out infinite",
+                          animation: "sovereignScanLine 2.5s ease-in-out infinite",
                         }}
                       />
                     )}
                     <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.2em] uppercase text-center">
-                      {witnessData.cohort === "genesis" ? "Genesis Cohort — Witness Confirmed" : "Protocol Witness"}
+                      {witnessData.cohort === "sovereign" ? "Sovereign — Witness Confirmed" : "Protocol Witness"}
                     </div>
                     <div className="text-center">
                       <span
                         className="text-[#90c8ff]/80 text-[14px] font-light tracking-[0.05em]"
-                        style={witnessData.cohort === "genesis" ? { animation: "genesisBadgePulse 2s ease-in-out infinite" } : undefined}
+                        style={witnessData.cohort === "sovereign" ? { animation: "sovereignBadgePulse 2s ease-in-out infinite" } : undefined}
                       >
                         ◈ Witness #{witnessData.position_number}
                       </span>
                     </div>
                     <p className="text-white/25 text-[11px] leading-relaxed text-center">
-                      {witnessData.cohort === "genesis"
+                      {witnessData.cohort === "sovereign"
                         ? "You are a founding tester. This status is permanent — not cosmetic, structural."
                         : "Your motion data is now part of the calibration engine. Share your contribution."}
                     </p>
@@ -1124,7 +1124,7 @@ export default function MotionDemoClient() {
                 <div className="space-y-3 pt-2">
                   <div className="h-px bg-gradient-to-r from-transparent via-[#90c8ff]/20 to-transparent" />
                   <div className="text-center space-y-2">
-                    <div className="text-[#90c8ff]/30 text-[11px] tracking-[0.4em] uppercase">Genesis Ritual · Motion Captured</div>
+                    <div className="text-[#90c8ff]/30 text-[11px] tracking-[0.4em] uppercase">Verification · Motion Captured</div>
                     <p className="text-white/40 text-[11px] leading-relaxed">
                       Your kinetic signature has been inscribed.
                       {researchConsented && uploadState === "success" && " This data now contributes to the protocol's calibration engine."}
@@ -1132,7 +1132,7 @@ export default function MotionDemoClient() {
                     </p>
                     <div className="flex gap-2 justify-center pt-1">
                       <a href="/research/apply" className="text-[#90c8ff]/30 hover:text-[#90c8ff]/70 text-[11px] tracking-[0.15em] uppercase border-b border-transparent hover:border-[#90c8ff]/30 transition-all pb-0.5">
-                        Apply for Genesis Node →
+                        Verify Continuity →
                       </a>
                       <span className="text-white/10">|</span>
                       <a href="/dashboard" className="text-[#90c8ff]/30 hover:text-[#90c8ff]/70 text-[11px] tracking-[0.15em] uppercase border-b border-transparent hover:border-[#90c8ff]/30 transition-all pb-0.5">
@@ -1197,11 +1197,6 @@ export default function MotionDemoClient() {
           )}
         </div>
 
-      </div>
-
-      {/* Protocol Status Wall — live command center dashboard */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 pb-8">
-        <ProtocolStatusWall />
       </div>
 
         <div className="max-w-5xl mx-auto px-4 md:px-6 -mt-4 pb-2">

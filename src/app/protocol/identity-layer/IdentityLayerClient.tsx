@@ -25,7 +25,7 @@ const FOUNDATION: IdentityModel[] = [
     accent: "from-blue-400/70 to-blue-400/0",
   },
   {
-    name: "ZK-PRESENCE",
+    name: "CONTINUITY",
     status: "ACTIVE",
     desc: "Zero-knowledge proof of human presence. Verifiable by any third party without access to raw sensor data.",
     detail:
