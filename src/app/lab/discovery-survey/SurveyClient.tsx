@@ -56,10 +56,19 @@ export default function SurveyClient() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await fetch("/api/research/survey", {
+      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/discovery_survey`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ domain, role, otherDomain, hasSensorData, freq, duration, dataFlow, provenance, pain, solution, standard, interest, contact }),
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          domain, role, other_domain: otherDomain, has_sensor_data: hasSensorData,
+          frequency: freq, duration, data_flow: dataFlow, provenance,
+          pain_point: pain, solution, standard_wish: standard, interest, contact,
+        }),
       });
     } catch { /* fail silently */ }
     setSent(true);
