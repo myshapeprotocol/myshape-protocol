@@ -32,7 +32,7 @@ type ResearchMetaProps = {
   artifactId?: string;
   type: "Research Note" | "Benchmark" | "Technical Paper" | "Decision Log" | "Open Question" | "Dataset" | "Request for Comments" | "Failure Report" | "Core Protocol Specification";
   number?: string;
-  status: "Draft" | "Under Review" | "Published" | "Active" | "Deprecated" | "Superseded";
+  status: "Draft" | "Under Review" | "Published" | "Active" | "Deprecated" | "Superseded" | "v1.0-RC";
   published: string;
   updated?: string;
 };
@@ -44,6 +44,7 @@ const STATUS_COLOR: Record<ResearchMetaProps["status"], string> = {
   Active: "rgba(63,185,80,0.5)",
   Deprecated: "rgba(255,255,255,0.15)",
   Superseded: "rgba(160,130,220,0.4)",
+  "v1.0-RC": "rgba(96,165,250,0.6)",
 };
 
 export default function ResearchMeta({ artifactId, type, number, status, published, updated }: ResearchMetaProps) {

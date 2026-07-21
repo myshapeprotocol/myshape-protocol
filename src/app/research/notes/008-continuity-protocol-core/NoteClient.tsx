@@ -66,7 +66,7 @@ export default function NoteClient() {
               <ResearchMeta
                 artifactId="CPS-0001"
                 type="Core Protocol Specification"
-                status="Draft"
+                status="v1.0-RC"
                 published="2026.07.21"
               />
             </div>
@@ -1409,17 +1409,18 @@ function verifyReceiptChain(
               <h3>Status of This Document</h3>
 
               <p>
-                CPS-0001 is a <strong>Draft</strong> Core Protocol Specification. It defines
-                the normative protocol object for the MyShape ecosystem. All future protocol
-                documents (RFCs, engine specifications, verification policies) SHOULD reference
-                this document as their foundation.
+                CPS-0001 is a <strong>v1.0-RC</strong> (Release Candidate) Core Protocol
+                Specification. It defines the normative protocol object for the MyShape
+                ecosystem. All future protocol documents (RFCs, engine specifications,
+                verification policies) SHOULD reference this document as their foundation.
               </p>
 
               <p>
-                The protocol object defined here is <strong>not yet final</strong>. Field names,
-                structures, and wire formats may change based on implementation experience and
-                community feedback. However, the <strong>semantic model</strong> — what a
-                receipt asserts, what it disclaims, and how it composes — is intended to be
+                The protocol object defined here is <strong>feature-stable but not final</strong>.
+                Field names, structures, and wire formats may receive minor adjustments based on
+                implementation experience and community feedback before v1.0. However, the
+                <strong>semantic model</strong> — what a receipt asserts, what it disclaims,
+                and how it composes — is stable across revisions.
                 stable across revisions.
               </p>
             </section>
