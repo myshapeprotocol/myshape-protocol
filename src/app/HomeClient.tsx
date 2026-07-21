@@ -29,42 +29,13 @@ export default function HomeClient() {
           </p>
         </div>
 
-        {/* ── Evidence Snapshot ── */}
-        <div className="relative z-10 pb-10 md:pb-14 px-6 text-center">
-          <Link
-            href="/research"
-            className="inline-flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 font-mono text-[10px] tracking-[0.12em] uppercase transition-all duration-500"
-            style={{ color: "rgba(255,255,255,0.3)" }}
-            onMouseEnter={(e) => {
-              playTick(520, "sine", 0.04, 0.015);
-              e.currentTarget.style.color = "rgba(255,255,255,0.55)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "rgba(255,255,255,0.3)";
-            }}
-          >
-            <span>576 experimental runs</span>
-            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            <span>
-              <span style={{ color: "rgba(144,200,255,0.65)" }}>2</span> RFCs
-            </span>
-            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            <span>
-              <span style={{ color: "rgba(212,175,55,0.65)" }}>npm</span> install
-            </span>
-            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            <span>121 tests</span>
-            <span className="ml-1" style={{ color: "rgba(144,200,255,0.3)" }}>→</span>
-          </Link>
-        </div>
-
-        {/* Mobile: SDK CTA */}
+        {/* Mobile: CTA */}
         <div className="relative z-10 -mt-6 pb-12 md:hidden flex flex-col items-center gap-4 px-6">
           <a
-            href="/research"
+            href="/verify"
             className="px-8 py-3 border border-[#60A5FA]/25 text-[#60A5FA]/60 text-[10px] tracking-[0.2em] uppercase font-mono hover:bg-[#60A5FA]/8 hover:border-[#60A5FA]/40 transition-all"
           >
-            Explore Research →
+            Verify Continuity →
           </a>
         </div>
 
