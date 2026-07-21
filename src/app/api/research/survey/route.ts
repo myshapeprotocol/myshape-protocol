@@ -9,15 +9,15 @@ export async function POST(req: Request) {
 
     // Try Supabase
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (supabaseUrl && supabaseKey) {
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (supabaseUrl && anonKey) {
       try {
         const res = await fetch(`${supabaseUrl}/rest/v1/discovery_survey`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "apikey": supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`,
+            "apikey": anonKey,
+            Authorization: `Bearer ${anonKey}`,
             Prefer: "return=minimal",
           },
           body: JSON.stringify({
