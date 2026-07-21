@@ -69,18 +69,18 @@ export default function LabPage() {
       {/* Content */}
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 56px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 16, marginBottom: 8 }}>
-          {[{ n: "576", label: "Experiments" },{ n: "2", label: "RFCs" },{ n: "7", label: "Research Notes" },{ n: "121", label: "Tests" }].map((s) => (
+          {[{ n: "576", label: "Experiments" },{ n: "1", label: "CPS" },{ n: "2", label: "RFCs" },{ n: "7", label: "Notes" },{ n: "192", label: "Tests" }].map((s) => (
             <div key={s.label} style={{ textAlign: "center", padding: "20px 12px", border: "1px solid #1E293B", background: "#0B1220" }}>
               <div style={{ fontSize: 28, fontWeight: 300, color: "#60A5FA", marginBottom: 4 }}>{s.n}</div>
               <div style={{ fontSize: 11, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.label}</div>
             </div>
           ))}
         </div>
-        <div style={{ textAlign: "right", fontSize: 11, color: "rgba(255,255,255,0.08)", marginBottom: 48 }}>Last updated 2026-07-20</div>
+        <div style={{ textAlign: "right", fontSize: 11, color: "rgba(255,255,255,0.30)", marginBottom: 48 }}>Last updated 2026-07-22</div>
 
         <div style={{ fontSize: 11, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Specifications</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 36 }}>
-          {[{ prefix: "RFC-0001", title: "Motion Signature Format", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" },{ prefix: "RFC-0002", title: "Continuity Proof Format", href: "https://www.myshape.com/research/notes/006-continuity-proof-rfc" }].map((p) => (
+          {[{ prefix: "CPS-0001", title: "Continuity Protocol Core · v1.0-RC", href: "https://www.myshape.com/research/notes/008-continuity-protocol-core" },{ prefix: "RFC-0001", title: "Motion Signature Format", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" },{ prefix: "RFC-0002", title: "Continuity Proof Format", href: "https://www.myshape.com/research/notes/006-continuity-proof-rfc" }].map((p) => (
             <a key={p.prefix} href={p.href} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #1E293B", fontSize: 12, textDecoration: "none", transition: "background 0.2s" }}
               onMouseEnter={(e) => e.currentTarget.style.background = "rgba(96,165,250,0.04)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
               <div><span style={{ color: "#60A5FA", fontWeight: 500, marginRight: 12, fontSize: 11 }}>{p.prefix}</span><span style={{ color: "#A7B4C6" }}>{p.title}</span></div>
@@ -121,7 +121,7 @@ export default function LabPage() {
 
         <div style={{ fontSize: 11, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Open Source</div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 48 }}>
-          {[{ label: "npm install @thecontinuitylab/myshape", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },{ label: "v0.1.1", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },{ label: "MIT License", href: "https://github.com/myshapeprotocol/myshape-protocol" },{ label: "121 tests", href: "https://github.com/myshapeprotocol/myshape-protocol/tree/master/src/lib/evidence" },{ label: "RFC-driven", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" }].map((t) => (
+          {[{ label: "npm install @thecontinuitylab/myshape", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },{ label: "v0.2.0", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },{ label: "Apache 2.0", href: "https://github.com/myshapeprotocol/myshape-protocol" },{ label: "192 tests", href: "https://github.com/myshapeprotocol/myshape-protocol/tree/master/src/lib/evidence" },{ label: "RFC-driven", href: "https://www.myshape.com/research/notes/004-motion-signature-rfc" }].map((t) => (
             <a key={t.label} href={t.href} style={{ padding: "6px 14px", border: "1px solid #1E293B", fontSize: 11, color: "#64748B", borderRadius: 2, textDecoration: "none", transition: "border-color 0.2s, color 0.2s" }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(96,165,250,0.4)"; e.currentTarget.style.color = "#94A3B8"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#1E293B"; e.currentTarget.style.color = "#64748B"; }}>{t.label}</a>
           ))}
@@ -134,7 +134,7 @@ export default function LabPage() {
           <p style={{ margin: 0 }}>Evidence precedes belief.</p>
         </div>
 
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.08)", letterSpacing: "0.08em", textAlign: "center", paddingBottom: 48 }}>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.30)", letterSpacing: "0.08em", textAlign: "center", paddingBottom: 48 }}>
           <a href="https://www.myshape.com" style={{ color: "rgba(96,165,250,0.3)", textDecoration: "none" }}>MyShape Protocol</a>
           <span style={{ margin: "0 10px" }}>·</span>
           <span>The Continuity Lab, 2026</span>
