@@ -12,7 +12,7 @@ export interface NetworkNode {
 export interface NetworkData {
   totalNodes: number;
   activeHumans: number;
-  genesisNodes: number;
+  sovereignNodes: number;
   agents: number;
   activeToday: number;
   totalScans: number;

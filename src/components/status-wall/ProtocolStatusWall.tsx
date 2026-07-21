@@ -15,7 +15,7 @@ interface HealthData {
 interface NetworkData {
   totalNodes: number;
   activeHumans: number;
-  genesisNodes: number;
+  sovereignNodes: number;
   agents: number;
   activeToday: number;
   totalScans: number;
@@ -124,10 +124,10 @@ export default function ProtocolStatusWall() {
 
       if (networkRes) {
         const prevNodes = network?.totalNodes;
-        const prevGenesis = network?.genesisNodes;
+        const prevGenesis = network?.sovereignNodes;
         const prevActive = network?.activeToday;
         if (prevNodes !== undefined && prevNodes !== networkRes.totalNodes) changed.add("NODES");
-        if (prevGenesis !== undefined && prevGenesis !== networkRes.genesisNodes) changed.add("GENESIS");
+        if (prevGenesis !== undefined && prevGenesis !== networkRes.sovereignNodes) changed.add("GENESIS");
         if (prevActive !== undefined && prevActive !== networkRes.activeToday) changed.add("ACTIVE");
         setNetwork(networkRes);
       }
@@ -160,8 +160,8 @@ export default function ProtocolStatusWall() {
   const allOk = wasmOk && supabaseOk;
 
   const total = network?.totalNodes ?? (nodeStatus?.total_nodes ?? 0);
-  const genesis = network?.genesisNodes ?? (nodeStatus?.genesis_nodes ?? 0);
-  const genesisRemaining = nodeStatus?.genesis_remaining ?? Math.max(0, 100 - genesis);
+  const genesis = network?.sovereignNodes ?? (nodeStatus?.genesis_nodes ?? 0);
+  const sovereignRemaining = nodeStatus?.genesis_remaining ?? Math.max(0, 100 - genesis);
   const activeToday = network?.activeToday ?? 0;
   const engines = network?.engines ?? 3;
   const attackSigs = network?.attackSigs ?? 8;

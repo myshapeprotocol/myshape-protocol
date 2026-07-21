@@ -65,7 +65,7 @@ export default function MotionDemoClient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isChromium, setIsChromium] = useState(false);
-  const [genesisDone, setGenesisDone] = useState(false);
+  const [sovereignEnrolled, setGenesisDone] = useState(false);
   const [genesisKey, setGenesisKey] = useState<string | null>(null);
   const [cohortFull, setCohortFull] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -463,10 +463,10 @@ export default function MotionDemoClient() {
 
   // ── Sync phaseRef with phase state (keeps feed loop + onResults in sync) ──
   useEffect(() => {
-    const check = () => setGenesisDone(sessionStorage.getItem("genesis_completed") === "1");
+    const check = () => setGenesisDone(sessionStorage.getItem("sovereign_enrolled") === "1");
     check();
-    window.addEventListener("genesis:updated", check);
-    return () => window.removeEventListener("genesis:updated", check);
+    window.addEventListener("sovereign:updated", check);
+    return () => window.removeEventListener("sovereign:updated", check);
   }, []);
   useEffect(() => { phaseRef.current = phase; }, [phase]);
 
@@ -566,7 +566,7 @@ export default function MotionDemoClient() {
         upload(uploadPayload).then(success => {
           if (success) setUploadDone(true);
           // Fetch witness position from recruitment API
-          const recEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+          const recEmail = typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null;
           if (recEmail) {
             fetch("/api/recruitment/apply", {
               method: "POST",
@@ -597,7 +597,7 @@ export default function MotionDemoClient() {
         if (t) { clearInterval(t); (window as unknown as Record<string, unknown>).__motionTimer = undefined; }
         setPhase("complete");
         // 记录一次成功的 motion 验证，递增 scan_count
-        const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+        const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null;
         if (genesisEmail) {
           fetch("/api/motion/record", {
             method: "POST",
@@ -837,7 +837,7 @@ export default function MotionDemoClient() {
                 </div>
                 {witnessData?.position_number&&(<div className="p-3 border border-amber-400/20 bg-amber-400/[0.03] text-center space-y-1"><div className="text-amber-300/60 text-[11px] uppercase tracking-[0.12em]">{witnessData.cohort==="genesis"?"Genesis Witness":"Protocol Witness"}</div><div className="text-amber-200/90 text-[18px] font-light">#{witnessData.position_number}</div></div>)}
                 {/* Genesis status */}
-                {genesisDone ? (
+                {sovereignEnrolled ? (
                   <div className="text-center text-[#90c8ff]/40 text-[11px] tracking-[0.1em]">◈ Scan recorded — contributing to orbital evolution</div>
                 ) : (
                   <div className="text-center text-amber-400/40 text-[11px] tracking-[0.1em]">⚠ Demo mode — scan not bound to identity</div>
@@ -862,7 +862,7 @@ export default function MotionDemoClient() {
                     }));
                     const report = {
                       session_id: crypto.randomUUID(),
-                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null)?.split("@")[0] || "anonymous",
+                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null)?.split("@")[0] || "anonymous",
                       timestamp: new Date().toISOString(),
                       landmarks: landmarkData,
                       pes_score: pesData.score,
@@ -987,7 +987,7 @@ export default function MotionDemoClient() {
                   </div>
                 )}
                 {/* Genesis 状态提示 */}
-                {genesisDone ? (
+                {sovereignEnrolled ? (
                   <div className="text-center text-[#90c8ff]/25 text-[11px] tracking-[0.15em] uppercase">
                     ◈ Scan recorded — contributing to your orbital evolution
                   </div>
@@ -999,7 +999,7 @@ export default function MotionDemoClient() {
                     <button
                       onClick={async () => {
                         const wallet = sessionStorage.getItem("wallet_address");
-                        const email = sessionStorage.getItem("genesis_email");
+                        const email = sessionStorage.getItem("sovereign_email");
                         const identityKey = email || (wallet ? "wallet:" + wallet.slice(2, 10) : null);
                         if (identityKey && pesData) {
                           // Bind this scan to the user's identity via entropy API
@@ -1019,17 +1019,17 @@ export default function MotionDemoClient() {
                             });
                             const data = await res.json();
                             if (data.badge_minted) {
-                              sessionStorage.setItem("genesis_completed", "1");
-                              sessionStorage.setItem("genesis_email", identityKey);
-                              sessionStorage.setItem("genesis_status", data.status);
-                              if (data.genesis_key) {
-                                sessionStorage.setItem("genesis_key", data.genesis_key);
-                                setGenesisKey(data.genesis_key);
+                              sessionStorage.setItem("sovereign_enrolled", "1");
+                              sessionStorage.setItem("sovereign_email", identityKey);
+                              sessionStorage.setItem("sovereign_status", data.status);
+                              if (data.sovereign_key) {
+                                sessionStorage.setItem("sovereign_key", data.sovereign_key);
+                                setGenesisKey(data.sovereign_key);
                               }
                               if (data.cohort_full) {
                                 setCohortFull(true);
                               }
-                              window.dispatchEvent(new CustomEvent("genesis:updated"));
+                              window.dispatchEvent(new CustomEvent("sovereign:updated"));
                               setGenesisDone(true);
                               playTick(1200, "sine", 0.12, 0.03);
                             }
@@ -1164,7 +1164,7 @@ export default function MotionDemoClient() {
                     }));
                     const report = {
                       session_id: crypto.randomUUID(),
-                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null)?.split("@")[0] || "anonymous",
+                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null)?.split("@")[0] || "anonymous",
                       timestamp: new Date().toISOString(),
                       landmarks: landmarkData,
                       pes_score: pesData.score,

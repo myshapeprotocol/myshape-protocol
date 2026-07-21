@@ -254,7 +254,7 @@ export function deriveTokenTier(
 ): TokenTier {
   // Thresholds from APPROX_TOKEN_TIER_THRESHOLDS (single source of truth).
   for (const entry of APPROX_TOKEN_TIER_THRESHOLDS) {
-    if (entry.requiresGenesisNode && status !== "GENESIS_NODE") continue;
+    if (entry.requiresSovereign && status !== "GENESIS_NODE") continue;
     if (
       entry.requiresReputation !== null &&
       reputationTier !== entry.requiresReputation

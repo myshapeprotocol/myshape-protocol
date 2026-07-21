@@ -185,16 +185,16 @@ export function useWalletAuth(): WalletAuthState {
     sessionStorage.setItem("wallet_address", addr);
 
     if (data.is_genesis) {
-      sessionStorage.setItem("genesis_completed", "1");
+      sessionStorage.setItem("sovereign_enrolled", "1");
     }
-    if (email && !sessionStorage.getItem("genesis_email")) {
-      sessionStorage.setItem("genesis_email", email);
+    if (email && !sessionStorage.getItem("sovereign_email")) {
+      sessionStorage.setItem("sovereign_email", email);
     }
     if (data.node_handle) {
-      sessionStorage.setItem("genesis_node_handle", data.node_handle as string);
+      sessionStorage.setItem("sovereign_node_handle", data.node_handle as string);
     }
     if (data.status) {
-      sessionStorage.setItem("genesis_status", data.status as string);
+      sessionStorage.setItem("sovereign_status", data.status as string);
     }
     window.dispatchEvent(new CustomEvent("wallet:connected"));
 

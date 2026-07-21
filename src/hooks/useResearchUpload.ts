@@ -119,7 +119,7 @@ export function useResearchUpload(): UseResearchUploadReturn {
 
       // Route C: Auto-attach Genesis node_handle if available
       const nodeHandle = typeof window !== "undefined"
-        ? sessionStorage.getItem("genesis_node_handle") ?? null
+        ? sessionStorage.getItem("sovereign_node_handle") ?? null
         : null;
 
       const payload: ResearchUploadPayload = {

@@ -31,9 +31,9 @@ const ProtocolHeader = () => {
   const [rippleActive, setRippleActive] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const confirmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [genesisDone, setGenesisDone] = useState(false);
+  const [sovereignEnrolled, setGenesisDone] = useState(false);
   const [maskedEmail, setMaskedEmail] = useState("");
-  const [genesisCount, setGenesisCount] = useState<number | null>(null);
+  const [sovereignCount, setGenesisCount] = useState<number | null>(null);
 
   /* ── 创世节点计数器 — 30s 轮询 ── */
   useEffect(() => {
@@ -52,9 +52,9 @@ const ProtocolHeader = () => {
   const { address: walletAddress, status: walletStatus, error: walletError, connect: connectWallet, disconnect: disconnectWallet } = useWalletAuth();
 
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
+    if (typeof window !== "undefined" && sessionStorage.getItem("sovereign_enrolled") === "1") {
       setGenesisDone(true);
-      const email = sessionStorage.getItem("genesis_email") || "";
+      const email = sessionStorage.getItem("sovereign_email") || "";
       if (email) {
         const [name, domain] = email.split("@");
         setMaskedEmail(`${name.slice(0, 2)}****@${domain || ""}`);
@@ -64,17 +64,17 @@ const ProtocolHeader = () => {
   // Also listen for genesis:updated in case genesis completes while header is visible
   useEffect(() => {
     const update = () => {
-      if (sessionStorage.getItem("genesis_completed") === "1") {
+      if (sessionStorage.getItem("sovereign_enrolled") === "1") {
         setGenesisDone(true);
-        const email = sessionStorage.getItem("genesis_email") || "";
+        const email = sessionStorage.getItem("sovereign_email") || "";
         if (email) {
           const [name, domain] = email.split("@");
           setMaskedEmail(`${name.slice(0, 2)}****@${domain || ""}`);
         }
       }
     };
-    window.addEventListener("genesis:updated", update);
-    return () => window.removeEventListener("genesis:updated", update);
+    window.addEventListener("sovereign:updated", update);
+    return () => window.removeEventListener("sovereign:updated", update);
   }, []);
 
   /* ── UTC 时钟 ── */
@@ -134,7 +134,7 @@ const ProtocolHeader = () => {
   };
 
   const handleConnectWallet = () => {
-    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("genesis_email") : null;
+    const genesisEmail = typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null;
     connectWallet(genesisEmail ? { email: genesisEmail } : undefined);
   };
 

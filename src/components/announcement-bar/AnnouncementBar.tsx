@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { playTick } from "@/utils/useAudioTick";
-import { useGenesisSlots } from "@/hooks/useGenesisSlots";
+import { useSovereignSlots } from "@/hooks/useSovereignSlots";
 import "./announcement-bar.css";
 
 const STORAGE_KEY = "myshape_announcement_dev_nodes_20260706";
@@ -9,7 +9,7 @@ const FULL_STORAGE_KEY = "myshape_announcement_cohort_full_20260706";
 
 export default function AnnouncementBar() {
   const [visible, setVisible] = useState(false);
-  const { isFull, genesisNodes } = useGenesisSlots();
+  const { isFull, sovereignNodes } = useSovereignSlots();
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem(isFull ? FULL_STORAGE_KEY : STORAGE_KEY);
@@ -25,7 +25,7 @@ export default function AnnouncementBar() {
   if (!visible) return null;
 
   const message = isFull
-    ? `Genesis 100 cohort is sealed — ${genesisNodes} sovereign nodes anchored. Protocol is now in Continuity Phase.`
+    ? `Genesis 100 cohort is sealed — ${sovereignNodes} sovereign nodes anchored. Protocol is now in Continuity Phase.`
     : "Dev Nodes are live. Deploy a protocol anchor in 60 seconds. No wallet. No invite.";
 
   const link = isFull ? "/specs" : "/developers";

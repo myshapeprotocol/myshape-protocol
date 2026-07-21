@@ -67,13 +67,13 @@ export const APPROX_REPUTATION_THRESHOLDS: Array<{
  */
 export const APPROX_TOKEN_TIER_THRESHOLDS: Array<{
   tier: string;
-  requiresGenesisNode: boolean;
+  requiresSovereign: boolean;
   requiresReputation: string | null;   // reputation tier, or null
   minBestPes: number;
 }> = [
-  { tier: "genesis",   requiresGenesisNode: true,  requiresReputation: "genesis",     minBestPes: 0.75 },
-  { tier: "validator", requiresGenesisNode: false, requiresReputation: "established", minBestPes: 0.50 },
-  { tier: "presence",  requiresGenesisNode: false, requiresReputation: null,          minBestPes: 0.30 },
+  { tier: "genesis",   requiresSovereign: true,  requiresReputation: "genesis",     minBestPes: 0.75 },
+  { tier: "validator", requiresSovereign: false, requiresReputation: "established", minBestPes: 0.50 },
+  { tier: "presence",  requiresSovereign: false, requiresReputation: null,          minBestPes: 0.30 },
   // fallback: "basic"
 ];
 

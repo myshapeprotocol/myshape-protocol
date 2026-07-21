@@ -14,7 +14,7 @@ export default function Hero() {
   const [genesisCompleted, setGenesisCompleted] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem("genesis_completed") === "1") {
+    if (typeof window !== "undefined" && sessionStorage.getItem("sovereign_enrolled") === "1") {
       setGenesisCompleted(true);
     }
   }, []);

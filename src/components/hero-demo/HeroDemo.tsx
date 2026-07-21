@@ -97,14 +97,14 @@ export default function HeroDemo() {
 
     // 检测创世用户 + 贡献指标
     function readOrbCount() {
-      if (typeof window === "undefined") return { orbCount: 0, isFullLoad: false, isGenesisUser: false };
-      const isGenesisUser = sessionStorage.getItem("genesis_completed") === "1";
-      const raw = parseInt(sessionStorage.getItem("genesis_scan_count") || "0", 10);
+      if (typeof window === "undefined") return { orbCount: 0, isFullLoad: false, isSovereign: false };
+      const isSovereign = sessionStorage.getItem("sovereign_enrolled") === "1";
+      const raw = parseInt(sessionStorage.getItem("sovereign_scan_count") || "0", 10);
       const sc = isNaN(raw) ? 0 : raw;
       const orbCount = sc >= 100 ? 8 : sc >= 85 ? 7 : sc >= 70 ? 6 : sc >= 50 ? 5 : sc >= 30 ? 4 : sc >= 15 ? 3 : sc >= 5 ? 2 : sc >= 1 ? 1 : 0;
-      return { orbCount, isFullLoad: orbCount >= 8, isGenesisUser };
+      return { orbCount, isFullLoad: orbCount >= 8, isSovereign };
     }
-    let { orbCount, isFullLoad, isGenesisUser } = readOrbCount();
+    let { orbCount, isFullLoad, isSovereign } = readOrbCount();
     let prevOrbCount = orbCount;
     const orbGrowTimestamp = { current: 0 };
     // 每 5 秒重新读取（检测扫描后的增长）
@@ -116,7 +116,7 @@ export default function HeroDemo() {
         isFullLoad = next.isFullLoad;
         orbGrowTimestamp.current = performance.now() * 0.001;
       }
-      isGenesisUser = next.isGenesisUser;
+      isSovereign = next.isSovereign;
     }, 5000);
 
     /* ── 星空背景（移动端减半）── */
@@ -390,7 +390,7 @@ export default function HeroDemo() {
       }
 
       // ── Genesis Core — 动态贡献指标（嵌入粒子几何体）──
-      if (isGenesisUser || orbCount > 0) {
+      if (isSovereign || orbCount > 0) {
         const corePulse = 1 + Math.sin(now * 0.003) * 0.3;
         const timeSec = now * 0.001;
 
@@ -403,7 +403,7 @@ export default function HeroDemo() {
         const growProgress = 1 - Math.pow(1 - growRaw, 3); // ease-out cubic
 
         // 创世核心（仅 Genesis 节点）
-        if (isGenesisUser) {
+        if (isSovereign) {
           const cg = ctx.createRadialGradient(0, 0, 0, 0, 0, 16 * corePulse);
           cg.addColorStop(0, "rgba(220,240,255,0.65)");
           cg.addColorStop(0.3, "rgba(144,200,255,0.25)");

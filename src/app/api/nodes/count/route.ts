@@ -49,13 +49,13 @@ export async function GET(req: Request) {
       ["ACTIVE", "GENESIS_NODE", "SUBSCRIBED", "GENESIS_CONNECTED"].includes(r.status ?? "")
     ).length;
     const agents = real.filter((r) => r.status === "AGENT_ACTIVE").length;
-    const genesisNodes = real.filter((r) => r.status === "GENESIS_NODE").length;
+    const sovereignNodes = real.filter((r) => r.status === "GENESIS_NODE").length;
 
     return NextResponse.json({
       total,
       humans,
       agents,
-      genesis_nodes: genesisNodes,
+      genesis_nodes: sovereignNodes,
     });
   } catch (err) {
     console.error("[/api/nodes/count]", err);

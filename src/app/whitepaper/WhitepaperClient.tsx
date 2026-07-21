@@ -190,7 +190,7 @@ This is not a product roadmap. It is the definition of a new protocol layer — 
 export default function WhitepaperClient() {
   const [activeId, setActiveId] = useState("proposition");
   const [tocShow, setTocShow] = useState(true);
-  const [genesisNodes, setGenesisNodes] = useState<{ total: number; remaining: number; nodes: Array<{ index: number; id: string; joined: string }> } | null>(null);
+  const [sovereignNodes, setGenesisNodes] = useState<{ total: number; remaining: number; nodes: Array<{ index: number; id: string; joined: string }> } | null>(null);
   const [prevTotal, setPrevTotal] = useState(0);
   const [nodePulse, setNodePulse] = useState(false);
   const [isSealed, setIsSealed] = useState(false);
@@ -204,7 +204,7 @@ export default function WhitepaperClient() {
         .then(r => r.json())
         .then(data => {
           if (data.nodes) {
-            const wasNotSealed = genesisNodes && genesisNodes.total < 100;
+            const wasNotSealed = sovereignNodes && sovereignNodes.total < 100;
             const nowSealed = data.total >= 100;
             setGenesisNodes(prev => {
               if (prev && data.total > prev.total) {
@@ -385,7 +385,7 @@ export default function WhitepaperClient() {
                   </div>
                 )}
 
-                {section.id === "genesis-protocol" && genesisNodes && (
+                {section.id === "genesis-protocol" && sovereignNodes && (
                   <div className="space-y-6 my-10">
                     {/* Genesis Cohort 实时状态 */}
                     <div className="border p-6" style={{ borderColor: "rgba(144,200,255,0.15)", background: "rgba(4,14,28,0.5)" }}>
@@ -400,8 +400,8 @@ export default function WhitepaperClient() {
                       </div>
 
                       <div className="flex items-baseline gap-4 mb-4">
-                        <span className="text-5xl font-light font-mono text-[#90c8ff]/80">{genesisNodes.total}</span>
-                        <span className="text-white/30 text-[12px] tracking-[0.2em] uppercase">Genesis Node{genesisNodes.total !== 1 ? "s" : ""} Active</span>
+                        <span className="text-5xl font-light font-mono text-[#90c8ff]/80">{sovereignNodes.total}</span>
+                        <span className="text-white/30 text-[12px] tracking-[0.2em] uppercase">Genesis Node{sovereignNodes.total !== 1 ? "s" : ""} Active</span>
                         <span className="text-[#90c8ff]/40 text-[11px]">— Phase: Alpha</span>
                       </div>
 
@@ -416,13 +416,13 @@ export default function WhitepaperClient() {
                           <>
                             <div className="flex items-center justify-between mb-1.5">
                               <span className="text-white/30 text-[11px] tracking-[0.3em] uppercase">Protocol Sync</span>
-                              <span className="text-[#90c8ff]/30 font-mono text-[11px]">{(genesisNodes.total / 100 * 100).toFixed(1)}%</span>
+                              <span className="text-[#90c8ff]/30 font-mono text-[11px]">{(sovereignNodes.total / 100 * 100).toFixed(1)}%</span>
                             </div>
                             <div className="relative h-1 bg-white/[0.04] overflow-hidden">
                               <div
                                 className={`absolute inset-y-0 left-0 bg-gradient-to-r from-[#90c8ff]/40 via-[#90c8ff]/60 to-[#90c8ff]/40 transition-all duration-1000 ease-out ${nodePulse ? "animate-pulse" : ""}`}
                                 style={{
-                                  width: `${Math.max(genesisNodes.total / 100 * 100, 1)}%`,
+                                  width: `${Math.max(sovereignNodes.total / 100 * 100, 1)}%`,
                                   boxShadow: nodePulse ? "0 0 12px rgba(144,200,255,0.6)" : "0 0 4px rgba(144,200,255,0.2)",
                                 }}
                               />
@@ -431,8 +431,8 @@ export default function WhitepaperClient() {
                             <div className="flex items-center gap-1.5 mt-1">
                               <span className={`w-1 h-1 rounded-full transition-all duration-500 ${nodePulse ? "bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.8)]" : "bg-[#90c8ff]/30"}`} />
                               <span className="text-white/30 text-[11px] tracking-[0.2em] uppercase">
-                                {genesisNodes.total === 0 ? "Awaiting genesis initialization" :
-                                 genesisNodes.total < 100 ? "Network bootstrapping in progress" :
+                                {sovereignNodes.total === 0 ? "Awaiting genesis initialization" :
+                                 sovereignNodes.total < 100 ? "Network bootstrapping in progress" :
                                  "Genesis Cohort sealed — network active"}
                               </span>
                             </div>
@@ -440,9 +440,9 @@ export default function WhitepaperClient() {
                         )}
                       </div>
 
-                      {genesisNodes.nodes.length > 0 && (
+                      {sovereignNodes.nodes.length > 0 && (
                         <div className={`grid ${isSealed ? "grid-cols-3 md:grid-cols-5" : "grid-cols-2 md:grid-cols-4"} gap-2`}>
-                          {genesisNodes.nodes.slice(0, isSealed ? 100 : 20).map(n => (
+                          {sovereignNodes.nodes.slice(0, isSealed ? 100 : 20).map(n => (
                             <div key={n.index} className="flex items-center gap-2 p-2 border text-[11px] font-mono transition-all duration-500"
                               style={{
                                 borderColor: isSealed ? "rgba(144,200,255,0.1)" : "rgba(255,255,255,0.04)",
@@ -452,9 +452,9 @@ export default function WhitepaperClient() {
                               <span className="text-white/25 truncate">{n.id}</span>
                             </div>
                           ))}
-                          {!isSealed && genesisNodes.total > 20 && (
+                          {!isSealed && sovereignNodes.total > 20 && (
                             <div className="flex items-center justify-center p-2 border border-white/[0.02] text-[11px] text-white/30 font-mono">
-                              +{genesisNodes.total - 20} more
+                              +{sovereignNodes.total - 20} more
                             </div>
                           )}
                         </div>

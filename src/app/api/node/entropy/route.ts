@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     // Read current entropy state + scan_count
     const { data: node, error: readErr } = await getSupabase()
       .from("protocol_nodes")
-      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count, status, genesis_key")
+      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count, status, sovereign_key")
       .eq("email", email)
       .single();
 
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     const currentStatus = node.status ?? "PENDING_VERIFICATION";
     const isFirstVerification = !["GENESIS_NODE", "AGENT_ACTIVE", "TEST_ACCOUNT"].includes(currentStatus);
     let badgeMinted: string | null = null;
-    let genesisKey: string | null = node.genesis_key ?? null;
+    let genesisKey: string | null = node.sovereign_key ?? null;
     let cohortFull = false;
     let slotsRemaining = 0;
 
@@ -116,14 +116,14 @@ export async function POST(request: Request) {
 
       if (newNodeStatus === "GENESIS_NODE") {
         genesisKey = `GK_${randomUUID()}`;
-        updates.genesis_key = genesisKey;
+        updates.sovereign_key = genesisKey;
       }
 
-      // Preserve genesis_key if already minted (GENESIS_NODE → GENESIS_NODE is impossible here,
+      // Preserve sovereign_key if already minted (GENESIS_NODE → GENESIS_NODE is impossible here,
       // but belt-and-suspenders: if somehow reached, don't overwrite the key)
-      if (node.genesis_key && newNodeStatus === "GENESIS_NODE") {
-        updates.genesis_key = node.genesis_key;
-        genesisKey = node.genesis_key;
+      if (node.sovereign_key && newNodeStatus === "GENESIS_NODE") {
+        updates.sovereign_key = node.sovereign_key;
+        genesisKey = node.sovereign_key;
       }
 
       const { error: writeErr } = await getSupabase()
@@ -165,7 +165,7 @@ export async function POST(request: Request) {
       decayApplied,
       spikeTriggered,
       badge_minted: badgeMinted,
-      genesis_key: genesisKey,
+      sovereign_key: genesisKey,
       cohort_full: cohortFull,
       slots_remaining: slotsRemaining,
       status: badgeMinted ?? currentStatus,
@@ -199,7 +199,7 @@ export async function GET(request: Request) {
   try {
     const { data, error } = await getSupabase()
       .from("protocol_nodes")
-      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count, status, genesis_key")
+      .select("entropy_score, particle_level, streak_days, streak_multiplier, best_pes, last_entropy_date, scan_count, status, sovereign_key")
       .eq("email", email)
       .single();
 
@@ -225,7 +225,7 @@ export async function GET(request: Request) {
       lastEntropyDate: data.last_entropy_date ?? "",
       scanCount: data.scan_count ?? 0,
       progress,
-      genesisKey: data.genesis_key ?? null,
+      genesisKey: data.sovereign_key ?? null,
       status: data.status ?? null,
     });
   } catch (err) {

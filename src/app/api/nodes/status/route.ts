@@ -19,7 +19,7 @@ export async function GET() {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { count: total } = await supabase.from("protocol_nodes").select("*", { count: "exact", head: true });
-    const { count: genesisNodes } = await supabase.from("protocol_nodes").select("*", { count: "exact", head: true }).eq("status", "GENESIS_NODE");
+    const { count: sovereignNodes } = await supabase.from("protocol_nodes").select("*", { count: "exact", head: true }).eq("status", "GENESIS_NODE");
     const { count: activeHumans } = await supabase.from("protocol_nodes").select("*", { count: "exact", head: true }).in("status", ["ACTIVE", "GENESIS_NODE"]);
     const { count: agents } = await supabase.from("protocol_nodes").select("*", { count: "exact", head: true }).eq("status", "AGENT_ACTIVE");
     const { data: recentScan } = await supabase.from("protocol_nodes").select("last_scan_date").not("last_scan_date", "is", null).order("last_scan_date", { ascending: false }).limit(1);
@@ -31,13 +31,13 @@ export async function GET() {
     const response: NodesStatusResponse = {
       apiVersion: CURRENT_API_VERSION,
       total_nodes: total ?? 0,
-      genesis_nodes: genesisNodes ?? 0,
-      genesis_remaining: Math.max(0, 100 - (genesisNodes ?? 0)),
+      genesis_nodes: sovereignNodes ?? 0,
+      genesis_remaining: Math.max(0, 100 - (sovereignNodes ?? 0)),
       active_humans: activeHumans ?? 0,
       agents: agents ?? 0,
       total_scans: totalScans,
       last_scan: recentScan?.[0]?.last_scan_date || null,
-      cohort_sealed: (genesisNodes ?? 0) >= 100,
+      cohort_sealed: (sovereignNodes ?? 0) >= 100,
       status: "OPERATIONAL",
       timestamp: new Date().toISOString(),
     };

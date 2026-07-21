@@ -4,7 +4,7 @@ import { playTick } from "@/utils/useAudioTick";
 
 /* ── Types ── */
 interface NetworkNode { handle: string; mask: string; status: string; particleLevel: number; entropy: number; lastSeen: string; scans: number; isGenesis: boolean; }
-interface NetworkData { totalNodes: number; activeHumans: number; genesisNodes: number; agents: number; activeToday: number; totalScans: number; lastInbound: { handle: string; mask: string; timestamp: string } | null; nodes: NetworkNode[]; engines: number; attackSigs: number; coreTests: string; }
+interface NetworkData { totalNodes: number; activeHumans: number; sovereignNodes: number; agents: number; activeToday: number; totalScans: number; lastInbound: { handle: string; mask: string; timestamp: string } | null; nodes: NetworkNode[]; engines: number; attackSigs: number; coreTests: string; }
 interface NodePosition { x: number; y: number; vx: number; vy: number; node: NetworkNode; radius: number; glow: number; phase: number; }
 
 /* ── Design tokens — aligned with Vision cards ── */
@@ -87,7 +87,7 @@ export default function PresenceNetwork() {
   useEffect(() => {
     const tick = () => fetch("/api/presence/network").then(r => r.json()).then(d => {
       setData(prev => {
-        if (prev && d.totalNodes !== undefined) { const c = new Set<string>(); if (d.totalNodes !== prev.totalNodes) c.add("NODES"); if (d.genesisNodes !== prev.genesisNodes) c.add("GENESIS"); if (d.activeToday !== prev.activeToday) c.add("TODAY"); if (c.size > 0) { setFlashRows(c); setTimeout(() => setFlashRows(new Set()), 800); } }
+        if (prev && d.totalNodes !== undefined) { const c = new Set<string>(); if (d.totalNodes !== prev.totalNodes) c.add("NODES"); if (d.sovereignNodes !== prev.sovereignNodes) c.add("GENESIS"); if (d.activeToday !== prev.activeToday) c.add("TODAY"); if (c.size > 0) { setFlashRows(c); setTimeout(() => setFlashRows(new Set()), 800); } }
         return d;
       });
       setLoading(false);
@@ -126,7 +126,7 @@ export default function PresenceNetwork() {
   );
 
   const hasNodes = (data.nodes?.length ?? 0) > 0;
-  const genesisPct = Math.min(100, Math.round((data.genesisNodes / 100) * 100));
+  const genesisPct = Math.min(100, Math.round((data.sovereignNodes / 100) * 100));
 
   return (
     <div className="relative bg-[#02040a]/60 backdrop-blur-sm overflow-hidden transition-all duration-700"

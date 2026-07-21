@@ -32,7 +32,7 @@ export default function GenesisBadge() {
       .then(data => {
         if (data.scan_count !== undefined) {
           setScanCount(data.scan_count);
-          sessionStorage.setItem("genesis_scan_count", String(data.scan_count));
+          sessionStorage.setItem("sovereign_scan_count", String(data.scan_count));
         }
         if (data.data_contribution !== undefined) setDataContrib(data.data_contribution);
       })
@@ -40,10 +40,10 @@ export default function GenesisBadge() {
   };
 
   const tryShow = () => {
-    const storedEmail = sessionStorage.getItem("genesis_email") || "";
+    const storedEmail = sessionStorage.getItem("sovereign_email") || "";
     const walletAddr = sessionStorage.getItem("wallet_address") || "";
-    const isCompleted = sessionStorage.getItem("genesis_completed") === "1";
-    const storedStatus = sessionStorage.getItem("genesis_status") || "";
+    const isCompleted = sessionStorage.getItem("sovereign_enrolled") === "1";
+    const storedStatus = sessionStorage.getItem("sovereign_status") || "";
 
     if (isCompleted) {
       const identityKey = storedEmail || walletAddr;
@@ -66,7 +66,7 @@ export default function GenesisBadge() {
   const tryShowRef = useRef(tryShow);
   tryShowRef.current = tryShow;
   const handleDisconnect = useCallback(() => {
-    const hasGenesis = sessionStorage.getItem("genesis_completed") === "1";
+    const hasGenesis = sessionStorage.getItem("sovereign_enrolled") === "1";
     const hasWallet = !!sessionStorage.getItem("wallet_address");
     if (!hasGenesis && !hasWallet) {
       setVisible(false);
@@ -83,12 +83,12 @@ export default function GenesisBadge() {
       // Re-check visibility every 30s — handles stale scan_count
       tryShowRef.current();
     }, 30000);
-    window.addEventListener("genesis:updated", onUpdate);
+    window.addEventListener("sovereign:updated", onUpdate);
     window.addEventListener("wallet:connected", onUpdate);
     window.addEventListener("wallet:disconnected", handleDisconnect);
     return () => {
       clearInterval(interval);
-      window.removeEventListener("genesis:updated", onUpdate);
+      window.removeEventListener("sovereign:updated", onUpdate);
       window.removeEventListener("wallet:connected", onUpdate);
       window.removeEventListener("wallet:disconnected", handleDisconnect);
     };

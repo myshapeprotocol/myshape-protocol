@@ -24,12 +24,12 @@ export default function DashboardClient() {
 
     const email =
       sessionStorage.getItem("node_email") ||
-      sessionStorage.getItem("genesis_email");
-    const completed = sessionStorage.getItem("genesis_completed") === "1";
+      sessionStorage.getItem("sovereign_email");
+    const completed = sessionStorage.getItem("sovereign_enrolled") === "1";
     const hasNode = !!sessionStorage.getItem("node_token");
     const handle =
       sessionStorage.getItem("node_handle") ||
-      sessionStorage.getItem("genesis_node_handle") ||
+      sessionStorage.getItem("sovereign_node_handle") ||
       null;
 
     setNodeHandle(handle);

@@ -24,12 +24,12 @@ export default function IdentityClient() {
   useEffect(() => {
     setGenesisId(makeGenesisId());
   }, []);
-  const [isGenesisUser, setIsGenesisUser] = useState(false);
+  const [isSovereign, setIsGenesisUser] = useState(false);
 
   useEffect(() => {
-    const isGenesis = sessionStorage.getItem("genesis_completed") === "1";
+    const isGenesis = sessionStorage.getItem("sovereign_enrolled") === "1";
     setIsGenesisUser(isGenesis);
-    const savedEmail = sessionStorage.getItem("genesis_email") || "";
+    const savedEmail = sessionStorage.getItem("sovereign_email") || "";
     // Wallet-derived keys are not real emails — don't pre-fill
     if (savedEmail && !savedEmail.startsWith("wallet:")) {
       setEmail(savedEmail);
@@ -72,7 +72,7 @@ export default function IdentityClient() {
       });
       const result = await response.json().catch(() => ({ error: "PARSE_FAILED" }));
       if (!response.ok) throw new Error(result.error || "UPLINK_REJECTED");
-      sessionStorage.setItem("genesis_completed", "1");
+      sessionStorage.setItem("sovereign_enrolled", "1");
       setIsGenesisUser(true);
       setStatus("success");
       window.dispatchEvent(new Event("speed-down"));
@@ -103,7 +103,7 @@ export default function IdentityClient() {
             durationMs={3200}
             colorRgb="128, 191, 255"
           />
-          {isGenesisUser && isFormed && (
+          {isSovereign && isFormed && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="genesis-core-glow" />
             </div>
@@ -196,7 +196,7 @@ export default function IdentityClient() {
                     <p className="text-[11px] tracking-[0.35em] uppercase text-[#90c8ff]/70 text-center">
                       NODE_REGISTERED. AUTH_STATE_UPDATED.
                     </p>
-                    {isGenesisUser && (
+                    {isSovereign && (
                       <p className="text-[11px] tracking-[0.3em] uppercase text-[#90c8ff]/60 text-center animate-pulse"
                         style={{ textShadow: "0 0 8px rgba(144,200,255,0.5)" }}>
                         ◈ GENESIS_NODE — FOUNDING_IDENTITY

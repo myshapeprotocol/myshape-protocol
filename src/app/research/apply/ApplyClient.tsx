@@ -34,7 +34,7 @@ function ApplyForm() {
     cohort?: string;
     position?: string;
     position_number?: number;
-    genesis_slots_remaining?: number;
+    sovereign_slots_remaining?: number;
     already_applied?: boolean;
     error?: string;
   }>({});
@@ -69,7 +69,7 @@ function ApplyForm() {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("witness_cohort", data.cohort || "");
           sessionStorage.setItem("witness_number", String(data.position_number || ""));
-          sessionStorage.setItem("witness_slots_remaining", String(data.genesis_slots_remaining || 0));
+          sessionStorage.setItem("witness_slots_remaining", String(data.sovereign_slots_remaining || 0));
         }
 
         // Countdown + redirect
@@ -267,7 +267,7 @@ function ApplyForm() {
                     Genesis #{String(result.position_number).padStart(3, '0')}
                   </div>
                   <div className="text-amber-400/25 text-[11px] mt-1">
-                    {result.genesis_slots_remaining} genesis slots remaining
+                    {result.sovereign_slots_remaining} genesis slots remaining
                   </div>
                 </>
               )}

@@ -21,7 +21,7 @@ export async function GET() {
 
     const humans = (nodes || []).filter((n) => n.status !== "AGENT_ACTIVE");
     const agents = (nodes || []).filter((n) => n.status === "AGENT_ACTIVE");
-    const genesisNodes = humans.filter((n) => n.status === "GENESIS_NODE");
+    const sovereignNodes = humans.filter((n) => n.status === "GENESIS_NODE");
 
     // Most recent scan
     const lastInbound = humans
@@ -50,7 +50,7 @@ export async function GET() {
     return NextResponse.json({
       totalNodes: humans.length + agents.length,
       activeHumans: humans.length,
-      genesisNodes: genesisNodes.length,
+      sovereignNodes: sovereignNodes.length,
       agents: agents.length,
       activeToday,
       totalScans: humans.reduce((sum, n) => sum + (n.scan_count ?? 0), 0),

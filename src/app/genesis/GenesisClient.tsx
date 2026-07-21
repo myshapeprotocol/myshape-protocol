@@ -8,7 +8,7 @@ import GenesisIdentityCard from "@/components/genesis-identity-card/GenesisIdent
 import GenesisProgress from "@/components/genesis-progress/GenesisProgress";
 import GenesisCTA from "@/components/genesis-cta/GenesisCTA";
 import { playTick } from "@/utils/useAudioTick";
-import { useGenesisSlots } from "@/hooks/useGenesisSlots";
+import { useSovereignSlots } from "@/hooks/useSovereignSlots";
 import "./genesis.css";
 
 type Stage = "input" | "scanning" | "sending_otp" | "verifying" | "success" | "error";
@@ -187,11 +187,11 @@ export default function GenesisClient() {
             registeredAt: data.registered_at || "",
           });
           // 同步 sessionStorage，确保 header/dashboard 也能识别
-          sessionStorage.setItem("genesis_completed", "1");
-          sessionStorage.setItem("genesis_status", data.status || "ACTIVE");
-          if (data.email) sessionStorage.setItem("genesis_email", data.email);
-          if (data.node_handle) sessionStorage.setItem("genesis_node_handle", data.node_handle);
-          window.dispatchEvent(new CustomEvent("genesis:updated"));
+          sessionStorage.setItem("sovereign_enrolled", "1");
+          sessionStorage.setItem("sovereign_status", data.status || "ACTIVE");
+          if (data.email) sessionStorage.setItem("sovereign_email", data.email);
+          if (data.node_handle) sessionStorage.setItem("sovereign_node_handle", data.node_handle);
+          window.dispatchEvent(new CustomEvent("sovereign:updated"));
         }
         // 404 = 新用户，正常留空
       } catch { /* silent — network issues shouldn't block the form */ }
@@ -203,7 +203,7 @@ export default function GenesisClient() {
   }, [headerWallet, stage]);
 
   // Cohort state — auto-detect when Genesis is full
-  const { isFull, genesisNodes } = useGenesisSlots();
+  const { isFull, sovereignNodes } = useSovereignSlots();
   const [liveStats, setLiveStats] = useState<{ totalNodes: number; totalScans: number } | null>(null);
 
   useEffect(() => {
@@ -281,10 +281,10 @@ export default function GenesisClient() {
 
         // Wallet connection = identity registration, not Genesis tier assignment
         // Genesis Cohort status is minted by first PES scan (POST /api/node/entropy)
-        sessionStorage.setItem("genesis_completed", "1");
-        sessionStorage.setItem("genesis_email", nodeKey);
-        sessionStorage.setItem("genesis_status", "ACTIVE"); // PES scan will upgrade if < 100
-        window.dispatchEvent(new CustomEvent("genesis:updated"));
+        sessionStorage.setItem("sovereign_enrolled", "1");
+        sessionStorage.setItem("sovereign_email", nodeKey);
+        sessionStorage.setItem("sovereign_status", "ACTIVE"); // PES scan will upgrade if < 100
+        window.dispatchEvent(new CustomEvent("sovereign:updated"));
         finalizeGenesis(nodeKey);
         return;
       }
@@ -307,10 +307,10 @@ export default function GenesisClient() {
 
       // 钱包已绑定的回头用户：跳过 OTP
       if (data.skip_otp) {
-        sessionStorage.setItem("genesis_completed", "1");
-        sessionStorage.setItem("genesis_email", cleanEmail);
-        if (data.status) sessionStorage.setItem("genesis_status", data.status);
-        window.dispatchEvent(new CustomEvent("genesis:updated"));
+        sessionStorage.setItem("sovereign_enrolled", "1");
+        sessionStorage.setItem("sovereign_email", cleanEmail);
+        if (data.status) sessionStorage.setItem("sovereign_status", data.status);
+        window.dispatchEvent(new CustomEvent("sovereign:updated"));
         finalizeGenesis(cleanEmail);
         return;
       }
@@ -333,11 +333,11 @@ export default function GenesisClient() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "SIGNATURE_INVALID");
-      sessionStorage.setItem("genesis_completed", "1");
-      sessionStorage.setItem("genesis_email", email.trim());
-      if (data.status) sessionStorage.setItem("genesis_status", data.status);
-      if (data.node_handle) sessionStorage.setItem("genesis_node_handle", data.node_handle);
-      window.dispatchEvent(new CustomEvent("genesis:updated"));
+      sessionStorage.setItem("sovereign_enrolled", "1");
+      sessionStorage.setItem("sovereign_email", email.trim());
+      if (data.status) sessionStorage.setItem("sovereign_status", data.status);
+      if (data.node_handle) sessionStorage.setItem("sovereign_node_handle", data.node_handle);
+      window.dispatchEvent(new CustomEvent("sovereign:updated"));
       finalizeGenesis(email);
     } catch (err: unknown) {
       setVerifyingOtp(false);
@@ -354,7 +354,7 @@ export default function GenesisClient() {
     if (!clean.includes("@") || bindEmailSaving) return;
     setBindEmailSaving(true);
     try {
-      const currentEmail = sessionStorage.getItem("genesis_email") || email;
+      const currentEmail = sessionStorage.getItem("sovereign_email") || email;
       const res = await fetch("/api/node/email", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -365,7 +365,7 @@ export default function GenesisClient() {
         }),
       });
       if (res.ok) {
-        sessionStorage.setItem("genesis_email", clean);
+        sessionStorage.setItem("sovereign_email", clean);
         setEmail(clean);
         setBindEmailDone(true);
       }
@@ -618,13 +618,13 @@ export default function GenesisClient() {
                         onSuccess={(walletData) => {
                           sessionStorage.setItem("wallet_address", walletData.address);
                           setHeaderWallet(walletData.address);
-                          if (walletData.node_handle) sessionStorage.setItem("genesis_node_handle", walletData.node_handle);
+                          if (walletData.node_handle) sessionStorage.setItem("sovereign_node_handle", walletData.node_handle);
                           if (walletData.skip_otp) {
                             const nodeEmail = walletData.email || email.trim().toLowerCase() || "wallet:" + walletData.address.slice(2, 10);
-                            sessionStorage.setItem("genesis_completed", "1");
-                            sessionStorage.setItem("genesis_email", nodeEmail);
-                            sessionStorage.setItem("genesis_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
-                            window.dispatchEvent(new CustomEvent("genesis:updated"));
+                            sessionStorage.setItem("sovereign_enrolled", "1");
+                            sessionStorage.setItem("sovereign_email", nodeEmail);
+                            sessionStorage.setItem("sovereign_status", walletData.is_genesis ? "GENESIS_NODE" : "ACTIVE");
+                            window.dispatchEvent(new CustomEvent("sovereign:updated"));
                             finalizeGenesis(nodeEmail);
                           }
                         }}
@@ -824,7 +824,7 @@ export default function GenesisClient() {
               {/* ── Genesis 身份卡 ── */}
               <GenesisIdentityCard
                 email={email}
-                nodeHandle={nodeData?.nodeHandle || sessionStorage.getItem("genesis_node_handle")}
+                nodeHandle={nodeData?.nodeHandle || sessionStorage.getItem("sovereign_node_handle")}
                 positionNumber={nodeData?.positionNumber}
                 entropyScore={nodeData?.entropyScore}
                 particleLevel={nodeData?.particleLevel}
@@ -833,7 +833,7 @@ export default function GenesisClient() {
 
               {/* ── 钱包用户：可选绑定真实邮箱（无 OTP）── */}
               {(() => {
-                const storedEmail = sessionStorage.getItem("genesis_email") || email;
+                const storedEmail = sessionStorage.getItem("sovereign_email") || email;
                 return storedEmail.startsWith("wallet:") && !bindEmailDone;
               })() && (
                 <motion.div

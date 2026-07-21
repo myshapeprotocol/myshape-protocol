@@ -65,7 +65,7 @@ export default function SpecsClient() {
               <div>2. SST Reduction — 33-pt → 18-pt skeleton topology (discards face/hand identity data)</div>
               <div>3. Motion Vector — 4D PES engine produces 128-dim signature from kinematics + acceleration + jerk + spectrum</div>
               <div>4. ZK-SNARK Proof — ~250 byte zero-knowledge proof. Verifies presence without exposing the vector.</div>
-              <div>5. Genesis Enrollment — Proof anchored to protocol node. Node receives genesis_key (UUID v4).</div>
+              <div>5. Genesis Enrollment — Proof anchored to protocol node. Node receives sovereign_key (UUID v4).</div>
             </div>
 
             <div className="border-t border-[#90c8ff]/08 pt-3 mt-3">

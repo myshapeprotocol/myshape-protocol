@@ -20,7 +20,7 @@ export default function CompletionCeremony({
   const [notifyState, setNotifyState] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   async function subscribeForUpdates() {
-    const email = sessionStorage.getItem("genesis_email");
+    const email = sessionStorage.getItem("sovereign_email");
     if (!email) return;
     setNotifyState("loading");
     try {

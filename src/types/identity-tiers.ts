@@ -10,7 +10,7 @@
 export type VerificationStatus = "pending" | "active" | "verified";
 
 /** Genesis tier — determined by PES scan order */
-export type GenesisTier = "GENESIS_NODE" | "ACTIVE" | "WALLET_LINKED";
+export type SovereignTier = "GENESIS_NODE" | "ACTIVE" | "WALLET_LINKED";
 
 /** Dynamic weight profile for protocol governance */
 export interface WeightProfile {
@@ -31,7 +31,7 @@ export interface WeightProfile {
 /** Genesis badge minting result */
 export interface BadgeResult {
   /** The tier that was minted (or null if already minted) */
-  tier: GenesisTier | null;
+  tier: SovereignTier | null;
   /** Whether this was the first verification */
   isFirstVerification: boolean;
   /** Total verified nodes at time of minting */

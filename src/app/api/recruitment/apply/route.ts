@@ -103,7 +103,7 @@ export async function POST(request: Request): Promise<Response> {
       cohort,
       position,
       position_number: currentCount + 1,
-      genesis_slots_remaining: remaining,
+      sovereign_slots_remaining: remaining,
       already_applied: false,
       redirect_to: "/motion-demo",
     });

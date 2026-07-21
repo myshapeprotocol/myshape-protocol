@@ -35,9 +35,9 @@ export default function ContinuityGenesisNodes({ data }: Props) {
               {n.handle || `GNS_${i + 1}`}
             </div>
           ))}
-        {data.genesisNodes > 20 && (
+        {data.sovereignNodes > 20 && (
           <div className="continuity-genesis-more">
-            +{data.genesisNodes - 20} more
+            +{data.sovereignNodes - 20} more
           </div>
         )}
       </div>
