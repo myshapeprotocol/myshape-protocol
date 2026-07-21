@@ -65,7 +65,7 @@ export default function ComparePage() {
           {
             question: "Is MyShape a competitor to Polygon ID?",
             answer:
-              "MyShape and Polygon ID operate at different layers of the identity stack. Polygon ID provides verifiable credentials and DID infrastructure using zero-knowledge proofs. MyShape provides presence verification — the physical layer that proves a human (not an AI) is continuously operating an identity. The two protocols are complementary: a Polygon ID credential can be bound to a MyShape presence proof for maximum assurance.",
+              "MyShape and Polygon ID operate at different layers of the identity stack. Polygon ID provides verifiable credentials and DID infrastructure using continuity receipts. MyShape provides presence verification — the physical layer that proves a human (not an AI) is continuously operating an identity. The two protocols are complementary: a Polygon ID credential can be bound to a MyShape presence proof for maximum assurance.",
           },
         ]}
       />

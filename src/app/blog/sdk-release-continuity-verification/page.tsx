@@ -6,7 +6,7 @@ import BreadcrumbList from "@/components/seo/BreadcrumbList";
 export const metadata: Metadata = {
   title: "Continuity Verification Becomes Programmable — MyShape Protocol",
   description:
-    "The Continuity Lab releases @thecontinuitylab/myshape v0.1.2 — the first open SDK for programmable continuity verification. One function: verifyContinuity().",
+    "The Continuity Lab releases @thecontinuitylab/myshape v0.2.0 — the first open SDK for programmable continuity verification. One function: verifyContinuity().",
   alternates: {
     canonical: "https://www.myshape.com/blog/sdk-release-continuity-verification",
   },
@@ -40,7 +40,7 @@ export default function Page() {
       />
       <ArticleJsonLd
         headline="Continuity Verification Becomes Programmable"
-        description="The Continuity Lab releases v0.1.2 — the first open SDK for programmable continuity verification."
+        description="The Continuity Lab releases v0.2.0 — the first open SDK for programmable continuity verification."
         datePublished="2026-07-20"
         authorName="The Continuity Lab"
         url="https://www.myshape.com/blog/sdk-release-continuity-verification"

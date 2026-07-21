@@ -54,7 +54,7 @@ const ENDPOINTS = [
 
 const MODULES = [
   { name: "presence-entropy.ts", desc: "Core PES computation — 4D entropy scoring across kinematics, acceleration, jerk, jerk spectrum" },
-  { name: "proof-system.ts", desc: "ZK-Presence proof generation and verification — produces ~250 byte proofs, verifies in <10ms" },
+  { name: "proof-system.ts", desc: "Continuity proof generation and verification — produces ~250 byte proofs, verifies in <10ms" },
   { name: "zk-circuit.ts", desc: "ZK-SNARK circuit definitions — 'PES > threshold AND motion recent AND biological entropy'" },
   { name: "skeleton-topology.ts", desc: "33-point MediaPipe → 18-point SST transformation — rotation-invariant skeletal model" },
   { name: "motion-vector.ts", desc: "128-dim motion vector extraction and serialization across 4 feature groups" },

@@ -35,7 +35,7 @@ export default function BlogClient() {
         <div className="space-y-4 mb-12">
           <div className="flex items-center gap-4 text-[#90c8ff]/50 text-[11px] tracking-[0.3em] uppercase"><span>Protocol Log</span><span className="w-8 h-[1px] bg-[#90c8ff]/25" /><span>{POSTS.length} ESSAYS</span></div>
           <h1 className="text-2xl md:text-4xl font-light tracking-[0.06em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>Protocol<br /><span className="text-[#90c8ff]">Log</span></h1>
-          <p className="text-white/40 text-[12px] tracking-[0.08em] leading-relaxed max-w-2xl">Technical essays on sovereign identity, presence verification, zero-knowledge proofs, and the protocol layer for verifiable digital continuity.</p>
+          <p className="text-white/40 text-[12px] tracking-[0.08em] leading-relaxed max-w-2xl">Technical essays on sovereign identity, presence verification, continuity receipts, and the protocol layer for verifiable digital continuity.</p>
         </div>
 
         {/* Category filter */}

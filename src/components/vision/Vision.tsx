@@ -47,7 +47,7 @@ export default function Vision() {
             </p>
           </div>
           <div className="text-[0.8rem] text-[#90c8ff]/30 text-right border-r border-[#90c8ff]/15 pr-6 leading-[1.8] font-mono mb-[5px]">
-            PROTOCOL_VISION_V1.0<br />{"// STATE: ACTIVE"}
+            PROTOCOL_VISION<br />{"// STATE: ACTIVE"}
           </div>
         </div>
 

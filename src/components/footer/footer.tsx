@@ -69,10 +69,9 @@ export default function ProtocolFooter() {
     {
       title: "SYS_COMPANY",
       links: [
-        { name: "ABOUT_MYSHAPE", href: "/about-myshape" },
         { name: "VISION", href: "/vision" },
-        { name: "ROADMAP_PLAN", href: "/roadmap" },
-        { name: "CONTACT_SYSTEM", href: "/contact" },
+        { name: "ROADMAP", href: "/roadmap" },
+        { name: "CONTACT", href: "/contact" },
         { name: "NEWSLETTER", href: "/newsletter" }
       ]
     },

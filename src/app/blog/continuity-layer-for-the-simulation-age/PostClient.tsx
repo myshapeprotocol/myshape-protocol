@@ -49,7 +49,7 @@ Identity verifies a credential at time T. Continuity verifies an unbroken chain 
 
 The passport model versus the soul model.
 
-Every identity system ever built — from passwords to identity credentials to zero-knowledge proofs — operates in the left column. They verify a claim. They do not verify a trajectory.
+Every identity system ever built — from passwords to identity credentials to continuity receipts — operates in the left column. They verify a claim. They do not verify a trajectory.
 
 MyShape operates in the right column. It verifies that the entity generating this proof is the same entity that generated the last one, and the one before that, in an unbroken chain of physical presence.
 
@@ -345,7 +345,7 @@ export default function PostClient() {
               className="block p-4 border border-[#90c8ff]/10 hover:border-[#90c8ff]/25 transition-all"
             >
               <p className="text-white/55 text-[12px] tracking-[0.08em]">
-                Zero-Knowledge Proofs Explained
+                Continuity Verification Explained
               </p>
               <p className="text-white/38 text-[11px] tracking-[0.06em] mt-1">
                 ZK for digital identity →

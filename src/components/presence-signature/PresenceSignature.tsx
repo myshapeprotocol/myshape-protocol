@@ -21,7 +21,7 @@ export default function PresenceSignature({ proof }: { proof: ProofData }) {
   const pesPct = Math.round(proof.pesScore * 100);
 
   const handleDownload = () => {
-    const data = `PRESENCE_PROOF\nProtocol: MyShape V1.0_GENESIS\nPresence_ID: ${presenceId}\nPES: ${pesPct}%\nTimestamp: ${now}\nZK_Hash: ${proof.zkpHash}\nPoP: ${proof.popHash}\nMP: ${proof.mpHash}\nEP: ${proof.epHash}\nDevice: Local Generation\nRaw Data: Zero Upload\n—————————————\nVerified by MyShape Protocol\nmyshape.com`;
+    const data = `PRESENCE_PROOF\nProtocol: MyShape CPS-0001 v1.0-RC\nPresence_ID: ${presenceId}\nPES: ${pesPct}%\nTimestamp: ${now}\nZK_Hash: ${proof.zkpHash}\nPoP: ${proof.popHash}\nMP: ${proof.mpHash}\nEP: ${proof.epHash}\nDevice: Local Generation\nRaw Data: Zero Upload\n—————————————\nVerified by MyShape Protocol\nmyshape.com`;
     const blob = new Blob([data], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -46,7 +46,7 @@ export default function PresenceSignature({ proof }: { proof: ProofData }) {
           <span className="w-2 h-2 rounded-full bg-[#90c8ff] shadow-[0_0_8px_rgba(144,200,255,0.8)] animate-pulse" />
           <span className="text-[#90c8ff]/90 text-[11px] tracking-[0.3em] uppercase font-bold">Presence Signature</span>
         </div>
-        <span className="text-white/30 text-[11px] tracking-[0.15em]">V1.0_GENESIS</span>
+        <span className="text-white/30 text-[11px] tracking-[0.15em]">CPS-0001 v1.0-RC</span>
       </div>
 
       {/* 核心数据 */}

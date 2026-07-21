@@ -444,7 +444,7 @@ export default function GenesisClient() {
   return (
     <ProtocolLayout
       refId="005" category="CIV_LAYER" title="GENESIS_PROTOCOL"
-      secLevel="CLASS_OMEGA"
+      secLevel="v1.0-RC"
       systemStatus={
         stage === "scanning" ? "PROTOCOL_NODE_INITIALIZING"
         : stage === "sending_otp" ? "TRANSMITTING_CHALLENGE"

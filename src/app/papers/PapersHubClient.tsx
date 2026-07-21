@@ -8,10 +8,10 @@ import "./papers.css";
 const PAPERS = [
   { title: "Technical Specification v1", path: "/papers/technical-spec", desc: "Motion Vector format, PES engine, SST topology, proof system, and reference implementation.", tags: ["Technical Spec", "V1.0"], author: "MyShape Protocol · June 2026" },
   { title: "Threat Model", path: "/papers/threat-model", desc: "8 attack signatures, entropy gap theorem, cost model, and defense-in-depth architecture.", tags: ["Security Analysis", "V1.0"], author: "MyShape Protocol · June 2026" },
-  { title: "Core Protocol", path: "/civ-layer/papers/core-protocol", desc: "Motion-Based Identity, ZK-Presence, manifold projection, and the cryptographic foundations of geometric identity.", tags: ["Whitepaper", "V2.1"], author: "MyShape Protocol · 2026" },
-  { title: "Protocol Architecture", path: "/civ-layer/papers/protocol-architecture", desc: "Five-layer architecture: Capture → Geometry → Integrity → Proof → Identity. Security boundaries and data flow.", tags: ["Architecture", "V1.0"], author: "MyShape Protocol · 2026" },
-  { title: "Civilization Roadmap", path: "/civ-layer/papers/civilization-roadmap", desc: "Four-epoch roadmap spanning 20+ years. From geometry to civilization.", tags: ["Vision", "V1.0"], author: "MyShape Protocol · 2026" },
-  { title: "Papers Manifesto", path: "/civ-layer/papers/manifesto", desc: "The philosophical foundations: why motion, why geometry, why zero-knowledge.", tags: ["Philosophy", "V1.0"], author: "MyShape Protocol · 2026" },
+  { title: "Core Protocol", path: "/research/notes/008-continuity-protocol-core", desc: "Motion-Based Identity, Continuity, manifold projection, and the cryptographic foundations of geometric identity.", tags: ["Whitepaper", "V2.1"], author: "MyShape Protocol · 2026" },
+  { title: "Protocol Architecture", path: "/protocol", desc: "Five-layer architecture: Capture → Geometry → Integrity → Proof → Identity. Security boundaries and data flow.", tags: ["Architecture", "V1.0"], author: "MyShape Protocol · 2026" },
+  { title: "Civilization Roadmap", path: "/roadmap", desc: "Four-epoch roadmap spanning 20+ years. From geometry to civilization.", tags: ["Vision", "V1.0"], author: "MyShape Protocol · 2026" },
+  { title: "Papers Manifesto", path: "/protocol/manifesto", desc: "The philosophical foundations: why motion, why geometry, why zero-knowledge.", tags: ["Philosophy", "V1.0"], author: "MyShape Protocol · 2026" },
 ];
 
 export default function PapersHubClient() {

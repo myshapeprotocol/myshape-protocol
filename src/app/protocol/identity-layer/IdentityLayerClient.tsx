@@ -21,7 +21,7 @@ const FOUNDATION: IdentityModel[] = [
     status: "ENCRYPTED",
     desc: "Raw motion data never leaves the device. Only the derived proof is transmitted — not the motion itself.",
     detail:
-      "The security root: ZK-Presence means proving you are human without revealing how you move.",
+      "The security root: Continuity means proving you are human without revealing how you move.",
     accent: "from-blue-400/70 to-blue-400/0",
   },
   {
@@ -75,7 +75,7 @@ export default function IdentityLayer() {
       refId="002"
       category="PROTOCOL_CORE"
       title="IDENTITY_LAYER"
-      secLevel="CLASS_A"
+      secLevel="STANDARD"
       systemStatus="ACTIVE_NODE"
     >
       <div className="space-y-16 md:space-y-28">

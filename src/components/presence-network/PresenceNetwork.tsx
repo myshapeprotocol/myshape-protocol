@@ -176,7 +176,7 @@ export default function PresenceNetwork() {
         <Row label="NODES"    value={data.totalNodes} sub={data.totalNodes === 0 ? "(awaiting first uplink)" : `human:${data.activeHumans}  agent:${data.agents}`} accent={data.totalNodes > 0 ? "cyan" : "muted"} pulse={data.totalNodes > 0} flash={flashRows.has("NODES")} freq={500} stripe />
         <Row label="GENESIS"  value="Alpha" sub="(restricted access)" accent="amber" pulse flash={flashRows.has("GENESIS")} freq={600} />
         <Row label="TODAY"    value={data.activeToday} sub={data.activeToday > 0 ? "scans recorded" : "(no activity)"} accent={data.activeToday > 0 ? "green" : "muted"} flash={flashRows.has("TODAY")} freq={700} stripe />
-        <Row label="ENGINES"  value={data.engines} sub="WASM + ZK + PES" accent="cyan" freq={800} />
+        <Row label="ENGINES"  value={data.engines} sub="WASM + PES" accent="cyan" freq={800} />
         <Row label="SPEC"     value={data.attackSigs} sub="threat sigs indexed" accent={data.attackSigs > 0 ? "amber" : "muted"} freq={900} stripe />
         <Row label="CORE"     value={data.coreTests} accent="green" pulse freq={1000} />
       </div>

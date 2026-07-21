@@ -17,7 +17,7 @@ const pillars = [
     id: "PIL_02",
     title: "ZERO-KNOWLEDGE BY DEFAULT",
     subtitle: "Prove without revealing",
-    desc: "ZK-Presence proofs verify that an entity is physically present without exposing who they are, where they are, or how they move. Privacy is not an option. It is the protocol default.",
+    desc: "Continuity proofs verify that an entity is physically present without exposing who they are, where they are, or how they move. Privacy is not an option. It is the protocol default.",
     accent: "from-[#90c8ff]/60 to-[#90c8ff]/0",
     color: "rgba(144,200,255,0.35)",
   },
@@ -49,7 +49,7 @@ export default function VisionClient() {
   return (
     <ProtocolLayout
       refId="006" category="CIV_LAYER" title="VISION"
-      secLevel="CLASS_OMEGA" systemStatus="PROTOCOL_EXPANDING"
+      secLevel="v1.0-RC" systemStatus="PROTOCOL_EXPANDING"
     >
       <div className="space-y-24 md:space-y-36">
         {/* ── 0. 范式宣言：从 Identity 到 Continuity ── */}
@@ -171,7 +171,7 @@ export default function VisionClient() {
               ))}
             </div>
             <p className="text-white/30 text-[11px] tracking-[0.2em] uppercase">
-              — MyShape Protocol &middot; V1.0_GENESIS
+              — MyShape Protocol &middot; CPS-0001 v1.0-RC
             </p>
           </div>
         </section>

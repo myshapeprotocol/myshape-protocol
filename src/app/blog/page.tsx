@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 const BLOG_ITEMS = [
   { title: "What Is Proof of Continuity? The Missing Primitive for the Agent Economy", url: "https://www.myshape.com/blog/what-is-proof-of-continuity", date: "2026-07-03" },
   { title: "What Is Decentralized Identity? The 2026 Guide", url: "https://www.myshape.com/blog/what-is-decentralized-identity-2026", date: "2026-07-03" },
-  { title: "Zero-Knowledge Proofs Explained — What ZK Means for Digital Identity", url: "https://www.myshape.com/blog/zero-knowledge-proofs-digital-identity-explained", date: "2026-07-03" },
+  { title: "Continuity Verification Explained — What ZK Means for Digital Identity", url: "https://www.myshape.com/blog/zero-knowledge-proofs-digital-identity-explained", date: "2026-07-03" },
   { title: "Motion vs Biometrics — Why Your Face Is Not a Password", url: "https://www.myshape.com/blog/motion-vs-biometrics-why-your-face-is-not-a-password", date: "2026-07-03" },
   { title: "Proof of Personhood vs Proof of Continuity", url: "https://www.myshape.com/blog/proof-of-personhood-vs-proof-of-continuity", date: "2026-07-03" },
   { title: "AI Agent Identity — How Autonomous Agents Prove Who They Are", url: "https://www.myshape.com/blog/ai-agent-identity-how-autonomous-agents-prove-who-they-are", date: "2026-07-03" },

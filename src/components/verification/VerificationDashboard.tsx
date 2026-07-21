@@ -120,7 +120,7 @@ export default function VerificationDashboard() {
 
       <div className="vd-footer" onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-          {[{ label: "Engine", value: "v0.1.0 · 25/25 tests pass" }, { label: "Features", value: "K · A · J · J_spec (4/7 active)" }, { label: "Factors", value: "M(0.60) · D(0.25) · C(0.15)" }, { label: "Risk API", value: "LOW · MEDIUM · HIGH" }].map((s) => (
+          {[{ label: "Engine", value: "v0.1.0 · 192 tests pass" }, { label: "Features", value: "K · A · J · J_spec (4/7 active)" }, { label: "Factors", value: "M(0.60) · D(0.25) · C(0.15)" }, { label: "Risk API", value: "LOW · MEDIUM · HIGH" }].map((s) => (
             <div key={s.label} className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.6)]" />
               <span className="vd-footer-label">{s.label}</span>

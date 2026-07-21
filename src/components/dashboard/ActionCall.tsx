@@ -53,7 +53,7 @@ export default function ActionCall({ progress }: Props) {
             className="action-cta"
             onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
           >
-            ◈ Explore ZK Identity →
+            ◈ Explore Continuity Protocol →
           </Link>
         )}
         {stage === "SOVEREIGN" && (

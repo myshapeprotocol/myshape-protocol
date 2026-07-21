@@ -66,8 +66,8 @@ This model is not theoretical. Billions Network (formerly Polygon ID) enables ZK
   },
   {
     id: "zk-presence",
-    heading: "ZK-Presence: Proving You Are Human Without Surveillance",
-    content: `ZK-Presence is MyShape's application of zero-knowledge proofs to physical presence verification. The problem it solves is: how do you prove that a human is physically generating motion at this moment, without creating a surveillance system?
+    heading: "Continuity: Proving You Are Human Without Surveillance",
+    content: `Continuity is MyShape's application of continuity receipts to physical presence verification. The problem it solves is: how do you prove that a human is physically generating motion at this moment, without creating a surveillance system?
 
 The answer is a two-stage ZK architecture:
 
@@ -80,7 +80,7 @@ A ZK circuit takes the PES result as a private input and proves: "PES > threshol
 What the verifier learns: "A human was physically present at time T."
 What the verifier does NOT learn: who that human is, what they look like, or any raw motion data.
 
-This is the categorical difference between ZK-Presence and biometric verification. Biometrics say: "show us your body, and we'll verify you." ZK-Presence says: "prove you can move like a human, without ever showing us who you are."`,
+This is the categorical difference between Continuity and biometric verification. Biometrics say: "show us your body, and we'll verify you." Continuity says: "prove you can move like a human, without ever showing us who you are."`,
   },
   {
     id: "why-matters",
@@ -91,7 +91,7 @@ This is the categorical difference between ZK-Presence and biometric verificatio
 Generative AI can now produce convincing fake video, voice, and behavior. Static identity verification — a selfie, a document scan, a voice sample — is trivially defeated. ZK proofs add a layer that AI cannot bypass: the proof is generated locally from a physical signal that AI cannot forge. If the proof verifies, the signal was authentic — regardless of what the camera feed looked like.
 
 2. Regulatory Privacy
-GDPR, CCPA, and emerging AI regulations increasingly restrict the collection and storage of biometric data. ZK identity enables compliance by design: if you never collect the data, you cannot violate data protection laws. ZK-Presence is GDPR-compliant by construction.
+GDPR, CCPA, and emerging AI regulations increasingly restrict the collection and storage of biometric data. ZK identity enables compliance by design: if you never collect the data, you cannot violate data protection laws. Continuity is GDPR-compliant by construction.
 
 3. Cross-Platform Sovereignty
 As digital life fragments across chains and platforms, users need identity that is both verifiable and private. A ZK proof generated on your phone should be verifiable on Ethereum, on Solana, on a private enterprise network — without any platform learning who you are. ZK enables universal verifiability with zero data leakage.
@@ -127,7 +127,7 @@ export default function PostClient() {
             <p className="text-white/50 text-[14px] tracking-[0.06em] leading-[1.7] max-w-xl">
               What ZK means for digital identity in 2026. How zero-knowledge
               proofs enable verification without surveillance — and why
-              ZK-Presence is the future of privacy-first identity.
+              Continuity is the future of privacy-first identity.
             </p>
           </div>
 
@@ -197,7 +197,7 @@ export default function PostClient() {
           {/* CTA */}
           <div className="mt-12 p-8 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02] text-center space-y-4">
             <p className="text-white/55 text-[13px] tracking-[0.1em] uppercase">
-              Experience ZK-Presence
+              Experience Continuity
             </p>
             <p className="text-white/45 text-[12px] leading-[1.7] max-w-md mx-auto">
               See zero-knowledge identity verification in action. The Motion Demo

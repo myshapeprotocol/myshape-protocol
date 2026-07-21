@@ -12,12 +12,12 @@ interface ConceptNode {
 const NODES: ConceptNode[] = [
   { id: "IDENTITY_DATA", legacyText: "Static profile picture", myshapeText: "Dynamic particle data-body", statusCode: "0x01_DATA" },
   { id: "PRIVACY_LEVEL", legacyText: "Centralized credential store", myshapeText: "Sovereign local enclave", statusCode: "0x02_PRIV" },
-  { id: "AUTH_FACTOR", legacyText: "Physiological template", myshapeText: "Motion-signature (ZK-verified)", statusCode: "0x03_AUTH" },
+  { id: "AUTH_FACTOR", legacyText: "Physiological template", myshapeText: "Motion-signature (continuity-verified)", statusCode: "0x03_AUTH" },
   { id: "ACCESS_GATE", legacyText: "Username / password", myshapeText: "Presence proof", statusCode: "0x04_GATE" },
   { id: "RECOVERY_PATH", legacyText: "Account recovery email", myshapeText: "Identity mesh", statusCode: "0x05_RCVR" },
   { id: "VISUAL_FORM", legacyText: "2D static image", myshapeText: "3D wireframe anatomy", statusCode: "0x06_VSUL" },
   { id: "PORTABILITY", legacyText: "Fragmented across platforms", myshapeText: "Single identity vector", statusCode: "0x07_PORT" },
-  { id: "TRUST_MODEL", legacyText: "KYC / third-party trust", myshapeText: "ZK-capable (local proof)", statusCode: "0x08_TRST" },
+  { id: "TRUST_MODEL", legacyText: "KYC / third-party trust", myshapeText: "continuity-capable (local verification)", statusCode: "0x08_TRST" },
   { id: "REPLAY_DEFENSE", legacyText: "Static identity sample", myshapeText: "Continuous entropy sampling", statusCode: "0x09_RPLY" },
 ];
 

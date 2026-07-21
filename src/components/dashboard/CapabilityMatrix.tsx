@@ -12,9 +12,9 @@ const GATE_LABELS: Record<string, { title: string; body: string; lockedBody: str
     body: "Your cryptographic proof of founding-node status. Permanent, non-transferable, never offered again.",
     lockedBody: "Complete your first motion scan to mint your Genesis Key — the protocol's root entropy anchor.",
   },
-  "ZK Presence Proof": {
-    title: "ZK Identity",
-    body: "Generate zero-knowledge proofs of presence — prove you are human without revealing who you are.",
+  "Continuity Proof": {
+    title: "Continuity Identity",
+    body: "Generate continuity receipts of presence — prove you are human without revealing who you are.",
     lockedBody: "Reach Regular reputation and PULSE particle level to unlock privacy-preserving ZK proof generation.",
   },
   "Governance Voting": {

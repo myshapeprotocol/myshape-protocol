@@ -5,7 +5,7 @@ import BreadcrumbList from "@/components/seo/BreadcrumbList";
 export const metadata: Metadata = {
   title: "MyShape Protocol Glossary — Terms, Concepts & Definitions",
   description:
-    "Complete glossary of MyShape Protocol terminology: Motion-Signature, Presence Entropy Score, Data-Body, Continuity Layer, ZK-Presence, and 30+ more terms defined for AI and human readers.",
+    "Complete glossary of MyShape Protocol terminology: Motion-Signature, Presence Entropy Score, Data-Body, Continuity Layer, Continuity, and 30+ more terms defined for AI and human readers.",
   keywords: [
     "MyShape glossary",
     "motion-signature definition",

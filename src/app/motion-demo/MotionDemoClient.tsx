@@ -504,7 +504,7 @@ export default function MotionDemoClient() {
       setThreatVerdict(threat.overallVerdict === "human" ? "✓ HUMAN_PRESENCE_VERIFIED"
         : threat.overallVerdict === "suspicious" ? "⚠ SUSPICIOUS — FURTHER_CHECK_REQUIRED"
         : "✗ SYNTHETIC_DETECTED");
-      // ── Generate full ZK-Presence Proof ──
+      // ── Generate full Continuity Proof ──
       const quickHash = (s: string) => {
         let h = 0x6d797368;
         for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; }

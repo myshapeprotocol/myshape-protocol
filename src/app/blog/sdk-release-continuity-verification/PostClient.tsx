@@ -16,7 +16,7 @@ export default function PostClient() {
           <div className="text-[11px] text-white/25 tracking-[0.3em] uppercase mb-6">July 20, 2026 · SDK Release</div>
           <h1 className="text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-white leading-[1.1] mb-4">Continuity Verification Becomes Programmable</h1>
           <p className="text-white/35 text-lg mb-12 leading-relaxed">
-            The Continuity Lab releases @thecontinuitylab/myshape v0.1.2 — the first open SDK for programmable continuity verification.
+            The Continuity Lab releases @thecontinuitylab/myshape v0.2.0 — the first open SDK for programmable continuity verification.
           </p>
 
           <div className="prose prose-invert max-w-none space-y-8 text-white/50 text-[17px] leading-[1.85]">
@@ -89,7 +89,7 @@ const result = await verifyContinuity({
             <table className="w-full my-6 border-collapse text-sm">
               <thead><tr className="border-b border-white/10"><th className="text-left py-2 text-white/40">Milestone</th><th className="text-left py-2 text-white/40">Status</th></tr></thead>
               <tbody>
-                <tr className="border-b border-white/5"><td className="py-2">verifyContinuity() SDK</td><td className="py-2 text-[#3fb950]">v0.1.2</td></tr>
+                <tr className="border-b border-white/5"><td className="py-2">verifyContinuity() SDK</td><td className="py-2 text-[#3fb950]">v0.2.0</td></tr>
                 <tr className="border-b border-white/5"><td className="py-2">Challenge-response anti-spoof</td><td className="py-2 text-[#d29922]">v0.2.0 planned</td></tr>
                 <tr className="border-b border-white/5"><td className="py-2">Cross-device continuity</td><td className="py-2 text-[#d29922]">Design phase</td></tr>
                 <tr className="border-b border-white/5"><td className="py-2">External replication study</td><td className="py-2 text-[#64748B]">Planned</td></tr>

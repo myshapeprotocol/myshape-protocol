@@ -1,80 +1,56 @@
-/* ============================================================
-   MyShape Protocol — Roadmap Page
-   ============================================================ */
-
-/* ── Epoch card ── */
+/* MyShape Protocol — Roadmap Page */
 
 .rm-card {
   background: transparent;
-  transition:
-    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.4s, box-shadow 0.4s;
 }
 
 .rm-epoch-label {
-  color: rgba(144, 200, 255, 0.5);
-  font-size: 11px;
-  letter-spacing: 0.4em;
-  font-family: monospace;
-  flex-shrink: 0;
+  color: rgba(144, 200, 255, 0.6);
+  font-size: 12px; letter-spacing: 0.2em; font-family: monospace; flex-shrink: 0;
 }
 
 .rm-title {
   color: rgba(255, 255, 255, 0.85);
-  font-size: 1.125rem;
-  letter-spacing: 0.3em;
-  font-weight: 300;
-  text-transform: uppercase;
+  font-size: 1.125rem; letter-spacing: 0.15em; font-weight: 300; text-transform: uppercase;
   transition: color 0.35s;
 }
 .rm-card:hover .rm-title { color: #fff; }
 @media (min-width: 768px) { .rm-title { font-size: 1.25rem; } }
 
 .rm-timeframe {
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  transition: color 0.35s;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px; letter-spacing: 0.1em; transition: color 0.35s;
 }
-.rm-card:hover .rm-timeframe { color: rgba(255, 255, 255, 0.4); }
+.rm-card:hover .rm-timeframe { color: rgba(255, 255, 255, 0.6); }
 
 .rm-thesis {
-  color: rgba(144, 200, 255, 0.5);
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  transition: color 0.35s;
+  color: rgba(144, 200, 255, 0.6);
+  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.35s;
 }
 .rm-card:hover .rm-thesis { color: rgba(144, 200, 255, 0.85); }
 
 /* ── Milestones ── */
 
 .rm-milestone-check {
-  font-size: 11px;
-  flex-shrink: 0;
-  margin-top: 0.125rem;
-  transition: color 0.35s;
+  font-size: 12px; flex-shrink: 0; margin-top: 0.125rem; transition: color 0.35s;
 }
 
 .rm-milestone-label {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  line-height: 1.5;
-  text-transform: uppercase;
-  transition: color 0.35s;
+  font-size: 12px; letter-spacing: 0.08em; line-height: 1.5; text-transform: uppercase; transition: color 0.35s;
 }
 
-.rm-ms-done .rm-milestone-check { color: rgba(144,200,255,0.6); }
-.rm-ms-done .rm-milestone-label { color: rgba(255,255,255,0.55); }
-.rm-card:hover .rm-ms-done .rm-milestone-check { color: rgba(144,200,255,0.9); }
-.rm-card:hover .rm-ms-done .rm-milestone-label { color: rgba(255,255,255,0.85); }
+.rm-ms-done .rm-milestone-check { color: rgba(144,200,255,0.7); }
+.rm-ms-done .rm-milestone-label { color: rgba(255,255,255,0.6); }
+.rm-card:hover .rm-ms-done .rm-milestone-check { color: rgba(144,200,255,0.95); }
+.rm-card:hover .rm-ms-done .rm-milestone-label { color: rgba(255,255,255,0.9); }
 
-.rm-ms-current .rm-milestone-check { color: rgba(144,200,255,0.4); }
-.rm-ms-current .rm-milestone-label { color: rgba(255,255,255,0.4); }
-.rm-card:hover .rm-ms-current .rm-milestone-check { color: rgba(144,200,255,0.75); }
-.rm-card:hover .rm-ms-current .rm-milestone-label { color: rgba(255,255,255,0.7); }
+.rm-ms-current .rm-milestone-check { color: rgba(144,200,255,0.5); }
+.rm-ms-current .rm-milestone-label { color: rgba(255,255,255,0.5); }
+.rm-card:hover .rm-ms-current .rm-milestone-check { color: rgba(144,200,255,0.8); }
+.rm-card:hover .rm-ms-current .rm-milestone-label { color: rgba(255,255,255,0.75); }
 
-.rm-ms-pending .rm-milestone-check { color: rgba(255,255,255,0.1); }
-.rm-ms-pending .rm-milestone-label { color: rgba(255,255,255,0.15); }
-.rm-card:hover .rm-ms-pending .rm-milestone-check { color: rgba(255,255,255,0.3); }
-.rm-card:hover .rm-ms-pending .rm-milestone-label { color: rgba(255,255,255,0.4); }
+.rm-ms-pending .rm-milestone-check { color: rgba(255,255,255,0.25); }
+.rm-ms-pending .rm-milestone-label { color: rgba(255,255,255,0.3); }
+.rm-card:hover .rm-ms-pending .rm-milestone-check { color: rgba(255,255,255,0.45); }
+.rm-card:hover .rm-ms-pending .rm-milestone-label { color: rgba(255,255,255,0.55); }

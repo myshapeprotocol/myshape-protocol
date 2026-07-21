@@ -36,7 +36,7 @@ The W3C standard for this is the Decentralized Identifier (DID): a globally uniq
 9. Minimization — Disclosure of claims must be minimized
 10. Protection — The rights of users must be protected
 
-These principles have driven a decade of innovation in verifiable credentials, zero-knowledge proofs, and blockchain-anchored identity. But there is a gap in these principles that has only become apparent with the rise of autonomous AI agents: none of them address continuity.`,
+These principles have driven a decade of innovation in verifiable credentials, continuity receipts, and blockchain-anchored identity. But there is a gap in these principles that has only become apparent with the rise of autonomous AI agents: none of them address continuity.`,
   },
   {
     id: "key-players",
@@ -50,7 +50,7 @@ Proof of Personhood (PoP)
 Projects like Worldcoin (now World), BrightID, and Gitcoin Passport tackle a specific problem: proving that you are a unique human without revealing who you are. Worldcoin uses iris biometrics via a custom hardware Orb. BrightID uses a social graph verification party system. Gitcoin Passport aggregates multiple stamps (biometric, social, financial) into a single personhood score.
 
 Zero-Knowledge Identity
-Polygon ID (now Billions Network), Iden3, and zkSync's identity stack use zero-knowledge proofs to enable selective disclosure. You can prove "I am over 18" without revealing your birth date. You can prove "I am a citizen of this country" without revealing which country. ZK identity is privacy-preserving by construction.
+Polygon ID (now Billions Network), Iden3, and zkSync's identity stack use continuity receipts to enable selective disclosure. You can prove "I am over 18" without revealing your birth date. You can prove "I am a citizen of this country" without revealing which country. ZK identity is privacy-preserving by construction.
 
 Continuity Protocols (Emerging)
 MyShape Protocol and TRIP Protocol represent a new category: continuity-first identity. Rather than verifying a static claim or a one-time biometric, these protocols verify the trajectory of a subject across time. MyShape uses motion-signature as the continuity primitive; TRIP uses attestation-based session chaining. This is the frontier.`,

@@ -9,7 +9,7 @@ export default function HowItWorks() {
   return (
     <section className="w-full px-[6%] flex flex-col items-center bg-transparent relative"
       style={{ paddingTop: "clamp(4rem, 10vw, 10rem)", paddingBottom: "clamp(4rem, 10vw, 10rem)", fontFamily: "var(--font-geist-sans), sans-serif" }}>
-      <h2 className="sr-only">How MyShape Works — Motion-Native Zero-Knowledge Identity Pipeline</h2>
+      <h2 className="sr-only">How MyShape Works — Motion-Native Continuity Verification Pipeline</h2>
 
       <div className="max-w-[1200px] w-full">
         {/* 标题区 */}
@@ -35,7 +35,7 @@ export default function HowItWorks() {
           {[
             { step: "01", title: "LOCAL MOTION CAPTURE", desc: "On-device posture, balance, and micro-movement reading — processed locally." },
             { step: "02", title: "BEHAVIORAL ENCODING", desc: "Movement becomes a compact identity vector — non-corporeal and irreversible." },
-            { step: "03", title: "ZERO-KNOWLEDGE VERIFICATION", desc: "Prove identity without exposing raw data — portable across AI and onchain worlds." },
+            { step: "03", title: "CONTINUITY VERIFICATION", desc: "Prove identity without exposing raw data — portable across AI and onchain worlds." },
           ].map((s, i) => (
             <div key={s.step} className="step-container relative"
               onMouseEnter={() => playPipelineTick(i)}>

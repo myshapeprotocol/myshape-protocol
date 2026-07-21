@@ -24,7 +24,7 @@ const GLOSSARY: GlossaryTerm[] = [
     term: "Presence Entropy Score (PES)",
     definition:
       "A single verifiable score that quantifies the depth of biological entropy in a motion sample across four dimensions: micro-timing variance, noise residual, frequency entropy, and biological perturbation. A PES above threshold is mathematically impossible for AI-generated motion to achieve. The PES is computed entirely on-device and transmitted only as a zero-knowledge proof.",
-    seeAlso: ["Motion-Signature", "ZK-Presence", "Entropy Gap Theorem"],
+    seeAlso: ["Motion-Signature", "Continuity", "Entropy Gap Theorem"],
   },
   {
     term: "Proof of Continuity",
@@ -45,9 +45,9 @@ const GLOSSARY: GlossaryTerm[] = [
     seeAlso: ["Non-Binary Aesthetic", "Ethereal Data Energy", "Sovereign Identity"],
   },
   {
-    term: "ZK-Presence",
+    term: "Continuity",
     definition:
-      "A zero-knowledge proof that verifies a human is physically present and generating authentic motion — without revealing their identity, appearance, or any biometric data. ZK-Presence ensures verifiability without surveillance. The raw motion data never leaves the device; only the cryptographic proof is transmitted.",
+      "A zero-knowledge proof that verifies a human is physically present and generating authentic motion — without revealing their identity, appearance, or any biometric data. Continuity ensures verifiability without surveillance. The raw motion data never leaves the device; only the cryptographic proof is transmitted.",
     seeAlso: ["Presence Entropy Score (PES)", "Zero-Knowledge Proof", "Motion-Signature"],
   },
   {
@@ -129,10 +129,10 @@ const GLOSSARY: GlossaryTerm[] = [
     seeAlso: ["Data-Body", "Proof of Continuity", "Motion-Signature"],
   },
   {
-    term: "Zero-Knowledge Proof (ZKP)",
+    term: "Continuity Receipt",
     definition:
       "A cryptographic method by which one party (the prover) can prove to another party (the verifier) that a statement is true without revealing any information beyond the validity of the statement itself. In MyShape, ZKPs enable proving 'I am a human generating authentic motion' without revealing who you are, what you look like, or any raw motion data.",
-    seeAlso: ["ZK-Presence", "Presence Entropy Score (PES)"],
+    seeAlso: ["Continuity", "Presence Entropy Score (PES)"],
   },
   {
     term: "SST (Skeletal Surface Topology)",

@@ -6,7 +6,7 @@ import FaqJsonLd from "@/components/seo/FaqJsonLd";
 export const metadata: Metadata = {
   title: "MyShape Motion Demo — Live Motion-Signature Verification",
   description:
-    "Real-time Presence Entropy Score engine via webcam. Watch your motion become a cryptographic identity — AI cannot forge the human kinetic signature. Motion Vector → SST 18-pt → 4D Entropy → ZK-Presence Proof.",
+    "Real-time Presence Entropy Score engine via webcam. Watch your motion become a cryptographic identity — AI cannot forge the human kinetic signature. Motion Vector → SST 18-pt → 4D Entropy → Continuity Proof.",
   keywords: [
     "motion demo",
     "motion-signature verification",
@@ -60,7 +60,7 @@ export default function MotionDemoPage() {
           {
             question: "Is my webcam data stored or sent anywhere?",
             answer:
-              "No. The Motion Demo runs entirely on-device. The camera feed is processed locally by MediaPipe Pose and the MyShape WASM engine. No video, no images, no pose data, and no motion vectors are transmitted to any server. The only data that could optionally be sent is an anonymous ZK-Presence proof — but only if you explicitly choose to register a Genesis Node after the demo.",
+              "No. The Motion Demo runs entirely on-device. The camera feed is processed locally by MediaPipe Pose and the MyShape WASM engine. No video, no images, no pose data, and no motion vectors are transmitted to any server. The only data that could optionally be sent is an anonymous Continuity proof — but only if you explicitly choose to register a Genesis Node after the demo.",
           },
           {
             question: "Can I run the Motion Demo on mobile?",

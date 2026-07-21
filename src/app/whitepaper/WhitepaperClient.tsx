@@ -350,7 +350,7 @@ export default function WhitepaperClient() {
                 Engine v0.1.0
               </span>
               <span className="text-white/10">|</span>
-              <span className="text-white/25 text-[11px]">25/25 tests pass</span>
+              <span className="text-white/25 text-[11px]">192 tests pass</span>
               <span className="text-white/10">|</span>
               <span className="text-white/25 text-[11px]">Human—AI Gap: 0.3960</span>
             </div>

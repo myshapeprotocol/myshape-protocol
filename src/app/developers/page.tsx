@@ -65,15 +65,15 @@ export default function DevelopersPage() {
               "Yes. The core protocol specification, the WASM verification engine, and the SDK are open source under the MyShape Protocol License. The SST topology, motion vector format, and PES algorithm are fully documented in the technical specification. The reference implementation is available on GitHub at github.com/myshapeprotocol.",
           },
           {
-            question: "How do I verify a ZK-Presence proof on my backend?",
+            question: "How do I verify a Continuity proof on my backend?",
             answer:
-              "Each ZK-Presence proof (~250 bytes) can be verified in under 10ms using the verification key published in the protocol specification. The proof asserts: 'PES > threshold AND motion was captured within the last 5 seconds AND the motion exhibits biological entropy characteristics.' Your backend receives the proof, runs the verification algorithm, and receives a binary valid/invalid response — no motion data, no biometric data, no PII.",
+              "Each Continuity proof (~250 bytes) can be verified in under 10ms using the verification key published in the protocol specification. The proof asserts: 'PES > threshold AND motion was captured within the last 5 seconds AND the motion exhibits biological entropy characteristics.' Your backend receives the proof, runs the verification algorithm, and receives a binary valid/invalid response — no motion data, no biometric data, no PII.",
           },
         ]}
       />
       <SoftwareAppJsonLd
         name="MyShape Protocol SDK"
-        description="Integrate sovereign identity verification into any application. Motion-signature verification engine, ZK-Presence proof validation, and protocol node API — all open source."
+        description="Integrate sovereign identity verification into any application. Motion-signature verification engine, Continuity proof validation, and protocol node API — all open source."
         applicationCategory="DeveloperApplication"
         operatingSystem="Web, Node.js, WASM"
         offersPrice="0"

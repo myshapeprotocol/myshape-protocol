@@ -9,7 +9,7 @@ const PIPELINE = [
   { step: "02", name: "Motion", desc: "SST 18-point topology maps 33→18 key joints. Temporal window captures 128-dim motion vector across 4 feature groups: kinematics, acceleration, jerk, jerk spectrum.", output: "128-dim Vector" },
   { step: "03", name: "Encoding", desc: "4-dimensional entropy scoring: micro-timing variance, noise residual, frequency entropy, biological perturbation. AI-generated motion fails here — the entropy gap is mathematically provable.", output: "PES Score" },
   { step: "04", name: "Vector", desc: "Motion geometry distilled into a compact, non-replicable identity vector. Poseidon-hashed. Non-invertible — you cannot reconstruct motion data from the hash.", output: "Identity Vector" },
-  { step: "05", name: "Proof", desc: "PoP + MP + EP → ZK-Presence composite proof. < 512 bytes. Verifiable in < 1ms. Proves presence without exposing identity or motion data.", output: "ZK-Proof" },
+  { step: "05", name: "Proof", desc: "PoP + MP + EP → Continuity composite proof. < 512 bytes. Verifiable in < 1ms. Proves presence without exposing identity or motion data.", output: "ZK-Proof" },
   { step: "06", name: "Agent", desc: "Cross-species verification. Human and AI identities coexist in one protocol. Presence Receipt issued — a cryptographic record that an entity proved presence at a specific time.", output: "Presence Receipt" },
 ];
 
@@ -152,9 +152,9 @@ export default function ArchitectureClient() {
             <div className="border p-4 md:p-5 overflow-x-auto font-mono arch-code-block"
               onMouseEnter={() => playTick(500, "sine", 0.04, 0.01)}>
               <pre className="text-[#90c8ff]/70 text-[11px] md:text-[11px] leading-relaxed whitespace-pre-wrap">
-{`// ZK-Presence composite proof
+{`// Continuity composite proof
 {
-  "proof_type": "ZK-Presence",
+  "proof_type": "Continuity",
   "pes_score": 0.94,
   "pes_components": { "timing": 0.91, "noise": 0.96, "frequency": 0.89, "biological": 0.97 },
   "timestamp": 1719000000,

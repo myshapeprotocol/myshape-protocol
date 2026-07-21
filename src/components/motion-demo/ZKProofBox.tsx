@@ -7,11 +7,11 @@ interface ZKProofBoxProps {
   ep: string;
 }
 
-/** ZK-Presence proof hash display with sub-proof breakdown. */
+/** Continuity proof hash display with sub-proof breakdown. */
 export default function ZKProofBox({ zkp, pop, mp, ep }: ZKProofBoxProps) {
   return (
     <div className="mt-4 p-3 border border-[#90c8ff]/20 bg-[#90c8ff]/[0.03] space-y-2">
-      <div className="text-[#90c8ff]/50 text-[11px] tracking-[0.3em] uppercase">ZK-Presence_Proof</div>
+      <div className="text-[#90c8ff]/50 text-[11px] tracking-[0.3em] uppercase">Continuity_Proof</div>
       <div className="text-[#90c8ff]/70 text-[11px] font-mono break-all leading-relaxed motion-demo__proof-hash">
         {zkp}
       </div>

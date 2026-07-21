@@ -51,7 +51,7 @@ export default function Capabilities() {
   const statusLines = [
     "[ DECRYPTING_PRIMITIVE_SYSTEM_SPEC ]",
     "[ // AUTHENTICATING_LOCAL_ANCHOR ]",
-    "[ // ACCESS_GRANTED_CLASS_OMEGA_DECRYPT_COMPLETE ]",
+    "[ // ACCESS_GRANTED_v1.0-RC_DECRYPT_COMPLETE ]",
   ];
 
   const handleDecrypt = useCallback(() => {
@@ -130,7 +130,7 @@ export default function Capabilities() {
           line3="Unforgeable. Uncopyable. Irreversible."
           params={{ MOTION_HASH: "SEALED", FORGE_RISK: "NULL" }} />
         <CapabilityCard index="02" side="center" motionType="privacy"
-          title="ZK-Privacy" line1="Protect your geometry with zero-knowledge proofs."
+          title="Privacy-Preserving" line1="Protect your geometry with continuity receipts."
           line2="Verification without exposure. Data never leaves the enclave."
           line3="EXPOSURE: ZERO. PRIVACY: ABSOLUTE."
           params={{ EXPOSURE: "ZERO", ZK_STATE: "ACTIVE" }} />

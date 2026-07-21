@@ -48,7 +48,7 @@ A proof that "this agent's actions are authorized by this continuously-present h
 
 The architecture is symmetric: human nodes and agent nodes exist in the same identity mesh, using the same protocol primitives, but verified through different mechanisms.
 
-Human nodes: verified through motion-signature (proof of biological presence). The 128-dimensional motion vector, PES scoring, and ZK-Presence proof ensure that only a physically present human can initialize or verify a human node.
+Human nodes: verified through motion-signature (proof of biological presence). The 128-dimensional motion vector, PES scoring, and Continuity proof ensure that only a physically present human can initialize or verify a human node.
 
 Agent nodes: registered through cryptographic declaration (proof of deployment provenance). The agent's public key is bound to the human principal's continuity chain. The agent inherits the human's continuity guarantees — but cannot spoof the human's motion-signature.
 

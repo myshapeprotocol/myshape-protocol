@@ -94,7 +94,7 @@ export default function SpecsClient() {
             </ul>
             <p className="text-[#90c8ff]/30 text-[11px]">
               Full governance specification:{" "}
-              <a href="https://github.com/myshapeprotocol/docs/genesis-governance.md" className="text-[#90c8ff]/50 hover:text-[#90c8ff]/80 underline">
+              <a href="https://github.com/myshapeprotocol/myshape-protocol" className="text-[#90c8ff]/50 hover:text-[#90c8ff]/80 underline">
                 genesis-governance.md
               </a>
             </p>

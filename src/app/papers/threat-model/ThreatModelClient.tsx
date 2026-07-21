@@ -19,7 +19,7 @@ const COST_MODEL = [
 
 const DEFENSES = [
   { layer: "L5 — Identity Layer", mechanism: "Sybil resistance via PES uniqueness. One presence → one identity.", boundary: "Application Boundary — apps only see Presence Receipt" },
-  { layer: "L4 — Proof Layer", mechanism: "ZK-Presence: PoP + MP + EP. Verifiable without exposing motion data.", boundary: "Proof Boundary — only FV_hash, PES, ZKP leave device" },
+  { layer: "L4 — Proof Layer", mechanism: "Continuity: PoP + MP + EP. Verifiable without exposing motion data.", boundary: "Proof Boundary — only FV_hash, PES, ZKP leave device" },
   { layer: "L3 — Integrity Layer", mechanism: "PES 4-dimensional entropy. Anti-replay. Anti-synthesis. Cross-joint correlation.", boundary: "Proof Boundary — raw data never leaves device" },
   { layer: "L2 — Geometry Layer", mechanism: "SST 18-point normalization. Device-agnostic. Manifold projection — non-invertible.", boundary: "Proof Boundary" },
   { layer: "L1 — Capture Layer", mechanism: "Raw sensor input processed on-device. Nothing stored. Nothing uploaded.", boundary: "Device Boundary — raw data never leaves" },
