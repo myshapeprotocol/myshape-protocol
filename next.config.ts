@@ -49,6 +49,13 @@ const nextConfig: NextConfig = {
   // Allow phone testing in dev
   allowedDevOrigins: IS_PROD ? undefined : ["192.168.0.105", "192.168.0.100"],
 
+  // ── Redirects ──
+  async redirects() {
+    return [
+      { source: "/research/discovery-survey", destination: "/lab/discovery-survey", permanent: true },
+    ];
+  },
+
   // ── Security headers applied to all routes ──
   async headers() {
     return [
