@@ -50,6 +50,9 @@ export default function ResearchClient() {
           </div>
           <h1 className="research-tagline">Investigating whether <span>continuity</span> can become a verifiable property of digital existence.</h1>
           <p className="research-subtitle">We are not building a product. We are investigating a question.</p>
+          <p className="mt-3 text-white/20 text-[11px] tracking-[0.1em] font-mono">
+            Research by <a href="https://thecontinuitylab.org" className="text-[#90c8ff]/35 hover:text-[#90c8ff]/55 transition-colors">The Continuity Lab</a> · MyShape is the first protocol implementation
+          </p>
         </section>
 
         {/* Quick Links */}

@@ -56,6 +56,11 @@ export default function LabPage() {
           Today's internet can verify identity. It cannot verify continuity — the property that a digital subject is the same physically embodied entity across time. The Continuity Lab explores whether continuity can become a measurable property rather than an assumption.
         </p>
 
+        <p className="fade-in fade-in-3"
+          style={{ fontSize: 12, color: "rgba(96,165,250,0.45)", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 36px" }}>
+          The Continuity Lab is the research organization behind the <a href="https://www.myshape.com/research/notes/008-continuity-protocol-core" style={{ color: "rgba(96,165,250,0.55)", textDecoration: "underline" }}>Continuity Protocol (CPS-0001)</a>. MyShape is the first protocol implementation, maintained separately.
+        </p>
+
         {/* Nav links */}
         <div className="fade-in fade-in-3" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a href="https://github.com/myshapeprotocol" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>GitHub</a>
