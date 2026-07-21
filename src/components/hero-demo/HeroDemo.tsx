@@ -657,13 +657,13 @@ export default function HeroDemo() {
         </div>
 
         <div className="hero-demo-ctas">
-          <Link href="/research" className="hero-demo-cta primary"
+          <Link href="/verify" className="hero-demo-cta primary"
             onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
             itemProp="potentialAction" itemScope itemType="https://schema.org/EntryPoint">
-            <meta itemProp="name" content="Initialize Genesis Cohort" />
-            <meta itemProp="description" content="Begin the Genesis Ritual to initialize your sovereign data-body and join the inaugural group of identity nodes." />
-            <meta itemProp="actionApplication" content="MyShape Protocol Genesis Initialization" />
-            <span className="hero-demo-cta-label">INITIALIZE_GENESIS</span>
+            <meta itemProp="name" content="Verify Continuity" />
+            <meta itemProp="description" content="Verify your physical continuity — move your phone naturally for 8 seconds and receive a CPS-0001 Continuity Receipt." />
+            <meta itemProp="actionApplication" content="MyShape Protocol Continuity Verification" />
+            <span className="hero-demo-cta-label">VERIFY_CONTINUITY</span>
           </Link>
         </div>
       </div>
