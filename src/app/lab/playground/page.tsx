@@ -152,11 +152,11 @@ export default function PlaygroundPage() {
         </details>
 
         {/* Footer */}
-        <div style={{ textAlign: "center", fontSize: 11, color: "rgba(96,165,250,0.3)" }}>
-          <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ color: "inherit" }}>npm install @thecontinuitylab/myshape</a>
-          <span style={{ margin: "0 8px" }}>·</span>
-          <a href="/lab" style={{ color: "inherit" }}>The Continuity Lab</a>
+        <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
+          <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.5)", textDecoration: "none", letterSpacing: "0.05em" }}>npm install @thecontinuitylab/myshape →</a>
+          <a href="https://thecontinuitylab.org/lab" style={{ fontSize: 12, color: "rgba(212,175,55,0.5)", textDecoration: "none", letterSpacing: "0.05em" }}>The Continuity Lab →</a>
         </div>
+        <div style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.15)", marginTop: 12 }}>Run this playground with real IMU data at myshape.com/verify</div>
       </div>
     </div>
   );
