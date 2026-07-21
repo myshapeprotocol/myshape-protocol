@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SurveyClient from "@/app/research/discovery-survey/SurveyClient";
+import SurveyClient from "./SurveyClient";
 
 export const metadata: Metadata = {
   title: "Discovery Survey — The Continuity Lab",
