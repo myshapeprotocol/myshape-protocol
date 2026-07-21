@@ -80,9 +80,10 @@ export default function SurveyClient() {
         <div style={{ textAlign: "center", maxWidth: 400 }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>✓</div>
           <h2 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 8px", color: "#60A5FA" }}>Thank you</h2>
-          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7, marginBottom: 24 }}>
             Your response helps us understand whether this problem is real — or isn't.
           </p>
+          <a href="/lab" style={{ display: "inline-block", padding: "10px 28px", border: "1px solid rgba(96,165,250,0.3)", color: "rgba(96,165,250,0.7)", fontSize: 13, textDecoration: "none", borderRadius: 4 }}>← Back to The Continuity Lab</a>
         </div>
       </div>
     );
