@@ -140,6 +140,9 @@ coverage/
 # Research CLI v0.1 — superseded by src/lib/evidence/, samples are reference data
 /myshape-cli/
 
+# IP deposit archives — NEVER commit to public repo
+*.zip
+
 # Internal screenshots / binary docs
 /docs/*.png
 /docs/*.jpg
