@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 // ============================================================
 // MyShape Protocol — ZK Circuit Engine
 // Pedersen Commitments + Schnorr-style Zero-Knowledge Proofs
@@ -167,6 +168,7 @@ export interface ZKPresenceResult {
   presence_hash: string;
 }
 
+/** @deprecated Use CPS-0001 verifyContinuity() instead. */
 export function generateZKPresenceProof(
   presenceData: string,   // e.g., PES + MV_Hash
   identityHint: string,    // e.g., device_salt
@@ -198,6 +200,7 @@ export function generateZKPresenceProof(
  * The verifier only needs the commitment and the proof —
  * they never learn the actual presence data or blinding factor.
  */
+/** @deprecated Use CPS-0001 verifyReceipt() instead. */
 export function verifyExternalZKPresence(
   commitment: PedersenCommitment,
   proof: SchnorrProof,

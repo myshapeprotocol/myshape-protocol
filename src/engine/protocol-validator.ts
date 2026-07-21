@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 // ============================================================
 // MyShape Protocol — Protocol Validator (§9.4)
 // Implements all six verification rules for Presence Transactions.

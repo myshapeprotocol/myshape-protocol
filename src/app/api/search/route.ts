@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 import { NextResponse } from "next/server";
 import { POSTS } from "@/app/blog/posts";
 

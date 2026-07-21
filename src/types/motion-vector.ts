@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 // ============================================================
 // MyShape Protocol — Motion Vector Type System v1.0
 // Derived from: Technical Specification v1.0 §1–§6

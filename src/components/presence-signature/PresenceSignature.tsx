@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 "use client";
 import React from "react";
 import { playTick } from "@/utils/useAudioTick";

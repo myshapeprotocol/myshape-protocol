@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 // ============================================================
 // MyShape Protocol — Presence Reputation Engine (§14-16)
 //

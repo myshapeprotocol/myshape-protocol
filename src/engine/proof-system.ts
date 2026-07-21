@@ -1,3 +1,4 @@
+/** @experimental ZK subsystem — under active research. Not production-grade. */
 // ============================================================
 // MyShape Protocol — Proof System v1.0
 // Derived from: Technical Specification v1.0 §6
@@ -155,6 +156,7 @@ export function generateEntropyProof(
 
 // ── §6.5 — Generate ZK-Presence Proof ──
 
+/** @deprecated Use CPS-0001 buildReceipt() instead. */
 export function generateZKPresenceProof(
   pop: PresenceProof,
   mp: MotionProof,
@@ -186,6 +188,7 @@ export function generateZKPresenceProof(
 
 // ── §6.8 — Verify ZK-Presence Proof ──
 
+/** @deprecated Use CPS-0001 verifyReceipt() instead. */
 export function verifyZKPresenceProof(
   proof: ZKPresenceProof,
   options: { pes_min?: number; max_age_seconds?: number } = {},
@@ -235,6 +238,7 @@ export interface ProofGenerationInput {
   deviceSalt?: string;
 }
 
+/** @deprecated Use CPS-0001 buildReceipt() instead. */
 export function generateFullProof(input: ProofGenerationInput): ZKPresenceProof {
   const timestamp = Math.floor(Date.now() / 1000);
 
