@@ -228,3 +228,46 @@ export function createReceiptId(): string {
     hex.slice(19, 31),
   ].join("-");
 }
+
+export async function computePayloadDigest(payload: Record<string, unknown>): Promise<string> {
+  return sha256(JSON.stringify(payload));
+}
+
+export function buildAssertions(engineConfidences: number[]): AssertionSet {
+  const avg = engineConfidences.length > 0
+    ? engineConfidences.reduce((a, b) => a + b, 0) / engineConfidences.length
+    : 0;
+  const hasEvidence = engineConfidences.length > 0;
+
+  return {
+    observationOccurred: { value: hasEvidence, confidence: hasEvidence ? 0.95 : 0 },
+    continuityMaintained: { value: avg >= 0.5, confidence: avg },
+    receiptIntegrity: { value: true, confidence: 1.0 },
+  };
+}
+
+export function buildReceipt(params: {
+  evidence: EvidenceBlock[];
+  interval: ContinuityInterval;
+  subject: SubjectRef;
+  issuer: IssuerIdentity;
+  previousReceiptHash?: string | null;
+  verdict?: Verdict;
+}): Omit<ContinuityReceipt, "signature"> {
+  const confidences = params.evidence.map((e) => e.confidence);
+  return {
+    protocolVersion: "1.0",
+    receiptId: createReceiptId(),
+    interval: params.interval,
+    subject: params.subject,
+    evidence: params.evidence,
+    assertions: buildAssertions(confidences),
+    verdict: params.verdict,
+    previousReceiptHash: params.previousReceiptHash ?? null,
+    references: [],
+    issuer: params.issuer,
+    expiresAt: params.interval.end
+      ? new Date(new Date(params.interval.end).getTime() + 5 * 60 * 1000).toISOString()
+      : undefined,
+  };
+}
