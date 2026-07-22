@@ -328,13 +328,16 @@
     opacity: 0.45;
   }
 
-  /* 场景字幕 — 粒子下方固定区域 */
+  /* 场景字幕 — fixed to bottom, right above CTAs */
   .hero-demo-subtitle {
-    bottom: 8px;
+    position: absolute;
+    top: auto;
+    bottom: 56px;
     max-width: 90vw;
     gap: 4px;
     flex-wrap: wrap;
     justify-content: center;
+    align-self: center;
   }
 
   /* 场景指示点 — 移动端隐藏 */
