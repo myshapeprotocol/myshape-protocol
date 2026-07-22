@@ -19,9 +19,9 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL("https://www.myshape.com"),
-  title: "MyShape Protocol — Presence is the New Identity",
+  title: "MyShape Protocol — CPS-0001 · Engine-Independent Continuity Verification",
   description:
-    "The identity layer for the simulation age. MyShape transforms human motion into verifiable presence — sovereign, zero-knowledge, cross-platform. Human and AI identities coexist in one protocol.",
+    "CPS-0001 defines the Continuity Receipt — an open protocol object for verifying that sensor evidence is continuous, unbroken, and untampered. Engine-independent. Implementation-agnostic. Research by The Continuity Lab.",
   icons: {
     icon: [
       { url: "/identity-sigil.jpg", sizes: "256x256", type: "image/jpeg" },
@@ -30,26 +30,20 @@ export const metadata = {
     ],
   },
   openGraph: {
-    title: "MyShape Protocol — Presence is the New Identity",
+    title: "MyShape Protocol — CPS-0001 · Engine-Independent Continuity Verification",
     description:
-      "The identity layer for the simulation age. Motion-signature verification, particle aesthetics, and zero-knowledge sovereignty. Human and AI identities coexist in one protocol.",
+      "CPS-0001 defines the Continuity Receipt — an open protocol object for verifiable continuity assertions. Engine-independent. Implementation-agnostic.",
     url: "https://www.myshape.com",
     siteName: "MyShape Protocol",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Protocol — Presence is the New Identity",
+    title: "MyShape Protocol — CPS-0001 · Engine-Independent Continuity Verification",
     description:
-      "The identity layer for the simulation age. Motion-signature verification, zero-knowledge presence, sovereign identity.",
+      "CPS-0001 defines the Continuity Receipt — an open protocol object for verifiable continuity assertions.",
     images: ["/og-image.png"],
   },
 };
