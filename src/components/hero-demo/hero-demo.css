@@ -204,6 +204,10 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+/* Hide motion CTAs on desktop — they require a phone */
+@media (min-width: 768px) {
+  .hero-demo-ctas { display: none !important; }
+}
 
 .hero-demo-cta {
   position: relative;
