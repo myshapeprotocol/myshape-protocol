@@ -68,6 +68,7 @@ export default function LabPage() {
           <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>npm</a>
           <a href="https://www.myshape.com/research" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>Research Hub</a>
           <a href="/lab/playground" style={{ fontSize: 12, color: "rgba(34,211,238,0.55)", textDecoration: "none", letterSpacing: "0.06em" }}>Playground ▸</a>
+          <a href="/lab/contribute" style={{ fontSize: 12, color: "rgba(52,211,153,0.55)", textDecoration: "none", letterSpacing: "0.06em" }}>Contribute Data ▸</a>
           <a href="/lab/discovery-survey" style={{ fontSize: 12, color: "rgba(212,175,55,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>Discovery Survey ▸</a>
         </div>
       </div>
