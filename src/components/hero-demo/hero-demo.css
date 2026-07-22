@@ -328,16 +328,17 @@
     opacity: 0.45;
   }
 
-  /* 场景字幕 — fixed to bottom, right above CTAs */
+  /* 场景字幕 — 按钮上方，居中 */
   .hero-demo-subtitle {
     position: absolute;
     top: auto;
-    bottom: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 105px;
     max-width: 90vw;
     gap: 4px;
     flex-wrap: wrap;
     justify-content: center;
-    align-self: center;
   }
 
   /* 场景指示点 — 移动端隐藏 */
@@ -361,20 +362,18 @@
     height: 8px;
   }
 
-  /* CTA — 下半屏，横排 */
+  /* CTA — 下半屏，堆叠 */
   .hero-demo-ctas {
     bottom: 10px;
     gap: 8px;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
   }
 
   .hero-demo-cta {
-    width: auto;
-    max-width: none;
-    padding: 10px 18px;
-    font-size: 11px;
-    letter-spacing: 0.15em;
+    width: 72vw;
+    max-width: 260px;
+    padding: 13px 0;
     font-size: 11px;
     letter-spacing: 0.3em;
     text-align: center;
