@@ -28,13 +28,13 @@ export default function HomeClient() {
           </p>
         </div>
 
-        {/* Mobile: CTA */}
+        {/* Mobile: Contribute CTA */}
         <div className="relative z-10 -mt-6 pb-12 md:hidden flex flex-col items-center gap-4 px-6">
           <a
-            href="/verify"
-            className="px-8 py-3 border border-[#60A5FA]/25 text-[#60A5FA]/60 text-[11px] tracking-[0.2em] uppercase font-mono hover:bg-[#60A5FA]/8 hover:border-[#60A5FA]/40 transition-all"
+            href="/lab/contribute"
+            className="px-8 py-3 border border-[#34D399]/25 text-[#34D399]/60 text-[11px] tracking-[0.2em] uppercase font-mono hover:bg-[#34D399]/8 hover:border-[#34D399]/40 transition-all"
           >
-            Verify Continuity →
+            Contribute Data →
           </a>
         </div>
 
