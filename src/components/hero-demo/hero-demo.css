@@ -294,6 +294,7 @@
     height: 100dvh;
     min-height: 100dvh;
     max-height: 100dvh;
+    overflow: hidden;
   }
 
   /* 粒子团缩小 — 限制 canvas 在屏幕中上部 */
