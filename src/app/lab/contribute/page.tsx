@@ -2,18 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 
-type Mode = "motion" | "challenge" | "dual";
-
-const MODES: { id: Mode; label: string; desc: string; time: string }[] = [
-  { id: "motion", label: "Motion Check", desc: "Move naturally for 8 seconds. Captures IMU data.", time: "8s" },
-  { id: "challenge", label: "Challenge", desc: "Respond to 3 randomized gyroscope prompts.", time: "15s" },
-  { id: "dual", label: "Dual Engine", desc: "Passive presence + active challenge in sequence.", time: "30s" },
-];
-
 export default function ContributePage() {
   const [isMobile, setIsMobile] = useState(false);
-  const [mode, setMode] = useState<Mode>("motion");
-  const [phase, setPhase] = useState<"idle" | "go" | "done">("idle");
+  const [phase, setPhase] = useState<"idle" | "countdown" | "recording" | "done">("idle");
   const [msg, setMsg] = useState("");
   const [verdict, setVerdict] = useState("");
   const [confidence, setConfidence] = useState(0);
@@ -23,28 +14,22 @@ export default function ContributePage() {
   const ref = useRef<Array<{ t: number; ax: number; ay: number; az: number }>>([]);
   const capRef = useRef(false);
 
-  useEffect(() => {
-    setIsMobile(/Mobi|Android|iPhone/i.test(navigator.userAgent));
-  }, []);
+  useEffect(() => { setIsMobile(/Mobi|Android|iPhone/i.test(navigator.userAgent)); }, []);
 
   async function go() {
     setError(""); setVerdict(""); setConfidence(0); setDetails([]);
 
     if (typeof (DeviceMotionEvent as any).requestPermission === "function") {
-      try {
-        const p = await (DeviceMotionEvent as any).requestPermission();
-        if (p !== "granted") { setError("Motion access needed."); return; }
-      } catch { setError("Permission error."); return; }
+      try { if (await (DeviceMotionEvent as any).requestPermission() !== "granted") { setError("Motion access needed."); return; } }
+      catch { setError("Permission error."); return; }
     }
     if (!("DeviceMotionEvent" in window)) { setError("No motion sensor."); return; }
 
-    setPhase("go");
-    setMsg("3");
-    await delay(1000); setMsg("2");
-    await delay(1000); setMsg("1");
-    await delay(1000);
+    setPhase("countdown");
+    setMsg("3"); await delay(1000);
+    setMsg("2"); await delay(1000);
+    setMsg("1"); await delay(1000);
 
-    const startTime = new Date();
     ref.current = [];
     capRef.current = true;
     const t0 = performance.now();
@@ -54,9 +39,9 @@ export default function ContributePage() {
     };
     window.addEventListener("devicemotion", handler);
 
-    const duration = mode === "motion" ? 8000 : mode === "challenge" ? 15000 : 30000;
-    setMsg("Recording...");
-    await delay(duration);
+    setPhase("recording");
+    setMsg("Move naturally...");
+    await delay(8000);
 
     capRef.current = false;
     window.removeEventListener("devicemotion", handler);
@@ -76,13 +61,12 @@ export default function ContributePage() {
     const sc = Math.min(cv / 0.25, 1) * 0.5 + Math.min(mvv / 1.5, 1) * 0.5;
     const ok = sc > 0.25;
 
-    setVerdict(ok ? "Physical motion detected ✓" : "Weak signal");
+    setVerdict(ok ? "Physical motion detected" : "Weak signal");
     setConfidence(Math.round(sc * 100));
     setDetails([cv > 0.08 ? "✓ Natural timing" : "✗ Too regular", mvv > 0.25 ? "✓ Good intensity" : "✗ Too weak"]);
 
-    // Save to research
     try {
-      await fetch("/api/pe001/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: "lab-" + Date.now(), imuSamples: data, mode }) });
+      await fetch("/api/pe001/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: "lab-" + Date.now(), imuSamples: data }) });
     } catch { /* ok */ }
     setPhase("done");
   }
@@ -96,7 +80,7 @@ export default function ContributePage() {
           <div style={{ fontSize: 40, marginBottom: 16 }}>📱</div>
           <h2 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 12px", color: "#60A5FA" }}>Open on your phone</h2>
           <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7 }}>
-            These experiments use motion sensors — only available on mobile devices.<br /><br />
+            This experiment uses motion sensors — only available on mobile devices.<br /><br />
             <span style={{ color: "#60A5FA", fontFamily: "monospace", fontSize: 12 }}>thecontinuitylab.org/lab/contribute</span>
           </p>
         </div>
@@ -105,54 +89,49 @@ export default function ContributePage() {
   }
 
   return (
-    <div style={{ minHeight: "100dvh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, sans-serif", padding: "24px 20px 60px", maxWidth: 420, margin: "0 auto" }}>
-      <div style={{ textAlign: "center", marginBottom: 32 }}>
-        <div style={{ fontSize: 12, color: "#60A5FA", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 4 }}>Contribute Data</div>
-        <p style={{ fontSize: 12, color: "#64748B", margin: 0 }}>Every run goes to the open Continuity Dataset</p>
-      </div>
+    <div style={{ minHeight: "100dvh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, textAlign: "center" }}>
+      <div style={{ maxWidth: 380, width: "100%" }}>
 
-      {/* Mode selector */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 24, justifyContent: "center", flexWrap: "wrap" }}>
-        {MODES.map((m) => (
-          <button key={m.id} onClick={() => { setMode(m.id); setPhase("idle"); }}
-            style={{ padding: "8px 14px", fontSize: 11, border: `1px solid ${mode === m.id ? "rgba(96,165,250,0.4)" : "rgba(255,255,255,0.1)"}`, borderRadius: 6, background: mode === m.id ? "rgba(96,165,250,0.08)" : "transparent", color: mode === m.id ? "#60A5FA" : "rgba(255,255,255,0.5)", cursor: "pointer", letterSpacing: "0.04em" }}>{m.label} · {m.time}</button>
-        ))}
-      </div>
-      <p style={{ fontSize: 11, color: "#64748B", textAlign: "center", marginBottom: 24 }}>{MODES.find(m => m.id === mode)?.desc}</p>
-
-      {/* Main area */}
-      <div style={{ textAlign: "center" }}>
         {phase === "idle" && (
           <>
+            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "radial-gradient(circle, rgba(52,211,153,0.15) 0%, transparent 70%)", margin: "0 auto 24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 10px rgba(52,211,153,0.6)" }} />
+            </div>
+            <h1 style={{ fontSize: 24, fontWeight: 300, margin: "0 0 8px" }}>Contribute Data</h1>
+            <p style={{ fontSize: 13, color: "#94A3B8", margin: "0 0 8px", lineHeight: 1.6 }}>
+              Move your phone naturally for 8 seconds.<br />Your data becomes part of the open Continuity Dataset.
+            </p>
+            <p style={{ fontSize: 11, color: "#64748B", margin: "0 0 32px" }}>Anonymous · No personal data · HuggingFace</p>
             {error && <div style={{ fontSize: 12, color: "#f85149", marginBottom: 16, padding: 10, background: "rgba(248,81,73,0.06)", border: "1px solid rgba(248,81,73,0.2)", borderRadius: 6 }}>{error}</div>}
-            <button onClick={go} style={{ width: "100%", padding: "18px 0", fontSize: 17, color: "#060B14", background: "#60A5FA", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 500 }}>
-              Start {MODES.find(m => m.id === mode)?.label}
+            <button onClick={go} style={{ width: "100%", padding: "18px 0", fontSize: 17, color: "#060B14", background: "#34D399", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 500 }}>
+              Start
             </button>
+            <div style={{ marginTop: 36, display: "flex", justifyContent: "center", gap: 24, fontSize: 11, color: "#64748B" }}>
+              <span><span style={{ color: "#34D399" }}>576</span> runs</span>
+              <span><span style={{ color: "#34D399" }}>~81</span> contributors</span>
+            </div>
           </>
         )}
 
-        {phase === "go" && (
-          <div style={{ fontSize: msg === "Recording..." ? 18 : 64, fontWeight: 200, color: "#60A5FA", padding: msg === "Recording..." ? 40 : 56 }}>
+        {(phase === "countdown" || phase === "recording") && (
+          <div style={{ fontSize: phase === "recording" ? 18 : 64, fontWeight: 200, color: "#34D399", padding: phase === "recording" ? 40 : 56 }}>
             {msg}
           </div>
         )}
 
         {phase === "done" && (
           <>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{verdict.startsWith("Physical") ? "✓" : "?"}</div>
-            <div style={{ fontSize: 18, fontWeight: 300, color: verdict.startsWith("Physical") ? "#34D399" : "#d29922", marginBottom: 4 }}>{verdict}</div>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{verdict === "Physical motion detected" ? "✓" : "?"}</div>
+            <div style={{ fontSize: 18, fontWeight: 300, color: verdict === "Physical motion detected" ? "#34D399" : "#d29922", marginBottom: 4 }}>{verdict}</div>
             <div style={{ fontSize: 13, color: "#94A3B8", marginBottom: 16 }}>{confidence}% confidence · {samples} samples</div>
             <div style={{ fontSize: 11, lineHeight: 1.8, marginBottom: 20, padding: "12px 14px", background: "#0B1220", border: "1px solid #1E293B", borderRadius: 8, textAlign: "left" }}>
               {details.map((d, i) => <div key={i} style={{ color: d.startsWith("✓") ? "#34D399" : "#f85149" }}>{d}</div>)}
-              <div style={{ marginTop: 8, fontSize: 10, color: "rgba(255,255,255,0.12)" }}>Anonymized · Added to Continuity Dataset</div>
+              <div style={{ marginTop: 8, fontSize: 10, color: "rgba(255,255,255,0.12)" }}>Added to Continuity Dataset · HuggingFace</div>
             </div>
-            <button onClick={() => setPhase("idle")} style={{ width: "100%", padding: "14px 0", fontSize: 15, color: "#60A5FA", background: "transparent", border: "1px solid rgba(96,165,250,0.3)", borderRadius: 8, cursor: "pointer" }}>Try again</button>
+            <button onClick={() => setPhase("idle")} style={{ width: "100%", padding: "14px 0", fontSize: 15, color: "#34D399", background: "transparent", border: "1px solid rgba(52,211,153,0.3)", borderRadius: 8, cursor: "pointer" }}>Contribute again</button>
           </>
         )}
-      </div>
 
-      <div style={{ marginTop: 48, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.15)" }}>
-        Data goes to <a href="https://huggingface.co/ContinuityLab-Org/myshape-576" style={{ color: "rgba(96,165,250,0.3)", textDecoration: "none" }}>HuggingFace</a> · <a href="/lab" style={{ color: "rgba(96,165,250,0.3)", textDecoration: "none" }}>Lab Home</a>
       </div>
     </div>
   );
