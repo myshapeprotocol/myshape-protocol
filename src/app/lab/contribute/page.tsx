@@ -195,6 +195,15 @@ export default function ContributePage() {
           <button onClick={reset} style={{ padding: "12px 28px", fontSize: 14, color: "#34D399", background: "transparent", border: "1px solid rgba(52,211,153,0.3)", borderRadius: 8, cursor: "pointer" }}>
             Start over
           </button>
+
+          <div style={{ marginTop: 32, padding: "16px 20px", border: "1px solid rgba(144,200,255,0.12)", borderRadius: 8, textAlign: "left" }}>
+            <div style={{ fontSize: 11, color: "#64748B", marginBottom: 6, letterSpacing: "0.1em" }}>📱+💻 REQUIRES 2 DEVICES</div>
+            <div style={{ fontSize: 14, color: "#90c8ff", marginBottom: 4, fontWeight: 500 }}>Cross-Device Causal Coupling</div>
+            <div style={{ fontSize: 12, color: "#94A3B8", lineHeight: 1.6, marginBottom: 10 }}>
+              Phone IMU + desktop camera work together. Proves both sensors observe the same physical event. The hardest and most valuable data.
+            </div>
+            <a href="/research/causal-coupling" style={{ fontSize: 12, color: "#60A5FA", textDecoration: "none" }}>Open on phone + computer →</a>
+          </div>
         </div>
       </div>
     );
@@ -232,8 +241,19 @@ export default function ContributePage() {
               Start
             </button>
             <button onClick={() => setPhase("finished")} style={{ marginTop: 10, fontSize: 11, color: "rgba(255,255,255,0.2)", background: "none", border: "none", cursor: "pointer" }}>
-              Skip
+              Skip all
             </button>
+
+            {stepIdx === 0 && (
+              <div style={{ marginTop: 28, padding: "14px 16px", border: "1px solid rgba(144,200,255,0.1)", borderRadius: 8, textAlign: "left" }}>
+                <div style={{ fontSize: 11, color: "#64748B", marginBottom: 4, letterSpacing: "0.08em" }}>📱+💻 REQUIRES 2 DEVICES</div>
+                <div style={{ fontSize: 13, color: "#90c8ff", marginBottom: 4, fontWeight: 500 }}>Cross-Device Causal Coupling</div>
+                <div style={{ fontSize: 11, color: "#94A3B8", lineHeight: 1.5, marginBottom: 8 }}>
+                  Phone IMU + desktop camera. The only experiment that proves two sensors observe the same event.
+                </div>
+                <a href="/research/causal-coupling" style={{ fontSize: 11, color: "#60A5FA", textDecoration: "none" }}>Open on phone + computer →</a>
+              </div>
+            )}
           </>
         )}
 
