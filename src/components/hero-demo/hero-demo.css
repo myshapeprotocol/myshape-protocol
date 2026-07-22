@@ -371,9 +371,8 @@
   }
 
   .hero-demo-cta {
-    width: 72vw;
-    max-width: 260px;
-    padding: 13px 0;
+    width: auto;
+    padding: 10px 24px;
     font-size: 11px;
     letter-spacing: 0.3em;
     text-align: center;
