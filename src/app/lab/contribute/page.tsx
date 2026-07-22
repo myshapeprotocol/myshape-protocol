@@ -89,8 +89,7 @@ export default function ContributePage() {
 
     // ── Countdown ──
     setPhase("countdown");
-    for (let c = 3; c >= 1; c--) { setCountdown(c); await delay(800); }
-    setCountdown(0);
+    for (let c = 3; c >= 1; c--) { setCountdown(c); await delay(1000); }
 
     // ── Recording ──
     setPhase("recording");
