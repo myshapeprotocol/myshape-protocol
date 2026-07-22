@@ -656,7 +656,7 @@ export default function HeroDemo() {
           ))}
         </div>
 
-        <div className="hero-demo-ctas md:hidden">
+        <div className="hero-demo-ctas max-md:flex hidden">
           <Link href="/verify" className="hero-demo-cta primary"
             onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
             itemProp="potentialAction" itemScope itemType="https://schema.org/EntryPoint">
