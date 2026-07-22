@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import ProtocolHeader from "@/components/header/header";
 import HandshakeVisual from "./HandshakeVisual";
 import type { VisualParams } from "./HandshakeVisual";
-import HaloScan from "./HaloScan";
 import MatrixGrid from "./MatrixGrid";
 import { playTick } from "@/utils/useAudioTick";
 import "./HandshakeRitual.css";
@@ -228,7 +227,6 @@ const HandshakeRitual: React.FC = () => {
           Layer 4: CSS 深感光环扫描
           ═══════════════════════════════════════════ */}
       <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 2 }}>
-        <HaloScan intensity={haloIntensity} rings={haloRings} />
       </div>
 
       {/* ═══════════════════════════════════════════
