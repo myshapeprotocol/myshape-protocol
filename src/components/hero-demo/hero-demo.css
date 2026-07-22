@@ -330,7 +330,7 @@
 
   /* 场景字幕 — 粒子下方固定区域 */
   .hero-demo-subtitle {
-    bottom: 35px;
+    bottom: 18px;
     max-width: 90vw;
     gap: 4px;
     flex-wrap: wrap;
