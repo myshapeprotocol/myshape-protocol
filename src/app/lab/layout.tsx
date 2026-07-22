@@ -43,7 +43,7 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
             ],
             sameAs: [
               "https://github.com/myshapeprotocol",
-              "https://huggingface.co/ContinuityLab-Org",
+              "https://huggingface.co/TheContinuityLab",
               "https://www.myshape.com",
             ],
           }),

@@ -64,7 +64,7 @@ export default function LabPage() {
         {/* Nav links */}
         <div className="fade-in fade-in-3" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a href="https://github.com/myshapeprotocol" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>GitHub</a>
-          <a href="https://huggingface.co/ContinuityLab-Org" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>HuggingFace</a>
+          <a href="https://huggingface.co/TheContinuityLab" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>HuggingFace</a>
           <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>npm</a>
           <a href="https://www.myshape.com/research" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>Research Hub</a>
           <a href="/lab/playground" style={{ fontSize: 12, color: "rgba(34,211,238,0.55)", textDecoration: "none", letterSpacing: "0.06em" }}>Playground ▸</a>
