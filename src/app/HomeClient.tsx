@@ -26,6 +26,12 @@ export default function HomeClient() {
           <p className="text-white/60 text-[clamp(1rem,2.8vw,1.6rem)] font-light tracking-[0.03em] leading-relaxed max-w-3xl mx-auto mt-3">
             Continuity answers whether you remained you.
           </p>
+
+          {/* Desktop CTAs — things desktop users can actually do */}
+          <div className="hidden md:flex justify-center gap-4 mt-6">
+            <a href="/research/notes/008-continuity-protocol-core" className="px-6 py-2.5 border border-[#60A5FA]/25 text-[#60A5FA]/60 text-[11px] tracking-[0.15em] uppercase font-mono hover:bg-[#60A5FA]/8 hover:border-[#60A5FA]/40 transition-all no-underline">Read CPS-0001 →</a>
+            <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 border border-white/10 text-white/35 text-[11px] tracking-[0.15em] uppercase font-mono hover:bg-white/[0.04] hover:border-white/20 hover:text-white/55 transition-all no-underline">GitHub →</a>
+          </div>
         </div>
 
         {/* Mobile: Contribute CTA */}
