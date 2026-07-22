@@ -2,19 +2,30 @@
 
 import { useState, useRef, useEffect } from "react";
 
+const STEPS = [
+  { id: "motion", title: "Motion Check", desc: "Move your phone naturally for 8 seconds.", seconds: 8 },
+  { id: "challenge", title: "Gyroscope Challenge", desc: "Respond to directional prompts. Tests anti-replay.", seconds: 15 },
+  { id: "dual", title: "Dual-Engine Verification", desc: "Passive observation + active challenge combined.", seconds: 30 },
+];
+
 export default function ContributePage() {
   const [isMobile, setIsMobile] = useState(false);
-  const [phase, setPhase] = useState<"idle" | "countdown" | "recording" | "done">("idle");
+  const [stepIdx, setStepIdx] = useState(0);
+  const [phase, setPhase] = useState<"idle" | "countdown" | "recording" | "done" | "finished">("idle");
   const [msg, setMsg] = useState("");
   const [verdict, setVerdict] = useState("");
   const [confidence, setConfidence] = useState(0);
   const [details, setDetails] = useState<string[]>([]);
   const [samples, setSamples] = useState(0);
   const [error, setError] = useState("");
+  const [collected, setCollected] = useState(0);
   const ref = useRef<Array<{ t: number; ax: number; ay: number; az: number }>>([]);
   const capRef = useRef(false);
 
   useEffect(() => { setIsMobile(/Mobi|Android|iPhone/i.test(navigator.userAgent)); }, []);
+
+  const step = STEPS[stepIdx];
+  const isLast = stepIdx === STEPS.length - 1;
 
   async function go() {
     setError(""); setVerdict(""); setConfidence(0); setDetails([]);
@@ -41,7 +52,7 @@ export default function ContributePage() {
 
     setPhase("recording");
     setMsg("Move naturally...");
-    await delay(8000);
+    await delay(step.seconds * 1000);
 
     capRef.current = false;
     window.removeEventListener("devicemotion", handler);
@@ -66,9 +77,16 @@ export default function ContributePage() {
     setDetails([cv > 0.08 ? "✓ Natural timing" : "✗ Too regular", mvv > 0.25 ? "✓ Good intensity" : "✗ Too weak"]);
 
     try {
-      await fetch("/api/pe001/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: "lab-" + Date.now(), imuSamples: data }) });
+      await fetch("/api/pe001/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: `lab-${step.id}-${Date.now()}`, imuSamples: data, mode: step.id }) });
+      setCollected(c => c + 1);
     } catch { /* ok */ }
     setPhase("done");
+  }
+
+  function next() {
+    if (isLast) { setPhase("finished"); return; }
+    setStepIdx(i => i + 1);
+    setPhase("idle");
   }
 
   function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }
@@ -80,9 +98,24 @@ export default function ContributePage() {
           <div style={{ fontSize: 40, marginBottom: 16 }}>📱</div>
           <h2 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 12px", color: "#60A5FA" }}>Open on your phone</h2>
           <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7 }}>
-            This experiment uses motion sensors — only available on mobile devices.<br /><br />
+            These experiments use motion sensors — only available on mobile devices.<br /><br />
             <span style={{ color: "#60A5FA", fontFamily: "monospace", fontSize: 12 }}>thecontinuitylab.org/lab/contribute</span>
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === "finished") {
+    return (
+      <div style={{ minHeight: "100dvh", background: "#060B14", color: "#E6EDF7", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "system-ui, sans-serif", textAlign: "center" }}>
+        <div style={{ maxWidth: 380 }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>✓</div>
+          <h2 style={{ fontSize: 22, fontWeight: 300, color: "#34D399", margin: "0 0 8px" }}>All done — thank you!</h2>
+          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7, marginBottom: 24 }}>
+            {collected} experiment{collected > 1 ? "s" : ""} contributed to the open Continuity Dataset.
+          </p>
+          <button onClick={() => { setStepIdx(0); setPhase("idle"); setCollected(0); }} style={{ padding: "14px 32px", fontSize: 15, color: "#34D399", background: "transparent", border: "1px solid rgba(52,211,153,0.3)", borderRadius: 8, cursor: "pointer" }}>Start over</button>
         </div>
       </div>
     );
@@ -92,23 +125,27 @@ export default function ContributePage() {
     <div style={{ minHeight: "100dvh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, textAlign: "center" }}>
       <div style={{ maxWidth: 380, width: "100%" }}>
 
+        {/* Step indicator */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 32 }}>
+          {STEPS.map((s, i) => (
+            <div key={s.id} style={{ width: 8, height: 8, borderRadius: "50%", background: i < stepIdx ? "#34D399" : i === stepIdx ? "#60A5FA" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+          ))}
+        </div>
+
         {phase === "idle" && (
           <>
-            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "radial-gradient(circle, rgba(52,211,153,0.15) 0%, transparent 70%)", margin: "0 auto 24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 10px rgba(52,211,153,0.6)" }} />
+            <div style={{ fontSize: 12, color: "#34D399", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 8 }}>
+              Step {stepIdx + 1} of {STEPS.length}
             </div>
-            <h1 style={{ fontSize: 24, fontWeight: 300, margin: "0 0 8px" }}>Contribute Data</h1>
-            <p style={{ fontSize: 13, color: "#94A3B8", margin: "0 0 8px", lineHeight: 1.6 }}>
-              Move your phone naturally for 8 seconds.<br />Your data becomes part of the open Continuity Dataset.
-            </p>
-            <p style={{ fontSize: 11, color: "#64748B", margin: "0 0 32px" }}>Anonymous · No personal data · HuggingFace</p>
+            <h1 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 8px" }}>{step.title}</h1>
+            <p style={{ fontSize: 13, color: "#94A3B8", margin: "0 0 8px", lineHeight: 1.6 }}>{step.desc}</p>
+            <p style={{ fontSize: 11, color: "#64748B", margin: "0 0 24px" }}>{step.seconds} seconds · Anonymous · Added to Dataset</p>
             {error && <div style={{ fontSize: 12, color: "#f85149", marginBottom: 16, padding: 10, background: "rgba(248,81,73,0.06)", border: "1px solid rgba(248,81,73,0.2)", borderRadius: 6 }}>{error}</div>}
             <button onClick={go} style={{ width: "100%", padding: "18px 0", fontSize: 17, color: "#060B14", background: "#34D399", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 500 }}>
               Start
             </button>
-            <div style={{ marginTop: 36, display: "flex", justifyContent: "center", gap: 24, fontSize: 11, color: "#64748B" }}>
-              <span><span style={{ color: "#34D399" }}>576</span> runs</span>
-              <span><span style={{ color: "#34D399" }}>~81</span> contributors</span>
+            <div style={{ marginTop: 12 }}>
+              <button onClick={() => { setPhase("finished"); }} style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", background: "none", border: "none", cursor: "pointer" }}>Skip all & finish</button>
             </div>
           </>
         )}
@@ -123,12 +160,14 @@ export default function ContributePage() {
           <>
             <div style={{ fontSize: 48, marginBottom: 8 }}>{verdict === "Physical motion detected" ? "✓" : "?"}</div>
             <div style={{ fontSize: 18, fontWeight: 300, color: verdict === "Physical motion detected" ? "#34D399" : "#d29922", marginBottom: 4 }}>{verdict}</div>
-            <div style={{ fontSize: 13, color: "#94A3B8", marginBottom: 16 }}>{confidence}% confidence · {samples} samples</div>
+            <div style={{ fontSize: 13, color: "#94A3B8", marginBottom: 16 }}>{confidence}% · {samples} samples</div>
             <div style={{ fontSize: 11, lineHeight: 1.8, marginBottom: 20, padding: "12px 14px", background: "#0B1220", border: "1px solid #1E293B", borderRadius: 8, textAlign: "left" }}>
               {details.map((d, i) => <div key={i} style={{ color: d.startsWith("✓") ? "#34D399" : "#f85149" }}>{d}</div>)}
-              <div style={{ marginTop: 8, fontSize: 10, color: "rgba(255,255,255,0.12)" }}>Added to Continuity Dataset · HuggingFace</div>
+              <div style={{ marginTop: 8, fontSize: 10, color: "rgba(255,255,255,0.12)" }}>Saved to Continuity Dataset</div>
             </div>
-            <button onClick={() => setPhase("idle")} style={{ width: "100%", padding: "14px 0", fontSize: 15, color: "#34D399", background: "transparent", border: "1px solid rgba(52,211,153,0.3)", borderRadius: 8, cursor: "pointer" }}>Contribute again</button>
+            <button onClick={next} style={{ width: "100%", padding: "14px 0", fontSize: 15, color: "#060B14", background: "#34D399", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 500 }}>
+              {isLast ? "Finish" : `Next: ${STEPS[stepIdx + 1].title} →`}
+            </button>
           </>
         )}
 
