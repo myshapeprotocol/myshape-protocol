@@ -243,17 +243,6 @@ export default function ContributePage() {
             <button onClick={() => setPhase("finished")} style={{ marginTop: 10, fontSize: 11, color: "rgba(255,255,255,0.2)", background: "none", border: "none", cursor: "pointer" }}>
               Skip all
             </button>
-
-            {stepIdx === 0 && (
-              <div style={{ marginTop: 28, padding: "14px 16px", border: "1px solid rgba(144,200,255,0.1)", borderRadius: 8, textAlign: "left" }}>
-                <div style={{ fontSize: 11, color: "#64748B", marginBottom: 4, letterSpacing: "0.08em" }}>📱+💻 REQUIRES 2 DEVICES</div>
-                <div style={{ fontSize: 13, color: "#90c8ff", marginBottom: 4, fontWeight: 500 }}>Cross-Device Causal Coupling</div>
-                <div style={{ fontSize: 11, color: "#94A3B8", lineHeight: 1.5, marginBottom: 8 }}>
-                  Phone IMU + desktop camera. The only experiment that proves two sensors observe the same event.
-                </div>
-                <a href="/research/causal-coupling" style={{ fontSize: 11, color: "#60A5FA", textDecoration: "none" }}>Open on phone + computer →</a>
-              </div>
-            )}
           </>
         )}
 
