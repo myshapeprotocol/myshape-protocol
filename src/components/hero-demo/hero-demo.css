@@ -261,10 +261,10 @@
 
 /* Secondary CTA — Demo */
 .hero-demo-cta.secondary {
-  color: rgba(160, 200, 240, 0.7);
-  border: 1px solid rgba(144, 200, 255, 0.2);
-  background: rgba(144, 200, 255, 0.02);
-  text-shadow: 0 0 10px rgba(144, 200, 255, 0.2);
+  color: rgba(52, 211, 153, 0.85);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  background: rgba(52, 211, 153, 0.06);
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
 }
 
 .hero-demo-cta.secondary::before {
@@ -281,19 +281,19 @@
 
 .hero-demo-cta.secondary:hover {
   color: #fff;
-  border-color: rgba(144, 200, 255, 0.45);
-  background: rgba(144, 200, 255, 0.06);
-  box-shadow: 0 0 30px rgba(144, 200, 255, 0.12), 0 0 60px rgba(144, 200, 255, 0.03);
-  text-shadow: 0 0 16px rgba(144, 200, 255, 0.35);
+  border-color: rgba(52, 211, 153, 0.55);
+  background: rgba(52, 211, 153, 0.1);
+  box-shadow: 0 0 30px rgba(52, 211, 153, 0.15), 0 0 60px rgba(52, 211, 153, 0.04);
+  text-shadow: 0 0 16px rgba(52, 211, 153, 0.4);
   transform: translateY(-2px);
 }
 
 /* ── 移动端极简协议入口 ── */
 @media (max-width: 768px) {
   .hero-demo-root {
-    height: 72dvh;
-    min-height: 480px;
-    max-height: 72dvh;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     overflow: hidden;
   }
 
