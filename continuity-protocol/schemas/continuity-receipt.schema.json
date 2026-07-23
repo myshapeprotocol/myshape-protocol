@@ -3,6 +3,9 @@
   "$id": "https://myshape.com/schemas/continuity-receipt.schema.json",
   "title": "CPS-0001 Continuity Receipt",
   "description": "A cryptographically verifiable statement that an observer collected sufficient evidence supporting the continuity of a subject over a bounded interval of time. v1.0-RC. Engine-independent.",
+  "version": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "compatibility": "This schema is frozen at version 1.0.0. Future versions MUST add new fields as optional only. Existing fields MUST NOT be removed or have their types changed. New required fields MUST NOT be added.",
   "type": "object",
   "required": [
     "protocolVersion",

@@ -13,19 +13,35 @@
 ```
 continuity-protocol/
 ├── QUICKSTART.md              # 10-minute getting started
-├── schemas/                   # JSON Schema (don't need TypeScript)
+├── IMPLEMENT.md               # Full 1-hour implementation guide
+├── reference-verifier/
+│   └── verifier.ts            # Zero-dependency verifier (V₁–V₇)
+├── schemas/
 │   └── continuity-receipt.schema.json
-├── reference-verifier/        # Zero-dependency verifier (TypeScript)
-│   └── verifier.ts
-├── test-vectors/             # JSON test vectors
+├── test-vectors/              # JSON test vectors
 │   ├── valid-receipt-01.json
 │   ├── valid-receipt-02-chained.json
 │   ├── expired.json
 │   ├── tampered-evidence.json
 │   └── broken-chain.json
-├── conformance/              # Conformance test suite
-│   └── conformance.test.ts
-└── README.md
+├── conformance/
+│   └── conformance.test.ts    # 23 assertions, zero MyShape deps
+├── second-producer/           # Proof: engine-independent Producer
+│   ├── dummy-engine.ts
+│   └── dummy-engine.test.ts
+├── verifier-plugin/           # First Consumer: HTTP middleware
+│   ├── index.ts               # parse, verify, risk score, serialize
+│   ├── middleware.ts          # Express drop-in middleware
+│   ├── plugin.test.ts         # 14 tests
+│   └── README.md              # Compatibility matrix + embedding guide
+└── research/                  # Discovery & experiments
+    ├── discovery-survey.md
+    ├── discovery-interview.md
+    ├── experiments/
+    │   ├── EXP-001-agent-authorization.md
+    │   ├── EXP-002-enterprise-session.md
+    │   └── EXP-003-xr-spatial.md
+    └── ...
 ```
 
 ## Reference Verifier
@@ -87,12 +103,15 @@ MyShape is the **first implementation**, not the protocol.
 
 ## Compatibility Matrix
 
-| Producer | Verifier | Result |
+| Producer | Consumer | Result |
 |:---|:---|:---|
-| Dummy Engine | Reference Verifier | ✅ PASS |
+| Dummy Engine (`second-producer/`) | Reference Verifier | ✅ PASS |
+| Dummy Engine (`second-producer/`) | HTTP Verifier Plugin | ✅ PASS |
 | MyShape EE-001 | Reference Verifier | ✅ PASS |
-| Tampered | Reference Verifier | ❌ REJECT (V₅) |
-| Expired | Reference Verifier | ❌ REJECT (V₆) |
+| MyShape EE-001 | HTTP Verifier Plugin | ✅ PASS |
+| Tampered evidence | Reference Verifier | ❌ REJECT (V₅) |
+| Expired receipt | Reference Verifier | ❌ REJECT (V₆) |
+| Broken chain | Reference Verifier | ❌ REJECT (V₇) |
 
 ## Full Specification
 

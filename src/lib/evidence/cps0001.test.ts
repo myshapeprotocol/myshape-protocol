@@ -33,8 +33,8 @@ function makeBlock(overrides?: Partial<EvidenceBlock>): EvidenceBlock {
 }
 
 function makeInterval(overrides?: Partial<ContinuityInterval>): ContinuityInterval {
-  const start = new Date("2026-07-22T10:00:00.000Z");
-  const end = new Date("2026-07-22T10:00:08.000Z");
+  const start = new Date(Date.now() - 60000); // 1 minute ago
+  const end = new Date(Date.now() - 52000);   // 52 seconds ago (8s window)
   return {
     start: start.toISOString(),
     end: end.toISOString(),
@@ -283,7 +283,7 @@ describe("verifyTemporal (V₄)", () => {
       subject: makeSubject(),
       issuer: makeIssuer(),
     }) as ContinuityReceipt;
-    r.signature = { algorithm: "Ed25519", value: "sig", signedAt: "2026-07-22T10:00:09.000Z" };
+    r.signature = { algorithm: "Ed25519", value: "sig", signedAt: r.interval.end };
     expect(verifyTemporal(r)).toBeNull();
   });
 

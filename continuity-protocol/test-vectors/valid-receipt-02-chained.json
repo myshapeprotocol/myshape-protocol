@@ -2,35 +2,53 @@
   "_comment": "CPS-0001 Test Vector — valid receipt (chained, multi-engine)",
   "protocolVersion": "1.0",
   "assertions": {
-    "observationOccurred": { "value": true, "confidence": 0.95 },
-    "continuityMaintained": { "value": true, "confidence": 0.88 },
-    "receiptIntegrity": { "value": true, "confidence": 1.0 }
+    "observationOccurred": {
+      "value": true,
+      "confidence": 0.95
+    },
+    "continuityMaintained": {
+      "value": true,
+      "confidence": 0.88
+    },
+    "receiptIntegrity": {
+      "value": true,
+      "confidence": 1
+    }
   },
   "evidence": [
     {
       "engineId": "com.example.simulation",
       "engineVersion": "1.0.0",
       "confidence": 0.91,
-      "payload": { "entropy": 0.91, "events": 42 },
+      "payload": {
+        "entropy": 0.91,
+        "events": 42
+      },
       "payloadDigest": "fb02d5b712c7867af5fd6af81b8620ea56ad56d695a6e4a50463bca819c1db55"
     },
     {
       "engineId": "com.other.challenge",
       "engineVersion": "2.0.0",
       "confidence": 0.85,
-      "payload": { "rounds": 5, "matched": 4 },
+      "payload": {
+        "rounds": 5,
+        "matched": 4
+      },
       "payloadDigest": "1b0ad3a49314bf900a1119190b9bfc7c1fa1485757830196e7e32b1d5b17d0fe"
     }
   ],
   "receiptId": "0193a62e-8c22-74b9-ad4e-f2a3b4c5d6e7",
   "interval": {
-    "start": "2026-07-22T14:00:00.000Z",
-    "end": "2026-07-22T14:00:30.000Z",
+    "start": "2026-12-01T14:00:00.000Z",
+    "end": "2026-12-01T14:00:30.000Z",
     "coverageMs": 30000
   },
-  "subject": { "id": "sha256:abcd1234efgh5678", "type": "embodied" },
-  "expiresAt": "2026-07-22T14:05:30.000Z",
-  "previousReceiptHash": "35772e2a5d78976341a30f0d12558fbbadd1aae98454ff1e191d698512617813",
+  "subject": {
+    "id": "sha256:abcd1234efgh5678",
+    "type": "embodied"
+  },
+  "expiresAt": "2026-12-01T14:05:30.000Z",
+  "previousReceiptHash": "e2bdd80e39ae44326d7c7bbda8d020a5655c9afba82d8cd0d7f05e70bb289fc0",
   "references": [],
   "verdict": "PASS",
   "issuer": {
@@ -40,6 +58,6 @@
   "signature": {
     "algorithm": "Ed25519",
     "value": "iGy9Pq3KlxAbCdEfGhIjKlMnOpQrStUvWxYz0123456789AbCdEfGhIjKlMnOpQr",
-    "signedAt": "2026-07-22T14:00:30.000Z"
+    "signedAt": "2026-12-01T14:00:30.000Z"
   }
 }

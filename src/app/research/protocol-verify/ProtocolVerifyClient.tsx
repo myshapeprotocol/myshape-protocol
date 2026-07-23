@@ -8,6 +8,11 @@ import ExperimentExport from "@/components/experiment/ExperimentExport";
 import { saveRun } from "@/lib/experiment-logger";
 import { type EngineEvidence, type Verdict, hashEvidence, evaluatePolicy } from "@/lib/evidence/types";
 import { type IMUSample, detectJerkPeaks } from "@/lib/evidence/causal-coupling";
+import { buildEvidenceReceipt, type BuildReceiptResult } from "./lib/build-receipt";
+import { runVerificationSteps, type VerificationStep } from "./lib/verify-receipt";
+import VerificationSteps from "./components/VerificationSteps";
+import { consumeReceipt, type ConsumeResult } from "./lib/consume-receipt";
+import ConsumerDecision from "./components/ConsumerDecision";
 import {
   type Direction,
   type RoundResult,
@@ -64,6 +69,9 @@ export default function ProtocolVerifyClient() {
   const [active, setActive] = useState<EngineEvidence | null>(null);
   const [finalV, setFinalV] = useState<Verdict | null>(null);
   const [copySt, setCopySt] = useState("");
+  const [receiptResult, setReceiptResult] = useState<BuildReceiptResult | null>(null);
+  const [verifySteps, setVerifySteps] = useState<VerificationStep[]>([]);
+  const [consumerResult, setConsumerResult] = useState<ConsumeResult | null>(null);
   const debug = useDebug();
 
   const imuRef = useRef<IMUSample[]>([]);
@@ -73,6 +81,7 @@ export default function ProtocolVerifyClient() {
   const startRef = useRef(0);
   const lastRef = useRef(0);
   const capRef = useRef(false);
+  const startWallRef = useRef<Date>(new Date());
 
   function stopSim() { if (simRef.current) { clearInterval(simRef.current); simRef.current = null; } }
 
@@ -82,6 +91,14 @@ export default function ProtocolVerifyClient() {
       if (fallbackRef.current) { clearTimeout(fallbackRef.current); fallbackRef.current = null; }
     };
   }, []);
+
+  // Phase C: When a receipt is produced, submit to HTTP Gateway for consumer decision
+  useEffect(() => {
+    if (!receiptResult) return;
+    consumeReceipt(receiptResult.receipt).then(setConsumerResult).catch(() => {
+      // Gateway unavailable — consumer decision not shown
+    });
+  }, [receiptResult]);
 
   const handleIMU = useCallback((e: DeviceMotionEvent) => {
     if (!capRef.current) return;
@@ -105,7 +122,7 @@ export default function ProtocolVerifyClient() {
   // ═══════════════════════════════════════
 
   const run = useCallback(async () => {
-    setPassive([]); setScore(0); setDecision(null); setActive(null); setGyroR([]); setFinalV(null);
+    setPassive([]); setScore(0); setDecision(null); setActive(null); setGyroR([]); setFinalV(null); setConsumerResult(null); setVerifySteps([]);
 
     // iOS motion permission
     if (typeof (DeviceMotionEvent as any).requestPermission === "function") {
@@ -121,6 +138,7 @@ export default function ProtocolVerifyClient() {
     imuRef.current = []; setImuN(0); hasSensRef.current = false;
     capRef.current = true; window.addEventListener("devicemotion", handleIMU);
     startRef.current = performance.now(); lastRef.current = 0;
+    startWallRef.current = new Date();
 
     if (isSim) { setNoSensors(true); startSim(); } else { fallbackRef.current = setTimeout(() => { if (!hasSensRef.current && !simRef.current) { setNoSensors(true); setIsSim(true); startSim(); } }, 1500); }
 
@@ -170,6 +188,16 @@ export default function ProtocolVerifyClient() {
         decision: dec,
         imuCount: imuRef.current.length,
       });
+      // Phase A: Build CPS-0001 Receipt
+      const r1 = await buildEvidenceReceipt({
+        evidence: passiveEvidence,
+        startTime: startWallRef.current,
+        endTime: new Date(),
+      });
+      setReceiptResult(r1);
+      // Phase B: Run step-by-step verification
+      const s1 = await runVerificationSteps(r1.receipt);
+      setVerifySteps(s1.steps);
       setStage("complete"); return;
     }
     if (dec === "accept") {
@@ -188,6 +216,16 @@ export default function ProtocolVerifyClient() {
         decision: dec,
         imuCount: imuRef.current.length,
       });
+      // Phase A: Build CPS-0001 Receipt
+      const rA = await buildEvidenceReceipt({
+        evidence: passiveEvidence,
+        startTime: startWallRef.current,
+        endTime: new Date(),
+      });
+      setReceiptResult(rA);
+      // Phase B: Run step-by-step verification
+      const sA = await runVerificationSteps(rA.receipt);
+      setVerifySteps(sA.steps);
       setStage("complete"); return;
     }
 
@@ -237,6 +275,16 @@ export default function ProtocolVerifyClient() {
       decision: "escalate",
       imuCount: imuRef.current.length,
     });
+    // Phase A: Build CPS-0001 Receipt (escalate path — dual-engine evidence)
+    const r3 = await buildEvidenceReceipt({
+      evidence: [...passiveEvidence, act],
+      startTime: startWallRef.current,
+      endTime: new Date(),
+    });
+    setReceiptResult(r3);
+    // Phase B: Run step-by-step verification
+    const s3 = await runVerificationSteps(r3.receipt);
+    setVerifySteps(s3.steps);
     setStage("complete");
   }, [isSim, handleIMU, startSim]);
 
@@ -257,6 +305,9 @@ export default function ProtocolVerifyClient() {
 
       <main className="max-w-lg mx-auto px-4 py-12 space-y-8">
         <div className="text-center space-y-4">
+          <div className="text-white/12 text-[10px] tracking-[0.3em] uppercase">
+            Interactive CPS-0001 Protocol Demonstration
+          </div>
           <h1 className="text-white/85 text-[clamp(1.5rem,4vw,2rem)] font-light tracking-[0.02em]">
             Verification Confidence
           </h1>
@@ -264,6 +315,31 @@ export default function ProtocolVerifyClient() {
             style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
             How sure are we that a human is physically present — not an AI, not a replay, not a script?
           </p>
+        </div>
+
+        {/* Phase D Lite: Protocol Pipeline */}
+        <div className="flex items-center justify-center gap-1 text-[10px] text-white/25 tracking-[0.1em]">
+          {[
+            { label: "Collect Evidence", key: "collect" },
+            { label: "Issue Receipt", key: "receipt" },
+            { label: "Verify Receipt", key: "verify" },
+            { label: "Consumer Decision", key: "consumer" },
+          ].map((step, i) => {
+            const isActive = stage !== "idle";
+            const isDone = stage === "complete";
+            return (
+              <div key={step.key} className="flex items-center gap-1">
+                {i > 0 && <span className="text-white/10 w-2 h-[1px]" />}
+                <span className={`px-2 py-1 rounded transition-all ${
+                  isDone ? "text-[#3fb950]/70 bg-[#3fb950]/[0.06]" :
+                  isActive ? "text-white/40" : "text-white/15"
+                }`}>
+                  {step.label}
+                </span>
+                {i < 3 && <span className="text-white/10">→</span>}
+              </div>
+            );
+          })}
         </div>
 
         <ResearchStatus engineId="EE-001 + EE-003" />
@@ -363,21 +439,70 @@ export default function ProtocolVerifyClient() {
         {/* ── Complete ── */}
         {stage === "complete" && finalV && (
           <div className="space-y-6">
-            <button onClick={() => { const lines = passive.concat(active || []).flatMap((e) => e.diagnostics); lines.unshift(`Verdict: ${finalV}`, `Passive: ${(score * 100).toFixed(0)}%`); navigator.clipboard.writeText(lines.join("\n")).then(() => { setCopySt("✓ Copied!"); setTimeout(() => setCopySt(""), 2000); }).catch(() => {}); }} className="w-full py-3 border border-[#d29922]/40 text-[#d29922]/70 text-[11px] tracking-[0.1em] uppercase hover:border-[#d29922] transition-all">{copySt || "📋 Copy All"}</button>
+            {/* Confidence summary */}
             <div className={`text-center p-6 border-2 ${finalV === 'PASS' ? "border-[#3fb950]/40 bg-[#3fb950]/[0.04]" : "border-[#f85149]/40 bg-[#f85149]/[0.04]"} space-y-3`}>
               <div className="text-white/20 text-[11px] tracking-[0.2em] uppercase">Verification Confidence</div>
               <div className="text-[48px] font-light" style={{ color: finalV === "PASS" ? "#3fb950" : finalV === "FAIL" ? "#f85149" : "#d29922" }}>{debug ? `${(score * 100).toFixed(0)}%` : `${(100 * [...passive, ...(active ? [active] : [])].reduce((s, e) => s + (e.confidence || 0), 0) / [...passive, ...(active ? [active] : [])].length).toFixed(0)}%`}</div>
             </div>
-            {debug ? (
-              [...passive, ...(active ? [active] : [])].map((ev) => (
-                <div key={ev.engineId} className="p-4 border border-white/10 bg-white/[0.02] space-y-2">
-                  <div className="flex justify-between"><span className="text-[11px] uppercase text-white/20">{ev.engineId === "EE-001" ? "Passive Evidence" : "Additional Evidence"}</span><span className="text-[11px] text-white/10">{ev.engineId}</span></div>
-                  {ev.components.map((c) => <div key={c.metric} className="flex justify-between p-2 border border-white/5"><span className="text-[11px] text-white/40">{c.metric}: <span className="text-white/60">{c.value.toFixed(3)}</span></span><span style={{ color: sc(c.status) }}>{si(c.status)}</span></div>)}
-                  {ev.diagnostics.filter((d) => d.startsWith("✓") || d.startsWith("✗") || d.startsWith("⚠")).map((d, i) => <div key={i} className={`text-[11px] font-mono ${d.startsWith("✓") ? "text-[#3fb950]/70" : d.startsWith("✗") ? "text-[#f85149]/70" : "text-[#d29922]/70"}`}>{d}</div>)}
+
+            {/* Phase D Lite: Three protocol cards side by side */}
+            {receiptResult && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {/* Card 1: Receipt */}
+                <div className="border border-white/10 bg-white/[0.01] p-3 space-y-2">
+                  <div className="text-[10px] tracking-[0.15em] uppercase text-white/20">
+                    <span className="text-white/15">❶</span> Receipt
+                  </div>
+                  <div className="text-[11px] font-mono space-y-1">
+                    <div className="flex justify-between"><span className="text-white/20">ID</span><span className="text-white/50 truncate ml-2 text-[10px]">{receiptResult.receipt.receiptId.slice(0, 18)}…</span></div>
+                    <div className="flex justify-between"><span className="text-white/20">blocks</span><span className="text-white/50">{receiptResult.receipt.evidence.length}</span></div>
+                    <div className="flex justify-between"><span className="text-white/20">coverage</span><span className="text-white/50">{receiptResult.receipt.interval.coverageMs}ms</span></div>
+                  </div>
+                  <div className="flex gap-1 pt-1">
+                    <button onClick={() => { navigator.clipboard.writeText(JSON.stringify(receiptResult.receipt, null, 2)).then(() => { setCopySt("✓"); setTimeout(() => setCopySt(""), 1500); }); }}
+                      className="flex-1 py-1.5 border border-white/10 text-white/30 text-[10px] hover:border-white/30 transition-all">{copySt === "✓" ? "✓" : "📋"}</button>
+                    <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(receiptResult.receipt, null, 2))}`}
+                      download={`cps-0001-receipt-${receiptResult.receipt.receiptId}.json`}
+                      className="flex-1 py-1.5 border border-white/10 text-white/30 text-[10px] text-center hover:border-white/30 transition-all block">⬇</a>
+                  </div>
+                  <details className="text-[10px] group">
+                    <summary className="text-white/20 cursor-pointer hover:text-white/35">View JSON</summary>
+                    <pre className="mt-1 p-2 border border-white/5 bg-black/50 text-[9px] text-white/30 font-mono overflow-x-auto max-h-32 overflow-y-auto leading-relaxed">
+                      {JSON.stringify(receiptResult.receipt, null, 2)}
+                    </pre>
+                  </details>
                 </div>
-              ))
-            ) : (
-              <div className="space-y-3">
+
+                {/* Card 2: Verifier */}
+                <div className="border border-white/10 bg-white/[0.01] p-3 space-y-2">
+                  <div className="text-[10px] tracking-[0.15em] uppercase text-white/20">
+                    <span className="text-white/15">❷</span> Verifier
+                  </div>
+                  <VerificationSteps steps={verifySteps} />
+                </div>
+
+                {/* Card 3: Consumer */}
+                <div className="border border-white/10 bg-white/[0.01] p-3 space-y-2">
+                  <div className="text-[10px] tracking-[0.15em] uppercase text-white/20">
+                    <span className="text-white/15">❸</span> Consumer
+                  </div>
+                  {consumerResult ? (
+                    <ConsumerDecision result={consumerResult} />
+                  ) : (
+                    <div className="text-[11px] text-white/20 py-4 text-center">
+                      Verifying with gateway…
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Evidence details (collapsible) */}
+            <details className="group">
+              <summary className="text-[11px] text-white/20 cursor-pointer hover:text-white/35 transition-colors text-center">
+                View evidence details
+              </summary>
+              <div className="mt-3 space-y-3">
                 {[...passive, ...(active ? [active] : [])].map((ev) => {
                   const passed = ev.components.filter((c) => c.status === "PASS").length;
                   const total = ev.components.length;
@@ -392,12 +517,16 @@ export default function ProtocolVerifyClient() {
                   );
                 })}
               </div>
-            )}
+            </details>
+
             <button onClick={() => { setStage("idle"); setIsSim(false); setNoSensors(false); }} className="w-full py-4 border border-white/10 text-white/25 text-[11px] tracking-[0.2em] uppercase hover:border-white/30 transition-all">↻ New Session</button>
           </div>
         )}
-        <div className="mt-10 pt-5 border-t border-white/[0.04] text-center">
-          <p className="text-white/25 text-[11px] tracking-[0.1em]">Research Prototype &middot; The Continuity Lab</p>
+        <div className="mt-10 pt-5 border-t border-white/[0.04] text-center space-y-2">
+          <p className="text-white/25 text-[11px] tracking-[0.1em]">Interactive CPS-0001 Protocol Demonstration &middot; The Continuity Lab</p>
+          <p className="text-white/15 text-[10px] leading-relaxed max-w-xs mx-auto">
+            This page demonstrates the CPS-0001 protocol flow. It is not an identity verification service.
+          </p>
           <p className="text-white/20 text-[11px] mt-1">
             Parameters intentionally omitted &middot;{" "}
             <a href={`?debug=${debug ? "0" : "1"}`} className="underline hover:text-white/35">
