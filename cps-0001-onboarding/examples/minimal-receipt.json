@@ -1,0 +1,44 @@
+{
+  "_comment": "CPS-0001 Minimal Receipt — self-contained, zero MyShape dependencies",
+  "protocolVersion": "1.0",
+  "receiptId": "00000000-0000-7000-8000-000000000001",
+  "interval": {
+    "start": "2026-12-01T10:00:00.000Z",
+    "end": "2026-12-01T10:00:08.000Z",
+    "coverageMs": 8000
+  },
+  "subject": {
+    "id": "sha256:abcd1234efgh5678",
+    "type": "embodied"
+  },
+  "evidence": [
+    {
+      "engineId": "com.example.external-producer",
+      "engineVersion": "1.0.0",
+      "confidence": 0.75,
+      "payload": {
+        "method": "simple-threshold",
+        "score": 0.75,
+        "sampleCount": 120
+      },
+      "payloadDigest": "d90da80532313ab8262cff9b4ff816262ddb9e6db89fd626c31d5fc66ea6da9c"
+    }
+  ],
+  "assertions": {
+    "observationOccurred": { "value": true, "confidence": 0.95 },
+    "continuityMaintained": { "value": true, "confidence": 0.75 },
+    "receiptIntegrity": { "value": true, "confidence": 1.0 }
+  },
+  "expiresAt": "2026-12-01T10:05:08.000Z",
+  "previousReceiptHash": null,
+  "references": [],
+  "issuer": {
+    "id": "sha256:external-impl",
+    "publicKey": "demo-unsigned"
+  },
+  "signature": {
+    "algorithm": "unsigned",
+    "value": "cps-0001-demonstration",
+    "signedAt": "2026-12-01T10:00:08.000Z"
+  }
+}
