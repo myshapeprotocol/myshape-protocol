@@ -119,21 +119,11 @@ export default function ProtocolClient() {
               ].map((p, i) => (
                 <div key={p.phase} className="flex items-center">
                   <div className="proto-lifecycle-node" onMouseEnter={() => playTick(p.freq, "sine", 0.06, 0.015)}>
-                    <div className="proto-lifecycle-circle"
-                      style={{
-                        borderColor: p.status === "current" ? "rgba(144,200,255,0.7)" : p.status === "next" ? "rgba(144,200,255,0.45)" : "rgba(144,200,255,0.3)",
-                        color: p.status === "current" ? "rgba(200,240,255,0.9)" : p.status === "next" ? "rgba(144,200,255,0.6)" : "rgba(144,200,255,0.4)",
-                        boxShadow: p.status === "current" ? "0 0 16px rgba(144,200,255,0.3)" : "none",
-                      }}>
+                    <div className={`proto-lifecycle-circle status-${p.status}`}>
                       {p.status === "current" ? "●" : "○"}
                     </div>
-                    <span className="proto-lifecycle-label" style={{
-                      color: p.status === "current" ? "rgba(255,255,255,0.85)" : p.status === "next" ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.5)",
-                    }}>{p.phase}</span>
-                    <span className="proto-lifecycle-desc" style={{
-                      maxWidth: "12rem", margin: "0.5rem auto",
-                      color: p.status === "current" ? undefined : p.status === "next" ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.3)",
-                    }}>{p.desc}</span>
+                    <span className={`proto-lifecycle-label status-${p.status}`}>{p.phase}</span>
+                    <span className={`proto-lifecycle-desc ${p.status !== "current" ? `status-${p.status}` : ""}`} style={{ maxWidth: "12rem", margin: "0.5rem auto" }}>{p.desc}</span>
                   </div>
                   {i < 2 && <span className="proto-lifecycle-arrow mx-2 md:mx-1">→</span>}
                 </div>

@@ -213,6 +213,26 @@
 @media (min-width: 768px) { .proto-lifecycle-label { font-size: 14px; } }
 .proto-lifecycle-node:hover .proto-lifecycle-label { color: #fff; }
 
+/* Protocol Status variants */
+.proto-lifecycle-circle.status-current {
+  border-color: rgba(144,200,255,0.7);
+  color: rgba(200,240,255,0.9);
+  box-shadow: 0 0 16px rgba(144,200,255,0.3);
+}
+.proto-lifecycle-circle.status-next {
+  border-color: rgba(144,200,255,0.45);
+  color: rgba(144,200,255,0.6);
+}
+.proto-lifecycle-circle.status-future {
+  border-color: rgba(144,200,255,0.3);
+  color: rgba(144,200,255,0.4);
+}
+.proto-lifecycle-label.status-current { color: rgba(255,255,255,0.85); }
+.proto-lifecycle-label.status-next { color: rgba(255,255,255,0.65); }
+.proto-lifecycle-label.status-future { color: rgba(255,255,255,0.5); }
+.proto-lifecycle-desc.status-next { color: rgba(255,255,255,0.4); }
+.proto-lifecycle-desc.status-future { color: rgba(255,255,255,0.3); }
+
 .proto-lifecycle-sub {
   color: rgba(144, 200, 255, 0.55);
   font-size: 11px;
