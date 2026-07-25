@@ -103,9 +103,14 @@
   align-items: center;
   gap: 10px;
   max-width: 640px;
-  opacity: 1 !important;
-  visibility: visible !important;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  visibility: visible;
   z-index: 50;
+}
+
+.hero-demo-subtitle.on {
+  opacity: 1 !important;
 }
 
 .hero-demo-subtitle-dot {
@@ -326,9 +331,10 @@
     opacity: 0.45;
   }
 
-  /* 场景字幕 — 按钮上方，居中 */
+  /* 场景字幕 — CTA 按钮上方，居中 */
   .hero-demo-subtitle {
     position: absolute;
+    bottom: 68px;
     top: auto;
     left: 50%;
     transform: translateX(-50%);

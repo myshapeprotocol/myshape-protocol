@@ -607,7 +607,7 @@ export default function HeroDemo() {
                       { x: 0, y: 130, s: 0.48 },
                     ];
                     particlesRef.current = [];
-                    const per = Math.floor(1500 / clusters.length);
+                    const per = Math.floor(getTorusCount() / clusters.length);
                     for (let ci = 0; ci < clusters.length; ci++) {
                       const cl = clusters[ci];
                       for (let k = 0; k < per; k++) {
@@ -648,12 +648,32 @@ export default function HeroDemo() {
           ))}
         </div>
 
-        <div className={`hero-demo-subtitle ${subtitleVisible ? "on" : ""}`}>
-          <span className="hero-demo-subtitle-dot" />
-          <span className="hero-demo-subtitle-label">{SCENES[uiScene]?.label}</span>
-          <span className="hero-demo-subtitle-sep">//</span>
-          <span className="hero-demo-subtitle-text">{displayedSubtitle}</span>
-          <span className="hero-demo-subtitle-cursor">|</span>
+        {/* 场景字幕 — fixed 定位，贴近 CTA（手机端 CTA 可见） */}
+        <div style={{
+          position: "fixed",
+          bottom: "60px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          zIndex: 2147483647,
+          opacity: 1,
+          pointerEvents: "none",
+          background: "rgba(0,0,0,0.7)",
+          padding: "8px 16px",
+          borderRadius: 8,
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(144,200,255,0.9)", flexShrink: 0, display: "inline-block" }} />
+          <span style={{ fontFamily: "monospace", fontSize: 12, letterSpacing: "0.3em", color: "#90c8ff", textTransform: "uppercase" }}>{SCENES[uiScene]?.label}</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", fontSize: 12 }}>//</span>
+          <span style={{ fontFamily: "sans-serif", fontSize: 14, fontWeight: 400, color: "#fff" }}>{displayedSubtitle || "(waiting...)"}</span>
+          <span style={{ color: "#90c8ff", fontSize: 14 }}>|</span>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(144,200,255,0.9)", flexShrink: 0, display: "inline-block" }} />
+          <span style={{ fontFamily: "monospace", fontSize: 12, letterSpacing: "0.3em", color: "#90c8ff", textTransform: "uppercase" }}>{SCENES[uiScene]?.label}</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", fontSize: 12 }}>//</span>
+          <span style={{ fontFamily: "sans-serif", fontSize: 14, fontWeight: 400, color: "#fff" }}>{displayedSubtitle || "(waiting...)"}</span>
+          <span style={{ color: "#90c8ff", fontSize: 14 }}>|</span>
         </div>
 
         <div className="hero-demo-ctas">

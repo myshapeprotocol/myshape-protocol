@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function proxy(req: NextRequest) {
   const host = req.headers.get("host") || "";
 
-  // Force HTTPS redirect
+  // Force HTTPS redirect — production only (Vercel edge). In dev, Next.js/Turbopack sets x-forwarded-proto which causes a broken 301 loop.
   if (process.env.NODE_ENV === "production" && req.headers.get("x-forwarded-proto") === "http") {
     const httpsUrl = req.url.replace("http://", "https://");
     return NextResponse.redirect(httpsUrl, 301);
