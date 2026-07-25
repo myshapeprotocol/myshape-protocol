@@ -1,0 +1,38 @@
+{
+  "_comment": "CPS-0001 Test Vector — V₇ FAIL: previousReceiptHash does not match predecessor",
+  "protocolVersion": "1.0",
+  "assertions": {
+    "observationOccurred": { "value": true, "confidence": 0.95 },
+    "continuityMaintained": { "value": true, "confidence": 0.85 },
+    "receiptIntegrity": { "value": true, "confidence": 1.0 }
+  },
+  "evidence": [
+    {
+      "engineId": "com.example.simulation",
+      "engineVersion": "1.0.0",
+      "confidence": 0.85,
+      "payload": { "score": 0.85, "timestamp": "2026-07-22T10:00:04.000Z" },
+      "payloadDigest": "b53905ceb79fbeb9397fdbb2bba81b5ff224c65b2668bf6103e955a54dcae6d9"
+    }
+  ],
+  "receiptId": "0193a62e-9d33-74ca-be5f-a3b4c5d6e7f8",
+  "interval": {
+    "start": "2026-07-22T10:10:00.000Z",
+    "end": "2026-07-22T10:10:08.000Z",
+    "coverageMs": 8000
+  },
+  "subject": { "id": "sha256:abcd1234efgh5678", "type": "embodied" },
+  "expiresAt": "2026-07-22T10:15:08.000Z",
+  "previousReceiptHash": "sha256:this-hash-does-not-match-any-predecessor-receipt-00000000000000000000000000",
+  "references": [],
+  "verdict": "PASS",
+  "issuer": {
+    "id": "sha256:issuer001",
+    "publicKey": "MCowBQYDK2VwAyEAabc123def456ghi789jkl012mno345pqr678stu901vwx234yz"
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "value": "iGy9Pq3KlxAbCdEfGhIjKlMnOpQrStUvWxYz0123456789AbCdEfGhIjKlMnOpQr",
+    "signedAt": "2026-07-22T10:10:08.000Z"
+  }
+}

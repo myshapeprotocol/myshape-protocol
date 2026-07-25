@@ -1,0 +1,22 @@
+{
+  "dataset_name": "cps-0001-benchmark",
+  "version": "1.0-RC",
+  "published_by": "The Continuity Lab",
+  "license": "CC0-1.0",
+  "description": "CPS-0001 Continuity Protocol Standard — test vectors, engine benchmarks, and verification data.",
+  "engines": [
+    { "id": "EE-001", "name": "Presence Entropy Score", "pass_rate": "100% floor", "n": null, "status": "active" },
+    { "id": "EE-002", "name": "Event-Level Causal Coupling", "pass_rate": "58%", "n": 316, "status": "active" },
+    { "id": "EE-003", "name": "Gyroscope Challenge", "pass_rate": "60%", "n": 150, "status": "active" },
+    { "id": "VS-001", "name": "Dual-Engine Verification Session", "pass_rate": "93%", "n": 60, "status": "active" }
+  ],
+  "test_vectors": {
+    "valid": ["single-engine.json", "multi-engine.json", "agent-trace.json"],
+    "invalid": ["expired.json", "tampered-evidence.json", "broken-chain.json"]
+  },
+  "conformance_suite": {
+    "assertions": 23,
+    "scenarios": 10,
+    "verification_steps": "V1-V7"
+  }
+}

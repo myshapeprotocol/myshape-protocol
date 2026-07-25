@@ -1,0 +1,38 @@
+{
+  "_comment": "CPS-0001 Test Vector — V₆ FAIL: receipt has expired",
+  "protocolVersion": "1.0",
+  "assertions": {
+    "observationOccurred": { "value": true, "confidence": 0.95 },
+    "continuityMaintained": { "value": true, "confidence": 0.85 },
+    "receiptIntegrity": { "value": true, "confidence": 1.0 }
+  },
+  "evidence": [
+    {
+      "engineId": "com.example.simulation",
+      "engineVersion": "1.0.0",
+      "confidence": 0.85,
+      "payload": { "score": 0.85, "timestamp": "2020-01-01T00:00:04.000Z" },
+      "payloadDigest": "a75cab288cad6bda0f55bd4e9c6968b5adb1b328596926a37cc9671bf5996d27"
+    }
+  ],
+  "receiptId": "0193a62e-7b11-74a8-9c3d-f1e2a3b4c5d6",
+  "interval": {
+    "start": "2020-01-01T00:00:00.000Z",
+    "end": "2020-01-01T00:00:08.000Z",
+    "coverageMs": 8000
+  },
+  "subject": { "id": "sha256:expired-subject", "type": "embodied" },
+  "expiresAt": "2020-01-01T00:05:08.000Z",
+  "previousReceiptHash": null,
+  "references": [],
+  "verdict": "PASS",
+  "issuer": {
+    "id": "sha256:issuer001",
+    "publicKey": "MCowBQYDK2VwAyEAabc123def456ghi789jkl012mno345pqr678stu901vwx234yz"
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "value": "iGy9Pq3KlxAbCdEfGhIjKlMnOpQrStUvWxYz0123456789AbCdEfGhIjKlMnOpQr",
+    "signedAt": "2020-01-01T00:00:08.000Z"
+  }
+}
