@@ -669,11 +669,6 @@ export default function HeroDemo() {
           <span style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", fontSize: 12 }}>//</span>
           <span style={{ fontFamily: "sans-serif", fontSize: 14, fontWeight: 400, color: "#fff" }}>{displayedSubtitle || "(waiting...)"}</span>
           <span style={{ color: "#90c8ff", fontSize: 14 }}>|</span>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(144,200,255,0.9)", flexShrink: 0, display: "inline-block" }} />
-          <span style={{ fontFamily: "monospace", fontSize: 12, letterSpacing: "0.3em", color: "#90c8ff", textTransform: "uppercase" }}>{SCENES[uiScene]?.label}</span>
-          <span style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", fontSize: 12 }}>//</span>
-          <span style={{ fontFamily: "sans-serif", fontSize: 14, fontWeight: 400, color: "#fff" }}>{displayedSubtitle || "(waiting...)"}</span>
-          <span style={{ color: "#90c8ff", fontSize: 14 }}>|</span>
         </div>
 
         <div className="hero-demo-ctas">
