@@ -648,9 +648,9 @@ export default function HeroDemo() {
           ))}
         </div>
 
-        {/* 场景字幕 — fixed 定位，贴近 CTA（手机端 CTA 可见） */}
+        {/* 场景字幕 — 贴近 CTA（手机端 CTA 可见） */}
         <div style={{
-          position: "fixed",
+          position: "absolute",
           bottom: "60px",
           left: "50%",
           transform: "translateX(-50%)",
