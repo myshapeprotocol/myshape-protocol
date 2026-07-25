@@ -1,7 +1,6 @@
 ---
 license: cc0-1.0
 task_categories:
-  - time-series
   - tabular-classification
 language:
   - en
