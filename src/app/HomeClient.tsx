@@ -48,7 +48,6 @@ export default function HomeClient() {
             <a href="/research/notes/004-motion-signature-rfc" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[11px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">RFC-0001</a>
             <a href="/research/notes/006-continuity-proof-rfc" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[11px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">RFC-0002</a>
             <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[11px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">npm</a>
-            <a href="https://github.com/myshapeprotocol" className="px-5 py-3 border border-[#1E293B] bg-[#0B1220] text-[#A7B4C6] text-[11px] tracking-[0.15em] uppercase font-mono hover:border-[#60A5FA]/30 hover:text-[#60A5FA] transition-all">GitHub</a>
           </div>
         </section>
 
