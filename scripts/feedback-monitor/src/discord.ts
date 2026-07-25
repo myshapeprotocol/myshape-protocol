@@ -76,6 +76,8 @@ export function formatGitHubEvents(events: GitHubEvent[]): Embed[] {
     pr: "🔀",
     fork: "🍴",
     comment: "💬",
+    discussion: "🗣️",
+    discussion_comment: "💬",
   };
 
   return events.map((e) => ({

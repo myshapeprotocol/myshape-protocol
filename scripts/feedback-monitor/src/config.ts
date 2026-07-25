@@ -31,6 +31,7 @@ export const TITLE_FILTER = [
 /** GitHub repos to monitor */
 export const GITHUB_REPOS = [
   { owner: "myshapeprotocol", repo: "myshape-protocol" },
+  { owner: "ContinuityLab-Org", repo: "continuity-protocol" },
   { owner: "RaymondHWu", repo: "myshape-site" },
 ];
 

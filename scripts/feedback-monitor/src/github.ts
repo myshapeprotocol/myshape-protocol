@@ -12,7 +12,7 @@ import { GITHUB_REPOS } from "./config";
 
 export interface GitHubEvent {
   repo: string;
-  type: "star" | "issue" | "pr" | "fork" | "comment";
+  type: "star" | "issue" | "pr" | "fork" | "comment" | "discussion" | "discussion_comment";
   title: string;
   url: string;
   author: string;
@@ -61,6 +61,7 @@ interface GhEvent {
     issue?: { title: string; html_url: string };
     pull_request?: { title: string; html_url: string };
     comment?: { html_url: string; text?: string };
+    discussion?: { title: string; html_url: string };
   };
 }
 
@@ -74,12 +75,12 @@ export function getRecentEvents(owner: string, repo: string): GitHubEvent[] {
 
     const allEvents = JSON.parse(raw) as GhEvent[];
     const relevant = allEvents.filter((e) =>
-      ["IssuesEvent", "IssueCommentEvent", "WatchEvent", "ForkEvent", "PullRequestEvent"].includes(e.type)
+      ["IssuesEvent", "IssueCommentEvent", "WatchEvent", "ForkEvent", "PullRequestEvent", "DiscussionEvent", "DiscussionCommentEvent"].includes(e.type)
     );
 
     return relevant.slice(0, 20).map((e) => {
-      const title = e.payload.issue?.title || e.payload.pull_request?.title || "";
-      const url = e.payload.issue?.html_url || e.payload.comment?.html_url || e.payload.pull_request?.html_url || "";
+      const title = e.payload.issue?.title || e.payload.pull_request?.title || e.payload.discussion?.title || "";
+      const url = e.payload.issue?.html_url || e.payload.comment?.html_url || e.payload.pull_request?.html_url || e.payload.discussion?.html_url || "";
 
       return {
         repo: `${owner}/${repo}`,
@@ -103,6 +104,8 @@ function mapEventType(t: string): GitHubEvent["type"] {
   if (t === "IssueCommentEvent") return "comment";
   if (t === "ForkEvent") return "fork";
   if (t === "PullRequestEvent") return "pr";
+  if (t === "DiscussionEvent") return "discussion";
+  if (t === "DiscussionCommentEvent") return "discussion_comment";
   return "issue";
 }
 
