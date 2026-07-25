@@ -11,6 +11,7 @@
 | ID | Title | Status |
 |----|-------|--------|
 | FD-001 | Frame Rate Hypothesis | ✓ Published |
+| FD-002 | Why Single Evidence Engines Plateau | ✓ Published |
 | DL-001 | Direction Asymmetry in EE-003 | ✓ Published |
 
 ### Research Notes
@@ -20,7 +21,7 @@
 | RN-001 | The Continuity Problem | ✓ Published |
 | RN-002 | PES Benchmark v0.2 | ✓ Published |
 | RN-003 | Cross-Modal Binding (477 runs) | ✓ Published |
-| RN-004 | TBD | ← Next |
+| RN-004 | From Human Verification to Continuity Infrastructure | ✓ Published |
 
 ### Specifications (RFC)
 
