@@ -6,6 +6,8 @@
 [![npm](https://img.shields.io/badge/npm-@thecontinuitylab/myshape-red)](https://www.npmjs.com/package/@thecontinuitylab/myshape)
 [![Tests](https://img.shields.io/badge/tests-537%20passed-brightgreen)](https://github.com/myshapeprotocol/myshape-protocol)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
+[![Discussions](https://img.shields.io/badge/discussions-welcome-purple)](https://github.com/myshapeprotocol/myshape-protocol/discussions)
+[![CITATION.cff](https://img.shields.io/badge/cite-CITATION.cff-orange)](CITATION.cff)
 
 Research by [The Continuity Lab](https://thecontinuitylab.org). MyShape is the first protocol implementation, maintained separately.
 
