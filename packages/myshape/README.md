@@ -1,17 +1,17 @@
-# MyShape Protocol
+# @thecontinuitylab/myshape
 
-> **Researching continuity as a verifiable property of the digital world.**
+> **Motion-signature verification for continuity proofs. CPS-0001 compatible.**
 
-[![RFC-0001](https://img.shields.io/badge/RFC-0001-blue)](https://www.myshape.com/research/notes/004-motion-signature-rfc)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CPS-0001](https://img.shields.io/badge/CPS-0001-v1.0--RC-gold)](https://github.com/myshapeprotocol/myshape-protocol)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
+[![npm](https://img.shields.io/badge/npm-@thecontinuitylab/myshape-red)](https://www.npmjs.com/package/@thecontinuitylab/myshape)
 
-`myshape` is the reference implementation of the [MyShape Motion Signature Format (RFC-0001)](https://www.myshape.com/research/notes/004-motion-signature-rfc).  
-One function. Sensor data in → verification result out.
+Reference implementation of the MyShape motion-signature engine. Sensor data in → verification result out. Research by [The Continuity Lab](https://thecontinuitylab.org).
 
 ## Install
 
 ```bash
-npm install myshape
+npm install @thecontinuitylab/myshape
 ```
 
 ## Usage
@@ -54,11 +54,12 @@ console.log(result.evidence);   // per-component scores + diagnostics
 
 ## The Continuity Lab
 
-This package is maintained by [The Continuity Lab](https://www.myshape.com/research), a research group studying continuity as a verifiable property of the digital world.
+This package is maintained by [The Continuity Lab](https://thecontinuitylab.org), a research group studying continuity as a verifiable property of the digital world.
 
-- **Research Notes** → [myshape.com/research](https://www.myshape.com/research)
-- **GitHub** → [github.com/myshapeprotocol](https://github.com/myshapeprotocol)
+- **GitHub Org** → [github.com/ContinuityLab-Org](https://github.com/ContinuityLab-Org)
+- **Protocol Spec** → [CPS-0001](https://github.com/ContinuityLab-Org/continuity-protocol)
+- **Implementation** → [myshape-protocol](https://github.com/myshapeprotocol/myshape-protocol)
 
 ## License
 
-MIT
+Apache-2.0. See [LICENSE](LICENSE).

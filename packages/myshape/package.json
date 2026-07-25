@@ -1,8 +1,8 @@
 {
   "name": "@thecontinuitylab/myshape",
   "version": "0.1.2",
-  "description": "MyShape Protocol — verifiable continuity. One function: verifyContinuity()",
-  "license": "MIT",
+  "description": "MyShape Protocol — motion-signature verification with continuity proofs. CPS-0001 compatible. Engine-independent: any sensor, any team.",
+  "license": "Apache-2.0",
   "author": "The Continuity Lab",
   "repository": {
     "type": "git",
@@ -13,7 +13,21 @@
     "continuity",
     "verification",
     "presence",
-    "pes"
+    "pes",
+    "cps-0001",
+    "ed25519",
+    "zero-knowledge",
+    "identity",
+    "behavioral-biometrics",
+    "imu",
+    "sensor-fusion",
+    "protocol",
+    "decentralized-identity",
+    "on-device",
+    "privacy-preserving",
+    "continuity-protocol",
+    "typescript",
+    "research"
   ],
   "type": "module",
   "main": "./dist/index.js",
