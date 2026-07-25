@@ -42,23 +42,28 @@ export default function LabPage() {
             style={{ maxWidth: "min(100%, 420px)", height: "auto", objectFit: "contain" }} />
         </div>
 
-        {/* Tagline */}
+        {/* Tagline — the question itself */}
         <p className="fade-in fade-in-2"
-          style={{ fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)", color: "#94A3B8", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 28px" }}>
-          Researching continuity<br />
-          as a verifiable property<br />
-          of the digital world.
+          style={{ fontSize: "clamp(1.05rem, 1.8vw, 1.35rem)", color: "#E6EDF7", lineHeight: 1.5, maxWidth: 560, margin: "0 auto 20px", fontWeight: 300 }}>
+          What is continuity —
+          and can it be made a verifiable property
+          of digital existence?
         </p>
 
         {/* Narrative hook */}
         <p className="fade-in fade-in-3"
           style={{ fontSize: 13, color: "#64748B", lineHeight: 1.8, maxWidth: 520, margin: "0 auto 36px" }}>
-          Today's internet can verify identity. It cannot verify continuity — the property that a digital subject is the same physically embodied entity across time. The Continuity Lab explores whether continuity can become a measurable property rather than an assumption.
+          Identity tells us who you claim to be. Continuity tells us whether you remained you.
+          The internet has protocols for identity, for data, and for value —
+          but no protocol for proving that a digital subject is the same entity across time.
+          The Continuity Lab exists to ask this question —
+          and to build the infrastructure that makes it answerable.
         </p>
 
         <p className="fade-in fade-in-3"
           style={{ fontSize: 12, color: "rgba(96,165,250,0.45)", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 36px" }}>
-          The Continuity Lab is the research organization behind the <a href="https://www.myshape.com/research/notes/008-continuity-protocol-core" style={{ color: "rgba(96,165,250,0.55)", textDecoration: "underline" }}>Continuity Protocol (CPS-0001)</a>. MyShape is the first protocol implementation, maintained separately.
+          Our first output is the <a href="https://www.myshape.com/research/notes/008-continuity-protocol-core" style={{ color: "rgba(96,165,250,0.55)", textDecoration: "underline" }}>Continuity Protocol (CPS-0001)</a> — an open standard for continuity receipts.
+          Not a product. Not a company. Not a token. A research program.
         </p>
 
         {/* Nav links */}

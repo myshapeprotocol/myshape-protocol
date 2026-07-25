@@ -64,6 +64,9 @@
 - Longitudinal study (same entity, weeks apart)
 - Multi-entity tracking (N > 1 in camera frame)
 - Privacy-preserving verification (ZK EvidenceReceipt)
+- **AI Agent Continuity** ← first priority application (AgentModelHash, BehaviorProfile, ToolPermissionState)
+- **Enterprise Session Continuity** (SessionContext, RiskSignal, AccessPattern)
+- **Robotics Continuity** (FirmwareVersion, SensorState, ControlModelHash)
 
 ### Specifications
 

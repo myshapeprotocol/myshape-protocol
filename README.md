@@ -1,6 +1,6 @@
-# MyShape Protocol
+# CPS-0001
 
-> **CPS-0001 v1.0-RC** — An engine-independent protocol object for continuity assertions.
+> **A verifiable temporal trust layer for digital entities.**
 
 [![CPS-0001](https://img.shields.io/badge/CPS-0001-v1.0--RC-gold)](https://myshape.com/research/notes/008-continuity-protocol-core)
 [![npm](https://img.shields.io/badge/npm-@thecontinuitylab/myshape-red)](https://www.npmjs.com/package/@thecontinuitylab/myshape)
@@ -9,7 +9,7 @@
 [![Discussions](https://img.shields.io/badge/discussions-welcome-purple)](https://github.com/myshapeprotocol/myshape-protocol/discussions)
 [![CITATION.cff](https://img.shields.io/badge/cite-CITATION.cff-orange)](CITATION.cff)
 
-Research by [The Continuity Lab](https://thecontinuitylab.org). MyShape is the first protocol implementation, maintained separately.
+Research by [The Continuity Lab](https://thecontinuitylab.org). CPS-0001 is a protocol — not a product, not a company, not a token. MyShape is the first protocol implementation, maintained separately.
 
 ---
 
