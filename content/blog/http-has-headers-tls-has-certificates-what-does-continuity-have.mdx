@@ -1,0 +1,102 @@
+---
+title: "HTTP Has Headers. TLS Has Certificates. What Does Continuity Have?"
+subtitle: "Every protocol layer has a data format for its core concern. Continuity — the property that the same entity is still here — has none. Here's what we're building to fix that."
+date: "2026.07.26"
+tags: ["protocol", "CPS-0001", "RFC", "standards"]
+category: "Standards"
+series: "Continuity Lab"
+featured: true
+---
+
+Take any protocol layer in the internet stack. Each one has a data format for its core concern:
+
+- HTTP has headers. They carry metadata about the request — content type, caching, authentication tokens.
+- TLS has certificates. They carry identity claims about the server — domain name, public key, issuer signature.
+- OAuth has tokens. They carry a delegation of authority — who granted what to whom.
+- JWT has claims. They carry assertions about a subject — issued at, expires, subject identifier.
+
+Each of these formats exists because someone recognized that a cross-cutting concern (metadata, server identity, authorization, claims) needed a standard way to be expressed, exchanged, and verified.
+
+Now here's the question: **what does continuity have?**
+
+## The Missing Layer
+
+Continuity — the property that the same entity has been continuously present across time — has no data format. No standard. No protocol primitive.
+
+If you wanted to prove that a subject has been continuously present for the last hour, you would have no standard way to do it. You'd invent something ad hoc: maybe a heartbeat log with timestamps, maybe a sequence of signed attestations, maybe a session token that assumes continuity without proving it.
+
+These ad hoc solutions share a common flaw: they're not interoperable. Your heartbeat format doesn't work with someone else's verifier. Your attestation chain can't be validated by a third party. Your session token makes continuity assumptions that collapse the moment you move beyond a single domain.
+
+The internet has no continuity primitive. And until recently, it didn't need one.
+
+## Why Now
+
+Three forces are converging that make a continuity primitive necessary:
+
+**1. AI agents with signing authority.** An AI agent that holds private keys, makes financial decisions, and acts autonomously needs to prove it's the same agent across time — not just at the moment of key enrollment.
+
+**2. Real-time deepfakes.** When a video call can be manipulated in real time, the gap between identity checks becomes a vulnerability window. You need continuous verification, not point-in-time checks.
+
+**3. Cross-domain sessions.** As digital identity becomes more portable (SSI, DIDs, verifiable credentials), the continuity of a session across domains becomes a problem that no single provider can solve. You need a standard.
+
+## CPS-0001: A First Attempt
+
+CPS-0001 is a draft protocol that defines a continuity receipt — a cryptographic object that carries a verifiable statement of continuity.
+
+A receipt looks like this conceptually:
+
+```
+Continuity Receipt {
+  subject: "<identifier of the entity being observed>",
+  evidenceDigest: "<SHA-256 of sensor evidence>",
+  confidence: 0.87,
+  timestamp: "2026-07-26T12:00:00Z",
+  engineId: "EE-001",
+  predecessorDigest: "<SHA-256 of previous receipt>",
+  signature: "<Ed25519 signature over all fields>"
+}
+```
+
+Key design decisions:
+
+**It does not identify the subject.** The subject field is an opaque reference — could be a session ID, a DID, a public key hash. The receipt doesn't care. Continuity is separate from identity.
+
+**It does not contain sensor data.** The receipt carries a digest, not the raw evidence. Privacy-preserving by construction.
+
+**It is self-verifying.** Anyone with the receipt, the protocol specification, and the producer's public key can verify the receipt. No access to sensor hardware, raw data, or the original verification engine required.
+
+**It is chainable.** Each receipt can reference its predecessor via `predecessorDigest`. A chain of receipts forms a verifiable trajectory. You can check "has this entity been continuously present since T₀?" by walking the chain.
+
+## What This Is Not
+
+Let's be explicit about what CPS-0001 is not:
+
+- It is not an identity protocol. It doesn't say who you are.
+- It is not a biometric standard. It doesn't care what sensor produced the evidence.
+- It is not a blockchain primitive. It doesn't require a distributed ledger.
+- It is not a product. It's an open specification, Apache 2.0, anyone can implement it.
+
+It's a protocol object. Like a JWT, but for continuity claims instead of identity claims.
+
+## The Test: Can Someone Else Implement It?
+
+We built three independent implementations to test whether CPS-0001 is actually engine-independent:
+
+1. A reference implementation using the Web Crypto API
+2. A second implementation using `@noble/hashes` and `@noble/curves`
+3. A third implementation in a completely different language
+
+All three produce receipts that all three verifiers accept. This is the bar for a protocol: not "our code works" but **"your code works against my verifier."**
+
+## Next Steps
+
+The protocol is at v1.0-RC. We're looking for:
+
+- Security review from cryptographers
+- Implementation feedback from protocol engineers
+- Real-world deployment testing from teams that have a continuity gap in their system
+- A second independent spec author — someone willing to read the spec and implement from scratch, without referencing our code
+
+If any of those describes you, the spec is open, the code is on GitHub, and we answer questions faster than most companies answer support tickets.
+
+Not because we're a company. Because we're researchers, and engagement is how research improves.

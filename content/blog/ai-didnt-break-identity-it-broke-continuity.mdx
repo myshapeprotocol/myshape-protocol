@@ -1,0 +1,91 @@
+---
+title: "AI Didn't Break Identity. It Broke Continuity."
+subtitle: "Everyone is talking about deepfakes, voice clones, and AI agents. But the real thing that broke isn't who you are — it's whether you're still here."
+date: "2026.07.26"
+tags: ["continuity", "AI", "deepfakes", "protocol"]
+category: "Continuity"
+series: "Continuity Lab"
+featured: true
+---
+
+The conversation about AI and identity is stuck on the wrong question.
+
+Everyone is asking: "How do we verify identity in a world where AI can generate anything?" Facial recognition companies are racing to add liveness detection. Voice authentication vendors are layering on anti-spoofing checks. Password-based systems are adding behavioral biometrics.
+
+These are all attempts to fix the identity verification problem. And they're all missing the point.
+
+## The Wrong Diagnosis
+
+Here's the diagnosis the industry has settled on: AI can fake identity signals, therefore we need better identity signals.
+
+This sounds reasonable. It's also wrong.
+
+The problem isn't that identity signals are getting weaker. It's that **the concept of identity verification itself is answering the wrong question.**
+
+"Who are you?" assumes that once the answer is given, it stays constant. It assumes that the person who authenticated at T=0 is the same person who's still there at T=3600. It assumes that identity is a state, not a process.
+
+It's not.
+
+Identity is a continuous claim. Every second that passes after authentication is a second in which that claim could have been broken. And we have no protocol for checking.
+
+## What Actually Changed
+
+Before generative AI, identity and presence were coupled by default.
+
+If you saw a face on a video call, it meant a real face was in front of a real camera. If you heard a voice on a call, it meant a real person was speaking. The identity signal (face, voice) carried an implicit presence guarantee.
+
+AI broke this coupling. Now a face on screen is evidence of nothing. A voice on a call proves nothing. The identity signal is intact — the face is recognizable, the voice sounds right — but the presence guarantee is gone.
+
+**Identity verification got harder. Continuity verification was never built.**
+
+## The Missing Primitive
+
+The internet has protocols for identity:
+
+- OAuth tells a service who you are.
+- TLS tells you who the server is.
+- DIDs tell you who controls a decentralized identifier.
+- Verifiable credentials tell you what claims someone holds.
+
+Every one of these answers "who." None answers **"whether the same entity is still here."**
+
+That question — the continuity question — has no protocol. No data format. No standard. No cryptographic primitive. It's a gap that the entire internet has been living with because, until AI, we didn't need to fill it.
+
+Now we do.
+
+## What a Continuity Protocol Looks Like
+
+A continuity protocol wouldn't replace identity protocols. It would sit alongside them, asking a different question:
+
+- Identity protocol: "Who is this?"
+- Continuity protocol: "Has the same entity been continuously present?"
+
+A continuity protocol needs three properties:
+
+1. **Temporal.** It must prove persistence across time, not just a point-in-time check. A continuity receipt isn't a snapshot — it's a trajectory.
+
+2. **Engine-independent.** The protocol must work with any sensor or evidence engine (IMU, camera, lidar, heart rate, whatever). It defines the receipt format, not how the evidence is collected.
+
+3. **Self-verifying.** Anyone with the receipt must be able to verify it without access to the original sensor data. The receipt is the proof.
+
+This is what CPS-0001 defines. Not who you are. That you stayed.
+
+## Why Engineers Should Care
+
+If you build systems that involve authentication, authorization, or identity:
+
+- Your OAuth tokens prove who logged in. They don't prove the same person is still at the keyboard.
+- Your session cookies prove the browser is the same. They don't prove the human operating it hasn't changed.
+- Your API keys prove the caller has credentials. They don't prove the caller is the same entity that enrolled them.
+
+Every one of these systems has a continuity gap. Right now, nobody checks for it because nobody has a way to check.
+
+That's what we're building.
+
+## The Research Posture
+
+We're not claiming to have solved the continuity problem. We're claiming to have **named it**, to have built the first protocol object for expressing continuity claims, and to have demonstrated that multiple independent engines can produce interoperable continuity receipts.
+
+There's a lot we still don't know. The open problems are real: sensor reliability, adversarial robustness, cross-platform standardization. If you're interested in any of them, we'd rather collaborate than compete.
+
+The protocol is open. The dataset is public. The research notes are published. Come take a look.

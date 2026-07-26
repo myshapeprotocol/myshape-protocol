@@ -213,7 +213,7 @@ export default function ContributePage() {
 
   /* ── Main UI ── */
   return (
-    <div style={{ minHeight: "100dvh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, textAlign: "center" }}>
+    <div style={{ minHeight: "100dvh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "80px 24px 60px", textAlign: "center" }}>
       <div style={{ maxWidth: 380, width: "100%" }}>
 
         {/* ── Progress dots ── */}

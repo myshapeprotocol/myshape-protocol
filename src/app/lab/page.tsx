@@ -1,5 +1,7 @@
 "use client";
 
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
+
 export default function LabPage() {
   return (
     <>
@@ -31,7 +33,8 @@ export default function LabPage() {
       .fade-in-2 { animation-delay: 0.5s; }
       .fade-in-3 { animation-delay: 0.7s; }
     `}</style>
-    <div style={{ minHeight: "100vh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, -apple-system, sans-serif", position: "relative" }}>
+      <BackgroundParticles />
 
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "80px 24px 32px", maxWidth: 720, margin: "0 auto" }}>
@@ -62,16 +65,17 @@ export default function LabPage() {
 
         <p className="fade-in fade-in-3"
           style={{ fontSize: 12, color: "rgba(96,165,250,0.45)", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 36px" }}>
-          Our first output is the <a href="https://www.myshape.com/research/notes/008-continuity-protocol-core" style={{ color: "rgba(96,165,250,0.55)", textDecoration: "underline" }}>Continuity Protocol (CPS-0001)</a> — an open standard for continuity receipts.
-          Not a product. Not a company. Not a token. A research program.
+          The research program has produced an <a href="https://www.myshape.com/research/notes/008-continuity-protocol-core" style={{ color: "rgba(96,165,250,0.55)", textDecoration: "underline" }}>open protocol for continuity receipts (CPS-0001)</a> — an engine-independent standard for verifiable evidence.
+          Not a product. Not a company. Not a token. A research question.
         </p>
 
         {/* Nav links */}
         <div className="fade-in fade-in-3" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <a href="/continuity" style={{ fontSize: 12, color: "rgba(144,200,255,0.7)", textDecoration: "none", letterSpacing: "0.06em" }}>Why Continuity ▸</a>
+          <a href="/about-myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>About</a>
           <a href="https://github.com/myshapeprotocol" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>GitHub</a>
           <a href="https://huggingface.co/TheContinuityLab" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>HuggingFace</a>
           <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>npm</a>
-          <a href="https://www.myshape.com/research" style={{ fontSize: 12, color: "rgba(96,165,250,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>Research Hub</a>
           <a href="/lab/playground" style={{ fontSize: 12, color: "rgba(34,211,238,0.55)", textDecoration: "none", letterSpacing: "0.06em" }}>Playground ▸</a>
           <a href="/lab/contribute" style={{ fontSize: 12, color: "rgba(52,211,153,0.55)", textDecoration: "none", letterSpacing: "0.06em" }}>Contribute Data ▸</a>
           <a href="/lab/discovery-survey" style={{ fontSize: 12, color: "rgba(212,175,55,0.6)", textDecoration: "none", letterSpacing: "0.06em" }}>Discovery Survey ▸</a>
@@ -89,6 +93,10 @@ export default function LabPage() {
           ))}
         </div>
         <div style={{ textAlign: "right", fontSize: 11, color: "rgba(255,255,255,0.30)", marginBottom: 48 }}>Last updated 2026-07-22</div>
+
+        <div style={{ fontSize: "clamp(0.95rem, 1.5vw, 1rem)", fontWeight: 300, color: "rgba(255,255,255,0.4)", lineHeight: 1.7, marginBottom: 36 }}>
+          Our research program has produced specifications, notes, benchmarks, and a growing body of evidence. Here is what exists today.
+        </div>
 
         <div style={{ fontSize: 11, color: "#60A5FA", textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: 12 }}>Specifications</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 36 }}>

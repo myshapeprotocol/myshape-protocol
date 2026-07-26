@@ -1,0 +1,92 @@
+---
+title: "What If Verification Returned Evidence Instead of Yes/No?"
+subtitle: "Every SDK you've ever used returns true or false. We think that's the wrong data model — and it's holding back an entire category of applications."
+date: "2026.07.26"
+tags: ["SDK", "evidence", "protocol", "developer"]
+category: "Continuity"
+series: "Continuity Lab"
+featured: true
+---
+
+Here's how every verification SDK you've ever used works:
+
+```typescript
+const result = await verify(credentials);
+// result: { success: true } or { success: false }
+```
+
+That's it. A boolean. Yes or no. Pass or fail.
+
+It seems natural because we're used to it. But think about what's lost when you reduce verification to a single bit:
+
+- How confident was the verification?
+- What evidence was examined?
+- When did the verification happen?
+- What engine produced the verdict?
+- Can someone else verify the same evidence independently?
+
+A boolean can't answer any of these. And in a world where verification decisions are increasingly consequential — granting access to systems, authorizing transactions, delegating authority to AI agents — a boolean is not enough.
+
+## The Evidence Object Model
+
+What if verification returned something richer? Not a verdict, but a **receipt**:
+
+```typescript
+const receipt = await verify({
+  subject: "session://abc123",
+  engines: ["presence", "causal-coupling"],
+  duration: 300, // seconds
+});
+
+// receipt: {
+//   evidenceDigest: "sha256:abc...",
+//   engines: ["EE-001", "EE-002"],
+//   confidence: 0.87,
+//   timestamp: "2026-07-26T12:00:00Z",
+//   predecessorDigest: "sha256:def...",
+//   signature: "ed25519:xyz...",
+// }
+```
+
+This isn't a boolean. It's a **verifiable statement** about what was observed, by whom, when, and with what confidence. Anyone with the receipt can verify it independently — no access to the original sensor data needed.
+
+## Why This Changes Everything
+
+### 1. Auditability
+
+A boolean tells you the door opened. An evidence receipt tells you **why** the door opened, **when**, and with **what confidence**. If something goes wrong, you can trace backwards through the chain of receipts to find the break.
+
+### 2. Composability
+
+A single receipt is a point-in-time check. A chain of receipts — each linking to its predecessor via a hash — is a **trajectory**. You can ask: "Has this entity been continuously verified for the last hour?" by checking the chain. You don't need the original sensor data. The receipts are the proof.
+
+### 3. Engine Independence
+
+The receipt format doesn't care how the evidence was collected. An IMU-based engine, a camera-based engine, and a completely custom hardware sensor can all produce the same receipt format. Verifiers don't need to know about sensors. They only need to read receipts.
+
+### 4. Privacy by Design
+
+The receipt contains a digest of the evidence, not the evidence itself. The original sensor data never leaves the device (or the trusted engine). Verifiers can confirm that evidence was collected without ever seeing the raw data.
+
+## The Protocol, Not the Implementation
+
+This idea — evidence over booleans — became CPS-0001, an open protocol for continuity receipts. It defines:
+
+- The receipt data model (what fields, what semantics)
+- The verification contract (V₁ through V₇ checks)
+- The cryptographic envelope (Ed25519 signatures, SHA-256 chaining)
+- The trust model (what the verifier assumes, what it doesn't)
+
+It does NOT define how evidence is collected. That's engine territory. Different engines for different sensors, different use cases, different threat models — all producing the same receipt format.
+
+## For Developers
+
+If you're building anything that involves verification — authentication, authorization, session management, agent identity, access control — ask yourself:
+
+What would change if your verification function returned evidence instead of a boolean?
+
+Not "should I switch to this protocol." Just: **what would be possible** if verification produced something you could hold, chain, audit, and share?
+
+If the answer is interesting to you, the protocol is open, the code is on GitHub, and we'd welcome your questions — even the skeptical ones, especially the skeptical ones.
+
+We're not selling anything. We're investigating a question. And we think developers who work at the verification layer will recognize the problem immediately.

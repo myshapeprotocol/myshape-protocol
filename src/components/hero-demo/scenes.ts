@@ -9,25 +9,25 @@ export const SCENES: SceneDef[] = [
     name: "formation",
     label: "PRESENCE",
     subtitle:
-      "Your motion is the key. No password. No credentials. No stored data. Presence is the proof — 4-dimensional entropy scoring at 60Hz.",
+      "AI can generate a face in seconds. A voice in milliseconds. But a living body produces entropy patterns that no model has learned to fake. That's the signal.",
   },
   {
     name: "motion",
-    label: "ENTROPY",
+    label: "THE GAP",
     subtitle:
-      "AI cannot forge embodied motion. The irreducible gap between biological entropy and synthetic smoothness is mathematically detectable.",
+      "381 experiments. We don't ask what the data says about identity. We ask whether it looks like a body that is actually, physically here. The answer hides in the noise.",
   },
   {
     name: "verification",
     label: "VERIFICATION",
     subtitle:
-      "Three evidence engines. Cross-modal binding. Challenge-response. 576 experimental runs. Continuity Failure Conditions detect attacks before they succeed.",
+      "Three independent engines. Challenge-response. Cross-modal binding. 576 runs. We're not identifying anyone. We're verifying one thing: the same entity has been continuously present.",
   },
   {
     name: "mesh",
     label: "CONTINUITY",
     subtitle:
-      "Hash-chained evidence receipts form a verifiable timeline. Not a snapshot. A trajectory. Proving you remain you — across time, across devices.",
+      "Every verification produces evidence — not a yes or a no, but a receipt. Linked together, they form a chain of proof. Not who you are. That you stayed.",
   },
 ];
 

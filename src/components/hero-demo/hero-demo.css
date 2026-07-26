@@ -107,6 +107,9 @@
   transition: opacity 0.5s ease;
   visibility: visible;
   z-index: 50;
+  background: rgba(0,0,0,0.55);
+  padding: 5px 12px;
+  border-radius: 8px;
 }
 
 .hero-demo-subtitle.on {
@@ -294,9 +297,9 @@
 /* ── 移动端极简协议入口 ── */
 @media (max-width: 768px) {
   .hero-demo-root {
-    height: 100dvh;
+    height: auto;
     min-height: 100dvh;
-    max-height: 100dvh;
+    max-height: none;
     overflow: hidden;
   }
 
@@ -317,7 +320,7 @@
 
   /* 标题 — 避开固定 Header(60px) + 二级导航(32px) */
   .hero-demo-title-zone {
-    margin-top: clamp(6rem, 12vh, 7rem);
+    margin-top: clamp(4rem, 16vh, 7rem);
   }
 
   .hero-demo-title {
@@ -331,36 +334,21 @@
     opacity: 0.45;
   }
 
-  /* 场景字幕 — CTA 按钮上方，居中 */
   .hero-demo-subtitle {
-    position: absolute;
-    bottom: 68px;
-    top: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex; bottom: 50px;
-    max-width: 90vw;
-    gap: 4px;
-    flex-wrap: wrap;
-    justify-content: center;
-    z-index: 50;
-    visibility: visible !important;
+    display: none;
+  }
+
+  .hero-demo-subtitle-text,
+  .hero-demo-subtitle-label,
+  .hero-demo-subtitle-sep,
+  .hero-demo-subtitle-cursor,
+  .hero-demo-subtitle-dot {
+    /* handled inline in HeroDemo.tsx */
   }
 
   /* 场景指示点 — 移动端隐藏 */
   .hero-demo-dots {
     display: none;
-  }
-
-  .hero-demo-subtitle-text {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.85);
-  }
-
-  .hero-demo-subtitle-label {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: rgba(144, 200, 255, 0.7);
   }
 
   .hero-demo-dot {
@@ -370,17 +358,17 @@
 
   /* CTA — 下半屏，堆叠 */
   .hero-demo-ctas {
-    bottom: 10px;
-    gap: 8px;
+    bottom: 8px;
+    gap: 10px;
     flex-direction: column;
     align-items: center;
     z-index: 10;
   }
 
   .hero-demo-cta {
-    width: auto; 
+    width: auto;
     max-width: none;
-    padding: 8px 16px; font-size: 11px; letter-spacing: 0.08em;
+    padding: 10px 20px;
     font-size: 11px;
     letter-spacing: 0.3em;
     text-align: center;
@@ -400,15 +388,15 @@
   }
 
   .hero-demo-subtitle {
-    bottom: 50px;
+    bottom: 78px;
   }
 
   .hero-demo-dots {
-    bottom: 112px;
+    bottom: 148px;
   }
 
   .hero-demo-ctas {
-    bottom: 24px;
+    bottom: 66px;
   }
 
   .hero-demo-cta {

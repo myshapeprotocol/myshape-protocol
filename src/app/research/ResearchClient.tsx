@@ -64,10 +64,11 @@ export default function ResearchClient() {
 
         {/* Specifications */}
         <div className="mb-12">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-2">
             <span className="w-1 h-1 rounded-full bg-[#d29922] shadow-[0_0_6px_rgba(210,153,34,0.5)]" />
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#d29922]/70">Specifications</h2>
           </div>
+          <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What would a standard for continuity look like?</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {SPECS.map((s) => (
               <Link key={s.id} href={s.slug} className="rn-card" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
@@ -82,10 +83,11 @@ export default function ResearchClient() {
 
         {/* Research Notes */}
         <div className="mb-12">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-2">
             <span className="w-1 h-1 rounded-full bg-[#60A5FA] shadow-[0_0_6px_rgba(96,165,250,0.5)]" />
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#60A5FA]/70">Research Notes</h2>
           </div>
+          <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What have we learned so far?</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {NOTES.map((n) => (
               <Link key={n.id} href={n.slug} className="rn-card" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
@@ -99,10 +101,11 @@ export default function ResearchClient() {
 
         {/* Research Records */}
         <div className="mb-12">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-2">
             <span className="w-1 h-1 rounded-full bg-[#64748B] shadow-[0_0_4px_rgba(100,116,139,0.3)]" />
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#64748B]/70">Research Records</h2>
           </div>
+          <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What didn't work — and what we learned from it.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {RECORDS.map((r) => (
               <Link key={r.id} href={r.slug} className="rn-card" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)} style={{borderColor:"rgba(100,116,139,0.15)"}}>
@@ -116,10 +119,11 @@ export default function ResearchClient() {
 
         {/* Evidence Engines */}
         <div className="mb-12">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-2">
             <span className="w-1 h-1 rounded-full bg-[#34D399] shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#34D399]/70">Evidence Engines</h2>
           </div>
+          <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What are we actually measuring?</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {ENGINES.map((e) => (
               <Link key={e.engine} href={e.slug} className="bm-card" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>
@@ -133,10 +137,11 @@ export default function ResearchClient() {
 
         {/* Dataset */}
         <div className="mb-12">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-2">
             <span className="w-1 h-1 rounded-full bg-[#a371f7] shadow-[0_0_6px_rgba(163,113,247,0.5)]" />
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#a371f7]/70">Dataset</h2>
           </div>
+          <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">All the data, open and available.</p>
           <a href={DATASET.slug} className="rn-card block max-w-md" target="_blank" rel="noopener noreferrer" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
             <div className="rn-card-num"><span className="rn-card-dot" style={{background:"#a371f7",boxShadow:"0 0 6px rgba(163,113,247,0.5)"}} />{DATASET.id}</div>
             <div className="rn-card-title">{DATASET.name}</div>

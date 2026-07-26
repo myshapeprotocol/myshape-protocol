@@ -527,22 +527,22 @@ export default function HeroDemo() {
       {/* 漩涡叙事文字 */}
       <NarrativeText
         lines={[
-          "PRESENCE IS A SIGNAL.",
-          "THE SELF IS A FIELD.",
-          "GEOMETRY HOLDS MEMORY.",
-          "FORM CARRIES INTENT.",
-          "SOVEREIGNTY BEGINS HERE.",
+          "AI CAN IMITATE ALMOST ANYTHING.",
+          "A FACE. A VOICE. A WRITING STYLE.",
+          "BUT CAN IT IMITATE ENTROPY?",
+          "CAN IT IMITATE THE NOISE OF A PHYSICAL ENTITY",
+          "BEING CONTINUOUSLY, PHYSICALLY HERE?",
         ]}
         visible={showLeft}
         side="left"
       />
       <NarrativeText
         lines={[
-          "YOU ARE A SHAPE.",
-          "A PATTERN IN MOTION.",
-          "A FIELD OF MEMORY.",
-          "A VECTOR OF INTENT.",
-          "MYSHAPE MAKES IT YOURS.",
+          "EVERY VERIFICATION RETURNS EVIDENCE,",
+          "NOT JUST YES OR NO.",
+          "HASH-CHAINED. CRYPTOGRAPHICALLY SIGNED.",
+          "A TRAJECTORY, NOT A SNAPSHOT.",
+          "PROOF THAT YOU STAYED.",
         ]}
         visible={showRight}
         side="right"
@@ -562,10 +562,10 @@ export default function HeroDemo() {
               textShadow: `0 0 ${titleGlow}px rgba(144,200,255,0.35), 0 0 ${titleGlow * 1.4}px rgba(144,200,255,0.18)`,
             }}
           >
-            THE NEW IDENTITY
+            THE CONTINUITY LAYER
           </h1>
           <p className="hero-demo-tagline">
-            Presence is the new identity.<br />The identity layer for the simulation age.
+            Identity tells you who someone claims to be.<br />Continuity asks whether the same entity is still here.
           </p>
         </div>
 
@@ -648,27 +648,31 @@ export default function HeroDemo() {
           ))}
         </div>
 
-        {/* 场景字幕 — 贴近 CTA（手机端 CTA 可见） */}
+        {/* 场景字幕 */}
         <div style={{
           position: "absolute",
-          bottom: "60px",
-          left: "50%",
-          transform: "translateX(-50%)",
+          bottom: "86px",
+          left: "16px",
+          right: "16px",
           display: "flex",
+          flexWrap: "wrap",
           alignItems: "center",
-          gap: "10px",
-          zIndex: 2147483647,
-          opacity: 1,
+          justifyContent: "center",
+          gap: "4px 10px",
+          zIndex: 50,
           pointerEvents: "none",
-          background: "rgba(0,0,0,0.7)",
-          padding: "8px 16px",
+          background: "rgba(0,0,0,0.55)",
+          padding: "5px 12px",
           borderRadius: 8,
+          maxWidth: "calc(100vw - 32px)",
+          margin: "0 auto",
         }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(144,200,255,0.9)", flexShrink: 0, display: "inline-block" }} />
-          <span style={{ fontFamily: "monospace", fontSize: 12, letterSpacing: "0.3em", color: "#90c8ff", textTransform: "uppercase" }}>{SCENES[uiScene]?.label}</span>
-          <span style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", fontSize: 12 }}>//</span>
-          <span style={{ fontFamily: "sans-serif", fontSize: 14, fontWeight: 400, color: "#fff" }}>{displayedSubtitle || "(waiting...)"}</span>
-          <span style={{ color: "#90c8ff", fontSize: 14 }}>|</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(144,200,255,0.9)", flexShrink: 0 }} />
+            <span style={{ fontFamily: "monospace", fontSize: 10, letterSpacing: "0.3em", color: "#90c8ff", textTransform: "uppercase" }}>{SCENES[uiScene]?.label}</span>
+            <span style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", fontSize: 10 }}>//</span>
+          </span>
+          <span style={{ fontFamily: "sans-serif", fontSize: 11, fontWeight: 400, color: "#fff", lineHeight: 1.4, textAlign: "center" }}>{displayedSubtitle || "(waiting...)"}</span>
         </div>
 
         <div className="hero-demo-ctas">

@@ -3,9 +3,9 @@ import HomeClient from "./HomeClient";
 import FaqJsonLd from "@/components/seo/FaqJsonLd";
 
 export const metadata: Metadata = {
-  title: "MyShape — The Continuity Layer for the Simulation Age",
+  title: "MyShape — The Continuity Layer",
   description:
-    "Identity tells us who you claim to be. Continuity tells us that you are still you. Motion → Identity Vector → Continuity Proof. The decentralized protocol for verifiable digital continuity in the Agent Economy.",
+    "Identity tells you who someone claims to be. Continuity asks whether the same entity is still here. A research protocol investigating whether continuity can become a verifiable property of digital existence.",
   keywords: [
     "MyShape Protocol",
     "continuity layer",
@@ -18,18 +18,18 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.myshape.com" },
   openGraph: {
-    title: "MyShape Protocol — The Continuity Layer for the Simulation Age",
+    title: "MyShape Protocol — The Continuity Layer",
     description:
-      "In a world where AI can generate everything — what proves that you continue to exist? MyShape verifies continuity, not identity. Motion-Signature proofs for persistent digital subjects.",
+      "In a world where AI can generate everything — what proves that you continue to exist? MyShape investigates continuity, not identity. A research protocol for verifiable digital persistence.",
     url: "https://www.myshape.com",
     siteName: "MyShape Protocol",
     images: [{ url: "/identity-sigil.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Protocol — The Continuity Layer for the Simulation Age",
+    title: "MyShape Protocol — The Continuity Layer",
     description:
-      "Identity is a snapshot. Continuity is a trajectory. MyShape makes digital continuity verifiable.",
+      "Identity is a snapshot. Continuity is a trajectory. Can digital continuity be made verifiable?",
     images: ["/identity-sigil.jpg"],
   },
 };
@@ -43,12 +43,12 @@ export default function HomePage() {
           {
             question: "What is MyShape Protocol?",
             answer:
-              "MyShape Protocol is the sovereign 3D identity layer for the decentralized human. It transforms human motion into verifiable presence through motion-signature technology — a zero-knowledge protocol that proves you are a continuously present human without storing biometric data, facial recognition, or any personally identifiable information.",
+              "MyShape Protocol is an open research framework investigating whether digital continuity can become a verifiable property. It analyzes motion patterns through motion-signature technology — a zero-knowledge approach that verifies continuous presence without storing personal visual data or any personally identifiable information.",
           },
           {
-            question: "How is MyShape different from biometric identity systems?",
+            question: "How is MyShape different from static identity systems?",
             answer:
-              "Biometric systems (fingerprints, face recognition, iris scans) store static biological signatures that, once compromised, can never be replaced. MyShape verifies dynamic presence — the way you move — rather than static attributes. Motion is generative and inexhaustible: each verification is a fresh cryptographic proof that cannot be replayed or stolen. No biometric data is ever stored or transmitted.",
+              "Static identity systems store fixed attributes that, once compromised, can never be replaced. MyShape verifies dynamic presence — the way an entity moves — rather than static attributes. Motion is generative and inexhaustible: each verification is a fresh cryptographic proof that cannot be replayed or stolen. No physical identity data is ever stored or transmitted.",
           },
           {
             question: "What is the Genesis Cohort?",
