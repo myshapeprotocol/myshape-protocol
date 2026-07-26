@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" font-family="Helvetica,Arial,sans-serif">
+  <rect width="500" height="300" fill="#ffffff" rx="4"/>
+
+  <text x="250" y="25" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="bold">Cost Asymmetry: Relative Forgery Difficulty</text>
+  <text x="250" y="40" text-anchor="middle" fill="#64748b" font-size="9">(lower = easier to forge; higher = more expensive to maintain)</text>
+
+  <!-- Y-axis -->
+  <line x1="80" y1="55" x2="80" y2="270" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="70" y="60" text-anchor="end" fill="#64748b" font-size="9">Cost</text>
+  <text x="72" y="100" text-anchor="end" fill="#64748b" font-size="8">100</text>
+  <text x="72" y="175" text-anchor="end" fill="#64748b" font-size="8">50</text>
+  <text x="72" y="265" text-anchor="end" fill="#64748b" font-size="8">0</text>
+  <line x1="75" y1="100" x2="80" y2="100" stroke="#cbd5e1" stroke-width="1"/>
+  <line x1="75" y1="175" x2="80" y2="175" stroke="#cbd5e1" stroke-width="1"/>
+
+  <!-- X-axis -->
+  <line x1="80" y1="265" x2="470" y2="265" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="120" y="282" text-anchor="middle" fill="#1e293b" font-size="8">Single face</text>
+  <text x="200" y="282" text-anchor="middle" fill="#1e293b" font-size="8">+ temporal consistency</text>
+  <text x="310" y="282" text-anchor="middle" fill="#1e293b" font-size="8">+ cross-modal consistency</text>
+  <text x="420" y="282" text-anchor="middle" fill="#1e293b" font-size="8">+ challenge-response</text>
+
+  <!-- Step function bars -->
+  <rect x="95" y="242" width="50" height="23" fill="rgba(74,222,128,0.6)" stroke="#22c55e" stroke-width="1" rx="2"/>
+  <text x="120" y="257" text-anchor="middle" fill="#166534" font-size="8" font-weight="bold">1x</text>
+
+  <rect x="175" y="200" width="50" height="65" fill="rgba(250,204,21,0.6)" stroke="#eab308" stroke-width="1" rx="2"/>
+  <text x="200" y="236" text-anchor="middle" fill="#854d0e" font-size="8" font-weight="bold">5x</text>
+
+  <rect x="280" y="140" width="60" height="125" fill="rgba(251,146,60,0.6)" stroke="#f97316" stroke-width="1" rx="2"/>
+  <text x="310" y="206" text-anchor="middle" fill="#7c2d12" font-size="8" font-weight="bold">25x</text>
+
+  <rect x="390" y="60" width="60" height="205" fill="rgba(239,68,68,0.6)" stroke="#ef4444" stroke-width="1" rx="2"/>
+  <text x="420" y="166" text-anchor="middle" fill="#7f1d1d" font-size="8" font-weight="bold">100x</text>
+
+  <!-- Step line overlay -->
+  <polyline points="120,242 200,200 310,140 420,60" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Bottom note -->
+  <rect x="40" y="260" width="420" height="35" fill="none"/>
+  <text x="250" y="295" text-anchor="middle" fill="#64748b" font-size="8" font-style="italic">Note: Multiplicative cost increase — each additional consistency requirement compounds forgery complexity.</text>
+
+</svg>

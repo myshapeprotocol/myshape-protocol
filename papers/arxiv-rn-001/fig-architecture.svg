@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" font-family="Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="100%" stop-color="#0d1b2a"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#0d1b2a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="420" fill="#0d1b2a" rx="8"/>
+
+  <!-- Title -->
+  <text x="300" y="28" text-anchor="middle" fill="#90c8ff" font-size="13" font-weight="bold" letter-spacing="2">CPS-0001 CONTINUITY PROTOCOL ARCHITECTURE</text>
+
+  <!-- === Layer 1: Evidence Engines === -->
+  <rect x="30" y="45" width="540" height="95" fill="none" stroke="#1e3a5f" stroke-width="1" rx="4"/>
+  <text x="45" y="65" fill="#64748b" font-size="10" letter-spacing="1">EVIDENCE ENGINES</text>
+
+  <!-- EE-001 -->
+  <rect x="40" y="75" width="120" height="55" fill="rgba(144,200,255,0.08)" stroke="rgba(144,200,255,0.3)" stroke-width="1" rx="4"/>
+  <text x="100" y="95" text-anchor="middle" fill="#90c8ff" font-size="10" font-weight="bold">EE-001</text>
+  <text x="100" y="110" text-anchor="middle" fill="#cbd5e1" font-size="9">Presence Entropy</text>
+  <text x="100" y="123" text-anchor="middle" fill="#64748b" font-size="8">4-dim biological noise</text>
+
+  <!-- EE-002 -->
+  <rect x="175" y="75" width="120" height="55" fill="rgba(144,200,255,0.08)" stroke="rgba(144,200,255,0.3)" stroke-width="1" rx="4"/>
+  <text x="235" y="95" text-anchor="middle" fill="#90c8ff" font-size="10" font-weight="bold">EE-002</text>
+  <text x="235" y="110" text-anchor="middle" fill="#cbd5e1" font-size="9">Causal Coupling</text>
+  <text x="235" y="123" text-anchor="middle" fill="#64748b" font-size="8">Cross-modal alignment</text>
+
+  <!-- EE-003 -->
+  <rect x="310" y="75" width="120" height="55" fill="rgba(144,200,255,0.08)" stroke="rgba(144,200,255,0.3)" stroke-width="1" rx="4"/>
+  <text x="370" y="95" text-anchor="middle" fill="#90c8ff" font-size="10" font-weight="bold">EE-003</text>
+  <text x="370" y="110" text-anchor="middle" fill="#cbd5e1" font-size="9">Challenge-Response</text>
+  <text x="370" y="123" text-anchor="middle" fill="#64748b" font-size="8">Jittered gyroscope</text>
+
+  <!-- VS-001 -->
+  <rect x="445" y="75" width="115" height="55" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.3)" stroke-width="1" rx="4"/>
+  <text x="502" y="95" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">VS-001</text>
+  <text x="502" y="110" text-anchor="middle" fill="#cbd5e1" font-size="9">Verification Session</text>
+  <text x="502" y="123" text-anchor="middle" fill="#64748b" font-size="8">Pipeline (EE-001+003)</text>
+
+  <!-- Arrow: Engines → Protocol -->
+  <line x1="300" y1="140" x2="300" y2="165" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="296,162 300,170 304,162" fill="#475569"/>
+
+  <!-- === Layer 2: CPS-0001 Protocol === -->
+  <rect x="120" y="170" width="360" height="70" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.4)" stroke-width="1.5" rx="4"/>
+  <text x="300" y="192" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="bold">CPS-0001 PROTOCOL LAYER</text>
+  <text x="300" y="208" text-anchor="middle" fill="#cbd5e1" font-size="9">Engine-independent receipt format · V₁–V₇ verification contract</text>
+  <text x="300" y="222" text-anchor="middle" fill="#64748b" font-size="8">Ed25519 signatures · SHA-256 evidence digests · Hash-chain predecessor linking</text>
+
+  <!-- Arrow: Protocol → Receipt -->
+  <line x1="300" y1="240" x2="300" y2="265" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="296,262 300,270 304,262" fill="#475569"/>
+
+  <!-- === Layer 3: Continuity Receipt === -->
+  <rect x="150" y="270" width="300" height="55" fill="rgba(251,191,36,0.08)" stroke="rgba(251,191,36,0.4)" stroke-width="1.5" rx="4"/>
+  <text x="300" y="290" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">CONTINUITY RECEIPT</text>
+  <text x="300" y="306" text-anchor="middle" fill="#cbd5e1" font-size="9">EvidenceDigest · Confidence · Timestamp</text>
+  <text x="300" y="318" text-anchor="middle" fill="#64748b" font-size="8">PredecessorDigest ⟶ Signature (Ed25519)</text>
+
+  <!-- Arrow: Receipt → Consumer -->
+  <line x1="300" y1="325" x2="300" y2="350" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="296,347 300,355 304,347" fill="#475569"/>
+
+  <!-- === Layer 4: Consumer === -->
+  <rect x="120" y="355" width="360" height="45" fill="rgba(52,211,153,0.06)" stroke="rgba(52,211,153,0.3)" stroke-width="1" rx="4"/>
+  <text x="300" y="375" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">CONSUMER (verifier / policy engine)</text>
+  <text x="300" y="391" text-anchor="middle" fill="#cbd5e1" font-size="9">Decision: allow / deny / escalate</text>
+
+  <!-- Side note: Engine independence -->
+  <text x="570" y="75" text-anchor="end" fill="#64748b" font-size="8" font-style="italic">Engine-independent</text>
+  <text x="570" y="87" text-anchor="end" fill="#64748b" font-size="8" font-style="italic">design:</text>
+  <text x="570" y="102" text-anchor="end" fill="#64748b" font-size="7">Any engine →</text>
+  <text x="570" y="114" text-anchor="end" fill="#64748b" font-size="7">same receipt format</text>
+  <text x="570" y="130" text-anchor="end" fill="#64748b" font-size="7">If EE-001 fails,</text>
+  <text x="570" y="142" text-anchor="end" fill="#64748b" font-size="7">protocol unchanged</text>
+
+</svg>

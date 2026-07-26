@@ -1,10 +1,10 @@
 \documentclass[conference]{IEEEtran}
 
-% ── arxiv metadata ──
 \usepackage{hyperref}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{float}
 
 % ── Title & Authors ──
 \title{The Continuity Problem: Why Proving ``I Am Still Me'' May Become the Missing Cryptographic Primitive of the AI Era}
@@ -22,7 +22,13 @@ MyShape Protocol\\
 
 % ── Abstract ──
 \begin{abstract}
-For fifty years, digital identity has answered a single question: \textit{who are you?} Passports, Decentralized Identifiers, Verifiable Credentials, and zero-knowledge proofs all verify that entity $E$ possesses attribute $A$ at moment $t_0$. Identity is a snapshot. But snapshots cannot answer a different question: has this entity \textit{continued} to exist across the interval? We argue that the AI era creates a new class of attacks — agent replacement, session hijacking, credential replay, and digital twin drift — for which identity succeeds and continuity fails. We hypothesize that continuity can be anchored by measurable presence signals (physical, temporal, and cryptographic) that form an unbroken chain from moment to moment, and that this chain can be verified without relying on persistent identifiers. This paper frames the continuity problem as a research program: if continuity can be made a verifiable property of digital existence, it becomes a new cryptographic primitive — alongside identity, encryption, and consensus.
+For fifty years, digital identity has answered a single question: \textit{who are you?} Passports, Decentralized Identifiers, Verifiable Credentials, and zero-knowledge proofs all verify that entity $E$ possesses attribute $A$ at moment $t_0$. Identity is a snapshot.
+
+We argue that the AI era creates a new class of attacks — agent replacement, session hijacking, credential replay, and digital twin drift — for which identity succeeds and continuity fails. Unlike most approaches that seek a single ``unforgeable'' signal, our framework treats continuity verification as a \textbf{cost asymmetry problem}: any single evidence channel can be imitated, but maintaining convincing evidence consistently across multiple channels over time is exponentially expensive.
+
+We present initial evidence from the Presence Entropy Score (PES) benchmark (281 samples, Cohen's $d = 2.1$) and describe a multi-engine architecture combining biological signal analysis, cross-modal temporal binding, and real-time challenge-response. The protocol layer (CPS-0001) defines engine-independent continuity receipts, ensuring that improvements in individual engines do not require protocol changes.
+
+We do not claim to have solved continuity. We claim it is the right question — and that answering it may become one of the defining cryptographic challenges of the AI era.
 \end{abstract}
 
 % ── Introduction ──
@@ -38,7 +44,7 @@ Identity, in the sense of static attribute verification, is a solved problem. Th
 
 But identity is a snapshot. A snapshot can be verified. But a snapshot cannot tell you whether the subject behind it has continued to exist.
 
-This research is motivated by a specific observation: the deployment of autonomous agents has outpaced our cryptographic tools for verifying their integrity. Identity was the prerequisite for a human-centric web. Continuity is the prerequisite for an agent-centric future. The question is not whether this problem will matter — it is whether the cryptographic community addresses it before the first major incident forces the issue. We think it is better to design the primitive first.
+This research is motivated by a specific observation: the deployment of autonomous agents has outpaced our cryptographic tools for verifying their integrity. Identity was the prerequisite for a human-centric web. Continuity is the prerequisite for an agent-centric future. The question is not whether this problem will matter — it is whether the cryptographic community addresses it before the first major incident forces the issue.
 
 \section{The AI Era Creates a New Problem}
 
@@ -64,40 +70,103 @@ Consider four scenarios that have no answer in today's identity stack:
 
 All of these attacks succeed against identity. All of them fail against continuity — if continuity is verifiable.
 
-\section{A Hypothesis}
+\section{Forgery Cost: A Framework for Continuity}
 
-We hypothesize that \textbf{continuity can be anchored by measurable presence signals} — physical, temporal, and cryptographic — that form an unbroken chain from moment to moment.
+Most approaches to anti-AI verification...
 
-When that chain is intact, continuity is verified. When it breaks, continuity is violated. The chain does not prove who you are. It proves you have \textit{continued to be you}.
+Each additional consistency requirement multiplies the forger's cost. The protocol does not need any single \textit{unforgeable} signal — it only needs the cost of maintaining forgery to exceed the value of the attack.
 
-This hypothesis has a significant consequence: if continuity can be verified without relying on persistent identifiers, then identity may not be the prerequisite for continuity. Continuity could instead be the primary primitive, with identity emerging as a higher-level interpretation — a label we assign to a trajectory that has maintained unbroken sovereignty.
+\subsection{Multi-Engine Architecture}
 
-We do not claim to have proven this hypothesis. We claim it is the right question — and that answering it is the work of The Continuity Lab.
-
-\section{Experimental Evaluation: PES Benchmark}
-
-The Presence Entropy Score (PES)~\cite{pes-benchmark} provides initial evidence for the continuity hypothesis. PES is a 0--1 metric that quantifies biological entropy in motion across four independent dimensions: micro-timing variance, noise residual, frequency entropy, and biological perturbation. Each dimension is extracted from 30-second motion sequences captured via standard webcam (30 fps, MediaPipe Pose 33-landmark model)~\cite{motion-signature}. All processing runs on-device; no raw motion data leaves the subject's machine. The ZK-Presence proof system uses audited cryptographic primitives from @noble/hashes~\cite{noble} for in-browser SHA-256 hashing, enabling the full pipeline to operate without native dependencies or server-side computation.
-
-In a benchmark of 281 motion samples (81 human across 54 subjects, 200 synthetic across four AI generation strategies: random walk, spline interpolation, GAN-generated, and near-static), PES produces a clean separation between human and synthetic motion: Cohen's $d = 2.1$, AUC $= 0.94$, precision $= 1.00$, recall $= 0.96$. Each of the four dimensions independently separates human from AI motion, with the human score floor at $0.41$ and the highest AI strategy (spline interpolation) at $0.38$. The 0.03 gap is the current entropy margin — measurable but narrow.
-
-These results did not come easily. Early iterations of the frequency entropy dimension performed poorly on samples recorded in rooms with fluorescent lighting, where the 60 Hz flicker introduced a periodic artifact that the dimension initially interpreted as biological signal. We spent considerable time distinguishing sensor noise from biological noise — a boundary that is less clear than the literature suggests. The spline interpolation strategy was also surprisingly effective: at 0.38 it sits uncomfortably close to the human floor, and we do not rule out that an adversarially optimized version could close the remaining gap.
-
-\textbf{Limitations.} The current benchmark has several important constraints. The 54 human subjects do not represent the full distribution of human motion entropy — we have not yet measured subjects across age extremes, neurological conditions, or non-Western movement cultures. All samples were recorded in a single session per subject; we have no data on intra-subject variability across days, moods, or hardware changes. The four AI generation strategies are representative of current off-the-shelf techniques, not adversarially optimized to defeat the PES. We consider these limitations the starting conditions for v0.3, not excuses for the current results.
-
-These results do not prove continuity. They establish presence detection — ``this is a human right now'' — which is a necessary but insufficient condition for continuity verification. A presence detector tells you that \textit{someone} is at the keyboard. A continuity verifier tells you it is the \textit{same} someone who was there ten minutes ago. Closing this gap — from presence detection to continuity verification — is the central open question of this research program~\cite{oq-001}.
-
-\section{Research Roadmap}
-
-This is a research program, not a product launch. Each investigation addresses one open question. Taken together, they form an investigation into whether continuity can be operationalized as a cryptographic primitive.
+Our implementation combines four evidence engines...
 
 \begin{enumerate}
-\item \textbf{RN-001} (this paper): The Continuity Problem — framing the missing primitive.
-\item \textbf{RN-002}: PES Benchmark v0.2 — dataset, Cohen's $d$, threats to validity. Published July 2026. \url{https://www.myshape.com/research/notes/002-pes-benchmark}
-\item \textbf{RN-003}: Replay Attack Analysis — under what conditions can continuity proofs be replayed?
-\item \textbf{RN-004}: Challenge-Response — can continuity be verified interactively without storing motion data?
-\item \textbf{RN-005}: The Continuity Receipt — a proposed format for portable, verifiable continuity proofs.
-\item \textbf{RN-006}: Agent Continuity — can continuity be transferred between a human and their AI agent?
+\item \textbf{EE-001 (Presence Entropy Score).} ...
+\item \textbf{EE-002 (Cross-Modal Causal Coupling).} ...
+\item \textbf{EE-003 (Challenge-Response).} ...
+\item \textbf{VS-001 (Verification Session).} ...
 \end{enumerate}
+
+The protocol layer (CPS-0001)~\cite{cps0001} defines a common receipt format that any evidence engine can produce. This engine-independent design ensures that improvements in individual engines do not require protocol changes. If EE-001 is compromised, EE-002 or EE-003 can be substituted without modifying the receipt format or verification contract.
+
+\subsection{Engine Performance}
+
+Table~\ref{tab:engines} summarizes experimental results across the four engines. The cost asymmetry framework predicts that combining multiple engines produces a compound effect: forging any single engine is feasible, but maintaining consistent forged output across all engines simultaneously requires exponentially increasing resources.
+
+\begin{table}[H]
+\centering
+\caption{Engine performance summary across 576 experimental runs.}
+\label{tab:engines}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Engine} & \textbf{N} & \textbf{Pass Rate} & \textbf{Attack Vector} & \textbf{Limitation} \\
+\midrule
+EE-001 (PES) & 281 & 100\% floor & Synthetic video/GAN & Spline 0.38 near human 0.41 \\
+EE-002 (Causal) & 316 & 58\% & Sensor desync/replay & Requires both sensors active \\
+EE-003 (Challenge) & 200 & 60\% & Gyro playback & High false rejection \\
+VS-001 (Pipeline) & 60 & 93\% & Multi-vector attack & Small N; composability unproven \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Forgery cost model: multiplicative increase across consistency requirements.}
+\label{tab:cost}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Consistency Requirement} & \textbf{Relative Cost} & \textbf{Attack Complexity} \\
+\midrule
+Single face generation & 1$\times$ & Trivial (single model call) \\
++ Temporal self-consistency ($t_{-1}$ to $t_0$) & 5$\times$ & Sequence modeling required \\
++ Cross-modal consistency (IMU + camera) & 25$\times$ & Multi-modal coordination \\
++ Interactive challenge-response & 100$\times$ & Real-time adaptation required \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Open Limitations (Published per Scientific Method)}
+
+We publish these limitations alongside our results because negative evidence is evidence:
+
+\begin{itemize}
+\item \textbf{Subject diversity:} 54 subjects, single-session recordings. No cross-age, cross-neurology, or cross-cultural measurement.
+\item \textbf{AI strategies:} Off-the-shelf generators only. Adversarially optimized attacks likely perform better.
+\item \textbf{Environmental artifacts:} 60 Hz fluorescent lighting disrupted the frequency entropy dimension in early trials.
+\item \textbf{Small N for VS-001:} 60 sessions is insufficient to estimate production error rates.
+\item \textbf{Single-session per subject:} Intra-subject variability across days, moods, or hardware changes is unmeasured.
+\end{itemize}
+
+\section{Experimental Evaluation: PES Benchmark}
+\label{sec:pes}
+
+The Presence Entropy Score (PES) provides initial evidence for the cost asymmetry hypothesis. PES is a 0--1 metric that quantifies biological entropy in motion across four independent dimensions: micro-timing variance, noise residual, frequency entropy, and biological perturbation. Each dimension is extracted from 30-second motion sequences captured via standard webcam (30 fps, MediaPipe Pose 33-landmark model)~\cite{motion-signature}. All processing runs on-device; no raw motion data leaves the subject's machine.
+
+In a benchmark of 281 motion samples (81 human across 54 subjects, 200 synthetic across four AI generation strategies: random walk, spline interpolation, GAN-generated, and near-static), PES produces a clean separation between human and synthetic motion: Cohen's $d = 2.1$, AUC $= 0.94$, precision $= 1.00$, recall $= 0.96$. Each of the four dimensions independently separates human from AI motion, with the human score floor at $0.41$ and the highest AI strategy (spline interpolation) at $0.38$.
+
+These results did not come easily. Early iterations of the frequency entropy dimension performed poorly on samples recorded in rooms with fluorescent lighting, where the 60 Hz flicker introduced a periodic artifact that the dimension initially interpreted as biological signal. The boundary between sensor noise and biological noise is less clear than the literature suggests. The spline interpolation strategy was also surprisingly effective: at 0.38 it sits uncomfortably close to the human floor, and we do not rule out that an adversarially optimized version could close the remaining gap.
+
+\textbf{Limitations.} The current benchmark has several important constraints. The 54 human subjects do not represent the full distribution of human motion entropy — we have not yet measured subjects across age extremes, neurological conditions, or non-Western movement cultures. All samples were recorded in a single session per subject; we have no data on intra-subject variability across days, moods, or hardware changes. The four AI generation strategies are representative of current off-the-shelf techniques, not adversarially optimized to defeat the PES.
+
+These results do not prove continuity. They establish presence detection — ``this is a human right now'' — which is a necessary but insufficient condition for continuity verification. A presence detector tells you that \textit{someone} is at the keyboard. A continuity verifier tells you it is the \textit{same} someone who was there ten minutes ago.
+
+Critically, the single-engine framing of PES is not the protocol's security model. PES alone can be improved, replaced, or supplemented by other engines without invalidating CPS-0001 receipts. The protocol's resilience depends on the cost of defeating multiple independent engines simultaneously, not on any single engine's permanence.
+
+\begin{table}[H]
+\centering
+\caption{Experimental summary across 576 runs with honest limitation disclosure.}
+\label{tab:full}
+\begin{tabular}{p{1.8cm}p{0.7cm}p{0.9cm}p{1.8cm}p{2.2cm}}
+\toprule
+\textbf{Engine} & \textbf{N} & \textbf{Rate} & \textbf{Attack Vector} & \textbf{Published Limitation} \\
+\midrule
+EE-001 (PES) & 281 & 100\% & Synthetic video/GAN & Spline 0.38 near human 0.41; 54 subjects only \\
+EE-002 (Causal) & 316 & 58\% & Sensor desync/replay & Requires both sensors active; small N \\
+EE-003 (Challenge) & 200 & 60\% & Gyro playback & High false rejection rate \\
+VS-001 (Pipeline) & 60 & 93\% & Multi-vector & Small N; composability unproven \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Related Work}
 
@@ -105,7 +174,7 @@ The continuity problem sits at the intersection of several established fields:
 
 \textbf{Decentralized Identity.} W3C DIDs~\cite{w3c-did} and Verifiable Credentials~\cite{w3c-vc} provide cryptographic binding of attributes to subjects but are inherently point-in-time. They do not address temporal continuity.
 
-\textbf{Proof of Personhood.} Systems like Worldcoin and BrightID establish that a subject is a unique human at enrollment time. They do not verify that the same human continues to operate the credential.
+\textbf{Proof of Personhood.} Systems like Worldcoin~\cite{worldcoin} and BrightID establish that a subject is a unique human at enrollment time. They do not verify that the same human continues to operate the credential. Our framework treats this as a complementary rather than competitive category: PoP solves registration uniqueness, continuity solves session integrity.
 
 \textbf{Biometric Authentication.} Fingerprint, face, and iris recognition verify presence at a moment but are vulnerable to replay, spoofing, and template theft. Once compromised, biometrics cannot be rotated.
 
@@ -115,11 +184,26 @@ The continuity problem sits at the intersection of several established fields:
 
 The continuity problem, as we define it, has no direct precedent in the literature. This is the gap we propose to fill.
 
+\section{Research Roadmap}
+
+This is a research program, not a product launch. Each investigation addresses one open question. Taken together, they form an investigation into whether continuity can be operationalized as a cryptographic primitive.
+
+\begin{enumerate}
+\item \textbf{RN-001} (this paper): The Continuity Problem — framing the missing primitive.
+\item \textbf{RN-002}: PES Benchmark v0.2 — dataset, Cohen's $d$, threats to validity. Published July 2026. \url{https://www.myshape.com/research/notes/002-pes-benchmark}
+\item \textbf{RN-003}: Cross-Modal Binding — 576-run validation of temporal alignment across independent devices. \url{https://www.myshape.com/research/notes/003-cross-modal-binding}
+\item \textbf{RN-004}: Challenge-Response Protocol — interactive verification without storing motion data. \url{https://www.myshape.com/research/notes/004-motion-signature-rfc}
+\item \textbf{RN-006}: Continuity Proof Format — CPS-0001 receipt format specification. \url{https://www.myshape.com/research/notes/006-continuity-proof-rfc}
+\item \textbf{RN-008}: Continuity Protocol Core — CPS-0001 protocol specification. \url{https://www.myshape.com/research/notes/008-continuity-protocol-core}
+\end{enumerate}
+
 \section{Conclusion}
 
-Identity answers who you are. Continuity answers whether you remained you.
+Identity answers who you are. Continuity asks whether you remained you.
 
-In an era where AI can generate faces, clone voices, and forge credentials, static identity verification is no longer sufficient. We need a new primitive: one that verifies not just a subject's attributes at a moment, but their continuous existence across time.
+In an era where AI can generate faces, clone voices, and forge credentials, static identity verification is no longer sufficient. But the solution is not to search for a signal that AI cannot reproduce — that race has no finish line.
+
+The alternative is a cost asymmetry framework: make the expense of maintaining consistent forged evidence across multiple channels, over time, and under challenge exceed the value of the attack. This framework does not require any single unfakable signal. It requires a protocol that can combine evidence from arbitrary engines, chain it across time, and verify the chain independently.
 
 We do not claim to have built this primitive. We claim the question is worth asking — and that answering it may become one of the defining cryptographic challenges of the AI era.
 
@@ -149,6 +233,12 @@ The Continuity Lab, ``OQ-001: Can continuity exist independently of identity?'' 
 
 \bibitem{noble}
 P. Miller, ``@noble/hashes: Audited \& minimal 0-dependency JS hash functions,'' 2026. [Online]. Available: \url{https://github.com/paulmillr/noble-hashes}
+
+\bibitem{cps0001}
+The Continuity Lab, ``CPS-0001: Continuity Protocol Core, v1.0-RC,'' 2026. [Online]. Available: \url{https://www.myshape.com/research/notes/008-continuity-protocol-core}
+
+\bibitem{worldcoin}
+Worldcoin, ``World ID: Proof of Personhood,'' 2023. [Online]. Available: \url{https://worldcoin.org}
 
 \end{thebibliography}
 

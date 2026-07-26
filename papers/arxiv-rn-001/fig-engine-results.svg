@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" font-family="Helvetica,Arial,sans-serif">
+  <rect width="600" height="350" fill="#ffffff" rx="4"/>
+
+  <text x="300" y="25" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="bold">Engine Performance Summary (576 experimental runs)</text>
+
+  <!-- Table header -->
+  <rect x="20" y="45" width="560" height="25" fill="#1e293b" rx="2"/>
+  <text x="90" y="62" text-anchor="middle" fill="#f8fafc" font-size="9" font-weight="bold">Engine</text>
+  <text x="200" y="62" text-anchor="middle" fill="#f8fafc" font-size="9" font-weight="bold">N</text>
+  <text x="290" y="62" text-anchor="middle" fill="#f8fafc" font-size="9" font-weight="bold">Pass Rate</text>
+  <text x="380" y="62" text-anchor="middle" fill="#f8fafc" font-size="9" font-weight="bold">Primary Attack Vector</text>
+  <text x="500" y="62" text-anchor="middle" fill="#f8fafc" font-size="9" font-weight="bold">Key Limitation</text>
+
+  <!-- Row 1: EE-001 -->
+  <rect x="20" y="70" width="560" height="45" fill="rgba(74,222,128,0.08)" rx="2"/>
+  <text x="90" y="87" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold">EE-001 (PES)</text>
+  <text x="90" y="100" text-anchor="middle" fill="#64748b" font-size="8">Presence Entropy Score</text>
+  <text x="200" y="93" text-anchor="middle" fill="#1e293b" font-size="10">281</text>
+  <text x="290" y="93" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="bold">100% floor</text>
+  <text x="380" y="93" text-anchor="middle" fill="#1e293b" font-size="9">Synthetic video / GAN</text>
+  <text x="500" y="93" text-anchor="middle" fill="#64748b" font-size="8">Spline at 0.38 close to</text>
+  <text x="500" y="105" text-anchor="middle" fill="#64748b" font-size="8">human floor 0.41</text>
+
+  <!-- Row 2: EE-002 -->
+  <rect x="20" y="115" width="560" height="45" fill="rgba(250,204,21,0.06)" rx="2"/>
+  <text x="90" y="132" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold">EE-002 (Causal)</text>
+  <text x="90" y="145" text-anchor="middle" fill="#64748b" font-size="8">Cross-Modal Coupling</text>
+  <text x="200" y="138" text-anchor="middle" fill="#1e293b" font-size="10">316</text>
+  <text x="290" y="138" text-anchor="middle" fill="#eab308" font-size="10" font-weight="bold">58%</text>
+  <text x="380" y="138" text-anchor="middle" fill="#1e293b" font-size="9">Sensor desync / replay</text>
+  <text x="500" y="138" text-anchor="middle" fill="#64748b" font-size="8">Requires both sensors</text>
+  <text x="500" y="150" text-anchor="middle" fill="#64748b" font-size="8">active simultaneously</text>
+
+  <!-- Row 3: EE-003 -->
+  <rect x="20" y="160" width="560" height="45" fill="rgba(250,204,21,0.06)" rx="2"/>
+  <text x="90" y="177" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold">EE-003 (Challenge)</text>
+  <text x="90" y="190" text-anchor="middle" fill="#64748b" font-size="8">Gyroscope Challenge</text>
+  <text x="200" y="183" text-anchor="middle" fill="#1e293b" font-size="10">200</text>
+  <text x="290" y="183" text-anchor="middle" fill="#eab308" font-size="10" font-weight="bold">60%</text>
+  <text x="380" y="183" text-anchor="middle" fill="#1e293b" font-size="9">Recorded gyro playback</text>
+  <text x="500" y="183" text-anchor="middle" fill="#64748b" font-size="8">Low pass rate means</text>
+  <text x="500" y="195" text-anchor="middle" fill="#64748b" font-size="8">high false rejection</text>
+
+  <!-- Row 4: VS-001 -->
+  <rect x="20" y="205" width="560" height="45" fill="rgba(74,222,128,0.08)" rx="2"/>
+  <text x="90" y="222" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold">VS-001 (Pipeline)</text>
+  <text x="90" y="235" text-anchor="middle" fill="#64748b" font-size="8">Verification Session</text>
+  <text x="200" y="228" text-anchor="middle" fill="#1e293b" font-size="10">60</text>
+  <text x="290" y="228" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="bold">93%</text>
+  <text x="380" y="228" text-anchor="middle" fill="#1e293b" font-size="9">Coordinated multi-vector</text>
+  <text x="500" y="228" text-anchor="middle" fill="#64748b" font-size="8">Small N; pipeline</text>
+  <text x="500" y="240" text-anchor="middle" fill="#64748b" font-size="8">composability unproven</text>
+
+  <!-- Combined row -->
+  <rect x="20" y="252" width="560" height="25" fill="rgba(99,102,241,0.08)" stroke="#818cf8" stroke-width="1" rx="2"/>
+  <text x="300" y="269" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold">All 4 engines: single-engine forgery possible; multi-engine simultaneous forgery cost exceeds attack value</text>
+
+  <!-- Open disclosure note -->
+  <rect x="20" y="290" width="560" height="45" fill="rgba(239,68,68,0.05)" stroke="#ef4444" stroke-width="0.5" rx="2"/>
+  <text x="300" y="307" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="bold">Honest Limitations Disclosure</text>
+  <text x="300" y="320" text-anchor="middle" fill="#64748b" font-size="8">54 subjects — not age/neurology diverse | Single-session recordings — no cross-day variability measured</text>
+  <text x="300" y="332" text-anchor="middle" fill="#64748b" font-size="8">Off-the-shelf AI strategies — not adversarially optimized | Frequency dimension disrupted by 60Hz fluorescent lighting</text>
+</svg>
