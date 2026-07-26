@@ -1,0 +1,11 @@
+{
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "buildCommand": "npx next build",
+  "outputDirectory": ".next",
+  "git": {
+    "deploymentEnabled": {
+      "master": true
+    }
+  }
+}
