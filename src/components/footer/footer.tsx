@@ -167,7 +167,10 @@ export default function ProtocolFooter() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
-        <div className="hidden md:flex items-center justify-center gap-1.5">
+        <div className="flex items-center justify-center gap-3 flex-wrap text-[11px] tracking-[0.15em] uppercase font-mono">
+          <a href="/blog" className="text-white/45 hover:text-[#90c8ff] hover:translate-x-1 transition-all duration-300 tracking-[0.12em] uppercase no-underline">Protocol Log</a>
+        </div>
+        <div className="items-center justify-center gap-1.5 flex">
           <span className="w-1 h-1 rounded-full bg-[#90c8ff]/60 shadow-[0_0_4px_rgba(144,200,255,0.5)]" />
           <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 v1.0-RC &middot; 4 Engines &middot; 192 Tests &middot; 576 Runs</span>
         </div>
