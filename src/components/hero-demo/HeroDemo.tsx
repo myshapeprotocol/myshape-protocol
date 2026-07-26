@@ -529,9 +529,9 @@ export default function HeroDemo() {
         lines={[
           "AI CAN IMITATE ALMOST ANYTHING.",
           "A FACE. A VOICE. A WRITING STYLE.",
-          "BUT CAN IT IMITATE ENTROPY?",
-          "CAN IT IMITATE THE NOISE OF A PHYSICAL ENTITY",
-          "BEING CONTINUOUSLY, PHYSICALLY HERE?",
+          "BUT CAN IT MAINTAIN THE SAME PATTERN",
+          "CONSISTENTLY OVER TIME —",
+          "ACROSS DEVICES, ACROSS INTERACTIONS?",
         ]}
         visible={showLeft}
         side="left"
@@ -540,9 +540,9 @@ export default function HeroDemo() {
         lines={[
           "EVERY VERIFICATION RETURNS EVIDENCE,",
           "NOT JUST YES OR NO.",
-          "HASH-CHAINED. CRYPTOGRAPHICALLY SIGNED.",
-          "A TRAJECTORY, NOT A SNAPSHOT.",
-          "PROOF THAT YOU STAYED.",
+          "EACH PIECE ALONE IS FALSIFIABLE —",
+          "BUT THE CHAIN OF EVIDENCE ACROSS TIME",
+          "IS EXPONENTIALLY HARDER TO FAKE.",
         ]}
         visible={showRight}
         side="right"

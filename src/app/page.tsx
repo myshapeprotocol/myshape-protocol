@@ -58,7 +58,7 @@ export default function HomePage() {
           {
             question: "Can AI agents use MyShape Protocol?",
             answer:
-              "Yes. MyShape is designed for the Agent Economy where human and AI identities coexist. AI agents can declare their identity through the Agent Registration protocol and participate in the identity mesh. However, AI agents cannot falsify a human motion-signature due to the mathematically provable entropy gap between biological and synthetic motion — ensuring that human presence remains cryptographically distinct from AI simulation.",
+              "Yes. MyShape is designed for the Agent Economy where human and AI identities coexist. AI agents can declare their identity through the Agent Registration protocol and participate in the identity mesh. However, maintaining a convincing continuous presence over time requires sustained physical interaction — creating a cost asymmetry that makes prolonged impersonation practically infeasible.",
           },
         ]}
       />

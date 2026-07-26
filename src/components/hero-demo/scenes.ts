@@ -9,13 +9,13 @@ export const SCENES: SceneDef[] = [
     name: "formation",
     label: "PRESENCE",
     subtitle:
-      "AI can generate a face in seconds. A voice in milliseconds. But a living body produces entropy patterns that no model has learned to fake. That's the signal.",
+      "AI can generate a face in seconds. A voice in milliseconds. But maintaining a convincing continuous presence over time is a different problem entirely. That's the signal.",
   },
   {
     name: "motion",
     label: "THE GAP",
     subtitle:
-      "381 experiments. We don't ask what the data says about identity. We ask whether it looks like a body that is actually, physically here. The answer hides in the noise.",
+      "381 experiments. We don't ask what the data says about identity. We ask whether the pattern of motion looks biologically plausible — and whether it can be maintained consistently over time.",
   },
   {
     name: "verification",

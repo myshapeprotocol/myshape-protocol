@@ -102,7 +102,7 @@ export default function ContinuityPage() {
               <div style={{ fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
                 Can we tell biological entropy from synthetic smoothness?
               </div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "monospace" }}>4-dimensional entropy scoring at 60Hz. Human motion has noise that AI cannot replicate.</div>
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "monospace" }}>4-dimensional entropy patterns. Subtle, inconsistent across time — and difficult to maintain convincingly under continuous observation.</div>
             </div>
             <div style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
               <div style={{ fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
@@ -141,6 +141,10 @@ export default function ContinuityPage() {
 
           <p style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", fontWeight: 300, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, marginBottom: 20 }}>
             This became <strong style={{ fontWeight: 400, color: "rgba(144,200,255,0.7)" }}>CPS-0001</strong> — an open protocol for continuity receipts. Engine-independent, self-verifying, and designed to be implementable by anyone.
+          </p>
+
+          <p style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)", fontWeight: 300, color: "rgba(255,255,255,0.3)", lineHeight: 1.7, marginBottom: 20, padding: "12px 16px", borderLeft: "1px solid rgba(144,200,255,0.15)", background: "rgba(144,200,255,0.015)" }}>
+            MyShape does not rely on a single unforgeable signal. It combines multiple sources of evidence to measure continuity across time, modalities, and interactions — increasing the cost of maintaining a convincing forged presence over time.
           </p>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 28 }}>

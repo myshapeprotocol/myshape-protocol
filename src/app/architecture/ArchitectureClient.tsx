@@ -28,7 +28,7 @@ const ENTROPY_DIMS = [
 ];
 
 const THREATS = [
-  { attack: "Generative AI", vector: "Synthetic video frames", defense: "4D entropy gap — AI cannot reproduce biological micro-timing", confidence: 0.992 },
+  { attack: "Generative AI", vector: "Synthetic video frames", defense: "Multi-engine cross-validation — time-synced evidence across modalities and challenge-response", confidence: 0.992 },
   { attack: "Replay Attack", vector: "Recorded motion playback", defense: "Temporal nonce + frame freshness check", confidence: 0.998 },
   { attack: "Imitation", vector: "Human mimicking target motion", defense: "Motion signature is individual — imitation ≠ original", confidence: 0.985 },
   { attack: "Motion Capture", vector: "MoCap data injection", defense: "Sensor noise profile verification", confidence: 0.990 },

@@ -17,7 +17,7 @@ const GLOSSARY: GlossaryTerm[] = [
   {
     term: "Motion-Signature",
     definition:
-      "A 128-dimensional vector extracted from real-time 3D pose sequences across four independent feature groups — kinematics, acceleration, jerk, and jerk spectrum. The Motion-Signature is the core identity primitive of the MyShape Protocol. Unlike a biometric, it is generative: each verification produces a fresh, non-replayable signature that AI cannot simulate due to the irreducible entropy gap between biological and synthetic motion.",
+      "A 128-dimensional vector extracted from real-time 3D pose sequences across four independent feature groups — kinematics, acceleration, jerk, and jerk spectrum. The Motion-Signature is a core primitive of the MyShape Protocol. Unlike a static feature, it is generative: each verification produces a fresh, non-replayable signature. The protocol does not depend on any single signal; it combines motion data with additional evidence engines to measure continuity across time and modalities.",
     seeAlso: ["Presence Entropy Score (PES)", "Entropy Gap Theorem", "Jerk Spectrum"],
   },
   {
@@ -47,7 +47,7 @@ const GLOSSARY: GlossaryTerm[] = [
   {
     term: "Continuity",
     definition:
-      "A zero-knowledge proof that verifies a human is physically present and generating authentic motion — without revealing their identity, appearance, or any biometric data. Continuity ensures verifiability without surveillance. The raw motion data never leaves the device; only the cryptographic proof is transmitted.",
+      "A zero-knowledge proof that verifies an entity is physically present and generating authentic motion — without revealing their identity, appearance, or any personal data. Continuity ensures verifiability without surveillance. The raw motion data never leaves the device; only the cryptographic proof is transmitted.",
     seeAlso: ["Presence Entropy Score (PES)", "Zero-Knowledge Proof", "Motion-Signature"],
   },
   {
@@ -125,7 +125,7 @@ const GLOSSARY: GlossaryTerm[] = [
   {
     term: "Sovereign Identity",
     definition:
-      "An identity that is generated, owned, and controlled entirely by the individual — not issued, granted, or revocable by any external authority. In the MyShape model, sovereign identity is anchored in the physics of human motion rather than in a government ID, a corporate account, or a biometric database. Motion is the only identity primitive that is both universal (every human moves) and irreplaceable (no authority can revoke your motion).",
+      "An identity that is generated, owned, and controlled entirely by the individual — not issued, granted, or revocable by any external authority. In the MyShape model, sovereign identity is anchored in the physics of movement rather than in a government ID, a corporate account, or a static identification database.",
     seeAlso: ["Data-Body", "Proof of Continuity", "Motion-Signature"],
   },
   {
@@ -143,7 +143,7 @@ const GLOSSARY: GlossaryTerm[] = [
   {
     term: "Halo Scan",
     definition:
-      "The circular deep-sense motion capture sequence used during the Genesis Ritual. The participant performs a controlled circular movement that exposes the full kinematic range of the upper body. The Halo Scan is designed to maximize entropy extraction — revealing the subtle biological noise patterns that distinguish human motion from synthetic simulation.",
+      "The circular deep-sense motion capture sequence used during the Genesis Ritual. The participant performs a controlled circular movement that exposes the full kinematic range of the upper form. The Halo Scan is designed to maximize entropy extraction — revealing the subtle biological noise patterns that help distinguish biological from synthetic motion.",
     seeAlso: ["Genesis Ritual", "Motion-Signature"],
   },
   {
@@ -183,15 +183,15 @@ const GLOSSARY: GlossaryTerm[] = [
     seeAlso: ["Protocol Node", "Data-Body", "Sovereign Identity"],
   },
   {
-    term: "Post-Biometric Identity",
+    term: "Post-Static Identity",
     definition:
-      "The emerging paradigm of identity verification that moves beyond static biological measurements (fingerprints, face, iris) toward dynamic, generative signals — motion, behavior, continuity. Post-biometric identity solves the fundamental flaw of biometrics: that a static biological fact, once compromised, can never be replaced.",
+      "The emerging paradigm of identity verification that moves beyond static measurements (appearance, fingerprint, iris) toward dynamic, generative signals — motion, behavior, continuity. Post-static identity solves the fundamental flaw of static identification: that a fixed fact, once compromised, can never be replaced.",
     seeAlso: ["Motion-Signature", "Proof of Continuity", "Non-Binary Aesthetic"],
   },
   {
     term: "Physiological Tremor",
     definition:
-      "The involuntary, rhythmic oscillation of body parts at 8-12 Hz caused by the neuromuscular control loop. Physiological tremor is present in all humans and absent in all AI-generated motion. The PES engine detects tremor characteristics as one of its four sub-scores, making it a key differentiator between biological and synthetic motion.",
+      "The involuntary, rhythmic oscillation of body parts at 8-12 Hz caused by the neuromuscular control loop. Physiological tremor is present in all humans and absent in all AI-generated motion. The PES engine detects tremor characteristics as one of its four sub-scores, contributing to the overall continuity assessment.",
     seeAlso: ["Presence Entropy Score (PES)", "Jerk Spectrum", "Entropy Gap Theorem"],
   },
 ];

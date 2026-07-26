@@ -70,7 +70,7 @@ export default function VisionClient() {
             <p className="text-white/60 text-[13px] md:text-[15px] leading-[1.9] font-light">
               The question that matters now is not who you are. It is{' '}
               <span className="text-[#90c8ff]/90 font-medium">who continues to be you.</span>
-              {' '}Identity is a snapshot. Continuity is a trajectory. And continuity is the one thing AI cannot fake.
+              {' '}Identity is a snapshot. Continuity is a trajectory. And continuity is what makes maintaining a forged presence expensive over time.
             </p>
           </div>
         </section>
@@ -85,8 +85,8 @@ export default function VisionClient() {
               Towards <span className="text-[#90c8ff]">Sovereignty</span>.
             </h2>
             <p className="text-white/55 text-[14px] tracking-[0.1em] leading-[1.9] font-light max-w-2xl">
-              Identity is not a credential. It is a physical property of a living entity — irreducible,
-              unforgeable, and sovereign by default. MyShape Protocol translates motion into geometry,
+              Identity is a property of an entity — measurable through accumulated evidence across time,
+              verifiable through multiple independent signals, and sovereign by default. MyShape Protocol translates motion into geometry,
               geometry into proof, and proof into presence — creating the first identity layer that
               belongs to the individual, not the platform.
             </p>
