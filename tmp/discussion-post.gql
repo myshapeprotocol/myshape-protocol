@@ -1,0 +1,10 @@
+mutation {
+  post1: createDiscussion(input: {
+    repositoryId: "R_kgDOTFMrJg",
+    categoryId: "DIC_kwDOTFMrJs4DA5L_",
+    title: "[Challenge] Implement CPS-0001 from spec alone — blind implementation test",
+    body: "We are testing whether CPS-0001 can be implemented without access to the original implementation.\n\n### The Claim\n\nA third party can build a conforming producer or verifier using only SHA-256 and Ed25519 — no MyShape source code, no SDK, no prior knowledge.\n\n### What We Need\n\n**3–5 developers** to try the blind implementation challenge.\n\n- ⏱ 30–90 minutes\n- 💻 Any programming language\n- 🔧 SHA-256 + Ed25519 + JSON\n- ✅ Pass or fail — both are valuable data\n\n### How It Works\n\n```bash\ngit clone https://github.com/myshapeprotocol/myshape-protocol.git\ncd myshape-protocol\ncat continuity-protocol/START_HERE.md\n```\n\n### After You Try\n\nTell us in this discussion or open an issue:\n1. How long did it take?\n2. Where did you get stuck?\n3. What was unclear in the spec?\n4. Did you need to look at anything outside the protocol directory?\n\nAll known limitations published in [PROTOCOL_STATUS.md](https://github.com/myshapeprotocol/myshape-protocol/blob/master/PROTOCOL_STATUS.md).\n\nNot a product pitch. No company. Research testing by The Continuity Lab."
+  }) {
+    discussion { url }
+  }
+}

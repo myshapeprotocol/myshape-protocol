@@ -1,0 +1,10 @@
+mutation {
+  post2: createDiscussion(input: {
+    repositoryId: "R_kgDOTfZJhg",
+    categoryId: "DIC_kwDOTfZJhs4DB6qH",
+    title: "[Challenge] Blind Implementation Test — can you implement CPS-0001 from spec alone?",
+    body: "We are running a blind implementation test for CPS-0001.\n\n### The question\n\nCan someone implement a conformant producer or verifier **without reading the original source code** — using only the spec, schema, and test vectors in this repository?\n\n### The challenge (30–90 minutes)\n\n1. Read [START_HERE.md](https://github.com/ContinuityLab-Org/continuity-protocol/blob/main/START_HERE.md)\n2. Write a program (any language) that produces a valid Continuity Receipt\n3. Run the CLI verifier against your output\n\nYou need SHA-256, Ed25519, and JSON. No sensor. No MyShape. No prior knowledge.\n\n### We want 3–5 independent implementations\n\nPass or fail — both are data. If you try, tell us:\n- How long it took\n- Where you got stuck\n- What was unclear\n\n### Known limitations\n\nSee [PROTOCOL_STATUS.md](https://github.com/myshapeprotocol/myshape-protocol/blob/master/PROTOCOL_STATUS.md) on the main implementation repo.\n\nThis is a research test, not a product launch. Research by The Continuity Lab."
+  }) {
+    discussion { url }
+  }
+}

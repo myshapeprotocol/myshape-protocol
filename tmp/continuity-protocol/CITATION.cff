@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "CPS-0001: The Continuity Protocol Standard"
+message: "If you use CPS-0001 in your research or implementation, please cite this work."
+type: standard
+authors:
+  - name: "The Continuity Lab"
+    website: "https://thecontinuitylab.org"
+repository-code: "https://github.com/ContinuityLab-Org/continuity-protocol"
+url: "https://myshape.com/research/notes/008-continuity-protocol-core"
+abstract: "CPS-0001 defines the Continuity Receipt — a cryptographically verifiable statement that an observer collected sufficient evidence supporting the continuity of a subject over a bounded interval of time. It is engine-independent."
+keywords:
+  - "continuity protocol"
+  - "identity verification"
+  - "Ed25519"
+  - "receipt verification"
+  - "interoperability"
+license: Apache-2.0
+version: "1.0-RC"
+date-released: "2026-07-24"

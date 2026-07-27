@@ -1,0 +1,46 @@
+[2026-07-26T04:14:00.843Z] ═══ Multi-Platform Publish: The Day Identity Stopped Meaning Presence ═══
+
+[2026-07-26T04:14:00.845Z] [bluesky] Publishing thread...
+[2026-07-26T04:14:00.846Z] [bluesky] Authenticating...
+[2026-07-26T04:14:02.136Z] [bluesky] Logged in: @myshapeprotocol.bsky.social
+[2026-07-26T04:14:03.263Z] [bluesky] Post 1/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjjezb2or2u
+[2026-07-26T04:14:05.055Z] [bluesky] Post 2/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjjf3rsbw2g
+[2026-07-26T04:14:06.855Z] [bluesky] Post 3/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjjf5iope2n
+[2026-07-26T04:14:08.649Z] [bluesky] Post 4/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjjf77ilw2e
+[2026-07-26T04:14:10.442Z] [bluesky] Post 5/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjjfaw6bt2p
+[2026-07-26T04:14:12.234Z] [bluesky] Post 6/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjjfcmvs423
+[2026-07-26T04:14:12.234Z] [bluesky] ✅ Thread complete
+
+[2026-07-26T04:14:14.248Z] [telegram] Publishing...
+[2026-07-26T04:14:16.022Z] [telegram] ✅ Message sent (id: 16)
+[2026-07-26T04:14:17.027Z] [farcaster] Publishing...
+[2026-07-26T04:14:18.238Z] [farcaster] ✗ Farcaster: {"code":"SignerNotApproved","message":"Signer status is generated.","property":"signer_uuid"}
+[2026-07-26T04:14:19.246Z] [discord] Publishing...
+[2026-07-26T04:14:20.566Z] [discord] ✅ Message sent
+[2026-07-26T04:14:20.567Z] 
+═══ Publish run complete ═══
+
+
+[2026-07-26T04:33:34.292Z] ═══ Multi-Platform Publish: The Day Identity Stopped Meaning Presence ═══
+
+[2026-07-26T04:33:34.293Z] [bluesky] Publishing thread...
+[2026-07-26T04:33:34.293Z] [bluesky] Authenticating...
+[2026-07-26T04:33:35.650Z] [bluesky] Logged in: @myshapeprotocol.bsky.social
+[2026-07-26T04:33:35.956Z] [bluesky] Post 1/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjkhygfuh2u
+[2026-07-26T04:33:37.761Z] [bluesky] Post 2/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjki25rub2e
+[2026-07-26T04:33:39.578Z] [bluesky] Post 3/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjki3v5hx2n
+[2026-07-26T04:33:41.371Z] [bluesky] Post 4/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjki5m7zz2e
+[2026-07-26T04:33:43.177Z] [bluesky] Post 5/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjki7deki2e
+[2026-07-26T04:33:44.967Z] [bluesky] Post 6/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrjkiazyai2p
+[2026-07-26T04:33:44.968Z] [bluesky] ✅ Thread complete
+
+[2026-07-26T04:33:46.984Z] [telegram] Publishing...
+[2026-07-26T04:33:48.810Z] [telegram] ✅ Message sent (id: 17)
+[2026-07-26T04:33:49.824Z] [farcaster] Publishing...
+[2026-07-26T04:33:51.034Z] [farcaster] ✗ Farcaster: {"code":"SignerNotApproved","message":"Signer status is generated.","property":"signer_uuid"}
+[2026-07-26T04:33:52.050Z] [discord] Publishing...
+[2026-07-26T04:33:53.267Z] [discord] ✅ Message sent
+[2026-07-26T04:33:53.267Z] 
+═══ Publish run complete ═══
+
+

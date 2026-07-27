@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask a question
+    url: https://github.com/ContinuityLab-Org/continuity-protocol/discussions
+    about: Please ask and answer questions in Discussions.
+  - name: 🔒 Security vulnerability
+    url: https://github.com/ContinuityLab-Org/continuity-protocol/security/advisories
+    about: Report security vulnerabilities here (or email security@thecontinuitylab.org).
