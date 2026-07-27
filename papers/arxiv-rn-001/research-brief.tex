@@ -1,0 +1,103 @@
+\documentclass[10pt]{article}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[margin=0.8in]{geometry}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+
+\title{Continuity Verification: A Missing Layer for Autonomous Agent Security}
+\author{The Continuity Lab\\
+\small\texttt{https://www.myshape.com/research}}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Problem}
+
+\textbf{The internet has no protocol for verifying that a digital entity is the same as it was a moment ago.}
+
+Every existing security primitive---OAuth, TLS, DIDs, Verifiable Credentials, zero-knowledge proofs---answers one question: \textit{who are you?} They are point-in-time snapshots, not trajectories. They cannot detect whether the subject behind a credential has been replaced mid-session.
+
+In the AI era, this gap creates four attack classes with no defense:
+
+\begin{enumerate}
+  \item \textbf{Agent replacement:} An AI agent with signing authority is swapped mid-deployment. The credentials remain valid. The behavior changes.
+  \item \textbf{Session hijacking:} A human authenticates; an AI-generated feed takes over. The identity check passed. The subject behind it changed.
+  \item \textbf{Credential replay:} A proof-of-personhood token is captured and replayed. The cryptographic proof verifies. The subject is absent.
+  \item \textbf{Digital twin drift:} A behavioral profile is cloned and replayed. Every statistical check passes. But no entity is continuously present.
+\end{enumerate}
+
+\textbf{All of these attacks succeed against identity. All fail against continuity---if continuity is verifiable.}
+
+\section*{Why Authorization Is Insufficient}
+
+OAuth tokens, API keys, and session cookies all assume that the entity holding the credential is the entity that originally authenticated. This assumption was reasonable before generative AI. Now:
+
+\begin{itemize}
+  \item A token can be stolen without invalidating the authorization server's records.
+  \item A session can be transferred to an AI agent mid-stream without any observable breach.
+  \item An API key does not distinguish between the original caller and a later impersonator.
+\end{itemize}
+
+We are not proposing a replacement for identity protocols. We are proposing a \textbf{complementary layer} that answers a different question: \textit{has the same entity been continuously present?}
+
+\section*{CPS-0001 Architecture}
+
+CPS-0001 defines an engine-independent protocol for producing and verifying Continuity Receipts---self-verifying cryptographic objects that capture evidence of persistent entity presence over a bounded interval.
+
+\begin{center}
+\fbox{\parbox{0.85\textwidth}{
+\small
+\textbf{Core data model:} \texttt{ContinuityReceipt\{ evidenceDigest, confidence, timestamp, predecessorDigest, signature \}}
+
+\vspace{4pt}
+\textbf{Verification contract:}
+V$_1$: Signature validity (Ed25519)\\
+V$_2$: Receipt integrity (hashes match payloads)\\
+V$_3$: Temporal validity (not expired)\\
+V$_4$: Chain continuity (predecessor hash matches)\\
+V$_5$: Minimum confidence threshold\\
+V$_6$: Engine eligibility\\
+V$_7$: Subject consistency\\
+}}
+\end{center}
+
+Each receipt links to its predecessor via SHA-256 hash, forming an auditable chain of presence evidence. The protocol is engine-independent: any sensor or algorithm can produce receipts in the same format. If one engine is compromised, others can be substituted without protocol changes.
+
+\subsection*{Four Evidence Engines}
+
+\begin{itemize}
+  \item \textbf{EE-001 (Presence Entropy Score):} 4-dimensional biological noise analysis. $N=281$, Cohen's $d = 2.1$.
+  \item \textbf{EE-002 (Cross-Modal Causal Coupling):} Temporal alignment between camera and IMU. 100\% across 316 trials.
+  \item \textbf{EE-003 (Challenge-Response):} Randomized gyroscope challenges with jittered timing. 60\% pass rate ($N=200$).
+  \item \textbf{VS-001 (Verification Session):} Dual-engine pipeline. 93\% pass rate ($N=60$).
+\end{itemize}
+
+\subsection*{Forgery Cost Model}
+
+Rather than assuming any single signal is ``unforgeable,'' our framework measures the \textbf{increasing cost of maintaining consistent forged evidence} across channels:
+
+\[
+\text{Cost} = 1\times\ (\text{single frame}) \rightarrow 5\times\ (+\text{temporal}) \rightarrow 25\times\ (+\text{cross-modal}) \rightarrow 100\times\ (+\text{challenge})
+\]
+
+\section*{Open Research Questions}
+
+\begin{enumerate}
+  \item Can continuity be verified independently of identity? (OQ-001)
+  \item What is the false acceptance rate under adversarially optimized attacks?
+  \item How does intra-subject motion variability affect long-duration verification?
+  \item Can continuity proofs be made as compact and efficient as JWT?
+\end{enumerate}
+
+\section*{Status}
+
+\textbf{Protocol:} CPS-0001 v1.0-RC published, Apache 2.0. \hfill
+\textbf{Code:} github.com/myshapeprotocol \hfill
+\textbf{Experiments:} 576 runs, 4 engines \hfill
+\textbf{Data:} public benchmarks + restricted motion dataset \hfill
+
+\medskip
+\noindent\small\textit{This research is conducted by The Continuity Lab. The reference implementation is developed under the MyShape Protocol initiative. We are seeking arXiv endorsement and academic collaboration.}
+\end{document}

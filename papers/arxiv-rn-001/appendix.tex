@@ -1,0 +1,125 @@
+\section*{Appendix A: Continuity Receipt Schema}
+\label{app:schema}
+\addcontentsline{toc}{section}{Appendix A: Continuity Receipt Schema}
+
+The Continuity Receipt is the core protocol object of CPS-0001. Each receipt captures a bounded interval of observation and carries evidence from one or more engines.
+
+\begin{verbatim}
+ContinuityReceipt {
+  protocolVersion: String,        // "1.0"
+  receiptId: UUID,
+  interval: { start: DateTime, end: DateTime, coverageMs: UInt64 },
+  subject: { id: SHA256, type: "embodied" | "agent" },
+  evidence: [{
+    engineId: String,
+    engineVersion: String,
+    confidence: Float,            // 0.0 — 1.0
+    payloadDigest: SHA256,
+    payload: JSON
+  }],
+  assertions: {
+    observationOccurred: { value: Bool, confidence: Float },
+    continuityMaintained: { value: Bool, confidence: Float },
+    receiptIntegrity: { value: true, confidence: 1.0 }
+  },
+  issuer: { id: String, publicKey: HexString },
+  previousReceiptHash: SHA256?,   // null for chain head
+  expiresAt: DateTime,
+  signature: { algorithm: "Ed25519", value: HexString, signedAt: DateTime }
+}
+\end{verbatim}
+
+\subsection*{Verification Contract (V$_1$–V$_7$)}
+
+Each receipt is verified against seven checks:
+\begin{enumerate}
+\item[V$_1$] Signature validity (Ed25519)
+\item[V$_2$] Receipt integrity (hashes match payloads)
+\item[V$_3$] Temporal validity (not expired)
+\item[V$_4$] Chain continuity (predecessor hash matches)
+\item[V$_5$] Minimum confidence threshold
+\item[V$_6$] Engine eligibility (known engine list)
+\item[V$_7$] Subject consistency across chain
+\end{enumerate}
+
+A receipt passes iff all seven checks pass.
+
+\newpage
+\section*{Appendix B: Experimental Protocol}
+\label{app:protocol}
+\addcontentsline{toc}{section}{Appendix B: Experimental Protocol}
+
+\subsection*{B.1 PES Benchmark (EE-001)}
+
+\textbf{Hardware:} Standard webcam, 30 fps. MediaPipe Pose 33-landmark model.
+\textbf{Environment:} Indoor, varied lighting (daylight, fluorescent, LED).
+\textbf{Subjects:} 54 participants (self-selected, age 22–61).
+\textbf{Duration:} 30 seconds per capture.
+\textbf{Processing:} On-device browser-side only. No raw motion data transmitted.
+
+\subsection*{B.2 Causal Coupling (EE-002)}
+
+\textbf{Devices:} Phone IMU + webcam, time-synchronized via shared start signal.
+\textbf{Metrics:} Temporal alignment precision at $\pm$16ms, 33ms, 66ms thresholds.
+\textbf{Procedure:} Subject performs a sharp motion event (clap, nod, drop). Both sensors record independently. Post-hoc alignment computed via cross-correlation of acceleration and optical flow.
+
+\subsection*{B.3 Challenge-Response (EE-003)}
+
+\textbf{Prompt set:} 5 rotation directions (left, right, forward, back, shake).
+\textbf{Timing:} Randomized jitter $\pm$200ms around 3s interval.
+\textbf{Pass criterion:} Detected motion direction matches prompt direction within 1.5s.
+
+\subsection*{B.4 Verification Session (VS-001)}
+
+\textbf{Structure:} Passive presence detection (30s) → if pass, challenge-response (3 rounds).
+\textbf{Multiple failure handling:} Any failed round falls back to re-authentication.
+\textbf{N:} 60 sessions across 20 subjects, 3 sessions each.
+
+\newpage
+\section*{Appendix C: Threat Model}
+\label{app:threat}
+\addcontentsline{toc}{section}{Appendix C: Threat Model}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Attack} & \textbf{Target} & \textbf{Feasibility} & \textbf{Mitigation} \\
+\hline
+Synthetic video frame injection & EE-001 & Medium (offline generation) & Cross-modal binding (EE-002) \\
+Recorded motion replay & EE-003 & Low (requires jitter prediction) & Randomized timing \\
+Sensor desynchronization & EE-002 & Medium (jam one sensor) & Chain continuity (V$_4$) \\
+Credential replay & CPS-0001 & Low (signature binding) & V$_1$ + expiry (V$_3$) \\
+Chain truncation & CPS-0001 & Medium (drop receipts) & V$_4$ predecessor check \\
+Long-interval evasion & CPS-0001 & High (wait for expiry) & Requires active re-verification \\
+\hline
+\end{tabular}
+
+\noindent\textbf{Key observation:} attacks that succeed against a single engine fail against the combined protocol. The forger must simultaneously defeat temporal, cross-modal, and challenge-response checks — each requiring a different attack capability.
+
+\newpage
+\section*{Appendix D: Published Failure Cases}
+\label{app:failures}
+\addcontentsline{toc}{section}{Appendix D: Published Failure Cases}
+
+Following the research principle that negative results are results, we document known failures:
+
+\subsection*{D.1 FD-001: Frame Rate Hypothesis}
+
+\textbf{Claim:} Higher capture frame rate (60 fps) should improve PES separation.
+\textbf{Result:} Falsified. 60 fps introduced sensor artifacts that degraded all four entropy dimensions. The optimal rate for entropy extraction is 30 fps.
+\textbf{Reference:} Research Note FD-001.
+
+\subsection*{D.2 DL-001: Direction Asymmetry in EE-003}
+
+\textbf{Observation:} Challenge-response pass rates are asymmetric by direction. Pitch (forward/back) passes more reliably than yaw (left/right).
+\textbf{Hypothesis:} Gyroscope axis sensitivity differences. Not yet confirmed.
+\textbf{Reference:} Research Note DL-001.
+
+\subsection*{D.3 Environmental Artifact: Fluorescent Flicker}
+
+\textbf{Observation:} Frequency entropy dimension (EE-001) produced false positives under fluorescent lighting. The 60 Hz AC flicker was initially interpreted as biological frequency structure.
+\textbf{Fix:} Notch filter at 60 Hz before frequency-domain analysis.
+
+\subsection*{D.4 Spline Interpolation Proximity (Ongoing)}
+
+\textbf{Observation:} AI strategy using cubic spline interpolation achieved PES 0.38 vs. human floor 0.41. This 0.03 margin is the narrowest separation observed.
+\textbf{Status:} Active research. Potential mitigations: cross-modal binding forces spatial consistency that splines cannot maintain.
