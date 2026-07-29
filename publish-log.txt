@@ -44,3 +44,101 @@
 ═══ Publish run complete ═══
 
 
+[2026-07-27T15:00:18.169Z] ═══ Multi-Platform Publish — Day 3: The Solution ═══
+
+[2026-07-27T15:00:18.171Z] [x] Publishing thread...
+[2026-07-27T15:00:39.260Z] [x] ✗ Request failed.
+[2026-07-27T15:00:41.273Z] [linkedin] Publishing...
+[2026-07-27T15:00:43.862Z] [linkedin] ✅ Post created: urn:li:share:7487522371671703552
+[2026-07-27T15:00:44.865Z] [bluesky] Publishing thread...
+[2026-07-27T15:00:44.866Z] [bluesky] Authenticating...
+[2026-07-27T15:00:46.515Z] [bluesky] Logged in: @myshapeprotocol.bsky.social
+[2026-07-27T15:00:46.809Z] [bluesky] Post 1/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrn5ygnxcd2e
+[2026-07-27T15:00:49.118Z] [bluesky] Post 2/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrn5yifclz2w
+[2026-07-27T15:00:50.942Z] [bluesky] Post 3/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrn5ykm2n72o
+[2026-07-27T15:00:52.752Z] [bluesky] Post 4/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrn5ymddmr2n
+[2026-07-27T15:00:54.575Z] [bluesky] Post 5/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrn5yo2vi52p
+[2026-07-27T15:00:56.375Z] [bluesky] Post 6/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrn5yps3s62j
+[2026-07-27T15:00:56.375Z] [bluesky] ✅ Thread complete
+[2026-07-27T15:00:58.389Z] [telegram] Publishing...
+[2026-07-27T15:01:01.863Z] [telegram] ✅ Message sent (id: 19)
+[2026-07-27T15:01:02.863Z] [discord] Publishing...
+[2026-07-27T15:01:04.233Z] [discord] ✅ Message sent
+[2026-07-27T15:01:05.242Z] [github] Creating discussion...
+[2026-07-27T15:01:07.134Z] [github] ✗ GitHub Discussion: 404 {
+  "message": "Not Found",
+  "documentation_url": "https://docs.github.com/rest",
+  "status": "404"
+}
+[2026-07-27T15:01:08.146Z] [huggingface] Creating discussion...
+[2026-07-27T15:01:09.237Z] [huggingface] ✗ HuggingFace: 404 <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /api/discussions/ContinuityLab-Org/cps-0001-benchmark</pre>
+</body>
+</html>
+
+[2026-07-27T15:01:09.238Z] 
+═══ Day 3 publish complete ═══
+
+
+[2026-07-28T00:37:01.343Z] ═══ Multi-Platform Publish — Day 4: The Evidence ═══
+
+[2026-07-28T00:37:01.359Z] [x] Publishing thread...
+[2026-07-28T00:37:22.456Z] [x] ✗ Request failed.
+[2026-07-28T00:37:24.462Z] [linkedin] Publishing...
+[2026-07-28T00:37:26.526Z] [linkedin] ✅ Post created: urn:li:share:7487667508955676672
+[2026-07-28T00:37:27.536Z] [bluesky] Publishing thread...
+[2026-07-28T00:37:27.537Z] [bluesky] Authenticating...
+[2026-07-28T00:37:28.762Z] [bluesky] Logged in: @myshapeprotocol.bsky.social
+[2026-07-28T00:37:29.045Z] [bluesky] Post 1/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mro67oovgv2e
+[2026-07-28T00:37:30.825Z] [bluesky] Post 2/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mro67qfgjd2n
+[2026-07-28T00:37:32.622Z] [bluesky] Post 3/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mro67s47qo23
+[2026-07-28T00:37:34.415Z] [bluesky] Post 4/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mro67tsv5o2q
+[2026-07-28T00:37:36.225Z] [bluesky] Post 5/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mro67vk2fg23
+[2026-07-28T00:37:38.034Z] [bluesky] Post 6/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mro67xbd3c2e
+[2026-07-28T00:37:38.035Z] [bluesky] ✅ Thread complete
+[2026-07-28T00:37:40.047Z] [telegram] Publishing...
+[2026-07-28T00:37:41.717Z] [telegram] ✅ Message sent (id: 21)
+[2026-07-28T00:37:42.720Z] [discord] Publishing...
+[2026-07-28T00:37:43.839Z] [discord] ✗ Discord: 400 {"content": ["Must be 2000 or fewer in length."]}
+[2026-07-28T00:37:44.846Z] [github] Creating discussion...
+[2026-07-28T00:37:46.441Z] [github] ✅ Discussion: https://github.com/myshapeprotocol/myshape-protocol/discussions/9
+[2026-07-28T00:37:47.451Z] [huggingface] Creating discussion...
+[2026-07-28T00:37:48.572Z] [huggingface] ✅ Discussion created: /datasets/ContinuityLab-Org/cps-0001-benchmark/discussions/5
+[2026-07-28T00:37:48.572Z] 
+═══ Day 4 publish complete ═══
+
+
+[2026-07-28T16:27:00.447Z] ═══ Multi-Platform Publish — Day 5: Forgery Cost Deep Dive ═══
+
+[2026-07-28T16:27:00.448Z] [x] Publishing thread...
+[2026-07-28T16:27:21.525Z] [x] ✗ Request failed.
+[2026-07-28T16:27:23.536Z] [linkedin] Publishing...
+[2026-07-28T16:27:34.203Z] [linkedin] ✗ fetch failed
+[2026-07-28T16:27:35.211Z] [bluesky] Publishing thread...
+[2026-07-28T16:27:35.213Z] [bluesky] Authenticating...
+[2026-07-28T16:27:38.106Z] [bluesky] Logged in: @myshapeprotocol.bsky.social
+[2026-07-28T16:27:38.402Z] [bluesky] Post 1/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrptcmzt3b2e
+[2026-07-28T16:27:40.227Z] [bluesky] Post 2/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrptcoraq72u
+[2026-07-28T16:27:42.049Z] [bluesky] Post 3/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrptcqiyia2w
+[2026-07-28T16:27:43.866Z] [bluesky] Post 4/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrptcsagpk2e
+[2026-07-28T16:27:46.170Z] [bluesky] Post 5/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrptctxu6r2n
+[2026-07-28T16:27:47.966Z] [bluesky] Post 6/6: https://bsky.app/profile/myshapeprotocol.bsky.social/post/3mrptcw5voi23
+[2026-07-28T16:27:47.967Z] [bluesky] ✅ Thread complete
+[2026-07-28T16:27:49.978Z] [telegram] Publishing...
+[2026-07-28T16:27:53.021Z] [telegram] ✅ Message sent (id: 22)
+[2026-07-28T16:27:54.026Z] [discord] Publishing...
+[2026-07-28T16:27:59.157Z] [discord] ✅ Message sent
+[2026-07-28T16:28:00.159Z] [github] Creating discussion...
+[2026-07-28T16:28:03.242Z] [github] ✅ Discussion: https://github.com/myshapeprotocol/myshape-protocol/discussions/10
+[2026-07-28T16:28:04.256Z] [huggingface] Creating discussion...
+[2026-07-28T16:28:06.604Z] [huggingface] ✅ Discussion created: /datasets/ContinuityLab-Org/cps-0001-benchmark/discussions/6
+[2026-07-28T16:28:06.605Z] 
+═══ Day 5 publish complete ═══
+
+

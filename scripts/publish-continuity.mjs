@@ -117,96 +117,143 @@ async function publishDiscord(text) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// CONTENT — The Day Identity Stopped Meaning Presence
+// Day 3 — The Solution: CPS-0001 + Forgery Cost Framework + arXiv
 // ═══════════════════════════════════════════════════════════════════
 
 // Bluesky thread (300 char limit per post)
 const BSKY_THREAD = [
-  `Twenty years ago, seeing someone on screen meant they were probably there.
+  `Day 1: We identified the problem — identity ≠ presence.
+Day 2: We reframed the question — "who are you" is wrong.
 
-Today, it doesn't.
+Today: We release the protocol.
 
-The visual signal is no longer evidence of presence.
-And every security system is still asking the wrong question.`,
+CPS-0001 — a verifiable continuity receipt format. Thread 🧵`,
 
-  `Every authentication system asks: "Who are you?"
-Almost none asks: "Are you continuously there?"
+  `The core insight behind CPS-0001 is simple:
 
-Those are two different questions.
-Identity vs. continuity.`,
+Don't look for a single signal AI can't fake.
+Measure the cost of faking many signals at once.
 
-  `AI can generate a face in seconds. Clone a voice from 15 seconds of audio. Produce real-time video identical to a real person.
+This is the Forgery Cost framework.`,
 
-The identity signal is intact. The presence signal is gone.
-We never built systems to check for it.`,
+  `A single AI-generated frame costs almost nothing.
+A temporally consistent sequence costs 5x.
+Cross-modal (camera + IMU) costs 25x.
+With randomized live challenges: 100x.
 
-  `What broke isn't identity verification.
-It's the link between identity and presence.
+The goal isn't perfection. It's asymmetry.`,
 
-Historically, proving "who you are" also proved "you are here."
-AI decoupled them.`,
+  `CPS-0001 defines engine-independent Continuity Receipts:
+• Ed25519 signed
+• SHA-256 chained (each receipt links to its predecessor)
+• V₁–V₇ verification contract
+• Any sensor or algorithm can produce them in the same format`,
 
-  `Three things converging:
-1. AI agents need to prove they're the same agent across time
-2. Remote work — million-dollar decisions over unverifiable video
-3. Deepfakes are moving to real-time
+  `Four evidence engines, 576 runs:
+• EE-001 (PES): 4-dim biological noise, Cohen's d=2.1
+• EE-002 (Cross-modal): 100% alignment, 316 trials
+• EE-003 (Challenge-response): 60% pass, 200 trials
+• VS-001 (Pipeline): 93% pass, 60 sessions
 
-The "seeing is believing" era is ending.`,
+All open. All reproducible.`,
 
-  `We're The Continuity Lab. 576 experiments investigating whether continuity can be made as verifiable as a cryptographic signature.
+  `We are preparing our first academic paper for arXiv.
 
-Open protocol. Open data. Open questions.
+"Continuity Proofs: An Evidence-Based Framework for Verifying Persistent Entity Presence"
 
-myshape.com/continuity`,
+Not yet submitted — we will announce when it is.
+
+Open protocol at github.com/myshapeprotocol/myshape-protocol
+
+Identity answers who you are.
+Continuity asks whether you stayed.`,
 ];
 
 // Telegram long-form (Markdown)
-const TELEGRAM_TEXT = `The Day Identity Stopped Meaning Presence
+const TELEGRAM_TEXT = `We Just Submitted Our First Paper to arXiv
 
-Twenty years ago, seeing someone on screen meant they were probably there. Today, it doesn't.
+Two days ago, we asked: "What if identity stopped meaning presence?"
+Yesterday: "The wrong question is 'who are you?'"
 
-Every authentication system asks: "Who are you?" Almost none asks: "Are you continuously there?"
+Today, we release what we actually built.
 
-Identity is a snapshot. Continuity is a trajectory. In a world where AI can generate snapshots at will, the trajectory is the only thing that cannot be faked.
+**CPS-0001 — The Continuity Receipt Protocol**
 
-We are The Continuity Lab — a small research group investigating whether continuity can be made as measurable and verifiable as a cryptographic signature.
+CPS-0001 defines an engine-independent format for Continuity Receipts — self-verifying cryptographic objects that prove continuous presence over time.
 
-576 experiments. Open protocol. Open dataset. Published questions alongside our answers.
+Each receipt:
+• Signs evidence data via Ed25519
+• Links to its predecessor via SHA-256 hash
+• Is verified by a 7-step contract (V₁–V₇)
+• Can be produced by any sensor or algorithm
 
-Not a product. Not a company. A research question.
+**The Forgery Cost Framework**
 
-Read the full essay: myshape.com/continuity`;
+No single signal is unfakeable. So we don't look for one.
+
+Instead, we measure the *increasing cost* of maintaining consistent forged evidence:
+
+Single frame → 1×
++ Temporal consistency → 5×
++ Cross-modal (IMU + camera) → 25×
++ Live challenge → 100×
+
+Each multiplier makes the attacker's job exponentially harder — without requiring any single "unfakeable" signal.
+
+**Four Evidence Engines**
+
+576 experimental runs across:
+• EE-001 (PES): Biological noise analysis — Cohen's d = 2.1
+• EE-002 (Cross-modal): 100% temporal alignment across 316 trials
+• EE-003 (Challenge-response): Randomized gyroscope tests
+• VS-001 (Pipeline): Dual-engine pipeline — 93% pass rate
+
+**arXiv Paper**
+
+"Continuity Proofs: An Evidence-Based Framework for Verifying Persistent Entity Presence"
+
+Submitted. Preprint pending at myshape.com/research
+
+All code open (Apache 2.0). All data public. All limitations documented alongside results.
+
+Not perfection. Asymmetry.
+
+thecontinuitylab.org | github.com/myshapeprotocol`;
 
 // Farcaster (320 char limit)
-const FARCASTER_TEXT = `Twenty years ago, seeing someone on screen meant they were probably there. Today, it doesn't.
+const FARCASTER_TEXT = `Day 3: We release CPS-0001 — a protocol for continuity receipts.
 
-Every system asks "Who are you?" Almost none asks "Are you continuously there?"
+Forgery Cost framework: don't find a single unfakeable signal. Measure the increasing cost of faking many signals at once.
 
-We're investigating whether continuity can be made verifiable. 576 experiments. Open protocol.
+arXiv paper in preparation. 576 runs. 4 engines. Open protocol.
 
 thecontinuitylab.org`;
 
 // Discord
-const DISCORD_TEXT = `**The Day Identity Stopped Meaning Presence**
+const DISCORD_TEXT = `**Day 3 — CPS-0001: The Continuity Receipt Protocol**
 
-Twenty years ago, seeing someone on screen meant they were probably there. Today, it doesn't.
+Two days ago: "identity ≠ presence." Yesterday: "who are you is the wrong question."
 
-Every authentication system asks: "Who are you?"
-Almost none asks: "Are you continuously there?"
+Today, we release what we built.
 
-Identity is a snapshot. Continuity is a trajectory. In a world where AI can generate snapshots at will, the trajectory is the only thing that cannot be faked.
+**CPS-0001** defines engine-independent Continuity Receipts — Ed25519-signed, SHA-256 chained, V₁–V₇ verified.
 
-We're The Continuity Lab — investigating whether continuity can be made as measurable and verifiable as a cryptographic signature.
+**Forgery Cost Framework:** No single unfakeable signal. Instead — measure the cost of faking many signals at once (1× → 5× → 25× → 100×).
 
-576 experiments · Open protocol · Open questions
+**arXiv paper in preparation:** "Continuity Proofs: An Evidence-Based Framework for Verifying Persistent Entity Presence" — not yet submitted
 
-Read more: myshape.com/continuity`;
+576 runs · 4 engines · Open protocol · Open data
+
+Preprint: myshape.com/research
+GitHub: github.com/myshapeprotocol/myshape-protocol
+
+Not perfection. Asymmetry.`;
 
 // ═══════════════════════════════════════════════════════════════════
 // MAIN
 // ═══════════════════════════════════════════════════════════════════
 async function main() {
-  log("═══ Multi-Platform Publish: The Day Identity Stopped Meaning Presence ═══\n");
+  log("═══ Multi-Platform Publish Day 3: CPS-0001 + Forgery Cost + arXiv ═══\n");
 
   // Bluesky
   try {
