@@ -651,7 +651,7 @@ export default function HeroDemo() {
         {/* 场景字幕 */}
         <div style={{
           position: "absolute",
-          bottom: "86px",
+          bottom: "96px",
           left: "16px",
           right: "16px",
           display: "flex",

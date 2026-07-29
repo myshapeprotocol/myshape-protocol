@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @page { margin: 0.75in; size: A4; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11pt; line-height: 1.5; color: #1a1a2e; }
+  h1 { font-size: 22pt; color: #1a1a2e; margin-bottom: 0; }
+  h2 { font-size: 14pt; color: #4a4a6a; margin-top: 1.5em; border-bottom: 2px solid #7c3aed; padding-bottom: 0.3em; }
+  h3 { font-size: 12pt; color: #1a1a2e; margin-top: 1em; }
+  .subtitle { font-size: 12pt; color: #7c3aed; margin-top: 0.2em; }
+  .meta { color: #666; font-size: 10pt; margin-top: 0.5em; }
+  table { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: 10pt; }
+  th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+  th { background: #f5f3ff; color: #4a4a6a; font-weight: 600; }
+  .stat-grid { display: flex; gap: 12px; flex-wrap: wrap; margin: 1em 0; }
+  .stat { background: #f5f3ff; border-radius: 8px; padding: 12px 18px; flex: 1; min-width: 120px; text-align: center; }
+  .stat-num { font-size: 20pt; font-weight: 700; color: #7c3aed; }
+  .stat-label { font-size: 9pt; color: #666; }
+  .badge { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: 600; }
+  .links { margin: 1em 0; }
+  .links a { color: #7c3aed; }
+  ul { padding-left: 1.2em; }
+  li { margin-bottom: 0.3em; }
+  .footer { margin-top: 2em; padding-top: 1em; border-top: 1px solid #ddd; font-size: 9pt; color: #999; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>The Continuity Lab</h1>
+<div class="subtitle">CPS-0001: A Verifiable Temporal Trust Layer for Digital Entities</div>
+<div class="meta">Independent Research Organization · Established June 2026</div>
+
+<div class="stat-grid">
+  <div class="stat"><div class="stat-num">590+</div><div class="stat-label">Tests Passing</div></div>
+  <div class="stat"><div class="stat-num">576</div><div class="stat-label">Experiments</div></div>
+  <div class="stat"><div class="stat-num">4</div><div class="stat-label">Evidence Engines</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-label">Research Notes</div></div>
+  <div class="stat"><div class="stat-num">2</div><div class="stat-label">GitHub Orgs</div></div>
+  <div class="stat"><div class="stat-num">1</div><div class="stat-label">arXiv Paper Prep</div></div>
+</div>
+
+<h2>What Is CPS-0001?</h2>
+<p>CPS-0001 defines the <strong>Continuity Receipt</strong> — a cryptographically verifiable statement that an observer collected sufficient evidence supporting the continuity of a subject over a bounded interval of time. It answers a question existing identity infrastructure cannot: <em>"Is this subject the same entity observed 8 seconds ago?"</em></p>
+
+<p>The protocol is <strong>engine-independent</strong> — any sensor, algorithm, or hardware can produce a valid receipt. If one evidence engine is compromised, others can be substituted without changing the receipt format.</p>
+
+<h2>Technical Architecture</h2>
+<pre style="background:#f8f8fc; padding:12px; border-radius:6px; font-size:10pt;">
+Producer (any engine) → Continuity Receipt → Verifier (V₁-V₇) → Consumer Decision
+
+Verification Contract:
+  V₁: Signature validity (Ed25519)
+  V₂: Receipt integrity (SHA-256)
+  V₃: Temporal validity (not expired)
+  V₄: Chain continuity (predecessor hash)
+  V₅: Minimum confidence threshold
+  V₆: Engine eligibility
+  V₇: Subject consistency
+</pre>
+
+<h2>Evidence Engines — 576 Experiments</h2>
+<table>
+  <tr><th>Engine</th><th>N</th><th>Key Result</th><th>Description</th></tr>
+  <tr><td>EE-001 (PES)</td><td>281</td><td>Cohen's d = 2.1</td><td>4-dim biological noise analysis</td></tr>
+  <tr><td>EE-002 (Cross-modal)</td><td>316</td><td>100% alignment</td><td>Camera + IMU temporal binding</td></tr>
+  <tr><td>EE-003 (Challenge-Response)</td><td>200</td><td>60% pass rate</td><td>Randomized gyroscope challenges</td></tr>
+  <tr><td>VS-001 (Verification Session)</td><td>60</td><td>93% pass rate</td><td>Passive + active pipeline</td></tr>
+</table>
+
+<h2>Open Source Deliverables</h2>
+<table>
+  <tr><th>Component</th><th>Status</th><th>Details</th></tr>
+  <tr><td>Protocol Spec (CPS-0001)</td><td><span class="badge">v1.0-RC</span></td><td>Receipt object model, V₁-V₇ verification contract</td></tr>
+  <tr><td>Reference Verifier (TypeScript)</td><td><span class="badge">Complete</span></td><td>Zero dependencies; 273 lines</td></tr>
+  <tr><td>HTTP Verifier Plugin</td><td><span class="badge">Complete</span></td><td>Express middleware — allow/deny + risk score</td></tr>
+  <tr><td>Second Producer (Agent Trace)</td><td><span class="badge">Complete</span></td><td>Proves engine independence</td></tr>
+  <tr><td>JSON Schema</td><td><span class="badge">Published</span></td><td>Schema-first validation</td></tr>
+  <tr><td>Test Vectors</td><td><span class="badge">Published</span></td><td>6 receipts: valid + invalid scenarios</td></tr>
+  <tr><td>Conformance Suite</td><td><span class="badge">Published</span></td><td>23 assertions, 10 scenarios</td></tr>
+  <tr><td>CLI Verifier (cps-verify)</td><td><span class="badge">Published</span></td><td>Verify from command line — any engine</td></tr>
+  <tr><td>npm Package</td><td><span class="badge">v0.1.3</span></td><td>@thecontinuitylab/myshape — Apache 2.0</td></tr>
+  <tr><td>Benchmark Dataset</td><td><span class="badge">Published</span></td><td>576+ runs, CC0 license on HuggingFace</td></tr>
+  <tr><td>Research Notes</td><td><span class="badge">RN-001→004</span></td><td>Open research publications</td></tr>
+  <tr><td>arXiv Paper</td><td><span class="badge">In Preparation</span></td><td>"Continuity Proofs: An Evidence-Based Framework"</td></tr>
+</table>
+
+<h2>Published Research Notes</h2>
+<ul>
+  <li><strong>RN-001</strong>: The Continuity Problem — Why Proving "I Am Still Me" Is the Missing Cryptographic Primitive</li>
+  <li><strong>RN-002</strong>: Forgery Cost Framework — Cost Asymmetry as the Foundation for Continuity Verification</li>
+  <li><strong>RN-003</strong>: Evidence Object v1 — Independent Lifecycle for Continuity Evidence</li>
+  <li><strong>RN-004</strong>: From Human Verification to Continuity Infrastructure</li>
+</ul>
+
+<h2>Key Links</h2>
+<div class="links">
+  <ul>
+    <li><strong>Research Hub:</strong> <a href="https://thecontinuitylab.org">thecontinuitylab.org</a></li>
+    <li><strong>Protocol Spec:</strong> <a href="https://myshape.com/research/notes/008-continuity-protocol-core">myshape.com/research/notes/008</a></li>
+    <li><strong>GitHub (Spec):</strong> <a href="https://github.com/ContinuityLab-Org/continuity-protocol">github.com/ContinuityLab-Org/continuity-protocol</a></li>
+    <li><strong>GitHub (Impl):</strong> <a href="https://github.com/myshapeprotocol/myshape-protocol">github.com/myshapeprotocol/myshape-protocol</a></li>
+    <li><strong>npm:</strong> <code>@thecontinuitylab/myshape</code></li>
+    <li><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/ContinuityLab-Org/cps-0001-benchmark">huggingface.co/ContinuityLab-Org/cps-0001-benchmark</a></li>
+    <li><strong>Bluesky:</strong> @myshapeprotocol.bsky.social</li>
+  </ul>
+</div>
+
+<h2>Community Health (GitHub)</h2>
+<ul>
+  <li>CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md — all published</li>
+  <li>Issue templates (bug report + feature request)</li>
+  <li>Pull request template</li>
+  <li>CITATION.cff for academic citation</li>
+  <li>Apache 2.0 license</li>
+  <li>2 organizations, 3 repositories, community health at 100%</li>
+</ul>
+
+<div class="footer">
+  The Continuity Lab · Independent Research · July 2026<br>
+  No company. No token. No product. Open protocol.
+</div>
+
+</body>
+</html>

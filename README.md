@@ -8,6 +8,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![Discussions](https://img.shields.io/badge/discussions-welcome-purple)](https://github.com/myshapeprotocol/myshape-protocol/discussions)
 [![CITATION.cff](https://img.shields.io/badge/cite-CITATION.cff-orange)](CITATION.cff)
+[![Giveth](https://img.shields.io/badge/Giveth-donate-8A2BE2)](https://giveth.io/project/the-continuity-lab)
 
 Research by [The Continuity Lab](https://thecontinuitylab.org). CPS-0001 is a protocol — not a product, not a company, not a token. MyShape is the first protocol implementation, maintained separately.
 

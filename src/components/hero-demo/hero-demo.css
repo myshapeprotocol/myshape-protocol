@@ -358,7 +358,7 @@
 
   /* CTA — 下半屏，堆叠 */
   .hero-demo-ctas {
-    bottom: 8px;
+    bottom: -10px;
     gap: 10px;
     flex-direction: column;
     align-items: center;
