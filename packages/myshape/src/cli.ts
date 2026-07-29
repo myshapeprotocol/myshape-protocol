@@ -8,7 +8,7 @@
 
 const PKG = {
   name: "@thecontinuitylab/myshape",
-  version: "0.1.4",
+  version: "0.1.5",
   docs: "https://myshape.com",
   lab: "https://thecontinuitylab.org",
   protocol: "CPS-0001",

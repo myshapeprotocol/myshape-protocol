@@ -8,11 +8,30 @@
 
 Reference implementation of the MyShape motion-signature engine. Sensor data in → verification result out. Research by [The Continuity Lab](https://thecontinuitylab.org).
 
+## Quick Test (no install needed)
+
+```bash
+npx @thecontinuitylab/myshape
+```
+
+Runs a self-check — 5/5 passes means everything works.
+
 ## Install
 
 ```bash
 npm install @thecontinuitylab/myshape
 ```
+
+### Windows users
+
+Before running `npm` or `npx`, you may need two things:
+
+1. **Install Node.js** — Download the LTS version from [nodejs.org](https://nodejs.org)
+2. **Unblock scripts** — If PowerShell blocks `npm` with a `.ps1` error, run this in PowerShell:
+   ```powershell
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
+   Press `Y` when prompted, then re-open your terminal.
 
 ## Usage
 
