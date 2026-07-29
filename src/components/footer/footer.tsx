@@ -42,6 +42,8 @@ export default function ProtocolFooter() {
         { name: "Continuity", href: "/continuity" },
         { name: "Protocol", href: "/protocol" },
         { name: "Research", href: "/research" },
+        { name: "Blog", href: "/blog" },
+        { name: "Agenda", href: "/research/agenda" },
         { name: "About", href: "/about-myshape" },
       ]
     },
