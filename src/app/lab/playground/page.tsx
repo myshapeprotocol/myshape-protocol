@@ -496,8 +496,13 @@ export default function PlaygroundPage() {
             <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
               {/* QR */}
               <div style={{ textAlign: "center", flexShrink: 0 }}>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://thecontinuitylab.org/lab/contribute&bgcolor=0B1220&color=64748B" alt="Scan to contribute" style={{ display: "block", width: 96, height: 96, border: "1px solid #1E293B", borderRadius: 4 }} />
-                <div style={{ fontSize: 9, color: "#64748B", marginTop: 4 }}>Scan with phone</div>
+                <img
+                  src="https://chart.googleapis.com/chart?cht=qr&chs=96x96&chl=https://thecontinuitylab.org/lab/contribute&choe=UTF-8&chld=L"
+                  alt="QR code to contribute page"
+                  style={{ display: "block", width: 96, height: 96, border: "1px solid #1E293B", borderRadius: 4, background: "#fff" }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+                <div style={{ fontSize: 9, color: "#64748B", marginTop: 4 }}>Scan with phone → contribute data</div>
               </div>
               {/* Copy */}
               <div style={{ minWidth: 200 }}>
