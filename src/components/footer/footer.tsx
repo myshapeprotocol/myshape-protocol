@@ -52,6 +52,7 @@ export default function ProtocolFooter() {
       links: [
         { name: "Playground", href: "https://thecontinuitylab.org/lab/playground" },
         { name: "CPS-0001", href: "/research/notes/008-continuity-protocol-core" },
+        { name: "Verify", href: "/verify-receipt" },
         { name: "Docs", href: "/docs" },
         { name: "Specs", href: "/specs" },
         { name: "Whitepaper", href: "/whitepaper" },
