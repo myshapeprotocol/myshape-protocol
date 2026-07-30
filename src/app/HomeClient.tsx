@@ -3,8 +3,7 @@ import React from "react";
 import Link from "next/link";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
-import LatestUpdates from "@/components/latest-updates/LatestUpdates";
-import { playTick } from "@/utils/useAudioTick";
+import EvidenceStrip from "@/components/evidence-strip/EvidenceStrip";import { playTick } from "@/utils/useAudioTick";
 import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
 import MotionPreview from "@/components/motion-preview/MotionPreview";
@@ -315,6 +314,8 @@ export default function HomeClient() {
             </div>
           </section>
 
+          <EvidenceStrip />
+
           <Vision />
 
           {/* ── Open Problems ── */}
@@ -442,7 +443,6 @@ export default function HomeClient() {
         </div>
       </main>
 
-      <LatestUpdates />
       <ProtocolFooter />
     </>
   );

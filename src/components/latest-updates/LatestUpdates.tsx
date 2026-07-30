@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import "./latest-updates.css";
 
@@ -53,6 +53,14 @@ const UPDATES: UpdateEntry[] = [
   },
 ];
 
+const FILTERS = [
+  { key: "All", label: "All" },
+  { key: "RFC", label: "RFC" },
+  { key: "Benchmark", label: "Benchmark" },
+  { key: "Release", label: "Release" },
+  { key: "Lab", label: "Lab" },
+] as const;
+
 const TAG_STYLES: Record<string, { bg: string; text: string }> = {
   RFC: { bg: "rgba(144,200,255,0.12)", text: "#90c8ff" },
   RN: { bg: "rgba(212,175,55,0.12)", text: "#d4af37" },
@@ -63,6 +71,12 @@ const TAG_STYLES: Record<string, { bg: string; text: string }> = {
 };
 
 export default function LatestUpdates() {
+  const [filter, setFilter] = useState<string>("All");
+
+  const filtered = filter === "All"
+    ? UPDATES
+    : UPDATES.filter((e) => e.tag === filter);
+
   return (
     <section className="latest-updates">
       <div className="latest-updates__header">
@@ -70,8 +84,21 @@ export default function LatestUpdates() {
         <span className="latest-updates__subtitle">A living research lab. Weekly updates.</span>
       </div>
 
+      {/* Filter tabs */}
+      <div className="latest-updates__filters">
+        {FILTERS.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setFilter(key)}
+            className={`latest-updates__filter-btn${filter === key ? " latest-updates__filter-btn--active" : ""}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <div className="latest-updates__list">
-        {UPDATES.map((entry, i) => {
+        {filtered.map((entry, i) => {
           const tagStyle = TAG_STYLES[entry.tag || "Lab"];
           const content = (
             <div className="latest-updates__row" key={i}>

@@ -1,0 +1,102 @@
+.evidence-strip {
+  padding: clamp(3.5rem, 6vw, 6rem) clamp(1rem, 4vw, 2rem);
+  background: rgba(6,11,20,0.5);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.evidence-strip__inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.evidence-strip__headline {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  color: rgba(248,254,255,0.7);
+  margin: 0 0 8px 0;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.evidence-strip__subhead {
+  font-size: 0.7rem;
+  color: rgba(248,254,255,0.22);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  text-align: center;
+  margin: 0 0 40px 0;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 400;
+}
+
+.evidence-strip__data {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.evidence-strip__item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.evidence-strip__item:last-child {
+  border-bottom: none;
+}
+
+.evidence-strip__value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #90c8ff;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.evidence-strip__sep {
+  color: rgba(255,255,255,0.12);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.evidence-strip__desc {
+  font-size: 0.82rem;
+  color: rgba(248,254,255,0.45);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.evidence-strip__link {
+  display: block;
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(144,200,255,0.4);
+  text-decoration: none;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 300;
+  transition: color 0.2s;
+}
+
+.evidence-strip__link:hover {
+  color: rgba(144,200,255,0.65);
+}
+
+@media (max-width: 480px) {
+  .evidence-strip__item {
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 0;
+  }
+  .evidence-strip__sep {
+    display: none;
+  }
+  .evidence-strip__value {
+    min-width: auto;
+  }
+}
