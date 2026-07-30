@@ -137,6 +137,26 @@ export default function VerifyReceiptPage() {
     setVerdict("");
   }
 
+  function handleDemo() {
+    const receipt = buildSampleReceipt();
+    setInput(JSON.stringify(receipt, null, 2));
+
+    if (!receipt.receiptId || !receipt.protocolVersion) {
+      setError("Sample receipt generation failed.");
+      return;
+    }
+    setReceiptId(receipt.receiptId);
+    try {
+      const results = runAllChecks(receipt);
+      setSteps(results);
+      const failed = results.filter((s) => s.status === "fail");
+      setVerdict(failed.length === 0 ? "VALID" : "INVALID");
+      setError("");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Verification failed unexpectedly.");
+    }
+  }
+
   const statusColor = (s: StepStatus) =>
     s === "pass" ? "#48bb78" : s === "fail" ? "#f56565" : s === "skipped" ? "#a0aec0" : "#f56565";
 
@@ -147,9 +167,15 @@ export default function VerifyReceiptPage() {
           <h1 className="text-2xl tracking-[0.3em] uppercase text-[#90c8ff] mb-2">
             CPS-0001 Receipt Verification
           </h1>
-          <p className="text-white/30 text-xs tracking-wider">
+          <p className="text-white/30 text-xs tracking-wider mb-4">
             Paste any CPS-0001 ContinuityReceipt to verify V₁–V₇
           </p>
+          <button
+            onClick={handleDemo}
+            className="px-6 py-2.5 border-2 border-[#64ffb4]/50 text-[#64ffb4] text-xs tracking-[0.15em] uppercase font-bold hover:bg-[#64ffb4]/10 transition-all"
+          >
+            Try Demo — one click
+          </button>
         </div>
 
         <div className="space-y-6">

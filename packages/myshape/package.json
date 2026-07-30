@@ -1,7 +1,7 @@
 {
   "name": "@thecontinuitylab/myshape",
-  "version": "0.1.5",
-  "description": "MyShape Protocol — motion-signature verification with continuity proofs. CPS-0001 compatible. Engine-independent: any sensor, any team.",
+  "version": "0.1.6",
+  "description": "MyShape Protocol — one function call adds continuity verification to your application. CPS-0001 compatible. Engine-independent.",
   "license": "Apache-2.0",
   "author": "The Continuity Lab",
   "repository": {
@@ -43,6 +43,7 @@
   },
   "files": [
     "dist/",
+    "data/",
     "README.md",
     "LICENSE"
   ],

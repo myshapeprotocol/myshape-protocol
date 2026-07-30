@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import ProtocolHeader from "@/components/header/header";
 import ProtocolFooter from "@/components/footer/footer";
+import LatestUpdates from "@/components/latest-updates/LatestUpdates";
 import { playTick } from "@/utils/useAudioTick";
 import HeroDemo from "@/components/hero-demo/HeroDemo";
 import Vision from "@/components/vision/Vision";
@@ -441,6 +442,7 @@ export default function HomeClient() {
         </div>
       </main>
 
+      <LatestUpdates />
       <ProtocolFooter />
     </>
   );

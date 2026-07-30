@@ -1,0 +1,103 @@
+.latest-updates {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(3rem, 5vw, 6rem) clamp(1rem, 4vw, 2rem);
+}
+
+.latest-updates__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.latest-updates__title {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  font-family: var(--font-geist-mono), monospace;
+  letter-spacing: 0.02em;
+}
+
+.latest-updates__subtitle {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.latest-updates__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.latest-updates__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  transition: background 0.2s;
+}
+
+.latest-updates__link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.latest-updates__link:hover .latest-updates__row {
+  background: rgba(144, 200, 255, 0.03);
+}
+
+.latest-updates__link:hover .latest-updates__arrow {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.latest-updates__date {
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  min-width: 5.5rem;
+  font-size: 0.75rem;
+}
+
+.latest-updates__tag {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.latest-updates__text {
+  color: rgba(255, 255, 255, 0.6);
+  flex: 1;
+}
+
+.latest-updates__arrow {
+  color: rgba(144, 200, 255, 0.3);
+  opacity: 0;
+  transition: all 0.2s;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .latest-updates__row {
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+    padding: 0.75rem 0;
+  }
+  .latest-updates__date {
+    min-width: auto;
+    width: 100%;
+    margin-bottom: 0.15rem;
+  }
+}
