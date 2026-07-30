@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
+import BackgroundParticles from "@/components/particles/BackgroundParticles";
 import { detectJerkPeaks, buildEvidence, matchEvents, detectDirectionChanges } from "@/lib/evidence/causal-coupling";
 import { evaluatePolicy } from "@/lib/evidence/types";
 import type { IMUSample, CameraSample } from "@/lib/evidence/causal-coupling";
@@ -16,7 +17,7 @@ const W = 640, H = 200;
 
 type Tab = "experiment" | "verify";
 
-function generateData(humanness: number, samples: number): { imu: IMUSample[]; cam: CameraSample[] } {
+function generateData(humanness: number, samples: number) {
   const imu: IMUSample[] = [];
   const cam: CameraSample[] = [];
   for (let i = 0; i < samples; i++) {
@@ -29,50 +30,48 @@ function generateData(humanness: number, samples: number): { imu: IMUSample[]; c
   return { imu, cam };
 }
 
-function buildSampleReceipt(): ContinuityReceipt {
-  const kp = generateKeyPair();
-  const issuer = createIssuerIdentity(kp);
-  const payload = { score: 0.85, metric: "PES" };
-  const digest = computePayloadDigest(payload);
-  const now = new Date();
-  const unsigned = buildReceipt({
-    evidence: [{ engineId: "EE-001", engineVersion: "1.0.0", confidence: 0.85, payload, payloadDigest: digest }],
-    interval: { start: new Date(now.getTime() - 8000).toISOString(), end: now.toISOString(), coverageMs: 8000 },
-    subject: { id: "demo-subject", type: "embodied" },
-    issuer,
-  });
-  return signReceipt(unsigned, kp.secretKey);
-}
-
 type StepStatus = "pass" | "fail" | "skipped";
 interface Step { id: string; label: string; detail: string; status: StepStatus; error?: string; }
+
+function humanLabel(id: string): string {
+  const m: Record<string, string> = {
+    "V1": "Structure check — does this look like a valid receipt?",
+    "V2": "Signature check — was it really signed by the issuer?",
+    "V3": "Logic check — do the claims make sense together?",
+    "V4": "Timeline check — do the timestamps add up?",
+    "V5": "Evidence check — does the payload hash match?",
+    "V6": "Freshness check — has the receipt expired?",
+    "V7": "Chain check — is there a predecessor receipt?",
+  };
+  return m[id] || "";
+}
 
 function runAllChecks(receipt: ContinuityReceipt): Step[] {
   const steps: Step[] = [];
   const v1 = verifySchema(receipt);
-  steps.push({ id: "V₁", label: "Schema Validity", detail: "protocolVersion, receiptId, interval, evidence, issuer, signature", status: v1 ? "fail" : "pass", error: v1 ?? undefined });
+  steps.push({ id: "V1", label: "Schema", detail: humanLabel("V1"), status: v1 ? "fail" : "pass", error: v1 ?? undefined });
   const v2 = verifySignature(receipt);
-  steps.push({ id: "V₂", label: "Ed25519 Signature", detail: "Canonical payload verified against issuer public key", status: v2 ? "fail" : "pass", error: v2 ?? undefined });
+  steps.push({ id: "V2", label: "Signature", detail: humanLabel("V2"), status: v2 ? "fail" : "pass", error: v2 ?? undefined });
   const v3 = verifyAssertions(receipt);
-  steps.push({ id: "V₃", label: "Assertion Consistency", detail: "Logical coherence of claims", status: v3 ? "fail" : "pass", error: v3 ?? undefined });
+  steps.push({ id: "V3", label: "Assertions", detail: humanLabel("V3"), status: v3 ? "fail" : "pass", error: v3 ?? undefined });
   const v4 = verifyTemporal(receipt);
-  steps.push({ id: "V₄", label: "Temporal Consistency", detail: "start < end, coverageMs match, signedAt ≥ end", status: v4 ? "fail" : "pass", error: v4 ?? undefined });
+  steps.push({ id: "V4", label: "Timeline", detail: humanLabel("V4"), status: v4 ? "fail" : "pass", error: v4 ?? undefined });
   const v5 = verifyEvidenceIntegrity(receipt);
-  steps.push({ id: "V₅", label: "Evidence Integrity", detail: "SHA-256 payload matches payloadDigest", status: v5 ? "fail" : "pass", error: v5 ?? undefined });
+  steps.push({ id: "V5", label: "Evidence", detail: humanLabel("V5"), status: v5 ? "fail" : "pass", error: v5 ?? undefined });
   const v6 = verifyFreshness(receipt);
-  steps.push({ id: "V₆", label: "Freshness", detail: "Current time < expiresAt", status: v6 ? "fail" : "pass", error: v6 ?? undefined });
+  steps.push({ id: "V6", label: "Freshness", detail: humanLabel("V6"), status: v6 ? "fail" : "pass", error: v6 ?? undefined });
   const genesis = !receipt.previousReceiptHash;
-  steps.push({ id: "V₇", label: "Predecessor Chain", detail: genesis ? "Genesis receipt — no predecessor" : "Chain link verification", status: genesis ? "skipped" : "skipped" });
+  steps.push({ id: "V7", label: "Chain", detail: humanLabel("V7"), status: genesis ? "skipped" : "skipped" });
   return steps;
 }
 
 export default function PlaygroundPage() {
   const [tab, setTab] = useState<Tab>("experiment");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // ── Experiment state ──
+  // ── Experiment ──
   const [humanness, setHumanness] = useState(0.75);
   const [samples, setSamples] = useState(200);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const result = useMemo(() => {
     const { imu, cam } = generateData(humanness, samples);
@@ -106,60 +105,116 @@ export default function PlaygroundPage() {
     peaks.forEach((p) => { const x = (p.t / maxT) * W; const y = H - ((data.find((d) => d.t >= p.t)?.v || minV) - minV) / (maxV - minV) * (H - 10) - 5; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); });
   }, [humanness, samples, tab]);
 
-  // ── Verify state ──
-  const [input, setInput] = useState("");
+  // ── Verify ──
+  const [receiptJson, setReceiptJson] = useState("");
+  const [originalReceipt, setOriginalReceipt] = useState("");
+  const [receiptSource, setReceiptSource] = useState<"experiment" | "manual" | "">("");
   const [vSteps, setVSteps] = useState<Step[]>([]);
   const [verdict, setVerdict] = useState<"VALID" | "INVALID" | "">("");
   const [vError, setVError] = useState("");
+  const [typingPos, setTypingPos] = useState(0);
+  const typingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  function handleDemo() {
-    const receipt = buildSampleReceipt();
-    setInput(JSON.stringify(receipt, null, 2));
-    setVError("");
-    try {
-      const results = runAllChecks(receipt);
-      setVSteps(results);
-      setVerdict(results.filter((s) => s.status === "fail").length === 0 ? "VALID" : "INVALID");
-    } catch (e) { setVError(e instanceof Error ? e.message : "Verification failed."); }
+  // Cleanup on unmount
+  useEffect(() => () => { if (typingRef.current) clearInterval(typingRef.current); }, []);
+
+  // Typewriter effect: reveals all steps, then types detail text character by character
+  function startTyping(all: Step[]) {
+    // Reveal steps one at a time
+    let stepIdx = 0;
+    const revealStep = () => {
+      if (stepIdx >= all.length) {
+        // All steps revealed — start typing detail text
+        const allText = all.map((s) => s.detail).join("");
+        let charIdx = 0;
+        setTypingPos(0);
+        typingRef.current = setInterval(() => {
+          charIdx++;
+          setTypingPos(charIdx);
+          if (charIdx >= allText.length) {
+            if (typingRef.current) clearInterval(typingRef.current);
+            setVerdict(all.filter((s) => s.status === "fail").length === 0 ? "VALID" : "INVALID");
+          }
+        }, 28);
+        return;
+      }
+      setVSteps(all.slice(0, stepIdx + 1));
+      stepIdx++;
+      setTimeout(revealStep, 280);
+    };
+    // Show first 2 immediately
+    setVSteps(all.slice(0, 2));
+    stepIdx = 2;
+    setTimeout(revealStep, 250);
   }
 
-  function handleVerify() {
-    setVError(""); setVSteps([]); setVerdict("");
+  function handleVerify(json?: string) {
+    const raw = json ?? receiptJson;
+    if (typingRef.current) { clearInterval(typingRef.current); typingRef.current = null; }
+    setVError(""); setVSteps([]); setVerdict(""); setTypingPos(0);
     let receipt: ContinuityReceipt;
-    try { receipt = JSON.parse(input) as ContinuityReceipt; } catch { setVError("Invalid JSON."); return; }
-    if (!receipt.receiptId) { setVError("Not a CPS-0001 receipt."); return; }
+    try { receipt = JSON.parse(raw) as ContinuityReceipt; } catch { setVError("Invalid JSON — check the receipt format."); return; }
+    if (!receipt.receiptId) { setVError("Missing receiptId — not a valid CPS-0001 receipt."); return; }
     try {
-      const results = runAllChecks(receipt);
-      setVSteps(results);
-      setVerdict(results.filter((s) => s.status === "fail").length === 0 ? "VALID" : "INVALID");
-    } catch (e) { setVError(e instanceof Error ? e.message : "Verification failed."); }
+      startTyping(runAllChecks(receipt));
+    } catch (e) { setVError(e instanceof Error ? e.message : "Verification crashed — this is a bug."); }
+  }
+
+  function handleSignAndVerify() {
+    const kp = generateKeyPair();
+    const issuer = createIssuerIdentity(kp);
+    const payload = {
+      engineId: "EE-002",
+      confidence: result.confidence,
+      verdict: result.verdict,
+      imuEvents: result.imuEvents,
+      camEvents: result.camEvents,
+      matches: result.matches,
+      humanness,
+    };
+    const digest = computePayloadDigest(payload);
+    const now = new Date();
+    const unsigned = buildReceipt({
+      evidence: [{ engineId: "EE-002", engineVersion: "1.0.0", confidence: result.confidence, payload, payloadDigest: digest }],
+      interval: { start: new Date(now.getTime() - samples * 16).toISOString(), end: now.toISOString(), coverageMs: samples * 16 },
+      subject: { id: "playground-experiment", type: "embodied" },
+      issuer,
+    });
+    const receipt = signReceipt(unsigned, kp.secretKey);
+    const json = JSON.stringify(receipt, null, 2);
+    setReceiptJson(json);
+    setOriginalReceipt(json);
+    setReceiptSource("experiment");
+    setVSteps([]);
+    setVerdict("");
+    setTypingPos(0);
+    setTab("verify");
   }
 
   const stepColor = (s: StepStatus) => s === "pass" ? "#48bb78" : s === "fail" ? "#f56565" : "#a0aec0";
 
   return (
-    <div style={{ minHeight: "100vh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#060B14", color: "#E6EDF7", fontFamily: "system-ui, -apple-system, sans-serif", position: "relative" }}>
+      <style>{`@keyframes blink{50%{opacity:0}} @keyframes statusIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}`}</style>
+      <BackgroundParticles />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px" }}>
 
         {/* Tabs */}
         <div style={{ display: "flex", gap: 0, marginBottom: 32, borderBottom: "1px solid #1E293B" }}>
           {([
-            ["experiment", "Experiment", "Tweak parameters, see live verification"],
-            ["verify", "Verify", "Paste a CPS-0001 receipt → V₁–V₇"],
+            ["experiment", "Experiment", "Tweak parameters → see live verification"],
+            ["verify", "Verify", "Sign experiment evidence → validate CPS-0001 receipt"],
           ] as [Tab, string, string][]).map(([key, label, hint]) => (
             <button
               key={key}
               onClick={() => setTab(key)}
               style={{
-                padding: "12px 24px",
-                fontSize: 13,
-                fontWeight: tab === key ? 500 : 300,
+                padding: "12px 24px", fontSize: 14,
+                fontWeight: tab === key ? 600 : 400,
                 color: tab === key ? "#60A5FA" : "#64748B",
-                background: "none",
-                border: "none",
+                background: "none", border: "none",
                 borderBottom: tab === key ? "2px solid #60A5FA" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.2s",
+                cursor: "pointer", transition: "all 0.2s",
               }}
               title={hint}
             >
@@ -168,13 +223,36 @@ export default function PlaygroundPage() {
           ))}
         </div>
 
-        {/* ═══════════════ TAB: Experiment ═══════════════ */}
+        {/* ═══════════ TAB: Experiment ═══════════ */}
         {tab === "experiment" && (
           <>
-            <h1 style={{ fontSize: 24, fontWeight: 300, color: "#E6EDF7", margin: "0 0 4px" }}>Continuity Playground</h1>
-            <p style={{ fontSize: 12, color: "#64748B", margin: "0 0 32px" }}>No code. No install. Slide to see verifyContinuity() in action.</p>
+            {/* Preset scenarios */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8, marginBottom: 20 }}>
+              {([
+                { label: "🚶 Walking", h: 0.90, desc: "Natural gait with heel strikes" },
+                { label: "🪑 Sitting", h: 0.70, desc: "Subtle micro-movements" },
+                { label: "🤖 AI Smooth", h: 0.25, desc: "Too regular — lacks noise" },
+                { label: "🔁 Replay", h: 0.45, desc: "Repeated pattern, no variation" },
+              ]).map(({ label, h, desc }) => (
+                <button
+                  key={label}
+                  onClick={() => setHumanness(h)}
+                  title={desc}
+                  style={{
+                    padding: "8px 10px", fontSize: 11, cursor: "pointer",
+                    border: humanness === h ? "1px solid rgba(96,165,250,0.4)" : "1px solid #1E293B",
+                    background: humanness === h ? "rgba(96,165,250,0.06)" : "#0B1220",
+                    color: humanness === h ? "#60A5FA" : "#94A3B8",
+                    borderRadius: 2, transition: "all 0.2s",
+                  }}
+                >
+                  <div>{label}</div>
+                  <div style={{ fontSize: 10, color: "#64748B", marginTop: 2 }}>{desc}</div>
+                </button>
+              ))}
+            </div>
 
-            <div style={{ padding: "16px 12px 8px", border: "1px solid #1E293B", background: "#0B1220", marginBottom: 0 }}>
+            <div style={{ padding: "16px 12px 8px", border: "1px solid #1E293B", background: "#0B1220" }}>
               <canvas ref={canvasRef} width={W} height={H} style={{ width: "100%", height: "auto", display: "block" }} />
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#64748B", marginTop: 4 }}>
                 <span>Acceleration magnitude</span>
@@ -183,13 +261,24 @@ export default function PlaygroundPage() {
               </div>
             </div>
 
-            <div style={{ textAlign: "center", padding: "12px 0 24px", display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
-              <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.2em", color: "#64748B" }}>VERDICT</div>
+            <div style={{ textAlign: "center", padding: "12px 0 8px", display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
+              <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.2em", color: "#64748B" }}>Verdict</div>
               <div style={{ fontSize: 32, fontWeight: 200, color: vc }}>{result.verdict.replace("_", " ")}</div>
               <div style={{ fontSize: 14, color: "#94A3B8" }}>{(result.confidence * 100).toFixed(0)}%</div>
             </div>
+            <p style={{ textAlign: "center", fontSize: 11, color: "#64748B", margin: "0 0 20px", lineHeight: 1.6 }}>
+              {result.verdict === "PASS"
+                ? humanness > 0.7
+                  ? "Strong biological signal — the motion has enough irregularity that it looks human."
+                  : "Just above the threshold — the evidence is sufficient but a more natural motion would boost confidence."
+                : result.verdict === "FAIL"
+                  ? humanness < 0.3
+                    ? "Too mechanical — the motion lacks the micro-variations that human bodies produce."
+                    : "Not enough evidence to confirm continuity — the signal is too weak or too uniform."
+                  : "Insufficient data — the sample is too short or lacks detectable events."}
+            </p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
               <div style={{ padding: "14px 16px", border: "1px solid #1E293B", background: "#0B1220" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 12 }}>
                   <span style={{ color: "#94A3B8" }}>Humanness</span>
@@ -207,21 +296,20 @@ export default function PlaygroundPage() {
               </div>
             </div>
 
-            <div style={{ marginBottom: 28 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                {result.components.map((c) => {
-                  const clr = c.status === "PASS" ? "#34D399" : c.status === "FAIL" ? "#f85149" : "#d29922";
-                  return (
-                    <div key={c.metric} style={{ padding: "10px 12px", border: "1px solid #1E293B", background: "#0B1220", fontSize: 11 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ color: "#A7B4C6" }}>{c.metric}</span>
-                        <span style={{ color: clr, fontSize: 14, fontWeight: 600 }}>{c.status === "PASS" ? "✓" : c.status === "FAIL" ? "✗" : "—"}</span>
-                      </div>
-                      <div style={{ color: "#64748B", fontSize: 11, marginTop: 2 }}>{c.value.toFixed(3)} / {c.threshold}</div>
+            {/* Evidence grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
+              {result.components.map((c) => {
+                const clr = c.status === "PASS" ? "#34D399" : c.status === "FAIL" ? "#f85149" : "#d29922";
+                return (
+                  <div key={c.metric} style={{ padding: "10px 12px", border: "1px solid #1E293B", background: "#0B1220", fontSize: 11 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ color: "#A7B4C6" }}>{c.metric}</span>
+                      <span style={{ color: clr, fontSize: 14, fontWeight: 600 }}>{c.status === "PASS" ? "✓" : c.status === "FAIL" ? "✗" : "—"}</span>
                     </div>
-                  );
-                })}
-              </div>
+                    <div style={{ color: "#64748B", fontSize: 11, marginTop: 2 }}>{c.value.toFixed(3)} / {c.threshold}</div>
+                  </div>
+                );
+              })}
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 28 }}>
@@ -232,6 +320,22 @@ export default function PlaygroundPage() {
                 </div>
               ))}
             </div>
+
+            {/* ── THE KEY BUTTON ── */}
+            <button
+              onClick={handleSignAndVerify}
+              style={{
+                display: "block", width: "100%", padding: "14px 0", marginBottom: 32,
+                border: "2px solid rgba(52,211,153,0.6)", background: "rgba(52,211,153,0.06)",
+                color: "#34D399", fontSize: 14, fontWeight: 600, cursor: "pointer",
+                letterSpacing: "0.1em",
+              }}
+            >
+              → Sign &amp; Verify This Evidence
+            </button>
+            <p style={{ textAlign: "center", fontSize: 11, color: "#64748B", marginTop: -20, marginBottom: 20 }}>
+              Signs the experiment result as a CPS-0001 receipt and sends it to the Verifier.
+            </p>
 
             <details style={{ marginBottom: 32 }}>
               <summary style={{ fontSize: 11, color: "#64748B", cursor: "pointer", letterSpacing: "0.1em", textTransform: "uppercase" }}>Diagnostics</summary>
@@ -244,48 +348,85 @@ export default function PlaygroundPage() {
           </>
         )}
 
-        {/* ═══════════════ TAB: Verify ═══════════════ */}
+        {/* ═══════════ TAB: Verify ═══════════ */}
         {tab === "verify" && (
           <>
-            <h1 style={{ fontSize: 24, fontWeight: 300, color: "#E6EDF7", margin: "0 0 4px" }}>Receipt Verifier</h1>
-            <p style={{ fontSize: 12, color: "#64748B", margin: "0 0 24px" }}>CPS-0001 V₁–V₇ verification. Runs in your browser.</p>
-
-            <button
-              onClick={handleDemo}
-              style={{
-                width: "100%", padding: "10px 0", marginBottom: 16,
-                border: "2px solid rgba(100,255,180,0.5)", background: "rgba(100,255,180,0.05)",
-                color: "#64ffb4", fontSize: 12, fontWeight: 600, cursor: "pointer",
-                textTransform: "uppercase", letterSpacing: "0.15em",
-              }}
-            >
-              Try Demo — one click
-            </button>
+            {(receiptSource === "experiment" || receiptSource === "manual") && originalReceipt && (
+              <>
+                <div style={{ padding: "12px 16px", marginBottom: 16, border: receiptSource === "experiment" ? "1px solid rgba(52,211,153,0.25)" : "1px solid rgba(245,101,101,0.2)", background: receiptSource === "experiment" ? "rgba(52,211,153,0.04)" : "rgba(245,101,101,0.03)", fontSize: 12, color: receiptSource === "experiment" ? "#34D399" : "#f56565", borderRadius: 2 }}>
+                  {receiptSource === "experiment" ? "← Receipt signed from your experiment evidence" : "⚠ Receipt has been tampered — see which checks catch it"}
+                </div>
+                {verdict && (
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
+                  {[
+                    { label: "Corrupt Signature", hint: "Tampers the Ed25519 signature → V2 fails", action: () => {
+                      try { const r = JSON.parse(receiptJson); r.signature = r.signature.slice(0, -10) + "0000000000"; setReceiptJson(JSON.stringify(r, null, 2)); setReceiptSource("manual"); handleVerify(JSON.stringify(r, null, 2)); } catch {}
+                    }},
+                    { label: "Break Timeline", hint: "Sets coverage to 0 → V4 fails", action: () => {
+                      try { const r = JSON.parse(receiptJson); r.interval.coverageMs = 0; setReceiptJson(JSON.stringify(r, null, 2)); setReceiptSource("manual"); handleVerify(JSON.stringify(r, null, 2)); } catch {}
+                    }},
+                    { label: "Mismatch Hash", hint: "Changes payload without updating digest → V5 fails", action: () => {
+                      try { const r = JSON.parse(receiptJson); r.evidence[0].payload.humanness = 0; setReceiptJson(JSON.stringify(r, null, 2)); setReceiptSource("manual"); handleVerify(JSON.stringify(r, null, 2)); } catch {}
+                    }},
+                    { label: "Restore Original", hint: "Back to the valid receipt", action: () => {
+                      setReceiptJson(originalReceipt); setReceiptSource("experiment"); handleVerify(originalReceipt);
+                    }},
+                  ].map(({ label, hint, action }) => (
+                    <button
+                      key={label}
+                      onClick={action}
+                      title={hint}
+                      style={{
+                        padding: "5px 10px", fontSize: 10,
+                        border: "1px solid rgba(245,101,101,0.3)", background: "transparent",
+                        color: "rgba(245,101,101,0.7)", cursor: "pointer",
+                        borderRadius: 2, transition: "all 0.2s",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(245,101,101,0.08)"; e.currentTarget.style.color = "#f56565"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(245,101,101,0.7)"; }}
+                    >
+                      🔨 {label}
+                    </button>
+                  ))}
+                </div>
+                )}
+              </>
+            )}
+            {!originalReceipt && receiptSource !== "manual" && (
+              <p style={{ fontSize: 13, color: "#64748B", margin: "0 0 20px", lineHeight: 1.6 }}>
+                Paste any CPS-0001 receipt to verify it — or <a href="#" onClick={(e) => { e.preventDefault(); setTab("experiment"); }} style={{ color: "#60A5FA" }}>go to Experiment</a> to generate one.
+              </p>
+            )}
 
             <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
+              value={receiptJson}
+              onChange={(e) => { setReceiptJson(e.target.value); setReceiptSource("manual"); }}
               placeholder="Paste CPS-0001 ContinuityReceipt JSON here…"
-              style={{
-                width: "100%", height: 160, boxSizing: "border-box",
-                background: "#0d0d14", border: "1px solid rgba(144,200,255,0.2)",
-                color: "rgba(255,255,255,0.7)", fontSize: 11, padding: 12,
-                fontFamily: "monospace", resize: "vertical",
-              }}
+              style={{ width: "100%", height: 160, boxSizing: "border-box", background: "#0d0d14", border: "1px solid rgba(144,200,255,0.2)", color: "rgba(255,255,255,0.7)", fontSize: 11, padding: 12, fontFamily: "monospace", resize: "vertical" }}
               spellCheck={false}
             />
 
+            {receiptSource === "experiment" && !verdict && (
+              <p style={{ textAlign: "center", fontSize: 11, color: "#34D399", margin: "10px 0 6px" }}>
+                ↓ Your receipt is ready — click below to verify it.
+              </p>
+            )}
             <button
-              onClick={handleVerify}
-              disabled={!input.trim()}
+              onClick={() => handleVerify()}
+              disabled={!receiptJson.trim()}
               style={{
-                width: "100%", padding: "10px 0", marginTop: 12, marginBottom: 20,
-                border: "2px solid rgba(144,200,255,0.6)", background: "transparent",
-                color: "#90c8ff", fontSize: 12, fontWeight: 600, cursor: input.trim() ? "pointer" : "not-allowed",
-                textTransform: "uppercase", letterSpacing: "0.15em", opacity: input.trim() ? 1 : 0.3,
+                width: "100%", padding: receiptSource === "experiment" && !verdict ? "14px 0" : "10px 0",
+                marginTop: 8, marginBottom: 20,
+                border: receiptSource === "experiment" && !verdict ? "2px solid rgba(52,211,153,0.6)" : "2px solid rgba(144,200,255,0.6)",
+                background: receiptSource === "experiment" && !verdict ? "rgba(52,211,153,0.06)" : "transparent",
+                color: receiptSource === "experiment" && !verdict ? "#34D399" : "#90c8ff",
+                fontSize: receiptSource === "experiment" && !verdict ? 14 : 12,
+                fontWeight: 600, cursor: receiptJson.trim() ? "pointer" : "not-allowed",
+                letterSpacing: "0.1em", opacity: receiptJson.trim() ? 1 : 0.3,
+                transition: "all 0.2s",
               }}
             >
-              Verify Receipt
+              {receiptSource === "experiment" && !verdict ? "→ Verify This Receipt" : "Verify Receipt"}
             </button>
 
             {vError && <div style={{ border: "1px solid rgba(245,101,101,0.3)", background: "rgba(245,101,101,0.03)", padding: 12, fontSize: 12, color: "#f56565", marginBottom: 16 }}>{vError}</div>}
@@ -302,35 +443,80 @@ export default function PlaygroundPage() {
               </div>
             )}
 
+            {verdict && (
+              <div style={{ textAlign: "center", marginBottom: 28, padding: "14px 16px", border: "1px solid rgba(96,165,250,0.12)", background: "rgba(96,165,250,0.02)", borderRadius: 2 }}>
+                <div style={{ fontSize: 12, color: "#64748B", marginBottom: 10 }}>
+                  {verdict === "VALID" ? "The receipt checks out. Want to see what a bad one looks like?" : "Something broke. See which checks caught it above."}
+                </div>
+                <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+                  {verdict === "VALID" && (
+                    <>
+                      <button onClick={() => { try { const r = JSON.parse(receiptJson); r.signature = r.signature.slice(0, -10) + "0000000000"; setReceiptJson(JSON.stringify(r, null, 2)); setReceiptSource("manual"); handleVerify(JSON.stringify(r, null, 2)); } catch {} }} style={{ padding: "5px 12px", fontSize: 10, border: "1px solid rgba(245,101,101,0.3)", background: "transparent", color: "rgba(245,101,101,0.7)", cursor: "pointer", borderRadius: 2 }}>🔨 Corrupt it</button>
+                    </>
+                  )}
+                  <button onClick={() => setTab("experiment")} style={{ padding: "5px 12px", fontSize: 10, border: "1px solid rgba(96,165,250,0.3)", background: "transparent", color: "rgba(96,165,250,0.7)", cursor: "pointer", borderRadius: 2 }}>← Try different parameters</button>
+                </div>
+              </div>
+            )}
+
             {vSteps.length > 0 && (
               <div>
-                <div style={{ fontSize: 11, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 12 }}>Verification Steps</div>
-                {vSteps.map((step) => (
+                <div style={{ fontSize: 11, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 12 }}>V₁–V7 Verification</div>
+                {vSteps.map((step, i) => {
+                  const prevChars = vSteps.slice(0, i).reduce((sum, s) => sum + s.detail.length, 0);
+                  const visible = Math.max(0, Math.min(step.detail.length, typingPos - prevChars));
+                  const showCursor = i === vSteps.length - 1 ? typingPos >= prevChars : (typingPos >= prevChars && typingPos < prevChars + step.detail.length);
+                  return (
                   <div key={step.id} style={{ display: "flex", gap: 12, padding: "10px 12px", border: "1px solid rgba(255,255,255,0.04)", marginBottom: 2, fontSize: 12 }}>
-                    <span style={{ width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, background: stepColor(step.status) + "20", color: stepColor(step.status), flexShrink: 0, marginTop: 1 }}>
+                    <span style={{ width: 22, height: 22, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, background: stepColor(step.status) + "20", color: stepColor(step.status), flexShrink: 0, marginTop: 1 }}>
                       {step.status === "pass" ? "✓" : step.status === "fail" ? "✗" : "—"}
                     </span>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
-                        <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10 }}>{step.id}</span>
-                        <span style={{ color: "rgba(255,255,255,0.8)" }}>{step.label}</span>
+                        <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10 }}>{step.id} {step.label}</span>
+                        <span style={{ color: stepColor(step.status), fontSize: 10, fontWeight: 600, animation: `statusIn 0.4s ease-out both`, animationDelay: `${i * 0.3}s` }}>{step.status.toUpperCase()}</span>
                       </div>
-                      <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 10, marginTop: 2 }}>{step.detail}</div>
+                      <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 3 }}>
+                        {step.detail.slice(0, visible)}
+                        {showCursor && typingPos < prevChars + step.detail.length && <span style={{ color: "#60A5FA", animation: "blink 0.6s step-end infinite" }}>▌</span>}
+                      </div>
                       {step.error && <div style={{ color: "rgba(245,101,101,0.7)", fontSize: 10, marginTop: 2 }}>{step.error}</div>}
                     </div>
                   </div>
-                ))}
+                );
+                })}
               </div>
             )}
           </>
         )}
 
+        {/* CTA — real data */}
+        {verdict && (
+          <div style={{ marginTop: 32, padding: "24px", border: "1px solid rgba(212,175,55,0.15)", background: "rgba(212,175,55,0.02)", borderRadius: 2 }}>
+            <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              {/* QR */}
+              <div style={{ textAlign: "center", flexShrink: 0 }}>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://thecontinuitylab.org/lab/contribute&bgcolor=0B1220&color=64748B" alt="Scan to contribute" style={{ display: "block", width: 96, height: 96, border: "1px solid #1E293B", borderRadius: 4 }} />
+                <div style={{ fontSize: 9, color: "#64748B", marginTop: 4 }}>Scan with phone</div>
+              </div>
+              {/* Copy */}
+              <div style={{ minWidth: 200 }}>
+                <div style={{ fontSize: 13, color: "rgba(212,175,55,0.75)", fontWeight: 500, marginBottom: 6 }}>
+                  This was simulated data.
+                </div>
+                <div style={{ fontSize: 12, color: "#94A3B8", lineHeight: 1.5 }}>
+                  Record real motion data on your phone and help us build the benchmark.
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <div style={{ marginTop: 40, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-          <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.5)", textDecoration: "none", letterSpacing: "0.05em" }}>npm install @thecontinuitylab/myshape →</a>
-          <a href="https://thecontinuitylab.org/lab" style={{ fontSize: 12, color: "rgba(212,175,55,0.5)", textDecoration: "none", letterSpacing: "0.05em" }}>The Continuity Lab →</a>
+          <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" style={{ fontSize: 12, color: "rgba(96,165,250,0.5)", textDecoration: "none" }}>npm install →</a>
+          <a href="/lab" style={{ fontSize: 12, color: "rgba(212,175,55,0.5)", textDecoration: "none" }}>The Continuity Lab →</a>
         </div>
-        <div style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.15)", marginTop: 12 }}>CPS-0001 v1.0-RC · Verification runs locally · Engine-independent</div>
       </div>
     </div>
   );
