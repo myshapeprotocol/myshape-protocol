@@ -53,8 +53,6 @@ export default function ProtocolFooter() {
         { name: "Playground", href: "https://thecontinuitylab.org/lab/playground" },
         { name: "CPS-0001", href: "/research/notes/008-continuity-protocol-core" },
         { name: "Verify", href: "/verify-receipt" },
-        { name: "Docs", href: "/docs" },
-        { name: "Specs", href: "/specs" },
         { name: "Whitepaper", href: "/whitepaper" },
         { name: "npm SDK", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },
       ]
@@ -66,7 +64,6 @@ export default function ProtocolFooter() {
         { name: "Roadmap", href: "/roadmap" },
         { name: "Glossary", href: "/glossary" },
         { name: "Contact", href: "/contact" },
-        { name: "Newsletter", href: "/newsletter" },
       ]
     },
     {

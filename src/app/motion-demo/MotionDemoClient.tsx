@@ -62,6 +62,15 @@ interface FeatureFrame {
 /** Cumulative phase boundary timestamps (ms) — mirrors MotionGuide PHASES */
 const PHASE_BOUNDARIES_MS = [6000, 12000, 19000, 25000, 30000];
 
+function storePESForPlayground(data: {
+  score: number; timing: number; noise: number; freq: number; bio: number;
+  verdict: string; receiptId?: string; payloadDigest?: string;
+}) {
+  if (typeof window !== "undefined") {
+    sessionStorage.setItem("motiondemo_pes", JSON.stringify(data));
+  }
+}
+
 export default function MotionDemoClient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -71,7 +80,8 @@ export default function MotionDemoClient() {
   const [cohortFull, setCohortFull] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
   const [sensorMode, setSensorMode] = useState<SensorMode | null>(null);
-  const [cameraAvailable] = useState(() => typeof navigator?.mediaDevices?.getUserMedia === "function");
+  const [cameraAvailable, setCameraAvailable] = useState(false);
+  useEffect(() => { setCameraAvailable(typeof navigator?.mediaDevices?.getUserMedia === "function"); }, []);
   const [features, setFeatures] = useState<FeatureFrame | null>(null);
   const [pesData, setPesData] = useState<PESData | null>(null);
   const [threatVerdict, setThreatVerdict] = useState<string>("");
@@ -125,7 +135,6 @@ export default function MotionDemoClient() {
 
   // ── Real Camera Mode ──
   const startCapture = useCallback(async () => {
-    // 在用户点击的同步代码块中恢复 AudioContext（浏览器自动播放策略要求）
     resumeAudio();
 
     setSensorMode("camera");
@@ -473,6 +482,7 @@ export default function MotionDemoClient() {
 
   const startGyroCapture = useCallback(async () => {
     resumeAudio();
+
     setSensorMode("gyro");
     setPhase("capturing");
     phaseRef.current = "capturing";
@@ -632,6 +642,7 @@ export default function MotionDemoClient() {
       };
 
       setTimeout(() => {
+    
         playTick(1200, "sine", 0.12, 0.03);
         // Stop camera + video + animation + timer
         if (animRef.current) cancelAnimationFrame(animRef.current);
@@ -726,6 +737,7 @@ export default function MotionDemoClient() {
 
   // ── Stop ──
   const stop = () => {
+
     if (animRef.current) cancelAnimationFrame(animRef.current);
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     if (poseRef.current) { try { poseRef.current.close(); } catch { /* ok */ } }
@@ -854,6 +866,32 @@ export default function MotionDemoClient() {
             )}
 
             {phase === "processing" && <ProcessingOverlay />}
+            {/* Playground Bridge — real data → protocol verification */}
+            {phase === "complete" && pesData && (
+              <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", zIndex: 40 }}>
+                <a
+                  href="/lab/playground"
+                  onClick={() => {
+                    storePESForPlayground({
+                      score: pesData.score, timing: pesData.timing, noise: pesData.noise,
+                      freq: pesData.frequency, bio: pesData.biological, verdict: threatVerdict,
+                      receiptId: proofHashes?.receiptId, payloadDigest: proofHashes?.payloadDigest,
+                    });
+                  }}
+                  style={{
+                    display: "inline-block", padding: "12px 28px",
+                    border: "2px solid rgba(52,211,153,0.7)", background: "rgba(52,211,153,0.08)",
+                    color: "#34D399", fontSize: 13, fontWeight: 600, textDecoration: "none",
+                    letterSpacing: "0.08em", borderRadius: 2,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(52,211,153,0.15)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(52,211,153,0.08)"; }}
+                >
+                  → Verify This In Playground
+                </a>
+              </div>
+            )}
+
             {/* Completion Ceremony */}
             {phase === "complete" && pesData && (
               <CompletionCeremony
@@ -1212,46 +1250,15 @@ export default function MotionDemoClient() {
                 </div>
 
                 {pesData && (
-                  <div className="space-y-2">
+                  <div className="flex gap-2">
                   <button onClick={()=>{
                     const report={protocol:"MyShape PES Benchmark v0.1",timestamp:new Date().toISOString(),pes:{score:pesData.score,components:{microTimingVariance:pesData.timing,noiseResidual:pesData.noise,frequencyEntropy:pesData.frequency,biologicalPerturbation:pesData.biological}},threat_verdict:threatVerdict,telemetry:{sst_frames:sstFramesRef.current.length,valid_frames:validFrameCount,capture_duration_ms:captureElapsedMs},proof_hashes:proofHashes,wasm_compare:wasmCompare,ai_compare:aiCompare};
                     const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
                     const url=URL.createObjectURL(blob);
                     const a=document.createElement("a");a.href=url;a.download=`myshape-pes-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}.json`;a.click();URL.revokeObjectURL(url);
                     playTick(800,"sine",0.10,0.025);
-                  }} className="w-full py-3 border-2 border-[#90c8ff]/60 text-[#90c8ff] text-[11px] tracking-[0.15em] uppercase font-bold hover:bg-[#90c8ff]/15 transition-all" style={{textShadow:"0 0 10px rgba(144,200,255,0.3)"}}>📥 Export PES Report</button>
-                  <button onClick={()=>{
-                    const frames = sstFramesRef.current;
-                    if (frames.length === 0) return;
-                    const startTs = frames[0].timestamp;
-                    const landmarkData = frames.map(f => ({
-                      t: f.timestamp - startTs,
-                      joints: Object.fromEntries(
-                        Object.entries(f.frame).map(([k, v]) => [k, { x: v.x, y: v.y, z: v.z }])
-                      ),
-                    }));
-                    const report = {
-                      session_id: crypto.randomUUID(),
-                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null)?.split("@")[0] || "anonymous",
-                      timestamp: new Date().toISOString(),
-                      landmarks: landmarkData,
-                      pes_score: pesData.score,
-                      pes_micro_timing: pesData.timing,
-                      pes_noise_residual: pesData.noise,
-                      pes_freq_entropy: pesData.frequency,
-                      pes_bio_perturb: pesData.biological,
-                      total_frames: frames.length,
-                      valid_frames: validFrameCount,
-                    };
-                    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = "myshape-landmarks-" + new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19) + ".json";
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    playTick(600, "sine", 0.08, 0.02);
-                  }} className="w-full py-2.5 border border-[#3fb950]/40 text-[#3fb950]/60 text-[11px] tracking-[0.12em] uppercase hover:bg-[#3fb950]/10 hover:border-[#3fb950]/70 transition-all">💾 Download Landmark Data</button>
+                  }} className="flex-1 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/50 text-[10px] tracking-[0.1em] uppercase hover:bg-[#90c8ff]/10 transition-all">📥 Export</button>
+                  <button onClick={()=>{const r=`MyShape PES: ${(pesData.score*100).toFixed(0)}% | μT:${(pesData.timing*100).toFixed(0)}% N:${(pesData.noise*100).toFixed(0)}% F:${(pesData.frequency*100).toFixed(0)}% B:${(pesData.biological*100).toFixed(0)}%\nVerified by MyShape Protocol — myshape.com/motion-demo`;navigator.clipboard.writeText(r).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)})}} className="flex-1 py-2 border border-[#90c8ff]/20 text-[#90c8ff]/35 text-[10px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 transition-all">{copied?"✓ Copied":"📋 Copy"}</button>
                   </div>
                 )}
                 <button onClick={stop}

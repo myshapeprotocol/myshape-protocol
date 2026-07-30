@@ -12,7 +12,7 @@ const CSP_DIRECTIVES = [
   // Styles: Tailwind needs 'unsafe-inline'
   "style-src 'self' 'unsafe-inline'",
   // Images: self + Supabase storage + data URIs
-  "img-src 'self' data: https://*.supabase.co",
+  "img-src 'self' data: https://*.supabase.co https://api.qrserver.com",
   // Fonts: self + Google Fonts
   "font-src 'self' https://fonts.gstatic.com",
   // Connections: API + Supabase + WebSocket + MediaPipe
