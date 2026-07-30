@@ -1,6 +1,7 @@
 "use client";
 
 import BackgroundParticles from "@/components/particles/BackgroundParticles";
+import LatestUpdates from "@/components/latest-updates/LatestUpdates";
 
 export default function LabPage() {
   return (
@@ -92,7 +93,7 @@ export default function LabPage() {
             </div>
           ))}
         </div>
-        <div style={{ textAlign: "right", fontSize: 11, color: "rgba(255,255,255,0.30)", marginBottom: 48 }}>Last updated 2026-07-22</div>
+        <LatestUpdates />
 
         <div style={{ fontSize: "clamp(0.95rem, 1.5vw, 1rem)", fontWeight: 300, color: "rgba(255,255,255,0.4)", lineHeight: 1.7, marginBottom: 36 }}>
           Our research program has produced specifications, notes, benchmarks, and a growing body of evidence. Here is what exists today.
