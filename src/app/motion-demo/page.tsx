@@ -3,6 +3,9 @@ import MotionDemoClient from "./MotionDemoClient";
 import BreadcrumbList from "@/components/seo/BreadcrumbList";
 import FaqJsonLd from "@/components/seo/FaqJsonLd";
 
+// Prevent static generation — force dynamic render to avoid Vercel CDN staleness
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "MyShape Motion Demo — Live Motion-Signature Verification",
   description:

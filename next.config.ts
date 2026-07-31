@@ -59,6 +59,13 @@ const nextConfig: NextConfig = {
   // ── Security headers applied to all routes ──
   async headers() {
     return [
+      // HTML pages — prevent CDN from serving stale content after deploy
+      {
+        source: "/((?!_next|api|.*\..*).*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+        ],
+      },
       {
         source: "/(.*)",
         headers: securityHeaders,

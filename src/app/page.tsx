@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import HomeClient from "./HomeClient";
 import FaqJsonLd from "@/components/seo/FaqJsonLd";
 
+// Prevent static generation — force dynamic render to avoid Vercel CDN staleness
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "MyShape Protocol — The Sovereign 3D Identity Layer for the Decentralized Human",
   description:

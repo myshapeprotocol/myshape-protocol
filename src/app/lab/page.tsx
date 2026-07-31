@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import LabClient from "@/components/lab/LabClient";
 
+// Prevent static generation — force dynamic render to avoid Vercel CDN staleness
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "The Continuity Lab — Open Research on Digital Continuity",
   description:
