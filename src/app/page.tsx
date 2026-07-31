@@ -3,34 +3,39 @@ import HomeClient from "./HomeClient";
 import FaqJsonLd from "@/components/seo/FaqJsonLd";
 
 export const metadata: Metadata = {
-  title: "MyShape — The Continuity Layer",
+  title: "MyShape Protocol — The Sovereign 3D Identity Layer for the Decentralized Human",
   description:
-    "Identity tells you who someone claims to be. Continuity asks whether the same entity is still here. A research protocol investigating whether continuity can become a verifiable property of digital existence.",
+    "AI-native identity. Zero-knowledge presence. Motion-signature verification. From signals to trust — explore the Continuity Layer through live PES demo, constellation research, diagnostic console, declassified evidence dossier, and sonar open questions. Built by The Continuity Lab.",
   keywords: [
     "MyShape Protocol",
     "continuity layer",
-    "identity protocol",
-    "motion-signature",
+    "motion-signature verification",
     "AI-native identity",
     "zero-knowledge presence",
     "sovereign identity",
+    "presence entropy score",
+    "CPS-0001",
+    "continuity proof",
     "decentralized identity",
+    "proof of continuity",
+    "motion biometrics alternative",
+    "The Continuity Lab",
   ],
   alternates: { canonical: "https://www.myshape.com" },
   openGraph: {
-    title: "MyShape Protocol — The Continuity Layer",
+    title: "MyShape Protocol — Motion-Signature Continuity Verification",
     description:
-      "In a world where AI can generate everything — what proves that you continue to exist? MyShape investigates continuity, not identity. A research protocol for verifiable digital persistence.",
+      "AI can generate faces, voices, identities. But can it maintain continuous presence? MyShape investigates continuity — the one thing AI cannot forge. Live PES engine. Open protocol. Research-driven.",
     url: "https://www.myshape.com",
     siteName: "MyShape Protocol",
-    images: [{ url: "/identity-sigil.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Protocol — The Continuity Layer",
+    title: "MyShape Protocol — Motion-Signature Continuity Verification",
     description:
-      "Identity is a snapshot. Continuity is a trajectory. Can digital continuity be made verifiable?",
-    images: ["/identity-sigil.jpg"],
+      "AI can generate everything. But can it maintain continuous presence? MyShape investigates the one thing AI cannot forge.",
+    images: ["/og-image.png"],
   },
 };
 

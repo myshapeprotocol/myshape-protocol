@@ -364,7 +364,7 @@ export default function MotionDemoClient() {
             const sz = p.size * (1 + prog * 3);
             const g = ctx.createRadialGradient(p.x * w, p.y * h, 0, p.x * w, p.y * h, sz * 2);
             g.addColorStop(0, `rgba(180,220,255,${a})`);
-            g.addColorStop(1, "rgba(144,200,255,0)");
+            g.addColorStop(1, "rgba(0,229,255,0)");
             ctx.fillStyle = g;
             ctx.beginPath(); ctx.arc(p.x * w, p.y * h, sz * 2, 0, Math.PI * 2); ctx.fill();
           });
@@ -430,8 +430,8 @@ export default function MotionDemoClient() {
           // 辉光（Bloom）
           const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, glowR);
           g.addColorStop(0, `rgba(200,235,255,${alpha * 0.9})`);
-          g.addColorStop(0.3, `rgba(144,200,255,${alpha * 0.5})`);
-          g.addColorStop(1, "rgba(144,200,255,0)");
+          g.addColorStop(0.3, `rgba(0,229,255,${alpha * 0.5})`);
+          g.addColorStop(1, "rgba(0,229,255,0)");
           ctx.fillStyle = g;
           ctx.beginPath();
           ctx.arc(sx, sy, glowR, 0, Math.PI * 2);
@@ -450,11 +450,11 @@ export default function MotionDemoClient() {
         // 扫描带视觉
         const bandY = haloY * h;
         const bandGrad = ctx.createLinearGradient(0, bandY - 12, 0, bandY + 12);
-        bandGrad.addColorStop(0, "rgba(144,200,255,0)");
-        bandGrad.addColorStop(0.4, "rgba(144,200,255,0.08)");
-        bandGrad.addColorStop(0.5, "rgba(144,200,255,0.15)");
-        bandGrad.addColorStop(0.6, "rgba(144,200,255,0.08)");
-        bandGrad.addColorStop(1, "rgba(144,200,255,0)");
+        bandGrad.addColorStop(0, "rgba(0,229,255,0)");
+        bandGrad.addColorStop(0.4, "rgba(0,229,255,0.08)");
+        bandGrad.addColorStop(0.5, "rgba(0,229,255,0.15)");
+        bandGrad.addColorStop(0.6, "rgba(0,229,255,0.08)");
+        bandGrad.addColorStop(1, "rgba(0,229,255,0)");
         ctx.fillStyle = bandGrad;
         ctx.fillRect(0, bandY - 12, w, 24);
 
@@ -758,529 +758,124 @@ export default function MotionDemoClient() {
     sstFramesRef.current = [];
   };
 
-  return (
-    <div className="bg-[#02040a] text-[#f8feff] font-mono selection:bg-[#90c8ff]/30">
-      <ProtocolHeader />
-      
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 motion-demo__container">
-        <div className="space-y-6 mb-12">
-          <div className="text-[#90c8ff]/50 text-[11px] tracking-[0.5em] uppercase">Presence_Engine // Live_Demo</div>
-          <h1 className="text-3xl md:text-4xl font-light tracking-[0.15em] text-white uppercase">
-            Motion <span className="motion-demo__arrow">→</span> Geometry <span className="motion-demo__arrow">→</span> Signature
-          </h1>
-          <p className="text-white/40 text-[12px] leading-relaxed max-w-xl">
-            Real-time Presence Entropy Score via webcam. Motion Vector → SST 18-pt → 4D Entropy → ZK-Proof.
-            All processing local. Nothing uploaded. Firefox recommended.
-          </p>
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#051025", color: "#f8feff", position: "relative" }}>
+      <ProtocolHeader />
+      <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "clamp(80px,10vw,100px) clamp(16px,3vw,24px) clamp(20px,4vw,40px)" }}>
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "clamp(2rem,4vw,3rem)" }}>
+          <div style={{ fontSize: 10, color: "rgba(0,229,255,0.35)", textTransform: "uppercase", letterSpacing: "0.5em", marginBottom: 14, fontFamily: "var(--font-geist-mono), monospace" }}>Continuity Chamber</div>
+          <h1 style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>Motion <span style={{ color: "rgba(0,229,255,0.8)" }}>→</span> Signature</h1>
+          <p style={{ fontSize: "clamp(0.8rem,1.2vw,0.9rem)", fontWeight: 300, color: "rgba(255,255,255,0.35)", marginTop: "0.6rem", lineHeight: 1.5 }}>Real-time Presence Entropy. On-device. Nothing uploaded.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Particle Panel */}
-          <div className="lg:col-span-2 border border-white/10 bg-black/60 relative overflow-hidden motion-demo__video-panel">
-            {/* Video is the main display — camera feed directly visible */}
-            <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover motion-demo__video" playsInline muted />
-            {/* Canvas overlay: particles + skeleton only */}
-            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10 pointer-events-none" />
+        {/* CHAMBER — hidden when complete */}
+        {phase !== "complete" && (
+        <div style={{ position: "relative", width: "100%", aspectRatio: "16/10", maxHeight: "64vh", border: "1px solid rgba(0,229,255,0.1)", background: "rgba(5,16,37,0.5)", borderRadius: 14, overflow: "hidden", marginBottom: "clamp(1.5rem,3vw,2.5rem)" }}>
+          <video ref={videoRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: phase === "capturing" ? 1 : 0, transition: "opacity 0.5s" }} playsInline muted />
+          <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 10, pointerEvents: "none" }} />
 
-            {phase === "idle" && (
-              <>
-                {cameraAvailable && (
-                  <IdlePanel
-                    isChromium={isChromium}
-                    researchConsented={researchConsented}
-                    onConsentChange={setResearchConsented}
-                    lighting={lighting}
-                    onLightingChange={setLighting}
-                    uploadState={uploadState}
-                    uploadError={uploadError}
-                    sessionId={sessionId}
-                    uploadDone={uploadDone}
-                    onStartCapture={startCapture}
-                  />
-                )}
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={startGyroCapture}
-                    className="px-8 py-3 border border-[#90c8ff]/30 text-[#90c8ff]/60 text-xs tracking-[0.15em] uppercase hover:bg-[#90c8ff]/5 hover:text-[#90c8ff]/90 transition-all"
-                  >
-                    {cameraAvailable ? "Use Phone Gyro Instead" : "Begin (Gyroscope)"}
-                  </button>
-                  {!cameraAvailable && (
-                    <p className="text-white/20 text-[10px] mt-3">Camera unavailable — using motion sensors. Tilt and shake your phone.</p>
-                  )}
-                  {cameraAvailable && (
-                    <p className="text-white/15 text-[10px] mt-3">Open this page on your phone to use the gyroscope sensor.</p>
-                  )}
-                </div>
-              </>
-            )}
-
-            {phase === "capturing" && sensorMode === "gyro" && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-20">
-                <div className="text-6xl font-light text-[#90c8ff] animate-pulse">{countdown}</div>
-                <div className="text-white/40 text-sm mt-4">Move your phone — tilt, shake, rotate</div>
-                <div className="text-white/20 text-xs mt-2">{validFrameCount} samples</div>
+          {/* IDLE */}
+          {phase === "idle" && (
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, background: "rgba(2,8,24,0.45)", zIndex: 20, padding: 24 }}>
+              <div style={{ width: 56, height: 56, borderRadius: "50%", border: "2px solid rgba(0,229,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ fontSize: 24 }}>⚡</span></div>
+              <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "clamp(13px,1.5vw,15px)", textAlign: "center", lineHeight: 1.5, maxWidth: 360, margin: 0 }}>Step into the Continuity Chamber. Your motion becomes your proof.</p>
+              <p style={{ color: "rgba(255,255,255,0.18)", fontSize: 11, textAlign: "center", margin: 0 }}>Face the camera. 30 seconds. Stay natural.</p>
+              <div style={{ width: "100%", maxWidth: 320 }}><ResearchConsent consented={researchConsented} onConsentChange={setResearchConsented} lighting={lighting} onLightingChange={setLighting} uploadState={uploadState} uploadError={uploadError} sessionId={sessionId} captureActive={false} uploadDone={uploadDone} /></div>
+              <div style={{ display: "flex", gap: 12, marginTop: 4 }}>
+                {cameraAvailable && <button onClick={startCapture} onMouseEnter={(e) => { playTick(800, "sine", 0.1, 0.025); e.currentTarget.style.borderColor = "rgba(0,229,255,0.7)"; e.currentTarget.style.background = "rgba(0,229,255,0.1)"; e.currentTarget.style.boxShadow = "0 0 32px rgba(0,229,255,0.15)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,229,255,0.35)"; e.currentTarget.style.background = "rgba(0,229,255,0.03)"; e.currentTarget.style.boxShadow = "none"; }} style={{ padding: "14px 36px", border: "2px solid rgba(0,229,255,0.35)", color: "rgba(0,229,255,0.8)", fontSize: 13, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.15em", textTransform: "uppercase", background: "rgba(0,229,255,0.03)", borderRadius: 8, cursor: "pointer", transition: "all 0.35s" }}>Begin Scan</button>}
+                <button onClick={startGyroCapture} onMouseEnter={(e) => { playTick(600, "sine", 0.06, 0.02); e.currentTarget.style.borderColor = "rgba(0,229,255,0.3)"; e.currentTarget.style.color = "#fff"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.35)"; }} style={{ padding: "14px 24px", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)", fontSize: 11, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.1em", textTransform: "uppercase", background: "transparent", borderRadius: 8, cursor: "pointer", transition: "all 0.3s" }}>{cameraAvailable ? "Use Phone" : "Begin (Gyro)"}</button>
               </div>
-            )}
+              {!cameraAvailable && <p style={{ color: "rgba(255,255,255,0.15)", fontSize: 10, margin: 0 }}>Camera unavailable — using motion sensors.</p>}
+            </div>
+          )}
 
-            {phase === "capturing" && sensorMode !== "gyro" && (
-              <>
-                {/* ── SkeletonOverlay: ethereal wireframe on camera feed ── */}
-                <SkeletonOverlay
-                  landmarks={landmarksRef.current as Array<{ x: number; y: number; z: number; visibility?: number }> | null}
-                  width={canvasRef.current?.width ?? 640}
-                  height={canvasRef.current?.height ?? 400}
-                  active={true}
-                />
-                {/* ── MotionGuide: 5-phase state machine + constraint overlay ── */}
-                <MotionGuide
-                  elapsedMs={captureElapsedMs}
-                  landmarkVisibility={landmarkVisibility}
-                  velocity={currentVelocity}
-                  anchorsAllVisible={
-                    [0, 11, 12, 13, 14, 15, 16, 23, 24].every(
-                      i => (landmarkVisibility[i] ?? 0) > 0.5
-                    )
-                  }
-                  active={true}
-                />
-                {/* Status badge — countdown + frame counter */}
-                <div className="absolute top-3 right-3 z-30 flex items-center gap-3 px-3 py-1.5 bg-black/70 border border-[#90c8ff]/20 rounded-sm">
-                  <span className="text-white/80 font-mono text-[18px] tabular-nums" style={{ textShadow: "0 0 12px rgba(144,200,255,0.5)" }}>
-                    {countdown}s
-                  </span>
-                  <span className="text-[#90c8ff]/40 text-[11px] tracking-[0.15em] font-mono">
-                    {validFrameCount} frames
-                  </span>
-                  {/* Manual stop — ends capture early, computes PES from accumulated frames */}
-                  <button
-                    onClick={() => setAllPhasesComplete(true)}
-                    onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}
-                    className="ml-2 px-2 py-0.5 border border-red-400/30 text-red-400/50 hover:bg-red-400/10 hover:text-red-400/80 text-[11px] tracking-[0.1em] uppercase transition-all"
-                    title="Stop early and compute PES from current frames">
-                    ⏹ Stop
-                  </button>
-                </div>
-              </>
-            )}
+          {/* CAPTURING — camera */}
+          {phase === "capturing" && sensorMode !== "gyro" && (<>
+            <SkeletonOverlay landmarks={landmarksRef.current as any} width={canvasRef.current?.width ?? 640} height={canvasRef.current?.height ?? 400} active={true} />
+            <MotionGuide elapsedMs={captureElapsedMs} landmarkVisibility={landmarkVisibility} velocity={currentVelocity} anchorsAllVisible={[0,11,12,13,14,15,16,23,24].every(i => (landmarkVisibility[i] ?? 0) > 0.5)} active={true} />
+            <div style={{ position: "absolute", top: 12, right: 12, zIndex: 30, display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", background: "rgba(5,16,37,0.75)", border: "1px solid rgba(0,229,255,0.15)", borderRadius: 10 }}>
+              <span style={{ color: "#fff", fontFamily: "var(--font-geist-mono), monospace", fontSize: 20, textShadow: "0 0 12px rgba(0,229,255,0.5)" }}>{countdown}s</span>
+              <span style={{ color: "rgba(0,229,255,0.3)", fontSize: 10, fontFamily: "var(--font-geist-mono), monospace" }}>{validFrameCount}f</span>
+              <button onClick={() => setAllPhasesComplete(true)} onMouseEnter={(e) => { playTick(600, "sine", 0.06, 0.015); e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.color = "rgba(239,68,68,0.8)"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(239,68,68,0.4)"; }} style={{ padding: "3px 10px", border: "1px solid rgba(239,68,68,0.25)", color: "rgba(239,68,68,0.4)", background: "transparent", borderRadius: 6, fontSize: 10, fontFamily: "var(--font-geist-mono), monospace", cursor: "pointer", transition: "all 0.2s" }}>Stop</button>
+            </div>
+            {livePes && <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", zIndex: 30, display: "flex", gap: 8, padding: "8px 16px", background: "rgba(5,16,37,0.75)", border: "1px solid rgba(0,229,255,0.1)", borderRadius: 20 }}><span style={{ color: "rgba(0,229,255,0.5)", fontSize: 10, fontFamily: "var(--font-geist-mono), monospace" }}>Live PES</span><span style={{ color: "#fff", fontSize: 12, fontWeight: 600, fontFamily: "var(--font-geist-mono), monospace" }}>{(livePes.score * 100).toFixed(0)}%</span></div>}
+          </>)}
 
-            {phase === "processing" && <ProcessingOverlay />}
-            {/* Playground Bridge — real data → protocol verification */}
-            {phase === "complete" && pesData && (
+          {/* CAPTURING — gyro */}
+          {phase === "capturing" && sensorMode === "gyro" && <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(5,16,37,0.85)", zIndex: 20, gap: 14 }}><div style={{ fontSize: 56, fontWeight: 200, color: "rgba(0,229,255,0.8)", fontFamily: "var(--font-geist-mono), monospace" }}>{countdown}</div><p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, margin: 0 }}>Move your phone — tilt, shake, rotate</p><p style={{ color: "rgba(0,229,255,0.3)", fontSize: 11, fontFamily: "var(--font-geist-mono), monospace", margin: 0 }}>{validFrameCount} samples</p></div>}
+
+          {/* PROCESSING */}
+          {phase === "processing" && <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(5,16,37,0.6)", zIndex: 20, gap: 12 }}><div style={{ width: 44, height: 44, borderRadius: "50%", border: "2px solid rgba(0,229,255,0.15)", borderTopColor: "rgba(0,229,255,0.6)", animation: "chamberSpin 0.8s linear infinite" }} /><p style={{ color: "rgba(0,229,255,0.5)", fontSize: 12, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.15em", margin: 0 }}>Computing PES...</p><style>{`@keyframes chamberSpin { to { transform: rotate(360deg); } }`}</style></div>}
+        </div>
+        )}
+
+        {/* COMPLETE — two-column layout */}
+        {phase === "complete" && pesData && (
+        <div style={{ display: "flex", gap: "clamp(10px,1.5vw,16px)", flexWrap: "nowrap", alignItems: "flex-start", marginBottom: "clamp(1.5rem,3vw,2.5rem)" }}>
+          {/* Left: Chamber (shrunk) */}
+          <div style={{ flex: "1 1 0", minWidth: 200 }}>
+            <div style={{ border: "1px solid rgba(0,229,255,0.1)", background: "rgba(5,16,37,0.5)", borderRadius: 14, overflow: "hidden", aspectRatio: "16/10", maxHeight: "40vh", position: "relative" }}>
+              <video ref={videoRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3 }} playsInline muted />
+              <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 10, pointerEvents: "none" }} />
               <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", zIndex: 40 }}>
-                <a
-                  href="/lab/playground"
-                  onClick={() => {
-                    storePESForPlayground({
-                      score: pesData.score, timing: pesData.timing, noise: pesData.noise,
-                      freq: pesData.frequency, bio: pesData.biological, verdict: threatVerdict,
-                      receiptId: proofHashes?.receiptId, payloadDigest: proofHashes?.payloadDigest,
-                    });
-                  }}
-                  style={{
-                    display: "inline-block", padding: "12px 28px",
-                    border: "2px solid rgba(52,211,153,0.7)", background: "rgba(52,211,153,0.08)",
-                    color: "#34D399", fontSize: 13, fontWeight: 600, textDecoration: "none",
-                    letterSpacing: "0.08em", borderRadius: 2,
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(52,211,153,0.15)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(52,211,153,0.08)"; }}
-                >
-                  → Verify This In Playground
-                </a>
-              </div>
-            )}
-
-            {/* Completion Ceremony */}
-            {phase === "complete" && pesData && (
-              <CompletionCeremony
-                researchConsented={researchConsented}
-                uploadState={uploadState}
-                sovereignKey={sovereignKey}
-                cohortFull={cohortFull}
-              />
-            )}
-          </div>
-
-          {/* Feature Panel */}
-          {phase === "complete" && pesData ? (
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="sm:w-[38%] border border-white/10 bg-black/40 p-3 flex flex-col space-y-2">
-                {/* Box 1: PES + Telemetry + ZK Proof */}
-                <div>
-                  <div className="text-[#90c8ff]/50 text-[11px] tracking-[0.2em] uppercase mb-1.5">Presence Entropy Score</div>
-                  <div className="flex items-center justify-center">
-                    <PESGauge score={pesData.score} />
-                  </div>
-                  <ThreatVerdict verdict={threatVerdict} />
-                </div>
-                <PESBars bars={buildPESBars(pesData)} />
-                <div className="h-px bg-white/5"/>
-                <div>
-                  <div className="text-[#90c8ff]/50 text-[11px] tracking-[0.2em] uppercase mb-1.5">Telemetry</div>
-                  <TelemetryPanel
-                    sstFrames={sstFramesRef.current.length}
-                    validFrames={validFrameCount}
-                    energy={features?.features.energy ?? null}
-                    phase="COMPLETE"
-                  />
-                </div>
-                <button onClick={handleAICompare}
-                  className="w-full py-1.5 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[11px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/30 hover:text-[#90c8ff]/60 transition-all">
-                  {wasmCompare?.loading ? "Loading WASM..." : wasmCompare?.similarity != null ? `AI: ${(wasmCompare.similarity*100).toFixed(0)}%` : "Compare with AI →"}
-                </button>
-                {proofHashes && (
-                  <div className="mt-auto text-[11px] text-[#90c8ff]/40 font-mono text-center">
-                    CPS-0001 Receipt generated
-                  </div>
-                )}
-              </div>
-              <div className="sm:flex-1 border border-white/10 bg-black/40 p-3 flex flex-col space-y-2">
-                {/* Box 2: Presence Signature + Witness + Actions */}
-                <div>
-                  {proofHashes&&(<PresenceSignature proof={{pesScore:pesData.score,timing:pesData.timing,noise:pesData.noise,freq:pesData.frequency,bio:pesData.biological,receiptId:proofHashes.receiptId,payloadDigest:proofHashes.payloadDigest,timestamp:Date.now()}} receipt={continuityReceipt??undefined}/>)}
-                </div>
-                {witnessData?.position_number&&(<div className="p-3 border border-amber-400/20 bg-amber-400/[0.03] text-center space-y-1"><div className="text-amber-300/60 text-[11px] uppercase tracking-[0.12em]">{witnessData.cohort==="sovereign"?"Protocol Witness":"Protocol Witness"}</div><div className="text-amber-200/90 text-[18px] font-light">#{witnessData.position_number}</div></div>)}
-                {/* Verification status */}
-                {sovereignEnrolled ? (
-                  <div className="text-center text-[#90c8ff]/40 text-[11px] tracking-[0.1em]">◈ Scan recorded — contributing to orbital evolution</div>
-                ) : (
-                  <div className="text-center text-amber-400/40 text-[11px] tracking-[0.1em]">⚠ Demo mode — scan not bound to identity</div>
-                )}
-                <div className="mt-auto space-y-2">
-                  <button onClick={()=>{
-                    const report={protocol:"MyShape PES Benchmark v0.1",timestamp:new Date().toISOString(),pes:{score:pesData.score,components:{microTimingVariance:pesData.timing,noiseResidual:pesData.noise,frequencyEntropy:pesData.frequency,biologicalPerturbation:pesData.biological}},threat_verdict:threatVerdict,telemetry:{sst_frames:sstFramesRef.current.length,valid_frames:validFrameCount,capture_duration_ms:captureElapsedMs},proof_hashes:proofHashes,wasm_compare:wasmCompare,ai_compare:aiCompare};
-                    const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
-                    const url=URL.createObjectURL(blob);
-                    const a=document.createElement("a");a.href=url;a.download=`myshape-pes-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}.json`;a.click();URL.revokeObjectURL(url);
-                    playTick(800,"sine",0.10,0.025);
-                  }} className="w-full py-3 border-2 border-[#90c8ff]/60 text-[#90c8ff] text-[11px] tracking-[0.15em] uppercase font-bold hover:bg-[#90c8ff]/15 hover:border-[#90c8ff] transition-all" style={{ textShadow: "0 0 10px rgba(144,200,255,0.3)" }}>📥 Export PES Report</button>
-                  <button onClick={()=>{
-                    const frames = sstFramesRef.current;
-                    if (frames.length === 0) return;
-                    const startTs = frames[0].timestamp;
-                    const landmarkData = frames.map(f => ({
-                      t: f.timestamp - startTs,
-                      joints: Object.fromEntries(
-                        Object.entries(f.frame).map(([k, v]) => [k, { x: v.x, y: v.y, z: v.z }])
-                      ),
-                    }));
-                    const report = {
-                      session_id: crypto.randomUUID(),
-                      subject_id: (typeof window !== "undefined" ? sessionStorage.getItem("sovereign_email") : null)?.split("@")[0] || "anonymous",
-                      timestamp: new Date().toISOString(),
-                      landmarks: landmarkData,
-                      pes_score: pesData.score,
-                      pes_micro_timing: pesData.timing,
-                      pes_noise_residual: pesData.noise,
-                      pes_freq_entropy: pesData.frequency,
-                      pes_bio_perturb: pesData.biological,
-                      total_frames: frames.length,
-                      valid_frames: validFrameCount,
-                    };
-                    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = "myshape-landmarks-" + new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19) + ".json";
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    playTick(600, "sine", 0.08, 0.02);
-                  }} className="w-full py-2.5 border border-[#3fb950]/40 text-[#3fb950]/60 text-[11px] tracking-[0.12em] uppercase hover:bg-[#3fb950]/10 hover:border-[#3fb950]/70 transition-all">💾 Download Landmark Data</button>
-                  <button onClick={()=>{const r=`MyShape PES: ${(pesData.score*100).toFixed(0)}% | μT:${(pesData.timing*100).toFixed(0)}% N:${(pesData.noise*100).toFixed(0)}% F:${(pesData.frequency*100).toFixed(0)}% B:${(pesData.biological*100).toFixed(0)}%\nVerified by MyShape Protocol — myshape.com/motion-demo`;navigator.clipboard.writeText(r).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)})}} className="w-full py-2.5 border border-[#90c8ff]/20 text-[#90c8ff]/40 text-[11px] tracking-[0.15em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all">{copied?"✓ Copied":"📋 Copy Results"}</button>
-                  <button onClick={stop} className="w-full py-2.5 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[11px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all">↻ Run Again</button>
-                </div>
+                <a href="/lab/playground" onClick={() => storePESForPlayground({ score: pesData.score, timing: pesData.timing, noise: pesData.noise, freq: pesData.frequency, bio: pesData.biological, verdict: threatVerdict, receiptId: proofHashes?.receiptId, payloadDigest: proofHashes?.payloadDigest })} style={{ display: "inline-block", padding: "10px 24px", border: "2px solid rgba(52,211,153,0.7)", background: "rgba(52,211,153,0.08)", color: "#34D399", fontSize: 12, fontWeight: 600, textDecoration: "none", letterSpacing: "0.08em", borderRadius: 8, transition: "all 0.3s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(52,211,153,0.15)"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(52,211,153,0.08)"; }}>→ Verify In Playground</a>
               </div>
             </div>
-          ) : (
-          <div className="border border-white/10 bg-black/40 p-5 space-y-4">
-            {/* ── PES Dashboard ── */}
-            {pesData && (
-              <>
-                <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.3em] uppercase">Presence_Entropy_Score (PES)</div>
-                <div className="flex items-center justify-center py-2">
-                  <PESGauge score={pesData.score} size="sm" />
-                </div>
-                <ThreatVerdict verdict={threatVerdict} />
-                <div className="h-px bg-white/5" />
-                <PESBars bars={buildPESBars(pesData)} />
-              </>
-            )}
-
-            {/* Live PES Preview (during capture) */}
-            {phase === "capturing" && livePes && (
-              <div className="p-3 border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02] space-y-2">
-                <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.2em] uppercase">Live PES Estimate</div>
-                <div className="flex items-center justify-between">
-                  <span className="text-white/30 text-[11px]">Score</span>
-                  <span className="text-[#90c8ff]/80 font-mono text-[13px]">{(livePes.score * 100).toFixed(0)}%</span>
-                </div>
-                {[
-                  { label: "μTiming", value: livePes.timing },
-                  { label: "Noise", value: livePes.noise },
-                  { label: "Freq", value: livePes.freq },
-                  { label: "Bio", value: livePes.bio },
-                ].map(g => (
-                  <div key={g.label} className="space-y-0.5">
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-white/20">{g.label}</span>
-                      <span className="text-[#90c8ff]/40 font-mono">{(g.value * 100).toFixed(0)}%</span>
-                    </div>
-                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-300"
-                        style={{
-                          width: `${Math.min(g.value * 100, 100)}%`,
-                          background: "rgba(144,200,255,0.3)",
-                        }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.3em] uppercase">Motion_Telemetry</div>
-            <TelemetryPanel
-              sstFrames={sstFramesRef.current.length}
-              validFrames={validFrameCount}
-              energy={features?.features.energy ?? null}
-              phase={phase}
-              showCollectingHint
-            />
-
-            {proofHashes && (
-              <div className="text-[11px] text-[#90c8ff]/40 font-mono text-center p-4 border border-[#90c8ff]/15">
-                CPS-0001 Continuity Receipt · engine-independent verification
-              </div>
-            )}
-
-            {phase === "complete" && (
-              <div className="space-y-2">
-                {!aiCompare ? (
-                  <button onClick={handleAICompare}
-                    onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                    className="w-full py-2 border border-[#90c8ff]/20 text-[#90c8ff]/40 text-[11px] tracking-[0.2em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all disabled:opacity-30"
-                    disabled={wasmLoading}>
-                    {wasmLoading ? "Loading Engine..." : "Compare with AI →"}
-                  </button>
-                ) : (
-                  <div className="p-3 border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02] space-y-2">
-                    <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.2em] uppercase text-center">
-                      {wasmCompare?.similarity != null ? "WASM Engine — Real Analysis" : "AI Simulation (for comparison)"}
-                    </div>
-                    {/* WASM Signature similarity */}
-                    {wasmCompare?.similarity != null && (
-                      <div className="flex items-center justify-between px-2 py-1.5 bg-black/30 border border-[#90c8ff]/10 rounded-sm">
-                        <span className="text-white/20 text-[11px]">Sig Similarity</span>
-                        <span className="font-mono text-[11px]" style={{
-                          color: wasmCompare.similarity < 0.5 ? "rgba(239,68,68,0.8)" : "rgba(250,204,21,0.8)",
-                          textShadow: wasmCompare.similarity < 0.5 ? "0 0 6px rgba(239,68,68,0.3)" : "none",
-                        }}>{(wasmCompare.similarity * 100).toFixed(1)}%</span>
-                      </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
-                      <div className="flex justify-between"><span className="text-white/15">μTiming</span><span className="text-amber-300/50">{(aiCompare.timing * 100).toFixed(0)}%</span></div>
-                      <div className="flex justify-between"><span className="text-white/15">Noise</span><span className="text-amber-300/50">{(aiCompare.noise * 100).toFixed(0)}%</span></div>
-                      <div className="flex justify-between"><span className="text-white/15">Freq</span><span className="text-amber-300/50">{(aiCompare.freq * 100).toFixed(0)}%</span></div>
-                      <div className="flex justify-between"><span className="text-white/15">Bio</span><span className="text-amber-300/50">{(aiCompare.bio * 100).toFixed(0)}%</span></div>
-                    </div>
-                    <div className="text-center text-[11px] text-amber-300/40 mt-1">
-                      AI PES: {(aiCompare.score * 100).toFixed(0)}% — ✗ SYNTHETIC
-                    </div>
-                    {wasmCompare?.similarity != null && (
-                      <div className="text-center text-[11px] text-[#90c8ff]/25 mt-0.5">
-                        128-dim Motion Signature — {wasmCompare.sigDim}d vector similarity
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Verification 状态提示 */}
-                {sovereignEnrolled ? (
-                  <div className="text-center text-[#90c8ff]/25 text-[11px] tracking-[0.15em] uppercase">
-                    ◈ Scan recorded — contributing to your orbital evolution
-                  </div>
-                ) : (
-                  <div className="text-center space-y-2">
-                    <div className="text-amber-400/25 text-[11px] tracking-[0.15em] uppercase">
-                      ⚠ Demo mode — scan not bound to identity
-                    </div>
-                    <button
-                      onClick={async () => {
-                        const wallet = sessionStorage.getItem("wallet_address");
-                        const email = sessionStorage.getItem("sovereign_email");
-                        const identityKey = email || (wallet ? "wallet:" + wallet.slice(2, 10) : null);
-                        if (identityKey && pesData) {
-                          // Bind this scan to the user's identity via entropy API
-                          playTick(800, "sine", 0.10, 0.025);
-                          try {
-                            const res = await fetch("/api/node/entropy", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({
-                                email: identityKey,
-                                pesScore: pesData.score,
-                                pesTiming: pesData.timing,
-                                pesNoise: pesData.noise,
-                                pesFrequency: pesData.frequency,
-                                pesBiological: pesData.biological,
-                              }),
-                            });
-                            const data = await res.json();
-                            if (data.badge_minted) {
-                              sessionStorage.setItem("sovereign_enrolled", "1");
-                              sessionStorage.setItem("sovereign_email", identityKey);
-                              sessionStorage.setItem("sovereign_status", data.status);
-                              if (data.sovereign_key) {
-                                sessionStorage.setItem("sovereign_key", data.sovereign_key);
-                                setSovereignKey(data.sovereign_key);
-                              }
-                              if (data.cohort_full) {
-                                setCohortFull(true);
-                              }
-                              window.dispatchEvent(new CustomEvent("sovereign:updated"));
-                              setSovereignEnrolled(true);
-                              playTick(1200, "sine", 0.12, 0.03);
-                            }
-                          } catch { /* silent */ }
-                        } else {
-                          // No identity yet — guide to genesis
-                          window.location.href = "/verify";
-                        }
-                      }}
-                      onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}
-                      className="px-6 py-2 border border-[#90c8ff]/40 text-[#90c8ff]/60 text-[11px] tracking-[0.2em] uppercase hover:bg-[#90c8ff]/10 hover:text-[#90c8ff] transition-all">
-                      Verify My Presence
-                    </button>
-                    <a href="/verify" className="inline-block text-[#90c8ff]/25 hover:text-[#90c8ff]/50 text-[11px] tracking-[0.15em] uppercase transition-colors">
-                      Initialize protocol identity →
-                    </a>
-                  </div>
-                )}
-                {/* ── Witness Badge (recruitment + upload complete) ── */}
-                {witnessData && witnessData.position_number && (
-                  <div
-                    className="p-3 border space-y-2 relative overflow-hidden"
-                    style={{
-                      borderRadius: 4,
-                      borderColor: witnessData.cohort === "sovereign" ? "rgba(144,200,255,0.35)" : "rgba(144,200,255,0.15)",
-                      background: witnessData.cohort === "sovereign" ? "rgba(144,200,255,0.05)" : "rgba(144,200,255,0.02)",
-                      animation: witnessData.cohort === "sovereign" ? "sovereignWitnessGlow 3s ease-in-out infinite" : undefined,
-                    }}
-                  >
-                    {/* Protocol scan line */}
-                    {witnessData.cohort === "sovereign" && (
-                      <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: "linear-gradient(90deg, transparent 0%, rgba(144,200,255,0.06) 40%, rgba(144,200,255,0.12) 50%, rgba(144,200,255,0.06) 60%, transparent 100%)",
-                          animation: "sovereignScanLine 2.5s ease-in-out infinite",
-                        }}
-                      />
-                    )}
-                    <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.2em] uppercase text-center">
-                      {witnessData.cohort === "sovereign" ? "Sovereign — Witness Confirmed" : "Protocol Witness"}
-                    </div>
-                    <div className="text-center">
-                      <span
-                        className="text-[#90c8ff]/80 text-[14px] font-light tracking-[0.05em]"
-                        style={witnessData.cohort === "sovereign" ? { animation: "sovereignBadgePulse 2s ease-in-out infinite" } : undefined}
-                      >
-                        ◈ Witness #{witnessData.position_number}
-                      </span>
-                    </div>
-                    <p className="text-white/25 text-[11px] leading-relaxed text-center">
-                      {witnessData.cohort === "sovereign"
-                        ? "You are a founding tester. This status is permanent — not cosmetic, structural."
-                        : "Your motion data is now part of the calibration engine. Share your contribution."}
-                    </p>
-                    {/* Share buttons */}
-                    <div className="flex gap-2 justify-center pt-1">
-                      <a
-                        href={`https://bsky.app/intent/compose?text=I+just+became+MyShape+Protocol+Witness+%23${witnessData.position_number}.+Join+the+first+300+to+calibrate+the+motion-signature+engine.%0A%0Ahttps://myshape.com/research/apply`}
-                        target="_blank" rel="noopener noreferrer"
-                        className="px-2.5 py-1 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[11px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all motion-demo__card-sm"
-                      >
-                        Share on Bluesky
-                      </a>
-                      <a
-                        href={`https://www.linkedin.com/sharing/share-offsite/?url=https://myshape.com/research/apply?ref=witness_share`}
-                        target="_blank" rel="noopener noreferrer"
-                        className="px-2.5 py-1 border border-[#90c8ff]/15 text-[#90c8ff]/40 text-[11px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 transition-all motion-demo__card-sm"
-                      >
-                        Share on LinkedIn
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {/* Presence Signature — 存在证明证书 */}
-                {pesData && proofHashes && (
-                  <PresenceSignature proof={{
-                    pesScore: pesData.score,
-                    timing: pesData.timing,
-                    noise: pesData.noise,
-                    freq: pesData.frequency,
-                    bio: pesData.biological,
-                    receiptId: proofHashes.receiptId,
-                    payloadDigest: proofHashes.payloadDigest,
-                    timestamp: Date.now(),
-                  }} />
-                )}
-                {/* ── Completion Ceremony ── */}
-                <div className="space-y-3 pt-2">
-                  <div className="h-px bg-gradient-to-r from-transparent via-[#90c8ff]/20 to-transparent" />
-                  <div className="text-center space-y-2">
-                    <div className="text-[#90c8ff]/30 text-[11px] tracking-[0.4em] uppercase">Verification · Motion Captured</div>
-                    <p className="text-white/40 text-[11px] leading-relaxed">
-                      Your kinetic signature has been inscribed.
-                      {researchConsented && uploadState === "success" && " This data now contributes to the protocol's calibration engine."}
-                      {researchConsented && uploadState === "error" && " Research upload failed — data kept local."}
-                    </p>
-                    <div className="flex gap-2 justify-center pt-1">
-                      <a href="/research/apply" className="text-[#90c8ff]/30 hover:text-[#90c8ff]/70 text-[11px] tracking-[0.15em] uppercase border-b border-transparent hover:border-[#90c8ff]/30 transition-all pb-0.5">
-                        Verify Continuity →
-                      </a>
-                      <span className="text-white/10">|</span>
-                      <a href="/dashboard" className="text-[#90c8ff]/30 hover:text-[#90c8ff]/70 text-[11px] tracking-[0.15em] uppercase border-b border-transparent hover:border-[#90c8ff]/30 transition-all pb-0.5">
-                        View Dashboard →
-                      </a>
-                    </div>
-                  </div>
-                  <div className="h-px bg-gradient-to-r from-transparent via-[#90c8ff]/20 to-transparent" />
-                </div>
-
-                {pesData && (
-                  <div className="flex gap-2">
-                  <button onClick={()=>{
-                    const report={protocol:"MyShape PES Benchmark v0.1",timestamp:new Date().toISOString(),pes:{score:pesData.score,components:{microTimingVariance:pesData.timing,noiseResidual:pesData.noise,frequencyEntropy:pesData.frequency,biologicalPerturbation:pesData.biological}},threat_verdict:threatVerdict,telemetry:{sst_frames:sstFramesRef.current.length,valid_frames:validFrameCount,capture_duration_ms:captureElapsedMs},proof_hashes:proofHashes,wasm_compare:wasmCompare,ai_compare:aiCompare};
-                    const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});
-                    const url=URL.createObjectURL(blob);
-                    const a=document.createElement("a");a.href=url;a.download=`myshape-pes-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}.json`;a.click();URL.revokeObjectURL(url);
-                    playTick(800,"sine",0.10,0.025);
-                  }} className="flex-1 py-2 border border-[#90c8ff]/30 text-[#90c8ff]/50 text-[10px] tracking-[0.1em] uppercase hover:bg-[#90c8ff]/10 transition-all">📥 Export</button>
-                  <button onClick={()=>{const r=`MyShape PES: ${(pesData.score*100).toFixed(0)}% | μT:${(pesData.timing*100).toFixed(0)}% N:${(pesData.noise*100).toFixed(0)}% F:${(pesData.frequency*100).toFixed(0)}% B:${(pesData.biological*100).toFixed(0)}%\nVerified by MyShape Protocol — myshape.com/motion-demo`;navigator.clipboard.writeText(r).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)})}} className="flex-1 py-2 border border-[#90c8ff]/20 text-[#90c8ff]/35 text-[10px] tracking-[0.1em] uppercase hover:border-[#90c8ff]/40 transition-all">{copied?"✓ Copied":"📋 Copy"}</button>
-                  </div>
-                )}
-                <button onClick={stop}
-                  onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}
-                  className="w-full py-2.5 border border-[#90c8ff]/15 text-[#90c8ff]/35 text-[11px] tracking-[0.3em] uppercase hover:border-[#90c8ff]/40 hover:text-[#90c8ff]/70 hover:bg-[#90c8ff]/[0.03] transition-all">
-                  ↻ Run_Again
-                </button>
-              </div>
-            )}
           </div>
-          )}
-        </div>
 
+          {/* Right: 2-col result cards */}
+          <div style={{ flex: "0 0 360px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, minWidth: 320 }}>
+            {/* Col A: PES + Telemetry */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, justifyContent: "space-between" }}>
+              <div style={{ textAlign: "center", padding: 10, border: "1px solid rgba(0,229,255,0.1)", background: "rgba(5,16,37,0.45)", borderRadius: 12 }}>
+                <div style={{ fontSize: 8, color: "rgba(0,229,255,0.25)", textTransform: "uppercase", letterSpacing: "0.25em", marginBottom: 6, fontFamily: "var(--font-geist-mono), monospace" }}>PES</div>
+                <PESGauge score={pesData.score} />
+                <div style={{ marginTop: 4 }}><ThreatVerdict verdict={threatVerdict} /></div>
+              </div>
+              <div style={{ padding: "6px 8px", border: "1px solid rgba(0,229,255,0.08)", background: "rgba(5,16,37,0.45)", borderRadius: 10 }}><PESBars bars={buildPESBars(pesData)} /></div>
+              <div style={{ display: "flex", gap: 4 }}>
+                <button onClick={() => { const report: any = { protocol: "MyShape PES", timestamp: new Date().toISOString(), pes: { score: pesData.score, components: { microTimingVariance: pesData.timing, noiseResidual: pesData.noise, frequencyEntropy: pesData.frequency, biologicalPerturbation: pesData.biological } }, threat_verdict: threatVerdict, proof_hashes: proofHashes }; const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `myshape-pes-${new Date().toISOString().slice(0,19).replace(/[:.]/g,"-")}.json`; a.click(); URL.revokeObjectURL(url); playTick(800, "sine", 0.1, 0.025); }} onMouseEnter={(e) => { playTick(600, "sine", 0.06, 0.02); e.currentTarget.style.borderColor = "rgba(0,229,255,0.35)"; e.currentTarget.style.color = "rgba(0,229,255,0.6)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,229,255,0.12)"; e.currentTarget.style.color = "rgba(0,229,255,0.3)"; }} style={{ flex: 1, padding: "7px 8px", border: "1px solid rgba(0,229,255,0.12)", color: "rgba(0,229,255,0.3)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "rgba(5,16,37,0.45)", borderRadius: 6, cursor: "pointer", transition: "all 0.25s" }}>Export</button>
+                <button onClick={() => { const r = `MyShape PES: ${(pesData.score*100).toFixed(0)}% | ${threatVerdict}\nmyshape.com/motion-demo`; navigator.clipboard.writeText(r).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }); }} onMouseEnter={(e) => { playTick(500, "sine", 0.05, 0.02); e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "rgba(255,255,255,0.25)"; }} style={{ flex: 1, padding: "7px 8px", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.25)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", borderRadius: 6, cursor: "pointer", transition: "all 0.25s" }}>{copied ? "✓" : "Copy"}</button>
+              </div>
+              {aiCompare && <div style={{ padding: "6px 8px", border: "1px solid rgba(0,229,255,0.08)", background: "rgba(5,16,37,0.45)", borderRadius: 10, textAlign: "center" }}><div style={{ color: "rgba(0,229,255,0.35)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.1em", marginBottom: 2 }}>AI MOTION</div><div style={{ color: "rgba(239,68,68,0.7)", fontSize: 10, fontWeight: 500 }}>{(aiCompare.score * 100).toFixed(0)}% SYNTHETIC</div>{wasmCompare?.similarity != null && <div style={{ color: "rgba(0,229,255,0.25)", fontSize: 8 }}>Sig: {(wasmCompare.similarity * 100).toFixed(1)}%</div>}</div>}
+              <button onClick={handleAICompare} onMouseEnter={(e) => { playTick(700, "sine", 0.08, 0.02); e.currentTarget.style.borderColor = "rgba(0,229,255,0.4)"; e.currentTarget.style.color = "#fff"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,229,255,0.2)"; e.currentTarget.style.color = "rgba(0,229,255,0.5)"; }} style={{ padding: "7px 10px", border: "1px solid rgba(0,229,255,0.2)", color: "rgba(0,229,255,0.5)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.08em", textTransform: "uppercase", background: "rgba(5,16,37,0.45)", borderRadius: 8, cursor: "pointer", transition: "all 0.25s" }}>{wasmCompare?.similarity != null ? `AI: ${(wasmCompare.similarity * 100).toFixed(0)}%` : "Compare AI"}</button>
+            </div>
+
+            {/* Col B: Telemetry + Signature + Actions */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, justifyContent: "space-between" }}>
+              {proofHashes && <PresenceSignature proof={{ pesScore: pesData.score, timing: pesData.timing, noise: pesData.noise, freq: pesData.frequency, bio: pesData.biological, receiptId: proofHashes.receiptId, payloadDigest: proofHashes.payloadDigest, timestamp: Date.now() }} receipt={continuityReceipt ?? undefined} />}
+              {witnessData?.position_number && <div style={{ padding: "6px 10px", border: "1px solid rgba(212,175,55,0.3)", background: "rgba(212,175,55,0.04)", borderRadius: 8, textAlign: "center" }}><div style={{ color: "rgba(212,175,55,0.6)", fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: "var(--font-geist-mono), monospace" }}>Witness #{witnessData.position_number}</div></div>}
+              <div style={{ display: "flex", gap: 4 }}>
+                <button onClick={stop} onMouseEnter={(e) => { playTick(700, "sine", 0.08, 0.02); e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; e.currentTarget.style.color = "rgba(255,255,255,0.4)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "rgba(255,255,255,0.18)"; }} style={{ padding: "7px 8px", border: "1px solid rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.18)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.06em", textTransform: "uppercase", background: "transparent", borderRadius: 6, cursor: "pointer", transition: "all 0.25s" }}>↻</button>
+              </div>
+              {!sovereignEnrolled ? (
+                <button onClick={async () => { const wallet = sessionStorage.getItem("wallet_address"); const email = sessionStorage.getItem("sovereign_email"); const identityKey = email || (wallet ? "wallet:" + wallet.slice(2, 10) : null); if (identityKey && pesData) { playTick(800, "sine", 0.1, 0.025); try { const res = await fetch("/api/node/entropy", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: identityKey, pesScore: pesData.score, pesTiming: pesData.timing, pesNoise: pesData.noise, pesFrequency: pesData.frequency, pesBiological: pesData.biological }) }); const data = await res.json(); if (data.badge_minted) { sessionStorage.setItem("sovereign_enrolled", "1"); sessionStorage.setItem("sovereign_email", identityKey); if (data.sovereign_key) { sessionStorage.setItem("sovereign_key", data.sovereign_key); setSovereignKey(data.sovereign_key); } if (data.cohort_full) setCohortFull(true); window.dispatchEvent(new CustomEvent("sovereign:updated")); setSovereignEnrolled(true); playTick(1200, "sine", 0.12, 0.03); } } catch { /* silent */ } } else { window.location.href = "/verify"; } }} onMouseEnter={(e) => { playTick(700, "sine", 0.08, 0.02); e.currentTarget.style.borderColor = "rgba(0,229,255,0.5)"; e.currentTarget.style.color = "rgba(0,229,255,0.8)"; e.currentTarget.style.background = "rgba(0,229,255,0.06)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,229,255,0.2)"; e.currentTarget.style.color = "rgba(0,229,255,0.4)"; e.currentTarget.style.background = "rgba(0,229,255,0.02)"; }} style={{ padding: "6px 8px", border: "1px solid rgba(0,229,255,0.2)", color: "rgba(0,229,255,0.4)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.08em", textTransform: "uppercase", background: "rgba(0,229,255,0.02)", borderRadius: 6, cursor: "pointer", transition: "all 0.25s" }}>Bind Identity</button>
+              ) : (
+                <p style={{ color: "rgba(0,229,255,0.25)", fontSize: 8, fontFamily: "var(--font-geist-mono), monospace", textAlign: "center", margin: 0 }}>Scan recorded</p>
+              )}
+            </div>
+          </div>
+        </div>
+        )}
+
+        {/* Privacy + Home */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "clamp(16px,2.5vw,24px) 0", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(0,229,255,0.35)", fontSize: "clamp(10px,1.2vw,11px)", fontFamily: "var(--font-geist-mono), monospace" }}>
+            <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x={3} y={11} width={18} height={11} rx={2}/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx={12} cy={16} r={1}/></svg>
+            {researchConsented ? "Camera stays local. Only joint data uploaded anonymously." : "Your motion data never leaves this device."}
+          </div>
+          <span style={{ color: "rgba(255,255,255,0.1)" }}>|</span>
+          <a href="/" style={{ color: "rgba(0,229,255,0.4)", fontSize: "clamp(10px,1.2vw,11px)", fontFamily: "var(--font-geist-mono), monospace", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.25s" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(0,229,255,0.7)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,229,255,0.4)"; }}>
+            ← Home
+          </a>
+        </div>
       </div>
-
-        <div className="max-w-5xl mx-auto px-4 md:px-6 -mt-4 pb-2">
-          <div className="flex items-center justify-center gap-2 text-[#90c8ff]/50 text-[12px] tracking-[0.05em]">
-            <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
-            {researchConsented ? "Camera images stay local. Only joint-position data is uploaded anonymously." : "Your motion data never leaves this device. No cloud upload. No server storage."}
-          </div>
-        </div>
-
       <ProtocolFooter />
     </div>
   );
