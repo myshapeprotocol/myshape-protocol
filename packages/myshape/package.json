@@ -1,6 +1,6 @@
 {
   "name": "@thecontinuitylab/myshape",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "MyShape Protocol — one function call adds continuity verification to your application. CPS-0001 compatible. Engine-independent.",
   "license": "Apache-2.0",
   "author": "The Continuity Lab",
@@ -43,7 +43,6 @@
   },
   "files": [
     "dist/",
-    "data/",
     "README.md",
     "LICENSE"
   ],

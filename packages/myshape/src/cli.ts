@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PKG = {
   name: "@thecontinuitylab/myshape",
-  version: "0.1.6",
+  version: "0.2.0",
   docs: "https://myshape.com",
   lab: "https://thecontinuitylab.org",
   protocol: "CPS-0001",
@@ -39,21 +39,29 @@ async function runDemo() {
   console.log(BANNER);
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log("  Continuity Demo");
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  console.log("  ℹ  Demo uses synthetic sample data.");
+  console.log("     Real sensor data produces more accurate results.");
+  console.log("     Contribute your data: thecontinuitylab.org/lab/contribute");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
   const { verifyContinuity } = await import("./index.js");
 
   for (const [label, filename] of [
-    ["Human Walking (8s, 62.5Hz)", "human-walk.json"],
-    ["Human Sitting  (8s, 62.5Hz)", "human-sit.json"],
+    ["Human Walking (8s, 62.5Hz)", "human-walk-4layer.json"],
+    ["Human Sitting  (8s, 62.5Hz)", "human-sit-4layer.json"],
+    ["AI Synthetic  (8s, 62.5Hz)", "ai-synthetic-4layer.json"],
   ] as const) {
     try {
       const filePath = join(__dirname, "..", "data", filename);
       const raw = readFileSync(filePath, "utf-8");
-      const { imu, cam } = JSON.parse(raw);
+      const { imu, cam, frames, timestamps, challengeResults } = JSON.parse(raw);
       const result = await verifyContinuity({
         imuSamples: imu,
         cameraSamples: cam,
+        frames,
+        timestamps,
+        challengeResults,
         duration: 8000,
       });
 
@@ -63,20 +71,30 @@ async function runDemo() {
       console.log(`  ${label}`);
       console.log(`  ${icon}  Verdict     ${result.verdict}`);
       console.log(`     Confidence  ${bar} ${((result.confidence ?? 0) * 100).toFixed(1)}%`);
-      console.log(`     Evidence    ${result.evidence?.components?.length ?? 0} components`);
+      console.log(`     Engines    ${result.evidence.length}`);
       console.log();
 
-      if (result.evidence?.components) {
-        for (const c of result.evidence.components) {
+      for (const ev of result.evidence) {
+        console.log(`     ── ${ev.engineId} ──`);
+        for (const c of ev.components) {
           const s = c.status === "PASS" ? "✓" : c.status === "FAIL" ? "✗" : "?";
           console.log(`       ${s}  ${c.metric.padEnd(20)} ${c.status}`);
+        }
+        for (const d of ev.diagnostics) {
+          console.log(`       ${d}`);
         }
         console.log();
       }
 
-      if (result.evidence?.diagnostics) {
-        for (const d of result.evidence.diagnostics) {
-          console.log(`     ${d}`);
+      if (result.threatReport) {
+        console.log(`     ── Threat Assessment ──`);
+        console.log(`       Verdict: ${result.threatReport.overallVerdict} (conf: ${result.threatReport.confidence.toFixed(2)})`);
+        if (result.threatReport.flaggedAttacks.length > 0) {
+          for (const a of result.threatReport.flaggedAttacks) {
+            console.log(`       ⚠  ${a.class} (${a.severity}) — ${a.metric}: ${a.value.toFixed(3)}`);
+          }
+        } else {
+          console.log(`       ✓ No attack signatures detected`);
         }
         console.log();
       }
@@ -114,6 +132,8 @@ async function runCheck() {
     checks.push({ label: "detectJerkPeaks()", pass: typeof mod.detectJerkPeaks === "function" });
     checks.push({ label: "buildEvidence()", pass: typeof mod.buildEvidence === "function" });
     checks.push({ label: "evaluatePolicy()", pass: typeof mod.evaluatePolicy === "function" });
+    checks.push({ label: "computePES()", pass: typeof mod.computePES === "function" });
+    checks.push({ label: "assessThreat()", pass: typeof mod.assessThreat === "function" });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     checks.push({ label: `Import failed: ${msg}`, pass: false });
@@ -146,3 +166,4 @@ if (mode === "demo") {
 } else {
   runCheck();
 }
+
