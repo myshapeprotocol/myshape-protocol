@@ -151,7 +151,12 @@ export {
   signReceipt,
   verifySignature,
   engineEvidenceToBlock,
+  canonicalSerialize,
+  computeReceiptHash,
+  verifyPredecessor,
 } from "./cps0001.js";
+
+export type { ChainStore } from "./cps0001.js";
 
 export {
   generateKeyPair,

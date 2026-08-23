@@ -26,6 +26,7 @@
 import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex } from "@noble/hashes/utils.js";
 import { ed25519 } from "@noble/curves/ed25519.js";
+import { canonicalSerialize } from "../shared/jcs";
 
 // ═══════════════════════════════════════════
 // Types (re-declared — zero MyShape imports)
@@ -96,7 +97,11 @@ export type FailureCode =
   | "TEMPORAL_INCONSISTENCY"
   | "EVIDENCE_TAMPERED"
   | "EXPIRED"
-  | "CHAIN_BROKEN";
+  | "CHAIN_BROKEN"
+  | "PREDECESSOR_MISSING"
+  | "SUBJECT_MISMATCH"
+  | "ISSUER_MISMATCH"
+  | "TEMPORAL_VIOLATION";
 
 export type VerificationResult =
   | { status: "VALID" }
@@ -311,6 +316,29 @@ export function verifyFreshness(receipt: ContinuityReceipt): FailureCode | null 
   if (receipt.expiresAt && Date.now() >= new Date(receipt.expiresAt).getTime()) {
     return "EXPIRED";
   }
+  return null;
+}
+
+// ── V₇: Predecessor Reference (requires predecessor receipt) ─────
+
+/** CPS-0001 receipt hash: SHA-256 over the canonical (JCS) serialization. */
+export function computeReceiptHash(receipt: ContinuityReceipt): string {
+  return sha256Hex(canonicalSerialize(receipt));
+}
+
+/**
+ * V₇ predecessor chain verification.
+ *
+ * Predecessor hash check uses the canonical receipt hash
+ * SHA-256( JCS( predecessor ) ), identical to Main and Reference, so
+ * all three implementations agree on the hash. (Subject/issuer/temporal
+ * binding is enforced by the authoritative Main verifier.)
+ */
+export function verifyPredecessor(
+  receipt: ContinuityReceipt,
+  predecessor: ContinuityReceipt,
+): FailureCode | null {
+  if (computeReceiptHash(predecessor) !== receipt.previousReceiptHash) return "CHAIN_BROKEN";
   return null;
 }
 

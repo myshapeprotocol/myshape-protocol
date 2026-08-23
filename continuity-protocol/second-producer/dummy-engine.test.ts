@@ -8,7 +8,6 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { describe, it, expect, beforeAll } from "vitest";
-import { createHash } from "node:crypto";
 import {
   produceReceipt,
   dummyEngine,
@@ -22,6 +21,7 @@ import {
   verifyFreshness,
   verifyPredecessor,
   verifyReceipt,
+  computeReceiptHash,
   type ContinuityReceipt,
 } from "../reference-verifier/verifier";
 
@@ -79,9 +79,9 @@ describe("PROOF-02: dummy engine supports chaining", () => {
       previousReceiptHash: null, // will be set below
     });
 
-    // Compute predecessor hash
-    const r1json = JSON.stringify(r1);
-    const r1hash = createHash("sha256").update(r1json).digest("hex");
+    // Compute predecessor hash using the canonical CPS-0001 V₇ definition
+    // (SHA-256 over RFC 8785 JCS serialization) — identical across implementations.
+    const r1hash = await computeReceiptHash(r1);
 
     // Create a properly chained receipt
     const r2chained = await produceReceipt({

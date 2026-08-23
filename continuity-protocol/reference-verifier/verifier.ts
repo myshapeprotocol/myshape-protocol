@@ -84,7 +84,11 @@ export type FailureCode =
   | "TEMPORAL_INCONSISTENCY"
   | "EVIDENCE_TAMPERED"
   | "EXPIRED"
-  | "CHAIN_BROKEN";
+  | "CHAIN_BROKEN"
+  | "PREDECESSOR_MISSING"
+  | "SUBJECT_MISMATCH"
+  | "ISSUER_MISMATCH"
+  | "TEMPORAL_VIOLATION";
 
 export type VerificationResult =
   | { status: "VALID" }
@@ -143,12 +147,19 @@ export function verifyTemporal(receipt: ContinuityReceipt): FailureCode | null {
 
 // ── V₅: Evidence Reference Integrity ─────────────────────────────
 
+import { canonicalSerialize } from "../shared/jcs";
+
 async function sha256(data: string): Promise<string> {
   const buf = new TextEncoder().encode(data);
   const hash = await crypto.subtle.digest("SHA-256", buf);
   return Array.from(new Uint8Array(hash))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
+}
+
+/** CPS-0001 receipt hash: SHA-256 over the canonical (JCS) serialization. */
+export async function computeReceiptHash(receipt: ContinuityReceipt): Promise<string> {
+  return sha256(canonicalSerialize(receipt));
 }
 
 export async function verifyEvidenceIntegrity(receipt: ContinuityReceipt): Promise<FailureCode | null> {
@@ -176,7 +187,7 @@ export function verifyPredecessor(
   receipt: ContinuityReceipt,
   predecessor: ContinuityReceipt,
 ): Promise<FailureCode | null> {
-  return sha256(JSON.stringify(predecessor)).then((expected) => {
+  return computeReceiptHash(predecessor).then((expected) => {
     if (receipt.previousReceiptHash !== expected) return "CHAIN_BROKEN";
     return null;
   });

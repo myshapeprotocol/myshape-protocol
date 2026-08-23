@@ -15,6 +15,7 @@ import {
   verifyTemporal,
   verifyEvidenceIntegrity,
   verifyFreshness,
+  verifyPredecessor,
   type ContinuityReceipt,
   type FailureCode,
 } from "@/lib/evidence/cps0001";
@@ -44,6 +45,7 @@ export interface VerificationStepsResult {
  */
 export function runVerificationSteps(
   receipt: ContinuityReceipt,
+  predecessor?: ContinuityReceipt,
 ): VerificationStepsResult {
   const steps: VerificationStep[] = [];
 
@@ -113,14 +115,40 @@ export function runVerificationSteps(
     error: v6 ?? undefined,
   });
 
-  // V₇: Predecessor Chain (skipped — needs external context)
-  steps.push({
-    id: "V₇",
-    label: "Predecessor Chain",
-    description: "Hash chain links to predecessor receipt",
-    detail: "This is a genesis receipt (no predecessor). V₇ applies when previousReceiptHash is non-null.",
-    status: "skipped",
-  });
+  // V₇: Predecessor Chain
+  // Genesis (previousReceiptHash === null) is skipped. A non-null pointer is
+  // verified when a predecessor object is available; otherwise it fails closed
+  // because V₇ requires a trusted store / supplied predecessor for resolution.
+  if (receipt.previousReceiptHash === null) {
+    steps.push({
+      id: "V₇",
+      label: "Predecessor Chain",
+      description: "Hash chain links to predecessor receipt",
+      detail: "This is a genesis receipt (no predecessor). V₇ applies when previousReceiptHash is non-null.",
+      status: "skipped",
+    });
+  } else if (predecessor) {
+    const v7 = verifyPredecessor(receipt, predecessor);
+    steps.push({
+      id: "V₇",
+      label: "Predecessor Chain",
+      description: "Hash chain links to predecessor receipt",
+      detail: v7
+        ? `Chain verification failed (${v7}).`
+        : "Predecessor hash, subject, issuer, and temporal order all valid.",
+      status: v7 ? "fail" : "pass",
+      error: v7 ?? undefined,
+    });
+  } else {
+    steps.push({
+      id: "V₇",
+      label: "Predecessor Chain",
+      description: "Hash chain links to predecessor receipt",
+      detail:
+        "Non-null previousReceiptHash present but no predecessor supplied. V₇ requires a trusted store or predecessor object for authoritative verification.",
+      status: "fail",
+    });
+  }
 
   // Overall verdict: VALID only if all non-skipped steps pass
   const failures = steps.filter((s) => s.status === "fail");

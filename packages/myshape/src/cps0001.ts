@@ -116,7 +116,16 @@ export type FailureCode =
   | "TEMPORAL_INCONSISTENCY"
   | "EVIDENCE_TAMPERED"
   | "EXPIRED"
-  | "CHAIN_BROKEN";
+  | "CHAIN_BROKEN"
+  | "PREDECESSOR_MISSING"
+  | "SUBJECT_MISMATCH"
+  | "ISSUER_MISMATCH"
+  | "TEMPORAL_VIOLATION";
+
+/** Authoritative predecessor resolution for V₇ chain verification (Model 3). */
+export interface ChainStore {
+  resolve(hash: string): ContinuityReceipt | null;
+}
 
 export type VerificationResult =
   | { status: "VALID" }
@@ -283,14 +292,50 @@ export function verifyFreshness(receipt: ContinuityReceipt): FailureCode | null 
   return null;
 }
 
-/** Run all verifiable checks (V₁, V₃, V₄, V₅, V₆). V₂ and V₇ need external context. */
-export function verifyReceipt(receipt: ContinuityReceipt): VerificationResult {
+/** Run all verifiable checks (V₁, V₂, V₃, V₄, V₅, V₆, and V₇ when chained).
+ *
+ * V₇ requires a trusted `ChainStore` for authoritative predecessor resolution.
+ * Genesis receipts (`previousReceiptHash === null`) skip V₇. A non-null pointer
+ * without a store fails closed.
+ */
+export function verifyReceipt(receipt: ContinuityReceipt, store?: ChainStore): VerificationResult {
   const schemaErr = verifySchema(receipt);
   if (schemaErr) return { status: "INVALID", reason: schemaErr, detail: "Receipt does not conform to CPS-0001 schema." };
 
-  // V₂: Signature verification
+  // V₂: Signature verification (must precede V₇ — the pointer is unsigned in v1.0)
   const sigErr = verifySignature(receipt);
   if (sigErr) return { status: "INVALID", reason: sigErr, detail: "Signature verification failed — receipt may be forged or tampered." };
+
+  // V₇: Predecessor chain (store-backed, authoritative)
+  if (receipt.previousReceiptHash !== null) {
+    if (!store) {
+      return {
+        status: "INVALID",
+        reason: "CHAIN_BROKEN",
+        detail: "V₇ predecessor chain requires a trusted ChainStore for authoritative resolution.",
+      };
+    }
+    const predecessor = store.resolve(receipt.previousReceiptHash);
+    if (!predecessor) {
+      return {
+        status: "INVALID",
+        reason: "PREDECESSOR_MISSING",
+        detail: "Predecessor receipt not found in trusted chain store.",
+      };
+    }
+    const chainErr = verifyPredecessor(receipt, predecessor);
+    if (chainErr) {
+      const detail =
+        chainErr === "CHAIN_BROKEN"
+          ? "Predecessor hash mismatch — receipt does not follow the referenced predecessor."
+          : chainErr === "SUBJECT_MISMATCH"
+            ? "Chain subject mismatch — predecessor subject differs from current."
+            : chainErr === "ISSUER_MISMATCH"
+              ? "Chain issuer mismatch — predecessor issuer differs from current."
+              : "Chain temporal violation — predecessor interval does not end before current interval starts.";
+      return { status: "INVALID", reason: chainErr, detail };
+    }
+  }
 
   const assertionErr = verifyAssertions(receipt);
   if (assertionErr) return { status: "INVALID", reason: assertionErr, detail: "Assertion consistency violation — continuity claimed without observation." };
@@ -366,6 +411,27 @@ export function verifySignature(receipt: ContinuityReceipt): FailureCode | null 
   return valid ? null : "INVALID_SIGNATURE";
 }
 
+/**
+ * V₇: Verify the predecessor chain binding for a non-genesis receipt.
+ * Assumes `current.previousReceiptHash !== null`. Enforces predecessor hash,
+ * subject binding, issuer binding, and temporal ordering. In v1.0 the pointer is
+ * UNSIGNED — only secure when `predecessor` comes from a TRUSTED store.
+ */
+export function verifyPredecessor(
+  current: ContinuityReceipt,
+  predecessor: ContinuityReceipt,
+): FailureCode | null {
+  if (computeReceiptHash(predecessor) !== current.previousReceiptHash) return "CHAIN_BROKEN";
+  if (current.subject.id !== predecessor.subject.id) return "SUBJECT_MISMATCH";
+  if (current.issuer.id !== predecessor.issuer.id) return "ISSUER_MISMATCH";
+
+  const predEnd = new Date(predecessor.interval.end).getTime();
+  const curStart = new Date(current.interval.start).getTime();
+  if (isNaN(predEnd) || isNaN(curStart) || predEnd > curStart) return "TEMPORAL_VIOLATION";
+
+  return null;
+}
+
 // ── Conversion: EngineEvidence → EvidenceBlock ──
 
 import type { EngineEvidence } from "./types.js";
@@ -376,6 +442,31 @@ import { sha256Hex } from "./hash.js";
 /** SHA-256 hex digest of a string payload. */
 function sha256(data: string): string {
   return sha256Hex(data);
+}
+
+/** RFC 8785 (JCS)-compatible canonical serialization (recursive key sort, no whitespace). */
+export function canonicalSerialize(value: unknown): string {
+  return JSON.stringify(sortForCanonicalization(value));
+}
+
+function sortForCanonicalization(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortForCanonicalization);
+  if (value !== null && typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+    const sorted: Record<string, unknown> = {};
+    for (const key of Object.keys(obj).sort()) {
+      const v = obj[key];
+      if (v === undefined) continue;
+      sorted[key] = sortForCanonicalization(v);
+    }
+    return sorted;
+  }
+  return value;
+}
+
+/** CPS-0001 receipt hash: SHA-256 over the canonical serialization of the full receipt. */
+export function computeReceiptHash(receipt: ContinuityReceipt): string {
+  return sha256(canonicalSerialize(receipt));
 }
 
 /** Convert an internal EngineEvidence to a CPS-0001 EvidenceBlock. */
