@@ -136,13 +136,12 @@ export type VerificationResult =
 /** Generate a time-sortable receipt ID (UUIDv7-like: timestamp + crypto random). */
 export function createReceiptId(): string {
   const ts = Date.now().toString(16).padStart(12, "0");
-  // Use crypto.getRandomValues when available, fall back to Math.random
-  const randBytes = new Uint8Array(20);
-  if (typeof globalThis.crypto !== "undefined" && globalThis.crypto.getRandomValues) {
-    globalThis.crypto.getRandomValues(randBytes);
-  } else {
-    for (let i = 0; i < randBytes.length; i++) randBytes[i] = Math.floor(Math.random() * 256);
+  // CSPRNG only — crypto.getRandomValues is mandatory (no pseudo-random fallback).
+  if (typeof globalThis.crypto === "undefined" || !globalThis.crypto.getRandomValues) {
+    throw new Error("CSPRNG unavailable: cannot generate receipt ID securely");
   }
+  const randBytes = new Uint8Array(20);
+  globalThis.crypto.getRandomValues(randBytes);
   const rand = Array.from(randBytes, (b) => b.toString(16).padStart(2, "0")).join("");
   // Format: 00000000-0000-7000-8000-000000000000 (UUIDv7 layout)
   const hex = (ts + rand).slice(0, 32).padEnd(32, "0");
@@ -249,25 +248,40 @@ export function verifyAssertions(receipt: ContinuityReceipt): FailureCode | null
   return null;
 }
 
-/** V₄: Temporal consistency. */
-export function verifyTemporal(receipt: ContinuityReceipt): FailureCode | null {
+/**
+ * V₄: Temporal consistency.
+ *
+ * Batch-2C hardening — mirrors src/lib/evidence/cps0001.ts EXACTLY:
+ *  - Every temporal input must PARSE (NaN comparisons used to mean "valid").
+ *  - Intervals attest COMPLETED observation windows; a future end is rejected.
+ *  - `now` injectable for deterministic boundary tests.
+ */
+export function verifyTemporal(
+  receipt: ContinuityReceipt,
+  now: number = Date.now(),
+): FailureCode | null {
   const start = new Date(receipt.interval.start).getTime();
   const end = new Date(receipt.interval.end).getTime();
+
+  // Malformed interval bounds fail closed.
+  if (Number.isNaN(start) || Number.isNaN(end)) return "TEMPORAL_INCONSISTENCY";
+
   if (start >= end) return "TEMPORAL_INCONSISTENCY";
+  if (end > now) return "TEMPORAL_INCONSISTENCY";
 
   // coverageMs must match
   if (receipt.interval.coverageMs !== end - start) return "TEMPORAL_INCONSISTENCY";
 
-  // signedAt must be ≥ interval.end
+  // signedAt must be a parseable timestamp ≥ interval.end
   if (receipt.signature?.signedAt) {
-    const signedAt = new Date(receipt.signature.signedAt).getTime();
-    if (signedAt < end) return "TEMPORAL_INCONSISTENCY";
+    const signedAtMs = new Date(receipt.signature.signedAt).getTime();
+    if (Number.isNaN(signedAtMs) || signedAtMs < end) return "TEMPORAL_INCONSISTENCY";
   }
 
-  // expiresAt must be after interval.end
+  // expiresAt must be a parseable timestamp strictly after interval.end
   if (receipt.expiresAt) {
-    const expiresAt = new Date(receipt.expiresAt).getTime();
-    if (expiresAt <= end) return "TEMPORAL_INCONSISTENCY";
+    const expiresAtMs = new Date(receipt.expiresAt).getTime();
+    if (Number.isNaN(expiresAtMs) || expiresAtMs <= end) return "TEMPORAL_INCONSISTENCY";
   }
 
   return null;
@@ -282,12 +296,14 @@ export function verifyEvidenceIntegrity(receipt: ContinuityReceipt): FailureCode
   return null;
 }
 
-/** V₆: Freshness. */
-export function verifyFreshness(receipt: ContinuityReceipt): FailureCode | null {
+/** V₆: Freshness — unparseable expiresAt fails closed; `now` injectable (Batch-2C). */
+export function verifyFreshness(
+  receipt: ContinuityReceipt,
+  now: number = Date.now(),
+): FailureCode | null {
   if (receipt.expiresAt) {
-    const now = Date.now();
-    const expiresAt = new Date(receipt.expiresAt).getTime();
-    if (now >= expiresAt) return "EXPIRED";
+    const expiresAtMs = new Date(receipt.expiresAt).getTime();
+    if (Number.isNaN(expiresAtMs) || now >= expiresAtMs) return "EXPIRED";
   }
   return null;
 }
@@ -365,6 +381,18 @@ import { sign as edSign, verify as edVerify } from "./crypto.js";
  */
 export function canonicalSigningPayload(receipt: Omit<ContinuityReceipt, "signature">): string {
   const evidenceDigests = receipt.evidence.map((e) => e.payloadDigest).join(":");
+  const a = receipt.assertions;
+  const assertionsFlat = [
+    a.observationOccurred.value,
+    a.observationOccurred.confidence,
+    a.continuityMaintained.value,
+    a.continuityMaintained.confidence,
+    a.receiptIntegrity.value,
+    a.receiptIntegrity.confidence,
+  ].join(":");
+
+  // Batch-2B hardening — mirrors src/lib/evidence/cps0001.ts EXACTLY so the
+  // published SDK, app, and reference/second producers stay interoperable.
   return [
     receipt.receiptId,
     receipt.interval.start,
@@ -374,6 +402,11 @@ export function canonicalSigningPayload(receipt: Omit<ContinuityReceipt, "signat
     evidenceDigests,
     receipt.issuer.id,
     receipt.issuer.publicKey,
+    receipt.protocolVersion ?? "",
+    receipt.expiresAt ?? "",
+    assertionsFlat,
+    receipt.verdict ?? "",
+    (receipt.references ?? []).join(":"),
   ].join(":");
 }
 

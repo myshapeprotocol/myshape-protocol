@@ -209,6 +209,18 @@ export function buildReceipt(params: {
 
 function canonicalSigningPayload(receipt: Omit<ContinuityReceipt, "signature">): string {
   const evidenceDigests = receipt.evidence.map((e) => e.payloadDigest).join(":");
+  const a = receipt.assertions;
+  const assertionsFlat = [
+    a.observationOccurred.value,
+    a.observationOccurred.confidence,
+    a.continuityMaintained.value,
+    a.continuityMaintained.confidence,
+    a.receiptIntegrity.value,
+    a.receiptIntegrity.confidence,
+  ].join(":");
+
+  // Batch-2B hardening — must match src/lib/evidence/cps0001.ts EXACTLY so the
+  // second producer's signatures interoperate with app + SDK.
   return [
     receipt.receiptId,
     receipt.interval.start,
@@ -218,6 +230,11 @@ function canonicalSigningPayload(receipt: Omit<ContinuityReceipt, "signature">):
     evidenceDigests,
     receipt.issuer.id,
     receipt.issuer.publicKey,
+    receipt.protocolVersion ?? "",
+    receipt.expiresAt ?? "",
+    assertionsFlat,
+    receipt.verdict ?? "",
+    (receipt.references ?? []).join(":"),
   ].join(":");
 }
 
@@ -288,18 +305,33 @@ export function verifyAssertions(receipt: ContinuityReceipt): FailureCode | null
   return null;
 }
 
-export function verifyTemporal(receipt: ContinuityReceipt): FailureCode | null {
+/**
+ * Batch-2C hardening — mirrors src/lib/evidence/cps0001.ts EXACTLY:
+ * every temporal input must parse, and intervals attest COMPLETED windows
+ * so a future interval.end is rejected regardless of self-reported signedAt.
+ */
+export function verifyTemporal(
+  receipt: ContinuityReceipt,
+  now: number = Date.now(),
+): FailureCode | null {
   const start = new Date(receipt.interval.start).getTime();
   const end = new Date(receipt.interval.end).getTime();
+
+  // Malformed interval bounds fail closed.
+  if (Number.isNaN(start) || Number.isNaN(end)) return "TEMPORAL_INCONSISTENCY";
+
   if (start >= end) return "TEMPORAL_INCONSISTENCY";
+  if (end > now) return "TEMPORAL_INCONSISTENCY";
+
   if (receipt.interval.coverageMs !== end - start) return "TEMPORAL_INCONSISTENCY";
 
   if (receipt.signature?.signedAt) {
-    const signedAt = new Date(receipt.signature.signedAt).getTime();
-    if (signedAt < end) return "TEMPORAL_INCONSISTENCY";
+    const signedAtMs = new Date(receipt.signature.signedAt).getTime();
+    if (Number.isNaN(signedAtMs) || signedAtMs < end) return "TEMPORAL_INCONSISTENCY";
   }
   if (receipt.expiresAt) {
-    if (new Date(receipt.expiresAt).getTime() <= end) return "TEMPORAL_INCONSISTENCY";
+    const expiresAtMs = new Date(receipt.expiresAt).getTime();
+    if (Number.isNaN(expiresAtMs) || expiresAtMs <= end) return "TEMPORAL_INCONSISTENCY";
   }
   return null;
 }
@@ -312,9 +344,16 @@ export function verifyEvidenceIntegrity(receipt: ContinuityReceipt): FailureCode
   return null;
 }
 
-export function verifyFreshness(receipt: ContinuityReceipt): FailureCode | null {
-  if (receipt.expiresAt && Date.now() >= new Date(receipt.expiresAt).getTime()) {
-    return "EXPIRED";
+/** Batch-2C: unparseable expiresAt fails closed; `now` injectable for tests. */
+export function verifyFreshness(
+  receipt: ContinuityReceipt,
+  now: number = Date.now(),
+): FailureCode | null {
+  if (receipt.expiresAt) {
+    const expiresAtMs = new Date(receipt.expiresAt).getTime();
+    if (Number.isNaN(expiresAtMs) || now >= expiresAtMs) {
+      return "EXPIRED";
+    }
   }
   return null;
 }

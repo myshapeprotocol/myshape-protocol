@@ -2,9 +2,9 @@
 
 > **A verifiable temporal trust layer for digital entities.**
 
-[![CPS-0001](https://img.shields.io/badge/CPS-0001-v1.0--RC-gold)](https://myshape.com/research/notes/008-continuity-protocol-core)
+[![CPS-0001](https://img.shields.io/badge/CPS-0001-v1.0-RC1-gold)](https://myshape.com/research/notes/008-continuity-protocol-core)
 [![npm](https://img.shields.io/badge/npm-@thecontinuitylab/myshape-red)](https://www.npmjs.com/package/@thecontinuitylab/myshape)
-[![Tests](https://img.shields.io/badge/tests-537%20passed-brightgreen)](https://github.com/myshapeprotocol/myshape-protocol)
+[![CI](https://github.com/myshapeprotocol/myshape-protocol/actions/workflows/ci.yml/badge.svg)](https://github.com/myshapeprotocol/myshape-protocol/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![Discussions](https://img.shields.io/badge/discussions-welcome-purple)](https://github.com/myshapeprotocol/myshape-protocol/discussions)
 [![CITATION.cff](https://img.shields.io/badge/cite-CITATION.cff-orange)](CITATION.cff)

@@ -24,12 +24,25 @@ import { generateKeyPair, createIssuerIdentity } from "@/lib/crypto";
 
 function makeKeyPair() { const kp = generateKeyPair(); return { kp, issuer: createIssuerIdentity(kp) }; }
 
+/**
+ * Deterministic recent interval — derives BOTH endpoints from ONE clock read.
+ * Two independent Date.now() calls can straddle a wall-clock tick, making the
+ * ISO-parsed `end - start` differ from coverageMs by 1ms+ (Windows timer
+ * granularity up to ~15ms). That trips the strict V₄ equality
+ * (`coverageMs !== end - start`) intermittently and, worse, MASKS the real
+ * failure reason on negative tests (V₄ runs before V₅/V₆).
+ */
+function recentInterval(coverageMs: number): { start: string; end: string; coverageMs: number } {
+  const endT = Date.now();
+  return { start: new Date(endT - coverageMs).toISOString(), end: new Date(endT).toISOString(), coverageMs };
+}
+
 function makeValid(): ContinuityReceipt {
   const { kp, issuer } = makeKeyPair();
   const block = toyEngine("boundary-test");
   const unsigned = buildReceipt({
     evidence: [block],
-    interval: { start: new Date(Date.now() - 8000).toISOString(), end: new Date().toISOString(), coverageMs: 8000 },
+    interval: recentInterval(8000),
     subject: { id: "boundary-test", type: "device" },
     issuer,
   });
@@ -51,7 +64,7 @@ describe("✅ VALID Receipts (protocol conformance verified)", () => {
     const { verifyReceipt: myshapeVerify, buildReceipt: msBuild, signReceipt: msSign, computePayloadDigest: msDigest } = await import("@/lib/evidence/cps0001");
     const mkp = generateKeyPair(); const miss = createIssuerIdentity(mkp);
     const p = { entropy: 0.85 }; const d = msDigest(p);
-    const u = msBuild({ evidence: [{ engineId: "EE-001", engineVersion: "1.0", confidence: 0.85, payload: p, payloadDigest: d }], interval: { start: new Date(Date.now() - 8000).toISOString(), end: new Date().toISOString(), coverageMs: 8000 }, subject: { id: "pes-test", type: "embodied" }, issuer: miss });
+    const u = msBuild({ evidence: [{ engineId: "EE-001", engineVersion: "1.0", confidence: 0.85, payload: p, payloadDigest: d }], interval: recentInterval(8000), subject: { id: "pes-test", type: "embodied" }, issuer: miss });
     const r = msSign(u, mkp.secretKey);
     expect(verifyReceipt(r).status).toBe("VALID");
     expect((await import("@/lib/evidence/cps0001")).verifyReceipt(r).status).toBe("VALID");
@@ -66,7 +79,7 @@ describe("✅ VALID Receipts (protocol conformance verified)", () => {
     const { kp, issuer } = makeKeyPair();
     const block = toyEngine("");
     expect(block.confidence).toBe(0);
-    const unsigned = buildReceipt({ evidence: [block], interval: { start: new Date(Date.now() - 1000).toISOString(), end: new Date().toISOString(), coverageMs: 1000 }, subject: { id: "zero-conf", type: "device" }, issuer });
+    const unsigned = buildReceipt({ evidence: [block], interval: recentInterval(1000), subject: { id: "zero-conf", type: "device" }, issuer });
     const r = signReceipt(unsigned, kp.secretKey);
     expect(verifyReceipt(r).status).toBe("VALID");
   });
@@ -95,7 +108,7 @@ describe("❌ INVALID Receipts (protocol violations caught)", () => {
   it("Wrong Digest — payloadDigest does not match payload", () => {
     const { kp, issuer } = makeKeyPair();
     const block = toyEngine("wrong-digest");
-    const unsigned = buildReceipt({ evidence: [block], interval: { start: new Date(Date.now() - 1000).toISOString(), end: new Date().toISOString(), coverageMs: 1000 }, subject: { id: "wd", type: "device" }, issuer });
+    const unsigned = buildReceipt({ evidence: [block], interval: recentInterval(1000), subject: { id: "wd", type: "device" }, issuer });
     unsigned.evidence[0].payloadDigest = "00".repeat(32);
     const r = signReceipt(unsigned, kp.secretKey);
     const result = verifyReceipt(r);
@@ -106,7 +119,7 @@ describe("❌ INVALID Receipts (protocol violations caught)", () => {
   it("Wrong Signature — signed by different key", () => {
     const { kp, issuer } = makeKeyPair();
     const block = toyEngine("wrong-sig");
-    const unsigned = buildReceipt({ evidence: [block], interval: { start: new Date(Date.now() - 1000).toISOString(), end: new Date().toISOString(), coverageMs: 1000 }, subject: { id: "ws", type: "device" }, issuer });
+    const unsigned = buildReceipt({ evidence: [block], interval: recentInterval(1000), subject: { id: "ws", type: "device" }, issuer });
     const r = signReceipt(unsigned, kp.secretKey);
     r.issuer.publicKey = generateKeyPair().publicKey;
     const result = verifyReceipt(r);
@@ -117,8 +130,11 @@ describe("❌ INVALID Receipts (protocol violations caught)", () => {
   it("Expired — expiresAt is in the past", () => {
     const { kp, issuer } = makeKeyPair();
     const block = toyEngine("expired");
-    const unsigned = buildReceipt({ evidence: [block], interval: { start: new Date(Date.now() - 2000).toISOString(), end: new Date(Date.now() - 1000).toISOString(), coverageMs: 1000 }, subject: { id: "ex", type: "device" }, issuer });
-    unsigned.expiresAt = new Date(Date.now() - 500).toISOString();
+    // Single base time: exact 1000ms span, expiresAt exactly 500ms before "now"
+    // — every temporal invariant below is arithmetically fixed, not racy.
+    const endT = Date.now();
+    const unsigned = buildReceipt({ evidence: [block], interval: { start: new Date(endT - 2000).toISOString(), end: new Date(endT - 1000).toISOString(), coverageMs: 1000 }, subject: { id: "ex", type: "device" }, issuer });
+    unsigned.expiresAt = new Date(endT - 500).toISOString();
     const r = signReceipt(unsigned, kp.secretKey);
     const result = verifyReceipt(r);
     expect(result.status).toBe("INVALID");
@@ -141,7 +157,7 @@ describe("❌ INVALID Receipts (protocol violations caught)", () => {
   it("Inconsistent Assertions — continuity without observation", () => {
     const { kp, issuer } = makeKeyPair();
     const block = toyEngine("bad-assert");
-    const unsigned = buildReceipt({ evidence: [block], interval: { start: new Date(Date.now() - 1000).toISOString(), end: new Date().toISOString(), coverageMs: 1000 }, subject: { id: "ba", type: "device" }, issuer });
+    const unsigned = buildReceipt({ evidence: [block], interval: recentInterval(1000), subject: { id: "ba", type: "device" }, issuer });
     unsigned.assertions.observationOccurred.value = false;
     unsigned.assertions.continuityMaintained.value = true;
     const r = signReceipt(unsigned, kp.secretKey);
@@ -160,7 +176,7 @@ describe("Cross-Implementation: MyShape Verifier agrees", () => {
     const { verifyReceipt: mv, buildReceipt: mb, signReceipt: ms, computePayloadDigest: md } = await import("@/lib/evidence/cps0001");
     const mkp = generateKeyPair(); const miss = createIssuerIdentity(mkp);
     const block = toyEngine("cross-impl-toy");
-    const u = mb({ evidence: [block], interval: { start: new Date(Date.now() - 8000).toISOString(), end: new Date().toISOString(), coverageMs: 8000 }, subject: { id: "toy-cross", type: "device" }, issuer: miss });
+    const u = mb({ evidence: [block], interval: recentInterval(8000), subject: { id: "toy-cross", type: "device" }, issuer: miss });
     const r = ms(u, mkp.secretKey);
     expect(mv(r).status).toBe("VALID");
   });
@@ -169,7 +185,7 @@ describe("Cross-Implementation: MyShape Verifier agrees", () => {
     const { verifyReceipt: mv, buildReceipt: mb, signReceipt: ms, computePayloadDigest: md } = await import("@/lib/evidence/cps0001");
     const mkp = generateKeyPair(); const miss = createIssuerIdentity(mkp);
     const block = toyEngine("tamper");
-    const u = mb({ evidence: [block], interval: { start: new Date(Date.now() - 1000).toISOString(), end: new Date().toISOString(), coverageMs: 1000 }, subject: { id: "t", type: "device" }, issuer: miss });
+    const u = mb({ evidence: [block], interval: recentInterval(1000), subject: { id: "t", type: "device" }, issuer: miss });
     u.evidence[0].payloadDigest = "ff".repeat(32);
     const r = ms(u, mkp.secretKey);
     const result = mv(r);

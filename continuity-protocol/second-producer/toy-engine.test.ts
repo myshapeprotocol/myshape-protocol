@@ -17,11 +17,17 @@ import { generateKeyPair, createIssuerIdentity } from "@/lib/crypto";
 function makeReceipt(block: ReturnType<typeof run>) {
   const kp = generateKeyPair();
   const issuer = createIssuerIdentity(kp);
+  // Deterministic interval: derives start + end from a SINGLE Date.now()
+  // reading so coverageMs === end - start even after clock tick.
+  // (Batch-2C rejects future intervals: end must be ≤ now at verify-time,
+  //  and two independent Date.now() calls can straddle a tick boundary on
+  //  Windows ~15ms timer granularity.)
+  const endT = Date.now();
   const unsigned = nobleBuild({
     evidence: [block],
     interval: {
-      start: new Date(Date.now() - 1000).toISOString(),
-      end: new Date().toISOString(),
+      start: new Date(endT - 1000).toISOString(),
+      end: new Date(endT).toISOString(),
       coverageMs: 1000,
     },
     subject: { id: "toy-subject", type: "device" },

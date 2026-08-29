@@ -29,6 +29,8 @@ import {
 } from "@/lib/evidence/cps0001";
 import { getDeviceSalt } from "@/engine/local-identity";
 import { getOrCreateKeyPair, createIssuerIdentity } from "@/lib/crypto";
+import { getOrCreateBrowserSigner } from "@/lib/browser-keys";
+import { canonicalSigningPayload } from "@/lib/evidence/cps0001";
 import { sha256Hex } from "@/lib/hash";
 import type { JointPosition } from "@/types/motion-vector";
 
@@ -104,6 +106,64 @@ export function runContinuityVerification(
   challengeResults: RoundResult[],
   windowSeconds = 8,
 ): ContinuityVerificationResult | null {
+  const composed = composeTwoStage(sstFrames, timestamps, challengeResults, windowSeconds);
+  if (!composed) return null;
+
+  const keyPair = getOrCreateKeyPair();
+  const issuer = createIssuerIdentity(keyPair);
+  const unsigned = buildReceipt({ ...composed.receiptArgs, issuer });
+  const receipt = signReceipt(unsigned, keyPair.secretKey);
+
+  return {
+    receipt,
+    verified: receipt.assertions.continuityMaintained.value,
+    confidence: receipt.assertions.continuityMaintained.confidence,
+    pes: composed.pes,
+    pesComponents: composed.components,
+    evidenceEngines: composed.evidence.map((e) => e.engineId),
+  };
+}
+
+/**
+ * Browser-hardened variant of runContinuityVerification: signs with the
+ * non-extractable WebCrypto identity (IndexedDB-backed) instead of the
+ * legacy localStorage hex key. Signatures are verifier-identical.
+ */
+export async function runContinuityVerificationAsync(
+  sstFrames: Array<Record<number, JointPosition>>,
+  timestamps: number[],
+  challengeResults: RoundResult[],
+  windowSeconds = 8,
+): Promise<ContinuityVerificationResult | null> {
+  const composed = composeTwoStage(sstFrames, timestamps, challengeResults, windowSeconds);
+  if (!composed) return null;
+
+  const signer = await getOrCreateBrowserSigner();
+  const issuer = { id: signer.id, publicKey: signer.publicKey };
+  const unsigned = buildReceipt({ ...composed.receiptArgs, issuer });
+  const sig = await signer.sign(canonicalSigningPayload(unsigned));
+  const receipt: ContinuityReceipt = {
+    ...unsigned,
+    signature: { algorithm: "Ed25519", value: sig, signedAt: new Date().toISOString() },
+  };
+
+  return {
+    receipt,
+    verified: receipt.assertions.continuityMaintained.value,
+    confidence: receipt.assertions.continuityMaintained.confidence,
+    pes: composed.pes,
+    pesComponents: composed.components,
+    evidenceEngines: composed.evidence.map((e) => e.engineId),
+  };
+}
+
+/** Shared composition for sync/async variants. Returns null when data insufficient. */
+function composeTwoStage(
+  sstFrames: Array<Record<number, JointPosition>>,
+  timestamps: number[],
+  challengeResults: RoundResult[],
+  windowSeconds: number,
+): { receiptArgs: Omit<Parameters<typeof buildReceipt>[0], "issuer">; pes: number; components: PESComponents; evidence: ReturnType<typeof engineEvidenceToBlock>[] } | null {
   if (sstFrames.length < 8 || timestamps.length < 8 || challengeResults.length === 0) {
     return null;
   }
@@ -121,29 +181,20 @@ export function runContinuityVerification(
   const intervalStart = new Date(now.getTime() - windowSeconds * 1000);
 
   const subject = { id: sha256Hex(getDeviceSalt()), type: "embodied" as const };
-  const keyPair = getOrCreateKeyPair();
-  const issuer = createIssuerIdentity(keyPair);
-
-  const unsigned = buildReceipt({
-    evidence,
-    interval: {
-      start: intervalStart.toISOString(),
-      end: now.toISOString(),
-      coverageMs: windowSeconds * 1000,
-    },
-    subject,
-    issuer,
-    assertions,
-  });
-
-  const receipt = signReceipt(unsigned, keyPair.secretKey);
 
   return {
-    receipt,
-    verified: receipt.assertions.continuityMaintained.value,
-    confidence: receipt.assertions.continuityMaintained.confidence,
+    receiptArgs: {
+      evidence,
+      interval: {
+        start: intervalStart.toISOString(),
+        end: now.toISOString(),
+        coverageMs: windowSeconds * 1000,
+      },
+      subject,
+      assertions,
+    },
     pes,
-    pesComponents: components,
-    evidenceEngines: evidence.map((e) => e.engineId),
+    components,
+    evidence,
   };
 }

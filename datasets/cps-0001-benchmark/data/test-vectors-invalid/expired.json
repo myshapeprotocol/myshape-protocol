@@ -1,17 +1,28 @@
 {
-  "_comment": "CPS-0001 Test Vector — V₆ FAIL: receipt has expired",
   "protocolVersion": "1.0",
   "assertions": {
-    "observationOccurred": { "value": true, "confidence": 0.95 },
-    "continuityMaintained": { "value": true, "confidence": 0.85 },
-    "receiptIntegrity": { "value": true, "confidence": 1.0 }
+    "observationOccurred": {
+      "value": true,
+      "confidence": 0.95
+    },
+    "continuityMaintained": {
+      "value": true,
+      "confidence": 0.85
+    },
+    "receiptIntegrity": {
+      "value": true,
+      "confidence": 1
+    }
   },
   "evidence": [
     {
       "engineId": "com.example.simulation",
       "engineVersion": "1.0.0",
       "confidence": 0.85,
-      "payload": { "score": 0.85, "timestamp": "2020-01-01T00:00:04.000Z" },
+      "payload": {
+        "score": 0.85,
+        "timestamp": "2020-01-01T00:00:04.000Z"
+      },
       "payloadDigest": "a75cab288cad6bda0f55bd4e9c6968b5adb1b328596926a37cc9671bf5996d27"
     }
   ],
@@ -21,18 +32,21 @@
     "end": "2020-01-01T00:00:08.000Z",
     "coverageMs": 8000
   },
-  "subject": { "id": "sha256:expired-subject", "type": "embodied" },
+  "subject": {
+    "id": "sha256:expired-subject",
+    "type": "embodied"
+  },
   "expiresAt": "2020-01-01T00:05:08.000Z",
   "previousReceiptHash": null,
   "references": [],
   "verdict": "PASS",
   "issuer": {
-    "id": "sha256:issuer001",
-    "publicKey": "MCowBQYDK2VwAyEAabc123def456ghi789jkl012mno345pqr678stu901vwx234yz"
+    "id": "74c00c0b4be8c3e3",
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
   },
   "signature": {
     "algorithm": "Ed25519",
-    "value": "iGy9Pq3KlxAbCdEfGhIjKlMnOpQrStUvWxYz0123456789AbCdEfGhIjKlMnOpQr",
+    "value": "215bfa26052733e57a5ac6c9c7dbc8a11c6fc38cfba69d3f953b221ac3a60ffa75dcc24b92b4f5634a0c137d0d117bcc290283a4fdc85b1d7fb5a1f20676790e",
     "signedAt": "2020-01-01T00:00:08.000Z"
   }
 }

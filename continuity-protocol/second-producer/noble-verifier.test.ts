@@ -17,6 +17,15 @@ import {
 } from "@/lib/evidence/cps0001";
 import { generateKeyPair, createIssuerIdentity } from "@/lib/crypto";
 
+// Deterministic recent interval — derives BOTH endpoints from ONE clock read so
+// `end - start` is exactly `coverageMs`. Two independent Date.now() calls can
+// straddle a wall-clock tick (Windows granularity up to ~15ms), producing a
+// ±1ms mismatch that trips the strict V₄ (`coverageMs !== end - start`) check.
+function makeRecentInterval(coverageMs: number): { start: string; end: string; coverageMs: number } {
+  const endT = Date.now();
+  return { start: new Date(endT - coverageMs).toISOString(), end: new Date(endT).toISOString(), coverageMs };
+}
+
 // ── Noble helper ──
 
 function makeNobleReceipt(): ContinuityReceipt {
@@ -33,11 +42,10 @@ function makeNobleReceipt(): ContinuityReceipt {
       payload,
       payloadDigest: digest,
     }],
-    interval: {
-      start: new Date(Date.now() - 1000).toISOString(),
-      end: new Date().toISOString(),
-      coverageMs: 1000,
-    },
+    // Deterministic recent interval — single clock read, so ISO-parsed
+    // `end - start` is EXACTLY coverageMs (double Date.now() can straddle a
+    // wall-clock tick and trip the strict V₄ equality).
+    interval: makeRecentInterval(1000),
     subject: { id: "noble-test-subject", type: "embodied" },
     issuer,
   });
@@ -99,11 +107,7 @@ describe("Cross-implementation: MyShape → Noble", () => {
         payload,
         payloadDigest: digest,
       }],
-      interval: {
-        start: new Date(Date.now() - 1000).toISOString(),
-        end: new Date().toISOString(),
-        coverageMs: 1000,
-      },
+      interval: makeRecentInterval(1000),
       subject: { id: "myshape-test-subject", type: "embodied" },
       issuer,
     });

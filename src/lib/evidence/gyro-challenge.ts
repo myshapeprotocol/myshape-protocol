@@ -57,8 +57,31 @@ export const PREDICTABILITY_MAG_VAR_THRESHOLD = 0.05;
 
 // ── Utilities ──
 
+/**
+ * CSPRNG-backed uniform index selection (rejection sampling — no modulo bias).
+ * Security path: deliberately NO pseudo-random fallback.
+ */
+export function secureRandomInt(maxExclusive: number): number {
+  if (
+    typeof globalThis.crypto === "undefined" ||
+    typeof globalThis.crypto.getRandomValues !== "function"
+  ) {
+    throw new Error("CSPRNG unavailable: crypto.getRandomValues is required for challenge direction selection");
+  }
+  const range = 0x100000000;
+  const limit = range - (range % maxExclusive);
+  const bytes = new Uint8Array(4);
+  const view = new DataView(bytes.buffer);
+  let v: number;
+  do {
+    globalThis.crypto.getRandomValues(bytes);
+    v = view.getUint32(0);
+  } while (v >= limit);
+  return v % maxExclusive;
+}
+
 export function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[secureRandomInt(arr.length)];
 }
 
 export function normalizeAngle(a: number): number {

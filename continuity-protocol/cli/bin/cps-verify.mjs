@@ -43,14 +43,42 @@ function v1(receipt) {
 }
 
 // ── V₂: Signature Verification ──
+//
+// Batch-2F: V₂ now reconstructs the EXACT canonical signing payload (13 fields)
+// that src/lib/evidence/cps0001.ts, packages/myshape/src/cps0001.ts and
+// noble-verifier.ts sign — byte-for-byte. A receipt signed by any 13-field
+// producer verifies here; tampering any signed field fails V₂.
+// Order/serialization MUST mirror canonicalSigningPayload in those files:
+//   receiptId, interval.start, interval.end, coverageMs.toString(),
+//   subject.id, evidenceDigests, issuer.id, issuer.publicKey,
+//   protocolVersion ?? "", expiresAt ?? "", assertionsFlat,
+//   verdict ?? "", (references ?? []).join(":")
 
 function v2(receipt) {
   if (receipt.signature.algorithm !== "Ed25519") return { ok: false, detail: `unsupported algorithm: ${receipt.signature.algorithm}` };
+  const a = receipt.assertions;
+  const assertionsFlat = [
+    a.observationOccurred.value,
+    a.observationOccurred.confidence,
+    a.continuityMaintained.value,
+    a.continuityMaintained.confidence,
+    a.receiptIntegrity.value,
+    a.receiptIntegrity.confidence,
+  ].join(":");
   const payload = [
-    receipt.receiptId, receipt.interval.start, receipt.interval.end,
-    String(receipt.interval.coverageMs), receipt.subject.id,
+    receipt.receiptId,
+    receipt.interval.start,
+    receipt.interval.end,
+    receipt.interval.coverageMs.toString(),
+    receipt.subject.id,
     receipt.evidence.map((e) => e.payloadDigest).join(":"),
-    receipt.issuer.id, receipt.issuer.publicKey,
+    receipt.issuer.id,
+    receipt.issuer.publicKey,
+    receipt.protocolVersion ?? "",
+    receipt.expiresAt ?? "",
+    assertionsFlat,
+    receipt.verdict ?? "",
+    (receipt.references ?? []).join(":"),
   ].join(":");
   try {
     const pk = hexToBytes(receipt.issuer.publicKey);
@@ -74,18 +102,33 @@ function v3(receipt) {
 }
 
 // ── V₄: Temporal Consistency ──
+// Batch-2C hardening — mirrors src/lib/evidence/cps0001.ts:
+//   every temporal input must parse; completed-window attestation rejects a
+//   future interval.end regardless of self-reported signedAt.
 
-function v4(receipt) {
+function v4(receipt, now = Date.now()) {
   const start = new Date(receipt.interval.start).getTime();
   const end = new Date(receipt.interval.end).getTime();
+  if (Number.isNaN(start) || Number.isNaN(end)) {
+    return { ok: false, detail: `malformed interval bound (${receipt.interval.start} … ${receipt.interval.end})` };
+  }
   if (start >= end) return { ok: false, detail: `start (${receipt.interval.start}) >= end (${receipt.interval.end})` };
+  if (end > now) return { ok: false, detail: `interval ends in the future (${receipt.interval.end})` };
   if (receipt.interval.coverageMs !== end - start) return { ok: false, detail: `coverageMs ${receipt.interval.coverageMs} ≠ ${end - start}` };
-  if (receipt.signature.signedAt && new Date(receipt.signature.signedAt).getTime() < end) {
-    return { ok: false, detail: "signedAt before interval.end" };
+
+  const signedAtRaw = receipt.signature?.signedAt;
+  if (signedAtRaw) {
+    const signedAt = new Date(signedAtRaw).getTime();
+    if (Number.isNaN(signedAt)) return { ok: false, detail: `malformed signature.signedAt (${signedAtRaw})` };
+    if (signedAt < end) return { ok: false, detail: "signedAt before interval.end" };
   }
-  if (receipt.expiresAt && new Date(receipt.expiresAt).getTime() <= end) {
-    return { ok: false, detail: "expiresAt before or at interval.end" };
+
+  if (receipt.expiresAt) {
+    const expiresAt = new Date(receipt.expiresAt).getTime();
+    if (Number.isNaN(expiresAt)) return { ok: false, detail: `malformed expiresAt (${receipt.expiresAt})` };
+    if (expiresAt <= end) return { ok: false, detail: "expiresAt before or at interval.end" };
   }
+
   return { ok: true };
 }
 
@@ -102,10 +145,13 @@ function v5(receipt) {
 }
 
 // ── V₆: Freshness ──
+// Batch-2C: malformed expiresAt fails closed instead of meaning "never expires".
 
-function v6(receipt) {
+function v6(receipt, now = Date.now()) {
   if (receipt.expiresAt) {
-    if (Date.now() >= new Date(receipt.expiresAt).getTime()) {
+    const expiresAt = new Date(receipt.expiresAt).getTime();
+    if (Number.isNaN(expiresAt)) return { ok: false, detail: `malformed expiresAt (${receipt.expiresAt})` };
+    if (now >= expiresAt) {
       return { ok: false, detail: `expired at ${receipt.expiresAt}` };
     }
   }

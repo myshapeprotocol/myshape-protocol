@@ -1,0 +1,99 @@
+name: IP Guard
+
+# CI-level defense against accidental commits of internal/sensitive files.
+#
+# Local git hooks (scripts/githooks/pre-push, scripts/ip-protection-check.sh)
+# are opt-in per clone. This workflow enforces the SAME rule lists for every
+# push and pull request, so a bypassed/missing local hook cannot leak files.
+#
+# Rule sources: CLAUDE.md §0.0 · scripts/githooks/pre-push ·
+# scripts/ip-protection-check.sh — keep the pattern lists in sync across all four.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  forbidden-files:
+    name: Forbidden paths & file types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan tracked files for prohibited paths / files / extensions
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIOLATIONS=0
+
+          # ── Mirrored from scripts/githooks/pre-push ──
+          FORBIDDEN_PATH='^(docs/\.core/|memory/|\.claude/projects/|MyShape_Documentation/|myshape-context/|\.ai/|docs/testing/|docs/docs/|engine/target/|cli/target/|wasm/target/|wasm/pkg-bundler/|\.certs/)'
+
+          FORBIDDEN_FILE='^(docs/Threat-Model\.md|docs/e1-e2-uniqueness-stability-experiment-v0\.1\.md|docs/key-management-enrollment-v0\.1\.md|docs/PHASE_E_ARCHITECTURE\.md|docs/DEMO_GUIDE\.md|docs/reddit-.*\.md|docs/substack-.*\.md|docs/x-post-.*\.md|scripts/verify-.*\.mjs|public/.*\.md|public/cmd\.html|public/genesis-100\.html|public/matrix-dashboard\.html|GENESIS_001_DISCUSSION\.md|PES-Benchmark-v0\.2\.md|PROTOCOL_CORE_SNAPSHOT\.md|PROTOCOL_LOG\.md|DESIGN\.md|supabase/MIGRATION_GUIDE\.md|gen-papers\.mjs|my-cps-0001-receipt\.json)$'
+
+          FORBIDDEN_EXT='\.(pem|zip|pdf|docx?|pptx?|xlsx?)$'
+
+          while IFS= read -r f; do
+            if echo "$f" | grep -Eq "$FORBIDDEN_PATH" \
+              || echo "$f" | grep -Eq "$FORBIDDEN_FILE" \
+              || echo "$f" | grep -Eq "$FORBIDDEN_EXT"; then
+              echo "✘ BLOCKED: $f"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+          done < <(git ls-files)
+
+          if [ "$VIOLATIONS" -gt 0 ]; then
+            echo "::error::IP Guard: $VIOLATIONS prohibited file(s) tracked in git. See CLAUDE.md §0.0."
+            exit 1
+          fi
+          echo "✓ No forbidden files tracked."
+
+  credentials:
+    name: Hardcoded credential scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan tracked text files for credential patterns
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # ── Mirrored from scripts/ip-protection-check.sh CHECK 4 ──
+          PATTERNS=(
+            'sk-[a-zA-Z0-9]{20,}'
+            'AKIA[0-9A-Z]{16}'
+            'ghp_[a-zA-Z0-9]{36}'
+            'github_pat_[a-zA-Z0-9_]{40,}'
+            'supabase_service_role_key[" :]*[a-zA-Z0-9_-]{20,}'
+            'eyJ[a-zA-Z0-9_-]{20,}\.[a-zA-Z0-9_-]{20,}\.[a-zA-Z0-9_-]{20,}'
+            'NEXT_PUBLIC_SUPABASE_ANON_KEY=[" :]*[a-zA-Z0-9_-]{20,}'
+          )
+
+          FILES=$(git ls-files | grep -E '\.(tsx?|jsx?|mjs|cjs|css|html|md|json|yml|yaml|toml|sh|py|rb|go|rs)$' || true)
+
+          HITS=0
+          for f in $FILES; do
+            case "$f" in
+              *package-lock.json|*pnpm-lock.yaml|*yarn.lock|*.map) continue ;;
+            esac
+            for p in "${PATTERNS[@]}"; do
+              MATCHES=$(grep -nE "$p" -- "$f" 2>/dev/null \
+                | grep -viE 'your[-_]|placeholder|example|xxxx|<[a-z-]+>' || true)
+              if [ -n "$MATCHES" ]; then
+                echo "✘ POTENTIAL CREDENTIAL in $f:"
+                echo "$MATCHES" | cut -c1-140
+                HITS=$((HITS + 1))
+              fi
+            done
+          done
+
+          if [ "$HITS" -gt 0 ]; then
+            echo "::error::IP Guard: $HITS potential hardcoded credential(s). Move secrets to process.env."
+            exit 1
+          fi
+          echo "✓ No credential patterns found."

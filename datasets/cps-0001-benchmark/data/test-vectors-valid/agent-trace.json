@@ -464,15 +464,15 @@
     }
   },
   "issuer": {
-    "id": "66d25c636a8a2324",
-    "publicKey": "6ad05d8c912351deb6a3baf2b28529081b5aa8b48b0316308aa5d776cbda906c"
+    "id": "74c00c0b4be8c3e3",
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
   },
   "previousReceiptHash": null,
   "references": [],
   "expiresAt": "2026-07-24T17:43:16.742Z",
   "signature": {
     "algorithm": "Ed25519",
-    "value": "7d25adaf3206ce310d867b970530d76d064efe08892c0b176c23c8d119167dcd55514593b08bf0a4c38e7737a3b5d1c02e90a688b9fa15fcc37f8b4da256ec01",
-    "signedAt": "2026-07-24T16:44:17.692Z"
+    "value": "c539b7c039012d8bf59df71128186213f9f0f82c23976dfa6a614bbe2f5f3ed1d7271ffa9dd4a35a361014aad832024c0ca06656e6cb7dee5f6ed06940a4e100",
+    "signedAt": "2026-08-27T12:18:14.596Z"
   }
 }

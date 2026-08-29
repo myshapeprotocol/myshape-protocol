@@ -124,12 +124,15 @@ export function verifyAssertions(receipt: ContinuityReceipt): FailureCode | null
 
 // ── V₄: Temporal Consistency ─────────────────────────────────────
 
-export function verifyTemporal(receipt: ContinuityReceipt): FailureCode | null {
+// Batch-2C: intervals attest COMPLETED observation windows — an interval.end
+// in the future was never observed. `now` injectable for deterministic tests.
+export function verifyTemporal(receipt: ContinuityReceipt, now: number = Date.now()): FailureCode | null {
   const start = new Date(receipt.interval.start).getTime();
   const end = new Date(receipt.interval.end).getTime();
 
   if (isNaN(start) || isNaN(end)) return "TEMPORAL_INCONSISTENCY";
   if (start >= end) return "TEMPORAL_INCONSISTENCY";
+  if (end > now) return "TEMPORAL_INCONSISTENCY";
   if (receipt.interval.coverageMs !== end - start) return "TEMPORAL_INCONSISTENCY";
 
   // signedAt must be >= interval.end
@@ -172,9 +175,8 @@ export async function verifyEvidenceIntegrity(receipt: ContinuityReceipt): Promi
 
 // ── V₆: Freshness ────────────────────────────────────────────────
 
-export function verifyFreshness(receipt: ContinuityReceipt): FailureCode | null {
+export function verifyFreshness(receipt: ContinuityReceipt, now: number = Date.now()): FailureCode | null {
   if (receipt.expiresAt) {
-    const now = Date.now();
     const expiresAt = new Date(receipt.expiresAt).getTime();
     if (isNaN(expiresAt) || now >= expiresAt) return "EXPIRED";
   }

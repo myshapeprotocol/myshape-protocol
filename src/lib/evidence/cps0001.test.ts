@@ -544,3 +544,242 @@ describe("engineEvidenceToBlock", () => {
     expect(block.payloadDigest).toBe(expected);
   });
 });
+
+// ═══════════════════════════════════════════
+// Batch-2B — signed-payload coverage (V₂)
+//
+// These pin the HARDENED canonicalSigningPayload: any mutation of the newly
+// covered semantic fields after signing must invalidate the signature.
+// ═══════════════════════════════════════════
+
+describe("signed-payload hardening (Batch-2B)", () => {
+  it("rejects expiresAt moved into the future after signing", () => {
+    // Before Batch-2B this was VALID forever — the freshness window was malleable.
+    const r = makeSignedReceipt();
+    const forged = { ...r, expiresAt: "2999-01-01T00:00:00Z" } as ContinuityReceipt;
+
+    const result = verifyReceipt(forged);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("INVALID_SIGNATURE");
+  });
+
+  it("rejects assertions tampering after signing", () => {
+    const r = makeSignedReceipt();
+    const forged = {
+      ...r,
+      assertions: {
+        ...r.assertions,
+        continuityMaintained: { value: true, confidence: 0.99 },
+      },
+    } as ContinuityReceipt;
+
+    const result = verifyReceipt(forged);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("INVALID_SIGNATURE");
+  });
+
+  it("rejects verdict tampering after signing", () => {
+    const r = makeSignedReceipt({ verdict: "PASS" });
+    const forged = { ...r, verdict: "FAIL" } as ContinuityReceipt;
+
+    const result = verifyReceipt(forged);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("INVALID_SIGNATURE");
+  });
+
+  it("rejects references tampering after signing", () => {
+    const r = makeSignedReceipt();
+    const forged = { ...r, references: ["sha256:injected-reference"] } as ContinuityReceipt;
+
+    const result = verifyReceipt(forged);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("INVALID_SIGNATURE");
+  });
+
+  it("rejects protocolVersion tampering after signing", () => {
+    // V₁ schema check runs before V₂, so this surfaces as INVALID_SCHEMA;
+    // what matters is that the receipt is rejected, not accepted.
+    const r = makeSignedReceipt();
+    const forged = { ...r, protocolVersion: "0.9" } as ContinuityReceipt;
+
+    const result = verifyReceipt(forged);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("INVALID_SCHEMA");
+  });
+
+  it("still accepts an untampered receipt whose verdict/references are present (no regression)", () => {
+    const r = makeSignedReceipt({
+      verdict: "PASS",
+      previousReceiptHash: null,
+    });
+    (r as ContinuityReceipt).references = ["sha256:legit-ref"];
+    const reissued = signReceipt(
+      (() => {
+        const { signature: _sig, ...unsigned } = r;
+        return unsigned;
+      })(),
+      TEST_KEYPAIR.secretKey,
+    );
+
+    const result = verifyReceipt(reissued);
+    expect(result.status).toBe("VALID");
+  });
+
+  // ── Batch-2C hardening (flipped from the Batch-2B pinned-gap marker) ──────
+  // A receipt ISSUED with a malformed expiresAt previously meant "never
+  // expires" (`NaN <= end → false`, `now >= NaN → false`). All five verifier
+  // copies now fail closed: V₄ rejects unparseable expiresAt outright.
+  it("rejects a natively-issued malformed expiresAt (Batch-2C hardening)", () => {
+    const unsigned = buildReceipt({
+      evidence: [],
+      interval: makeInterval(),
+      subject: makeSubject(),
+      issuer: makeIssuer(),
+    });
+    unsigned.expiresAt = "not-a-date";
+    const r = signReceipt(unsigned, TEST_KEYPAIR.secretKey);
+
+    const result = verifyReceipt(r);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") {
+      expect(result.reason).toBe("TEMPORAL_INCONSISTENCY");
+    }
+  });
+});
+
+// ═══════════════════════════════════════════
+// Temporal / freshness semantic matrix (Batch-2C)
+//
+// Deterministic: boundaries are exercised through the injectable `now`
+// parameter — NO sleeps / setTimeout / wall-clock racing.
+// ═══════════════════════════════════════════
+
+describe("temporal/freshness semantic matrix (Batch-2C)", () => {
+  /** Issue a fully-signed receipt over an empty-evidence base. */
+  function issue(opts?: {
+    interval?: ContinuityInterval;
+  }): ContinuityReceipt {
+    const unsigned = buildReceipt({
+      evidence: [],
+      interval: opts?.interval ?? makeInterval(),
+      subject: makeSubject(),
+      issuer: makeIssuer(),
+    });
+    return signReceipt(unsigned, TEST_KEYPAIR.secretKey);
+  }
+
+  it("rejects malformed interval.start (full pipeline)", () => {
+    const end = new Date(Date.now() - 52_000).toISOString();
+    const r = issue({
+      interval: { start: "not-a-date", end, coverageMs: 8000 },
+    });
+
+    const result = verifyReceipt(r);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("rejects malformed interval.end (full pipeline)", () => {
+    const start = new Date(Date.now() - 60_000).toISOString();
+    const unsigned = buildReceipt({
+      evidence: [],
+      interval: { start, end: new Date(Date.now() - 52_000).toISOString(), coverageMs: 8000 },
+      subject: makeSubject(),
+      issuer: makeIssuer(),
+    });
+    // Post-build override: the BUILDER derives expiresAt from interval.end and
+    // would crash on a garbage value (RangeError) — correctly refusing to
+    // construct nonsense. We corrupt the bound only after construction, then
+    // sign; the signature legitimately covers the malformed string, and V₄
+    // must still reject it.
+    unsigned.interval.end = "also-not-a-date";
+    const r = signReceipt(unsigned, TEST_KEYPAIR.secretKey);
+
+    const result = verifyReceipt(r);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("rejects zero-length interval (start === end)", () => {
+    const t = new Date(Date.now() - 60_000).toISOString();
+    const r = issue({ interval: { start: t, end: t, coverageMs: 0 } });
+    expect(verifyTemporal(r)).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("rejects negative interval (start > end)", () => {
+    const start = new Date(Date.now() - 52_000).toISOString();
+    const end = new Date(Date.now() - 60_000).toISOString();
+    const r = issue({ interval: { start, end, coverageMs: 8000 } });
+    expect(verifyTemporal(r)).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("rejects malformed signature.signedAt", () => {
+    const r = issue();
+    const probe = {
+      ...r,
+      signature: { ...r.signature, signedAt: "garbage" },
+    } as ContinuityReceipt;
+    expect(verifyTemporal(probe)).toBe("TEMPORAL_INCONSISTENCY");
+
+    // End-to-end: signedAt is not part of the signing payload, so the
+    // signature stays VALID and V₄ is what rejects.
+    const result = verifyReceipt(probe);
+    expect(result.status).toBe("INVALID");
+    if (result.status === "INVALID") expect(result.reason).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("rejects FUTURE interval regardless of self-reported signedAt", () => {
+    const base = Date.now();
+    const futureProbe = {
+      ...issue(),
+      interval: {
+        start: new Date(base + 60_000).toISOString(),
+        end: new Date(base + 68_000).toISOString(),
+        coverageMs: 8000,
+      },
+      // Self-consistent attestation story (signed after "end"), yet the whole
+      // window is ahead of verification time — documented protocol intent says
+      // receipts describe COMPLETED observation windows, so this must reject.
+      signature: undefined as never, // replaced below
+    };
+    (futureProbe as ContinuityReceipt).signature = {
+      ...(issue().signature),
+      signedAt: new Date(base + 69_000).toISOString(),
+    };
+
+    expect(verifyTemporal(futureProbe as ContinuityReceipt)).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("boundary: interval.end === injected now is allowed (completed window)", () => {
+    const base = Date.now();
+    const endIso = new Date(base - 8_000).toISOString();
+    const signedAtIso = new Date(base).toISOString();
+
+    const probe = {
+      ...issue(),
+      interval: { start: new Date(base - 16_000).toISOString(), end: endIso, coverageMs: 8000 },
+      expiresAt: new Date(base + 300_000).toISOString(),
+      signature: { ...issue().signature, signedAt: signedAtIso },
+    } as ContinuityReceipt;
+
+    // Injected now == signedAt == last safe instant (matches production flow:
+    // sign right at the moment the observation completes).
+    expect(verifyTemporal(probe, base)).toBeNull();
+    expect(verifyFreshness(probe, base)).toBeNull();
+  });
+
+  it("freshness boundaries: expiresAt === now → EXPIRED, ±1ms resolve deterministically", () => {
+    const r = issue();
+    const expMs = Date.parse(r.expiresAt as string);
+
+    expect(verifyFreshness(r, expMs - 1)).toBeNull();          // 1ms before expiry → fresh
+    expect(verifyFreshness(r, expMs)).toBe("EXPIRED");         // exactly at expiry → expired
+    expect(verifyFreshness(r, expMs + 1)).toBe("EXPIRED");     // after expiry → expired
+  });
+
+  it("freshness defense-in-depth: malformed expiresAt fails closed even when reached directly", () => {
+    const r = issue();
+    (r as ContinuityReceipt).expiresAt = "garbage";
+    expect(verifyFreshness(r, Date.now())).toBe("EXPIRED");
+  });
+});

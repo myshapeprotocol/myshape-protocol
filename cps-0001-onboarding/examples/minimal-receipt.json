@@ -3,8 +3,8 @@
   "protocolVersion": "1.0",
   "receiptId": "00000000-0000-7000-8000-000000000001",
   "interval": {
-    "start": "2026-12-01T10:00:00.000Z",
-    "end": "2026-12-01T10:00:08.000Z",
+    "start": "2026-01-01T00:00:00.000Z",
+    "end": "2026-01-01T00:00:08.000Z",
     "coverageMs": 8000
   },
   "subject": {
@@ -29,7 +29,7 @@
     "continuityMaintained": { "value": true, "confidence": 0.75 },
     "receiptIntegrity": { "value": true, "confidence": 1.0 }
   },
-  "expiresAt": "2026-12-01T10:05:08.000Z",
+  "expiresAt": "2099-12-31T23:59:59.000Z",
   "previousReceiptHash": null,
   "references": [],
   "issuer": {
@@ -39,6 +39,6 @@
   "signature": {
     "algorithm": "unsigned",
     "value": "cps-0001-demonstration",
-    "signedAt": "2026-12-01T10:00:08.000Z"
+    "signedAt": "2026-01-01T00:00:08.000Z"
   }
 }

@@ -45,15 +45,15 @@
     }
   },
   "issuer": {
-    "id": "6fc751221153e2d8",
-    "publicKey": "e2b399c54019a988e1c75d1f53a4823c132175c7a954d466c14bafe17dd87625"
+    "id": "74c00c0b4be8c3e3",
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
   },
-  "previousReceiptHash": "243736c5b47b913e170ae36ca56e90aac789f8e5c16e9a6bed2a35fb5558eeaf",
+  "previousReceiptHash": "55c4110f5a8fba68ee944bb49311f77048a358e08bb43d01be3e8ffc9414c5cc",
   "references": [],
   "expiresAt": "2026-12-31T23:59:59Z",
   "signature": {
     "algorithm": "Ed25519",
-    "value": "121d9ccf102c9f11d74b31a1f874d770d86275443a503c6eb94adc7c8e8fdc47d07f35329346b37785199b0f77eeac5b215c397302b2e751bf1342c378ac4a03",
-    "signedAt": "2026-07-22T10:00:04Z"
+    "value": "466987c55d5471a7874d1533ef7d7ff1f1653fb6c22a428eb4b2bfcb1e378ce166075975b1067cc1fc3d55b6c70dd369f716371907fa10bed1a728e8707caa02",
+    "signedAt": "2026-08-27T12:18:14.575Z"
   }
 }

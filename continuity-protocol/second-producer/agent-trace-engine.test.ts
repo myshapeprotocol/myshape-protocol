@@ -5,6 +5,17 @@ import {
 } from "./noble-verifier";
 import { generateKeyPair, createIssuerIdentity } from "@/lib/crypto";
 
+/**
+ * Deterministic recent interval — derives BOTH endpoints from ONE clock read.
+ * Independent Date.now() calls can straddle a wall-clock tick (Windows timer
+ * granularity up to ~15ms), making the ISO-parsed `end - start` differ from
+ * coverageMs and tripping the strict V₄ equality intermittently.
+ */
+function recentInterval(coverageMs: number): { start: string; end: string; coverageMs: number } {
+  const endT = Date.now();
+  return { start: new Date(endT - coverageMs).toISOString(), end: new Date(endT).toISOString(), coverageMs };
+}
+
 function makeTrace(overrides?: { duration?: number; gap?: number }) {
   const duration = overrides?.duration ?? 60;
   const gap = overrides?.gap ?? 0;
@@ -59,7 +70,7 @@ describe("EE-002 Agent Execution Trace Engine", () => {
     const issuer = createIssuerIdentity(kp);
     const unsigned = buildReceipt({
       evidence: [evidence],
-      interval: { start: new Date(Date.now() - 60000).toISOString(), end: new Date().toISOString(), coverageMs: 60000 },
+      interval: recentInterval(60000),
       subject: { id: "agent-test", type: "agent" },
       issuer,
     });
@@ -74,7 +85,7 @@ describe("EE-002 Agent Execution Trace Engine", () => {
     const issuer = createIssuerIdentity(kp);
     const u = mb({
       evidence: [evidence],
-      interval: { start: new Date(Date.now() - 60000).toISOString(), end: new Date().toISOString(), coverageMs: 60000 },
+      interval: recentInterval(60000),
       subject: { id: "agent-cross", type: "agent" },
       issuer,
     });

@@ -2,11 +2,16 @@ import { describe, it, expect } from "vitest";
 import {
   buildAssertions,
   buildReceipt,
+  signReceipt,
   verifySchema,
+  verifyTemporal,
+  verifyFreshness,
   type AssertionSet,
+  type ContinuityInterval,
   type ContinuityReceipt,
   type EvidenceBlock,
 } from "./cps0001.js";
+import { generateKeyPair, createIssuerIdentity } from "./crypto.js";
 
 // ── Helpers ──
 
@@ -114,5 +119,73 @@ describe("buildReceipt schema integrity", () => {
     });
 
     expect(verifySchema(receipt as ContinuityReceipt)).toBe(null);
+  });
+});
+
+// ═══════════════════════════════════════════
+// Temporal / freshness parity with main + noble (Batch-2C)
+//
+// Deterministic via injectable `now` — no sleeps, no wall-clock racing.
+// ═══════════════════════════════════════════
+
+describe("temporal/freshness parity (Batch-2C)", () => {
+  const kp = generateKeyPair();
+  const iss = createIssuerIdentity(kp);
+
+  function sdkIssue(intervalOverride?: Partial<ContinuityInterval>): ContinuityReceipt {
+    const iv: ContinuityInterval = {
+      start: new Date(Date.now() - 8000).toISOString(),
+      end: new Date().toISOString(),
+      coverageMs: 8000,
+      ...intervalOverride,
+    };
+    const unsigned = buildReceipt({ evidence: [makeBlock()], interval: iv, subject, issuer: iss });
+    return signReceipt(unsigned, kp.secretKey);
+  }
+
+  it("rejects malformed interval.start (NaN fails closed)", () => {
+    const r = sdkIssue({ start: "not-a-date" });
+    expect(verifyTemporal(r)).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("rejects FUTURE interval regardless of self-reported signedAt", () => {
+    const base = Date.now();
+    const fut = sdkIssue({
+      start: new Date(base + 60_000).toISOString(),
+      end: new Date(base + 68_000).toISOString(),
+      coverageMs: 8000,
+    });
+    // signedAt is outside the signing payload — safe to override here.
+    fut.signature.signedAt = new Date(base + 69_000).toISOString();
+
+    expect(verifyTemporal(fut)).toBe("TEMPORAL_INCONSISTENCY");
+  });
+
+  it("boundary: interval.end === injected now is allowed (completed window)", () => {
+    const base = Date.now();
+    const past = sdkIssue({
+      start: new Date(base - 16_000).toISOString(),
+      end: new Date(base - 8_000).toISOString(),
+      coverageMs: 8000,
+    });
+    past.signature.signedAt = new Date(base).toISOString();
+
+    expect(verifyTemporal(past, base)).toBeNull();
+    expect(verifyFreshness(past, base)).toBeNull();
+  });
+
+  it("freshness boundaries: expiresAt === now → EXPIRED, ±1ms deterministic", () => {
+    const r = sdkIssue();
+    const expMs = Date.parse(r.expiresAt as string);
+
+    expect(verifyFreshness(r, expMs - 1)).toBeNull();
+    expect(verifyFreshness(r, expMs)).toBe("EXPIRED");
+    expect(verifyFreshness(r, expMs + 1)).toBe("EXPIRED");
+  });
+
+  it("malformed expiresAt fails closed when reached directly", () => {
+    const r = sdkIssue();
+    (r as ContinuityReceipt).expiresAt = "garbage";
+    expect(verifyFreshness(r, Date.now())).toBe("EXPIRED");
   });
 });
