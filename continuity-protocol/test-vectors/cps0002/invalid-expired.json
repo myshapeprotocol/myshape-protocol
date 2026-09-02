@@ -1,0 +1,99 @@
+{
+  "vectorId": "cps0002-invalid-expired",
+  "protocol": "cps-hsa-0.1-draft",
+  "category": "invalid",
+  "description": "Cryptographically VALID CPS-0002 assertion (JCS payloadDigest + valid Ed25519 signature + valid receipt binding, BATCH-0002-3-F8 regeneration) evaluated at verifyAt=2100-01-01, which is beyond the signed expiresAt (2099-12-31T23:59:59.000Z). Expected: EXPIRED. No signed field was modified; the vector declares the verification time at which the assertion is stale.",
+  "expect": {
+    "status": "INVALID",
+    "reason": "EXPIRED"
+  },
+  "verifyAt": "2100-01-01T00:00:00.000Z",
+  "assertion": {
+    "protocolType": "cps-hsa-0.1-draft",
+    "assertionId": "6fdceb85-30c0-7b90-8b2f-5594a455a369",
+    "attester": {
+      "id": "d25fc5f2bba3df7e",
+      "publicKey": "c768f9a2ade9d12927abb1e576e0f1fffeb2eab89e6a75b5a9b357425868b215"
+    },
+    "subject": {
+      "id": "sha256:abcd1234efgh567890ijklmnopqrstuv",
+      "type": "embodied"
+    },
+    "reference": {
+      "receiptHash": "55c4110f5a8fba68ee944bb49311f77048a358e08bb43d01be3e8ffc9414c5cc",
+      "receiptId": "0193a62e-7b11-74a8-9c3d-f1e2a3b4c5d6"
+    },
+    "evidence": {
+      "engineId": "TOY-HSA-999",
+      "confidence": 0,
+      "payload": {
+        "label": "TOY / PROTOTYPE / NOT PROOF OF HUMAN",
+        "engine": "CPS-0002 Toy Human Signal Attester",
+        "version": "0.1-draft",
+        "challenge": "cps-0002-toy-deterministic",
+        "timestamp": "2026-08-29T00:00:00.000Z",
+        "note": "This evidence contains no biometric, physiological, or liveness data. Confidence is 0.0 by design."
+      },
+      "payloadDigest": "61e3a02b6c71c1268a8fb16c9c670dea4d2640833f8e9f4f016f2ab53539c8c9"
+    },
+    "validity": {
+      "issuedAt": "2026-08-29T00:00:00.000Z",
+      "expiresAt": "2099-12-31T23:59:59.000Z"
+    },
+    "signature": {
+      "algorithm": "Ed25519",
+      "value": "df8f8106389969ab820a0f411855200f71f70ae53c785b70ed4ccb253050bede6b9adc05b668eb1aeda95672b1d8bd6fc53d7f16a763ec345402df29061ec20b",
+      "signedAt": "2026-08-29T00:00:00.000Z"
+    }
+  },
+  "receipt": {
+    "protocolVersion": "1.0",
+    "receiptId": "0193a62e-7b11-74a8-9c3d-f1e2a3b4c5d6",
+    "interval": {
+      "start": "2026-07-22T10:00:00Z",
+      "end": "2026-07-22T10:00:02Z",
+      "coverageMs": 2000
+    },
+    "subject": {
+      "id": "sha256:abcd1234efgh567890ijklmnopqrstuv",
+      "type": "embodied"
+    },
+    "evidence": [
+      {
+        "engineId": "com.example.simulation",
+        "engineVersion": "1.0.0",
+        "confidence": 0.85,
+        "payload": {
+          "score": 0.85
+        },
+        "payloadDigest": "68b211b6633b2c4393664710c7dc69a928f6363d6a4c9c2c18fced6fe44363b0"
+      }
+    ],
+    "assertions": {
+      "observationOccurred": {
+        "value": true,
+        "confidence": 0.95
+      },
+      "continuityMaintained": {
+        "value": true,
+        "confidence": 0.85
+      },
+      "receiptIntegrity": {
+        "value": true,
+        "confidence": 1
+      }
+    },
+    "issuer": {
+      "id": "74c00c0b4be8c3e3",
+      "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
+    },
+    "previousReceiptHash": null,
+    "references": [],
+    "expiresAt": "2026-12-31T23:59:59Z",
+    "signature": {
+      "algorithm": "Ed25519",
+      "value": "8c083089cb0689bbc26543139f2c205076175938cfbf0b296f1bba2883df08b093703c66d14ad64a73b4c7c055fa7d8465ee771e5c14e8693756ba40b3635308",
+      "signedAt": "2026-08-27T12:18:14.570Z"
+    }
+  }
+}

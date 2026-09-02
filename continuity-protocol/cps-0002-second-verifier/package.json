@@ -1,0 +1,17 @@
+{
+  "name": "cps-0002-second-verifier",
+  "version": "0.1.0-prototype",
+  "description": "Independent reference verifier for CPS-0002 Human Signal Assertions (Prototype)",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./verifier.ts",
+      "import": "./verifier.ts"
+    }
+  },
+  "files": [
+    "verifier.ts"
+  ]
+}

@@ -1,6 +1,6 @@
 # CPS-0002 — Human Signal Assertion (Conceptual Foundation)
 
-**Status**: CONCEPT DRAFT — not yet frozen. This document defines the *problem boundary* for CPS-0002 and establishes what must NOT change in CPS-0001.
+**Status**: PROTOTYPE PHASE COMPLETE — CONCEPT NOT FROZEN. The Minimum Viable Prototype (BATCH-0002-0) is implemented and passing conformance. This document defines the *problem boundary* for CPS-0002 and establishes what must NOT change in CPS-0001. It is **not** frozen and **not** final.
 
 ---
 
@@ -136,7 +136,7 @@ This keeps the door open for alternative blockchains, centralized attesters, or 
 1. **CPS-0001 v1.0-RC1** — release candidate, 30-day review
 2. **Community discovery** — gather friction reports from independent implementers
 3. **CPS-0002 problem definition** — refine sections 4.1–4.4 above based on field feedback
-4. **CPS-0002 prototype** — implement toy attester + reference verifier
+4. **CPS-0002 prototype** — ✅ DONE (BATCH-0002-0): toy attester + reference verifier + schema + conformance suite implemented and passing. See `cps-0002-toy-attester/`, `test-vectors/cps0002/`, `conformance/cps0002-conformance.test.ts`, `CPS-0002-THREAT-MODEL.md`, `IMPLEMENT-CPS-0002.md`
 5. **Season 2 execution** — run the "first human-signal attestation" challenge
 
 ---

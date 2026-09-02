@@ -1,0 +1,23 @@
+{
+  "name": "cps-0002-toy-attester",
+  "version": "0.1-draft",
+  "description": "CPS-0002 Prototype — Human Signal Assertion Toy Attester & Reference Verifier. NOT PRODUCTION. NOT PROOF OF HUMAN.",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+      "main": "./verifier",
+  "types": "./verifier",
+  "module": "ESNext",
+  "exports": {
+    ".": "./verifier",
+    "./build": "./src/index"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.2.0",
+    "@noble/curves": "^2.2.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.9",
+    "typescript": "^5"
+  }
+}

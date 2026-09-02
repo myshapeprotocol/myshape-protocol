@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myshape.com/schemas/cps-0002-assertion.schema.json",
+  "title": "CPS-0002 Human Signal Assertion",
+  "description": "Prototype CPS-0002 assertion that references a CPS-0001 Continuity Receipt by hash and provides a human-signal attestation. NOT proof of human authenticity — cryptographic validity only.",
+  "version": "0.1-draft",
+  "schemaVersion": "0.1-draft",
+  "type": "object",
+  "required": [
+    "protocolType",
+    "assertionId",
+    "attester",
+    "subject",
+    "reference",
+    "evidence",
+    "validity",
+    "signature"
+  ],
+  "properties": {
+    "protocolType": {
+      "type": "string",
+      "const": "cps-hsa-0.1-draft",
+      "description": "CPS-0002 assertion protocol type. Identifies this as a Human Signal Assertion, draft 0.1."
+    },
+    "assertionId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-8[0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "UUIDv7 assertion identifier. Distinguishes this assertion from all others."
+    },
+    "attester": {
+      "type": "object",
+      "required": ["id", "publicKey"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque attester identifier. Not a human identity — just a label for the signing key."
+        },
+        "publicKey": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Ed25519 public key (32 bytes, hex). Used to verify the assertion signature."
+        }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subject identifier. SHOULD be the same as the referenced CPS-0001 receipt's subject.id, establishing the binding."
+        },
+        "type": {
+          "type": "string",
+          "description": "Optional subject type hint, inherited from the referenced receipt. Values not normative."
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "required": ["receiptHash", "receiptId"],
+      "properties": {
+        "receiptHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256(JCS(referenced CPS-0001 receipt)). The binding between this assertion and the receipt."
+        },
+        "receiptId": {
+          "type": "string",
+          "description": "The receiptId of the referenced CPS-0001 receipt. For lookup convenience; the hash is the cryptographic binding."
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["engineId", "confidence", "payload", "payloadDigest"],
+      "properties": {
+        "engineId": {
+          "type": "string",
+          "pattern": "^[A-Z0-9-]{3,32}$",
+          "description": "Evidence engine identifier. The toy attester uses 'TOY-HSA-999' to signal non-production."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Attester's confidence in the human-signal evidence. The toy attester uses 0.0 to signal no real evidence."
+        },
+        "payload": {
+          "type": "object",
+          "description": "Opaque evidence payload, interpreted as parsed I-JSON-compatible JSON (unique keys, valid UTF-8, numbers within IEEE-754 double range). NOT part of the 12-field signed payload; bound to it only through payloadDigest. The toy attester uses a label indicating TOY/PROTOTYPE status."
+        },
+        "payloadDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Integrity commitment over evidence.payload: lowercase hex of SHA-256(UTF8(JCS(evidence.payload))), where JCS is RFC 8785 canonical JSON serialization applied to the parsed I-JSON payload. Signed as field #9 of the 12-field canonical assertion payload; verifiers MUST independently recompute it (V2.5) and reject mismatches with INVALID_PAYLOAD_DIGEST. Malformed (non-64-lowercase-hex) values are INVALID_SCHEMA. (Normative since BATCH-0002-3-F8; previously SHA-256(JSON.stringify(payload)).)"
+        }
+      }
+    },
+    "validity": {
+      "type": "object",
+      "required": ["issuedAt", "expiresAt"],
+      "properties": {
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 — when the assertion was issued. MUST be <= signedAt."
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 — after this time, the assertion is no longer fresh. Default: 1 hour after issuedAt."
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "value", "signedAt"],
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "const": "Ed25519",
+          "description": "Signature algorithm. MUST be Ed25519."
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{128}$",
+          "description": "Ed25519 signature (64 bytes, hex). Covers the 12-field canonical assertion payload."
+        },
+        "signedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 — when the signature was produced. MUST be parseable."
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
