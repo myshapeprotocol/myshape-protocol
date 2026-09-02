@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 export const dynamic = "force-dynamic";
 
 async function getResponses() {
@@ -20,6 +22,13 @@ async function getResponses() {
 }
 
 export default async function ResponsesPage() {
+  // P0-HOTFIX-1: 此页面曾以 service-role key 公开渲染全部问卷回执（含 contact PII）。
+  // 生产环境一律 404 —— 匿名请求不得获得任何 survey responses（service key 不得外流）。
+  // guard 位于任何数据获取之前。
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   const rows = await getResponses();
 
   return (

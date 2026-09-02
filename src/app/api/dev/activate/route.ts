@@ -5,6 +5,13 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  // P0-HOTFIX-1: 本 endpoint 的 node token 从未入库（handshake/register 签发后即丢弃），
+  // 因此无法真正验证 —— 任意 ms_* 前缀字符串 + 任意 email/node_handle 均可改写节点状态。
+  // 生产环境直接 404（handler 最早阶段执行），仅保留本地开发工具链。
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "NOT_FOUND" }, { status: 404 });
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

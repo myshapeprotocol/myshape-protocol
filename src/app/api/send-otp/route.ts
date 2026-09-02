@@ -1,3 +1,4 @@
+import { randomInt } from 'crypto';
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
@@ -68,34 +69,29 @@ export async function POST(req: Request) {
       });
     }
 
-    // 1a. 智慧分流：检查是否为老用户
-    const { data: existingNode } = await supabase
-      .from('protocol_nodes')
-      .select('status')
-      .eq('email', email.trim())
-      .maybeSingle();
+    // 1. Check if this is an existing node (status already queried via wallet check above)
+    const existingStatus = walletNode?.status;
+    const isAlreadyActive = existingStatus && ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(existingStatus);
 
-    // Invite code requirement removed — admission is now governed by PES threshold.
-    // See docs/genesis-governance.md for the current algorithmic admission rules.
-    // Returning users are detected by existing node status and skip OTP if wallet-bound.
-
-    // 1b. 生成 6 位随机验证码
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // 1b. Generate 6-digit OTP (CSPRNG)
+    const otp = randomInt(100000, 1000000).toString();
 
     // 2. 存入 Supabase — 保留已有节点的状态，新节点设为 PENDING_VERIFICATION
-    const { data: existing } = await supabase
-      .from('protocol_nodes')
-      .select('status')
-      .eq('email', email.trim())
-      .maybeSingle();
-
-    const existingStatus = existing?.status;
-    const isAlreadyActive = existingStatus && ['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(existingStatus);
+    //    OTP lifecycle fields ensure TTL + single-use enforcement
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 10 * 60 * 1000); // 10 minute TTL
 
     const { error: dbError } = await supabase
       .from('protocol_nodes')
       .upsert(
-        { email, otp_code: otp, status: isAlreadyActive ? existingStatus : 'PENDING_VERIFICATION' },
+        {
+          email,
+          otp_code: otp,
+          otp_created_at: now.toISOString(),
+          otp_expires_at: expiresAt.toISOString(),
+          otp_used_at: null,
+          status: isAlreadyActive ? existingStatus : 'PENDING_VERIFICATION'
+        },
         { onConflict: 'email' }
       );
 
