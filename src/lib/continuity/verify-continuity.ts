@@ -18,7 +18,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { computeFullPES, type PESComponents } from "@/engine/presence-entropy";
-import { pesToEngineEvidence } from "@/sdk/presence-v2";
+import { pesToEngineEvidence } from "@/lib/continuity/presence-adapter";
 import { buildChallengeEvidence, type RoundResult } from "@/lib/evidence/gyro-challenge";
 import {
   buildReceipt,

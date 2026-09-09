@@ -18,20 +18,20 @@ export {
   getEntropyScore,
   buildReceiptFromPES,
   verifyReceiptFn as verifyReceipt,
-} from "./presence-v2";
+} from "../lib/continuity/presence-adapter";
 export type {
   ContinuityResult,
   GenerateOptions,
   ContinuityReceipt,
   VerificationResult,
-} from "./presence-v2";
+} from "../lib/continuity/presence-adapter";
 
 export { checkContinuity } from "./continuity";
 export type { ContinuityStatus, ContinuityTrend, ContinuityOptions } from "./continuity";
 
 // ── Default export ──
 
-import { verify, getReceipt, getEntropyScore, buildReceiptFromPES, verifyReceiptFn } from "./presence-v2";
+import { verify, getReceipt, getEntropyScore, buildReceiptFromPES, verifyReceiptFn } from "../lib/continuity/presence-adapter";
 import { checkContinuity } from "./continuity";
 
 const MyShapeSDK = {

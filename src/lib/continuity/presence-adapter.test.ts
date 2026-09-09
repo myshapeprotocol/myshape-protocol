@@ -6,7 +6,7 @@ import {
   buildReceiptFromPES,
   verifyReceiptFn,
   type ContinuityResult,
-} from "./presence-v2";
+} from "./presence-adapter";
 import { verifyReceipt as verifyCpsReceipt } from "@/lib/evidence/cps0001";
 import type { ContinuityReceipt } from "@/lib/evidence/cps0001";
 

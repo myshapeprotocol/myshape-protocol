@@ -13,7 +13,7 @@ import { computeFullPES } from "@/engine/presence-entropy";
 import { assessThreat } from "@/engine/threat-assessment";
 import { getDeviceSalt } from "@/engine/local-identity";
 import type { JointPosition, SSTJointId } from "@/types/motion-vector";
-import { buildReceiptFromPES } from "@/sdk/presence-v2";
+import { buildReceiptFromPES } from "@/lib/continuity/presence-adapter";
 import type { ContinuityReceipt } from "@/lib/evidence/cps0001";
 import { sha256Hex } from "@/lib/hash";
 import { useResearchUpload } from "@/hooks/useResearchUpload";

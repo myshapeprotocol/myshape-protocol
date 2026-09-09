@@ -158,7 +158,9 @@ export function verify(
     type: "embodied",
   };
 
-  // Build issuer identity from persistent Ed25519 keypair
+  // Build issuer identity from EPHEMERAL Ed25519 keypair
+  // (P0-KEYS: getOrCreateKeyPair() no longer persists key material;
+  // identity is per-call. SDK facade only — no production importer.)
   const keyPair = getOrCreateKeyPair();
   const issuer = createIssuerIdentity(keyPair);
 
