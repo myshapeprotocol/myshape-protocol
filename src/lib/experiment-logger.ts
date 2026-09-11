@@ -22,6 +22,12 @@ export interface LoggedRound {
   angleDeg: number;
   peakG: number;
   sampleCount: number;
+  // Observational EE-003 forensics (REAL-TRY-003+): signed peak + axis so each
+  // run is scientifically comparable. Strictly reads existing analyzeRound
+  // output — does not change any scoring, threshold, or verdict.
+  axis?: "rx" | "ry";
+  expectedSign?: number;
+  signedPeakDegS?: number;
 }
 
 export interface ExperimentRun {

@@ -3,7 +3,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { mediaPipeToSST, normalizeSSTFrame } from "@/engine/skeleton-topology";
 import {
-  runContinuityVerification,
+  runContinuityVerificationAsync,
   PRESENCE_THRESHOLD,
   CHALLENGE_PASS_CONFIDENCE,
   type ContinuityVerificationResult,
@@ -22,6 +22,12 @@ import {
   type RoundResult,
 } from "@/lib/evidence/gyro-challenge";
 import { verifyReceipt } from "@/lib/evidence/cps0001";
+import { saveRun, type ExperimentRun, type LoggedRound } from "@/lib/experiment-logger";
+import {
+  getDiagnosticSessions,
+  copyDiagnosticSessions,
+  downloadDiagnosticSessions,
+} from "@/lib/try-instrumentation";
 import type { JointPosition, SSTJointId } from "@/types/motion-vector";
 import "./try.css";
 
@@ -52,8 +58,24 @@ interface RoundDirectionDiag {
 
 export default function TryClient() {
   const [phase, setPhase] = useState<Phase>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+  const [poseReady, setPoseReady] = useState(false);
+
+  // BATCH-005A — pre-flight entry: users are walked through a thin
+  // "Ready to verify?" layer before anything starts, then a motion-access
+  // explicit allow step. start() below is unchanged (permission, camera,
+  // challenge semantics untouched) — only the trigger is split into two taps.
+  const [idleStage, setIdleStage] = useState<"intro" | "consent">("intro");
+
   const [poseCountdown, setPoseCountdown] = useState(0);
+
+  // REAL-TRY-004 field diagnostic (display-only): flips the bottom-left load
+  // marker from "V" to "V ✓" once client JS is actually executing, so the
+  // operator can distinguish a hydrated page from static HTML on the phone.
+  const [markerLive, setMarkerLive] = useState(false);
+  useEffect(() => {
+    setMarkerLive(true);
+  }, []);
 
   // Challenge state
   const [currentRound, setCurrentRound] = useState(1);
@@ -78,11 +100,95 @@ export default function TryClient() {
   const timestampsRef = useRef<number[]>([]);
   const imuSamplesRef = useRef<Array<{ t: number; ax: number; ay: number; az: number; rx: number; ry: number; rz: number }>>([]);
   const targetDirRef = useRef<Direction>("→");
-  const isCapturingRef = useRef(false);
+    const isCapturingRef = useRef(false);
+  // Keyed by receiptId to guarantee a completed run is persisted exactly once,
+  // even across React StrictMode effect double-invocation.
+  const savedRunIdRef = useRef<string | null>(null);
+
+  // ── Secure-context gate (production only) ─────────────────────
+  // Camera/motion APIs do not exist on insecure origins (e.g. a phone opening
+  // the dev box via http://<lan-ip>:3000). Originally we gated these uniformly,
+  // which forced an extra "Open Secure Preview" hop on LAN HTTP in dev.
+  //
+  // Dev/bench decision: in NON-production we allow the local LAN flow to proceed
+  // straight to Start Verification (fast phone↔desktop iteration). Browser-level
+  // camera/IMU restrictions on insecure origins still apply if the phone hits
+  // them — if that happens, use the HTTPS preview (https://<lan-ip>:3443).
+  // The strict HTTPS requirement remains ONLY in production builds.
+  const [needsSecure, setNeedsSecure] = useState(false);
+  useEffect(() => {
+    if (
+      process.env.NODE_ENV === "production" &&
+      typeof window !== "undefined" &&
+      !window.isSecureContext
+    ) {
+      setNeedsSecure(true);
+    }
+  }, []);
 
   useEffect(() => {
     phaseRef.current = phase;
   }, [phase]);
+
+  // ── Experiment logging (observational only) ────────────────────────
+  // Persists one ExperimentRun per completed /try verification, keyed on the
+  // receiptId. This effect only READS the finished result — it never writes
+  // into the verification state machine, the verdict, or any EE score.
+  useEffect(() => {
+    if (!result) return;
+    const id = result.receipt.receiptId;
+    if (!id || savedRunIdRef.current === id) return;
+    savedRunIdRef.current = id;
+
+    const passingRounds = roundResults.filter(
+      (r) => r.directionMatch && r.magnitudeStatus === "PASS",
+    ).length;
+    const ee003Score = roundResults.length > 0 ? passingRounds / roundResults.length : 0;
+
+    const roundResultsPersisted: LoggedRound[] = roundResults.map((r) => {
+      const diag = roundDirectionDiags.find((x) => x.round === r.round);
+      return {
+        round: r.round,
+        direction: r.direction,
+        directionMatch: r.directionMatch,
+        magnitudeStatus: r.magnitudeStatus,
+        angleDeg: r.angleDeg,
+        peakG: r.peakG,
+        sampleCount: r.sampleCount,
+        // EE-003 forensics captured for comparability — not consumed by verification
+        axis: diag?.axis,
+        expectedSign: expectedSign(r.direction),
+        signedPeakDegS: diag?.signedPeakDegS,
+      };
+    });
+
+    const run: ExperimentRun = {
+      id,
+      engineId: "EE-003",
+      timestamp: result.receipt.interval.end,
+      isSimulated: false,
+      verdict: result.verified ? "PASS" : "FAIL",
+      confidence: result.confidence,
+      components: [
+        {
+          metric: "EE-001.PES",
+          value: result.pes,
+          threshold: PRESENCE_THRESHOLD,
+          status: result.pes >= PRESENCE_THRESHOLD ? "PASS" : "FAIL",
+        },
+        {
+          metric: "EE-003.ChallengeResponse",
+          value: ee003Score,
+          threshold: 1,
+          status: ee003Score >= 1 ? "PASS" : "FAIL",
+        },
+      ],
+      diagnostics: [],
+      roundResults: roundResultsPersisted,
+    };
+
+    saveRun(run);
+  }, [result, roundResults, roundDirectionDiags]);
 
   // Attach the camera stream once the <video> element actually mounts.
   // The <video> only renders during the "pose" phase, so assigning srcObject
@@ -182,9 +288,19 @@ export default function TryClient() {
   );
 
   // ── Full flow ──
-  const start = useCallback(async () => {
+    const start = useCallback(async () => {
     setErrorMsg("");
     setResult(null);
+    setPoseReady(false);
+
+    // Defensive re-check inside the handler (covers any entry path that skips
+    // the render-level gate): never run the flow on an insecure origin.
+    if (typeof window !== "undefined" && !window.isSecureContext) {
+      setNeedsSecure(true);
+      setErrorMsg("Camera and motion verification require a secure connection.");
+      return;
+    }
+
     setReceiptStatus("");
     setShowReceiptJson(false);
     sstFramesRef.current = [];
@@ -218,6 +334,12 @@ export default function TryClient() {
           return;
         }
       }
+    } else {
+      // Fix B: explicit unsupported state instead of silently proceeding to a
+      // guaranteed FAIL with zero sensor samples.
+      setErrorMsg("Motion sensors are not available on this device. Please use a compatible mobile device.");
+      setPhase("idle");
+      return;
     }
 
     // 2) Camera (EE-001 requires MediaPipe pose)
@@ -237,11 +359,25 @@ export default function TryClient() {
     streamRef.current = stream;
 
     // 3) Init MediaPipe pose
+    // MediaPipe Pose 0.5 exposes no onError and surfaces runtime failures only
+    // via send() rejection and/or onResults never firing (see below). Track both
+    // so an infra failure is reported as one, never as "insufficient frames".
+    const POSE_MODEL_TIMEOUT_MS = 10000;
+    let modelReady = false;
+    let lastSendError: string | null = null;
+    let resolveModelReady: (() => void) | null = null;
+    let modelLoadTimer: ReturnType<typeof setTimeout> | null = null;
     try {
       const { Pose } = await import("@mediapipe/pose");
       const pose = new Pose({
-        locateFile: (f: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}`,
+        locateFile: (f: string) => {
+          if (!f || f.includes("undefined")) {
+            throw new Error(`[TryClient] MediaPipe locateFile received an invalid asset path: "${f}"`);
+          }
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}`;
+        },
       });
+
       pose.setOptions({
         modelComplexity: 0,
         // Raw pose — EE-001's noise residual measures real joint noise, so we do
@@ -251,12 +387,16 @@ export default function TryClient() {
       });
       pose.onResults((results: PoseResult) => {
         if (results.poseLandmarks && phaseRef.current === "pose") {
+          modelReady = true;
+          setPoseReady(true);
+          resolveModelReady?.();
           const now = performance.now();
           const sst = normalizeSSTFrame(mediaPipeToSST(results.poseLandmarks));
           sstFramesRef.current.push(sst);
           timestampsRef.current.push(now);
         }
       });
+
       poseRef.current = pose;
 
       const feedLoop = async () => {
@@ -264,9 +404,18 @@ export default function TryClient() {
         if (v && poseRef.current && v.readyState >= 2) {
           try {
             await poseRef.current.send({ image: v });
-          } catch {
-            /* ignore */
+          } catch (err: unknown) {
+            // EE-002 FIX: surface send() errors instead of swallowing them. They
+            // are the primary signal that the Pose WASM model / web-worker failed
+            // to init or run. Swallowing left onResults silent -> 0 frames -> the
+            // misleading "Not enough pose frames" message.
+            lastSendError = err instanceof Error ? err.message : String(err);
+            console.error("[TryClient] pose.send() failed:", err);
+            resolveModelReady?.();
+            if (modelLoadTimer) clearTimeout(modelLoadTimer);
+            return;
           }
+
         }
         // Gate on poseRef (set synchronously) rather than phaseRef — phaseRef is
         // still "idle" on the first call here because feedLoop() runs immediately
@@ -276,23 +425,53 @@ export default function TryClient() {
         if (poseRef.current) requestAnimationFrame(feedLoop);
       };
 
-      // 4) Pose phase
+      // 4) Pose phase — GATE on model readiness first (up to POSE_MODEL_TIMEOUT_MS).
+      //    Only a model that actually emits output proceeds to the capture window.
+      //    EE-002 fix: keep "did not initialize" separate from "not enough frames".
       setPhase("pose");
+      feedLoop();
+
+      await new Promise<void>((resolve) => {
+        resolveModelReady = resolve;
+        modelLoadTimer = setTimeout(() => resolve(), POSE_MODEL_TIMEOUT_MS);
+      });
+
+      // Model never produced output (or send() threw) -> infra failure, NOT user error.
+      if (!modelReady) {
+        if (modelLoadTimer) clearTimeout(modelLoadTimer);
+        stopCamera();
+        setErrorMsg(
+          lastSendError
+            ? `Pose model error — the on-device model could not run: ${lastSendError}`
+            : `Pose model did not initialize within ${POSE_MODEL_TIMEOUT_MS}ms. This is usually a WebAssembly / web-worker load failure — check the browser console for the MediaPipe error.`,
+        );
+        setPhase("idle");
+        return;
+      }
+
+      // Model confirmed working — run the 8s capture window. Clear frames
+      // accumulated during model warm-up so the window matches the original 8s.
+      sstFramesRef.current = [];
+      timestampsRef.current = [];
       const poseStart = performance.now();
       const poseTimer = setInterval(() => {
         setPoseCountdown(Math.max(0, Math.ceil((POSE_DURATION_MS - (performance.now() - poseStart)) / 1000)));
       }, 200);
-      feedLoop();
+      setPoseCountdown(Math.ceil(POSE_DURATION_MS / 1000));
       await sleep(POSE_DURATION_MS);
       clearInterval(poseTimer);
+      setPoseCountdown(0);
       stopCamera();
 
       const frames = sstFramesRef.current;
+      // "Not enough frames" is ONLY reported when the model was confirmed ready
+      // but simply did not see enough valid poses within the window.
       if (frames.length < 8) {
         setErrorMsg("Not enough pose frames captured. Ensure your face and body are well-lit and in frame, then try again.");
         setPhase("idle");
         return;
       }
+
 
       // 5) Challenge phase (3 rounds)
       setPhase("challenge");
@@ -313,7 +492,7 @@ export default function TryClient() {
       // 6) Compose + verify
       setPhase("processing");
       await sleep(400);
-      const verification = runContinuityVerification(
+      const verification = await runContinuityVerificationAsync(
         frames as Array<Record<number, JointPosition>>,
         timestampsRef.current,
         allResults,
@@ -334,10 +513,12 @@ export default function TryClient() {
     }
   }, [handleIMU, runRound, stopCamera]);
 
-  const reset = useCallback(() => {
+    const reset = useCallback(() => {
     setPhase("idle");
     setErrorMsg("");
     setResult(null);
+    setPoseReady(false);
+
     setReceiptStatus("");
     setShowReceiptJson(false);
     setCurrentRound(1);
@@ -378,29 +559,79 @@ export default function TryClient() {
           <span className="try-kicker">Experimental Continuity Verification</span>
         </header>
 
-        {/* ── IDLE ── */}
+        {/* ── IDLE — BATCH-005A pre-flight: intro → motion consent → start ── */}
         {phase === "idle" && (
           <section className="try-center">
             <p className="try-eyebrow">RESEARCH PREVIEW</p>
-            <h1 className="try-title">
-              Prove continuity.
-            </h1>
-            <p className="try-subtitle">
-              This is a research preview. No identity information is required.
-              <br />
-              Nothing is uploaded — verification runs on this device.
-            </p>
 
-            {errorMsg && <div className="try-error">{errorMsg}</div>}
+            {needsSecure ? (
+              <>
+                <h1 className="try-title">Prove continuity.</h1>
+                <p className="try-subtitle">
+                  This is a research preview. No identity information is required.
+                  <br />
+                  Nothing is uploaded — verification runs on this device.
+                </p>
+                {errorMsg && <div className="try-error">{errorMsg}</div>}
+                <a
+                  className="try-cta"
+                  href={`https://${window.location.hostname}:3443${window.location.pathname}`}
+                >
+                  Open Secure Preview
+                </a>
+                <p className="try-footnote">
+                  You opened this preview over HTTP, which cannot access the camera or
+                  motion sensors. Tap above to switch to the encrypted local preview,
+                  then run the verification there.
+                </p>
+              </>
+            ) : idleStage === "intro" ? (
+              <>
+                <h1 className="try-title">Ready to verify?</h1>
+                <p className="try-subtitle">
+                  MyShape will use your device&apos;s camera and motion to verify
+                  continuity.
+                  <br />
+                  Nothing is uploaded — verification runs on this device.
+                </p>
+                {errorMsg && <div className="try-error">{errorMsg}</div>}
+                <button className="try-cta" onClick={() => setIdleStage("consent")}>
+                  Continue
+                </button>
+                <p className="try-footnote">
+                  You&apos;ll grant camera + motion access, face the camera for a few seconds,
+                  then rotate your phone to follow on-screen directions. ~20 seconds total.
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className="try-title">Motion access required</h1>
+                <p className="try-subtitle">
+                  Allow motion access to continue. Your phone&apos;s motion sensors verify
+                  continuity — nothing is uploaded.
+                </p>
+                {errorMsg && <div className="try-error">{errorMsg}</div>}
+                <button className="try-cta" onClick={start}>
+                  Allow Motion Access
+                </button>
+                <button
+                  className="try-btn"
+                  onClick={() => setIdleStage("intro")}
+                >
+                  ← Back
+                </button>
+                <p className="try-footnote">
+                  Camera + motion access is requested only for this verification session.
+                </p>
+              </>
+            )}
 
-            <button className="try-cta" onClick={start}>
-              Start Verification
-            </button>
+            {/* Load marker (display-only): confirms tonight's build is live on this
+                device. Distinguishes a fresh page from a stale cached one. */}
+            <span aria-hidden style={{ position: "fixed", left: 8, bottom: 6, fontSize: 10, opacity: 0.45 }}>
+              {markerLive ? "V ✓" : "V"}
+            </span>
 
-            <p className="try-footnote">
-              You&apos;ll grant camera + motion access, face the camera for a few seconds,
-              then rotate your phone to follow on-screen directions. ~20 seconds total.
-            </p>
           </section>
         )}
 
@@ -411,10 +642,17 @@ export default function TryClient() {
               <video ref={videoRef} playsInline muted className="try-video" />
               <div className="try-countdown">{poseCountdown}</div>
             </div>
-            <p className="try-instruction">Face the camera. Stay natural. Move slightly.</p>
-            <p className="try-footnote">
-              Collecting presence entropy — {sstFramesRef.current.length} frames
+            <p className="try-instruction">
+              {poseReady
+                ? "Face the camera. Stay natural. Move slightly."
+                : "Loading pose model…"}
             </p>
+            <p className="try-footnote">
+              {poseReady
+                ? `Collecting presence entropy — ${sstFramesRef.current.length} frames`
+                : "Waiting for the on-device model to initialize…"}
+            </p>
+
           </section>
         )}
 
@@ -487,7 +725,7 @@ export default function TryClient() {
             <p className="try-subtitle">
               {verified
                 ? "Experimental verification completed."
-                : "The signal was insufficient or inconsistent."}
+                : "The signal was insufficient or inconsistent. Try again and follow the movement directions more closely."}
             </p>
 
             {/* Receipt */}
@@ -518,7 +756,18 @@ export default function TryClient() {
               {showReceiptJson && (
                 <pre className="try-receipt-json">{JSON.stringify(result.receipt, null, 2)}</pre>
               )}
+                                                </div>
+
+            {/* Research Diagnostics (developer/research use only) */}
+            {getDiagnosticSessions().length > 0 && (
+            <div className="try-diag">
+              <div className="try-diag try-diag-header">RESEARCH DIAGNOSTICS</div>
+              <div className="try-actions">
+                <button className="try-btn" onClick={() => { void copyDiagnosticSessions(); }}>Copy JSON</button>
+                <button className="try-btn" onClick={() => { downloadDiagnosticSessions(); }}>Download JSON</button>
+              </div>
             </div>
+            )}
 
             <div className="try-disclaimer">
               <strong>Experimental research preview.</strong> This is not production authentication
