@@ -5,10 +5,12 @@ const IS_PROD = process.env.NODE_ENV === "production";
 
 const CSP_DIRECTIVES = [
   "default-src 'self'",
-  // Scripts: self + eval for dev (Next.js Fast Refresh), MediaPipe CDN (scoped)
+  // Scripts: self + eval for dev (Next.js Fast Refresh), MediaPipe CDN (scoped).
+  // 'wasm-unsafe-eval' (CSP3) allows WebAssembly instantiation (MediaPipe pose/motion
+  // model + engine asyncWebAssembly) without enabling arbitrary JS eval.
   IS_PROD
-    ? "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com"
-    : "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com",
+    ? "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com"
+    : "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net/npm/@mediapipe/ https://va.vercel-scripts.com",
   // Styles: Tailwind needs 'unsafe-inline'
   "style-src 'self' 'unsafe-inline'",
   // Images: self + Supabase storage + data URIs
