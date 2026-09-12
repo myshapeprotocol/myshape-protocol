@@ -1,23 +1,43 @@
-/**
- * BATCH-005B — Diagnostic instrumentation for /try verification runs.
- *
- * Scope: DEVELOPMENT/RESEARCH DIAGNOSTICS ONLY.
- *
- * This module provides read-only access to locally-stored verification
- * diagnostics. It does NOT touch any protocol semantics, CPS-0001,
- * EE-001/003, signing, Supabase, or network behavior.
- *
- * Storage:
- *   localStorage["myshape-diagnostic-sessions"]
- *   → Array of session objects (most recent at end)
- *   → Each session contains roundInstrumentation[]
- *   → roundInstrumentation contains raw sensor samples per round
- *
- * This is a research-only diagnostic surface. Production verification
- * logic is NOT affected.
- */
+// ═══════════════════════════════════════════════════════════════════
+// EE-003-DIAGNOSTICS-002 — Compact diagnostic instrumentation for /try
+//
+// Scope: DEVELOPMENT/RESEARCH DIAGNOSTICS ONLY.
+//
+// This module provides read/write access to locally-stored verification
+// diagnostics. It does NOT touch any protocol semantics, CPS-0001,
+// EE-001/EE-003, signing, Supabase, or network behavior.
+//
+// Storage (compact, bounded):
+//   localStorage["myshape-diagnostic-sessions-v2"]
+//   → Array of CompactDiagnosticSession objects (most recent at end)
+//   → At most MAX_DIAGNOSTIC_SESSIONS sessions retained
+//   → Each round retains only bounded representative samples (first /
+//     peak / last) — NOT the full raw DeviceMotion sample array.
+//
+// Full raw DeviceMotion samples are no longer persisted continuously;
+// they were causing localStorage bloat (observed 265 KB on production
+// phones after repeated /try runs with 25 retained sessions).
+//
+// Migration: on first access, the legacy "myshape-diagnostic-sessions"
+// key is cleaned up (best-effort) so old oversized payloads do not
+// linger.
+//
+// This is a research-only diagnostic surface. Production verification
+// logic is NOT affected.
+// ═══════════════════════════════════════════════════════════════════
 
-export const DIAGNOSTIC_STORAGE_KEY = "myshape-diagnostic-sessions";
+
+// Compact schema (v2): rounds carry bounded representative samples only.
+export const DIAGNOSTIC_STORAGE_KEY = "myshape-diagnostic-sessions-v2";
+
+// Legacy key (v1): stored full raw sample arrays. Cleaned up on migration.
+const LEGACY_DIAGNOSTIC_STORAGE_KEY = "myshape-diagnostic-sessions";
+
+// Maximum number of sessions retained in localStorage.
+export const MAX_DIAGNOSTIC_SESSIONS = 3;
+
+// Maximum number of representative samples kept per round.
+const MAX_REPRESENTATIVE_SAMPLES = 3;
 
 export interface RawSensorSample {
   t: number;
@@ -30,45 +50,126 @@ export interface RawSensorSample {
   orientation: number | "unknown";
 }
 
-export interface RoundInstrumentation {
+export interface RepresentativeSample {
+  t: number;
+  alpha: number;
+  beta: number;
+  gamma: number;
+  ax: number;
+  ay: number;
+  az: number;
+  orientation: number | "unknown";
+  role: "first" | "peak" | "last";
+}
+
+export interface CompactRoundInstrumentation {
   roundId: string;
   direction: string;
   axis: "rx" | "ry";
   expectedSign: number;
-  samples: RawSensorSample[];
+  sampleCount: number;
+  representativeSamples: RepresentativeSample[];
   peakMagnitude: number;
   signedPeakDegS: number;
   match: boolean;
   orientation: number | "unknown";
 }
 
-export interface DiagnosticSession {
+export interface CompactDiagnosticSession {
   sessionId: string;
   timestamp: string;
   userAgent: string;
   host: string;
   route: string;
-  rounds: RoundInstrumentation[];
+  rounds: CompactRoundInstrumentation[];
+}
+
+// Backward-compatible aliases so existing consumers compile without changes.
+export type DiagnosticSession = CompactDiagnosticSession;
+export type RoundInstrumentation = CompactRoundInstrumentation;
+
+/**
+ * Build a bounded set of representative samples (first / peak / last) from
+ * an array of raw samples. If the input is empty, returns an empty array.
+ * The peak sample is chosen by absolute value on the EE-003 relevant axis.
+ */
+export function toRepresentativeSamples(
+  samples: RawSensorSample[],
+  signedPeakAxis: "alpha" | "beta" | "gamma",
+): RepresentativeSample[] {
+  if (samples.length === 0) return [];
+  const out: RepresentativeSample[] = [toRepresentative(samples[0], "first")];
+  let peakIdx = 0;
+  let peakAbs = Math.abs(samples[0][signedPeakAxis]);
+  for (let i = 1; i < samples.length; i++) {
+    const v = Math.abs(samples[i][signedPeakAxis]);
+    if (v > peakAbs) {
+      peakAbs = v;
+      peakIdx = i;
+    }
+  }
+  const lastIdx = samples.length - 1;
+  if (peakIdx !== 0) out.push(toRepresentative(samples[peakIdx], "peak"));
+  if (lastIdx !== 0 && lastIdx !== peakIdx) {
+    out.push(toRepresentative(samples[lastIdx], "last"));
+  }
+  return out.slice(0, MAX_REPRESENTATIVE_SAMPLES);
+}
+
+function toRepresentative(
+  s: RawSensorSample,
+  role: RepresentativeSample["role"],
+): RepresentativeSample {
+  return {
+    t: s.t,
+    alpha: s.alpha,
+    beta: s.beta,
+    gamma: s.gamma,
+    ax: s.ax,
+    ay: s.ay,
+    az: s.az,
+    orientation: s.orientation,
+    role,
+  };
 }
 
 /**
- * Read all diagnostic sessions from localStorage.
+ * Read all compact diagnostic sessions from localStorage.
  * Returns empty array if none exist or if running in SSR.
+ * Silently migrates from the legacy v1 key on first read.
  */
-export function getDiagnosticSessions(): DiagnosticSession[] {
+export function getDiagnosticSessions(): CompactDiagnosticSession[] {
   if (typeof window === "undefined") return [];
+  migrateLegacyStorage();
   try {
     const raw = localStorage.getItem(DIAGNOSTIC_STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw) as DiagnosticSession[];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed as CompactDiagnosticSession[];
   } catch {
     return [];
   }
 }
 
 /**
- * Copy all diagnostic sessions to clipboard as formatted JSON.
- * Uses navigator.clipboard with a textarea fallback.
+ * Best-effort migration: remove the legacy oversized key so old payloads
+ * do not compound localStorage bloat. Failures are swallowed.
+ */
+function migrateLegacyStorage(): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (localStorage.getItem(LEGACY_DIAGNOSTIC_STORAGE_KEY) !== null) {
+      localStorage.removeItem(LEGACY_DIAGNOSTIC_STORAGE_KEY);
+    }
+  } catch {
+    // ignore — localStorage access can fail (private mode, quota, etc.)
+  }
+}
+
+/**
+ * Copy all diagnostic sessions to clipboard as compact, formatted JSON.
+ * Uses navigator.clipboard with a textarea fallback. Graceful on failure.
  */
 export async function copyDiagnosticSessions(): Promise<"copied" | "failed"> {
   const sessions = getDiagnosticSessions();
@@ -121,7 +222,7 @@ export function downloadDiagnosticSessions(): void {
  */
 declare global {
   interface Window {
-    __myshape_export_diagnostics__: () => DiagnosticSession[];
+    __myshape_export_diagnostics__: () => CompactDiagnosticSession[];
   }
 }
 
@@ -130,19 +231,11 @@ if (typeof window !== "undefined") {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// EE-003-EVIDENCE-001 — session writer (observation-only)
+// Session writer (observation-only)
 //
-// The reader surface above existed without any producer: nothing on /try
-// ever populated "myshape-diagnostic-sessions". These functions add the
-// missing writer so real-phone runs persist per-round raw rotationRate
-// samples (alpha/beta/gamma + orientation). Strictly additive: no
-// verification state, EE-001/EE-003 scoring, threshold, verdict, or
-// receipt semantics are touched.
+// Strictly additive: no verification state, EE-001/EE-003 scoring,
+// threshold, verdict, or receipt semantics are touched.
 // ═══════════════════════════════════════════════════════════════════
-
-/** Cap on stored sessions — raw per-round sample arrays are large; keep the
- * most recent sessions only (localStorage quota safety). */
-export const MAX_DIAGNOSTIC_SESSIONS = 25;
 
 /** Session identifier: crypto.randomUUID() when available (secure contexts —
  * /try requires HTTPS in production), else a timestamped fallback. Diagnostic
@@ -155,13 +248,14 @@ export function newDiagnosticSessionId(): string {
 }
 
 /**
- * Append a DiagnosticSession (most recent at end) and trim to
+ * Append a compact DiagnosticSession (most recent at end) and trim to
  * MAX_DIAGNOSTIC_SESSIONS. Returns true on success; false on SSR or quota
  * errors. Never throws — evidence recording must not break verification.
  */
-export function recordDiagnosticSession(session: DiagnosticSession): boolean {
+export function recordDiagnosticSession(session: CompactDiagnosticSession): boolean {
   if (typeof window === "undefined") return false;
   try {
+    migrateLegacyStorage();
     const next = [...getDiagnosticSessions(), session].slice(-MAX_DIAGNOSTIC_SESSIONS);
     localStorage.setItem(DIAGNOSTIC_STORAGE_KEY, JSON.stringify(next));
     return true;

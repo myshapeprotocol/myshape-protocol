@@ -29,8 +29,9 @@ import {
   downloadDiagnosticSessions,
   recordDiagnosticSession,
   newDiagnosticSessionId,
+  toRepresentativeSamples,
   type RawSensorSample,
-  type RoundInstrumentation,
+  type CompactRoundInstrumentation,
 } from "@/lib/try-instrumentation";
 import {
   gyroSampleFromDeviceMotion,
@@ -113,7 +114,7 @@ export default function TryClient() {
   // by verification logic; never affects EE-001/EE-003 scoring or the receipt.
   const rawMotionRef = useRef<RawSensorSample[]>([]);
   const diagSessionIdRef = useRef<string>("");
-  const diagRoundsRef = useRef<RoundInstrumentation[]>([]);
+    const diagRoundsRef = useRef<CompactRoundInstrumentation[]>([]);
 
   // ── Secure-context gate (production only) ─────────────────────
   // Camera/motion APIs do not exist on insecure origins (e.g. a phone opening
@@ -297,12 +298,18 @@ export default function TryClient() {
       // round (raw alpha/beta/gamma + orientation + round verdict). Reads the
       // same analyzeRound output as the diag above; no new analysis, no
       // verdict change.
+      // EE-003-DIAGNOSTICS-002: compact representative samples instead of
+      // full raw array to prevent localStorage bloat. First/peak/last samples
+      // provide enough evidence for traceability without storing every event.
+      const peakAxis: "alpha" | "beta" | "gamma" =
+        gyroAxisFor(dir) === "rx" ? "alpha" : "beta";
       diagRoundsRef.current.push({
         roundId: `${diagSessionIdRef.current}-R${roundNum}`,
         direction: dir,
         axis: gyroAxisFor(dir),
         expectedSign: expectedSign(dir),
-        samples: [...rawMotionRef.current],
+        sampleCount: rawMotionRef.current.length,
+        representativeSamples: toRepresentativeSamples(rawMotionRef.current, peakAxis),
         peakMagnitude: Math.round(Math.abs(analysis.meanAngle)),
         signedPeakDegS: Math.round(analysis.meanAngle),
         match: analysis.directionMatch && analysis.magnitudeStatus === "PASS",
