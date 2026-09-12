@@ -27,7 +27,16 @@ import {
   getDiagnosticSessions,
   copyDiagnosticSessions,
   downloadDiagnosticSessions,
+  recordDiagnosticSession,
+  newDiagnosticSessionId,
+  type RawSensorSample,
+  type RoundInstrumentation,
 } from "@/lib/try-instrumentation";
+import {
+  gyroSampleFromDeviceMotion,
+  rawMotionSampleFromDeviceMotion,
+  currentScreenOrientation,
+} from "@/lib/evidence/device-motion";
 import type { JointPosition, SSTJointId } from "@/types/motion-vector";
 import "./try.css";
 
@@ -37,11 +46,6 @@ type Phase = "idle" | "pose" | "challenge" | "processing" | "result";
 
 function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-function roundVal(v: number | null | undefined): number {
-  if (v === null || v === undefined) return 0;
-  return Math.round(v * 1000) / 1000;
 }
 
 // Observation-only per-round diagnostic. analyzeRound computes the SIGNED peak
@@ -104,6 +108,12 @@ export default function TryClient() {
   // Keyed by receiptId to guarantee a completed run is persisted exactly once,
   // even across React StrictMode effect double-invocation.
   const savedRunIdRef = useRef<string | null>(null);
+  // EE-003-EVIDENCE-001 — observation-only raw sensor evidence (see
+  // lib/evidence/device-motion.ts + lib/try-instrumentation.ts). Never read
+  // by verification logic; never affects EE-001/EE-003 scoring or the receipt.
+  const rawMotionRef = useRef<RawSensorSample[]>([]);
+  const diagSessionIdRef = useRef<string>("");
+  const diagRoundsRef = useRef<RoundInstrumentation[]>([]);
 
   // ── Secure-context gate (production only) ─────────────────────
   // Camera/motion APIs do not exist on insecure origins (e.g. a phone opening
@@ -220,15 +230,16 @@ export default function TryClient() {
 
   const handleIMU = useCallback((e: DeviceMotionEvent) => {
     if (!isCapturingRef.current) return;
-    imuSamplesRef.current.push({
-      t: performance.now(),
-      ax: roundVal(e.acceleration?.x ?? e.accelerationIncludingGravity?.x),
-      ay: roundVal(e.acceleration?.y ?? e.accelerationIncludingGravity?.y),
-      az: roundVal(e.acceleration?.z ?? e.accelerationIncludingGravity?.z),
-      rx: roundVal(e.rotationRate?.alpha),
-      ry: roundVal(e.rotationRate?.beta),
-      rz: roundVal(e.rotationRate?.gamma),
-    });
+    // EE-003-EVIDENCE-001: the rotationRate field mapping now lives in the
+    // pure, unit-tested gyroSampleFromDeviceMotion (rotationRate.alpha→rx,
+    // beta→ry, gamma→rz — verbatim copy, no transform, 3-decimal rounding).
+    // The parallel raw record below keeps alpha/beta/gamma + orientation for
+    // evidence only; it never feeds analysis or verdicts.
+    const t = performance.now();
+    imuSamplesRef.current.push(gyroSampleFromDeviceMotion(e, t));
+    rawMotionRef.current.push(
+      rawMotionSampleFromDeviceMotion(e, t, currentScreenOrientation()),
+    );
   }, []);
 
   // ── EE-003: one challenge round ──
@@ -246,6 +257,7 @@ export default function TryClient() {
       }
 
       imuSamplesRef.current = [];
+      rawMotionRef.current = [];
       isCapturingRef.current = true;
       const captureStart = performance.now();
       const timer = setInterval(() => {
@@ -281,6 +293,21 @@ export default function TryClient() {
           pass: analysis.directionMatch && analysis.magnitudeStatus === "PASS",
         },
       ]);
+      // EE-003-EVIDENCE-001 — observation-only raw sensor evidence for this
+      // round (raw alpha/beta/gamma + orientation + round verdict). Reads the
+      // same analyzeRound output as the diag above; no new analysis, no
+      // verdict change.
+      diagRoundsRef.current.push({
+        roundId: `${diagSessionIdRef.current}-R${roundNum}`,
+        direction: dir,
+        axis: gyroAxisFor(dir),
+        expectedSign: expectedSign(dir),
+        samples: [...rawMotionRef.current],
+        peakMagnitude: Math.round(Math.abs(analysis.meanAngle)),
+        signedPeakDegS: Math.round(analysis.meanAngle),
+        match: analysis.directionMatch && analysis.magnitudeStatus === "PASS",
+        orientation: currentScreenOrientation(),
+      });
       await sleep(1200);
       return rr;
     },
@@ -308,6 +335,10 @@ export default function TryClient() {
     setRoundResults([]);
     setLastRoundResult(null);
     setRoundDirectionDiags([]);
+
+    // EE-003-EVIDENCE-001 — observation-only diagnostic session for this run.
+    diagSessionIdRef.current = newDiagnosticSessionId();
+    diagRoundsRef.current = [];
 
     // 1) Motion permission FIRST — iOS requires DeviceMotionEvent.requestPermission()
     //    to run synchronously inside the tap gesture. Any prior `await` (e.g. camera)
@@ -487,6 +518,18 @@ export default function TryClient() {
       } finally {
         window.removeEventListener("devicemotion", handleIMU);
         isCapturingRef.current = false;
+        // EE-003-EVIDENCE-001 — persist raw sensor evidence for the whole run
+        // (observation-only; never touches verification state, EE-001/EE-003
+        // scoring, or the receipt). Runs even if a round throws, so partial
+        // sessions are preserved for diagnosis.
+        recordDiagnosticSession({
+          sessionId: diagSessionIdRef.current,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          host: window.location.host,
+          route: window.location.pathname,
+          rounds: diagRoundsRef.current,
+        });
       }
 
       // 6) Compose + verify

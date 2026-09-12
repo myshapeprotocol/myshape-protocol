@@ -128,3 +128,44 @@ declare global {
 if (typeof window !== "undefined") {
   window.__myshape_export_diagnostics__ = getDiagnosticSessions;
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// EE-003-EVIDENCE-001 — session writer (observation-only)
+//
+// The reader surface above existed without any producer: nothing on /try
+// ever populated "myshape-diagnostic-sessions". These functions add the
+// missing writer so real-phone runs persist per-round raw rotationRate
+// samples (alpha/beta/gamma + orientation). Strictly additive: no
+// verification state, EE-001/EE-003 scoring, threshold, verdict, or
+// receipt semantics are touched.
+// ═══════════════════════════════════════════════════════════════════
+
+/** Cap on stored sessions — raw per-round sample arrays are large; keep the
+ * most recent sessions only (localStorage quota safety). */
+export const MAX_DIAGNOSTIC_SESSIONS = 25;
+
+/** Session identifier: crypto.randomUUID() when available (secure contexts —
+ * /try requires HTTPS in production), else a timestamped fallback. Diagnostic
+ * correlation id only — not security-relevant. */
+export function newDiagnosticSessionId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `diag-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e9).toString(36)}`;
+}
+
+/**
+ * Append a DiagnosticSession (most recent at end) and trim to
+ * MAX_DIAGNOSTIC_SESSIONS. Returns true on success; false on SSR or quota
+ * errors. Never throws — evidence recording must not break verification.
+ */
+export function recordDiagnosticSession(session: DiagnosticSession): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const next = [...getDiagnosticSessions(), session].slice(-MAX_DIAGNOSTIC_SESSIONS);
+    localStorage.setItem(DIAGNOSTIC_STORAGE_KEY, JSON.stringify(next));
+    return true;
+  } catch {
+    return false;
+  }
+}
