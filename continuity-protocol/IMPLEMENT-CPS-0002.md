@@ -71,7 +71,7 @@ The 12 signed fields:
 | 6 | `reference.receiptHash` | `SHA-256(JCS(receipt))` |
 | 7 | `reference.receiptId` | From referenced CPS-0001 receipt |
 | 8 | `evidence.engineId` | Toy: `"TOY-HSA-999"` |
-| 9 | `evidence.payloadDigest` | `SHA-256(JSON.stringify(payload))` |
+| 9 | `evidence.payloadDigest` | `SHA-256(UTF8(canonicalJSON(payload)))` — MyShape canonical JSON; **not** `JSON.stringify` |
 | 10 | `validity.issuedAt` | ISO 8601 timestamp |
 | 11 | `validity.expiresAt` | ISO 8601 timestamp |
 | 12 | `signature.signedAt` | ISO 8601 timestamp |
@@ -80,11 +80,19 @@ The 12 signed fields:
 
 1. **V0 — Schema**: Validate JSON structure against schema
 2. **V2 — Signature**: Reconstruct 12-field payload, verify Ed25519 signature
-3. **V3 — Receipt Reference**: Recompute `SHA-256(JCS(receipt))`, compare to
-   `reference.receiptHash`. Also verify `receiptId` and `subject.id` match.
-4. **V4 — Freshness**: Check `validity.expiresAt` hasn't passed.
+3. **V2.5 — Payload Digest**: Recompute
+   `SHA-256(UTF8(canonicalJSON(evidence.payload)))` and compare with the signed
+   `evidence.payloadDigest`. Mismatch → `INVALID_PAYLOAD_DIGEST`.
+4. **V3 — Receipt Reference**: Verify `receiptId` and `subject.id` match the
+   presented receipt (**first**), then recompute
+   `SHA-256(UTF8(canonicalJSON(receipt)))` and compare with
+   `reference.receiptHash`.
+5. **V4 — Freshness**: Check `validity.expiresAt` hasn't passed.
 
 > V1 is implicit in V2 — the verifier reconstructs the exact canonical payload.
+> Step order is normative: see `CPS-0002-VERIFIER-CONTRACT.md` §4 (reference
+> bindings precede the receipt-hash comparison, which determines the `reason`
+> code on double-fault input).
 
 `VALID` = all four checks pass. `VALID` ≠ proof of human.
 
@@ -94,7 +102,11 @@ The 12 signed fields:
 2. Use the test vector at `test-vectors/cps0002/human-signal-01.json`
 3. Reference the canonical payload field list above (Section 5)
 4. Use any Ed25519 library (prototype uses `@noble/curves`)
-5. Use any JCS canonicalizer (prototype reuses `../shared/jcs`)
+5. Implement the canonical JSON rules in `CPS-0002-VERIFIER-CONTRACT.md` §5.0
+   (MyShape canonical JSON). Any conformant RFC 8785 library also works for
+   I-JSON-conformant input; note the compatibility boundary in §5.0 — the
+   serialization does not reject non-finite numbers or lone surrogates. The
+   prototype reuses `../shared/jcs`.
 6. Run conformance tests:
    ```bash
    npx vitest run continuity-protocol/conformance/cps0002-conformance.test.ts

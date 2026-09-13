@@ -171,7 +171,66 @@ Reconstruct exactly 12 fields, in this order, joined by `":"` with NO escaping:
 | 11 | `validity.expiresAt` |
 | 12 | `signature.signedAt` |
 
+### 5.0 Canonical JSON serialization (normative)
+
+Two CPS-0002 operations hash a **canonical JSON serialization**:
+
+```
+reference.receiptHash  = SHA-256( UTF8( canonicalJSON( receipt )        ) )
+evidence.payloadDigest = SHA-256( UTF8( canonicalJSON( evidence.payload ) ) )
+```
+
+CPS-0002 defines this serialization itself — **MyShape canonical JSON** —
+rather than delegating to a third-party RFC 8785 implementation. It is:
+
+1. **Input** — a parsed JSON value satisfying I-JSON (RFC 7493).
+2. **Key order** — object members sorted ascending by the UTF-16 code unit
+   values of their key strings (not code points).
+3. **Whitespace** — none.
+4. **Numbers** — ECMAScript `Number::toString` (ES6) semantics: `1e-6` →
+   `0.000001`, `1e-7` → `1e-7`, `1e20` → `100000000000000000000`, `1e21` →
+   `1e+21`, `-0` → `0`. This is the algorithm RFC 8785 §3.2.2.3 mandates.
+5. **Strings** — minimal escaping: `"` and `\` escaped; U+0000–U+001F escaped
+   as `\b \f \n \r \t` where defined, otherwise lowercase `\uXXXX`. U+007F,
+   U+2028, and U+2029 are **not** escaped.
+6. **Arrays** — element order preserved. **`null`** → `null`.
+7. The result is encoded as UTF-8 before hashing.
+
+#### Compatibility with RFC 8785 (JCS) — byte-compatible
+
+> For every **I-JSON-conformant** input, MyShape canonical JSON produces bytes
+> **identical** to RFC 8785 (JCS). Independent implementations MAY therefore
+> use any conformant RFC 8785 library, or implement the rules above directly,
+> and obtain identical digests.
+
+#### Compatibility boundary (normative)
+
+MyShape canonical JSON is a **serializer, not a validator**. It does not
+reject non-I-JSON input where RFC 8785 requires an error:
+
+| Input | MyShape canonical JSON | RFC 8785 |
+|---|---|---|
+| `NaN`, `Infinity`, `-Infinity` | serialized as `null` | MUST be rejected |
+| Lone surrogate (e.g. `U+D800` unpaired) | serialized as a `\uXXXX` escape | MUST be rejected |
+| `undefined` object member | member omitted | not a JSON type |
+| `undefined` array element | serialized as `null` | not a JSON type |
+
+**Reachability.** `NaN`, `±Infinity`, and `undefined` cannot be produced by
+`JSON.parse` and are therefore unreachable from the wire. A **lone surrogate is
+reachable**: a JSON string containing an unpaired `\uD800`-style escape parses
+successfully, serializes without error here, and would be rejected by a
+strictly validating RFC 8785 implementation.
+
+**Consequence.** Both CPS-0002 reference verifiers use the same serialization,
+so digest agreement is unaffected. The difference is observable only across
+implementations that differ in strictness — so "cross-language determinism" is
+a statement about **I-JSON-conformant payloads**, not a guarantee that every
+implementation accepts every payload a CPS-0002 verifier accepts.
+
 ### 5.1 Rules
+
+> The 12-field signing input defined in §5 is a `":"`-joined string — it is
+> **not** JSON. §5.0 applies only to `receiptHash` and `payloadDigest`.
 
 - **Field extraction:** take the raw string value of each field as it appears in the JSON.
 - **String conversion:** every field is a string already; do NOT json-escape, normalize,
@@ -278,9 +337,10 @@ Stable machine-readable failure classification. The eight defined codes:
 ## 8. Payload Digest Integrity (V2.5)**
 
 - `evidence.payloadDigest` exists on every assertion.
-- The digest rule is **`SHA-256(UTF8(JCS(evidence.payload)))`** where JCS is
-  RFC 8785 canonical JSON serialization applied to the parsed in-memory JSON
-  object.
+- The digest rule is **`SHA-256(UTF8(canonicalJSON(evidence.payload)))`**,
+  where `canonicalJSON` is **MyShape canonical JSON** — defined normatively in
+  §5.0. It is byte-compatible with RFC 8785 (JCS) for I-JSON-conformant input,
+  and is a serializer rather than a validator (§5.0 compatibility boundary).
 - The CPS-0002 verifier **recomputes** `payloadDigest` from `evidence.payload`
   at verification step **V2.5** (after signature verification, before receipt
   reference verification) and requires an exact match with the signed

@@ -67,7 +67,7 @@ This manifest is the exact, exhaustive list of files intended to belong to the C
 
 | Path | Reason |
 |---|---|
-| `scripts/gen-cps0002-test-vector.mjs` | Deterministic vector generator (JCS-compliant, reproducible) |
+| `scripts/gen-cps0002-test-vector.mjs` | Deterministic vector generator (MyShape canonical JSON; verified byte-reproducible) |
 
 ## Release Artifacts (INCLUDE)
 

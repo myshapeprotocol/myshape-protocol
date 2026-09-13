@@ -12,9 +12,11 @@
  *   V1   — Canonical payload reconstruction (implicit in V2)
  *   V2   — Ed25519 signature validity
  *   V2.5 — Evidence payload digest integrity (BATCH-0002-3-F8, F7 fix):
- *          SHA-256( UTF8( JCS( evidence.payload ) ) ) must equal the
- *          signed evidence.payloadDigest (field #9), else
- *          INVALID_PAYLOAD_DIGEST
+ *          SHA-256( UTF8( canonicalJSON( evidence.payload ) ) ) must equal
+ *          the signed evidence.payloadDigest (field #9), else
+ *          INVALID_PAYLOAD_DIGEST. canonicalJSON = MyShape canonical JSON
+ *          (VERIFIER-CONTRACT §5.0): byte-compatible with RFC 8785 on
+ *          I-JSON-conformant input; a serializer, not a validator.
  *   V3   — Referenced CPS-0001 receipt hash match
  *   V4   — Freshness
  *
@@ -231,10 +233,12 @@ export function verifySignature(a: CPS0002Assertion): CPS0002FailureCode | null 
  * the signed evidence.payloadDigest (field #9 of the canonical signing
  * payload):
  *
- *   payloadDigest = lowercase_hex( SHA-256( UTF8( JCS( payload ) ) ) )
+ *   payloadDigest = lowercase_hex( SHA-256( UTF8( canonicalJSON( payload ) ) ) )
  *
- * JCS = RFC 8785 canonical JSON serialization (shared canonicalizer),
- * applied to the parsed in-memory JSON object (I-JSON constraints apply).
+ * canonicalJSON = MyShape canonical JSON (shared canonicalizer) applied to
+ * the parsed in-memory JSON object. Byte-compatible with RFC 8785 (JCS) for
+ * I-JSON-conformant input; it does not reject non-I-JSON input. Normative
+ * definition: CPS-0002-VERIFIER-CONTRACT.md §5.0.
  *
  * Ordering: runs AFTER V2 (signature) — the digest is part of the signed
  * 12-field input, so any payload+digest+signature rewrite still fails at

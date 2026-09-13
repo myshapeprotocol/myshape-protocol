@@ -77,10 +77,11 @@ function hexToBytes(hex: string): Uint8Array {
 
 /**
  * CPS-0001 receipt hash:
- *   SHA-256( JCS( ContinuityReceipt ) )
+ *   SHA-256( UTF8( canonicalJSON( ContinuityReceipt ) ) )
  *
- * Uses the shared JCS canonicalizer (../shared/jcs) to guarantee
- * byte-for-byte agreement with the Main and Reference verifiers.
+ * Uses the shared canonicalizer (../shared/jcs) — MyShape canonical JSON,
+ * defined in CPS-0002-VERIFIER-CONTRACT.md §5.0 — to guarantee byte-for-byte
+ * agreement with the Main and Reference verifiers.
  */
 export function computeReceiptHash(receipt: CPS0001Receipt): string {
   return sha256Hex(canonicalSerialize(receipt));
@@ -169,18 +170,23 @@ export function buildCanonicalAssertionPayload(a: CPS0002Assertion): string {
 /**
  * Compute payloadDigest (normative since BATCH-0002-3-F8 / F7 fix):
  *
- *   payloadDigest = lowercase_hex( SHA-256( UTF8( JCS( payload ) ) ) )
+ *   payloadDigest = lowercase_hex( SHA-256( UTF8( canonicalJSON( payload ) ) ) )
  *
- * where JCS is RFC 8785 canonical JSON serialization (the shared
- * canonicalizer — byte-for-byte identical across producer and both
- * verifiers), applied to the parsed in-memory JSON object. The payload
- * MUST satisfy I-JSON constraints (unique keys, valid UTF-8, numbers
- * within IEEE-754 double range).
+ * where canonicalJSON is **MyShape canonical JSON** — a MyShape-defined
+ * deterministic canonical JSON serialization (the shared canonicalizer,
+ * byte-for-byte identical across producer and both verifiers), applied to
+ * the parsed in-memory JSON object. Normative definition:
+ * CPS-0002-VERIFIER-CONTRACT.md §5.0.
+ *
+ * Byte-compatible with RFC 8785 (JCS) for I-JSON-conformant input: key sort
+ * by UTF-16 code units, ECMAScript Number::toString formatting, minimal
+ * escaping, no whitespace. It is a SERIALIZER, NOT A VALIDATOR — non-finite
+ * numbers serialize as `null` and lone surrogates as `\uXXXX` escapes
+ * instead of being rejected the way RFC 8785 requires. See the compatibility
+ * boundary in CPS-0002-TRUST-POLICY.md §12-D.
  *
  * This replaces the prototype-era SHA-256(JSON.stringify(payload)):
- * JSON.stringify is JS-implementation-defined (key insertion order,
- * number formatting, escaping) and cannot serve as a cross-language
- * verifier contract. JCS (RFC 8785) is fully specified and deterministic.
+ * JSON.stringify is key-order-dependent and therefore non-canonical.
  *
  * NOTE: the frozen CPS-0001 EvidenceBlock.payloadDigest keeps its own
  * (JSON.stringify-based) definition; CPS-0001 is NOT modified by this

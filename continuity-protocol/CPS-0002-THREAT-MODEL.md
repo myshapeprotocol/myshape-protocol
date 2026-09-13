@@ -197,7 +197,7 @@ The prototype's `VALID` means: "this assertion is structurally and cryptographic
 1. The CPS-0001 receipt hash function (`SHA-256(JCS(receipt))`) is frozen and correct (v1.0-RC1).
 2. The Ed25519 signature scheme is secure (no quantum attacks assumed).
 3. The canonical assertion payload (12 fields) is deterministic and reproducible by any implementation.
-4. The payload digest rule `SHA-256(UTF8(JCS(evidence.payload)))` (RFC 8785) is deterministic and reproducible by any implementation (cross-language verified).
+4. The payload digest rule `SHA-256(UTF8(canonicalJSON(evidence.payload)))` — MyShape canonical JSON, byte-compatible with RFC 8785 (JCS) on I-JSON-conformant input — is deterministic and reproducible across implementations for conformant payloads (cross-language verified). It is a serializer, not a validator: it does not reject non-finite numbers or lone surrogates the way RFC 8785 requires. See `CPS-0002-TRUST-POLICY.md` §12-D.
 4. The relying application will NOT treat a VALID CPS-0002 assertion as proof of human presence for high-stakes decisions.
 5. The toy attester's evidence payload (`TOY-HSA-999`, confidence = 0.0) signals non-human evidence.
 

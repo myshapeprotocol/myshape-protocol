@@ -648,7 +648,13 @@ describe("CONFORMANCE-21: payload digest integrity (F7 fix, T1–T8)", () => {
   // The test verifies that JS canonicalSerialize output matches the
   // independently computed Python JCS output byte-for-byte, AND that the
   // SHA-256 digests agree.
-  it("T8: JCS bytes and digest match an independent Python RFC 8785 computation (F8-H1)", () => {
+  //
+  // SCOPE (Route B): this establishes byte-compatibility between MyShape
+  // canonical JSON and RFC 8785 for I-JSON-CONFORMANT input only. It is NOT
+  // an RFC 8785 conformance claim: the serialization is a serializer, not a
+  // validator. The non-I-JSON boundary is pinned separately in
+  // "CONFORMANCE-22: canonical JSON compatibility boundary".
+  it("T8: canonical JSON bytes and digest match an independent Python RFC 8785 computation (F8-H1)", () => {
     const FIXTURE: Record<string, unknown> = {
       arr: [1, "two", null, true, -0.5],
       ctrl: "\u0001\u001f",
@@ -679,6 +685,77 @@ describe("CONFORMANCE-21: payload digest integrity (F7 fix, T1–T8)", () => {
     expect(canonicalSerialize({ score: 1.0 })).toBe('{"score":1}');
     // JCS sorts keys — insertion order is irrelevant:
     expect(canonicalSerialize({ b: 1, a: 2 })).toBe('{"a":2,"b":1}');
+  });
+});
+
+// ═══════════════════════════════════════════
+// CONFORMANCE-22: Canonical JSON compatibility boundary (Route B)
+//
+// Pins the documented boundary as TESTED behavior. MyShape canonical JSON is
+// byte-compatible with RFC 8785 (JCS) for I-JSON-conformant input, but it is
+// a serializer, not a validator: it does NOT reject the inputs RFC 8785
+// requires an error for.
+//
+// These tests exist so the boundary cannot drift silently. If the primitive
+// is ever hardened to reject (Route A), these assertions must be updated
+// deliberately rather than discovered by accident.
+//
+// Normative: CPS-0002-VERIFIER-CONTRACT.md §5.0; CPS-0002-TRUST-POLICY.md §12-D.
+// No serialization behavior is changed by this suite — it only pins it.
+// ═══════════════════════════════════════════
+
+describe("CONFORMANCE-22: canonical JSON compatibility boundary (Route B)", () => {
+  it("non-finite numbers serialize as null (RFC 8785 requires rejection)", () => {
+    expect(canonicalSerialize({ n: NaN })).toBe('{"n":null}');
+    expect(canonicalSerialize({ n: Infinity })).toBe('{"n":null}');
+    expect(canonicalSerialize({ n: -Infinity })).toBe('{"n":null}');
+  });
+
+  it("non-finite numbers do not throw", () => {
+    expect(() => canonicalSerialize({ n: NaN })).not.toThrow();
+    expect(() => canonicalSerialize({ n: Infinity })).not.toThrow();
+  });
+
+  it("non-finite numbers are NOT reachable from JSON text", () => {
+    // JSON.parse cannot produce NaN/Infinity — they arise only in-process.
+    expect(() => JSON.parse("NaN")).toThrow();
+    expect(() => JSON.parse("Infinity")).toThrow();
+    expect(JSON.parse('{"n":null}').n).toBeNull();
+  });
+
+  it("a lone surrogate serializes as a \\uXXXX escape (RFC 8785 requires rejection)", () => {
+    expect(canonicalSerialize({ s: "\ud800" })).toBe('{"s":"\\ud800"}');
+    expect(() => canonicalSerialize({ s: "\ud800" })).not.toThrow();
+  });
+
+  it("a lone surrogate IS reachable from JSON text (unlike NaN / undefined)", () => {
+    const parsed = JSON.parse('{"s":"\\ud800"}');
+    // unpaired high surrogate — parses successfully
+    expect(parsed.s.charCodeAt(0)).toBe(0xd800);
+    expect(() => canonicalSerialize(parsed)).not.toThrow();
+    // self-consistent: same input → same bytes
+    expect(canonicalSerialize(parsed)).toBe(
+      canonicalSerialize(JSON.parse('{"s":"\\ud800"}')),
+    );
+  });
+
+  it("undefined members are omitted; undefined array elements become null", () => {
+    expect(canonicalSerialize({ a: 1, b: undefined })).toBe('{"a":1}');
+    expect(canonicalSerialize({ a: undefined })).toBe("{}");
+    expect(canonicalSerialize([1, undefined, 2])).toBe("[1,null,2]");
+  });
+
+  it("conformant input matches the RFC 8785 rules (the compatible side)", () => {
+    // The same rules T8 verifies against the independent Python computation.
+    expect(canonicalSerialize({ n: 1.0 })).toBe('{"n":1}');
+    expect(canonicalSerialize({ n: 1e-7 })).toBe('{"n":1e-7}');
+    expect(canonicalSerialize({ n: 1e-6 })).toBe('{"n":0.000001}');
+    expect(canonicalSerialize({ n: 1e21 })).toBe('{"n":1e+21}');
+    expect(canonicalSerialize({ n: -0 })).toBe('{"n":0}');
+    expect(canonicalSerialize({ b: 1, a: 2 })).toBe('{"a":2,"b":1}');
+    // U+007F, U+2028, U+2029 are NOT escaped (RFC 8785 §3.2.2.2)
+    expect(canonicalSerialize({ s: "\u007F" })).toBe('{"s":"\u007F"}');
+    expect(canonicalSerialize({ s: "\u2028" })).toBe('{"s":"\u2028"}');
   });
 });
 

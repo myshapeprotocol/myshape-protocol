@@ -37,6 +37,7 @@ CPS-0001 remains byte-for-byte unchanged throughout this release.
 | Interop proof | Added independent second verifier (`cps-0002-second-verifier/`) | Cross-implementation proof, mirroring CPS-0001 |
 | V0 strictness | Second verifier now enforces `confidence` ∈ [0,1] and `receiptHash` 64 lowercase hex, matching the reference verifier | B1: removes VALID-vs-INVALID_SCHEMA and INVALID_RECEIPT_HASH-vs-INVALID_SCHEMA divergences on identical inputs |
 | Receipt check order | `VERIFIER-CONTRACT` §4 aligned to the implementation (`receiptId` → `subject.id` → `receiptHash`) | B2: double-fault inputs now yield an agreed `reason` across implementations |
+| Canonicalization naming | Serialization now named and normatively defined as **MyShape canonical JSON** (`VERIFIER-CONTRACT` §5.0, `TRUST-POLICY` §12-D); overstated RFC 8785 conformance claims corrected | Route B: the primitive is byte-compatible with RFC 8785 on I-JSON-conformant input but is a serializer, not a validator — it does not reject non-finite numbers or lone surrogates. No serialization, hash, or vector change |
 
 ## What CPS-0002 Does NOT Claim
 
@@ -54,6 +55,18 @@ The Toy Attester is explicitly labeled `TOY / PROTOTYPE / NOT PROOF OF HUMAN`, w
 - Signature validity (Ed25519) covers the 12-field canonical payload.
 - Receipt reference (hash + receiptId + subject) binds the assertion to a CPS-0001 receipt.
 - Freshness (expiry) is validated against `validity.expiresAt`.
+
+### Canonicalization scope (Route B)
+
+The canonical JSON serialization used for `receiptHash` and `payloadDigest` is
+**MyShape canonical JSON** — byte-compatible with RFC 8785 (JCS) on
+I-JSON-conformant input, but a **serializer rather than a validator**. It does
+**not** reject non-finite numbers or lone surrogates, which RFC 8785 requires.
+"Cross-language determinism" therefore applies to I-JSON-conformant payloads
+only. Full statement: `CPS-0002-VERIFIER-CONTRACT.md` §5.0 and
+`CPS-0002-TRUST-POLICY.md` §12-D.
+
+No serialization behavior, hash, or test vector changed in this revision.
 
 ## Known Limitations (Non-blocking)
 

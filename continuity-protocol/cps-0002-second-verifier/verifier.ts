@@ -15,9 +15,11 @@
  *   noble-verifier in the CPS-0001 project.
  *
  * F7 fix (BATCH-0002-3-F8):
- *   - V2.5 payload-digest verification: SHA-256(UTF8(JCS(evidence.payload)))
- *     is recomputed independently and compared with the signed
- *     evidence.payloadDigest (field #9) — mismatch → INVALID_PAYLOAD_DIGEST.
+ *   - V2.5 payload-digest verification:
+ *     SHA-256(UTF8(canonicalJSON(evidence.payload))) is recomputed
+ *     independently and compared with the signed evidence.payloadDigest
+ *     (field #9) — mismatch → INVALID_PAYLOAD_DIGEST. canonicalJSON =
+ *     MyShape canonical JSON (VERIFIER-CONTRACT §5.0).
  *   - Malformed payloadDigest is rejected at V0 with INVALID_SCHEMA
  *     (previously it reached V2 and surfaced as INVALID_SIGNATURE — closed).
  *
@@ -234,11 +236,14 @@ export function verifySignature(a: CPS0002Assertion): FailureCode | null {
 /**
  * Independently implemented (same minimal primitive set): recompute
  *
- *   SHA-256( UTF8( JCS( evidence.payload ) ) )
+ *   SHA-256( UTF8( canonicalJSON( evidence.payload ) ) )
  *
- * via the shared RFC 8785 canonicalizer + local sha256Hex and compare with
- * the signed evidence.payloadDigest (field #9). Ordering identical to the
- * reference verifier: AFTER V2 (signature), BEFORE V3 (receipt reference).
+ * via the shared canonicalizer (MyShape canonical JSON —
+ * CPS-0002-VERIFIER-CONTRACT.md §5.0; byte-compatible with RFC 8785 for
+ * I-JSON-conformant input, not a validator) + local sha256Hex, and compare
+ * with the signed evidence.payloadDigest (field #9). Ordering identical to
+ * the reference verifier: AFTER V2 (signature), BEFORE V3 (receipt
+ * reference).
  */
 export function verifyPayloadDigest(a: CPS0002Assertion): FailureCode | null {
   const recomputed = sha256Hex(canonicalSerialize(a.evidence.payload));

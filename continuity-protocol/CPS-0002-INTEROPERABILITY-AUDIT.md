@@ -265,6 +265,25 @@ BATCH-0002-3-F8 — the digest rule is now `SHA-256(UTF8(JCS(payload)))` (RFC 87
 and the verifier independently recomputes it at V2.5. Cross-language JCS
 determinism verified via independent Python implementation.**
 
+### 10.1 Scope of this result (added — Route B canonicalization clarification)
+
+The reconstruction above used **I-JSON-conformant** inputs only, and the two
+canonicalizers compared (the hand-written one here, the Python one, and
+`shared/jcs.ts`) agree byte-for-byte on those inputs. That agreement does **not**
+extend to non-I-JSON input:
+
+- `NaN` / `±Infinity` are serialized as `null` rather than rejected.
+- A lone surrogate is serialized as a `\uXXXX` escape rather than rejected.
+- `undefined` members are omitted (object) or become `null` (array).
+
+RFC 8785 requires rejection for the first two. The CPS-0002 serialization is
+therefore a **serializer, not a validator**, and is now named and defined
+normatively as **MyShape canonical JSON**
+(`CPS-0002-VERIFIER-CONTRACT.md` §5.0; `CPS-0002-TRUST-POLICY.md` §12-D).
+Read "RESOLVED" above as: *cross-language agreement holds for conformant
+payloads*, not *any conformant implementation accepts any payload a CPS-0002
+verifier accepts*.
+
 ---
 
 ## 11. Required Future Changes

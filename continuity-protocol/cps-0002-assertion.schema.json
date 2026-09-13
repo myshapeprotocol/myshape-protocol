@@ -65,7 +65,7 @@
         "receiptHash": {
           "type": "string",
           "pattern": "^[0-9a-f]{64}$",
-          "description": "SHA-256(JCS(referenced CPS-0001 receipt)). The binding between this assertion and the receipt."
+          "description": "SHA-256(UTF8(canonicalJSON(referenced CPS-0001 receipt))) — MyShape canonical JSON, byte-compatible with RFC 8785 (JCS) for I-JSON-conformant input (see CPS-0002-VERIFIER-CONTRACT.md §5.0). The binding between this assertion and the receipt."
         },
         "receiptId": {
           "type": "string",
@@ -95,7 +95,7 @@
         "payloadDigest": {
           "type": "string",
           "pattern": "^[0-9a-f]{64}$",
-          "description": "Integrity commitment over evidence.payload: lowercase hex of SHA-256(UTF8(JCS(evidence.payload))), where JCS is RFC 8785 canonical JSON serialization applied to the parsed I-JSON payload. Signed as field #9 of the 12-field canonical assertion payload; verifiers MUST independently recompute it (V2.5) and reject mismatches with INVALID_PAYLOAD_DIGEST. Malformed (non-64-lowercase-hex) values are INVALID_SCHEMA. (Normative since BATCH-0002-3-F8; previously SHA-256(JSON.stringify(payload)).)"
+          "description": "Integrity commitment over evidence.payload: lowercase hex of SHA-256(UTF8(canonicalJSON(evidence.payload))), where canonicalJSON is MyShape canonical JSON — a MyShape-defined deterministic canonical JSON serialization, byte-compatible with RFC 8785 (JCS) for I-JSON-conformant input. It is a serializer, not a validator: non-finite numbers and lone surrogates are NOT rejected. See CPS-0002-VERIFIER-CONTRACT.md §5.0. Signed as field #9 of the 12-field canonical assertion payload; verifiers MUST independently recompute it (V2.5) and reject mismatches with INVALID_PAYLOAD_DIGEST. Malformed (non-64-lowercase-hex) values are INVALID_SCHEMA. (Normative since BATCH-0002-3-F8; previously SHA-256(JSON.stringify(payload)).)"
         }
       }
     },

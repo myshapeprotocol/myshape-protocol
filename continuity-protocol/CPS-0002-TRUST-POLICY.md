@@ -396,19 +396,20 @@ Resolves BATCH-0002-1 MEDIUM finding #4 and DH-1. Resolved by BATCH-0002-3-F8.
 
 ### Key-order independence
 
-JCS (RFC 8785) sorts object keys deterministically by UTF-16 code unit order.
-Two objects with identical key-value sets but different key order produce the
-**same** digest.
+MyShape canonical JSON sorts object keys deterministically by UTF-16 code unit
+order (identical to RFC 8785 §3.2.3). Two objects with identical key-value sets
+but different key order produce the **same** digest.
 
 ### Is this deterministic?
 
 - **Within one attester build**: deterministic (same canonicalization → same
   digest).
-- **Across independent implementations**: YES — JCS (RFC 8785) is a
-  fully-specified canonical serialization. Any conformant JCS implementation
-  produces identical bytes for the same logical JSON object.
-  protocol violation, because the digest is attester-chosen and self-consistent
-  within an assertion.
+- **Across independent implementations**: YES for I-JSON-conformant payloads —
+  MyShape canonical JSON is byte-compatible with RFC 8785 (see §12-D and
+  `CPS-0002-VERIFIER-CONTRACT.md` §5.0), so any conformant RFC 8785
+  implementation produces identical bytes for the same logical JSON object.
+  This is a statement about conformant input, **not** a validation guarantee:
+  see the compatibility boundary in §12-D.
 
 ### The binding semantics (RESOLVED — BATCH-0002-3-F8)
 
@@ -424,15 +425,19 @@ an exact match with the signed value. Therefore:
 > (Contrast: CPS-0001 V5 also re-checks `payloadDigest` against `payload`.
 > CPS-0002 now does the same via JCS — resolved by BATCH-0002-3-F8.)
 
-### Cross-language determinism (GUARANTEED — JCS)
+### Cross-language determinism (I-JSON-conformant input)
 
-JCS (RFC 8785) is a fully-specified canonical serialization independent of
-language. Number formatting, key ordering, and Unicode escaping are all
-deterministic. Therefore:
+MyShape canonical JSON fixes number formatting, key ordering, and Unicode
+escaping, and matches RFC 8785 byte-for-byte on I-JSON-conformant input.
+Therefore:
 
-> **Cross-language deterministic `payloadDigest` IS now guaranteed.**
-> Two independent implementations (JavaScript + Python) produce identical
-> digests for logically identical evidence payloads.
+> **Cross-language deterministic `payloadDigest` holds for I-JSON-conformant
+> payloads.** Two independent implementations (JavaScript + Python) produce
+> identical digests for logically identical evidence payloads.
+
+> **This is NOT a validation guarantee.** The serialization is a serializer,
+> not a validator: it does not reject non-I-JSON input (non-finite numbers,
+> lone surrogates) as RFC 8785 requires. See §12-D.
 
 ### Classification & resolution
 
@@ -442,9 +447,10 @@ deterministic. Therefore:
   at V0 as `INVALID_SCHEMA`.
 - The F7 gap (payload tampering with stale digest remaining VALID) is closed.
 
-> **RESOLVED** (digest = `SHA-256(UTF8(JCS(payload)))`, verifier re-checks at
-> V2.5, cross-language determinism guaranteed via JCS). Implementation +
-> test vectors + conformance tests all updated by BATCH-0002-3-F8.
+> **RESOLVED** (digest = `SHA-256(UTF8(canonicalJSON(payload)))`, verifier
+> re-checks at V2.5, cross-language agreement on I-JSON-conformant input).
+> Implementation + test vectors + conformance tests all updated by
+> BATCH-0002-3-F8; serialization named and bounded in §12-D.
 
 ---
 
@@ -604,6 +610,76 @@ type CPS0002VerificationResult =
 > `RECOMMENDED`: document "opaque, non-comparable, advisory". Classified
 > **C. application policy / E. intentionally undefined**. No aggregation
 > implementation.
+
+---
+
+## 12-D. Canonical JSON Serialization — Definition & Boundary (NORMATIVE)
+
+Resolves the Route B canonicalization-naming finding.
+
+### What the serialization is
+
+CPS-0002 hashes two objects through a canonical JSON serialization:
+
+```
+receiptHash   = SHA-256( UTF8( canonicalJSON( receipt )        ) )
+payloadDigest = SHA-256( UTF8( canonicalJSON( evidence.payload ) ) )
+```
+
+The serialization is **MyShape canonical JSON** — a MyShape-defined
+deterministic canonical JSON serialization. It is **not** a vendored RFC 8785
+implementation and **not** an RFC 8785 conformance claim.
+
+**Normative definition:** `CPS-0002-VERIFIER-CONTRACT.md` §5.0.
+
+### Relationship to RFC 8785 (JCS)
+
+> **Byte-compatible on I-JSON-conformant input.** For every I-JSON-conformant
+> value, MyShape canonical JSON and RFC 8785 (JCS) produce identical bytes —
+> key sort (UTF-16 code units), ECMAScript `Number::toString` number
+> formatting, minimal string escaping, no insignificant whitespace.
+
+This compatibility is **verified**, not assumed: it is pinned by the
+cross-language fixture test (`conformance/cps0002-conformance.test.ts`, T8)
+against an independently written Python RFC 8785 computation, including the
+ES6-sensitive number cases (`1e-7` → `1e-7`, `1.0` → `1`).
+
+### Compatibility boundary (the part that must not be overstated)
+
+> The serialization is a **serializer, not a validator**. It does **not**
+> reject non-I-JSON input the way RFC 8785 requires.
+
+| Input | MyShape canonical JSON | RFC 8785 |
+|---|---|---|
+| `NaN`, `Infinity`, `-Infinity` | serialized as `null` | MUST be rejected |
+| Lone surrogate (unpaired `\uD800`-style escape) | serialized as a `\uXXXX` escape | MUST be rejected |
+| `undefined` object member | member omitted | not a JSON type |
+| `undefined` array element | serialized as `null` | not a JSON type |
+
+**Reachability.** `NaN`, `±Infinity`, and `undefined` cannot be produced by
+`JSON.parse`, so they are unreachable from the wire. A **lone surrogate IS
+reachable** — a JSON string carrying an unpaired surrogate escape parses
+successfully and serializes without error here.
+
+**Consequence.** Both reference verifiers use the same serialization, so digest
+agreement between them is unaffected. The divergence is observable only against
+an implementation with different strictness. Therefore:
+
+> "Cross-language determinism" (above) is a claim about **I-JSON-conformant
+> payloads**. It is **not** a guarantee that every implementation accepts every
+> payload a CPS-0002 verifier accepts, and it must not be read as one.
+
+### Terminology
+
+- **"MyShape canonical JSON"** — the precise term; use where the definition,
+  compatibility, or boundary matters.
+- **"JCS"** — acceptable **shorthand** where the sentence is about
+  *I-JSON-conformant* hashing and implies no validation or conformance
+  enforcement (e.g. "`SHA-256(JCS(receipt))`"). Do **not** use it to claim
+  RFC 8785 conformance, validation, or rejection behavior.
+
+> `CURRENTLY DEFINED` (algorithm) + `NORMATIVE` (term & boundary). No
+> serialization change, no hash change, no vector change, no dependency added.
 
 ---
 
@@ -800,8 +876,10 @@ For the two-independent-implementations scenario (neither trusts MyShape):
 11. **Formal domain-separation wording**: exact normative text for `protocolType`
     as a domain tag. (Documentation; LOW. See §16.)
 12. **Payload digest determinism**: RESOLVED BY BATCH-0002-3-F8. Moved from
-    `SHA-256(JSON.stringify(payload))` to `SHA-256(UTF8(JCS(payload)))`
-    (RFC 8785); verifier now recomputes at V2.5 (§12).
+    `SHA-256(JSON.stringify(payload))` to
+    `SHA-256(UTF8(canonicalJSON(payload)))` — MyShape canonical JSON, byte-
+    compatible with RFC 8785 on I-JSON-conformant input; verifier now
+    recomputes at V2.5 (§12, §12-D).
 13. **Schema vs verifier enforcement**: whether the verifier should enforce
     strict property-set closure (`additionalProperties: false`) or the schema
     should relax. (Documentation; LOW. See §12-A.)

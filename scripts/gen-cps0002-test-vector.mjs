@@ -9,7 +9,7 @@
  *   continuity-protocol/test-vectors/cps0002/invalid-expired.json            (EXPIRED)
  *
  * Uses @noble/hashes + @noble/curves only (same deps as onboarding-test.mjs).
- * JCS canonicalization replicated from continuity-protocol/shared/jcs.ts.
+ * MyShape canonical JSON replicated from continuity-protocol/shared/jcs.ts.
  *
  * BATCH-0002-3-F8: payloadDigest is now SHA-256(UTF8(JCS(payload))) — the
  * F7 fix. All four vectors are regenerated so digest + signature are
@@ -33,7 +33,13 @@ import { ed25519 } from "@noble/curves/ed25519.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// ── JCS Canonicalization (replicated from shared/jcs.ts) ──
+// ── MyShape canonical JSON (replicated from shared/jcs.ts) ──
+// Byte-compatible with RFC 8785 (JCS) for I-JSON-conformant input; a
+// serializer, not a validator (non-finite numbers → null, lone surrogates →
+// \uXXXX escapes, rather than rejection). Normative definition:
+// continuity-protocol/CPS-0002-VERIFIER-CONTRACT.md §5.0.
+// Kept as a replica rather than an import so the generator stays a
+// standalone script; it must track shared/jcs.ts byte-for-byte.
 
 function sortForCanonicalization(value) {
   if (Array.isArray(value)) return value.map(sortForCanonicalization);
@@ -113,7 +119,8 @@ const evidencePayload = {
   timestamp: issuedAt,
   note: "This evidence contains no biometric, physiological, or liveness data. Confidence is 0.0 by design.",
 };
-// F7 fix (BATCH-0002-3-F8): JCS-based digest (RFC 8785), NOT JSON.stringify.
+// F7 fix (BATCH-0002-3-F8): canonical-JSON digest (MyShape canonical JSON,
+// byte-compatible with RFC 8785), NOT key-order-dependent JSON.stringify.
 const evidencePayloadDigest = sha256Hex(canonicalSerialize(evidencePayload));
 
 // Assemble assertion (without signature value)
