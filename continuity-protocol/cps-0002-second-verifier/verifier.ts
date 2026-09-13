@@ -129,10 +129,28 @@ export function reconstructSigningInput(a: CPS0002Assertion): string {
 }
 
 // ── V0: Schema Validation ──
+// Normative: root-level additionalProperties:false — unknown root keys INVALID_SCHEMA.
 
 export function verifySchema(a: unknown): FailureCode | null {
   if (typeof a !== "object" || a === null) return "INVALID_SCHEMA";
   const obj = a as Record<string, unknown>;
+
+  // Strictness closure (normative): root-level additionalProperties:false.
+  // MUST reject unknown root-level properties at V0 with INVALID_SCHEMA.
+  // Nested objects remain open per the current schema.
+  const ALLOWED_ROOT_KEYS = new Set([
+    "protocolType",
+    "assertionId",
+    "attester",
+    "subject",
+    "reference",
+    "evidence",
+    "validity",
+    "signature",
+  ]);
+  for (const k of Object.keys(obj)) {
+    if (!ALLOWED_ROOT_KEYS.has(k)) return "INVALID_SCHEMA";
+  }
 
   if (obj.protocolType !== "cps-hsa-0.1-draft") return "INVALID_PROTOCOL_TYPE";
 

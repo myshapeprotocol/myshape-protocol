@@ -56,12 +56,42 @@ CPS-0002 Verifier → VALID / INVALID
 Relying Application → authorization decision
 ```
 
-### What `VALID` means
+### What `VALID` means (canonical, normative)
 
-`VALID` = the assertion is structurally conformant, its Ed25519 signature is
-valid for the reconstructed 12-field canonical payload, the referenced receipt
-hash/id/subject match the presented receipt, and the assertion is within its
-validity window.
+> `VALID` means that the CPS-0002 assertion is structurally and cryptographically
+> valid, internally consistent, correctly bound to the referenced CPS-0001 receipt,
+> and within its assertion validity period.
+
+`VALID` does NOT by itself establish: attester authorization, attester trust,
+evidence truth, human presence, biological humanity, liveness, single-use,
+universal replay protection, or application acceptance. Whether a
+cryptographically `VALID` assertion is trusted / authorized / accepted is a
+Trust Policy / deployment / application decision. The relying layer MUST apply
+its own trust decision (`TRUSTED / UNKNOWN / NOT TRUSTED`) and MUST NOT treat
+`VALID` as `TRUSTED`. See the Verifier Contract §1 for the authoritative wording.
+
+### Canonical Human Signal Assertion definition (prototype, normative)
+
+> **Human Signal Assertion (prototype):** a receipt-bound, attester-signed,
+> evidence-digest-committed, expiry-bounded assertion. The name describes the
+> intended signal domain and does not constitute proof of human presence,
+> biological humanity, liveness, or evidence truth.
+>
+> ```text
+> Human Signal Assertion ≠ Proof of Human
+> ```
+
+### CPS-0001 receipt-freshness boundary (normative)
+
+CPS-0002 verification checks the referenced receipt ONLY for: `receiptId`
+binding, `subject.id` binding, and `receiptHash` integrity/binding. It does NOT
+replace CPS-0001 V1–V7 verification.
+
+> A `VALID` CPS-0002 assertion does not by itself establish that the referenced
+> CPS-0001 receipt is currently fresh, issuer-valid, or otherwise valid under
+> CPS-0001. For freshness-sensitive decisions, the integration/application layer
+> MUST independently verify the referenced CPS-0001 receipt per CPS-0001
+> (including its freshness rules).
 
 ### What `VALID` does NOT mean
 
@@ -69,6 +99,21 @@ validity window.
 - The attester observed a real human
 - The evidence is true, fresh, or meaningful
 - Liveness, anti-Sybil, or proof-of-human
+
+### Non-authoritative fields (normative scope)
+
+`confidence`, `engineId`, and `attester.id` are not independent cryptographic
+trust guarantees:
+
+- `confidence` is attester-declared / informational and is NOT authoritative
+  proof. It is not comparable across attesters, carries no cross-attester scale,
+  and is ignored by the verifier.
+- `engineId` identifies the declared evidence engine/context and is NOT itself a
+  trust anchor. It is pattern-checked only; it does not establish that the
+  declared engine is trustworthy or authorized.
+- `attester.id` is an identifier/label and is NOT a substitute for the
+  cryptographic `attester.publicKey`. Only the public key anchors signature
+  verification; the id MUST NOT be treated as an independent identity proof.
 
 ### Trust anchors
 

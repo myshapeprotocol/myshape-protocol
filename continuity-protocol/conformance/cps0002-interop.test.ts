@@ -383,3 +383,29 @@ describe("F8-M1: uppercase hex boundary — both verifiers (BATCH-0002-3-F9)", (
     expect(sec.status).toBe("VALID");
   });
 });
+
+// ═══════════════════════════════════════════
+// Strictness closure: unknown ROOT property → INVALID_SCHEMA (both verifiers)
+// Normative: root-level additionalProperties:false (schema). Nested open.
+// ═══════════════════════════════════════════
+
+describe("Strictness closure — unknown root property", () => {
+  it("valid assertion → VALID (both verifiers, baseline)", () => {
+    const ref = verifyWithReference(assertion01 as any, receipt01 as any, NOW);
+    const sec = verifyWithSecond(assertion01 as any, receipt01 as any, NOW);
+    expect(ref.status).toBe("VALID");
+    expect(sec.status).toBe("VALID");
+  });
+
+  it("valid assertion + unknown root property → INVALID_SCHEMA (both verifiers)", () => {
+    const withExtra = clone(assertion01 as any);
+    withExtra.unexpectedField = "x";
+    const ref = verifyWithReference(withExtra, receipt01 as any, NOW);
+    const sec = verifyWithSecond(clone(withExtra), receipt01 as any, NOW);
+    expect(ref.status).toBe("INVALID");
+    expect(ref.reason).toBe("INVALID_SCHEMA");
+    expect(sec.status).toBe("INVALID");
+    expect(sec.reason).toBe("INVALID_SCHEMA");
+    expect(sec.reason).toBe(ref.reason);
+  });
+});

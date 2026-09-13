@@ -145,9 +145,28 @@ export function reconstructPayload(a: CPS0002Assertion): string {
 }
 
 // ── V0: Schema Validation ──
+// Normative: root-level additionalProperties:false — unknown root keys INVALID_SCHEMA.
 
 export function verifySchema(a: CPS0002Assertion): CPS0002FailureCode | null {
   if (typeof a !== "object" || a === null) return "INVALID_SCHEMA";
+
+  // Strictness closure (normative): root-level additionalProperties:false.
+  // The JSON schema closes the ROOT object; verifiers MUST reject unknown
+  // root-level properties at V0 with INVALID_SCHEMA. Nested objects remain
+  // open per the current schema (no closure added there).
+  const ALLOWED_ROOT_KEYS = new Set([
+    "protocolType",
+    "assertionId",
+    "attester",
+    "subject",
+    "reference",
+    "evidence",
+    "validity",
+    "signature",
+  ]);
+  for (const k of Object.keys(a as unknown as Record<string, unknown>)) {
+    if (!ALLOWED_ROOT_KEYS.has(k)) return "INVALID_SCHEMA";
+  }
 
   if (a.protocolType !== "cps-hsa-0.1-draft") return "INVALID_PROTOCOL_TYPE";
 

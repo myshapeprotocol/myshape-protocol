@@ -15,11 +15,66 @@
 A **CPS-0002 Human Signal Assertion** is an Ed25519-signed statement that references a
 CPS-0001 Continuity Receipt by hash. A verifier that accepts an assertion establishes:
 
-1. The assertion structurally conforms to the CPS-0002 schema.
+1. The assertion structurally conforms to the CPS-0002 schema (including
+   root-level `additionalProperties: false` — unknown root-level properties
+   are rejected at V0 with `INVALID_SCHEMA`).
 2. The Ed25519 signature is valid over the canonical signing input of the assertion.
 3. The evidence payload digest independently recomputes to the signed `payloadDigest` (F7 fix, BATCH-0002-3-F8).
 4. The referenced CPS-0001 receipt hash, receiptId, and subject bindings are consistent.
 5. The assertion's own validity window (issuedAt / expiresAt) is honored at verify time.
+
+### Canonical VALID semantics (normative)
+
+> `VALID` means that the CPS-0002 assertion is structurally and cryptographically
+> valid, internally consistent, correctly bound to the referenced CPS-0001 receipt,
+> and within its assertion validity period.
+
+`VALID` does NOT by itself establish: attester authorization, attester trust,
+evidence truth, human presence, biological humanity, liveness, single-use,
+universal replay protection, or application acceptance. Whether a
+cryptographically `VALID` assertion is trusted / authorized / accepted is a
+Trust Policy / deployment / application decision. The relying layer MUST apply
+its own trust decision (`TRUSTED / UNKNOWN / NOT TRUSTED`) and MUST NOT treat
+`VALID` as `TRUSTED`.
+
+### Canonical Human Signal Assertion definition (prototype, normative)
+
+> **Human Signal Assertion (prototype):** a receipt-bound, attester-signed,
+> evidence-digest-committed, expiry-bounded assertion. The name describes the
+> intended signal domain and does not constitute proof of human presence,
+> biological humanity, liveness, or evidence truth.
+>
+> ```text
+> Human Signal Assertion ≠ Proof of Human
+> ```
+
+### CPS-0001 receipt-freshness boundary (normative)
+
+CPS-0002 verification checks the referenced receipt ONLY for: `receiptId`
+binding, `subject.id` binding, and `receiptHash` integrity/binding. It does NOT
+replace CPS-0001 V1–V7 verification.
+
+> A `VALID` CPS-0002 assertion does not by itself establish that the referenced
+> CPS-0001 receipt is currently fresh, issuer-valid, or otherwise valid under
+> CPS-0001. For freshness-sensitive decisions, the integration/application layer
+> MUST independently verify the referenced CPS-0001 receipt per CPS-0001
+> (including its freshness rules). The CPS-0002 verifier MUST NOT be extended to
+> execute CPS-0001 V1–V7.
+
+### Non-authoritative fields (normative scope)
+
+`confidence`, `engineId`, and `attester.id` are not independent cryptographic
+trust guarantees:
+
+- `confidence` is attester-declared / informational and is NOT authoritative
+  proof. It is not comparable across attesters, carries no cross-attester scale,
+  and is ignored by the verifier.
+- `engineId` identifies the declared evidence engine/context and is NOT itself a
+  trust anchor. It is pattern-checked only; it does not establish that the
+  declared engine is trustworthy or authorized.
+- `attester.id` is an identifier/label and is NOT a substitute for the
+  cryptographic `attester.publicKey`. Only the public key anchors signature
+  verification; the id MUST NOT be treated as an independent identity proof.
 
 It does **NOT** establish human authenticity, biological truth, universal liveness,
 proof-of-human, absence of bots, or absence of Sybil identities.
@@ -71,7 +126,7 @@ Follow these steps in order. First failure → return `INVALID` with the corresp
 | Step | Check | Reason code | Class |
 |------|-------|-------------|-------|
 | 1 | `protocolType == "cps-hsa-0.1-draft"` | `INVALID_PROTOCOL_TYPE` | protocol-core |
-| 2 | All required fields present, typed correctly, publicKey 64-hex, signature.value 128-hex, **payloadDigest 64-hex (malformed → INVALID_SCHEMA)** | `INVALID_SCHEMA` | schema |
+| 2 | All required fields present, typed correctly, publicKey 64-hex, signature.value 128-hex, **payloadDigest 64-hex (malformed → INVALID_SCHEMA)**; unknown ROOT-level properties rejected (`additionalProperties: false` normative, V0) | `INVALID_SCHEMA` | schema |
 | 3 | Reconstruct canonical signing input exactly (§5) | — | protocol-core |
 | 4 | Decode publicKey (hex→32 bytes), decode signature (hex→64 bytes) | `INVALID_SCHEMA` | protocol-core |
 | 5 | Verify Ed25519 signature over UTF-8 encoding of canonical signing input | `INVALID_SIGNATURE` | protocol-core |
