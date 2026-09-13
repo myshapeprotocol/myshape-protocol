@@ -10,7 +10,7 @@
 - **Signing payload**: 12 fields (separate from CPS-0001's frozen 13-field canonical signing payload)
 - **Vectors**: 4 valid/invalid test vectors (deterministic)
 - **Conformance suite**: 45 tests
-- **Interoperability suite**: 27 tests (reference verifier ↔ independent second verifier)
+- **Interoperability suite**: 39 tests (reference verifier ↔ independent second verifier)
 - **Third-party review**: R8–R12 → **GO**
 
 ## Relationship to CPS-0001
@@ -35,6 +35,8 @@ CPS-0001 remains byte-for-byte unchanged throughout this release.
 | Malformed digest | Rejected at V0 with `INVALID_SCHEMA` | P5 divergence closed (both verifiers agree) |
 | Hex format | `publicKey`/`signature.value` strictly lowercase hex | F8-M1: consistent with schema/reference verifier |
 | Interop proof | Added independent second verifier (`cps-0002-second-verifier/`) | Cross-implementation proof, mirroring CPS-0001 |
+| V0 strictness | Second verifier now enforces `confidence` ∈ [0,1] and `receiptHash` 64 lowercase hex, matching the reference verifier | B1: removes VALID-vs-INVALID_SCHEMA and INVALID_RECEIPT_HASH-vs-INVALID_SCHEMA divergences on identical inputs |
+| Receipt check order | `VERIFIER-CONTRACT` §4 aligned to the implementation (`receiptId` → `subject.id` → `receiptHash`) | B2: double-fault inputs now yield an agreed `reason` across implementations |
 
 ## What CPS-0002 Does NOT Claim
 
@@ -55,9 +57,14 @@ The Toy Attester is explicitly labeled `TOY / PROTOTYPE / NOT PROOF OF HUMAN`, w
 
 ## Known Limitations (Non-blocking)
 
-- **IA-2**: Schema declares `additionalProperties: false`, but neither verifier independently rejects unknown top-level fields. Documented as contract divergence (not security defect).
 - **IA-3**: `attester.id` is a producer-side key-derived convention (`SHA-256(publicKey)[:16]`); not cryptographically bound by the verifier. `publicKey` is the cryptographic identity anchor.
-- **F8-L1**: `scripts/gen-cps0002-test-vector.mjs` is untracked (provenance tooling; recommended for version control).
+
+## Previously Listed Limitations — Now Resolved
+
+- **IA-2** — **CLOSED.** Both reference verifiers now reject unknown root-level properties at V0 with `INVALID_SCHEMA`; the schema's root-level `additionalProperties: false` is normative AND verifier-enforced (see `CPS-0002-TRUST-POLICY.md` §12-A). Regression-tested in `conformance/cps0002-interop.test.ts` ("Strictness closure — unknown root property").
+- **F8-L1** — **CLOSED.** `scripts/gen-cps0002-test-vector.mjs` is now tracked in version control.
+- **B1** — **CLOSED.** Second verifier V0 aligned with the reference verifier: `evidence.confidence` ∈ [0,1] and `reference.receiptHash` as 64 lowercase hex chars. Regression-tested in "B1: V0 schema strictness — both verifiers agree".
+- **B2** — **CLOSED.** `CPS-0002-VERIFIER-CONTRACT.md` §4 step order aligned to the implementation (`receiptId` → `subject.id` → `receiptHash`), with an explicit note that the order determines the `reason` code on double-fault inputs. Regression-tested in "B2: double-fault receipt mismatch — ordering".
 
 ## Freeze Boundary
 

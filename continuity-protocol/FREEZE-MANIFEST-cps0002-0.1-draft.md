@@ -52,7 +52,7 @@ This manifest is the exact, exhaustive list of files intended to belong to the C
 
 | Path | Reason |
 |---|---|
-| `continuity-protocol/conformance/cps0002-interop.test.ts` | 27 interop tests |
+| `continuity-protocol/conformance/cps0002-interop.test.ts` | 39 interop tests |
 
 ## Test Vectors (INCLUDE)
 

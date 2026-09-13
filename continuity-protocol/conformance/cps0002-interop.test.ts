@@ -409,3 +409,151 @@ describe("Strictness closure — unknown root property", () => {
     expect(sec.reason).toBe(ref.reason);
   });
 });
+
+// ═══════════════════════════════════════════
+// B1: V0 SCHEMA-STRICTNESS ALIGNMENT — both verifiers
+// Regression for the second verifier's V0 gaps: `evidence.confidence` range
+// and `reference.receiptHash` format. Both are V0 (schema) checks, so both
+// verifiers MUST agree on INVALID_SCHEMA rather than diverging.
+// ═══════════════════════════════════════════
+
+describe("B1: V0 schema strictness — both verifiers agree (regression)", () => {
+  // Type-safe accessor: both verifier result unions omit `reason` on the VALID
+  // branch, so read it through a helper instead of after an `expect` call.
+  const reasonOf = (r: { status: string; reason?: string }): string | undefined =>
+    r.reason;
+
+  it("baseline: valid assertion → VALID (both verifiers)", () => {
+    const ref = verifyWithReference(assertion01 as any, receipt01 as any, NOW);
+    const sec = verifyWithSecond(assertion01 as any, receipt01 as any, NOW);
+    expect(ref.status).toBe("VALID");
+    expect(sec.status).toBe("VALID");
+  });
+
+  it("confidence > 1 → INVALID_SCHEMA (both verifiers)", () => {
+    // confidence is NOT part of the signed 12-field payload, so this mutation
+    // leaves the signature intact — only a V0 range check can catch it.
+    const a = clone(assertion01 as any);
+    a.evidence.confidence = 5;
+    const ref = verifyWithReference(a, receipt01 as any, NOW);
+    const sec = verifyWithSecond(clone(a), receipt01 as any, NOW);
+    expect(ref.status).toBe("INVALID");
+    expect(reasonOf(ref)).toBe("INVALID_SCHEMA");
+    expect(sec.status).toBe("INVALID");
+    expect(reasonOf(sec)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+
+  it("confidence < 0 → INVALID_SCHEMA (both verifiers)", () => {
+    const a = clone(assertion01 as any);
+    a.evidence.confidence = -0.1;
+    const ref = verifyWithReference(a, receipt01 as any, NOW);
+    const sec = verifyWithSecond(clone(a), receipt01 as any, NOW);
+    expect(reasonOf(ref)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+
+  it("confidence boundary values 0, 0.5, 1 → VALID (both verifiers)", () => {
+    for (const c of [0, 0.5, 1]) {
+      const a = clone(assertion01 as any);
+      a.evidence.confidence = c;
+      const ref = verifyWithReference(a, receipt01 as any, NOW);
+      const sec = verifyWithSecond(clone(a), receipt01 as any, NOW);
+      expect(ref.status).toBe("VALID");
+      expect(sec.status).toBe("VALID");
+    }
+  });
+
+  it("malformed receiptHash (non-hex) → INVALID_SCHEMA (both verifiers)", () => {
+    // receiptHash IS a signed field (#6). Pre-fix, the second verifier's V0
+    // only checked non-emptiness, so this value passed V0 and surfaced at V2
+    // as INVALID_SIGNATURE, while the reference verifier returned
+    // INVALID_SCHEMA for the identical input.
+    const a = clone(assertion01 as any);
+    a.reference.receiptHash = "zz";
+    const ref = verifyWithReference(a, receipt01 as any, NOW);
+    const sec = verifyWithSecond(clone(a), receipt01 as any, NOW);
+    expect(ref.status).toBe("INVALID");
+    expect(reasonOf(ref)).toBe("INVALID_SCHEMA");
+    expect(sec.status).toBe("INVALID");
+    expect(reasonOf(sec)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+
+  it("short receiptHash (32 hex chars) → INVALID_SCHEMA (both verifiers)", () => {
+    const a = clone(assertion01 as any);
+    a.reference.receiptHash = "ab".repeat(16);
+    const ref = verifyWithReference(a, receipt01 as any, NOW);
+    const sec = verifyWithSecond(clone(a), receipt01 as any, NOW);
+    expect(reasonOf(ref)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+
+  it("uppercase receiptHash → INVALID_SCHEMA (both verifiers)", () => {
+    const a = clone(assertion01 as any);
+    a.reference.receiptHash = (a.reference.receiptHash as string).toUpperCase();
+    const ref = verifyWithReference(a, receipt01 as any, NOW);
+    const sec = verifyWithSecond(clone(a), receipt01 as any, NOW);
+    expect(reasonOf(ref)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe("INVALID_SCHEMA");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+});
+
+// ═══════════════════════════════════════════
+// B2: DOUBLE-FAULT RECEIPT MISMATCH — ordering regression
+// VERIFIER-CONTRACT §4 (aligned to the implementation) checks
+// receiptId → subject.id → receiptHash. When a presented receipt has BOTH a
+// wrong receiptId AND altered content, the first failing step decides the
+// reason code: INVALID_RECEIPT_REFERENCE (not INVALID_RECEIPT_HASH). Both
+// verifiers MUST agree, and the contract MUST document this order.
+// ═══════════════════════════════════════════
+
+describe("B2: double-fault receipt mismatch — ordering (regression)", () => {
+  const reasonOf = (r: { status: string; reason?: string }): string | undefined =>
+    r.reason;
+
+  it("wrong receiptId AND altered content → INVALID_RECEIPT_REFERENCE (both verifiers)", () => {
+    const doubleFault = clone(receipt01 as any);
+    doubleFault.receiptId = "wrong-id";
+    doubleFault.protocolVersion = "9.9";
+
+    const ref = verifyWithReference(assertion01 as any, doubleFault, NOW);
+    const sec = verifyWithSecond(assertion01 as any, clone(doubleFault), NOW);
+
+    expect(ref.status).toBe("INVALID");
+    expect(reasonOf(ref)).toBe("INVALID_RECEIPT_REFERENCE");
+    expect(sec.status).toBe("INVALID");
+    expect(reasonOf(sec)).toBe("INVALID_RECEIPT_REFERENCE");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+
+  it("wrong subject.id AND altered content → INVALID_RECEIPT_REFERENCE (both verifiers)", () => {
+    const doubleFault = clone(receipt01 as any);
+    doubleFault.subject.id = "wrong-subject";
+    doubleFault.protocolVersion = "9.9";
+
+    const ref = verifyWithReference(assertion01 as any, doubleFault, NOW);
+    const sec = verifyWithSecond(assertion01 as any, clone(doubleFault), NOW);
+
+    expect(reasonOf(ref)).toBe("INVALID_RECEIPT_REFERENCE");
+    expect(reasonOf(sec)).toBe("INVALID_RECEIPT_REFERENCE");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+
+  it("intact receiptId/subject with altered content → INVALID_RECEIPT_HASH (both verifiers)", () => {
+    // Control for the two cases above: with the reference bindings intact,
+    // the hash check is the first (and only) failure.
+    const altered = clone(receipt01 as any);
+    altered.protocolVersion = "9.9";
+
+    const ref = verifyWithReference(assertion01 as any, altered, NOW);
+    const sec = verifyWithSecond(assertion01 as any, clone(altered), NOW);
+
+    expect(reasonOf(ref)).toBe("INVALID_RECEIPT_HASH");
+    expect(reasonOf(sec)).toBe("INVALID_RECEIPT_HASH");
+    expect(reasonOf(sec)).toBe(reasonOf(ref));
+  });
+});

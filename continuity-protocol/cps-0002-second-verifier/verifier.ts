@@ -21,6 +21,13 @@
  *   - Malformed payloadDigest is rejected at V0 with INVALID_SCHEMA
  *     (previously it reached V2 and surfaced as INVALID_SIGNATURE — closed).
  *
+ * B1 fix (V0 schema-strictness alignment):
+ *   - V0 now enforces `evidence.confidence` in [0, 1] and
+ *     `reference.receiptHash` as 64 lowercase hex chars, matching the
+ *     reference verifier. Previously these were unchecked here, producing
+ *     VALID vs INVALID_SCHEMA and INVALID_RECEIPT_HASH vs INVALID_SCHEMA
+ *     divergences on the same input.
+ *
  * TOY / PROTOTYPE / NOT PROOF OF HUMAN
  */
 
@@ -170,12 +177,23 @@ export function verifySchema(a: unknown): FailureCode | null {
   if (typeof obj.reference !== "object" || obj.reference === null) return "INVALID_SCHEMA";
   const ref = obj.reference as Record<string, unknown>;
   if (!checkStr(ref.receiptHash)) return "INVALID_SCHEMA";
+  // Malformed receipt hash must fail at V0 — same rule as the reference
+  // verifier (B1 fix): 64 lowercase hex chars. receiptHash IS a signed field
+  // (field #6), so previously a malformed value passed V0 and surfaced at V2
+  // as INVALID_SIGNATURE, while the reference verifier returned
+  // INVALID_SCHEMA for the same input.
+  if (!/^([0-9a-f]{2}){32}$/.test(ref.receiptHash as string)) return "INVALID_SCHEMA";
   if (!checkStr(ref.receiptId)) return "INVALID_SCHEMA";
 
   if (typeof obj.evidence !== "object" || obj.evidence === null) return "INVALID_SCHEMA";
   const ev = obj.evidence as Record<string, unknown>;
   if (!checkStr(ev.engineId)) return "INVALID_SCHEMA";
   if (typeof ev.confidence !== "number") return "INVALID_SCHEMA";
+  // Range check — same rule as the reference verifier (B1 fix). confidence is
+  // NOT part of the signed 12-field payload, so an unchecked out-of-range
+  // value previously stayed VALID here while the reference verifier returned
+  // INVALID_SCHEMA — a VALID-vs-INVALID split on the same input.
+  if (ev.confidence < 0 || ev.confidence > 1) return "INVALID_SCHEMA";
   if (typeof ev.payload !== "object" || ev.payload === null) return "INVALID_SCHEMA";
   if (!checkStr(ev.payloadDigest)) return "INVALID_SCHEMA";
   // Malformed digest must fail at V0 (F7 fix, BATCH-0002-3-F8; P5 divergence

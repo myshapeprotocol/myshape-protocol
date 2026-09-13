@@ -131,11 +131,20 @@ Follow these steps in order. First failure → return `INVALID` with the corresp
 | 4 | Decode publicKey (hex→32 bytes), decode signature (hex→64 bytes) | `INVALID_SCHEMA` | protocol-core |
 | 5 | Verify Ed25519 signature over UTF-8 encoding of canonical signing input | `INVALID_SIGNATURE` | protocol-core |
 | 5.5 | Recompute `payloadDigest = lowercase_hex(SHA-256(UTF8(JCS(evidence.payload))))`; compare with signed `evidence.payloadDigest` (field #9) | `INVALID_PAYLOAD_DIGEST` | protocol-core |
-| 6 | Recompute `SHA-256(JCS(receipt))`; compare with `reference.receiptHash` | `INVALID_RECEIPT_HASH` | protocol-core |
-| 7 | Compare `receipt.receiptId == reference.receiptId` AND `receipt.subject.id == assertion.subject.id` | `INVALID_RECEIPT_REFERENCE` | protocol-core |
+| 6 | Compare `receipt.receiptId == reference.receiptId`, then `receipt.subject.id == assertion.subject.id` | `INVALID_RECEIPT_REFERENCE` | protocol-core |
+| 7 | Recompute `SHA-256(JCS(receipt))`; compare with `reference.receiptHash` | `INVALID_RECEIPT_HASH` | protocol-core |
 | 8 | Parse `issuedAt` / `expiresAt` as ISO-8601; if unparseable | `MALFORMED_TIMESTAMP` | schema/freshness |
 | 9 | If `current_time >= expiresAt` | `EXPIRED` | protocol-core (freshness) |
 | 10 | All checks pass | `VALID` | — |
+
+> **Step 6 precedes step 7 (reference bindings before hash).** Both reference
+> verifiers check `receiptId` → `subject.id` → `receiptHash`. When a presented
+> receipt has BOTH a wrong `receiptId`/`subject.id` AND mismatched content, the
+> reason code is therefore `INVALID_RECEIPT_REFERENCE`, not
+> `INVALID_RECEIPT_HASH`. Because `reason` is part of the interoperability
+> contract (§6.3), implementations MUST follow this order to agree on the code.
+> Regression-tested in `conformance/cps0002-interop.test.ts` ("B2: double-fault
+> receipt mismatch — ordering").
 
 > The protocol does NOT require the CPS-0002 verifier to re-run CPS-0001 V1–V7 on the
 > receipt. Whether the receipt itself is fresh/valid is an **application-policy** concern
