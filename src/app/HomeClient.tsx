@@ -19,7 +19,7 @@ export default function HomeClient() {
         {/* ═══════════ 01 Hero ═══════════ */}
         <HeroTrail />
 
-        {/* ═══════════ 02 TRY IT ═══════════ */}
+        {/* ═══════════ 02 EXPLORE ═══════════ */}
         <TryIt />
 
         {/* ═══════════ 03 Research ═══════════ */}

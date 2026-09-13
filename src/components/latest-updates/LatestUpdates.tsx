@@ -87,7 +87,7 @@ export default function LatestUpdates() {
     <section className="latest-updates">
       <div className="latest-updates__header">
         <h2 className="latest-updates__title">Latest Updates</h2>
-        <span className="latest-updates__subtitle">A living research lab. Weekly updates.</span>
+        <span className="latest-updates__subtitle">A living research lab. Ongoing work.</span>
       </div>
 
       {/* Filter tabs */}

@@ -252,20 +252,28 @@ export default function OpenQuestions() {
           display: "flex", justifyContent: "center", gap: 20,
           marginTop: "clamp(2rem, 3vw, 2.5rem)",
         }}>
-          <Link href="/research" style={{
+          <Link href="https://thecontinuitylab.org" style={{
             fontSize: 11, color: "rgba(0,229,255,0.3)",
             fontFamily: "var(--font-geist-mono), monospace",
             textDecoration: "none", borderBottom: "1px solid rgba(0,229,255,0.08)",
+            padding: "2px 4px", borderRadius: 4,
+            transition: "color 0.3s ease, border-color 0.3s ease, text-shadow 0.3s ease, background 0.3s ease, box-shadow 0.3s ease",
           }}
-            onMouseEnter={() => playTick(600, "sine", 0.06, 0.02)}>
-            Research Hub →
-          </Link>
-          <Link href="/lab" style={{
-            fontSize: 11, color: "rgba(0,229,255,0.3)",
-            fontFamily: "var(--font-geist-mono), monospace",
-            textDecoration: "none", borderBottom: "1px solid rgba(0,229,255,0.08)",
-          }}
-            onMouseEnter={() => playTick(600, "sine", 0.06, 0.02)}>
+            onMouseEnter={(e) => {
+              playTick(600, "sine", 0.06, 0.02);
+              e.currentTarget.style.color = "#00E5FF";
+              e.currentTarget.style.borderBottomColor = "rgba(0,229,255,0.6)";
+              e.currentTarget.style.textShadow = "0 0 12px rgba(0,229,255,0.8), 0 0 28px rgba(0,229,255,0.35)";
+              e.currentTarget.style.background = "rgba(0,229,255,0.06)";
+              e.currentTarget.style.boxShadow = "0 0 18px rgba(0,229,255,0.25), inset 0 0 12px rgba(0,229,255,0.08)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "rgba(0,229,255,0.3)";
+              e.currentTarget.style.borderBottomColor = "rgba(0,229,255,0.08)";
+              e.currentTarget.style.textShadow = "none";
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.boxShadow = "none";
+            }}>
             The Continuity Lab →
           </Link>
         </div>

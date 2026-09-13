@@ -46,7 +46,7 @@ export default function TryIt() {
             letterSpacing: "0.5em", marginBottom: 12,
             fontFamily: "var(--font-geist-mono), monospace",
           }}>
-            Try It Now
+            Explore
           </div>
           <h2 style={{
             fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 200,
@@ -65,8 +65,8 @@ export default function TryIt() {
           {/* CTAs — consistent style */}
           <div style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: "1.2rem" }}>
             {[
+              { label: "Explore", href: "/motion-demo", accent: true },
               { label: "Why Continuity", href: "/continuity", accent: true },
-              { label: "The Lab", href: "/lab" },
             ].map(({ label, href, accent }) => (
               <Link key={label} href={href} style={{
                 padding: "9px 22px",

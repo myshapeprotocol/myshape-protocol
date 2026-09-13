@@ -51,10 +51,16 @@ export default function ProtocolFooter() {
       title: "BUILD",
       links: [
         { name: "Developers", href: "/developers" },
-        { name: "Playground", href: "https://thecontinuitylab.org/lab/playground" },
         { name: "CPS-0001", href: "/research/notes/008-continuity-protocol-core" },
         { name: "Whitepaper", href: "/whitepaper" },
         { name: "npm SDK", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },
+      ]
+    },
+    {
+      title: "LAB",
+      links: [
+        { name: "The Continuity Lab", href: "https://thecontinuitylab.org" },
+        { name: "Playground", href: "https://thecontinuitylab.org/lab/playground" },
       ]
     },
     {
@@ -79,7 +85,7 @@ export default function ProtocolFooter() {
 
   return (
     <footer className="relative z-10 w-full bg-transparent font-mono pt-20 md:pt-32 pb-12 md:pb-20">
-      <div className="max-w-6xl mx-auto px-4 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-16 gap-x-2 md:gap-x-6">
+      <div className="max-w-6xl mx-auto px-4 md:px-10 grid grid-cols-2 md:grid-cols-5 gap-y-8 md:gap-y-16 gap-x-2 md:gap-x-6">
         {navGroups.map((group, i) => (
           <div key={group.title} className={`flex ${i % 2 === 0 ? "justify-start" : "justify-end"} md:justify-center`}>
             <div className={`flex flex-col ${i % 2 === 0 ? "items-start" : "items-end"} md:items-start min-w-[140px]`}>
@@ -115,8 +121,8 @@ export default function ProtocolFooter() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 bg-[#00E5FF] rounded-full animate-pulse shadow-[0_0_10px_#00E5FF]" />
-              <span className="text-[#00E5FF]/70 text-[11px] tracking-[0.2em] uppercase font-mono font-bold">
-                CPS-0001 v1.0-RC
+                            <span className="text-[#00E5FF]/70 text-[11px] tracking-[0.2em] uppercase font-mono font-bold">
+                CPS-0001 v0.2 · MyShape SDK 0.3.0
               </span>
               <span className="text-white/15">|</span>
               <span className="text-white/40 text-[11px] tracking-[0.15em] uppercase font-mono">
@@ -172,7 +178,7 @@ export default function ProtocolFooter() {
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
         <div className="items-center justify-center gap-1.5 flex">
           <span className="w-1 h-1 rounded-full bg-[#00E5FF]/60 shadow-[0_0_4px_rgba(0,229,255,0.5)]" />
-          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 v1.0-RC &middot; 4 Engines &middot; 120 Tests &middot; 576 Runs</span>
+          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 v0.2 &middot; MyShape SDK 0.3.0 &middot; 4 Engines &middot; 120 Tests &middot; 576 Runs</span>
         </div>
         <span className="text-[11px] text-white/40 tracking-[0.15em] uppercase font-mono block">
           &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL
