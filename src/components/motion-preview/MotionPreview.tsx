@@ -81,7 +81,7 @@ export default function MotionPreview({ paused = false }: { paused?: boolean }) 
       {/* Top status bar */}
       <div style={{ display: "flex", justifyContent: "space-between", width: "100%", marginBottom: "1rem", position: "relative", zIndex: 2 }}>
         <span style={{ fontSize: 9, color: "rgba(0,229,255,0.3)", fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-          PRESENCE ENTROPY SCORE
+          SIMULATED PRESENCE ENTROPY
         </span>
         <span style={{ fontSize: 9, color: "rgba(0,229,255,0.25)", fontFamily: "var(--font-geist-mono), monospace" }}>
           PHASE {phase}/5
@@ -109,14 +109,14 @@ export default function MotionPreview({ paused = false }: { paused?: boolean }) 
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "1rem" }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: score > 0.5 ? "#34D399" : "#f56565", boxShadow: score > 0.5 ? "0 0 8px #34D399" : "0 0 8px #f56565" }} />
             <span style={{ fontSize: 10, color: score > 0.5 ? "#34D399" : "#f56565", fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.1em" }}>
-              {score > 0.7 ? "HUMAN SIGNAL" : score > 0.4 ? "PROCESSING" : "LOW ENTROPY"}
+              {score > 0.7 ? "SIMULATED SIGNAL" : score > 0.4 ? "PROCESSING" : "LOW ENTROPY"}
             </span>
           </div>
 
           {/* Mini data rows */}
           {[
             ["SCAN TIME", "30s"],
-            ["SENSOR", "Camera"],
+            ["MODE", "Simulated"],
             ["PRIVACY", "Local Only"],
           ].map(([k, v]) => (
             <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: "1px solid rgba(0,229,255,0.04)", marginBottom: 2 }}>
@@ -127,7 +127,7 @@ export default function MotionPreview({ paused = false }: { paused?: boolean }) 
 
           <div style={{ marginTop: "1rem" }}>
             <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", fontWeight: 300, margin: 0, lineHeight: 1.5, maxWidth: 180 }}>
-              No face stored. Nothing uploaded. Your motion is the key.
+              Simulation only. No sensor data is collected here.
             </p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function MotionPreview({ paused = false }: { paused?: boolean }) 
         }}
           onMouseEnter={(e) => { playTick(700, "sine", 0.08, 0.02); e.currentTarget.style.borderColor = "rgba(0,229,255,0.5)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(0,229,255,0.08)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(0,229,255,0.1)"; }}
           onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,229,255,0.2)"; e.currentTarget.style.color = "rgba(0,229,255,0.5)"; e.currentTarget.style.background = "rgba(0,229,255,0.03)"; e.currentTarget.style.boxShadow = "none"; }}>
-          Try It →
+          Explore →
         </Link>
       </div>
     </div>

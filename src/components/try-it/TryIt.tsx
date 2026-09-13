@@ -41,13 +41,6 @@ export default function TryIt() {
       <div style={{ maxWidth: "60rem", margin: "0 auto" }}>
         {/* header */}
         <div style={{ marginBottom: "clamp(2.5rem, 4vw, 3.5rem)", textAlign: "center" }}>
-          <div style={{
-            fontSize: 11, color: "rgba(0,229,255,0.3)", textTransform: "uppercase",
-            letterSpacing: "0.5em", marginBottom: 12,
-            fontFamily: "var(--font-geist-mono), monospace",
-          }}>
-            Explore
-          </div>
           <h2 style={{
             fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 200,
             letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0,
@@ -65,7 +58,6 @@ export default function TryIt() {
           {/* CTAs — consistent style */}
           <div style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: "1.2rem" }}>
             {[
-              { label: "Explore", href: "/motion-demo", accent: true },
               { label: "Why Continuity", href: "/continuity", accent: true },
             ].map(({ label, href, accent }) => (
               <Link key={label} href={href} style={{
