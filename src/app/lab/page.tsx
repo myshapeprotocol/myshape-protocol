@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     "continuity proof",
     "MyShape Protocol",
   ],
-  alternates: { canonical: "https://www.thecontinuitylab.org" },
+  alternates: { canonical: "https://thecontinuitylab.org" },
   openGraph: {
     title: "The Continuity Lab — Open Research on Digital Continuity",
     description:
       "We test hypotheses. We do not defend them. Living research laboratory investigating whether continuity can be made a verifiable property of digital existence.",
-    url: "https://www.thecontinuitylab.org",
+    url: "https://thecontinuitylab.org",
     siteName: "The Continuity Lab",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },

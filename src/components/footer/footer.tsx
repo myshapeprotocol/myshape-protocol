@@ -122,7 +122,7 @@ export default function ProtocolFooter() {
             <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 bg-[#00E5FF] rounded-full animate-pulse shadow-[0_0_10px_#00E5FF]" />
                             <span className="text-[#00E5FF]/70 text-[11px] tracking-[0.2em] uppercase font-mono font-bold">
-                CPS-0001 v0.2 · MyShape SDK 0.3.0
+                CPS-0001 Specification v1.0-RC1 · Implementation v0.2 · SDK 0.3.0
               </span>
               <span className="text-white/15">|</span>
               <span className="text-white/40 text-[11px] tracking-[0.15em] uppercase font-mono">
@@ -178,7 +178,7 @@ export default function ProtocolFooter() {
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
         <div className="items-center justify-center gap-1.5 flex">
           <span className="w-1 h-1 rounded-full bg-[#00E5FF]/60 shadow-[0_0_4px_rgba(0,229,255,0.5)]" />
-          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 v0.2 &middot; MyShape SDK 0.3.0 &middot; 4 Engines &middot; 120 Tests &middot; 576 Runs</span>
+          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 Specification v1.0-RC1 · Implementation v0.2 · SDK 0.3.0 · 4 Engines · 576 Experimental Runs</span>
         </div>
         <span className="text-[11px] text-white/40 tracking-[0.15em] uppercase font-mono block">
           &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL

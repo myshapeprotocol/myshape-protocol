@@ -2,13 +2,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
+import { metricValue } from "@/lib/metrics";
 
 const SURFACE = "rgba(5,16,37,0.45)";
 
 const FIELDS = [
   { field: "protocol", value: "CPS-0001" },
   { field: "evidence", value: "4 engines" },
-  { field: "benchmark", value: "281 samples" },
+  { field: "benchmark", value: `${metricValue("dataset.benchmarkSamples")} PES Benchmark samples` },
   { field: "verification", value: "PASS", green: true },
   { field: "integrity", value: "SHA-256" },
   { field: "signature", value: "Ed25519" },

@@ -58,7 +58,7 @@ export default function DatasetClient() {
           <section className="note-section">
             <h2>Composition</h2>
 
-            <p><strong>Human motion (576 runs).</strong> 30-second unstructured motion sequences from ~81 subjects. Standard webcam at 30 fps. MediaPipe Pose (33 landmarks). No choreography, no controlled environment. Ecological variability is intentional.</p>
+            <p><strong>Human motion (576 Experimental Runs).</strong> 30-second unstructured motion sequences from ~81 subjects. Standard webcam at 30 fps. MediaPipe Pose (33 landmarks). No choreography, no controlled environment. Ecological variability is intentional.</p>
 
             <p><strong>Synthetic motion (200 samples, 50 per strategy).</strong></p>
             <p>1. Random walk — Gaussian per-joint walk calibrated to human joint range.</p>
@@ -75,8 +75,8 @@ export default function DatasetClient() {
 
             <div className="space-y-3">
               {[
-                { date: "2026.07.10", milestone: "DS-001 established as first-class Research Object. 576 runs." },
-                { date: "2026.07.04", milestone: "PES v0.2 recalibration across ~81 human subjects. Cohen's d: 2.1." },
+                { date: "2026.07.10", milestone: "DS-001 established as first-class Research Object. 576 Experimental Runs." },
+                { date: "2026.07.04", milestone: "PES v0.2 recalibration across ~81 human subjects." },
                 { date: "2026 Q3 (target)", milestone: "300+ human samples. Explicit coverage of age, mobility, and hardware diversity." },
                 { date: "2026 Q4 (target)", milestone: "Longitudinal samples — same subjects across multiple sessions, days apart." },
               ].map((entry, i) => (

@@ -29,7 +29,7 @@ export default function ChallengeClient() {
         <p className="text-white/35 text-[14px] leading-relaxed mb-10 max-w-lg mx-auto"
           style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif" }}>
           The Presence Entropy Score separates human motion from synthetic motion with
-          Cohen&apos;s d = 2.1 and AUC = 0.94. But every benchmark has boundary conditions
+          a large effect size and AUC = 0.94. But every benchmark has boundary conditions
           it has not yet encountered. If you can describe a scenario where you believe
           the PES would misclassify — a specific population, a specific motion pattern,
           a specific hardware configuration — we will design an experiment, run it,

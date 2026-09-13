@@ -107,7 +107,6 @@ const BENCHMARKS = [
     name: "PES Benchmark v0.2",
     tests: 6,
     metrics: [
-      { label: "Cohen's d", value: "2.1" },
       { label: "AUC", value: "0.94" },
       { label: "Human samples", value: "54" },
       { label: "AI samples", value: "54" },

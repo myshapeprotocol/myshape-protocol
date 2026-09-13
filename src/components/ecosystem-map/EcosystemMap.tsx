@@ -59,9 +59,9 @@ const LAYERS = [
     bg: "rgba(144,200,255,0.02)",
     border: "rgba(144,200,255,0.12)",
     items: [
-      { label: "576 Runs", desc: "4 engines · consumer hardware" },
+      { label: "576 Experimental Runs", desc: "4 engines · consumer hardware" },
       { label: "HuggingFace", desc: "Dataset · open access" },
-      { label: "120 Tests", desc: "Automated verification · CI" },
+      { label: "120 Conformance Tests", desc: "Automated verification · CI · zero deps" },
     ],
   },
   {

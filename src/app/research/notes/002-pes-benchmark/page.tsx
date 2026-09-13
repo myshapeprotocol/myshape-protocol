@@ -4,7 +4,7 @@ import NoteClient from "./NoteClient";
 export const metadata: Metadata = {
   title: "RN-002 — PES Benchmark v0.2",
   description:
-    "Dataset, Cohen's d, precision/recall, and threats to validity for the Presence Entropy Score. 54 human samples, 200+ synthetic samples, AUC 0.94.",
+    "Dataset, precision/recall, and threats to validity for the Presence Entropy Score. 54 human subjects, 281 PES Benchmark samples, AUC 0.94.",
   alternates: { canonical: "https://www.myshape.com/research/notes/002-pes-benchmark" },
   openGraph: {
     title: "RN-002 — PES Benchmark v0.2",
@@ -35,8 +35,7 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "ScholarlyArticle",
             headline: "RN-002 — PES Benchmark v0.2",
-            description:
-              "Dataset, Cohen's d, precision/recall, and threats to validity for the Presence Entropy Score.",
+            description: "Dataset, precision/recall, and threats to validity for the Presence Entropy Score.",
             author: { "@type": "Organization", name: "The Continuity Lab" },
             datePublished: "2026-07-10",
             url: "https://www.myshape.com/research/notes/002-pes-benchmark",

@@ -19,7 +19,7 @@ const QUESTIONS = [
     status: "Investigating",
     detail:
       "Is there a statistically separable signal in human motion that persists across sessions, hardware, and environments — and can it be quantified as a continuity score?",
-    note: "Dependent on PES Benchmark stability validation. Current evidence: Cohen's d = 2.1, AUC = 0.94 (54 samples).",
+    note: "Dependent on PES Benchmark stability validation. Current evidence: AUC = 0.94.",
     link: { href: "/research/notes/001-the-continuity-problem", label: "RN #001 — The Continuity Problem" },
   },
   {
@@ -179,7 +179,7 @@ export default function AgendaClient() {
                 period: "2026 Q3",
                 label: "Now",
                 items: [
-                  { done: true, text: "PES Benchmark v0.2 — 54 human samples, Cohen's d: 2.1, AUC: 0.94" },
+                  { done: true, text: "PES Benchmark v0.2 — 54 human samples, AUC: 0.94" },
                   { done: true, text: "RN #001 — The Continuity Problem published" },
                   { done: true, text: "The Continuity Lab launched with Research Hub" },
                   { done: false, text: "Expand benchmark dataset to 300+ human samples" },
