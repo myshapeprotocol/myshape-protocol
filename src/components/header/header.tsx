@@ -291,8 +291,7 @@ const ProtocolHeader = () => {
     </nav>
 
     {/* ── 二级导航条 ──
-         桌面：居中 6 项完整协议导航
-         移动：左对齐 3 项 + 横向滚动 */}
+         Desktop / mobile: audience navigation */}
     <div className="sub-nav-bar" style={{
       position: "fixed", top: "60px", left: 0, width: "100%", height: "32px",
       display: "flex", alignItems: "center", justifyContent: "center", gap: "32px",
@@ -305,11 +304,9 @@ const ProtocolHeader = () => {
       scrollbarWidth: "none",
     }}>
       {[
-        { label: "Try",        href: "/try" },
-        { label: "Continuity", href: "/continuity" },
-        { label: "Research",   href: "/research" },
-        { label: "Protocol",   href: "/protocol" },
-        { label: "Playground", href: "https://thecontinuitylab.org/lab/playground" },
+        { label: "Developer",  href: "/developers" },
+        { label: "Researcher", href: "/research" },
+        { label: "Human",      href: "/human" },
       ].map(link =>
           <Link key={link.href} href={link.href}
             onMouseEnter={e => {
