@@ -19,10 +19,10 @@ const supabase = (supabaseUrl && supabaseAnonKey)
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
-const CLIENT_SNIPPET_JS = `// 5 lines to anchor your node in the identity mesh
+const CLIENT_SNIPPET_JS = `// 5 lines to anchor your node in the protocol mesh
 import { getOrCreateKeyPair, createIssuerIdentity } from '@thecontinuitylab/myshape';
 
-const keyPair = getOrCreateKeyPair();      // persistent Ed25519 key
+const keyPair = getOrCreateKeyPair();      // ephemeral Ed25519 key (one per call, NOT persisted)
 const identity = createIssuerIdentity(keyPair);
 
 console.log(identity.id);                  // → 'a3f9c2…' node fingerprint`;
@@ -206,7 +206,7 @@ export default function DevQuickstart() {
               Choose a handle. Or leave it blank — we&apos;ll generate one.
               <br />
               <span className="dqs-hint">
-                This deploys a Protocol Anchor. Not an account. Not a user. A cryptographic node in the identity mesh.
+                This deploys a Protocol Anchor. Not an account. Not a user. A cryptographic node in the protocol mesh.
               </span>
             </p>
             <div className="dqs-input-row">
@@ -324,7 +324,7 @@ export default function DevQuickstart() {
             <div className="dqs-active-banner">
               <span className="dqs-active-icon">◈</span>
               <span>PROTOCOL_ANCHOR_ACTIVE</span>
-              <span className="dqs-active-sub">Your terminal command just resonated in the identity mesh.</span>
+              <span className="dqs-active-sub">Your terminal command just resonated in the protocol mesh.</span>
             </div>
 
             {/* Node info */}

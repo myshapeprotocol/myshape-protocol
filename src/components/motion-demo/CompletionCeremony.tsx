@@ -112,7 +112,7 @@ export default function CompletionCeremony({
                 borderRadius: 6,
                 textShadow: "0 0 8px rgba(144,200,255,0.3)",
               }}
-              title="Sovereign Key — your sovereign identity proof"
+              title="Sovereign Key — your continuity identifier"
             >
               Sovereign Key: {sovereignKey}
             </div>

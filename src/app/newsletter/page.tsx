@@ -4,12 +4,12 @@ import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
 export const metadata: Metadata = {
   title: "MyShape Protocol Newsletter — Signal Subscription",
-  description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign identity, motion-signature verification, zero-knowledge presence, and the Agent Economy.",
-  keywords: ["MyShape newsletter", "identity protocol updates", "motion-signature research", "ZK-presence news", "proof of continuity updates"],
+  description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign continuity, motion-signature verification, zero-knowledge presence, and the Agent Economy.",
+  keywords: ["MyShape newsletter", "continuity protocol updates", "motion-signature research", "ZK-presence news", "proof of continuity updates"],
   alternates: { canonical: "https://www.myshape.com/newsletter" },
   openGraph: {
     title: "MyShape Protocol Newsletter — Signal Subscription",
-    description: "Technical deep-dives on sovereign identity and the Agent Economy. No spam. Pure signal.",
+    description: "Technical deep-dives on sovereign continuity and the Agent Economy. No spam. Pure signal.",
     url: "https://www.myshape.com/newsletter",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -27,7 +27,7 @@ export default function NewsletterPage() {
         "@id": "https://www.myshape.com/newsletter/#webpage",
         url: "https://www.myshape.com/newsletter",
         name: "MyShape Protocol Newsletter — Signal Subscription",
-        description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign identity, motion-signature verification, and the Agent Economy.",
+        description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign continuity, motion-signature verification, and the Agent Economy.",
         isPartOf: { "@type": "WebSite", "@id": "https://www.myshape.com/#website", name: "MyShape Protocol", url: "https://www.myshape.com" },
       }) }} />
       <NewsletterClient />

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import ProtocolLayout from "@/components/layout/ProtocolLayout";
-import IdentityCard from "@/components/identity-layer/IdentityCard";
+import ContinuityCard from "@/components/identity-layer/IdentityCard";
 import SectionHeader from "@/components/identity-layer/SectionHeader";
 import PipelineBar from "@/components/identity-layer/PipelineBar";
 import type { IdentityModel } from "@/components/identity-layer/IdentityCard";
@@ -9,27 +9,27 @@ import "@/components/identity-layer/identity-layer.css";
 
 const FOUNDATION: IdentityModel[] = [
   {
-    name: "BIOLOGICAL SOVEREIGNTY",
+    name: "PHYSICAL CONTINUITY",
     status: "IMMUTABLE",
-    desc: "Your motion is a physical signature — unique, irreproducible, sovereign. No authority can revoke what physics verifies.",
+    desc: "Your motion is a physical signature — unique, irreproducible, and verifiable by anyone. No authority can revoke what physics verifies.",
     detail:
-      "The philosophical root: identity as a property of existence, not a grant from institutions.",
+      "The philosophical root: continuity as a property of existence, not a grant from institutions.",
     accent: "from-[#90c8ff]/70 to-[#90c8ff]/0",
   },
   {
     name: "KINEMATIC PRIVACY",
     status: "ENCRYPTED",
-    desc: "Raw motion data never leaves the device. Only the derived proof is transmitted — not the motion itself.",
+    desc: "Motion is processed on-device by default. Only the derived proof is transmitted — not the motion itself.",
     detail:
-      "The security root: Continuity means proving you are human without revealing how you move.",
+      "The security root: Continuity means proving presence without revealing how you move.",
     accent: "from-blue-400/70 to-blue-400/0",
   },
   {
     name: "CONTINUITY",
     status: "ACTIVE",
-    desc: "Zero-knowledge proof of human presence. Verifiable by any third party without access to raw sensor data.",
+    desc: "Zero-knowledge proof of presence. Verifiable by any third party without access to raw sensor data.",
     detail:
-      "The proof layer: PoP + MP + EP composite — 128-dimensional cryptographic identity vector.",
+      "The proof layer: PoP + MP + EP composite — built on the 128-dimensional Motion Signature.",
     accent: "from-[#90c8ff]/70 to-[#90c8ff]/0",
   },
 ];
@@ -46,17 +46,17 @@ const EXTENSION: IdentityModel[] = [
   {
     name: "AI-NATIVE EXISTENCE",
     status: "COEXISTING",
-    desc: "Identity designed for a world where AI agents and humans coexist. Cross-species verification in one protocol.",
+    desc: "Continuity designed for a world where AI agents and humans coexist. Cross-species verification in one protocol.",
     detail:
-      "The cross-species layer: AGENT_ACTIVE nodes verify alongside GENESIS_NODE — one mesh.",
+      "The cross-species layer: AGENT_ACTIVE nodes verify alongside GENESIS_NODE — one verification network.",
     accent: "from-violet-400/70 to-violet-400/0",
   },
   {
     name: "NEURAL SYNTHESIS",
     status: "FUTURE",
-    desc: "The frontier: integrating deeper biological signals with cryptographic identity primitives.",
+    desc: "The frontier: integrating deeper biological signals with cryptographic continuity primitives.",
     detail:
-      "The expansion layer: beyond skeletal motion toward full neuro-kinetic identity fusion.",
+      "The expansion layer: beyond skeletal motion toward full neuro-kinetic continuity fusion.",
     accent: "from-fuchsia-400/50 to-fuchsia-400/0",
   },
 ];
@@ -69,12 +69,12 @@ const PIPELINE_STEPS = [
   { label: "Presence", variant: "glow" as const },
 ];
 
-export default function IdentityLayer() {
+export default function ContinuityLayer() {
   return (
     <ProtocolLayout
       refId="002"
       category="PROTOCOL_CORE"
-      title="IDENTITY_LAYER"
+      title="CONTINUITY_LAYER"
       secLevel="STANDARD"
       systemStatus="ACTIVE_NODE"
     >
@@ -86,19 +86,19 @@ export default function IdentityLayer() {
             Core_Concept
           </h2>
           <p className="il-page-header-hook">
-            In the MyShape ecosystem, identity is not a string of characters,
+            In the MyShape ecosystem, continuity is not a stored credential,
             but a{" "}
             <span className="il-page-header-accent-text">
               dynamic geometric expression
             </span>.
           </p>
           <p className="il-page-header-tagline">
-            Geometry is distilled into a non-replicable identity vector.
+            Geometry is distilled into a non-replicable Motion Signature.
           </p>
           <p className="il-page-header-text">
             Through the Energy-Presence Model, we translate raw motion data
             into a multi-dimensional visual and cryptographic state. This is the
-            first step toward becoming a sovereign data-body.
+            first step toward a continuously verifiable data-body.
           </p>
         </section>
 
@@ -107,7 +107,7 @@ export default function IdentityLayer() {
           <SectionHeader label="Foundation" />
           <div className="il-card-grid">
             {FOUNDATION.map((model) => (
-              <IdentityCard key={model.name} model={model} />
+              <ContinuityCard key={model.name} model={model} />
             ))}
           </div>
         </section>
@@ -117,7 +117,7 @@ export default function IdentityLayer() {
           <SectionHeader label="Extension" />
           <div className="il-card-grid">
             {EXTENSION.map((model) => (
-              <IdentityCard key={model.name} model={model} />
+              <ContinuityCard key={model.name} model={model} />
             ))}
           </div>
         </section>
@@ -145,6 +145,7 @@ export default function IdentityLayer() {
 
         {/* ── Pipeline ── */}
         <PipelineBar
+          label="Continuity Pipeline"
           steps={PIPELINE_STEPS}
           footer="Real-time · On-device · Zero upload · Cryptographically verifiable"
         />

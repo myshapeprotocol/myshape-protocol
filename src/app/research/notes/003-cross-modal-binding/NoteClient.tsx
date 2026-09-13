@@ -518,7 +518,7 @@ export default function NoteClient() {
               supportedBy={[
                 { id: "PE-001", label: "Event-Level Causal Coupling", href: "/research/causal-coupling" },
                 { id: "VS-001", label: "Verification Session", href: "/research/protocol-verify" },
-                { id: "EE-001", label: "Fusion Identity Verification", href: "/research/fusion" },
+                { id: "EE-001", label: "Fusion Continuity Verification", href: "/research/fusion" },
               ]}
               relatedNotes={[
                 { id: "RN-002", label: "PES Benchmark v0.2", href: "/research/notes/002-pes-benchmark" },

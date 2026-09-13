@@ -17,10 +17,10 @@ export default function HowItWorks() {
           <div className="max-w-[650px]">
             <span className="text-[11px] tracking-[0.6em] text-white/20 block mb-4 uppercase">HOW IT WORKS</span>
             <h2 className="text-[clamp(2rem,5vw,3.2rem)] font-extralight -tracking-[0.02em] leading-[1.1] text-white m-0">
-              The protocol behind <span className="text-[#90c8ff]/90">your identity.</span>
+              The protocol behind <span className="text-[#90c8ff]/90">your continuity.</span>
             </h2>
             <p className="text-[1.2rem] font-light text-white/85 mt-6 max-w-[600px] leading-[1.6]">
-              A motion-native pipeline that turns how you move into a zero-knowledge identity.
+              A motion-native pipeline that turns how you move into a zero-knowledge continuity proof.
             </p>
           </div>
           <div className="text-[0.9rem] text-[#90c8ff]/40 text-right border-r border-[#90c8ff]/20 pr-6 leading-[1.6] font-mono mb-[5px]">
@@ -34,8 +34,8 @@ export default function HowItWorks() {
 
           {[
             { step: "01", title: "LOCAL MOTION CAPTURE", desc: "On-device posture, balance, and micro-movement reading — processed locally." },
-            { step: "02", title: "BEHAVIORAL ENCODING", desc: "Movement becomes a compact identity vector — non-corporeal and irreversible." },
-            { step: "03", title: "CONTINUITY VERIFICATION", desc: "Prove identity without exposing raw data — portable across AI and onchain worlds." },
+            { step: "02", title: "BEHAVIORAL ENCODING", desc: "Movement becomes a compact Motion Signature — non-corporeal and irreversible." },
+            { step: "03", title: "CONTINUITY VERIFICATION", desc: "Prove presence without exposing raw data — portable across AI and onchain worlds." },
           ].map((s, i) => (
             <div key={s.step} className="step-container relative"
               onMouseEnter={() => playPipelineTick(i)}>
@@ -53,11 +53,11 @@ export default function HowItWorks() {
 
       {/* SEO semantic layer */}
       <div className="sr-only">
-        <h2>How MyShape Works — Motion-Native Identity Pipeline</h2>
-        <p>MyShape transforms human motion into a zero-knowledge identity layer. The pipeline consists of three stages: local motion capture, behavioral encoding, and zero-knowledge verification.</p>
-        <p>Related concepts include: motion identity, kinetic authentication, privacy-preserving identity, decentralized identity mesh, and AI-native identity protocols.</p>
-        <a href="/continuity">Continuity Layer</a>
-        <a href="/identity">Identity Layer</a>
+        <h2>How MyShape Works — Motion-Native Continuity Pipeline</h2>
+        <p>MyShape transforms human motion into a zero-knowledge continuity proof. The pipeline consists of three stages: local motion capture, behavioral encoding, and zero-knowledge verification.</p>
+        <p>Related concepts include: motion-signature continuity, kinetic verification, privacy-preserving presence, and AI-native continuity protocols.</p>
+        <a href="/continuity">Continuity Overview</a>
+        <a href="/protocol/continuity-layer">Continuity Layer</a>
         <a href="/protocol">Protocol Architecture</a>
         <a href="/papers">Technical Papers</a>
       </div>
@@ -65,14 +65,14 @@ export default function HowItWorks() {
       {/* Schema.org structured data */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org", "@type": "HowTo",
-        name: "How MyShape Works — Motion-Native Identity Pipeline",
-        description: "Learn how MyShape transforms human motion into a zero-knowledge identity layer through local capture, behavioral encoding, and ZK verification.",
+        name: "How MyShape Works — Motion-Native Continuity Pipeline",
+        description: "Learn how MyShape transforms human motion into a zero-knowledge continuity proof through local capture, behavioral encoding, and ZK verification.",
         step: [
           { "@type": "HowToStep", name: "Local Motion Capture", text: "On-device posture, balance, and micro-movement reading." },
-          { "@type": "HowToStep", name: "Behavioral Encoding", text: "Movement becomes a compact, irreversible identity vector." },
-          { "@type": "HowToStep", name: "Zero-Knowledge Verification", text: "Prove identity without exposing raw data." },
+          { "@type": "HowToStep", name: "Behavioral Encoding", text: "Movement becomes a compact, irreversible Motion Signature." },
+          { "@type": "HowToStep", name: "Zero-Knowledge Verification", text: "Prove presence without exposing raw data." },
         ],
-        keywords: ["motion identity", "zero-knowledge identity", "kinetic authentication", "AI-native identity", "behavioral encoding"],
+        keywords: ["motion-signature continuity", "zero-knowledge presence", "kinetic verification", "AI-native continuity", "behavioral encoding"],
       })}} />
     </section>
   );

@@ -14,9 +14,9 @@ const NODES: ConceptNode[] = [
   { id: "PRIVACY_LEVEL", legacyText: "Centralized credential store", myshapeText: "Sovereign local enclave", statusCode: "0x02_PRIV" },
   { id: "AUTH_FACTOR", legacyText: "Physiological template", myshapeText: "Motion-signature (continuity-verified)", statusCode: "0x03_AUTH" },
   { id: "ACCESS_GATE", legacyText: "Username / password", myshapeText: "Presence proof", statusCode: "0x04_GATE" },
-  { id: "RECOVERY_PATH", legacyText: "Account recovery email", myshapeText: "Identity mesh", statusCode: "0x05_RCVR" },
+  { id: "RECOVERY_PATH", legacyText: "Account recovery email", myshapeText: "Protocol mesh", statusCode: "0x05_RCVR" },
   { id: "VISUAL_FORM", legacyText: "2D static image", myshapeText: "3D wireframe anatomy", statusCode: "0x06_VSUL" },
-  { id: "PORTABILITY", legacyText: "Fragmented across platforms", myshapeText: "Single identity vector", statusCode: "0x07_PORT" },
+  { id: "PORTABILITY", legacyText: "Fragmented across platforms", myshapeText: "Single Motion Signature", statusCode: "0x07_PORT" },
   { id: "TRUST_MODEL", legacyText: "KYC / third-party trust", myshapeText: "continuity-capable (local verification)", statusCode: "0x08_TRST" },
   { id: "REPLAY_DEFENSE", legacyText: "Static identity sample", myshapeText: "Continuous entropy sampling", statusCode: "0x09_RPLY" },
 ];
@@ -28,15 +28,15 @@ export default function ParadigmShift() {
     <section className="relative z-10 w-full py-16 md:py-24 font-mono"
       itemScope itemType="https://schema.org/DefinedTerm"
       itemProp="hasDefinedTerm">
-      <meta itemProp="name" content="Sovereign Data-Body" />
-      <meta itemProp="description" content="A decentralized, non-corporeal digital identity representation controlled solely by the user. Constructed from motion-signature data and visualized as dynamic ethereal particle geometry." />
-      <meta itemProp="url" content="https://www.myshape.com/identity" />
+      <meta itemProp="name" content="Data-Body" />
+      <meta itemProp="description" content="A decentralized, non-corporeal digital representation controlled solely by the user. Constructed from motion-signature data and visualized as dynamic ethereal particle geometry." />
+      <meta itemProp="url" content="https://www.myshape.com/continuity" />
 
       {/* 顶部标题 — 左对齐 + 右侧状态指示 */}
       <div className="w-full max-w-4xl mx-auto px-6 mb-12 flex justify-between items-end border-b border-white/[0.06] pb-6"
         onMouseEnter={() => playTick(700, "sine", 0.06, 0.02)}>
         <div>
-          <div className="text-white/20 text-[11px] tracking-[0.6em] uppercase mb-3">Identity Paradigm Shift</div>
+          <div className="text-white/20 text-[11px] tracking-[0.6em] uppercase mb-3">Continuity Paradigm Shift</div>
           <h2 style={{ fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 200, letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0 }}>
             Legacy <span style={{ color: "rgba(144,200,255,0.6)" }}>vs</span> MyShape
           </h2>

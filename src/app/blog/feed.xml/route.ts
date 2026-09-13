@@ -12,7 +12,7 @@ import { POSTS } from "@/app/blog/posts";
 const BASE_URL = "https://www.myshape.com";
 const SITE_TITLE = "MyShape Protocol — Protocol Log";
 const SITE_DESCRIPTION =
-  "Technical essays on sovereign identity, presence verification, and the protocol layer for verifiable digital continuity.";
+  "Technical essays on digital continuity, presence verification, and the protocol layer for verifiable sovereignty.";
 
 function escapeXml(text: string): string {
   return text

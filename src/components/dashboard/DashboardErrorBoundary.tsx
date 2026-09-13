@@ -45,7 +45,7 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
 
           <p className="dash-error-text">
             The dashboard render pipeline encountered a transient interrupt.
-            Your identity data is intact — this is a client-side rendering
+            Your local data is intact — this is a client-side rendering
             boundary, not a data loss event.
           </p>
 

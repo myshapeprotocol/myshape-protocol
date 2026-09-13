@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "proof of continuity definition",
     "ZK-presence",
     "decentralized identity glossary",
-    "identity protocol terminology",
+    "continuity protocol terminology",
   ],
   alternates: { canonical: "https://www.myshape.com/glossary" },
   openGraph: {

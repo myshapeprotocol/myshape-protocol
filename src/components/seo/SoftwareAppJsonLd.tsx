@@ -8,7 +8,7 @@
  *
  *   <SoftwareAppJsonLd
  *     name="MyShape Protocol SDK"
- *     description="Integrate sovereign identity verification into any application."
+ *     description="Integrate motion-signature continuity verification into any application."
  *     applicationCategory="DeveloperApplication"
  *     operatingSystem="Web"
  *     offersPrice="0"

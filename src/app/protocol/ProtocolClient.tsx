@@ -167,7 +167,7 @@ export default function ProtocolClient() {
         {/* Entry Points */}
         <section className="proto-divider flex flex-wrap justify-center gap-6 py-16">
           <Link href="/protocol/manifesto" className="proto-cta" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Protocol_Manifesto →</Link>
-          <Link href="/protocol/identity-layer" className="proto-cta" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Identity_Layer →</Link>
+          <Link href="/protocol/continuity-layer" className="proto-cta" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Continuity_Layer →</Link>
         </section>
       </div>
     </ProtocolLayout>

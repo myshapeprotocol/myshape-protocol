@@ -31,7 +31,7 @@ export default function ActionCall({ progress }: Props) {
         <div className="action-complete">
           <span className="action-complete-icon">◈</span>
           <span className="action-complete-text">
-            All protocol capabilities unlocked. You are a fully sovereign entity in the MyShape identity mesh.
+            All protocol capabilities unlocked. You are a fully sovereign entity in the MyShape protocol mesh.
           </span>
         </div>
       )}

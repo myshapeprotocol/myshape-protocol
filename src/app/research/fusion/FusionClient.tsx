@@ -13,7 +13,7 @@ import {
 } from "@/lib/evidence/types";
 
 // ═══════════════════════════════════════════════════════════════
-// EE-001 · Fusion Identity Verification
+// EE-001 · Fusion Continuity Verification
 // Dual-channel Presence Evidence: IMU PES + Camera PES
 // Outputs EngineEvidence — no verdict in the evidence object.
 // Verdict is computed by VerificationPolicy for display only.
@@ -275,9 +275,9 @@ export default function FusionClient() {
       <main className="max-w-lg mx-auto px-4 py-8 space-y-6">
         <div className="text-center space-y-3">
           <div className="text-5xl">🔬</div>
-          <h1 className="text-white/80 text-[22px] font-light">Fusion Identity Verification</h1>
+          <h1 className="text-white/80 text-[22px] font-light">Fusion Continuity Verification</h1>
           <p className="text-white/30 text-[13px] leading-relaxed max-w-sm mx-auto">
-            {template ? "Template enrolled. Verify your identity." : "First time? Enroll your motion signature."}
+            {template ? "Template enrolled. Verify your continuity." : "First time? Enroll your motion signature."}
           </p>
         </div>
 
@@ -296,7 +296,7 @@ export default function FusionClient() {
             </button>
             <button onClick={() => { setMode(template ? "verify" : "enroll"); run(); }}
               className="w-full py-5 bg-gradient-to-r from-[#3fb950]/20 to-[#90c8ff]/20 border-2 border-[#3fb950]/40 text-[#3fb950] text-[16px] tracking-[0.15em] uppercase font-bold hover:border-[#3fb950] transition-all active:scale-[0.98]">
-              {template ? "✅ Verify Identity" : "🔒 Enroll Identity"}
+              {template ? "✅ Verify Continuity" : "🔒 Enroll Continuity"}
             </button>
             {template && (
               <button onClick={() => { setTemplate(null); localStorage.removeItem("myshape-fusion-template"); setMode("enroll"); }}
@@ -309,7 +309,7 @@ export default function FusionClient() {
 
         {phase === "countdown" && (
           <div className="flex flex-col items-center justify-center py-24 gap-6">
-            <div className="text-white/20 text-[12px] uppercase">{mode === "enroll" ? "Recording Your Signature" : "Verifying Identity"}</div>
+            <div className="text-white/20 text-[12px] uppercase">{mode === "enroll" ? "Recording Your Signature" : "Verifying Continuity"}</div>
             <div className="text-[120px] font-light text-[#3fb950] leading-none" style={{ textShadow: "0 0 60px rgba(63,185,80,0.4)", animation: "countdownPulse 1s ease-in-out infinite" }}>{countdown}</div>
           </div>
         )}
@@ -335,13 +335,13 @@ export default function FusionClient() {
             {enrollmentDone ? (
               <div className="text-center p-6 border-2 border-[#90c8ff]/40 bg-[#90c8ff]/[0.04] space-y-4">
                 <div className="text-6xl">🔒</div>
-                <h2 className="text-[22px] font-light text-[#90c8ff]">Identity Enrolled</h2>
+                <h2 className="text-[22px] font-light text-[#90c8ff]">Continuity Enrolled</h2>
                 <p className="text-white/25 text-[12px]">Your dual-channel signature saved. Now verify to confirm it works.</p>
               </div>
             ) : displayVerdict === "PASS" ? (
               <div className="text-center p-6 border-2 border-[#3fb950]/40 bg-[#3fb950]/[0.04] space-y-4">
                 <div className="text-6xl">✅</div>
-                <h2 className="text-[22px] font-light text-[#3fb950]">Identity Verified</h2>
+                <h2 className="text-[22px] font-light text-[#3fb950]">Continuity Verified</h2>
                 <p className="text-white/25 text-[12px]">All evidence components pass. Policy: {displayVerdict}.</p>
               </div>
             ) : (

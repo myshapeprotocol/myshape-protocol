@@ -55,6 +55,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/research/discovery-survey", destination: "/lab/discovery-survey", permanent: true },
+      // Identity-positioning cleanup: the former /protocol/identity-layer page is
+      // now the Continuity Layer. Permanent redirect preserves inbound links.
+      { source: "/protocol/identity-layer", destination: "/protocol/continuity-layer", permanent: true },
     ];
   },
 

@@ -9,10 +9,10 @@ const GLOSSARY_TERMS = [
   "Jerk Spectrum", "Genesis Ritual", "Presence Receipt",
   "State-Chain Evolution", "Entropy Transformation", "Ethereal Data Energy",
   "Non-Binary Aesthetic", "Wireframe Anatomy",
-  "Agent Economy", "Sovereign Identity", "Zero-Knowledge Proof (ZKP)",
+  "Agent Economy", "Sovereign Continuity", "Zero-Knowledge Proof (ZKP)",
   "SST (Skeletal Surface Topology)", "Halo Scan", "Motion Pipeline",
   "Protocol Node", "Agent Declaration", "Hurst Exponent",
-  "Kinetic Verification", "Identity Mesh", "Post-Biometric Identity",
+  "Kinetic Verification", "Protocol Mesh", "Post-Biometric Identity",
   "Physiological Tremor",
 ];
 

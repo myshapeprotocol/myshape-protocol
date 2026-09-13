@@ -4,7 +4,7 @@ import BlogClient from "./BlogClient";
 export const metadata: Metadata = {
   title: "Protocol Log — MyShape Genesis Archive",
   description:
-    "Technical essays on sovereign identity, presence verification, and the protocol layer for verifiable digital continuity.",
+    "Technical essays on digital continuity, presence verification, and the protocol layer for verifiable sovereignty.",
   alternates: {
     canonical: "https://www.myshape.com/blog",
     types: {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Protocol Log — MyShape Genesis Archive",
     description:
-      "Essays on sovereign identity, presence verification, and verifiable digital continuity.",
+      "Essays on digital continuity, presence verification, and verifiable sovereignty.",
     url: "https://www.myshape.com/blog",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Protocol Log — MyShape Genesis Archive",
     description:
-      "Essays on sovereign identity, presence verification, and verifiable digital continuity.",
+      "Essays on digital continuity, presence verification, and verifiable sovereignty.",
     images: ["/og-image.png"],
   },
 };
@@ -61,7 +61,7 @@ export default function BlogPage() {
         "@context": "https://schema.org",
         "@type": "ItemList",
         name: "MyShape Protocol — Protocol Log",
-        description: "Technical essays on sovereign identity, presence verification, and the protocol layer for verifiable digital continuity.",
+        description: "Technical essays on digital continuity, presence verification, and the protocol layer for verifiable sovereignty.",
         url: "https://www.myshape.com/blog",
         numberOfItems: BLOG_ITEMS.length,
         itemListElement: BLOG_ITEMS.map((item, i) => ({

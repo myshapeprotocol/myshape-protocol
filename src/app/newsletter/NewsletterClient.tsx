@@ -50,7 +50,7 @@ export default function NewsletterClient() {
           <div className="space-y-4 mb-12">
             <div className="text-[#90c8ff]/40 text-[11px] tracking-[0.3em] uppercase">SIGNAL_SUBSCRIPTION</div>
             <h1 className="text-2xl md:text-3xl font-light tracking-[0.06em] text-white leading-tight">Protocol<br /><span className="text-[#90c8ff]">Newsletter</span></h1>
-            <p className="text-white/30 text-[11px] tracking-[0.08em] leading-relaxed max-w-lg mx-auto">Technical deep-dives on sovereign identity, motion-signature verification, zero-knowledge presence, and the Agent Economy. No spam. Pure signal.</p>
+            <p className="text-white/30 text-[11px] tracking-[0.08em] leading-relaxed max-w-lg mx-auto">Technical deep-dives on sovereign continuity, motion-signature verification, zero-knowledge presence, and the Agent Economy. No spam. Pure signal.</p>
           </div>
 
           <div className="mb-12">

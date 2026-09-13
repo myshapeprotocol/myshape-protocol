@@ -13,7 +13,7 @@ const GATE_LABELS: Record<string, { title: string; body: string; lockedBody: str
     lockedBody: "Complete your first motion scan to mint your Genesis Key — the protocol's root entropy anchor.",
   },
   "Continuity Proof": {
-    title: "Continuity Identity",
+    title: "Continuity Verification",
     body: "Generate continuity receipts of presence — prove you are human without revealing who you are.",
     lockedBody: "Reach Regular reputation and PULSE particle level to unlock privacy-preserving ZK proof generation.",
   },

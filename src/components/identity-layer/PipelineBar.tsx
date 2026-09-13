@@ -10,9 +10,10 @@ interface Step {
 interface Props {
   steps: Step[];
   footer: string;
+  label?: string;
 }
 
-export default function PipelineBar({ steps, footer }: Props) {
+export default function PipelineBar({ steps, footer, label = "Identity Pipeline" }: Props) {
   const variantClass = (v: Step["variant"]) => {
     if (v === "highlight") return "il-pipeline-step il-step-highlight";
     if (v === "glow") return "il-pipeline-step il-step-glow";
@@ -21,7 +22,7 @@ export default function PipelineBar({ steps, footer }: Props) {
 
   return (
     <section className="il-pipeline">
-      <div className="il-pipeline-label">Identity Pipeline</div>
+      <div className="il-pipeline-label">{label}</div>
       <div className="il-pipeline-steps">
         {steps.map((step, i) => (
           <span key={step.label}>

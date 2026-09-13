@@ -4,24 +4,24 @@ import BreadcrumbList from "@/components/seo/BreadcrumbList";
 import FaqJsonLd from "@/components/seo/FaqJsonLd";
 
 export const metadata: Metadata = {
-  title: "MyShape vs Worldcoin vs Civic — Identity Protocol Comparison 2026",
+  title: "MyShape vs Worldcoin vs Civic — Continuity vs Identity Comparison 2026",
   description:
-    "Comparing MyShape Protocol with Worldcoin, Civic, SpruceID, TRIP, and Polygon ID. Motion-signature vs biometrics vs credentials. Which identity layer protects your sovereignty?",
+    "Comparing MyShape Protocol with Worldcoin, Civic, SpruceID, TRIP, and Polygon ID. Motion-signature continuity vs biometrics vs credentials. Which layer protects your sovereignty?",
   keywords: [
     "MyShape vs Worldcoin",
     "decentralized identity comparison",
     "motion-signature vs biometrics",
-    "identity protocol comparison 2026",
-    "self-sovereign identity alternatives",
+    "continuity vs identity 2026",
+    "continuity verification alternatives",
     "Worldcoin alternative",
     "proof of personhood comparison",
     "zero-knowledge identity",
   ],
   alternates: { canonical: "https://www.myshape.com/compare" },
   openGraph: {
-    title: "MyShape vs Worldcoin vs Civic — Identity Protocol Comparison 2026",
+    title: "MyShape vs Worldcoin vs Civic — Continuity vs Identity Comparison 2026",
     description:
-      "Motion-signature vs biometrics vs credentials. Which identity layer actually protects your sovereignty?",
+      "Motion-signature continuity vs biometrics vs credentials. Which layer actually protects your sovereignty?",
     url: "https://www.myshape.com/compare",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape vs Worldcoin vs Civic — Identity Protocol Comparison",
+    title: "MyShape vs Worldcoin vs Civic — Continuity vs Identity Comparison",
     description:
-      "Which identity layer actually protects your sovereignty? A principled comparison.",
+      "Which layer actually protects your sovereignty? A principled comparison.",
     images: ["/og-image.png"],
   },
 };

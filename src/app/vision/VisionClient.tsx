@@ -8,8 +8,8 @@ const pillars = [
   {
     id: "PIL_01",
     title: "PRESENCE FIRST",
-    subtitle: "Identity is generated, not stored",
-    desc: "Every identity system today stores a credential. MyShape verifies presence — the continuous, entropy-rich signal of a living entity in motion. Presence is the identity. Everything else is just a record.",
+    subtitle: "Continuity is generated, not stored",
+    desc: "Every identity system today stores a credential. MyShape verifies presence — the continuous, entropy-rich signal of a living entity in motion. Presence is the proof. Everything else is just a record.",
     accent: "from-[#00E5FF]/80 to-[#00E5FF]/0",
     color: "rgba(0,229,255,0.4)",
   },
@@ -85,9 +85,9 @@ export default function VisionClient() {
               Towards <span className="text-[#00E5FF]">Sovereignty</span>.
             </h2>
             <p className="text-white/55 text-[14px] tracking-[0.1em] leading-[1.9] font-light max-w-2xl">
-              Identity is a property of an entity — measurable through accumulated evidence across time,
+              Continuity is a property of an entity — measurable through accumulated evidence across time,
               verifiable through multiple independent signals, and sovereign by default. MyShape Protocol translates motion into geometry,
-              geometry into proof, and proof into presence — creating the first identity layer that
+              geometry into proof, and proof into presence — creating the first continuity layer that
               belongs to the individual, not the platform.
             </p>
           </div>
@@ -201,10 +201,10 @@ export default function VisionClient() {
 
       <div className="sr-only">
         <h2>The Continuity Layer for the Simulation Age</h2>
-        <p>MyShape defines a new primitive: verifiable digital continuity. When AI can generate your face, voice, and behavior — what proves that you continue to exist? Motion-Signature verification, ZK-Continuity proofs, and sovereign data-body architecture for persistent digital subjects in the Agent Economy.</p>
+        <p>MyShape defines a new primitive: verifiable digital continuity. When AI can generate your face, voice, and behavior — what proves that you continue to exist? Motion-Signature verification, ZK-Continuity proofs, and data-body architecture for persistent digital subjects in the Agent Economy.</p>
         <a href="/whitepaper">Whitepaper</a>
         <a href="/protocol">Protocol Architecture</a>
-        <a href="/identity">AI-Native Identity Layer</a>
+        <a href="/protocol/continuity-layer">AI-Native Continuity Layer</a>
         <a href="/papers">Technical Papers</a>
       </div>
     </ProtocolLayout>

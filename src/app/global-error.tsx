@@ -27,7 +27,7 @@ export default function GlobalError({
       <body style={{ margin: 0, padding: 0, background: "#051025" }}>
         <ErrorFallback
           title="PROTOCOL_LAYER_UNREACHABLE"
-          message="A critical protocol error has occurred.\nThe identity layer cannot be rendered.\n\nRe-initialization may restore the connection."
+          message="A critical protocol error has occurred.\nThe continuity layer cannot be rendered.\n\nRe-initialization may restore the connection."
           onReset={reset}
           resetLabel="REINITIALIZE_PROTOCOL"
         />

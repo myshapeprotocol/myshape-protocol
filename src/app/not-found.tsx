@@ -19,7 +19,7 @@ export default function RootNotFound() {
         </div>
         <div className="h-[1px] w-12 mx-auto bg-gradient-to-r from-transparent via-[#90c8ff]/20 to-transparent" />
         <p className="text-white/15 text-[11px] tracking-[0.15em] uppercase max-w-xs leading-relaxed">
-          This identity vector does not exist in the protocol mesh.
+          This node does not exist in the protocol mesh.
           The sector you requested has been archived, relocated, or never initialized.
         </p>
       </div>
