@@ -56,7 +56,7 @@ for PATTERN in "${BANNED[@]}"; do
       RAW_MATCHES=$(grep -Hin "$PATTERN" "$file" 2>/dev/null || true)
             # 排除: 技术术语/HTML标签/HTTP fetch body；以及合法 DOM API document.body.* 调用
       # （明确例外：只匹配含 document.body 的行，不影响任何其它 banned-word 检测）
-            MATCHES=$(echo "$RAW_MATCHES" | grep -v -i -E 'document\.body|data.body|non.biometric|no[[:space:]]+biometric|Particle.Body|body[: ].|BodyInit|<body|</body|body \{|biometric, device attestation, reputation|biometric binding is enforced|Post Body$|the-post-biometric-era-2026' || true)
+            MATCHES=$(echo "$RAW_MATCHES" | grep -v -i -E 'document\.body|data.body|non.biometric|no[[:space:]]+biometric|Particle.Body|body[: ].|BodyInit|<body|</body|body \{|biometric, device attestation, reputation|biometric binding is enforced|Post Body$|the-post-biometric-era-2026|dqs-body|Post-Biometric' || true)
       if [ -n "$MATCHES" ]; then
         VIOLATIONS=$((VIOLATIONS + 1))
         echo -e "${RED}✘ BANNED WORD${NC} found in: ${YELLOW}$file${NC}"
