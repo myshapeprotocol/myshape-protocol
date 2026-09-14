@@ -256,11 +256,13 @@ No claim is made here about deployment, adoption, or real-world performance.
    challenge-response / WebAuthn, on-/off-chain attestation schemes) should
          the future Trust Framework intentionally compose with?
 
+See also: **[What Continuity Is — and Is Not](../continuity-is-and-is-not-draft.md)** — a concise boundary analysis distinguishing continuity from identity, integrity, provenance, attestation, temporal validity, state integrity, authorization, and trust.
+
 ---
 
 ## 10. Status
 
-- **CPS-0002 Protocol Core: FROZEN** — `cps-hsa-0.1-draft`
+- **CPS-0002 Protocol Core: PROTOTYPE FREEZE CANDIDATE — NOT YET FROZEN** — `cps-hsa-0.1-draft`
   (frozen commit `d06b907` / tag `cps-hsa-0.1-draft`; companion
   `cps-0002-0.1-draft` at `1008e8f`).
 - **Trust Framework: NOT FROZEN / OUT OF SCOPE.**

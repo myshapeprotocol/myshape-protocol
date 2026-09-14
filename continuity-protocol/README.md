@@ -52,4 +52,16 @@ Currently tracking results in → **[BLIND_TEST_REPORT.md](BLIND_TEST_REPORT.md)
 
 ---
 
+## CPS-0002 — External Review
+
+CPS-0002 is a receipt-bound attestation layer over CPS-0001. For external review:
+
+→ **[CPS-0002 External Review Brief](CPS-0002-EXTERNAL-REVIEW-BRIEF.md)** — Full entry point: frozen core, trust boundary, evidence surface, open questions.
+
+→ **[2-Minute External Review Brief](../myshape-external-review-2min-brief.md)** — First-touch briefing for researchers.
+
+→ **[What Continuity Is — and Is Not](../continuity-is-and-is-not-draft.md)** — Boundary analysis: continuity vs. identity, integrity, provenance, attestation, trust.
+
+---
+
 *Part of the Continuity Protocol Project · 2026-07-24*

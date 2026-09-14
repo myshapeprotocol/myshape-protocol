@@ -22,6 +22,26 @@ It is **engine-independent**. No sensor type, algorithm, or hardware requirement
 
 **The protocol standardizes the object, not the engine.**
 
+## And CPS-0002?
+
+CPS-0002 builds an **independently verifiable attestation layer** around the Continuity Receipt. A CPS-0002 **Human Signal Assertion** is an attester-signed, receipt-bound, evidence-digest-committed, expiry-bounded assertion: it cryptographically references a CPS-0001 receipt, a subject, an attester, an evidence payload digest, and a validity period.
+
+- **CPS-0001** defines the Continuity Receipt.
+- **CPS-0002** defines how an assertion binds to that receipt and is independently verified → `VALID` / `INVALID`.
+- **Trust remains a separate policy and deployment decision.** `VALID` does not mean trusted, authorized, human, or accepted — the Trust Framework is outside the frozen core.
+
+**Status:** CPS-0002 Protocol Core is **frozen** as `cps-hsa-0.1-draft`. The broader Trust Framework is **not frozen / out of scope**. Protocol core: commit `d06b907`, tag `cps-hsa-0.1-draft`.
+
+→ **[CPS-0002 Concept](continuity-protocol/CPS-0002_CONCEPT.md)** · **[Verifier Contract](continuity-protocol/CPS-0002-VERIFIER-CONTRACT.md)** · **[Trust Policy](continuity-protocol/CPS-0002-TRUST-POLICY.md)** · **[Threat Model](continuity-protocol/CPS-0002-THREAT-MODEL.md)** · **[Assertion Schema](continuity-protocol/cps-0002-assertion.schema.json)**
+
+## External Review
+
+Researchers and reviewers: start here.
+
+→ **[2-Minute External Review Brief](../myshape-external-review-2min-brief.md)** — First-touch briefing: hypothesis, scope, limitations, and what we want reviewers to challenge.
+
+→ **[CPS-0002 External Review Brief](continuity-protocol/CPS-0002-EXTERNAL-REVIEW-BRIEF.md)** — Full entry point for technical review: frozen core, trust boundary, evidence surface, and open questions.
+
 ## Implement It Yourself
 
 → **[IMPLEMENT.md](continuity-protocol/IMPLEMENT.md)** — Create a receipt in 1 hour. No MyShape. No IMU. No camera.
