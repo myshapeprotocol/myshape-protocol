@@ -44,15 +44,15 @@ A proof that "this agent's actions are authorized by this continuously-present h
   {
     id: "myShape-approach",
     heading: "The MyShape Approach: Coexistence",
-    content: `MyShape is the only identity protocol designed from first principles for human-agent coexistence.
+    content: `MyShape is a continuity protocol designed from first principles for human-agent coexistence.
 
-The architecture is symmetric: human nodes and agent nodes exist in the same identity mesh, using the same protocol primitives, but verified through different mechanisms.
+The architecture is symmetric: human nodes and agent nodes exist in the same continuity mesh, using the same protocol primitives, but verified through different mechanisms.
 
 Human nodes: verified through motion-signature (proof of biological presence). The 128-dimensional motion vector, PES scoring, and Continuity proof ensure that only a physically present human can initialize or verify a human node.
 
 Agent nodes: registered through cryptographic declaration (proof of deployment provenance). The agent's public key is bound to the human principal's continuity chain. The agent inherits the human's continuity guarantees — but cannot spoof the human's motion-signature.
 
-The two node types interact through the Identity Mesh: a distributed graph where every node — human or agent — maintains sovereign control over its own Data-Body while participating in the collective verification network. An agent can query a human's continuity status. A human can audit their agent's action history. A third-party protocol can verify that "agent A, deployed by human H, with unbroken continuity since deployment, executed transaction T."
+The two node types interact through the Continuity Mesh: a distributed graph where every node — human or agent — maintains sovereign control over its own Data-Body while participating in the collective verification network. An agent can query a human's continuity status. A human can audit their agent's action history. A third-party protocol can verify that "agent A, deployed by human H, with unbroken continuity since deployment, executed transaction T."
 
 This is not science fiction. The Agent Declaration endpoint is live. The continuity chain architecture is deployed. The motion-signature engine distinguishes human from AI with mathematical certainty.`,
   },

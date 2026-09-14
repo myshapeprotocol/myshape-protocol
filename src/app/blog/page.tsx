@@ -36,7 +36,7 @@ const BLOG_ITEMS = [
   { title: "Continuity Verification Explained — What ZK Means for Digital Identity", url: "https://www.myshape.com/blog/zero-knowledge-proofs-digital-identity-explained", date: "2026-07-03" },
   { title: "Motion vs Biometrics — Why Your Face Is Not a Password", url: "https://www.myshape.com/blog/motion-vs-biometrics-why-your-face-is-not-a-password", date: "2026-07-03" },
   { title: "Proof of Personhood vs Proof of Continuity", url: "https://www.myshape.com/blog/proof-of-personhood-vs-proof-of-continuity", date: "2026-07-03" },
-  { title: "AI Agent Identity — How Autonomous Agents Prove Who They Are", url: "https://www.myshape.com/blog/ai-agent-identity-how-autonomous-agents-prove-who-they-are", date: "2026-07-03" },
+  { title: "AI Agent Continuity — How Autonomous Agents Prove They Are Still Themselves", url: "https://www.myshape.com/blog/ai-agent-identity-how-autonomous-agents-prove-who-they-are", date: "2026-07-03" },
   { title: "Self-Sovereign Identity Explained — What SSI Actually Means in 2026", url: "https://www.myshape.com/blog/self-sovereign-identity-explained-2026", date: "2026-07-03" },
   { title: "The Post-Biometric Era — Why 2026 Is the Year We Stop Scanning Faces", url: "https://www.myshape.com/blog/the-post-biometric-era-2026", date: "2026-07-03" },
   { title: "Digital Identity Future 2027 — Predictions for the Identity Layer", url: "https://www.myshape.com/blog/digital-identity-future-2027", date: "2026-07-03" },

@@ -153,7 +153,7 @@ World solves the bot problem. MyShape solves the continuity problem. These are d
 
 The real competitive landscape is **every future infrastructure project that will attempt to solve Human-Agent Continuity.** This category does not yet have a name, but it will — because every AI agent network, every DeFi protocol handling serious value, and every autonomous system will eventually discover that they need it.
 
-MyShape's advantage is being first to define the category, first to build the pipeline, and first to articulate why continuity — not identity — is the right primitive for the Simulation Age.
+MyShape's advantage is early work defining the category and articulating why continuity — not identity — may be the right primitive for the Simulation Age.
 
 ---
 
@@ -163,11 +163,11 @@ In a world of infinite copies and infinite agents, one question cuts through the
 
 **What proves that you continue to exist?**
 
-Not your passport. Not your private key. Not your visual identity. Not your voice. All of these are data. All data can be generated.
+Not your passport. Not your private key. Not your visual identity. Not your voice. All of these are data. Most data can be copied, replayed, or synthesized.
 
-The only thing that cannot be generated is the **unbroken causal trajectory of your data-body in motion.** Your motion-signature is not a credential you hold. It is a property you **are.**
+The hardest thing to synthesize is the **unbroken causal trajectory of a data-body in motion.** Your motion-signature is not a credential you hold. It is a property you **are.**
 
-MyShape translates that property into a verifiable proof — and in doing so, gives the Simulation Age its first Continuity Layer.
+MyShape translates that property into a verifiable proof — and in doing so, gives the Simulation Age a verifiable Continuity Layer.
 
 ---
 
