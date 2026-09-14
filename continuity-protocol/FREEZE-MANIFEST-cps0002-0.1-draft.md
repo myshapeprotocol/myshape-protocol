@@ -1,4 +1,4 @@
-# CPS-0002 0.1-Draft Freeze Manifest
+# CPS-0002 `cps-hsa-0.1-draft` Freeze Manifest
 
 **Version**: `cps-hsa-0.1-draft`
 **Type**: Prototype freeze candidate (NOT final protocol freeze)
@@ -46,7 +46,7 @@ This manifest is the exact, exhaustive list of files intended to belong to the C
 
 | Path | Reason |
 |---|---|
-| `continuity-protocol/conformance/cps0002-conformance.test.ts` | 45 conformance tests |
+| `continuity-protocol/conformance/cps0002-conformance.test.ts` | 52 conformance tests |
 
 ## Interoperability Suite (INCLUDE)
 
