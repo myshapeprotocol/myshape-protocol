@@ -3,6 +3,12 @@ import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import "@/components/hero-demo/hero-demo.css";
 import { playTick } from "@/utils/useAudioTick";
+import {
+  canRunTryFlow,
+  detectTryCapability,
+  resolveHeroTryHref,
+  HERO_TRY_FALLBACK_HREF,
+} from "@/lib/try-capability";
 
 const SCENES = ["formation","motion","verification","mesh"] as const;
 const DUR = 8000;
@@ -33,6 +39,8 @@ export default function HeroTrail() {
   const [subtitle, setSubtitle] = useState("");
   const [subVisible, setSubVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [tryHref, setTryHref] = useState(HERO_TRY_FALLBACK_HREF);
+  const [canVerify, setCanVerify] = useState(false);
 
   /* detect mobile — sync on mount + resize */
   useEffect(() => {
@@ -40,6 +48,23 @@ export default function HeroTrail() {
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
+  }, []);
+
+  /* PHASE 2B — capability-aware CTA target.
+     Hydration-safe: SSR and the first client render both emit the
+     accessible fallback (/motion-demo); after mount this upgrades to /try
+     only when the browser can plausibly run the full /try sensor flow
+     (DeviceMotion + mobile-class IMU environment). Same label and
+     geometry for both targets → no layout shift.
+
+     BATCH-005A — verification CTA is MOBILE-ONLY. The CTA is not rendered
+     at all during SSR/first render (canVerify=false), so desktop never sees
+     a verification action it cannot complete. After mount, canVerify turns
+     true only on a verification-capable device. */
+  useEffect(() => {
+    const cap = detectTryCapability();
+    setCanVerify(cap !== null && canRunTryFlow(cap));
+    setTryHref(resolveHeroTryHref(cap));
   }, []);
 
   /* particle canvas */
@@ -135,13 +160,16 @@ export default function HeroTrail() {
           ))}
         </div>
 
-        {/* Mobile CTA — data collection */}
-        <div className="hero-demo-ctas">
-          <Link href="/lab/contribute" className="hero-demo-cta primary"
-            onMouseEnter={() => playTick(700, "sine", 0.1, 0.03)}>
-            <span className="hero-demo-cta-label">Contribute Data</span>
-          </Link>
-        </div>
+                {/* Mobile CTA — primary action is "Run a verification".
+                    Rendered only on verification-capable devices (BATCH-005A). */}
+        {canVerify && (
+          <div className="hero-demo-ctas">
+            <Link href={tryHref} className="hero-demo-cta primary"
+              onMouseEnter={() => playTick(700, "sine", 0.1, 0.03)}>
+              <span className="hero-demo-cta-label">RUN A VERIFICATION</span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
