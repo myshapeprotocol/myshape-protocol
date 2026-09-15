@@ -605,7 +605,7 @@ export default function NoteClient() {
               </p>
 
               <ul>
-                <li><strong>Hash chain</strong> — SHA-256 of the predecessor (RFC-0002, current default)</li>
+                <li><strong>Predecessor reference</strong> — SHA-256 of the predecessor, unsigned in v1.0-RC1 (RFC-0002 draft)</li>
                 <li><strong>Merkle accumulator</strong> — efficient inclusion proofs for chains with many receipts</li>
                 <li><strong>DAG reference</strong> — multiple predecessors for branching continuity histories</li>
                 <li><strong>ZK-aggregated reference</strong> — zero-knowledge proof that a valid predecessor exists without revealing it</li>

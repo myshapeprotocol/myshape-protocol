@@ -4,7 +4,7 @@
 
 CPS-0001 defines the **Continuity Receipt** — a cryptographically verifiable statement that an observer collected sufficient evidence supporting the continuity of a subject over a bounded interval of time.
 
-It answers a question that existing identity infrastructure cannot: *"Is this subject the same entity observed 8 seconds ago?"* — without storing biometric data, without centralized authorities, and without requiring a specific trusted execution environment.
+It answers a question that existing identity infrastructure cannot: *"Is this subject the same entity observed 8 seconds ago?"* — without storing raw sensor data, without centralized authorities, and without requiring a specific trusted execution environment.
 
 We are **The Continuity Lab**, an independent research organization. We publish everything openly: protocol specifications, reference implementations, test vectors, conformance suites, and benchmark data. No company. No token. No product.
 
@@ -25,12 +25,12 @@ CPS-0001 does not replace Ethereum's identity stack — it adds a missing primit
 
 | Component | Status | Details |
 |-----------|--------|---------|
-| **Protocol Spec (CPS-0001)** | ✅ v1.0-RC | ContinuityReceipt object model, V₁-V₇ verification contract |
+| **Protocol Spec (CPS-0001)** | ✅ v1.0-RC1 | ContinuityReceipt object model, V₁-V₇ verification contract |
 | **Reference Verifier** | ✅ TypeScript | Zero MyShape dependencies; V₁-V₇ in 273 lines |
 | **Test Vectors** | ✅ 6 receipts | Valid (single/multi/agent), invalid (expired/tampered/broken-chain) |
 | **Conformance Suite** | ✅ 23 assertions, 10 scenarios | Any implementation claiming CPS-0001 compatibility must pass |
 | **CLI Verifier** | ✅ `npx cps-verify` | Verify receipts from any engine |
-| **npm SDK** | ✅ `@thecontinuitylab/myshape` | `verifyContinuity()` — 84 tests, Apache 2.0 |
+| **npm SDK** | ✅ `@thecontinuitylab/myshape` | `verifyContinuity()` — 140 tests, Apache 2.0 |
 | **Benchmark Dataset** | ✅ CC0 on HuggingFace | EE-001 through VS-001 engine pass rates; 576+ runs |
 | **Engine Evidence (PES)** | ✅ 4D entropy scoring | 100% floor: human vs AI synthetic motion separation |
 

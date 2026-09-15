@@ -54,7 +54,7 @@ Not a product. Not a company. An open protocol.
 
 | Layer | What | Status |
 |-------|------|--------|
-| Core Protocol | ContinuityReceipt object, V₁–V₇ verification, Ed25519 | ✅ v1.0-RC |
+| Core Protocol | ContinuityReceipt object, V₁–V₇ verification, Ed25519 | ✅ v1.0-RC1 |
 | Reference Verifier | Zero MyShape deps, 273 lines | ✅ |
 | Test Vectors | 6 receipts (valid + invalid) | ✅ |
 | Conformance Suite | 23 assertions, 10 scenarios | ✅ |

@@ -190,7 +190,7 @@ export default function Page() {
                   Chain: {receiptHash}...
                 </div>
                 <div style={{ marginTop: 8, fontSize: 11, color: "rgba(255,255,255,0.12)" }}>
-                  Continuity Receipt · CPS-0001 v1.0 · hash-chained to previous verification
+                  Continuity Receipt · CPS-0001 v1.0-RC1 · independent receipt (no signed chain link)
                 </div>
               </div>
             )}

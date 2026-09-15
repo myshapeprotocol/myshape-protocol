@@ -30,7 +30,7 @@ This gap is not academic. It creates real vulnerabilities:
 | Attack | Identity Protocol Response | Continuity Protocol Response |
 |--------|---------------------------|------------------------------|
 | Deepfake bypasses camera liveness | "The face matched." | IMU + camera must converge on same physical event |
-| AI agent hijacked mid-session | "The key is still valid." | Temporal hash chain detects session break |
+| AI agent hijacked mid-session | "The key is still valid." | Unsigned predecessor reference may indicate a session break |
 | Replay attack replays valid sensor data | "The pattern is in the database." | Randomized challenge-response breaks determinism |
 | Sybil attack with synthetic motion | "Each account has a unique key." | Biological entropy in motion is non-synthesizable |
 
@@ -196,7 +196,7 @@ All specifications are published as RFCs under an open artifact versioning syste
 
 **RFC-0001: Motion Signature Format.** Defines PES computation, jerk peak detection (MAD-based dynamic threshold, τ = median + 2×MAD, floor 0.15 m/s³), cross-modal temporal matching (±500ms window, 90° direction tolerance), and challenge-response protocol (3 rounds, jittered timing). Reference implementation: `npm install myshape`.
 
-**RFC-0002: Continuity Proof Format.** Defines Evidence Receipts (SHA-256 hash-chained, UUIDv4 sessions), CFC catalog (8 conditions with severity levels), Verification Policy framework (accept/reject thresholds, escalation rules), and Cross-Device Binding metrics (Pearson correlation of binned IMU streams).
+**RFC-0002: Continuity Proof Format.** Defines Evidence Receipts (Ed25519-signed, SHA-256 evidence digests, UUIDv4 sessions), CFC catalog (8 conditions with severity levels), Verification Policy framework (accept/reject thresholds, escalation rules), and Cross-Device Binding metrics (Pearson correlation of binned IMU streams).
 
 Both RFCs are **Drafts.** External contributions are invited.
 
@@ -225,8 +225,8 @@ const result = await verifyContinuity({
 
 | Path | Content |
 |------|---------|
-| `packages/myshape/` | npm package (84 tests) |
-| `src/lib/evidence/` | Core engines (121 tests) |
+| `packages/myshape/` | npm package (140 tests) |
+| `src/lib/evidence/` | Core engines (243 tests) |
 | `src/app/research/` | Research Hub + interactive prototypes |
 | `papers/` | Research papers + benchmarks |
 

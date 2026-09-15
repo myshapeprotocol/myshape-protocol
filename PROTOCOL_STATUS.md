@@ -1,12 +1,12 @@
 # CPS-0001 Protocol Status
 
-**v1.0-RC** · Last updated: 2026-07-25
+**v1.0-RC1** · Last updated: 2026-07-25
 
 ---
 
 ## Version
 
-`v1.0-RC` — Research Candidate. Semantic model is stable. Wire formats may receive minor adjustments before v1.0.
+`v1.0-RC1` — Research Candidate. Semantic model is stable. Wire formats may receive minor adjustments before v1.0.
 
 ---
 

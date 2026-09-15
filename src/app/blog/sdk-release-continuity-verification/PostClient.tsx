@@ -71,7 +71,7 @@ const result = await verifyContinuity({
                 <tr className="border-b border-white/5"><td className="py-2">Presence</td><td className="py-2">EE-001 · Presence Entropy</td><td className="py-2">Human-generated motion entropy in IMU data</td></tr>
                 <tr className="border-b border-white/5"><td className="py-2">Events</td><td className="py-2">EE-002 · Motion Event Binding</td><td className="py-2">Jerk peak detection via dynamic MAD threshold</td></tr>
                 <tr className="border-b border-white/5"><td className="py-2">Binding</td><td className="py-2">EE-002 · Cross-Modal</td><td className="py-2">Camera + IMU event matching ±500ms</td></tr>
-                <tr className="border-b border-white/5"><td className="py-2">Continuity</td><td className="py-2">RFC-0002</td><td className="py-2">Hash-chained evidence receipts</td></tr>
+                <tr className="border-b border-white/5"><td className="py-2">Continuity</td><td className="py-2">RFC-0002</td><td className="py-2">Ed25519-signed evidence receipts</td></tr>
               </tbody>
             </table>
 
@@ -80,8 +80,8 @@ const result = await verifyContinuity({
             <ul>
               <li><strong className="text-white/60">576 controlled experimental runs</strong> across 4 independent evidence engines</li>
               <li><strong className="text-white/60">2 open RFC specifications</strong> (Motion Signature Format, Continuity Proof Format)</li>
-              <li><strong className="text-white/60">121 automated tests</strong> in the reference implementation</li>
-              <li><strong className="text-white/60">MIT License</strong> — use it, build on it, challenge it</li>
+              <li><strong className="text-white/60">243 automated tests</strong> in the core evidence implementation</li>
+              <li><strong className="text-white/60">Apache 2.0 License</strong> — use it, build on it, challenge it</li>
             </ul>
 
             {/* Roadmap */}

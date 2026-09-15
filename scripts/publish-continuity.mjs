@@ -145,7 +145,7 @@ The goal isn't perfection. It's asymmetry.`,
 
   `CPS-0001 defines engine-independent Continuity Receipts:
 • Ed25519 signed
-• SHA-256 chained (each receipt links to its predecessor)
+• SHA-256 evidence digest
 • V₁–V₇ verification contract
 • Any sensor or algorithm can produce them in the same format`,
 
@@ -236,7 +236,7 @@ Two days ago: "identity ≠ presence." Yesterday: "who are you is the wrong ques
 
 Today, we release what we built.
 
-**CPS-0001** defines engine-independent Continuity Receipts — Ed25519-signed, SHA-256 chained, V₁–V₇ verified.
+**CPS-0001** defines engine-independent Continuity Receipts — Ed25519-signed, SHA-256 evidence digests, verified under V₁/V₃/V₄/V₅/V₆ by default (V₇ when a predecessor is supplied).
 
 **Forgery Cost Framework:** No single unfakeable signal. Instead — measure the cost of faking many signals at once (1× → 5× → 25× → 100×).
 

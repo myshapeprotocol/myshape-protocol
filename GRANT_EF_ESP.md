@@ -36,7 +36,7 @@ Ethereum has world-class cryptography for identity. It has no primitive for **co
 | EE-002 | Cross-Modal Causal Coupling | N=316, 58% |
 | EE-003 | Gyroscope Challenge | N=200, 59% |
 | VS-001 | Dual-Engine Pipeline | N=60, 93% |
-| npm package | `verifyContinuity()` | MIT · 84 tests |
+| npm package | `verifyContinuity()` | Apache 2.0 · 140 tests |
 
 **576 experimental runs. All data, diagnostics, and failure reports public.**
 

@@ -33,7 +33,7 @@ Security issues in the following areas are in scope:
 
 | Version | Supported          |
 |---------|--------------------|
-| v1.0-RC | ✅ Full support    |
+| v1.0-RC1 | ✅ Full support    |
 | < v1.0   | ❌ No longer supported |
 
 ## Disclosure Policy

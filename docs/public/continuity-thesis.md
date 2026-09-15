@@ -59,7 +59,7 @@ Continuity is a requirement of the simulation age. It answers: *I was X at T₀.
 
 Every identity system ever built — from passwords to identity credentials to zero-knowledge proofs — operates in the left column. They verify a claim. They do not verify a trajectory.
 
-MyShape operates in the right column. It verifies that the entity generating this proof is the same entity that generated the last one, and the one before that, in an unbroken chain of physical presence.
+MyShape operates in the right column. It records bounded observation intervals as independently verifiable receipts, each signed by the holder of the attesting key.
 
 ---
 

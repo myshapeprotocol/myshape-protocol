@@ -136,7 +136,7 @@ export default function ContinuityPage() {
           </div>
 
           <p style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", fontWeight: 300, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, marginBottom: 20 }}>
-            We asked: what if verification didn&apos;t return &quot;yes&quot; or &quot;no&quot; — but <em>evidence</em>? Signed, timestamped, hash-chained receipts that you can hold, verify, and link together into a proof of continuous presence.
+            We asked: what if verification didn&apos;t return &quot;yes&quot; or &quot;no&quot; — but <em>evidence</em>? Signed, timestamped receipts covering bounded observation intervals that you can hold and verify independently.
           </p>
 
           <p style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", fontWeight: 300, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, marginBottom: 20 }}>

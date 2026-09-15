@@ -1,10 +1,10 @@
 # The Continuity Lab™ — MyShape Protocol
 
-> Open protocol research: verifying continuity as a verifiable property of digital presence. 2 RFCs, 576 experiments, reference implementation. All data public. MIT license.
+> Open protocol research: verifying continuity as a verifiable property of digital presence. 2 RFCs, 576 experiments, reference implementation. All data public. Apache 2.0 license.
 
 ## Specifications (RFCs)
 - [RFC-0001: Motion Signature Format](https://www.myshape.com/research/notes/004-motion-signature-rfc): Formal specification. PES computation, jerk peak detection (MAD-based dynamic threshold), cross-modal temporal matching (±500ms), challenge-response protocol (3 rounds, jittered timing).
-- [RFC-0002: Continuity Proof Format](https://www.myshape.com/research/notes/006-continuity-proof-rfc): Evidence Receipts (SHA-256 hash-chained), CFC catalog (8 conditions), Verification Policy framework, Cross-Device Binding metrics.
+- [RFC-0002: Continuity Proof Format](https://www.myshape.com/research/notes/006-continuity-proof-rfc): Evidence Receipts (Ed25519-signed, SHA-256 evidence digests), CFC catalog (8 conditions), Verification Policy framework, Cross-Device Binding metrics.
 
 ## Research Notes
 - [RN-003: Cross-Modal Binding](https://www.myshape.com/research/notes/003-cross-modal-binding): 576-run validation. Temporal alignment 100% across independent devices. CFC-005 validated (13 detections on independent, 0 on single device).
@@ -27,7 +27,7 @@
 - [VS-001: Dual-Engine Pipeline](https://www.myshape.com/research/protocol-verify): EE-001 passive + EE-003 escalation. N=60, 93% pass rate.
 
 ## Developer Resources
-- [npm: myshape](https://www.npmjs.com/package/myshape): `verifyContinuity()` — one function, 84 tests, MIT license.
+- [npm: @thecontinuitylab/myshape](https://www.npmjs.com/package/@thecontinuitylab/myshape): `verifyContinuity()` — one function, 140 tests, Apache 2.0 license.
 - [GitHub: myshape-protocol](https://github.com/myshapeprotocol/myshape-protocol): Full monorepo with engines, tests, research pages, and prototypes.
 - [Research Hub](https://www.myshape.com/research): Interactive prototypes and published research index.
 - [ROADMAP.md](https://github.com/myshapeprotocol/myshape-protocol/blob/master/ROADMAP.md): 2026 achievements, 2027 plans, artifact versioning strategy.

@@ -1,7 +1,7 @@
 # The Continuity Lab™ — MyShape Protocol · Full AI Reference
 
-> Version: 2026-07-19 | RFCs: 2 | Experiments: 576 | Tests: 121
-> Open protocol research. All data public. MIT license.
+> Version: 2026-07-19 | RFCs: 2 | Experiments: 576 | Tests: 243
+> Open protocol research. All data public. Apache 2.0 license.
 
 ## 1. WHAT THIS IS
 
@@ -25,7 +25,7 @@ https://www.myshape.com/research/notes/006-continuity-proof-rfc
 
 Defines the proof infrastructure:
 - EvidenceReceipt: JSON-serializable object with sessionId (UUIDv4), timestamp, verdict, confidence, engineEvidence[], evidenceDigest (SHA-256), previousReceiptHash, cfcResults[]
-- Hash Chaining: R₁ → H(R₁) → R₂ → H(R₂) → R₃. Chain Integrity Score (CIS) = valid links / total links.
+- Receipt Linking: each receipt MAY carry `previousReceiptHash` (unsigned in v1.0-RC1). V₇ checks the linkage only when a predecessor receipt is supplied; default verification does not execute V₇.
 - CFC Catalog: 8 Continuity Failure Conditions with severity levels and detection algorithms.
 - Verification Policy: acceptThreshold (0.70), rejectThreshold (0.35), IMU_ONLY_CAP (0.65), escalationEngines ([EE-003])
 
@@ -84,14 +84,14 @@ Temporal alignment 100% throughout all three trackers.
 
 npm package: `myshape`
 ```typescript
-import { verifyContinuity } from "myshape";
+import { verifyContinuity } from "@thecontinuitylab/myshape";
 const result = await verifyContinuity({ imuSamples, cameraSamples });
 // → { verdict, confidence, evidence }
 ```
 
-- 84 tests, MIT license
+- 140 tests, Apache 2.0 license
 - Source: github.com/myshapeprotocol/myshape-protocol
-- Core engine tests: src/lib/evidence/ (121 tests)
+- Core engine tests: src/lib/evidence/ (243 tests)
 
 ## 7. RESEARCH ARTIFACTS
 
@@ -108,14 +108,14 @@ const result = await verifyContinuity({ imuSamples, cameraSamples });
 - The Continuity Lab: thecontinuitylab.org
 - GitHub: github.com/myshapeprotocol + github.com/ContinuityLab-Org
 - HuggingFace: huggingface.co/ContinuityLab-Org (dataset: myshape-576)
-- npm: myshape
+- npm: @thecontinuitylab/myshape
 
 ## 9. KEY CONCEPTS
 
 - Continuity: The property that two temporally separated observations describe the same entity
 - Presence: The property of being a living, physically embodied entity
 - Evidence Engine: A module that produces structured evidence from sensor data
-- EvidenceReceipt: Hash-chained, verifiable record of a verification session
+- EvidenceReceipt: Ed25519-signed, independently verifiable record of a verification session
 - CFC: Continuity Failure Condition — a measurable condition that reduces confidence
 - PES: Presence Entropy Score — 4D quantification of biological entropy
 

@@ -106,7 +106,7 @@ export default function DevelopersClient() {
       {/* Compact CTA banner — replaces the old global AnnouncementBar */}
       <div className="relative z-10 flex items-center justify-center gap-3 px-4 py-2.5 border-b border-[#90c8ff]/10 bg-[#90c8ff]/[0.03] font-mono text-[11px] tracking-[0.06em] text-white/55">
         <span className="w-1.5 h-1.5 rounded-full bg-[#90c8ff] shadow-[0_0_6px_rgba(144,200,255,0.5)] animate-pulse flex-shrink-0" />
-        CPS-0001 v1.0-RC · Reference verifier · Conformance suite · npm SDK
+        CPS-0001 v1.0-RC1 · Reference verifier · Conformance suite · npm SDK
         <a href="#quickstart" className="text-[#90c8ff]/70 hover:text-[#90c8ff] transition-colors whitespace-nowrap ml-1">Get Started ↓</a>
       </div>
 

@@ -161,7 +161,7 @@ The Continuity Lab is a research entity dedicated to open-source continuity infr
 ```typescript
 import { verifyContinuity } from "myshape";
 // One function. Sensor data in → verification result out.
-// npm install myshape · 84 tests · MIT license
+// npm install @thecontinuitylab/myshape · 140 tests · Apache 2.0 license
 ```
 
 ---

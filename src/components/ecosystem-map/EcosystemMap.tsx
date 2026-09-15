@@ -61,7 +61,7 @@ const LAYERS = [
     items: [
       { label: "576 Experimental Runs", desc: "4 engines · consumer hardware" },
       { label: "HuggingFace", desc: "Dataset · open access" },
-      { label: "120 Conformance Tests", desc: "Automated verification · CI · zero deps" },
+      { label: "197 Protocol Tests", desc: "Conformance + interop · CI · zero deps" },
     ],
   },
   {

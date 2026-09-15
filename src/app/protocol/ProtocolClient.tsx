@@ -36,7 +36,7 @@ const LIFECYCLE = [
   { step: "01", label: "Capture", sub: "Sensor Data", desc: "IMU at 60Hz + camera at 7Hz. All processing on-device. No raw data leaves the device." },
   { step: "02", label: "Extract", sub: "Evidence Engines", desc: "Jerk peak detection, direction changes, cross-modal matching. Per-component diagnostics." },
   { step: "03", label: "Evaluate", sub: "Verification Policy", desc: "Confidence thresholds. Escalation logic. CFC checks. Evidence → Verdict." },
-  { step: "04", label: "Receipt", sub: "Evidence Receipt", desc: "SHA-256 hash-chained. Verifiable by any conforming verifier. RFC-0002 compliant." },
+  { step: "04", label: "Receipt", sub: "Evidence Receipt", desc: "SHA-256 integrity-bound. Verifiable by any conforming verifier. RFC-0002 draft." },
   { step: "05", label: "Verify", sub: "Any Verifier", desc: "Open specification. Reference implementation. Anyone can build a compatible verifier." },
 ];
 
@@ -113,7 +113,7 @@ export default function ProtocolClient() {
             <div className="proto-section-title text-center mb-8" onMouseEnter={() => playTick(500, "sine", 0.04, 0.022)}>Protocol Status</div>
             <div className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-0">
               {[
-                { phase: "Research Candidate", status: "current", desc: "v1.0-RC · CPS-0001 frozen · 120 tests · reference verifier · conformance suite", freq: 500 },
+                { phase: "Research Candidate", status: "current", desc: "v1.0-RC1 · CPS-0001 frozen · reference verifier · conformance suite", freq: 500 },
                 { phase: "Protocol Candidate", status: "next", desc: "Community review · third-party implementations · interoperability validation", freq: 600 },
                 { phase: "Stable", status: "future", desc: "v1.0 release · RFC 3161 public timestamp · ecosystem adoption", freq: 700 },
               ].map((p, i) => (
