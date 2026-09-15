@@ -181,7 +181,7 @@ const ProtocolHeader = () => {
       <div style={styles.leftSection}>
         <div className="status-pulse" />
         <span style={styles.versionText} className="hide-mobile">
-          CPS-0001 v1.0-RC
+          CPS-0001 v1.0-RC1
         </span>
         <span style={styles.divider} className="hide-mobile">
           //

@@ -8,13 +8,13 @@ const SURFACE_HOVER = "radial-gradient(circle at 30% 20%, rgba(0,229,255,0.06) 0
 
 /* ── Verification stages ─────────────────────────────── */
 const V_STAGES = [
-  { id: "V₁", label: "Signature", detail: "Ed25519 valid" },
-  { id: "V₂", label: "Timestamp", detail: "Not expired" },
-  { id: "V₃", label: "Entropy", detail: "PES ≥ 0.5" },
-  { id: "V₄", label: "Binding", detail: "Cross-modal" },
-  { id: "V₅", label: "Challenge", detail: "Nonce valid" },
-  { id: "V₆", label: "Chain", detail: "SHA-256 linked" },
-  { id: "V₇", label: "Threshold", detail: "5/7 passed" },
+  { id: "V₁", label: "Schema Validity", detail: "Structure conforms" },
+  { id: "V₂", label: "Signature", detail: "Ed25519 valid" },
+  { id: "V₃", label: "Assertion Consistency", detail: "Fields agree" },
+  { id: "V₄", label: "Temporal Consistency", detail: "Interval ordered" },
+  { id: "V₅", label: "Evidence Reference Integrity", detail: "Digest matches" },
+  { id: "V₆", label: "Freshness", detail: "Within validity window" },
+  { id: "V₇", label: "Predecessor Reference", detail: "Requires predecessor receipt" },
 ];
 
 /* ── Timing constants ─────────────────────────────────── */
@@ -336,6 +336,8 @@ export default function TerminalEntry() {
                 <span style={{ color: "rgba(255,255,255,0.2)" }}>SHA-256</span>
                 <span style={{ color: "rgba(0,229,255,0.3)" }}>●</span>
                 <span style={{ color: "rgba(255,255,255,0.2)" }}>LOCAL</span>
+                <span style={{ color: "rgba(0,229,255,0.3)" }}>●</span>
+                <span style={{ color: "rgba(0,229,255,0.5)" }}>SIMULATION</span>
               </div>
             </div>
 

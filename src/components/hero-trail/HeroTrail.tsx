@@ -20,17 +20,17 @@ const LABELS: Record<string, string> = {
 };
 const SUBTITLES: Record<string, string> = {
   formation: "AI can generate a face in seconds. A voice in milliseconds. But maintaining a convincing continuous presence over time is a different problem entirely.",
-  motion: "We don't ask what the data says about identity. We ask whether the pattern of motion looks biologically plausible — and whether it can be maintained consistently over time.",
-  verification: "Three independent engines. Challenge-response. Cross-modal binding. We're not identifying anyone. We're verifying one thing: the same entity has been continuously present.",
-  mesh: "Every verification produces evidence — not a yes or a no, but a receipt. Linked together, they form a chain of proof. Not who you are. That you stayed.",
+  motion: "We don't ask what the data says about identity. We ask whether the pattern of motion is consistent with a live physical source — and whether it can be maintained over time.",
+  verification: "Three engines. Challenge-response. Cross-modal binding. We're not identifying anyone. We're verifying one thing: the observation interval was sustained.",
+  mesh: "Every verification produces evidence — not a yes or a no, but a receipt. Each receipt covers one bounded interval. Not who you are. That the interval was sustained.",
 };
 
 /* Short mobile versions — max 2-3 lines */
 const SUBTITLES_MOBILE: Record<string, string> = {
   formation: "AI generates faces, voices — in seconds. But biological entropy sustained over time? That's the real test.",
-  motion: "We don't ask what the data says. We ask whether the motion pattern stays biologically plausible — over time.",
-  verification: "Three engines. Challenge-response. Cross-modal binding. Verifying one thing — the same entity stayed.",
-  mesh: "Every check produces evidence. A receipt, not a yes or no. A chain of proof. Not who you are — that you stayed.",
+  motion: "We don't ask what the data says. We ask whether the motion pattern stays consistent with a live physical source — over time.",
+  verification: "Three engines. Challenge-response. Cross-modal binding. Recording one thing — whether the interval was sustained.",
+  mesh: "Every check produces evidence. A receipt, not a yes or no. Not who you are — whether the interval was sustained.",
 };
 
 export default function HeroTrail() {
@@ -138,9 +138,9 @@ export default function HeroTrail() {
       <canvas ref={canvasRef} width={1920} height={1080} className="hero-demo-canvas" />
       <div className="hero-demo-content">
         <div className="hero-demo-title-zone" style={{ position: "relative", zIndex: 5 }}>
-          <h1 className="hero-demo-title">THE CONTINUITY LAYER</h1>
+          <h1 className="hero-demo-title">CONTINUITY AS A VERIFIABLE PROPERTY</h1>
           <p className="hero-demo-tagline" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Identity tells you who someone claims to be.<br />Continuity asks whether the same entity is still here.
+            Identity tells you who someone claims to be.<br />Continuity asks whether the same key-controlled presence persisted across an interval.
           </p>
         </div>
 

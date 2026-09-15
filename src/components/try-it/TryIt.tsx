@@ -52,7 +52,7 @@ export default function TryIt() {
             color: "rgba(255,255,255,0.5)", marginTop: "1rem", lineHeight: 1.7,
             maxWidth: 500, marginLeft: "auto", marginRight: "auto",
           }}>
-            Continuity answers whether you remained you.
+            Continuity asks whether the same key-controlled presence persisted across an interval.
           </p>
 
           {/* CTAs — consistent style */}

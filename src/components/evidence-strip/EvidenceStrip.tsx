@@ -8,7 +8,7 @@ const SURFACE = "rgba(5,16,37,0.45)";
 
 const FIELDS = [
   { field: "protocol", value: "CPS-0001" },
-  { field: "evidence", value: "4 engines" },
+  { field: "evidence", value: "3 engines · 1 verification session" },
   { field: "benchmark", value: `${metricValue("dataset.benchmarkSamples")} PES Benchmark samples` },
   { field: "verification", value: "PASS", green: true },
   { field: "integrity", value: "SHA-256" },
@@ -298,7 +298,7 @@ export default function EvidenceStrip() {
                 background:"rgba(52,211,153,0.04)", textAlign:"center",
               }}>
                 <div style={{ fontSize:9, color:"#34D399", fontFamily:"var(--font-geist-mono), monospace", letterSpacing:"0.15em", marginBottom:2 }}>
-                  ✓ AUTHENTICATED
+                  ✓ VERIFIED (VALID)
                 </div>
                 <div style={{ fontSize:7, color:"rgba(52,211,153,0.4)", fontFamily:"var(--font-geist-mono), monospace", letterSpacing:"0.1em" }}>
                   THE CONTINUITY LAB
