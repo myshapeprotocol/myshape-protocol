@@ -232,7 +232,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     {
                       "@type": "DefinedTerm",
                       "name": "Continuity Receipt",
-                      "description": "An engine-independent cryptographic object (CPS-0001) that proves continuous presence over time. Ed25519-signed, SHA-256 hash-chained.",
+                      "description": "An engine-independent cryptographic object (CPS-0001) that commits a bounded observation interval to a signed receipt.",
                       "url": "https://www.myshape.com/research/notes/008-continuity-protocol-core",
                     },
                   ],

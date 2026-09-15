@@ -27,7 +27,7 @@ const NODES: RNode[] = [
   {
     q: "What happens when we send a randomized gyroscope challenge — something a recording can't predict?",
     l: "CHALLENGE RESPONSE",
-    m: "Jittered timing defeats replay // N: 200",
+    m: "Jittered timing vs. replay — exploratory // N: 200",
   },
   {
     q: "Can we chain these checks into a single verification session — passive first, then escalating?",
@@ -35,9 +35,9 @@ const NODES: RNode[] = [
     m: "Dual-engine pipeline // N: 60",
   },
   {
-    q: "After verification, what remains? A yes? A no? Or evidence — signed, timestamped, hash-chained?",
+    q: "After verification, what remains? A yes? A no? Or evidence — signed, timestamped, digest-bound?",
     l: "CONTINUITY PROOF",
-    m: "Evidence Receipt // SHA-256 chained",
+    m: "Evidence Receipt // SHA-256 digest",
   },
 ];
 
