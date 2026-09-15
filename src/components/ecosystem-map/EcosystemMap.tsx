@@ -35,7 +35,7 @@ const LAYERS = [
     border: "rgba(144,200,255,0.18)",
     items: [
       { label: "EE-001", desc: "Presence Detection · 100% floor" },
-      { label: "EE-002", desc: "Causal Coupling · N=316" },
+      { label: "EE-002", desc: "Causal Coupling · 58% overall pass rate, N=316 (temporal alignment measured separately)" },
       { label: "EE-003", desc: "Gyroscope Challenge · N=200" },
       { label: "VS-001", desc: "Dual-Engine Pipeline · 93%" },
     ],
