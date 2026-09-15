@@ -30,7 +30,7 @@ CPS-0002 builds an **independently verifiable attestation layer** around the Con
 - **CPS-0002** defines how an assertion binds to that receipt and is independently verified → `VALID` / `INVALID`.
 - **Trust remains a separate policy and deployment decision.** `VALID` does not mean trusted, authorized, human, or accepted — the Trust Framework is outside the frozen core.
 
-**Status:** CPS-0002 Protocol Core is **frozen** as `cps-hsa-0.1-draft`. The broader Trust Framework is **not frozen / out of scope**. Protocol core: commit `d06b907`, tag `cps-hsa-0.1-draft`.
+**Status:** CPS-0002 Protocol Core is **frozen as a prototype draft artifact** — tag `cps-hsa-0.1-draft`, commit `d06b907` (2026-09-13); superseded draft tag `cps-0002-0.1-draft`, commit `1008e8f` (2026-09-02). The **specification prose remains draft / not frozen**, and the Trust Framework remains **not frozen / out of scope**. External review is open and targets `d06b907`.
 
 → **[CPS-0002 Concept](continuity-protocol/CPS-0002_CONCEPT.md)** · **[Verifier Contract](continuity-protocol/CPS-0002-VERIFIER-CONTRACT.md)** · **[Trust Policy](continuity-protocol/CPS-0002-TRUST-POLICY.md)** · **[Threat Model](continuity-protocol/CPS-0002-THREAT-MODEL.md)** · **[Assertion Schema](continuity-protocol/cps-0002-assertion.schema.json)**
 
@@ -38,9 +38,9 @@ CPS-0002 builds an **independently verifiable attestation layer** around the Con
 
 Researchers and reviewers: start here.
 
-→ **[2-Minute External Review Brief](../myshape-external-review-2min-brief.md)** — First-touch briefing: hypothesis, scope, limitations, and what we want reviewers to challenge.
+→ **[2-Minute External Review Brief](myshape-external-review-2min-brief.md)** — First-touch briefing: hypothesis, scope, limitations, and what we want reviewers to challenge.
 
-→ **[CPS-0002 External Review Brief](continuity-protocol/CPS-0002-EXTERNAL-REVIEW-BRIEF.md)** — Full entry point for technical review: frozen core, trust boundary, evidence surface, and open questions.
+→ **[CPS-0002 External Review Brief](continuity-protocol/CPS-0002-EXTERNAL-REVIEW-BRIEF.md)** — Full entry point for technical review: protocol core, trust boundary, evidence surface, and open questions.
 
 ## Implement It Yourself
 
