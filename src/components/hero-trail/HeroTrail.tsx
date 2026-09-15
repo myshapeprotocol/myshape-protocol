@@ -138,7 +138,9 @@ export default function HeroTrail() {
       <canvas ref={canvasRef} width={1920} height={1080} className="hero-demo-canvas" />
       <div className="hero-demo-content">
         <div className="hero-demo-title-zone" style={{ position: "relative", zIndex: 5 }}>
-          <h1 className="hero-demo-title">CONTINUITY, WITHOUT IDENTITY.</h1>
+          <h1 className="hero-demo-title">
+            CONTINUITY, <span style={{ color: "rgba(0,229,255,0.8)" }}>WITHOUT</span> IDENTITY.
+          </h1>
           <p className="hero-demo-tagline" style={{ color: "rgba(255,255,255,0.45)" }}>
             Identity tells you who someone claims to be.<br />Continuity asks whether the same key-controlled presence persisted across an interval.
           </p>

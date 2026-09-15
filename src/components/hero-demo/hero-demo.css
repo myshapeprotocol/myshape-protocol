@@ -72,7 +72,7 @@
 
 .hero-demo-title {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  font-size: clamp(2.2rem, 6vw, 5rem);
+  font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 200;
   letter-spacing: 0.06em;
   color: #fff;
@@ -324,7 +324,7 @@
   }
 
   .hero-demo-title {
-    font-size: clamp(1.2rem, 6vw, 1.8rem);
+    font-size: clamp(1.05rem, 5.5vw, 1.6rem);
     letter-spacing: 0.3em;
   }
 
