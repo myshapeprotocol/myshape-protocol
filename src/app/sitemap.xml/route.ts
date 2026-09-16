@@ -87,12 +87,15 @@ const MYSHAPE_ENTRIES: SitemapEntry[] = [
   { path: "/dashboard", changeFrequency: "monthly", priority: 0.3 },
 ];
 
-// ── LAB: only the canonical root is public for now ──
+// ── LAB: canonical root + protocol artifacts ──
 // /lab/* paths are the internal route namespace and are deliberately NOT
-// listed as canonical URLs (BATCH-001 §4/§9). Research/protocol pages are
-// added after their migration.
+// listed as canonical URLs (BATCH-001 §4/§9). Public LAB URLs use the
+// canonical /protocols/* namespace (rewritten to /lab/protocols/* internally).
 const LAB_ENTRIES: SitemapEntry[] = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
+  { path: "/protocols", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/protocols/cps-0001", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/protocols/cps-0002", changeFrequency: "monthly", priority: 0.8 },
 ];
 
 function buildSitemapXml(origin: string, entries: SitemapEntry[]): string {

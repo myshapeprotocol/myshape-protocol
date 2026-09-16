@@ -8,14 +8,15 @@
 
 ## 1. Executive Verdict
 
-> **`INTEROPERABLE WITH DOCUMENTATION NOTES`**
+> **`INTEROPERABLE WITH DOCUMENTATION NOTES (IN-REPO RECONSTRUCTION)`**
 
-A completely independent third-party implementation — using only the protocol
+An in-repo independent reconstruction — using only the protocol
 documentation, assertion data, receipt data, public key, canonicalization/
 signing rules, and test vectors — **can reproduce CPS-0002 verification
-byte-for-byte**. This was proven by an independent reconstruction performed
+byte-for-byte**. This was demonstrated by an independent reconstruction performed
 with `node:crypto` and a hand-written RFC 8785 (JCS) canonicalizer, sharing
-**zero code** with the project's `@noble`-based helpers.
+**zero code** with the project's `@noble`-based helpers. No independent
+third-party review evidence exists.
 
 One protocol-level portability hazard was found and is now **RESOLVED** (BATCH-0002-3-F8): the
 payload-digest rule has moved from `SHA-256(JSON.stringify(payload))` to

@@ -7,9 +7,9 @@ import SoftwareAppJsonLd from "@/components/seo/SoftwareAppJsonLd";
 export const metadata: Metadata = {
   title: "MyShape Developers — Build with Motion-Signature Continuity",
   description:
-    "Integrate motion-signature continuity verification into any application. Five lines of code. Zero data stored. Real presence — AI-native continuity SDK and API reference.",
+    "Integrate motion-signature continuity verification into any application. Five lines of code. Zero data stored. Continuity check — AI-native continuity SDK and API reference.",
   keywords: [
-    "identity API",
+    "continuity verification API",
     "motion-signature SDK",
     "developer documentation",
     "continuity verification API",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MyShape Developers — Build with Motion-Signature Continuity",
     description:
-      "Integrate motion-signature continuity verification. Five lines of code. Zero data stored. Real presence.",
+      "Integrate motion-signature continuity verification. Five lines of code. Zero data stored. Continuity check.",
     url: "https://www.myshape.com/developers",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],

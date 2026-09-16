@@ -98,7 +98,7 @@ export default function VerificationDashboard() {
           <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)] animate-pulse" />
           <span className="vd-rejection-label">AI REJECTION ROOT CAUSE ANALYSIS</span>
         </div>
-        <div className="vd-rejection-desc mb-5">The AI forgery failed verification because the Motion Signature Engine detected structural deficiencies across four independent dimensions. These are not temporary AI limitations — they are consequences of how neural network architectures model motion.</div>
+        <div className="vd-rejection-desc mb-5">The bundled AI sample failed verification in this demo because its motion structure differs from the bundled human sample across four reported dimensions. Exploratory result — not proof of human, not a production security claim.</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {AI_REJECTION_TAGS.map((tag, i) => (
             <div key={tag.label}>

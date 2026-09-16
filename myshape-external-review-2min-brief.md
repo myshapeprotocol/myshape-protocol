@@ -111,7 +111,7 @@ We are not asking for endorsement. We are asking for the specific ways this work
 
 - **Website:** https://myshape.com
 - **CPS-0001 (Continuity Receipt):** https://myshape.com/research/notes/008-continuity-protocol-core
-- **CPS-0002 (Human Signal Assertion):** https://myshape.com/lab/protocols/cps-0002
+- **CPS-0002 (Human Signal Assertion):** https://thecontinuitylab.org/protocols/cps-0002
 - **Source repository:** https://github.com/myshapeprotocol/myshape-protocol
 - **Research lab:** https://thecontinuitylab.org
 

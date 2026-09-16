@@ -6,10 +6,10 @@
 
 ## 1. Why CPS-0001 Must Freeze First
 
-CPS-0001 v1.0-RC1 has successfully proven:
+CPS-0001 v1.0-RC1 has demonstrated in-repo:
 
 - ✅ Cryptographic integrity of structured temporal assertions
-- ✅ Cross-implementation independence (toy engine ↔ MyShape ↔ reference verifier)
+- ✅ Cross-implementation agreement between the reference verifier and the in-repo second producer/verifier (external cross-engine interop is pending)
 - ✅ Engine-agnostic evidence binding
 
 But it has an explicit, documented boundary:

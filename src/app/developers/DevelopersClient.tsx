@@ -20,9 +20,9 @@ const SDK_METHODS = [
 ];
 
 const API_ENDPOINTS = [
-  { method: "GET", path: "/api/identity?email=...", desc: "Look up a node by email" },
-  { method: "GET", path: "/api/nodes/count", desc: "Total protocol node counts" },
-  { method: "POST", path: "/api/nodes/handshake", desc: "Register a new protocol node → returns node_token + node_handle" },
+  { method: "GET", path: "/api/identity?email=...", desc: "Demo app lookup by email (not part of CPS-0001/CPS-0002)" },
+  { method: "GET", path: "/api/nodes/count", desc: "Demo app node counts (not part of CPS-0001/CPS-0002)" },
+  { method: "POST", path: "/api/nodes/handshake", desc: "Demo app registration → returns node_token + node_handle (not part of CPS-0001/CPS-0002)" },
 ];
 
 const QUICK_START = `// Verify continuity in 5 lines
@@ -72,7 +72,8 @@ const result = await verifyContinuity({
 });
 
 // → { verdict: "PASS" | "FAIL", confidence, evidence, threatReport }
-if (result.verdict === "PASS") { /* trust the session */ }` },
+// PASS means the interval checks passed — apply your trust policy before acting
+if (result.verdict === "PASS") { /* VALID ≠ TRUSTED — check policy first */ }` },
   { title: "Build & Verify a Receipt", code: `import { buildReceipt, signReceipt, verifyReceipt, computePayloadDigest, generateKeyPair, createIssuerIdentity } from "@thecontinuitylab/myshape";
 
 const kp = generateKeyPair();
@@ -94,7 +95,7 @@ const unsigned = buildReceipt({
 
 const receipt = signReceipt(unsigned, kp.secretKey);
 const result = verifyReceipt(receipt);
-// → { status: "VALID" } — engine-independent` },
+// → { status: "VALID" } — engine-independent, cryptographic validity only (not trust)` },
 ];
 
 export default function DevelopersClient() {

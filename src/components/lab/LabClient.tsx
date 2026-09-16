@@ -286,6 +286,7 @@ const COLUMNS = [
     title: "Core Research", color: "rgba(0,229,255,0.7)",
     items: [
       { p: "CPS-0001", t: "Continuity Protocol Core", h: "/research/notes/008-continuity-protocol-core" },
+      { p: "CPS-0002", t: "Human Signal Assertion", h: "/protocols/cps-0002" },
       { p: "EE-001", t: "Presence Entropy Score", h: "/research/fusion" },
       { p: "EE-002", t: "Cross-Modal Causal Coupling", h: "/research/causal-coupling" },
       { p: "EE-003", t: "Challenge-Response Engine", h: "/research/challenge-response" },

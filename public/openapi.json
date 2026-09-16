@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "MyShape Protocol API",
-    "description": "The Sovereign 3D Identity Layer for the Decentralized Human. AI-native identity, zero-knowledge presence, motion-signature verification. This API enables human and AI agent identity declaration, motion verification, and protocol node management.",
+    "description": "CPS-0001 Continuity Protocol — engine-independent Continuity Receipts (Ed25519, SHA-256). This API exposes demo and research endpoints. CPS-0001 v1.0-RC1; CPS-0002 cps-hsa-0.1-draft prototype draft. VALID means cryptographic validity only — not trust, human presence, authorization, or acceptance.",
     "version": "1.0.0",
     "contact": {
       "name": "MyShape Protocol",

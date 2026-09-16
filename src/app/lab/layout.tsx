@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import LabHeader from "@/components/lab/LabHeader";
 
 export const metadata: Metadata = {
   title: "The Continuity Lab™ — What is Continuity?",
@@ -49,6 +50,7 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
           }),
         }}
       />
+      <LabHeader />
       {children}
     </>
   );
