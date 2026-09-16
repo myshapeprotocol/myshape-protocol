@@ -33,7 +33,6 @@ const MYSHAPE_ENTRIES: SitemapEntry[] = [
   { path: "/architecture", changeFrequency: "weekly", priority: 0.9 },
   { path: "/roadmap", changeFrequency: "weekly", priority: 0.9 },
   { path: "/developers", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/docs", changeFrequency: "weekly", priority: 0.9 },
   { path: "/glossary", changeFrequency: "weekly", priority: 0.9 },
   { path: "/compare", changeFrequency: "weekly", priority: 0.9 },
   { path: "/whitepaper", changeFrequency: "weekly", priority: 0.9 },

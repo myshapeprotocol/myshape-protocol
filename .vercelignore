@@ -6,7 +6,7 @@ scripts/agent-workflow/published.json
 scripts/matrix-bot/matrix_dashboard.html
 
 # Development (keep wasm/ — required by API routes)
-docs/
+/docs/
 scripts/
 cli/
 .claude/
