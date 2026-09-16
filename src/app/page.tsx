@@ -6,38 +6,34 @@ import FaqJsonLd from "@/components/seo/FaqJsonLd";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "MyShape Protocol — The Sovereign 3D Identity Layer for the Decentralized Human",
+  title: "MyShape Protocol — CPS-0001 Motion-Signature Continuity Verification",
   description:
-    "AI-native identity. Zero-knowledge presence. Motion-signature verification. From signals to trust — explore the Continuity Layer through live PES demo, constellation research, diagnostic console, declassified evidence dossier, and sonar open questions. Built by The Continuity Lab.",
+    "CPS-0001 Continuity Protocol v1.0-RC1 — engine-independent continuity verification with cryptographically verifiable receipts. verifyContinuity() → PASS / FAIL / INSUFFICIENT_EVIDENCE. Run a verification at /try. Open protocol, research-driven by The Continuity Lab.",
   keywords: [
     "MyShape Protocol",
-    "continuity layer",
-    "motion-signature verification",
-    "AI-native identity",
-    "zero-knowledge presence",
-    "sovereign identity",
-    "presence entropy score",
     "CPS-0001",
+    "continuity verification",
+    "motion-signature",
+    "presence entropy score",
+    "two-stage verification",
     "continuity proof",
-    "decentralized identity",
-    "proof of continuity",
-    "motion biometrics alternative",
     "The Continuity Lab",
+    "open protocol",
   ],
   alternates: { canonical: "https://www.myshape.com" },
   openGraph: {
-    title: "MyShape Protocol — Motion-Signature Continuity Verification",
+    title: "MyShape Protocol — CPS-0001 Motion-Signature Continuity Verification",
     description:
-      "AI can generate faces, voices, identities. But can it maintain continuous presence? MyShape investigates continuity — the one thing AI cannot forge. Live PES engine. Open protocol. Research-driven.",
+      "CPS-0001 Continuity Protocol v1.0-RC1 — engine-independent continuity verification. Run a verification → motion-signature presence check, no static identity stored.",
     url: "https://www.myshape.com",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Protocol — Motion-Signature Continuity Verification",
+    title: "MyShape Protocol — CPS-0001 Motion-Signature Continuity Verification",
     description:
-      "AI can generate everything. But can it maintain continuous presence? MyShape investigates the one thing AI cannot forge.",
+      "CPS-0001 Continuity Protocol v1.0-RC1 — engine-independent continuity verification. Run a verification.",
     images: ["/og-image.png"],
   },
 };
@@ -51,12 +47,12 @@ export default function HomePage() {
           {
             question: "What is MyShape Protocol?",
             answer:
-              "MyShape Protocol is an open research framework investigating whether digital continuity can become a verifiable property. It analyzes motion patterns through motion-signature technology — a zero-knowledge approach that verifies continuous presence without storing personal visual data or any personally identifiable information.",
+              "MyShape Protocol is an open research framework investigating whether digital continuity can become a verifiable property. It analyzes motion patterns through motion-signature technology — an on-device approach that verifies continuous presence without storing personal visual data or any personally identifiable information.",
           },
           {
             question: "How is MyShape different from static identity systems?",
             answer:
-              "Static identity systems store fixed attributes that, once compromised, can never be replaced. MyShape verifies dynamic presence — the way an entity moves — rather than static attributes. Motion is generative and inexhaustible: each verification is a fresh cryptographic proof that cannot be replayed or stolen. No physical identity data is ever stored or transmitted.",
+              "Static identity systems store fixed attributes that, once compromised, can never be replaced. MyShape verifies dynamic presence — the way an entity moves — rather than static attributes. Motion is generative and inexhaustible: each verification produces a fresh cryptographic proof, and temporal uniqueness raises the cost of replay. No physical identity data is stored or transmitted by default.",
           },
           {
             question: "What is Proof of Continuity?",

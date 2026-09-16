@@ -39,7 +39,7 @@ const result = await verifyContinuity({
 const QUICK_STEPS = [
   { step: "01", title: "Install the SDK", time: "30 sec", code: "npm install @thecontinuitylab/myshape", desc: "Zero native dependencies. TypeScript. Works with Node.js 18+." },
   { step: "02", title: "Verify Continuity", time: "8 sec", code: QUICK_START, desc: "That's it. Your app now has protocol-level continuity verification." },
-  { step: "03", title: "Build with Receipts", time: "ongoing", code: 'import { verifyReceipt } from "@thecontinuitylab/myshape";\n\n// Any CPS-0001 receipt — from any engine — works\nconst result = await verifyReceipt(receipt);\nif (result.status === "VALID") { /* trust the session */ }', desc: "Engine-independent. Accept receipts from any CPS-0001 producer." },
+  { step: "03", title: "Build with Receipts", time: "ongoing", code: 'import { verifyReceipt } from "@thecontinuitylab/myshape";\n\n// Any CPS-0001 receipt — from any engine — works\nconst result = await verifyReceipt(receipt);\nif (result.status === "VALID") { /* VALID ≠ TRUSTED — check policy first */ }', desc: "Engine-independent. Accept receipts from any CPS-0001 producer." },
   { step: "04", title: "Try It Live", time: "30 sec", code: "", desc: "", isAction: true },
 ];
 
