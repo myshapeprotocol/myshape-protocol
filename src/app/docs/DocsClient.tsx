@@ -76,7 +76,7 @@ export default function DocsClient() {
           <div className="space-y-4 mb-12">
             <div className="flex items-center gap-4 text-[#90c8ff]/40 text-[11px] tracking-[0.3em] uppercase"><span>SDK v2.0</span><span className="w-8 h-[1px] bg-[#90c8ff]/20" /><span>REFERENCE</span></div>
             <h1 className="text-2xl md:text-4xl font-light tracking-[0.06em] text-white leading-tight">SDK<br /><span className="text-[#90c8ff]">Documentation</span></h1>
-            <p className="text-white/35 text-[11px] tracking-[0.08em] leading-relaxed max-w-2xl">Integrate sovereign identity verification into any application. Five lines of code. Zero data stored. Real human presence — verified through the irreducible entropy of biological motion.</p>
+            <p className="text-white/35 text-[11px] tracking-[0.08em] leading-relaxed max-w-2xl">Integrate continuity verification into any application. Five lines of code. No identity stored. A continuity check — not a human proof.</p>
             <div className="flex gap-3 pt-2">
               <a href="https://github.com/myshapeprotocol/myshape-engine" target="_blank" rel="noopener noreferrer" className="text-[#90c8ff]/40 text-[11px] tracking-[0.2em] uppercase hover:text-[#90c8ff] transition-colors">GitHub ↗</a>
               <span className="text-white/10">|</span>

@@ -80,7 +80,7 @@ Verify continuity from sensor data:
     frames, timestamps,  // EE-001: presence entropy score
     challengeResults,    // EE-003: challenge-response (anti-replay)
   });
-  if (result.verdict === "PASS") { /* trust the session */ }
+  if (result.verdict === "PASS") { /* VALID ≠ TRUSTED — check policy first */ }
 
 Or build and verify a receipt explicitly:
 

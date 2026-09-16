@@ -117,7 +117,7 @@ export default function DevelopersClient() {
             onMouseEnter={() => playTick(500, "sine", 0.05, 0.022)}>DEVELOPER_HUB</div>
           <h1 className="text-3xl md:text-5xl font-light tracking-[0.08em] md:tracking-[0.12em] text-white uppercase">Build with Presence</h1>
           <p className="text-white/45 md:text-white/50 text-[12px] md:text-[14px] leading-relaxed max-w-xl font-light">
-            Integrate sovereign identity verification into any application.
+            Integrate continuity verification into any application.
             Five lines of code. Zero data stored. Real human presence.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
