@@ -98,6 +98,8 @@ CPS-0001 was published **before adoption evidence was available**. We are runnin
 
 ## Quick Install
 
+> **SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.**
+
 ```bash
 npm install @thecontinuitylab/myshape
 ```
