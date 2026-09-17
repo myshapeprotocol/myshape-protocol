@@ -298,6 +298,7 @@ const COLUMNS = [
     items: [
       { t: "npm install @thecontinuitylab/myshape", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
       { t: "npx @thecontinuitylab/myshape demo", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
+      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.", h: "/protocols" },
       { t: "Contribute Data", h: "/lab/contribute" },
       { t: "Discovery Survey", h: "/lab/discovery-survey" },
     ],

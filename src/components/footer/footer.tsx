@@ -134,6 +134,9 @@ export default function ProtocolFooter() {
                 CONTINUITY PROTOCOL LAYER
               </p>
               <p className="text-[11px] text-white/35 tracking-[0.15em] leading-relaxed uppercase font-mono">
+                SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.
+              </p>
+              <p className="text-[11px] text-white/35 tracking-[0.15em] leading-relaxed uppercase font-mono">
                 ENGINE-INDEPENDENT &middot; CONTINUITY-VERIFIED
               </p>
               <p className="text-[11px] text-[#d4af37]/35 tracking-[0.15em] leading-relaxed uppercase font-mono mt-2">
@@ -179,6 +182,9 @@ export default function ProtocolFooter() {
         <div className="items-center justify-center gap-1.5 flex">
           <span className="w-1 h-1 rounded-full bg-[#00E5FF]/60 shadow-[0_0_4px_rgba(0,229,255,0.5)]" />
           <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 Specification v1.0-RC1 · Implementation v0.2 · SDK 0.3.0 · 3 engines · 1 verification session · 576 Experimental Runs</span>
+          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono block">
+            SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.
+          </span>
         </div>
         <span className="text-[11px] text-white/40 tracking-[0.15em] uppercase font-mono block">
           &copy; {new Date().getFullYear()} MYSHAPE PROTOCOL
