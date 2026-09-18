@@ -63,4 +63,13 @@
     "typescript": "^5",
     "vitest": "^4.1.9"
   }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myshapeprotocol/myshape-protocol.git"
+  },
+  "bugs": {
+    "url": "https://github.com/myshapeprotocol/myshape-protocol/issues"
+  },
+  "homepage": "https://github.com/myshapeprotocol/myshape-protocol#readme"
 }

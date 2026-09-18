@@ -1,4 +1,9 @@
-# MyShape Protocol v1.0 — Genesis Stability Audit
+# [Historical] MyShape Protocol v1.0 — Genesis Stability Audit (Superseded)
+
+> **[Historical — Superseded Snapshot]**
+> This document is a historical snapshot from the Genesis-era audit cycle. It does not describe the current protocol status.
+> Current status: **CPS-0001 Specification v1.0-RC1 · evaluation-only**. CPS-0002 remains a prototype draft (`cps-hsa-0.1-draft`). There is no live Genesis onboarding.
+> For current status and entry points, see `README.md` and `continuity-protocol/CPS-0002-EXTERNAL-REVIEW-BRIEF.md`.
 
 ## Executive Summary
 

@@ -22,7 +22,11 @@ export default function PostClient() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-6" style={{ paddingTop: "8rem", paddingBottom: "6rem" }}>
           <div className="space-y-4 mb-16"><div className="flex items-center gap-4 text-[#90c8ff]/50 text-[11px] tracking-[0.3em] uppercase"><span>GENESIS 012</span><span className="w-8 h-[1px] bg-[#90c8ff]/20" /><span>2026.07.03</span>
               <span className="w-8 h-[1px] bg-[#90c8ff]/20" />
-              <span className="text-white/40">The Continuity Lab</span></div><h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>Digital Identity<br /><span className="text-[#90c8ff]">Future 2027</span></h1><p className="text-white/50 text-[14px] tracking-[0.06em] leading-[1.7] max-w-xl">Five trends reshaping the identity layer. Biometrics collapse. AI agents demand identity. Continuity becomes the new primitive.</p></div>
+              <span className="text-white/40">The Continuity Lab</span></div><div className="mb-10 p-4 border border-[#90c8ff]/15 bg-[#90c8ff]/[0.02]">
+            <p className="text-white/45 text-[12px] leading-relaxed">
+              Historical note (2026-07-03): the closing paragraph refers to a Genesis-era recruitment plan. That plan is superseded; there is no current Genesis onboarding or permanent-tier offer. Current research participation is via the Discovery Survey.
+            </p>
+          </div><h1 className="text-2xl md:text-3xl font-light tracking-[0.08em] text-white leading-tight" onMouseEnter={() => playTick(520, "sine", 0.04, 0.015)}>Digital Identity<br /><span className="text-[#90c8ff]">Future 2027</span></h1><p className="text-white/50 text-[14px] tracking-[0.06em] leading-[1.7] max-w-xl">Five trends reshaping the identity layer. Biometrics collapse. AI agents demand identity. Continuity becomes the new primitive.</p></div>
           <div className="space-y-20">{SECTIONS.map(s => (<section key={s.id} id={s.id}><h2 className="text-white/65 text-[12px] tracking-[0.2em] uppercase mb-6 flex items-center gap-3"><span className="w-6 h-[1px] bg-[#90c8ff]/30" />{s.heading}</h2><div className="text-white/55 text-[15px] sm:text-[17px] leading-[1.85] tracking-[0.03em] space-y-5 whitespace-pre-line">{s.content}</div></section>))}</div>
           <PostNavigation slug="/blog/digital-identity-future-2027" />
 
