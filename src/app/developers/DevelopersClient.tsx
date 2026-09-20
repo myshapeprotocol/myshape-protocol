@@ -55,7 +55,11 @@ const ENGINES = [
 ];
 
 const API_EXAMPLES = [
-  { label: "PROTOCOL_HEALTH", curl: "curl https://www.myshape.com/api/health", response: '{ "status": "healthy", "services": { "supabase": { "ok": true } } }' },
+  { label: "PROTOCOL_HEALTH", curl: "curl https://www.myshape.com/api/health", response: `HTTP 200 — all dependencies reachable
+{ "status": "healthy", "services": { "supabase": { "ok": true }, "wasm": { "ok": true } } }
+
+HTTP 503 — a dependency is unavailable (endpoint reflects real state; may return degraded)
+{ "status": "degraded", "services": { "wasm": { "ok": false, "error": "WASM_UNAVAILABLE" } } }` },
   { label: "NETWORK_STATUS", curl: "curl https://www.myshape.com/api/nodes/status", response: '{ "total_nodes": 42, "active_nodes": 12 }' },
   { label: "LOOKUP_NODE", curl: "curl https://www.myshape.com/api/identity?email=user@example.com", response: '{ "handle": "NODE_XXXX", "status": "ACTIVE" }' },
 ];

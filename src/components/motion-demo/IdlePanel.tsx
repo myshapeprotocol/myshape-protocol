@@ -31,6 +31,26 @@ export default function IdlePanel({
       {isChromium && <ChromiumWarning />}
       <PrivacyBadge />
 
+      {/* Research Preview banner */}
+      <div style={{
+        padding: "6px 16px",
+        background: "rgba(0,229,255,0.05)",
+        border: "1px solid rgba(0,229,255,0.15)",
+        borderRadius: 6,
+        marginBottom: 8,
+        textAlign: "center",
+      }}>
+        <span style={{
+          fontSize: 10,
+          color: "rgba(0,229,255,0.6)",
+          fontFamily: "var(--font-geist-mono), monospace",
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+        }}>
+          Research Preview — experimental continuity verification
+        </span>
+      </div>
+
       <p style={{
         color: "rgba(255,255,255,0.35)", fontSize: "clamp(12px,1.2vw,14px)",
         letterSpacing: "0.08em", textAlign: "center", maxWidth: 420, lineHeight: 1.6,
@@ -42,7 +62,8 @@ export default function IdlePanel({
         color: "rgba(255,255,255,0.18)", fontSize: 11, letterSpacing: "0.06em",
         textAlign: "center", maxWidth: 320, marginTop: 2,
       }}>
-        Face the camera. Stand naturally. No specific pose needed.
+        Camera and motion data are processed locally. No face images are stored.
+        Optional research upload is separate and requires explicit consent.
       </p>
 
       <div style={{ width: "100%", maxWidth: 360, marginTop: 4 }}>

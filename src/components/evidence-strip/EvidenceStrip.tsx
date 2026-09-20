@@ -8,7 +8,7 @@ const SURFACE = "rgba(5,16,37,0.45)";
 
 const FIELDS = [
   { field: "protocol", value: "CPS-0001" },
-  { field: "evidence", value: "3 engines · 1 verification session" },
+  { field: "evidence", value: `3 engines · ${metricValue("vs001.sessions")} verification sessions` },
   { field: "benchmark", value: `${metricValue("dataset.benchmarkSamples")} PES Benchmark samples` },
   { field: "verification", value: "PASS", green: true },
   { field: "integrity", value: "SHA-256" },
@@ -201,6 +201,16 @@ export default function EvidenceStrip() {
             animation: isDeclass ? "txtDeclass 0.7s ease-out forwards" : "none",
           }}>
             {isDeclass ? "DECLASSIFIED" : "CLASSIFIED"}
+          </span>
+          <span
+            title="Illustrative presentation — not a verification record"
+            style={{
+              fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "rgba(255,193,7,0.8)", border: "1px solid rgba(255,193,7,0.3)",
+              borderRadius: 3, padding: "1px 6px", whiteSpace: "nowrap",
+            }}
+          >
+            ILLUSTRATIVE
           </span>
           <span style={{ color: "rgba(255,255,255,0.12)", marginLeft: "auto", fontSize: 9 }}>
             REF: CPS-0001-2026-07

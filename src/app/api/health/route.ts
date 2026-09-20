@@ -45,12 +45,14 @@ export async function GET(): Promise<Response> {
       services.supabase = {
         ok: !error,
         latency_ms: Date.now() - supabaseStart,
-        ...(error ? { error: error.message } : {}),
+        // Public error disclosure boundary: never forward client-side/library
+        // exception messages (may contain internal identifiers) — stable codes only.
+        ...(error ? { error: "SUPABASE_UNAVAILABLE" } : {}),
       };
       if (error) allOk = false;
     }
   } catch (err) {
-    services.supabase = { ok: false, latency_ms: Date.now() - supabaseStart, error: (err as Error).message };
+    services.supabase = { ok: false, latency_ms: Date.now() - supabaseStart, error: "SUPABASE_UNAVAILABLE" };
     allOk = false;
   }
 
@@ -63,11 +65,11 @@ export async function GET(): Promise<Response> {
     services.wasm = {
       ok: dim === 120,
       latency_ms: Date.now() - wasmStart,
-      ...(dim !== 120 ? { error: `Unexpected feature dim: ${dim}` } : {}),
+      ...(dim !== 120 ? { error: "WASM_ENGINE_UNEXPECTED_RESPONSE" } : {}),
     };
     if (dim !== 120) allOk = false;
   } catch (err) {
-    services.wasm = { ok: false, latency_ms: Date.now() - wasmStart, error: (err as Error).message };
+    services.wasm = { ok: false, latency_ms: Date.now() - wasmStart, error: "WASM_UNAVAILABLE" };
     allOk = false;
   }
 

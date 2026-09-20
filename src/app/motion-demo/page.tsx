@@ -7,23 +7,21 @@ import FaqJsonLd from "@/components/seo/FaqJsonLd";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "MyShape Motion Demo — Live Motion-Signature Verification",
+  title: "MyShape Motion Demo — Live Motion-Signature Research Preview",
   description:
-    "Real-time Presence Entropy Score engine via webcam. Watch your motion become a cryptographic identity — AI cannot forge the human kinetic signature. Motion Vector → SST 18-pt → 4D Entropy → Continuity Proof.",
+    "Experimental Presence Entropy Score engine via webcam. Research preview — continuity signal verification.",
   keywords: [
     "motion demo",
-    "motion-signature verification",
     "presence entropy score",
     "PES demo",
-    "live identity verification",
-    "ZK-presence demo",
+    "continuity research",
     "MyShape Protocol",
   ],
   alternates: { canonical: "https://www.myshape.com/motion-demo" },
   openGraph: {
-    title: "MyShape Motion Demo — Live Motion-Signature Verification",
+    title: "MyShape Motion Demo — Research Preview",
     description:
-      "Watch your motion become a cryptographic identity. Real-time PES engine — AI cannot forge human kinetics.",
+      "Experimental continuity signal verification via webcam. Research preview.",
     url: "https://www.myshape.com/motion-demo",
     siteName: "MyShape Protocol",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -32,8 +30,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MyShape Motion Demo — Live Presence Entropy Score",
-    description: "Real-time PES engine via webcam. Firefox recommended.",
+    title: "MyShape Motion Demo — Research Preview",
+    description: "Experimental continuity signal verification via webcam.",
     images: ["/og-image.png"],
   },
 };
@@ -53,27 +51,27 @@ export default function MotionDemoPage() {
           {
             question: "How does the MyShape Motion Demo work?",
             answer:
-              "The Motion Demo captures your real-time movement through your webcam, extracts 33 body landmarks using MediaPipe Pose, transforms them into MyShape's 18-point SST topology, computes a 128-dimensional motion vector across four feature groups (kinematics, acceleration, jerk, jerk spectrum), and calculates your Presence Entropy Score — all on-device. No video or motion data is ever uploaded to any server.",
+              "The Motion Demo captures your real-time movement through your webcam, extracts 33 body landmarks using MediaPipe Pose, transforms them into MyShape's 18-point SST topology, and calculates your Presence Entropy Score — all on-device. No video or images are transmitted. With your explicit consent, derived landmark data (33 body points per frame) may be uploaded for research calibration. This is optional and separate from the local verification flow.",
           },
           {
             question: "What does the Presence Entropy Score (PES) mean?",
             answer:
-              "The PES is a 0-100 score that quantifies the biological entropy in your motion. A score above 70 indicates strong biological entropy characteristics — the micro-timing variance, physiological tremor, and motor noise that are present in all human motion and absent in all AI-generated motion. The PES is not a measure of 'how well you move' — it is a measure of 'how biologically irreducible your movement is.'",
+              "The PES is a 0-100 score that quantifies the biological entropy in your motion. A higher score indicates stronger biological entropy characteristics — the micro-timing variance, physiological tremor, and motor noise that are typically present in human motion. This is a research preview and not a production identity verification system.",
           },
           {
             question: "Is my webcam data stored or sent anywhere?",
             answer:
-              "No. The Motion Demo runs entirely on-device. The camera feed is processed locally by MediaPipe Pose and the MyShape WASM engine. No video, no images, no pose data, and no motion vectors are transmitted to any server. The only data that could optionally be sent is an anonymous Continuity proof — but only if you explicitly choose to register a Genesis Node after the demo.",
+              "The Motion Demo runs primarily on-device. Your camera feed is processed locally by MediaPipe Pose and the MyShape engine to compute a Presence Entropy Score. No video or images are transmitted. With your explicit consent, derived landmark data (33 body points per frame) may be uploaded for research calibration. This is optional and separate from the local verification flow.",
           },
           {
             question: "Can I run the Motion Demo on mobile?",
             answer:
-              "Yes. The Motion Demo works on any device with a camera and a modern browser — desktop, laptop, tablet, or smartphone. Firefox is recommended for optimal performance. Safari requires explicit camera permission. The WASM engine is optimized for mobile processors and completes PES computation in under 500ms on modern smartphone hardware.",
+              "Yes. The Motion Demo works on any device with a camera and a modern browser. Firefox is recommended for optimal performance. Safari requires explicit camera permission. This is a research preview and may not work perfectly on all devices.",
           },
           {
             question: "Can AI-generated video fool the Motion Demo?",
             answer:
-              "No. The PES engine analyzes four-dimensional entropy characteristics (micro-timing variance, noise residual, frequency entropy, biological perturbation) that are present in biological motion but fundamentally absent from AI-generated motion. This is not a heuristic — it is a mathematical consequence of three hard limits: the Nyquist limit on temporal resolution, depth ambiguity in 2D-to-3D reconstruction, and the deterministic noise floor of generative models. AI motion consistently scores below 20 PES. Human motion consistently scores above 70 PES.",
+              "The PES engine analyzes entropy characteristics (micro-timing variance, noise residual, frequency entropy, biological perturbation) that are typically present in biological motion and absent from AI-generated motion. Research results show strong separation, but this is a research preview and not a production guarantee. No verification system is immune to all forms of spoofing.",
           },
         ]}
       />
