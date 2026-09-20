@@ -62,7 +62,6 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.9"
-  }
   },
   "repository": {
     "type": "git",
