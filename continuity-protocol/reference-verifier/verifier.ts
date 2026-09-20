@@ -2,8 +2,11 @@
 // CPS-0001 Reference Verifier
 //
 // ZERO dependencies on MyShape, IMU, Camera, EE-001, or any engine.
-// This file is the protocol. If you can produce receipts that pass
-// this verifier — using any sensor, any algorithm — you implement CPS-0001.
+// V1,V3-V6 HELPER ONLY — NOT the protocol oracle. V2 (signature) is deferred
+// to the caller (MUST verify before trusting); V7 here is hash-only and omits
+// subject/issuer/temporal binding. Normative full oracle is
+// src/lib/evidence/cps0001.ts + trusted ChainStore (V1-V7); the CLI
+// (continuity-protocol/cli/bin/cps-verify.mjs) is the normative V1-V6 oracle.
 //
 // v1.0-RC · Apache 2.0 · The Continuity Lab
 // ═══════════════════════════════════════════════════════════════════
@@ -229,9 +232,16 @@ export async function verifyReceipt(receipt: ContinuityReceipt): Promise<Verific
 
 export function createReceiptId(): string {
   const ts = Date.now().toString(16).padStart(12, "0");
-  const rand = Array.from({ length: 20 }, () =>
-    Math.floor(Math.random() * 16).toString(16),
-  ).join("");
+  // CSPRNG only — crypto.getRandomValues is mandatory (no pseudo-random fallback).
+  // P0-CSPRNG: previously used Math.random() (predictable). Matching the
+  // authoritative implementation in src/lib/evidence/cps0001.ts.
+  if (typeof globalThis.crypto === "undefined" || !globalThis.crypto.getRandomValues) {
+    throw new Error("CSPRNG unavailable: cannot generate receipt ID securely");
+  }
+  const randBytes = new Uint8Array(20);
+  globalThis.crypto.getRandomValues(randBytes);
+  const rand = Array.from(randBytes, (b) => b.toString(16).padStart(2, "0")).join("");
+  // Format: 00000000-0000-7000-8000-000000000000 (UUIDv7 layout)
   const hex = (ts + rand).slice(0, 32).padEnd(32, "0");
   return [
     hex.slice(0, 8),

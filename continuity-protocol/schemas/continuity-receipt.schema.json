@@ -94,7 +94,7 @@
           "payloadDigest": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$",
-            "description": "SHA-256 hex digest of JSON.stringify(payload)."
+            "description": "SHA-256 lowercase-hex digest of UTF-8(JSON.stringify(payload)) using ECMAScript own-property enumeration order (integer-index keys ascending first, then other keys in insertion order; no whitespace; no Unicode normalization). V5 track only; not JCS. Frozen v1.0-RC1 (see CPS0001 Annex N-2)."
           }
         }
       }
@@ -160,7 +160,7 @@
         "publicKey": {
           "type": "string",
           "minLength": 1,
-          "description": "Public key for signature verification (base64url)."
+          "description": "Public key for signature verification (lowercase hex in all current implementations; see CPS0001 Annex N-1)."
         }
       }
     },
@@ -175,7 +175,7 @@
         "value": {
           "type": "string",
           "minLength": 1,
-          "description": "Signature value (base64url). Covers all fields except signature itself."
+          "description": "Signature value (lowercase hex in all current implementations; see CPS0001 Annex N-1). Covers exactly the 13-slot canonical payload defined in CPS0001 Annex N-1, not all receipt fields."
         },
         "signedAt": {
           "type": "string",

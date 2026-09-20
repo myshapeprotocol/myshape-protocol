@@ -43,7 +43,7 @@ npm install vitest       # To run the conformance suite (optional)
 
 ## Step 1 — Understand the Receipt Structure (10 min)
 
-A Continuity Receipt has **12 fields** organized into **4 groups**:
+A Continuity Receipt has **12 top-level groups/fields** organized into **4 groups** (signing input is a separate 13-slot canonical payload — see CPS0001 Annex N-1):
 
 ```
 ContinuityReceipt
@@ -70,7 +70,9 @@ ContinuityReceipt
     └── signature          { algorithm, value, signedAt }
 ```
 
-**Key principle:** `evidence.payload` is YOUR business. The protocol does not interpret it. Put anything you want in there — IMU data, mouse movements, keystroke timing, robot encoder readings. The verifier only checks that `payloadDigest` matches `SHA-256(payload)`.
+**Key principle:** `evidence.payload` is YOUR business. The protocol does not interpret it. Put anything you want in there — IMU data, mouse movements, keystroke timing, robot encoder readings. The verifier only checks that `payloadDigest` matches `SHA-256(UTF-8(JSON.stringify(payload)))` (V5 track, ECMAScript enumeration order — see CPS0001 Annex N-2; NOT JCS).
+
+> Normative oracle scope: this pseudocode covers V1,V3–V6. V2 (Ed25519 over the 13-slot payload, CPS0001 Annex N-1) and V7 (store-backed, Model 3) are enforced by the normative oracles: main (`src/lib/evidence/cps0001.ts`) + trusted ChainStore = full V1–V7; CLI (`continuity-protocol/cli/bin/cps-verify.mjs`) = V1–V6. The reference-verifier file is a V1,V3–V6 helper only.
 
 ---
 

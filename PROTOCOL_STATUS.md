@@ -14,9 +14,9 @@
 
 | Component | Status |
 |:---|:---|
-| Specification | ✅ Complete — [CPS0001.md](CPS0001.md) |
-| Reference Verifier (V₁–V₇) | ✅ Complete — [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) |
-| Test Vectors | ✅ Complete — 5 receipts (valid, chained, expired, tampered, broken-chain) |
+| Specification | ✅ Complete — [CPS0001.md](CPS0001.md) (incl. Annex N-1 13-slot signing input, Annex N-2 digest dual-track) |
+| Reference Verifier helper (V₁,V₃–V₆) | ✅ Complete — [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) — helper only; normative full oracle = main + trusted ChainStore (V₁–V₇); normative V₁–V₆ oracle = CLI |
+| Test Vectors | ✅ Complete — see `continuity-protocol/VECTOR-INVENTORY.md` (file hashes authoritative; counts differ by grouping) |
 | Conformance Suite | ✅ Complete — 23 assertions, 10 scenarios |
 | CLI Verifier | ✅ Complete — `npx cps-verify` |
 | HTTP Verifier Plugin | ✅ Complete — Express middleware |

@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 /**
- * CPS-0001 Onboarding Test
+ * CPS-0001 Onboarding Test — LEGACY 9-field signing payload.
+ *
+ * WARNING (P0-3): this template signs only
+ * [receiptId, interval.start, interval.end, coverageMs, subject.id,
+ *  evidence[0].payloadDigest, issuer.id, issuer.publicKey]
+ * and will FAIL the current normative 13-slot V2
+ * (src/lib/evidence/cps0001.ts:382-412, CLI cps-verify.mjs:57-82).
+ * Retained as a historical artifact; do NOT use as the spec.
+ * Normative signing input: CPS0001 Annex N-1.
  *
  * Simulates an external developer following the Engine Authoring Guide.
  * This script uses ONLY the continuity-protocol/ directory.
