@@ -1,0 +1,8 @@
+/* RFC-0001 specific styles — inherits from research.css */
+.note-section code {
+  background: rgba(144, 200, 255, 0.06);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 0.85em;
+  color: rgba(144, 200, 255, 0.8);
+}

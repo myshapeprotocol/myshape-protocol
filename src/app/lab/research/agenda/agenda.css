@@ -1,0 +1,529 @@
+/* ============================================================
+   The Continuity Lab — Research Agenda
+   Editorial / manifesto style — the soul of the lab
+   ============================================================ */
+
+/* ── Hero ── */
+
+.agenda-hero {
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.05s;
+}
+
+.agenda-tagline {
+  font-size: clamp(1.5rem, 3.5vw, 2.75rem);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.25;
+  max-width: 24ch;
+}
+
+.agenda-tagline span {
+  color: rgba(144, 200, 255, 0.8);
+}
+
+/* ── Three Numbers ── */
+
+.agenda-numbers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 4rem 0 5rem;
+  padding: 2.5rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.08s;
+}
+
+.agenda-number-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 2rem;
+  cursor: default;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agenda-number-card:hover {
+  transform: translateY(-2px);
+}
+
+.agenda-number {
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  color: rgba(144, 200, 255, 0.75);
+  line-height: 1;
+  transition: color 0.35s, text-shadow 0.35s;
+}
+
+.agenda-number-card:hover .agenda-number {
+  color: rgba(144, 200, 255, 0.95);
+  text-shadow: 0 0 40px rgba(144, 200, 255, 0.15);
+}
+
+.agenda-number-gold {
+  color: rgba(212, 175, 55, 0.7);
+}
+
+.agenda-number-card:hover .agenda-number-gold {
+  color: rgba(212, 175, 55, 0.9);
+  text-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+}
+
+.agenda-number-label {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transition: color 0.35s;
+}
+
+.agenda-number-card:hover .agenda-number-label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.agenda-number-divider {
+  width: 1px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .agenda-numbers {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 1rem;
+  }
+
+  .agenda-number-divider {
+    width: 60px;
+    height: 1px;
+  }
+
+  .agenda-number-card {
+    padding: 0;
+  }
+}
+
+/* ── Primer ── */
+
+.agenda-primer {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 15px;
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 38rem;
+  margin: 0 auto 0;
+}
+
+.agenda-primer strong {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+/* ── Manifesto Blockquote ── */
+
+.agenda-manifesto {
+  margin: 4rem 0;
+}
+
+.agenda-blockquote {
+  margin: 0;
+  padding: 2.5rem 2rem;
+  border-left: 2px solid rgba(144, 200, 255, 0.3);
+  background: rgba(144, 200, 255, 0.015);
+  transition: border-color 0.5s, box-shadow 0.5s;
+  cursor: default;
+}
+
+.agenda-blockquote:hover {
+  border-left-color: rgba(144, 200, 255, 0.55);
+  box-shadow: inset 2px 0 20px -8px rgba(144, 200, 255, 0.08);
+}
+
+.agenda-blockquote-text {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  line-height: 1.6;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+
+.agenda-blockquote-cite {
+  color: rgba(144, 200, 255, 0.4);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── Section Heading ── */
+
+.agenda-section {
+  margin-bottom: 3rem;
+}
+
+.agenda-section-heading {
+  color: rgba(144, 200, 255, 0.5);
+  font-size: 11px;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: color 0.4s;
+}
+
+.agenda-section-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.5s;
+}
+
+.agenda-section-heading:hover {
+  color: rgba(144, 200, 255, 0.9);
+}
+
+.agenda-section-heading:hover::after {
+  background: rgba(144, 200, 255, 0.2);
+}
+
+/* ── Research Questions ── */
+
+.agenda-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.agenda-question-card {
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+  transition: border-color 0.35s, background 0.35s, transform 0.35s,
+    box-shadow 0.35s;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.agenda-question-card:nth-child(1) { animation-delay: 0.1s; }
+.agenda-question-card:nth-child(2) { animation-delay: 0.2s; }
+.agenda-question-card:nth-child(3) { animation-delay: 0.3s; }
+.agenda-question-card:nth-child(4) { animation-delay: 0.4s; }
+
+.agenda-question-card:hover {
+  border-color: rgba(144, 200, 255, 0.2);
+  background: rgba(144, 200, 255, 0.025);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px -6px rgba(144, 200, 255, 0.08), inset 0 1px 0 rgba(144, 200, 255, 0.03);
+}
+
+.agenda-question-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.agenda-question-num {
+  color: rgba(144, 200, 255, 0.45);
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.agenda-question-status {
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.agenda-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.agenda-question-status[data-status="Active Research"] { color: #4ade80; }
+.agenda-question-status[data-status="Investigating"]   { color: #facc15; }
+.agenda-question-status[data-status="Conceptual"]      { color: #60a5fa; }
+
+.agenda-question-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  color: rgba(144, 200, 255, 0.4);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: color 0.3s, gap 0.3s;
+}
+
+.agenda-question-link:hover {
+  color: rgba(144, 200, 255, 0.7);
+  gap: 0.6rem;
+}
+
+.agenda-question-link-arrow {
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.agenda-question-link:hover .agenda-question-link-arrow {
+  transform: translateX(2px);
+}
+
+.agenda-question-title {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+  margin-bottom: 0.75rem;
+  transition: color 0.35s;
+}
+
+.agenda-question-card:hover .agenda-question-title {
+  color: #fff;
+}
+
+.agenda-question-detail {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 0.75rem;
+}
+
+.agenda-question-note {
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 11px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ── Research Roadmap ── */
+
+.agenda-roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.agenda-roadmap-phase {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: transparent;
+  transition: border-color 0.35s, background 0.35s;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.agenda-roadmap-phase:nth-child(1) { animation-delay: 0.4s; }
+.agenda-roadmap-phase:nth-child(2) { animation-delay: 0.5s; }
+.agenda-roadmap-phase:nth-child(3) { animation-delay: 0.6s; }
+
+.agenda-roadmap-phase:hover {
+  border-color: rgba(144,200,255,0.15);
+  background: rgba(144,200,255,0.015);
+}
+
+@media (max-width: 640px) {
+  .agenda-roadmap-phase {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.agenda-roadmap-period {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.agenda-roadmap-period-text {
+  color: rgba(144,200,255,0.65);
+  font-family: monospace;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+.agenda-roadmap-period-label {
+  color: rgba(255,255,255,0.2);
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.agenda-roadmap-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agenda-roadmap-item-v2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.agenda-roadmap-check {
+  font-family: monospace;
+  font-size: 11px;
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+}
+
+.agenda-roadmap-check.done {
+  color: rgba(63,185,80,0.6);
+}
+
+.agenda-roadmap-check.pending {
+  color: rgba(255,255,255,0.15);
+}
+
+.agenda-roadmap-item-text {
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  line-height: 1.5;
+  transition: color 0.35s;
+}
+
+.agenda-roadmap-item-text.done {
+  color: rgba(255,255,255,0.35);
+}
+
+.agenda-roadmap-phase:hover .agenda-roadmap-item-text {
+  color: rgba(255,255,255,0.65);
+}
+
+.agenda-roadmap-phase:hover .agenda-roadmap-item-text.done {
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── Methodology ── */
+
+.agenda-methods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .agenda-methods {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.agenda-method-card {
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: transparent;
+  transition: border-color 0.35s, background 0.35s;
+  opacity: 0;
+  animation: specimenReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.agenda-method-card:nth-child(1) { animation-delay: 0.45s; }
+.agenda-method-card:nth-child(2) { animation-delay: 0.55s; }
+.agenda-method-card:nth-child(3) { animation-delay: 0.65s; }
+.agenda-method-card:nth-child(4) { animation-delay: 0.75s; }
+
+.agenda-method-card:hover {
+  border-color: rgba(144, 200, 255, 0.2);
+  background: rgba(144, 200, 255, 0.025);
+  box-shadow: 0 2px 16px -4px rgba(144, 200, 255, 0.06);
+}
+
+.agenda-method-num {
+  color: rgba(144, 200, 255, 0.35);
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  margin-bottom: 0.5rem;
+}
+
+.agenda-method-title {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+  transition: color 0.35s;
+}
+
+.agenda-method-card:hover .agenda-method-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.agenda-method-desc {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+  line-height: 1.6;
+  transition: color 0.35s;
+}
+
+.agenda-method-card:hover .agenda-method-desc {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Footer ── */
+
+.agenda-footer {
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.agenda-footer-text {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+}
+
+.agenda-footer-text a {
+  color: rgba(144, 200, 255, 0.4);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.agenda-footer-text a:hover {
+  color: rgba(144, 200, 255, 0.7);
+}
+
+.agenda-footer-credits {
+  color: rgba(255, 255, 255, 0.22);
+  font-size: 11px;
+  line-height: 1.6;
+  max-width: 30rem;
+  margin: 0 auto;
+}
