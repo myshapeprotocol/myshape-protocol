@@ -17,7 +17,7 @@ const NODES: RNode[] = [
   {
     q: "Can AI generate a face? Yes. A voice? Yes. But can it generate biological entropy?",
     l: "THE GAP",
-    m: "381 experiments // 4-dimensional entropy scoring",
+    m: "4-dimensional entropy scoring",
   },
   {
     q: "If two sensors see the same physical event, do their signals agree?",
@@ -27,7 +27,7 @@ const NODES: RNode[] = [
   {
     q: "What happens when we send a randomized gyroscope challenge — something a recording can't predict?",
     l: "CHALLENGE RESPONSE",
-    m: "Jittered timing vs. replay — exploratory // N: 200",
+    m: "Jittered timing vs. replay — exploratory",
   },
   {
     q: "Can we chain these checks into a single verification session — passive first, then escalating?",

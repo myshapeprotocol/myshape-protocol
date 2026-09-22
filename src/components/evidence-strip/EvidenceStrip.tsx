@@ -8,7 +8,7 @@ const SURFACE = "rgba(5,16,37,0.45)";
 
 const FIELDS = [
   { field: "protocol", value: "CPS-0001" },
-  { field: "evidence", value: `3 engines · ${metricValue("vs001.sessions")} verification sessions` },
+  { field: "evidence", value: "3 engines" },
   { field: "benchmark", value: `${metricValue("dataset.benchmarkSamples")} PES Benchmark samples` },
   { field: "verification", value: "PASS", green: true },
   { field: "integrity", value: "SHA-256" },

@@ -6,7 +6,7 @@ const SURFACE = "rgba(5,16,37,0.45)";
 
 const STAGES = [
   { label: "Signals", sub: "IMU · Camera · Logs", detail: "Any source. Engine-independent." },
-  { label: "Engine", sub: "EE-001 → EE-00N", detail: "Pluggable. 3 engines · 1 verification session." },
+  { label: "Engine", sub: "EE-001 → EE-00N", detail: "Pluggable. 3 engines." },
   { label: "Receipt", sub: "CPS-0001 · Ed25519", detail: "Ed25519-signed receipt. Evidence bound by SHA-256." },
   { label: "Verify", sub: "V₁–V₇ · In-Browser", detail: "Seven checks. Independently verifiable." },
   { label: "Decision", sub: "PASS · FAIL · INSUFFICIENT_EVIDENCE", detail: "Policy-driven. Reproducible." },

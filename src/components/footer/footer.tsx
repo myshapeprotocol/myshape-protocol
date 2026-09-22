@@ -181,7 +181,7 @@ export default function ProtocolFooter() {
       <div className="max-w-6xl mx-auto px-4 md:px-10 mt-3 md:mt-16 pt-3 md:pt-6 border-t border-white/5 text-center space-y-1">
         <div className="items-center justify-center gap-1.5 flex">
           <span className="w-1 h-1 rounded-full bg-[#00E5FF]/60 shadow-[0_0_4px_rgba(0,229,255,0.5)]" />
-          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 Specification v1.0-RC1 · Implementation v0.2 · SDK 0.3.0 · 3 engines · 1 verification session · 576 Experimental Runs</span>
+          <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono">CPS-0001 Specification v1.0-RC1 · Implementation v0.2 · SDK 0.3.0 · 3 engines · 576 experimental runs · as of 2026-07-19</span>
           <span className="text-[11px] text-white/35 tracking-[0.15em] uppercase font-mono block">
             SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.
           </span>
