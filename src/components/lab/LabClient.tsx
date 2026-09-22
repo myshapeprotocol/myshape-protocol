@@ -136,11 +136,6 @@ function LabHero() {
         <p style={{ fontSize: 12, color: "rgba(0,229,255,0.4)", lineHeight: 1.7, maxWidth: 460, margin: "0 auto 14px", animation: "fadeUp 0.8s ease-out 0.5s both" }}>
           Not a product. Not a company. Not a token. A research question.
         </p>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", fontSize: 10, fontFamily: "var(--font-geist-mono), monospace", animation: "fadeUp 0.8s ease-out 0.8s both" }}>
-          {["GitHub","X","HuggingFace","npm","Discord"].map((l) => (
-            <a key={l} href="#" onMouseEnter={(e) => { playTick(500, "sine", 0.05, 0.02); e.currentTarget.style.borderColor = "rgba(0,229,255,0.3)"; e.currentTarget.style.color = "rgba(0,229,255,0.6)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(0,229,255,0.06)"; e.currentTarget.style.color = "rgba(0,229,255,0.3)"; }} style={{ color: "rgba(0,229,255,0.3)", textDecoration: "none", padding: "2px 8px", border: "1px solid rgba(0,229,255,0.06)", borderRadius: 4, transition: "all 0.25s", cursor: "pointer" }}>{l}</a>
-          ))}
-        </div>
       </div>
     </header>
   );
@@ -151,9 +146,9 @@ function LabHero() {
    ═══════════════════════════════════════════════════════ */
 const STATS = [
   { n: "576", label: "Experiments", unit: "runs" },
-  { n: "1", label: "Protocol", unit: "CPS" },
-  { n: "2", label: "RFCs", unit: "specs" },
-  { n: "7", label: "Research Notes", unit: "papers" },
+  { n: "2", label: "Protocols", unit: "CPS-0001 + CPS-0002 draft" },
+  { n: "2", label: "RFCs", unit: "specs · drafts" },
+  { n: "8", label: "Research Notes", unit: "published" },
   { n: "120", label: "Tests", unit: "cases" },
 ];
 
@@ -285,12 +280,12 @@ const COLUMNS = [
   {
     title: "Core Research", color: "rgba(0,229,255,0.7)",
     items: [
-      { p: "CPS-0001", t: "Continuity Protocol Core", h: "/research/notes/008-continuity-protocol-core" },
-      { p: "CPS-0002", t: "Human Signal Assertion", h: "/protocols/cps-0002" },
-      { p: "EE-001", t: "Presence Entropy Score", h: "/research/fusion" },
-      { p: "EE-002", t: "Cross-Modal Causal Coupling", h: "/research/causal-coupling" },
-      { p: "EE-003", t: "Challenge-Response Engine", h: "/research/challenge-response" },
-      { p: "VS-001", t: "Verification Pipeline · 93%", h: "/research/protocol-verify" },
+      { p: "CPS-0001", t: "Continuity Protocol Core", h: "https://www.myshape.com/research/notes/008-continuity-protocol-core" },
+      { p: "CPS-0002", t: "Attestation Draft (cps-hsa-0.1-draft)", h: "/lab/protocols/cps-0002" },
+      { p: "EE-001", t: "Presence Entropy Score", h: "/lab/research/fusion" },
+      { p: "EE-002", t: "Cross-Modal Causal Coupling", h: "/lab/research/causal-coupling" },
+      { p: "EE-003", t: "Challenge-Response Engine", h: "/lab/research/challenge-response" },
+      { p: "VS-001", t: "Verification Pipeline", h: "/lab/research/protocol-verify" },
     ],
   },
   {
@@ -298,7 +293,7 @@ const COLUMNS = [
     items: [
       { t: "npm install @thecontinuitylab/myshape", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
       { t: "npx @thecontinuitylab/myshape demo", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
-      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.", h: "/protocols" },
+      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.", h: "/lab/protocols" },
       { t: "Contribute Data", h: "/lab/contribute" },
       { t: "Discovery Survey", h: "/lab/discovery-survey" },
     ],
@@ -306,11 +301,11 @@ const COLUMNS = [
   {
     title: "Research Notes", color: "rgba(212,175,55,0.7)",
     items: [
-      { p: "RN-003", t: "Cross-Modal Binding · 477 runs", h: "/research/notes/003-cross-modal-binding" },
-      { p: "RN-002", t: "PES Benchmark v0.2", h: "/research/notes/002-pes-benchmark" },
-      { p: "RN-001", t: "The Continuity Problem", h: "/research/notes/001-the-continuity-problem" },
-      { p: "FD-001", t: "Frame Rate Hypothesis (failed)", h: "/research/notes/005-failure-report-10fps" },
-      { p: "DL-001", t: "Direction Asymmetry in EE-003", h: "/research/notes/007-ee003-direction-asymmetry" },
+      { p: "RN-003", t: "Cross-Modal Binding", h: "/lab/research/notes/003-cross-modal-binding" },
+      { p: "RN-002", t: "PES Benchmark v0.2", h: "/lab/research/notes/002-pes-benchmark" },
+      { p: "RN-001", t: "The Continuity Problem", h: "/lab/research/notes/001-the-continuity-problem" },
+      { p: "FD-001", t: "Frame Rate Hypothesis (failed)", h: "/lab/research/notes/005-failure-report-10fps" },
+      { p: "DL-001", t: "Direction Asymmetry in EE-003", h: "/lab/research/notes/007-ee003-direction-asymmetry" },
     ],
   },
 ];
@@ -320,6 +315,9 @@ function LabArchive() {
   return (
     <section ref={ref} style={{ padding: "clamp(2rem,5vw,4rem) 24px", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.7s ease-out, transform 0.7s ease-out" }}>
       <div style={{ maxWidth: 780, margin: "0 auto" }}>
+        <p style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", textAlign: "center", margin: "0 0 16px", lineHeight: 1.7, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.04em" }}>
+          Research engines and verification studies are experimental research artifacts, not production components.
+        </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "clamp(16px,2.5vw,28px)" }}>
           {COLUMNS.map((col, ci) => (
             <div key={col.title}>
@@ -424,9 +422,9 @@ function LabManifesto() {
    6. SPECS — Blueprint Table
    ═══════════════════════════════════════════════════════ */
 const SPECS = [
-  { p: "CPS-0001", t: "Continuity Protocol Core · v1.0-RC", h: "/research/notes/008-continuity-protocol-core" },
-  { p: "RFC-0001", t: "Motion Signature Format", h: "/research/notes/004-motion-signature-rfc" },
-  { p: "RFC-0002", t: "Continuity Proof Format", h: "/research/notes/006-continuity-proof-rfc" },
+  { p: "CPS-0001", t: "Continuity Protocol Core · v1.0-RC1", h: "https://www.myshape.com/research/notes/008-continuity-protocol-core" },
+  { p: "RFC-0001", t: "Motion Signature Format", h: "/lab/research/notes/004-motion-signature-rfc" },
+  { p: "RFC-0002", t: "Continuity Proof Format", h: "/lab/research/notes/006-continuity-proof-rfc" },
 ];
 
 function LabSpecs() {
@@ -506,13 +504,26 @@ export default function LabClient() {
       <LabManifesto />
       <LabSpecs />
 
-      {/* Footer */}
-      <footer style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", textAlign: "center", padding: "clamp(28px,4vw,40px) 24px", borderTop: "1px solid rgba(0,229,255,0.06)", fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.08em" }}>
-        <a href="https://www.myshape.com" style={{ color: "rgba(0,229,255,0.25)", textDecoration: "none" }}
-          onMouseEnter={(e) => { playTick(500, "sine", 0.04, 0.02); e.currentTarget.style.color = "rgba(0,229,255,0.5)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,229,255,0.25)"; }}
-        >MyShape Protocol</a>
-        <span style={{ margin: "0 10px" }}>·</span>
+      {/* Footer — minimal Lab IA (links only; no metrics, no duplicated warnings) */}
+      <footer style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", textAlign: "center", padding: "clamp(28px,4vw,40px) 24px", borderTop: "1px solid rgba(0,229,255,0.06)", fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.08em" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 14px", justifyContent: "center", marginBottom: 14 }}>
+          {[
+            { l: "Protocols", h: "/lab/protocols", ext: false },
+            { l: "Research", h: "/lab/research", ext: false },
+            { l: "Develop", h: "/lab/develop", ext: false },
+            { l: "Contribute", h: "/lab/contribute", ext: false },
+            { l: "GitHub", h: "https://github.com/myshapeprotocol", ext: true },
+            { l: "X", h: "https://x.com/myshapeprotocol", ext: true },
+            { l: "npm", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
+            { l: "Discord", h: "https://discord.gg/zr8Tczard", ext: true },
+            { l: "MyShape", h: "https://www.myshape.com", ext: true },
+          ].map((f) => (
+            <a key={f.l} href={f.h} target={f.ext ? "_blank" : undefined} rel={f.ext ? "noopener noreferrer" : undefined}
+              onMouseEnter={(e) => { playTick(500, "sine", 0.04, 0.02); e.currentTarget.style.color = "rgba(0,229,255,0.6)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; }}
+              style={{ color: "rgba(255,255,255,0.25)", textDecoration: "none", textTransform: "uppercase" }}>{f.l}</a>
+          ))}
+        </div>
         The Continuity Lab, 2026
       </footer>
     </div>

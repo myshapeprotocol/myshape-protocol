@@ -12,6 +12,24 @@ interface UpdateEntry {
 
 const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-09-13",
+    text: "CPS-0002 Protocol Core frozen as prototype draft artifact (cps-hsa-0.1-draft) — Trust Framework not frozen, out of scope",
+    href: "https://thecontinuitylab.org/protocols/cps-0002",
+    tag: "RFC",
+  },
+  {
+    date: "2026-08-29",
+    text: "CPS-0001 Specification frozen as v1.0-RC1 — normative serialization and validation semantics fixed (tag v1.0-RC1)",
+    href: "https://www.myshape.com/research/notes/008-continuity-protocol-core",
+    tag: "RFC",
+  },
+  {
+    date: "2026-08-19",
+    text: "SDK 0.3.0 released — evaluation only; predates Batch-2D hardening. For hardened verification use the repository reference verifier / cps-verify",
+    href: "https://www.npmjs.com/package/@thecontinuitylab/myshape",
+    tag: "Release",
+  },
+  {
     date: "2026-08-17",
     text: "CPS-0001 v0.2 two-stage verification complete — implementation, semantic tests, and documentation aligned (Stage 1 EE-001 ≥ 0.50, Stage 2 EE-003 = 1.0)",
     href: "/research/notes/009-two-stage-continuity-verification",
@@ -19,7 +37,7 @@ const UPDATES: UpdateEntry[] = [
   },
   {
     date: "2026-08-07",
-    text: "npm package v0.2.2 — 4-layer verification pipeline (EE-001 PES + EE-002 + EE-003 + Threat Assessment), 120 tests, extensible by design",
+    text: "npm package v0.2.2 — 4-layer verification pipeline (EE-001 PES + EE-002 + EE-003 + Threat Assessment), 120 tests, extensible by design (superseded by SDK 0.3.0)",
     href: "https://www.npmjs.com/package/@thecontinuitylab/myshape",
     tag: "Release",
   },

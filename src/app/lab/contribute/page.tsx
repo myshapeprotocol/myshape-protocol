@@ -165,17 +165,28 @@ export default function ContributePage() {
 
   function reset() { setStepIdx(0); setPhase("idle"); setCollected(0); }
 
-  /* ── Desktop prompt ── */
+  /* ── Desktop prompt — QR handoff to phone ── */
   if (!isMobile) {
+    const HANDOFF_URL = "https://thecontinuitylab.org/contribute";
     return (
       <div style={{ minHeight: "100dvh", background: "#051025", color: "#E6EDF7", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "system-ui, sans-serif", textAlign: "center" }}>
-        <div style={{ maxWidth: 360 }}>
+        <div style={{ maxWidth: 380 }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>📱</div>
-          <h2 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 12px", color: "#60A5FA" }}>Open on your phone</h2>
-          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7 }}>
-            Motion sensors are only available on mobile devices.<br /><br />
-            <code style={{ color: "#60A5FA", fontSize: 12 }}>thecontinuitylab.org/lab/contribute</code>
+          <h2 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 12px", color: "#60A5FA" }}>Continue on your phone</h2>
+          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7, marginBottom: 20 }}>
+            This experiment requires mobile motion sensors, which are only available on phones.
+            Scan the QR code to continue on your device.
           </p>
+          {/* QR code → canonical /contribute URL (api.qrserver.com is allow-listed in CSP) */}
+          <img
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(HANDOFF_URL)}`}
+            alt={`QR code linking to ${HANDOFF_URL}`}
+            width={220}
+            height={220}
+            style={{ display: "block", margin: "0 auto 16px", background: "#ffffff", padding: 10, borderRadius: 8 }}
+          />
+          <p style={{ fontSize: 12, color: "#64748B", marginBottom: 8 }}>Or open manually:</p>
+          <code style={{ color: "#60A5FA", fontSize: 12 }}>thecontinuitylab.org/contribute</code>
         </div>
       </div>
     );
@@ -204,7 +215,7 @@ export default function ContributePage() {
             <div style={{ fontSize: 12, color: "#94A3B8", lineHeight: 1.6, marginBottom: 10 }}>
               Phone IMU + desktop camera work together. Proves both sensors observe the same physical event. The hardest and most valuable data.
             </div>
-            <a href="/research/causal-coupling" style={{ fontSize: 12, color: "#60A5FA", textDecoration: "none" }}>Open on phone + computer →</a>
+            <a href="/lab/research/causal-coupling" style={{ fontSize: 12, color: "#60A5FA", textDecoration: "none" }}>Open on phone + computer →</a>
           </div>
         </div>
       </div>

@@ -38,12 +38,11 @@ export default function DatasetClient() {
           <section className="note-section">
             <h2>Current Snapshot</h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
               {[
-                { label: "Total Runs", value: "576" },
-                { label: "Human Subjects", value: "~81" },
+                { label: "Experimental Runs", value: "576" },
+                { label: "Evidence Engines", value: "4" },
                 { label: "AI Strategies", value: "4" },
-                { label: "Countries", value: "3" },
               ].map((stat) => (
                 <div key={stat.label} className="p-4 text-center"
                   style={{ border: "1px solid rgba(144,200,255,0.08)", background: "rgba(2,6,14,0.6)" }}>
@@ -58,7 +57,9 @@ export default function DatasetClient() {
           <section className="note-section">
             <h2>Composition</h2>
 
-            <p><strong>Human motion (576 Experimental Runs).</strong> 30-second unstructured motion sequences from ~81 subjects. Standard webcam at 30 fps. MediaPipe Pose (33 landmarks). No choreography, no controlled environment. Ecological variability is intentional.</p>
+            <p><strong>576 experimental runs across 4 evidence engines (EE-001–EE-003 + VS-001), as of 2026-07-19.</strong> Point-in-time total; newer runs are not yet reflected in this number.</p>
+
+            <p><strong>Human motion.</strong> 30-second unstructured motion sequences. Standard webcam at 30 fps. MediaPipe Pose (33 landmarks). No choreography, no controlled environment. Ecological variability is intentional.</p>
 
             <p><strong>Synthetic motion (200 samples, 50 per strategy).</strong></p>
             <p>1. Random walk — Gaussian per-joint walk calibrated to human joint range.</p>
@@ -75,8 +76,8 @@ export default function DatasetClient() {
 
             <div className="space-y-3">
               {[
-                { date: "2026.07.10", milestone: "DS-001 established as first-class Research Object. 576 Experimental Runs." },
-                { date: "2026.07.04", milestone: "PES v0.2 recalibration across ~81 human subjects." },
+                { date: "2026.07.10", milestone: "DS-001 established as first-class Research Object." },
+                { date: "2026.07.04", milestone: "PES v0.2 recalibration with human-subject data." },
                 { date: "2026 Q3 (target)", milestone: "300+ human samples. Explicit coverage of age, mobility, and hardware diversity." },
                 { date: "2026 Q4 (target)", milestone: "Longitudinal samples — same subjects across multiple sessions, days apart." },
               ].map((entry, i) => (
