@@ -27,7 +27,7 @@ const ENGINES = [
   { engine: "EE-001", name: "Presence Detection", rate: "100% floor", slug: "/research/fusion" },
   { engine: "EE-002", name: "Causal Coupling", rate: "58% overall pass rate · N=316 (temporal alignment measured separately)", slug: "/research/causal-coupling" },
   { engine: "EE-003", name: "Gyroscope Challenge", rate: "59% · N=200", slug: "/research/challenge-response" },
-  { engine: "VS-001", name: "Dual-Engine Pipeline", rate: "93% · N=60", slug: "/research/protocol-verify" },
+  { engine: "VS-001", name: "Dual-Engine Pipeline", rate: "Passive observer + active challenge", slug: "/research/protocol-verify" },
 ];
 
 const DATASET = { id: "DS-001", name: "Continuity Dataset", status: "576 runs · 4 engines · HuggingFace", slug: "https://huggingface.co/TheContinuityLab/myshape-576" };

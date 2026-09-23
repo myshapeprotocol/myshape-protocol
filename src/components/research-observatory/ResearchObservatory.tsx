@@ -22,7 +22,7 @@ const NODES: RNode[] = [
   {
     q: "If two sensors see the same physical event, do their signals agree?",
     l: "CAUSAL COUPLING",
-    m: "Cross-modal binding // N: 316",
+    m: "Cross-modal binding",
   },
   {
     q: "What happens when we send a randomized gyroscope challenge — something a recording can't predict?",
@@ -32,7 +32,7 @@ const NODES: RNode[] = [
   {
     q: "Can we chain these checks into a single verification session — passive first, then escalating?",
     l: "VERIFICATION SESSION",
-    m: "Dual-engine pipeline // N: 60",
+    m: "Dual-engine pipeline",
   },
   {
     q: "After verification, what remains? A yes? A no? Or evidence — signed, timestamped, digest-bound?",

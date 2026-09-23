@@ -126,10 +126,6 @@ export default function ResearchClient() {
               <h3>Protocol Verify</h3>
               <p>Experiment tool.</p>
             </Link>
-            <Link href="/lab/research/real-001-capture" className="lab-card">
-              <h3>REAL-001 Capture</h3>
-              <p>Experiment tool.</p>
-            </Link>
             <Link href="/lab/research/real-try-004-export" className="lab-card">
               <h3>REAL-TRY-004 Export</h3>
               <p>Data export.</p>

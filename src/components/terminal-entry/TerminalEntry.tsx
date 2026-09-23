@@ -277,13 +277,14 @@ export default function TerminalEntry() {
             letterSpacing: "-0.02em", lineHeight: 1.1, color: "#fff", margin: 0,
           }}>
             One command.<br />
-            <span style={{ color: "rgba(0,229,255,0.8)" }}>Continuity verified.</span>
+            <span style={{ color: "rgba(0,229,255,0.8)" }}>Receipt verified.</span>
           </h2>
           <p style={{
             fontSize: "clamp(0.85rem, 1.5vw, 1rem)", fontWeight: 300,
             color: "rgba(255,255,255,0.4)", marginTop: "0.8rem", lineHeight: 1.6,
           }}>
-            No servers. No accounts. Three lines of code.
+            No servers. No accounts. Three lines of code.<br />
+            <span style={{ color: "rgba(255,255,255,0.35)" }}>SDK 0.3.0 · evaluation only. Reference verifier: cps-verify.</span>
           </p>
         </div>
 

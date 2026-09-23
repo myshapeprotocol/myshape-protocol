@@ -240,7 +240,7 @@ export default function OpenQuestions() {
           </div>
 
           {/* mobile: stacked below radar */}
-          <div className="md:hidden" style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
+          <div className="md:hidden" style={{ flexDirection: "column", gap: 16, width: "100%" }}>
             {QUESTIONS.map((item, i) => (
               <QuestionCard key={i} item={item} side="left" />
             ))}

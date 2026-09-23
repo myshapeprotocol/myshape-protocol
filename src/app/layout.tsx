@@ -84,8 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* Domain-aware SEO override */}
         <title>{seo.title}</title>
-        <meta name="description" content={seo.description} />
-        <link rel="canonical" href={seo.canonical} />
+                <meta name="description" content={seo.description} />
         <meta property="og:title" content={seo.ogTitle} />
         <meta property="og:description" content={seo.ogDescription} />
         <meta property="og:url" content={seo.ogUrl} />

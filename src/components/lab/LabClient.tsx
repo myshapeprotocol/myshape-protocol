@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
@@ -146,7 +146,7 @@ function LabHero() {
    ═══════════════════════════════════════════════════════ */
 const STATS = [
   { n: "576", label: "Experiments", unit: "runs" },
-  { n: "2", label: "Protocols", unit: "CPS-0001 + CPS-0002 draft" },
+  { n: "1", label: "Protocols", unit: "CPS-0001 · CPS-0002 (draft)" },
   { n: "2", label: "RFCs", unit: "specs · drafts" },
   { n: "8", label: "Research Notes", unit: "published" },
   { n: "120", label: "Tests", unit: "cases" },

@@ -155,13 +155,13 @@ export default function Vision() {
             fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 200,
             color: "rgba(255,255,255,0.85)", lineHeight: 1.1, margin: "0 0 0.5rem 0",
           }}>
-            From signals <span style={{ color: "rgba(0,229,255,0.8)" }}>to trust</span>
+            From signals <span style={{ color: "rgba(0,229,255,0.8)" }}>to evidence</span>
           </h2>
           <p style={{
             fontSize: "clamp(0.85rem, 1.5vw, 1rem)", fontWeight: 300,
             color: "rgba(255,255,255,0.45)", lineHeight: 1.6, margin: 0,
           }}>
-            Five stages. Engine-independent at every step. Any signal, any algorithm — one receipt format.
+            Five stages. Different engines, one receipt format. Any signal, any algorithm — one receipt format.
           </p>
         </div>
 

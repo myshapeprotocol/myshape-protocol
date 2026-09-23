@@ -19,6 +19,9 @@ export function useLabPath(): (path: string) => string {
     // If already has /lab prefix, return as-is
     if (path.startsWith("/lab/")) return path;
 
+    // LAB home resolves to /lab in the preview namespace and / on the LAB domain
+    if (path === "/") return isLabContext ? "/lab" : "/";
+
     // In LAB context on localhost, use /lab/ prefix
     if (isLabContext) {
       return `/lab${path}`;
@@ -33,8 +36,9 @@ export function useLabPath(): (path: string) => string {
    LabHeader — minimal Continuity Lab navigation shell.
 
    IA (localhost preview → /lab/* namespace):
-     RESEARCH    → /lab/research
+     LAB HOME    → /lab
      PROTOCOLS   → /lab/protocols
+     RESEARCH    → /lab/research
      DEVELOP     → /lab/develop
      CONTRIBUTE  → /lab/contribute
 
@@ -51,8 +55,9 @@ export function useLabPath(): (path: string) => string {
    ═══════════════════════════════════════════════════════════════════ */
 
 const NAV = [
-  { label: "Research", href: "/research" },
+  { label: "LAB HOME", href: "/" },
   { label: "Protocols", href: "/protocols" },
+  { label: "Research", href: "/research" },
   { label: "Develop", href: "/develop" },
   { label: "Contribute", href: "/contribute" },
 ];
@@ -138,8 +143,10 @@ export default function LabHeader() {
         <nav className="lab-nav">
           {NAV.map((link) => {
             const resolvedHref = labPath(link.href);
+            const isRoot = link.href === "/";
             const active =
-              pathname === resolvedHref || pathname.startsWith(resolvedHref + "/");
+              pathname === resolvedHref ||
+              (!isRoot && pathname.startsWith(resolvedHref + "/"));
             return (
               <Link
                 key={link.href}

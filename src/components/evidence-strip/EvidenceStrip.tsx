@@ -2,14 +2,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { playTick } from "@/utils/useAudioTick";
-import { metricValue } from "@/lib/metrics";
 
 const SURFACE = "rgba(5,16,37,0.45)";
 
 const FIELDS = [
   { field: "protocol", value: "CPS-0001" },
   { field: "evidence", value: "3 engines" },
-  { field: "benchmark", value: `${metricValue("dataset.benchmarkSamples")} PES Benchmark samples` },
+  { field: "benchmark", value: "PES research" },
   { field: "verification", value: "PASS", green: true },
   { field: "integrity", value: "SHA-256" },
   { field: "signature", value: "Ed25519" },
@@ -308,7 +307,7 @@ export default function EvidenceStrip() {
                 background:"rgba(52,211,153,0.04)", textAlign:"center",
               }}>
                 <div style={{ fontSize:9, color:"#34D399", fontFamily:"var(--font-geist-mono), monospace", letterSpacing:"0.15em", marginBottom:2 }}>
-                  ✓ VERIFIED (VALID)
+                  ✓ RECEIPT VALID
                 </div>
                 <div style={{ fontSize:7, color:"rgba(52,211,153,0.4)", fontFamily:"var(--font-geist-mono), monospace", letterSpacing:"0.1em" }}>
                   THE CONTINUITY LAB
