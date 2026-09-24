@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "The Continuity Lab™ — What is Continuity?",
     description:
-      "The internet has protocols for identity, data, and value — but no protocol for proving you are still you across time. The Continuity Lab is building one.",
+      "The internet has protocols for identity, data, and value — but none for verifying continuity across time. The Continuity Lab is researching whether continuity can be made a verifiable property of digital existence.",
     url: "https://thecontinuitylab.org",
     siteName: "The Continuity Lab",
     type: "website",

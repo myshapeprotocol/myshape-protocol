@@ -47,7 +47,7 @@ export default function LabLogo() {
           textTransform: "uppercase",
           whiteSpace: "nowrap",
         }}>
-          CONTINUITY · EVIDENCE · TRUST
+          CONTINUITY · EVIDENCE · VERIFICATION
         </span>
       </div>
     </div>

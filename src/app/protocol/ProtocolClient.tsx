@@ -26,7 +26,7 @@ const FIVE_LAYERS = [
 
 const ENGINES = [
   { name: "Presence Detection (EE-001)", file: "N/A — 100% floor", desc: "4D entropy scoring from IMU data. Distinguishes embodied entities from synthetic motion." },
-  { name: "Causal Coupling (EE-002)", file: "316 runs · 58% pass", desc: "Cross-modal event binding. Proves IMU and camera observe the same physical event." },
+  { name: "Causal Coupling (EE-002)", file: "316 runs · 58% pass", desc: "Cross-modal event binding. Tests whether IMU and camera signals are consistent with one underlying event — evidence context, not proof of physical-world fact." },
   { name: "Gyroscope Challenge (EE-003)", file: "200 runs · 59% pass", desc: "3-round randomized directional challenge with jittered timing. Defeats replay." },
   { name: "Verification Session (VS-001)", file: "60 runs · 93% pass", desc: "Dual-engine pipeline. Passive presence + active challenge escalation." },
   { name: "Reference Verifier", file: "120 tests · Apache-2.0", desc: "CPS-0001 conformance suite. 23 assertions, 10 scenarios. Zero engine deps." },

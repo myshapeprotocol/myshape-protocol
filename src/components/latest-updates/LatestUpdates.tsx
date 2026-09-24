@@ -43,7 +43,7 @@ const UPDATES: UpdateEntry[] = [
   },
   {
     date: "2026-07-29",
-    text: "First external verifier — clean machine, USA, 5/5 checks passed",
+    text: "First external reproduction — clean machine, 5/5 checks passed",
     tag: "Lab",
   },
   {

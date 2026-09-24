@@ -205,7 +205,7 @@ function LabStats() {
 
   return (
     <section ref={ref} style={{ padding: "clamp(3rem,6vw,5rem) 24px", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.7s ease-out, transform 0.7s ease-out" }}>
-      <SectionHeader eyebrow="Dashboard" title={<>Research <span style={{ color: A }}>Telemetry</span></>} subtitle="Live metrics from the Continuity Lab" />
+      <SectionHeader eyebrow="Dashboard" title={<>Research <span style={{ color: A }}>Telemetry</span></>} subtitle="Point-in-time research metrics" />
 
       <div style={{ position: "relative", maxWidth: 720, margin: "0 auto", padding: "clamp(1rem,2vw,2rem) 0" }}>
         <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, zIndex: 0, width: "100%", height: "100%" }} />
@@ -504,14 +504,12 @@ export default function LabClient() {
       <LabManifesto />
       <LabSpecs />
 
-      {/* Footer — minimal Lab IA (links only; no metrics, no duplicated warnings) */}
+      {/* Footer — external/secondary links only. Section navigation already
+          lives in LabHeader (LAB HOME · Protocols · Research · Develop ·
+          Contribute); the footer must not become a second header. */}
       <footer style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", textAlign: "center", padding: "clamp(28px,4vw,40px) 24px", borderTop: "1px solid rgba(0,229,255,0.06)", fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.08em" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 14px", justifyContent: "center", marginBottom: 14 }}>
           {[
-            { l: "Protocols", h: "/lab/protocols", ext: false },
-            { l: "Research", h: "/lab/research", ext: false },
-            { l: "Develop", h: "/lab/develop", ext: false },
-            { l: "Contribute", h: "/lab/contribute", ext: false },
             { l: "GitHub", h: "https://github.com/myshapeprotocol", ext: true },
             { l: "X", h: "https://x.com/myshapeprotocol", ext: true },
             { l: "npm", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
