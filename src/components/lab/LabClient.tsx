@@ -274,13 +274,107 @@ function LabCTAs() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   3b. CPS-0001 — Minimal Definition + VALID Boundary
+
+   Wording is taken from the frozen, authoritative sources and
+   paraphrased only by omission:
+     · continuity-protocol/CPS0001.md § "What Is This?"
+     · continuity-protocol/PROTOCOL_BOUNDARY.md § 'What "VALID" means'
+   No new claims are introduced here.
+   ═══════════════════════════════════════════════════════ */
+const VALID_MEANS = [
+  "The signature covers all signed fields.",
+  "The temporal constraints are satisfied.",
+  "The evidence digests match their payloads.",
+  "The assertions are internally consistent.",
+];
+
+const VALID_DOES_NOT_MEAN = [
+  "The evidence represents real human behavior.",
+  "The subject is biologically present.",
+  "The issuer is who they claim to be to any external authority.",
+  "The receipt proves anything about the real world beyond \u201csomeone with this key made this assertion\u201d.",
+];
+
+const BOUNDARY_COLUMNS = [
+  { t: "VALID means", color: "rgba(52,211,153,0.8)", items: VALID_MEANS },
+  { t: "VALID does not mean", color: "rgba(212,175,55,0.8)", items: VALID_DOES_NOT_MEAN },
+];
+
+function LabBoundary() {
+  const { ref, visible } = useScrollReveal(0.3);
+  const pill: React.CSSProperties = {
+    fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+    textDecoration: "none", color: "rgba(0,229,255,0.78)",
+    border: "1px solid rgba(0,229,255,0.22)", borderRadius: 999,
+    padding: "7px 14px", fontFamily: "var(--font-geist-mono), monospace",
+    transition: "all 0.25s",
+  };
+  const eyebrow: React.CSSProperties = {
+    fontSize: 10, color: "rgba(0,229,255,0.35)", textTransform: "uppercase",
+    letterSpacing: "0.3em", fontFamily: "var(--font-geist-mono), monospace",
+  };
+  return (
+    <section ref={ref} style={{ padding: "0 24px clamp(3rem,5vw,4rem)", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.7s ease-out, transform 0.7s ease-out" }}>
+      <div style={{
+        maxWidth: 680, margin: "0 auto", border: "1px solid rgba(0,229,255,0.12)",
+        background: SURFACE, borderRadius: 14, padding: "clamp(20px,3vw,32px)",
+      }}>
+        <div style={{ ...eyebrow, marginBottom: 14 }}>CPS-0001 · What the protocol is</div>
+
+        <p style={{ fontSize: "clamp(13px,1.6vw,15px)", lineHeight: 1.8, color: "rgba(248,254,255,0.85)", margin: "0 0 12px" }}>
+          A <em>Continuity Receipt</em> is a cryptographically verifiable statement that an observer
+          collected sufficient evidence supporting the continuity of a subject over a bounded interval
+          of time.
+        </p>
+        <p style={{ fontSize: 12, lineHeight: 1.8, color: "rgba(255,255,255,0.45)", margin: 0 }}>
+          It is engine-independent: no sensor type, algorithm, or hardware requirement appears in the
+          specification. The protocol standardizes how continuity assertions are{" "}
+          <strong style={{ color: "rgba(0,229,255,0.75)", fontWeight: 400 }}>represented</strong>,{" "}
+          <strong style={{ color: "rgba(0,229,255,0.75)", fontWeight: 400 }}>exchanged</strong>, and{" "}
+          <strong style={{ color: "rgba(0,229,255,0.75)", fontWeight: 400 }}>verified</strong>.
+        </p>
+
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(0,229,255,0.08)" }}>
+          <div style={{ ...eyebrow, marginBottom: 16 }}>
+            What {"\u201c"}VALID{"\u201d"} means
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "clamp(16px,2.5vw,28px)" }}>
+            {BOUNDARY_COLUMNS.map((col) => (
+              <div key={col.t}>
+                <div style={{ fontSize: 10, color: col.color, fontFamily: "var(--font-geist-mono), monospace", letterSpacing: "0.14em", marginBottom: 10 }}>
+                  {col.t}
+                </div>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 7 }}>
+                  {col.items.map((it) => (
+                    <li key={it} style={{ display: "flex", gap: 8, fontSize: 11.5, lineHeight: 1.65, color: "rgba(255,255,255,0.55)" }}>
+                      <span style={{ color: col.color, flexShrink: 0 }}>▸</span>
+                      <span>{it}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 24 }}>
+          <Link href="/lab/protocols/cps-0001" style={pill}>Full specification →</Link>
+          <Link href="/lab/develop" style={pill}>Reproduce it without the SDK →</Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    4. RESEARCH ARCHIVE — Three Column Catalog
    ═══════════════════════════════════════════════════════ */
 const COLUMNS = [
   {
     title: "Core Research", color: "rgba(0,229,255,0.7)",
     items: [
-      { p: "CPS-0001", t: "Continuity Protocol Core", h: "https://www.myshape.com/research/notes/008-continuity-protocol-core" },
+      { p: "CPS-0001", t: "Continuity Protocol Core", h: "/lab/protocols/cps-0001" },
       { p: "CPS-0002", t: "Attestation Draft (cps-hsa-0.1-draft)", h: "/lab/protocols/cps-0002" },
       { p: "EE-001", t: "Presence Entropy Score", h: "/lab/research/fusion" },
       { p: "EE-002", t: "Cross-Modal Causal Coupling", h: "/lab/research/causal-coupling" },
@@ -291,9 +385,13 @@ const COLUMNS = [
   {
     title: "For Developers", color: "rgba(52,211,153,0.7)",
     items: [
+      // Engine-independent reproduction path first (specification → test
+      // vectors → reference verifier → cps-verify). The npm SDK is one
+      // optional consumer of CPS-0001, never the only verification path.
+      { t: "Reproduce CPS-0001 — spec, test vectors, reference verifier, cps-verify", h: "/lab/develop" },
+      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the reference verifier / cps-verify.", h: "/lab/develop" },
       { t: "npm install @thecontinuitylab/myshape", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
       { t: "npx @thecontinuitylab/myshape demo", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
-      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.", h: "/lab/protocols" },
       { t: "Contribute Data", h: "/lab/contribute" },
       { t: "Discovery Survey", h: "/lab/discovery-survey" },
     ],
@@ -422,7 +520,7 @@ function LabManifesto() {
    6. SPECS — Blueprint Table
    ═══════════════════════════════════════════════════════ */
 const SPECS = [
-  { p: "CPS-0001", t: "Continuity Protocol Core · v1.0-RC1", h: "https://www.myshape.com/research/notes/008-continuity-protocol-core" },
+  { p: "CPS-0001", t: "Continuity Protocol Core · v1.0-RC1", h: "/lab/protocols/cps-0001" },
   { p: "RFC-0001", t: "Motion Signature Format", h: "/lab/research/notes/004-motion-signature-rfc" },
   { p: "RFC-0002", t: "Continuity Proof Format", h: "/lab/research/notes/006-continuity-proof-rfc" },
 ];
@@ -496,6 +594,7 @@ export default function LabClient() {
     }}>
       <LabHero />
       <LabStats />
+      <LabBoundary />
       <LabCTAs />
       <LabArchive />
       <section style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
