@@ -48,6 +48,15 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // ── Fix A: Turbopack's Node wasm loader ([turbopack-wasm]/node/loadWasm.ts) emits an
+  // unbounded fs access pattern for /motion-demo, causing NFT to trace all 52,090 project
+  // files (554.71 MB local / ~682 MB on Vercel). With this exclude the route trace is
+  // 31 files / 1.69 MB and contains 0 raw node_modules entries, so the route trace does
+  // not require node_modules at runtime; the shared Next runtime closure does.
+  outputFileTracingExcludes: {
+    '/motion-demo': ['**/node_modules/**/*'],
+  },
+
   // Allow phone testing in dev
   allowedDevOrigins: IS_PROD ? undefined : ["192.168.0.105", "192.168.0.100", "127.0.0.1", "localhost", "192.168.0.105:3443", "192.168.0.105:3000"],
 
