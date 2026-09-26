@@ -126,7 +126,7 @@ export default function DevelopersClient() {
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <a href="/lab/playground" className="dev-cta" onMouseEnter={() => playTick(800, "sine", 0.10, 0.025)}>Verify Continuity →</a>
-            <a href="https://github.com/myshapeprotocol" target="_blank" rel="noopener noreferrer" className="dev-cta dev-cta-dim" onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>GitHub →</a>
+            <a href="https://github.com/myshapeprotocol/myshape-protocol" target="_blank" rel="noopener noreferrer" className="dev-cta dev-cta-dim" onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>GitHub →</a>
             <a href="/research/notes/008-continuity-protocol-core" className="dev-cta dev-cta-dim" onMouseEnter={() => playTick(700, "sine", 0.08, 0.02)}>CPS-0001 →</a>
             <a href="https://www.npmjs.com/package/@thecontinuitylab/myshape" target="_blank" rel="noopener noreferrer" className="dev-cta dev-cta-gold" onMouseEnter={() => playTick(600, "sine", 0.06, 0.015)}>npm Install →</a>
           </div>

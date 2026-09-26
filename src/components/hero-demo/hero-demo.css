@@ -70,6 +70,52 @@
   margin-bottom: 0;
 }
 
+/* ── 首次接触入口 (MINIMUM-PATH BATCH A / P1-C) ──
+   Always visible, no role choice and no device gate. Matches the existing
+   tagline typography and the primary-CTA accent so it reads as part of the
+   same hero, not as a new block. */
+.hero-demo-firststeps {
+  display: flex;
+  gap: clamp(14px, 3vw, 28px);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: clamp(1.4rem, 3vh, 2.2rem);
+}
+
+.hero-demo-firststep {
+  position: relative;
+  display: inline-block;
+  padding: 9px 20px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(0.6rem, 1vw, 0.72rem);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(0, 229, 255, 0.62);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  background: rgba(0, 229, 255, 0.03);
+  transition: color 0.4s ease, border-color 0.4s ease,
+    background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.hero-demo-firststep:hover {
+  color: rgba(0, 229, 255, 0.95);
+  border-color: rgba(0, 229, 255, 0.45);
+  background: rgba(0, 229, 255, 0.07);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+}
+
+.hero-demo-firststep:focus-visible {
+  outline: 1px solid rgba(0, 229, 255, 0.6);
+  outline-offset: 2px;
+}
+
+.hero-demo-firststep-label {
+  position: relative;
+  z-index: 1;
+}
+
 .hero-demo-title {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: clamp(2rem, 5vw, 3.2rem);

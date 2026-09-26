@@ -144,6 +144,23 @@ export default function HeroTrail() {
           <p className="hero-demo-tagline" style={{ color: "rgba(255,255,255,0.45)" }}>
             Identity tells you who someone claims to be.<br />Continuity asks whether the same key-controlled presence persisted across an interval.
           </p>
+
+          {/* MINIMUM-PATH BATCH A / P1-C — first-contact entry.
+              Unconditional: no role choice (Developer / Researcher / Human) and no
+              device gate. Surfaces resources that already exist — the Lab's
+              "Reproduce it without the SDK" path and the existing one-click
+              /verify-receipt verifier. Nothing is added to the research content
+              and the device-gated "RUN A VERIFICATION" CTA below is unchanged. */}
+          <div className="hero-demo-firststeps">
+            <a href="https://thecontinuitylab.org/develop" className="hero-demo-firststep"
+              onMouseEnter={() => playTick(700, "sine", 0.1, 0.03)}>
+              <span className="hero-demo-firststep-label">Reproduce it without the SDK</span>
+            </a>
+            <a href="/verify-receipt" className="hero-demo-firststep"
+              onMouseEnter={() => playTick(700, "sine", 0.1, 0.03)}>
+              <span className="hero-demo-firststep-label">Verify a Receipt</span>
+            </a>
+          </div>
         </div>
 
 {/* Scene subtitle */}
