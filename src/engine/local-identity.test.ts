@@ -120,3 +120,77 @@ describe("clearLocalIdentity", () => {
     expect(newId.key).not.toBe(id.key);
   });
 });
+
+// ── P0-CSPRNG: fail-closed when no CSPRNG is available ─────────────────────
+//
+// The module must NEVER fall back to Math.random() for identity anchor
+// material. Each function below must throw when globalThis.crypto is missing
+// or lacks getRandomValues.
+//
+// Every function early-returns on cached storage, so the cached value must be
+// cleared first — otherwise the CSPRNG branch is never reached and the test
+// would pass for the wrong reason.
+
+describe("P0-CSPRNG: fail-closed with no CSPRNG available", () => {
+  const withNoCrypto = (fn: () => void) => {
+    // Present object without getRandomValues, and fully absent — both must fail.
+    vi.stubGlobal("crypto", {});
+    try {
+      fn();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  };
+
+  it("getDeviceSalt() throws instead of falling back to Math.random", () => {
+    storage.clear(); // no cached device_salt
+    expect(storage.get("myshape_id_device_salt")).toBeUndefined();
+
+    withNoCrypto(() => {
+      expect(() => getDeviceSalt()).toThrow(
+        "CSPRNG unavailable: cannot create device salt securely",
+      );
+    });
+  });
+
+  it("getOrCreateLocalIdentity() throws instead of falling back to Math.random", () => {
+    storage.clear(); // no cached identity
+    expect(storage.get("myshape_id_identity")).toBeUndefined();
+
+    withNoCrypto(() => {
+      expect(() => getOrCreateLocalIdentity()).toThrow(
+        "CSPRNG unavailable: cannot create local identity securely",
+      );
+    });
+  });
+
+  it("createPresenceSession() throws instead of falling back to Math.random", () => {
+    storage.clear(); // no cached identity OR salt
+
+    withNoCrypto(() => {
+      expect(() => createPresenceSession(30)).toThrow(
+        "CSPRNG unavailable: cannot create local identity securely",
+      );
+    });
+
+    // Isolate the nonce branch: identity now resolves from cache, so the only
+    // remaining CSPRNG call is the session_nonce anti-replay token.
+    expect(() => createPresenceSession(30)).not.toThrow();
+    storage.clear();
+    withNoCrypto(() => {
+      expect(() => createPresenceSession(30)).toThrow();
+    });
+  });
+
+  it("throws when globalThis.crypto is entirely absent", () => {
+    storage.clear();
+    vi.stubGlobal("crypto", undefined);
+    try {
+      expect(() => getDeviceSalt()).toThrow(
+        "CSPRNG unavailable: cannot create device salt securely",
+      );
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+});
