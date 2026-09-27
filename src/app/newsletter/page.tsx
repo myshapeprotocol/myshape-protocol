@@ -3,12 +3,12 @@ import NewsletterClient from "./NewsletterClient";
 import BreadcrumbList from "@/components/seo/BreadcrumbList";
 
 export const metadata: Metadata = {
-  title: "MyShape Protocol Newsletter — Signal Subscription",
-  description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign continuity, motion-signature verification, zero-knowledge presence, and the Agent Economy.",
-  keywords: ["MyShape newsletter", "continuity protocol updates", "motion-signature research", "ZK-presence news", "proof of continuity updates"],
+  title: "Research Signal — MyShape Protocol Updates",
+  description: "Subscribe to the MyShape Research Signal for technical deep-dives on sovereign continuity, motion-signature verification, zero-knowledge presence, and the Agent Economy. An opt-in research contact list, separate from protocol node registration.",
+  keywords: ["MyShape research signal", "continuity protocol research updates", "motion-signature research", "ZK-presence news", "proof of continuity updates"],
   alternates: { canonical: "https://www.myshape.com/newsletter" },
   openGraph: {
-    title: "MyShape Protocol Newsletter — Signal Subscription",
+    title: "Research Signal — MyShape Protocol Updates",
     description: "Technical deep-dives on sovereign continuity and the Agent Economy. No spam. Pure signal.",
     url: "https://www.myshape.com/newsletter",
     siteName: "MyShape Protocol",
@@ -26,8 +26,8 @@ export default function NewsletterPage() {
         "@context": "https://schema.org", "@type": "WebPage",
         "@id": "https://www.myshape.com/newsletter/#webpage",
         url: "https://www.myshape.com/newsletter",
-        name: "MyShape Protocol Newsletter — Signal Subscription",
-        description: "Subscribe to the MyShape Protocol newsletter for technical deep-dives on sovereign continuity, motion-signature verification, and the Agent Economy.",
+        name: "Research Signal — MyShape Protocol Updates",
+        description: "Subscribe to the MyShape Research Signal for technical deep-dives on sovereign continuity, motion-signature verification, and the Agent Economy. An opt-in research contact list, separate from protocol node registration.",
         isPartOf: { "@type": "WebSite", "@id": "https://www.myshape.com/#website", name: "MyShape Protocol", url: "https://www.myshape.com" },
       }) }} />
       <NewsletterClient />

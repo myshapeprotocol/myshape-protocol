@@ -25,10 +25,22 @@ export default function ProtocolFooter() {
         body: JSON.stringify({ email: email.trim() }),
       });
       const data = await res.json();
-      if (!res.ok && !data.alreadySubscribed) throw new Error(data.error || "SUBSCRIBE_FAILED");
-      setStatus("SUCCESS");
+      if (!res.ok) throw new Error(data.error || "SUBSCRIBE_FAILED");
+      // P1-C6: /api/subscribe reports three distinct, truthful outcomes:
+      //   alreadySubscribed === true  → already a Research Signal contact
+      //   alreadySubscribed === false → an existing protocol record exists;
+      //                                  NO Research Signal subscription was added
+      //   flag absent                → a new Research Signal contact was created
+      // Only the first and third mean a Signal subscription exists.
+      setStatus(
+        data.alreadySubscribed === true
+          ? "ALREADY"
+          : data.alreadySubscribed === false
+            ? "NOT_SIGNAL"
+            : "SUCCESS",
+      );
       setEmail("");
-      setTimeout(() => setStatus("IDLE"), 3000);
+      setTimeout(() => setStatus("IDLE"), 4000);
     } catch {
       setStatus("ERROR");
       setTimeout(() => setStatus("IDLE"), 3000);
@@ -148,10 +160,12 @@ export default function ProtocolFooter() {
           <div className="flex flex-col items-start md:items-end">
             <div className="flex items-center gap-2 mb-4">
               <span className="text-[11px] text-white/50 tracking-[0.2em] uppercase font-bold">
-                {status === "SENDING" ? "⋯ TRANSMITTING" :
-                 status === "SUCCESS" ? "✓ UPLINK_ESTABLISHED" :
-                 status === "ERROR" ? "✗ TRANSMISSION_FAILED" :
-                 "SIGNAL_SUBSCRIPTION"}
+                {status === "SENDING" ? "⋯ SUBSCRIBING" :
+                 status === "SUCCESS" ? "✓ RESEARCH SIGNAL SUBSCRIBED" :
+                 status === "ALREADY" ? "✓ ALREADY A RESEARCH SIGNAL CONTACT" :
+                 status === "NOT_SIGNAL" ? "— PROTOCOL RECORD — SIGNAL NOT ADDED" :
+                 status === "ERROR" ? "✗ SUBSCRIPTION_FAILED" :
+                 "RESEARCH_SIGNAL_CONTACT"}
               </span>
             </div>
             <form onSubmit={handleSubscribe} className="relative w-full max-w-[320px] group">
@@ -159,7 +173,7 @@ export default function ProtocolFooter() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={status === "SENDING" ? "TRANSMITTING..." : `ENTER_EMAIL_ADDR${cursorVisible ? "█" : " "}`}
+                placeholder={status === "SENDING" ? "SUBSCRIBING..." : `ENTER_EMAIL_ADDR${cursorVisible ? "█" : " "}`}
                 disabled={status !== "IDLE"}
                 className="w-full bg-transparent border-b border-white/10 py-3 text-[11px] text-[#00E5FF]/70 placeholder:text-white/30 focus:outline-none focus:border-[#00E5FF]/50 transition-all tracking-[0.15em] uppercase font-mono"
                 required
@@ -168,9 +182,11 @@ export default function ProtocolFooter() {
                 type="submit"
                 className="absolute right-0 bottom-3 text-[11px] font-normal text-[#00E5FF]/35 hover:text-[#00E5FF]/70 transition-all tracking-[0.15em]"
               >
-                {status === "IDLE" && "[ CONNECT ]"}
+                {status === "IDLE" && "[ SUBSCRIBE ]"}
                 {status === "SENDING" && "[ ... ]"}
                 {status === "SUCCESS" && "[ ✓ ]"}
+                {status === "ALREADY" && "[ ✓ ]"}
+                {status === "NOT_SIGNAL" && "[ — ]"}
                 {status === "ERROR" && "[ ✗ ]"}
               </button>
             </form>

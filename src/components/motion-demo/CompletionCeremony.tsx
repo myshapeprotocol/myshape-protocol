@@ -17,7 +17,7 @@ export default function CompletionCeremony({
   sovereignKey,
   cohortFull,
 }: CompletionCeremonyProps) {
-  const [notifyState, setNotifyState] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [notifyState, setNotifyState] = useState<"idle" | "loading" | "done" | "already" | "notSignal" | "error">("idle");
 
   async function subscribeForUpdates() {
     const email = sessionStorage.getItem("sovereign_email");
@@ -30,7 +30,18 @@ export default function CompletionCeremony({
         body: JSON.stringify({ email }),
       });
       if (res.ok) {
-        setNotifyState("done");
+        const data = await res.json().catch(() => ({}));
+        // P1-C6: a user reaching this ceremony already holds a protocol
+        // identity, so /api/subscribe returns alreadySubscribed === false and
+        // records NO Research Signal contact. Only "new contact" or "already a
+        // contact" mean updates will actually arrive.
+        if (data.alreadySubscribed === false) {
+          setNotifyState("notSignal");
+        } else if (data.alreadySubscribed === true) {
+          setNotifyState("already");
+        } else {
+          setNotifyState("done");
+        }
       } else {
         setNotifyState("error");
       }
@@ -144,21 +155,45 @@ export default function CompletionCeremony({
               Protocol is now in Continuity Phase mode.
             </div>
             <p className="text-white/15 text-[11px] max-w-[260px] mx-auto leading-relaxed mt-1">
-              Stay tuned for ZK-Identity updates. Your node remains active and sovereign.
+              Your node remains active and sovereign.
             </p>
-            <div className="flex flex-col items-center gap-2 mt-3">
-              {/* Notify button — subscribe for ZK-Identity updates */}
+            <a
+              href="/dashboard"
+              className="mt-3 px-8 py-2.5 border border-[#d2991d]/20 text-[#d2991d]/50 text-[11px] tracking-[0.15em] uppercase hover:bg-[#d2991d]/10 hover:border-[#d2991d]/50 transition-all"
+            >
+              ◈ View my Node
+            </a>
+
+            {/* P1-C6: Research Signal is an optional, separate opt-in. It is not
+                part of node registration and grants no protocol access. */}
+            <div className="mt-5 pt-4 w-full max-w-xs mx-auto border-t border-white/[0.07] space-y-2">
+              <p className="text-white/25 text-[10px] tracking-[0.15em] uppercase">
+                Optional — Research Signal
+              </p>
+              <p className="text-white/15 text-[10px] leading-relaxed">
+                Separate from your node identity. Research updates only — not node
+                registration, activation, or product access.
+              </p>
               {notifyState === "done" ? (
-                <div className="text-[#3fb950]/60 text-[11px] tracking-[0.1em]">
-                  ✓ You&apos;ll be notified for ZK-Identity launch
-                </div>
+                <p className="text-[#3fb950]/60 text-[11px] tracking-[0.1em]">
+                  ✓ Research Signal contact created — you&apos;ll receive research updates
+                </p>
+              ) : notifyState === "already" ? (
+                <p className="text-[#3fb950]/60 text-[11px] tracking-[0.1em]">
+                  ✓ Already a Research Signal contact — you&apos;ll receive research updates
+                </p>
+              ) : notifyState === "notSignal" ? (
+                <p className="text-white/25 text-[11px] leading-relaxed">
+                  This address already holds a protocol record, so no Research Signal
+                  contact was added. Your node identity is unchanged.
+                </p>
               ) : (
                 <button
                   onClick={subscribeForUpdates}
                   disabled={notifyState === "loading"}
-                  className="px-8 py-2.5 border border-[#d2991d]/30 text-[#d2991d]/70 text-[11px] tracking-[0.15em] uppercase hover:bg-[#d2991d]/10 hover:border-[#d2991d]/60 transition-all disabled:opacity-40"
+                  className="w-full px-6 py-2 border border-white/10 text-white/35 text-[11px] tracking-[0.15em] uppercase hover:bg-white/[0.04] hover:text-white/55 transition-all disabled:opacity-40"
                 >
-                  {notifyState === "loading" ? "Subscribing..." : "Get notified for ZK-Identity launch"}
+                  {notifyState === "loading" ? "Subscribing..." : "Subscribe to research updates"}
                 </button>
               )}
               {notifyState === "error" && (
@@ -169,13 +204,6 @@ export default function CompletionCeremony({
                   ⚠ Failed — tap to retry
                 </button>
               )}
-
-              <a
-                href="/dashboard"
-                className="px-8 py-2.5 border border-[#d2991d]/20 text-[#d2991d]/50 text-[11px] tracking-[0.15em] uppercase hover:bg-[#d2991d]/10 hover:border-[#d2991d]/50 transition-all"
-              >
-                ◈ View my Node
-              </a>
             </div>
           </>
         ) : (
