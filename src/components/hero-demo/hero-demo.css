@@ -70,6 +70,436 @@
   margin-bottom: 0;
 }
 
+/* ── 首次接触入口 (MINIMUM-PATH BATCH A / P1-C) ──
+   VISUAL EXPLORATION — uncommitted.
+
+   Placement: the container is a direct child of .hero-demo-root, so it can be
+   laid out against the full hero and the particle field remains the absolute
+   visual centre. The left/right idiom mirrors the existing .hero-demo-vortexes
+   block above (absolute + space-between + pointer-events split).
+
+   Only the visual treatment is exploratory. Text, hrefs, targets and click
+   behaviour are identical to the Batch A commit. The particle system, the h1
+   and the tagline are untouched.
+
+   Variants (set on the container):
+     v-a  hairline pill outline
+     v-b  corner brackets
+     v-c  bare text + underline that grows on hover                */
+.hero-demo-firststeps {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: 0 clamp(1.25rem, 7vw, 8rem);
+  margin-top: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.hero-demo-firststep {
+  position: relative;
+  pointer-events: auto;
+  max-width: 15rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(0.58rem, 0.78vw, 0.68rem);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  line-height: 1.9;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(0, 229, 255, 0.5);
+  transition: color 0.35s ease, border-color 0.35s ease,
+    background 0.35s ease;
+}
+
+.hero-demo-firststep-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-wrap: balance;
+}
+
+.hero-demo-firststep:focus-visible {
+  outline: 1px solid rgba(0, 229, 255, 0.6);
+  outline-offset: 3px;
+}
+
+/* ── Variant A — hairline pill ── */
+.hero-demo-firststeps.v-a .hero-demo-firststep {
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 229, 255, 0.16);
+  border-radius: 999px;
+  background: transparent;
+}
+
+.hero-demo-firststeps.v-a .hero-demo-firststep:hover {
+  color: rgba(0, 229, 255, 0.9);
+  border-color: rgba(0, 229, 255, 0.42);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+/* ── Variant B — corner brackets ── */
+.hero-demo-firststeps.v-b .hero-demo-firststep {
+  padding: 12px 18px;
+  border: 0;
+  background: transparent;
+}
+
+.hero-demo-firststeps.v-b .hero-demo-firststep::before,
+.hero-demo-firststeps.v-b .hero-demo-firststep::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(0, 229, 255, 0.34);
+  transition: border-color 0.35s ease;
+}
+
+.hero-demo-firststeps.v-b .hero-demo-firststep::before {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.hero-demo-firststeps.v-b .hero-demo-firststep::after {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+.hero-demo-firststeps.v-b .hero-demo-firststep:hover {
+  color: rgba(0, 229, 255, 0.92);
+}
+
+.hero-demo-firststeps.v-b .hero-demo-firststep:hover::before,
+.hero-demo-firststeps.v-b .hero-demo-firststep:hover::after {
+  border-color: rgba(0, 229, 255, 0.7);
+}
+
+/* ── Variant C — bare text + growing underline ── */
+.hero-demo-firststeps.v-c .hero-demo-firststep {
+  padding: 4px 0 9px;
+  border: 0;
+  background: transparent;
+  color: rgba(0, 229, 255, 0.42);
+}
+
+.hero-demo-firststeps.v-c .hero-demo-firststep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 229, 255, 0.2);
+  transform: scaleX(0.55);
+  transform-origin: left center;
+  transition: background 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* The right-hand CTA grows from its outer edge, mirroring the left one. */
+.hero-demo-firststeps.v-c .hero-demo-firststep:last-child::after {
+  transform-origin: right center;
+}
+
+.hero-demo-firststeps.v-c .hero-demo-firststep:hover {
+  color: rgba(0, 229, 255, 0.9);
+}
+
+.hero-demo-firststeps.v-c .hero-demo-firststep:hover::after {
+  background: rgba(0, 229, 255, 0.62);
+  transform: scaleX(1);
+}
+
+/* ── Variant D — hairline outline + restrained corner brackets ──
+   Keeps A's complete, unmistakably-clickable boundary (so a first-time
+   visitor still reads it as a CTA) and layers B's instrument character on
+   top as four restrained L-shaped registration marks that sit a touch
+   brighter than the hairline itself. No glow, no motion beyond colour,
+   no thicker frame. Click area stays the whole box, not just the glyphs. */
+.hero-demo-firststeps.v-d .hero-demo-firststep {
+  padding: 11px 18px;
+  border: 1px solid rgba(0, 229, 255, 0.13);
+  background: transparent;
+}
+
+.hero-demo-firststeps.v-d .hero-demo-firststep::before,
+.hero-demo-firststeps.v-d .hero-demo-firststep::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid rgba(0, 229, 255, 0.46);
+  transition: border-color 0.35s ease;
+}
+
+/* Outer corners only, registered onto the hairline itself. */
+.hero-demo-firststeps.v-d .hero-demo-firststep::before {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.hero-demo-firststeps.v-d .hero-demo-firststep::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.hero-demo-firststeps.v-d .hero-demo-firststep:hover {
+  color: rgba(0, 229, 255, 0.88);
+  border-color: rgba(0, 229, 255, 0.32);
+  background: rgba(0, 229, 255, 0.03);
+}
+
+.hero-demo-firststeps.v-d .hero-demo-firststep:hover::before,
+.hero-demo-firststeps.v-d .hero-demo-firststep:hover::after {
+  border-color: rgba(0, 229, 255, 0.62);
+}
+
+/* ── V-D matched-pair geometry (wide desktop) ──
+   Above ~1280px both CTAs are forced onto a single line and given the same
+   box width, so the pair reads as two matched instrument modules rather than
+   one long and one short. Both labels hug their OUTER edge, so the empty
+   space always falls on the inner side, facing the particle field.
+   Below 1280px none of this applies and the labels wrap as usual. */
+@media (min-width: 1280px) {
+  .hero-demo-firststeps {
+    padding: 0 clamp(1.25rem, 6vw, 7rem);
+  }
+
+  .hero-demo-firststeps.v-d .hero-demo-firststep {
+    white-space: nowrap;
+    min-width: 14.5rem;
+    max-width: none;
+    font-size: 0.6rem;
+    letter-spacing: 0.13em;
+  }
+
+  .hero-demo-firststeps.v-d .hero-demo-firststep:first-child .hero-demo-firststep-label {
+    text-align: left;
+  }
+
+  .hero-demo-firststeps.v-d .hero-demo-firststep:last-child .hero-demo-firststep-label {
+    text-align: right;
+  }
+}
+
+/* ── Variant E3 — centred cluster BELOW the particle field ──
+   E3 asks a structural question: does the hero read more naturally as
+   particle field -> CTA -> scrolling text, instead of the CTA pair flanking
+   the field?
+
+   Placement is a single centred block anchored above .hero-demo-subtitle
+   (bottom: 120px), so the hero height, the particle canvas, the h1, the
+   tagline, the scene dots and the scrolling text are all untouched.
+
+   Sizing is intentionally NOT the V-D matched pair: each CTA now takes its
+   natural content width, so the short label is not padded out into a wide
+   empty box. The two boxes share one height so the pair still reads as
+   balanced, and the label is centred on both axes inside its own box.
+
+   Visual treatment is inherited from V-D (hairline outline + restrained
+   corner brackets, dark transparent fill, no glow). Only the layout and
+   the box metrics change. */
+.hero-demo-firststeps.v-e3 {
+  position: absolute;
+  top: auto;
+  inset: auto auto 225px 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 2.5rem);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+.hero-demo-firststeps.v-e3 .hero-demo-firststep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  padding: 10px 20px;
+  line-height: 1.35;
+  font-size: clamp(0.58rem, 0.78vw, 0.68rem);
+  letter-spacing: 0.2em;
+  text-align: center;
+  border: 1px solid rgba(0, 229, 255, 0.13);
+  /* Matches the scrolling-text panel's own fill (rgba(5,16,37,0.7)). The field
+     animates through this band, so the CTA needs enough body to stay readable
+     when a particle drifts behind it — and sharing the value makes the two
+     read as peer panels in one stack. */
+  background: rgba(5, 16, 37, 0.7);
+}
+
+.hero-demo-firststeps.v-e3 .hero-demo-firststep:hover {
+  color: rgba(0, 229, 255, 0.88);
+  border-color: rgba(0, 229, 255, 0.32);
+  background: rgba(0, 229, 255, 0.04);
+}
+
+.hero-demo-firststeps.v-e3 .hero-demo-firststep-label {
+  text-align: center;
+  text-wrap: balance;
+}
+
+.hero-demo-firststeps.v-e3 .hero-demo-firststep::before {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.hero-demo-firststeps.v-e3 .hero-demo-firststep::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.hero-demo-firststeps.v-e3 .hero-demo-firststep:hover::before,
+.hero-demo-firststeps.v-e3 .hero-demo-firststep:hover::after {
+  border-color: rgba(0, 229, 255, 0.62);
+}
+
+/* Phone: the field is compressed and the band is narrow, so the pair sits
+   a little higher and is allowed to wrap onto two lines if it must. */
+@media (max-width: 767px) {
+  .hero-demo-firststeps.v-e3 {
+    inset: auto auto 182px 50%;
+    gap: 10px;
+  }
+
+  .hero-demo-firststeps.v-e3 .hero-demo-firststep {
+    padding: 9px 16px;
+  }
+}
+
+/* ── Variant E4 — restrained animated border sweep ──
+   Aims at "two research-instrument nodes running", not "two marketing CTAs":
+   completely still at rest, and only a short arc of light travelling the
+   perimeter draws the eye while it moves.
+
+   Mechanism (pure CSS, no new DOM, no dependency):
+   The hairline IS a conic-gradient painted on the border-box, with the dark
+   fill painted on the padding-box above it. That leaves exactly the 1px ring
+   visible, so the ring itself is the gradient and ::before / ::after stay free
+   for the corner brackets. The gradient's start angle is a registered custom
+   property, which is what makes it animatable at all.
+
+   Nothing breathes or blinks as a whole: a single narrow arc with a soft
+   falloff on both sides exists, it completes one revolution, fades out, and
+   restarts.
+
+   Only a paint-affecting custom property is animated, so there is no layout,
+   no reflow and no change to hit-testing. */
+
+@property --e4-sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --e4-peak {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.hero-demo-firststeps.v-e4 .hero-demo-firststep {
+  /* These must exist outside the keyframes, otherwise the gradient would hold
+     an invalid value and the dark fill would disappear entirely. */
+  --e4-sweep: 0deg;
+  --e4-peak: 0;
+  --e4-gain: 1;
+  --e4-dur: 5.4s;
+  --e4-hi: 150, 235, 255;
+
+  border-color: transparent;
+  background:
+    linear-gradient(rgba(5, 16, 37, 0.7), rgba(5, 16, 37, 0.7)) padding-box,
+    conic-gradient(
+      from var(--e4-sweep),
+      rgba(0, 229, 255, 0.13) 0deg,
+      rgba(0, 229, 255, 0.13) 292deg,
+      rgba(var(--e4-hi), calc(var(--e4-peak) * var(--e4-gain) * 0.22)) 312deg,
+      rgba(var(--e4-hi), calc(var(--e4-peak) * var(--e4-gain))) 334deg,
+      rgba(var(--e4-hi), calc(var(--e4-peak) * var(--e4-gain) * 0.3)) 346deg,
+      rgba(0, 229, 255, 0.13) 360deg
+    ) border-box;
+  animation: e4Sweep var(--e4-dur) ease-in-out infinite;
+}
+
+@keyframes e4Sweep {
+  0%   { --e4-sweep: 0deg;   --e4-peak: 0; }
+  14%  { --e4-peak: 0.5; }
+  50%  { --e4-sweep: 180deg; --e4-peak: 0.66; }
+  86%  { --e4-peak: 0.42; }
+  100% { --e4-sweep: 360deg; --e4-peak: 0; }
+}
+
+/* The second node runs a different period and starts mid-cycle, so the two
+   never march in lockstep. Its highlight is nudged a hair toward blue rather
+   than made a visibly different colour. */
+.hero-demo-firststeps.v-e4 .hero-demo-firststep:last-child {
+  --e4-dur: 6.6s;
+  --e4-hi: 168, 208, 255;
+  animation-delay: -2.4s;
+}
+
+/* Hover lifts the arc and the label. The period is deliberately left alone:
+   changing animation-duration on hover would visibly snap the arc back to a
+   new phase mid-flight. */
+.hero-demo-firststeps.v-e4 .hero-demo-firststep:hover {
+  --e4-gain: 1.32;
+  color: rgba(0, 229, 255, 0.88);
+}
+
+.hero-demo-firststeps.v-e4 .hero-demo-firststep:hover::before,
+.hero-demo-firststeps.v-e4 .hero-demo-firststep:hover::after {
+  border-color: rgba(0, 229, 255, 0.62);
+}
+
+/* Reduced motion: no travel and no arc — just the static hairline. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-demo-firststeps.v-e4 .hero-demo-firststep {
+    animation: none;
+    --e4-sweep: 0deg;
+    --e4-peak: 0;
+  }
+}
+
+
+/* ── Narrow viewports — keep the current centred, in-flow behaviour ──
+   The side placement needs horizontal room the phone does not have, so below
+   768px the pair returns to a centred wrapped row in the same visual band. */
+@media (max-width: 767px) {
+  .hero-demo-firststeps {
+    inset: auto 0 auto 0;
+    top: clamp(13rem, 29vh, 16rem);
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 1rem;
+  }
+
+  .hero-demo-firststep {
+    max-width: 100%;
+  }
+}
+
 .hero-demo-title {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
