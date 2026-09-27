@@ -13,6 +13,7 @@ import {
   type ContinuityReceipt,
 } from "@/lib/evidence/cps0001";
 import { generateKeyPair, createIssuerIdentity } from "@/lib/crypto";
+import ProtocolHeader from "@/components/header/header";
 
 // ── Types ──
 
@@ -162,6 +163,7 @@ export default function VerifyReceiptPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white font-mono">
+      <ProtocolHeader />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <div className="text-center mb-10">
           <h1 className="text-2xl tracking-[0.3em] uppercase text-[#00E5FF] mb-2">
