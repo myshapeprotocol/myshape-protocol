@@ -123,7 +123,9 @@ export async function POST(req: Request) {
 
     // OTP only verifies email ownership — does NOT assign Genesis tier
     const previousStatus = updateResult.status;
-    const isFirstActivation = !['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE'].includes(previousStatus);
+    // SUBSCRIBED is a Research Signal contact, not a protocol participant.
+    // Email ownership must not promote it into the protocol node lifecycle.
+    const isFirstActivation = !['ACTIVE', 'GENESIS_NODE', 'AGENT_ACTIVE', 'SUBSCRIBED'].includes(previousStatus);
     const nodeStatus = isFirstActivation ? 'ACTIVE' : previousStatus;
 
     // Send welcome email (only for first activation)

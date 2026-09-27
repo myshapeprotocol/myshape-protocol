@@ -12,7 +12,8 @@ import { describe, it, expect, beforeEach } from "vitest";
 // ── Pure Decision Logic (extracted for testability) ──
 
 /** Statuses that CANNOT be upgraded to GENESIS_NODE */
-const EXCLUSION_SET = ["GENESIS_NODE", "AGENT_ACTIVE", "TEST_ACCOUNT"] as const;
+/** SUBSCRIBED = Research Signal contact, not a protocol participant. */
+const EXCLUSION_SET = ["GENESIS_NODE", "AGENT_ACTIVE", "TEST_ACCOUNT", "SUBSCRIBED"] as const;
 
 function isEligible(currentStatus: string): boolean {
   return !EXCLUSION_SET.includes(currentStatus as (typeof EXCLUSION_SET)[number]);
@@ -59,13 +60,13 @@ describe("Eligibility Matrix", () => {
     "PENDING_VERIFICATION",
     "ACTIVE",
     "GENESIS_CONNECTED",
-    "SUBSCRIBED",
   ];
 
   const ineligibleStatuses = [
     "GENESIS_NODE",
     "AGENT_ACTIVE",
     "TEST_ACCOUNT",
+    "SUBSCRIBED",
   ];
 
   it.each(eligibleStatuses)("%s is eligible for Genesis minting", (status) => {
@@ -106,9 +107,19 @@ describe("Decision Algorithm", () => {
   });
 
   it("eligible + PES > 0.5 + cohort full at 101 → ACTIVE", () => {
-    const result = determineNodeStatus("SUBSCRIBED", 0.65, 101);
+    const result = determineNodeStatus("PENDING_VERIFICATION", 0.65, 101);
     expect(result.newNodeStatus).toBe("ACTIVE");
     expect(result.cohortFull).toBe(true);
+  });
+
+  it("SUBSCRIBED (Research Signal) is never eligible for protocol promotion", () => {
+    // A research-signal contact must not enter the node lifecycle, even with
+    // a passing PES and free cohort slots.
+    const result = determineNodeStatus("SUBSCRIBED", 0.88, 10);
+    expect(result.eligible).toBe(false);
+    expect(result.passesThreshold).toBe(true);
+    expect(result.newNodeStatus).toBeNull();
+    expect(result.cohortFull).toBe(false);
   });
 
   it("eligible + PES ≤ 0.5 → no mint (below threshold)", () => {
@@ -187,7 +198,7 @@ describe("Cohort Cap Invariants", () => {
 
   it("GENESIS_NODE only assigned when cohort is NOT full", () => {
     // Brute-force: verify across all eligible statuses
-    const statuses = ["PENDING_VERIFICATION", "ACTIVE", "GENESIS_CONNECTED", "SUBSCRIBED"];
+    const statuses = ["PENDING_VERIFICATION", "ACTIVE", "GENESIS_CONNECTED"];
     for (const status of statuses) {
       const under = determineNodeStatus(status, 0.8, 50);
       expect(under.newNodeStatus).toBe("GENESIS_NODE");

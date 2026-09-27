@@ -22,7 +22,7 @@ There is no invite code. There is no waitlist priority. There is no manual overr
 A node is eligible for Genesis evaluation if and only if its current status is NOT in the exclusion set:
 
 ```
-Exclusion Set = { GENESIS_NODE, AGENT_ACTIVE, TEST_ACCOUNT }
+Exclusion Set = { GENESIS_NODE, AGENT_ACTIVE, TEST_ACCOUNT, SUBSCRIBED }
 ```
 
 | Current Status | Eligible? | Rationale |
@@ -30,7 +30,7 @@ Exclusion Set = { GENESIS_NODE, AGENT_ACTIVE, TEST_ACCOUNT }
 | `PENDING_VERIFICATION` | ✅ Yes | New node awaiting first scan |
 | `ACTIVE` | ✅ Yes | OTP-verified, scan not yet performed |
 | `GENESIS_CONNECTED` | ✅ Yes | Handshake-complete, awaiting scan |
-| `SUBSCRIBED` | ✅ Yes | Waitlist member, awaiting scan |
+| `SUBSCRIBED` | ❌ No | Research Signal contact; not a protocol participant — excluded from the node verification/activation lifecycle |
 | `GENESIS_NODE` | ❌ No | Already minted — key is permanent |
 | `AGENT_ACTIVE` | ❌ No | AI agents are a separate identity class |
 | `TEST_ACCOUNT` | ❌ No | Sandbox/dev accounts excluded from governance |

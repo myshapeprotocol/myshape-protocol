@@ -4,9 +4,14 @@ import { NextResponse } from "next/server";
 import { formSubmitLimiter, getClientIP } from '@/lib/rate-limiter';
 
 /**
- * Subscribe API — 将邮箱加入协议节点等待列表
+ * Subscribe API — 将邮箱加入 Research Signal（研究信号）联络名单
  *
- * 新订阅者将收到一封确认邮件，告知他们已被列入 Genesis 邀请队列。
+ * 新订阅者将收到一封确认邮件，告知其邮箱已登记为 Research Signal 联络点。
+ *
+ * SUBSCRIBED = Research Signal contact：一条选择加入的研究更新联络记录。
+ * 它不是协议参与者、不是活跃节点、不是 Genesis 节点，
+ * 也不代表任何 Genesis 候补名单顺序。
+ *
  * Rate limit: 3 req/IP/hour — prevents form spam.
  */
 
@@ -29,12 +34,12 @@ async function sendSubscriptionConfirmation(
   const { error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL || 'MyShape Protocol <onboarding@resend.dev>',
     to: email,
-    subject: 'UPLINK_ESTABLISHED — You are on the Genesis List',
+    subject: 'UPLINK_ESTABLISHED — Research Signal Active',
     html: `
       <div style="background:#000; color:#90c8ff; padding:40px; font-family:monospace; border:1px solid #333; max-width:560px;">
         <div style="text-align:center; margin-bottom:24px;">
           <div style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#90c8ff; box-shadow:0 0 12px rgba(144,200,255,0.8); margin-right:8px;"></div>
-          <span style="color:#90c8ff; font-size:9px; letter-spacing:0.5em; text-transform:uppercase;">SIGNAL_SUBSCRIPTION_ACTIVE</span>
+          <span style="color:#90c8ff; font-size:9px; letter-spacing:0.5em; text-transform:uppercase;">RESEARCH_SIGNAL_ACTIVE</span>
         </div>
 
         <h2 style="border-bottom:1px solid #333; padding-bottom:12px; font-size:18px; font-weight:300; letter-spacing:0.15em; text-align:center; color:#fff;">
@@ -42,19 +47,19 @@ async function sendSubscriptionConfirmation(
         </h2>
 
         <p style="font-size:14px; color:#90c8ff; line-height:1.8;">
-          Your node has been registered on the <strong>MyShape Protocol Genesis List</strong>.
+          Your email has been added to the <strong>MyShape Research Signal</strong>.
         </p>
 
         <p style="font-size:13px; color:#90c8ff; line-height:1.8;">
-          Genesis Cohort invitations are rolling out in batches. When your slot opens, you will receive an invitation to complete the identity initialization ritual.
+          The Research Signal is an opt-in channel for research updates. We use it for things like protocol research updates, public releases, and validation opportunities.
         </p>
 
         <div style="margin:24px 0; padding:16px; border:1px dashed rgba(144,200,255,0.3); background:rgba(144,200,255,0.03);">
-          <p style="font-size:11px; color:#90c8ff; text-transform:uppercase; letter-spacing:0.2em; margin:0 0 8px 0;">▸ What to expect:</p>
+          <p style="font-size:11px; color:#90c8ff; text-transform:uppercase; letter-spacing:0.2em; margin:0 0 8px 0;">▸ What this is:</p>
           <ul style="list-style:none; padding:0; margin:0; font-size:11px; color:#90c8ff; line-height:2;">
-            <li>◈ Genesis Cohort: First 100 nodes receive permanent founding tier</li>
-            <li>◈ Invitations sent in order of subscription</li>
-            <li>◈ Watch your inbox for your Genesis initialization link</li>
+            <li>◈ A contact record for research and release updates</li>
+            <li>◈ Opt-in only — nothing is published under your name</li>
+            <li>◈ Separate from protocol node registration and verification</li>
           </ul>
         </div>
 
@@ -63,13 +68,13 @@ async function sendSubscriptionConfirmation(
           <ol style="padding:0 0 0 18px; margin:0; font-size:11px; color:#90c8ff; line-height:2.2;">
             <li><a href="https://www.myshape.com/papers" style="color:#90c8ff;">Read the Papers</a> — understand the protocol</li>
             <li><a href="https://www.myshape.com/motion-demo" style="color:#90c8ff;">Try the Motion Demo</a> — see the tech in action</li>
-            <li><a href="https://x.com/myshapeprotocol" style="color:#90c8ff;">Follow on X</a> — stay updated on Genesis rollouts</li>
+            <li><a href="https://x.com/myshapeprotocol" style="color:#90c8ff;">Follow on X</a> — research and release updates</li>
           </ol>
         </div>
 
         <p style="font-size:9px; color:#444; margin-top:24px; text-align:center;">
           TIMESTAMP: ${new Date().toISOString()}<br/>
-          MYSHAPE_PROTOCOL // YOUR_POSITION_IS_SECURED<br/>
+          MYSHAPE_PROTOCOL // RESEARCH_SIGNAL_CONTACT_RECORD<br/>
           DO_NOT_REPLY_TO_THIS_TRANSMISSION
         </p>
       </div>

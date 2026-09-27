@@ -79,12 +79,13 @@ export async function POST(request: Request) {
     // Upgrades qualifying nodes to GENESIS_NODE (first 100 with PES > 0.5).
     //
     // Eligible statuses: anything EXCEPT already-minted (GENESIS_NODE),
-    // AI agents (AGENT_ACTIVE), and sandbox test accounts (TEST_ACCOUNT).
+    // AI agents (AGENT_ACTIVE), sandbox test accounts (TEST_ACCOUNT),
+    // and SUBSCRIBED (Research Signal contact — never a protocol participant).
     //
     // OTP-verified users (ACTIVE) ARE eligible — they reach this route
     // before doing a motion scan, and the scan is what proves sovereignty.
     const currentStatus = node.status ?? "PENDING_VERIFICATION";
-    const isFirstVerification = !["GENESIS_NODE", "AGENT_ACTIVE", "TEST_ACCOUNT"].includes(currentStatus);
+    const isFirstVerification = !["GENESIS_NODE", "AGENT_ACTIVE", "TEST_ACCOUNT", "SUBSCRIBED"].includes(currentStatus);
     let badgeMinted: string | null = null;
     let genesisKey: string | null = node.sovereign_key ?? null;
     let cohortFull = false;

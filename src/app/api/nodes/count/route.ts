@@ -45,8 +45,10 @@ export async function GET(req: Request) {
     );
 
     const total = real.length;
+    // Protocol participants only. SUBSCRIBED is a Research Signal contact
+    // (newsletter / research update signup), not a protocol node.
     const humans = real.filter((r) =>
-      ["ACTIVE", "GENESIS_NODE", "SUBSCRIBED", "GENESIS_CONNECTED"].includes(r.status ?? "")
+      ["ACTIVE", "GENESIS_NODE", "GENESIS_CONNECTED"].includes(r.status ?? "")
     ).length;
     const agents = real.filter((r) => r.status === "AGENT_ACTIVE").length;
     const sovereignNodes = real.filter((r) => r.status === "GENESIS_NODE").length;
