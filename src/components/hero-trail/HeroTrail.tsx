@@ -173,6 +173,28 @@ export default function HeroTrail() {
           </div>
         )}
       </div>
+
+      {/* MINIMUM-PATH BATCH A / P1-C — first-contact entry.
+          CTA PLACEMENT: the container now sits at hero root
+          level instead of inside the title zone, so it can be positioned against
+          the full hero and the particle field can stay the absolute centre.
+          Follows the same left/right idiom already used by .hero-demo-vortexes.
+
+          UNCHANGED BY DESIGN: link text, hrefs, targets, click behaviour, the
+          particle system, the h1, the tagline, and the device-gated
+          "RUN A VERIFICATION" CTA. Variant class below selects the visual
+          treatment only — v-a (hairline pill) / v-b (corner brackets) /
+          v-c (text + underline). */}
+      <div className="hero-demo-firststeps v-e3 v-e4">
+        <a href="https://thecontinuitylab.org/develop" className="hero-demo-firststep"
+          onMouseEnter={() => playTick(700, "sine", 0.1, 0.03)}>
+          <span className="hero-demo-firststep-label">Reproduce it without the SDK</span>
+        </a>
+        <a href="/verify-receipt" className="hero-demo-firststep"
+          onMouseEnter={() => playTick(700, "sine", 0.1, 0.03)}>
+          <span className="hero-demo-firststep-label">Verify a Receipt</span>
+        </a>
+      </div>
     </section>
   );
 }
