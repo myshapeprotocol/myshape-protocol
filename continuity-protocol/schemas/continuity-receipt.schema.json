@@ -27,8 +27,8 @@
     },
     "receiptId": {
       "type": "string",
-      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-8[0-9a-f]{3}-[0-9a-f]{12}$",
-      "description": "UUIDv7 receipt identifier."
+      "minLength": 1,
+      "description": "Opaque, non-empty receipt identifier. Its value is signed verbatim as slot 1 of the canonical signing payload (CPS0001 Annex N-1), so it MUST be stable once issued. UUIDv7 / UUIDv7-like values are RECOMMENDED for time-sortability by producers, but the format is NOT a CPS-0001 validity requirement: verifiers MUST NOT reject a receipt on the basis of its receiptId format."
     },
     "interval": {
       "type": "object",
