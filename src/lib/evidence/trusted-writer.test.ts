@@ -85,10 +85,10 @@ describe("trusted writer — verify -> insert", () => {
     expect(inserts).toHaveLength(0);
   });
 
-  it("chained missing predecessor → REJECTED PREDECESSOR_MISSING", async () => {
+  it("chained missing predecessor → REJECTED CHAIN_BROKEN (core fail-closed)", async () => {
     const inserts: ContinuityReceiptRow[] = [];
     const r = rejected(await ingestReceipt(B, { lookup: memLookup(), writer: memWriter(inserts) }));
-    expect(r.reason).toBe("PREDECESSOR_MISSING");
+    expect(r.reason).toBe("CHAIN_BROKEN");
     expect(inserts).toHaveLength(0);
   });
 
@@ -109,15 +109,16 @@ describe("trusted writer — verify -> insert", () => {
     expect(inserts).toHaveLength(0);
   });
 
-  it("N. self-referencing receipt → REJECTED fail-closed (PREDECESSOR_MISSING)", async () => {
+  it("N. self-referencing receipt → REJECTED fail-closed (CHAIN_BROKEN)", async () => {
     // A receipt whose previousReceiptHash points at its own (pre-assignment) hash
     // cannot form a real cycle, but it MUST be rejected fail-closed rather than
-    // indexed. The predecessor is absent → PREDECESSOR_MISSING.
+    // indexed. The predecessor is absent, so the canonical core verdict under
+    // the v1.0-RC1 fail-closed rule is CHAIN_BROKEN.
     const inserts: ContinuityReceiptRow[] = [];
     const self = makeReceipt();
     self.previousReceiptHash = computeReceiptHash(self);
     const r = rejected(await ingestReceipt(self, { lookup: memLookup(), writer: memWriter(inserts) }));
-    expect(r.reason).toBe("PREDECESSOR_MISSING");
+    expect(r.reason).toBe("CHAIN_BROKEN");
     expect(inserts).toHaveLength(0);
   });
 

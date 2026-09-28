@@ -119,7 +119,6 @@ export type FailureCode =
   | "EVIDENCE_TAMPERED"
   | "EXPIRED"
   | "CHAIN_BROKEN"
-  | "PREDECESSOR_MISSING"
   | "SUBJECT_MISMATCH"
   | "ISSUER_MISMATCH"
   | "TEMPORAL_VIOLATION";
@@ -333,10 +332,17 @@ export function verifyReceipt(receipt: ContinuityReceipt, store?: ChainStore): V
     }
     const predecessor = store.resolve(receipt.previousReceiptHash);
     if (!predecessor) {
+      // Fail-closed (CPS-0001 v1.0-RC1, V₇): a non-genesis receipt whose
+      // predecessor cannot be resolved has NOT established receipt-to-receipt
+      // continuity, so the core failure code is CHAIN_BROKEN.
+      // PREDECESSOR_MISSING is a store/integration-layer diagnostic and is
+      // deliberately NOT a member of the v1.0-RC1 core failure-code
+      // vocabulary; it must never appear in VerificationResult.reason.
       return {
         status: "INVALID",
-        reason: "PREDECESSOR_MISSING",
-        detail: "Predecessor receipt not found in trusted chain store.",
+        reason: "CHAIN_BROKEN",
+        detail:
+          "Predecessor unavailable in trusted chain store (store-layer diagnostic: predecessor unresolved; core verdict is CHAIN_BROKEN under the v1.0-RC1 fail-closed rule).",
       };
     }
     const chainErr = verifyPredecessor(receipt, predecessor);

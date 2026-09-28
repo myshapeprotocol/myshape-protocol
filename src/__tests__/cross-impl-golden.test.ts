@@ -12,6 +12,7 @@
  */
 import { describe, it, expect } from "vitest";
 import { verifyReceipt as srcVerify, computeReceiptHash as srcHash, type ContinuityReceipt as SrcReceipt } from "@/lib/evidence/cps0001";
+import { MemoryChainStore } from "@/lib/evidence/chain-store";
 import { verifyReceipt as pkgVerify, signReceipt as pkgSignReceipt } from "../../packages/myshape/src/index";
 import { verifyReceipt as refVerify, computeReceiptHash as refHash } from "../../continuity-protocol/reference-verifier/verifier";
 import validSingle from "../../continuity-protocol/test-vectors/valid/single-engine.json";
@@ -50,12 +51,23 @@ describe("golden vectors", () => {
     expect(pkgVerify(expiredVec as never).status).toBe("INVALID");
     expect((await refVerify(tamperedVec as never)).status).toBe("INVALID");
   });
-  it("GAP-2: multi vector signature-era mismatch surfaced by src, schema-only by ref", async () => {
-    const r = srcVerify(V.multi);
-    if (r.status !== "INVALID") {
-      throw new Error(`GAP-2: expected multi vector to fail on src verifier, got ${r.status}`);
-    }
-    expect(["CHAIN_BROKEN", "INVALID_SIGNATURE", "PREDECESSOR_MISSING"]).toContain(r.reason);
+  it("multi vector: canonical result is VALID with V7 PASS against valid/single-engine.json", async () => {
+    // Canonical oracle (continuity-protocol/expected-results.json) freezes
+    // valid/multi-engine.json as VALID with V1-V7 all passing and V7 resolved
+    // against valid/single-engine.json. The GAP-2 "multi must be INVALID"
+    // tie-breaker was retired in Batch 2; nothing here may reintroduce it.
+    const store = new MemoryChainStore();
+    store.store(V.single);
+    const r = srcVerify(V.multi, store);
+    expect(r.status).toBe("VALID");
+
+    // Without a trusted store the pointer cannot be resolved. Under the
+    // v1.0-RC1 fail-closed rule that is CHAIN_BROKEN - still INVALID, never
+    // VALID, and never a store-layer code in the core reason field.
+    const r2 = srcVerify(V.multi);
+    expect(r2.status).toBe("INVALID");
+    if (r2.status === "INVALID") expect(r2.reason).toBe("CHAIN_BROKEN");
+
     const rr = await refVerify(V.multi as never);
     expect(rr.status).toBe("VALID");
   });

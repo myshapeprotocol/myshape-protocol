@@ -87,14 +87,14 @@ describe("V₇ bridge — verifyReceiptWithStore", () => {
   it("B. valid genesis → chained → VALID", async () => {
     expect((await verifyReceiptWithStore(B, fakeLookup(new Map([[hashP, P]])))).status).toBe("VALID");
   });
-  it("C. missing predecessor → PREDECESSOR_MISSING (fail closed)", async () => {
+  it("C. missing predecessor → CHAIN_BROKEN (core fail-closed; store miss)", async () => {
     const r = invalid(await verifyReceiptWithStore(B, fakeLookup(new Map())));
-    expect(r.reason).toBe("PREDECESSOR_MISSING");
+    expect(r.reason).toBe("CHAIN_BROKEN");
   });
-  it("D/E. wrong/tampered stored predecessor (hash mismatch) → PREDECESSOR_MISSING (poisoning-safe, fail closed)", async () => {
+  it("D/E. wrong/tampered stored predecessor (hash mismatch) → CHAIN_BROKEN (poisoning-safe, fail closed)", async () => {
     const other = makeReceipt({ subjectId: "X" });
     const r = invalid(await verifyReceiptWithStore(B, fakeLookup(new Map([[hashP, other]]))));
-    expect(r.reason).toBe("PREDECESSOR_MISSING");
+    expect(r.reason).toBe("CHAIN_BROKEN");
   });
   it("F. subject mismatch → SUBJECT_MISMATCH", async () => {
     const Bf = makeReceipt({ subjectId: "S2", issuerId: "I", startMs: base - 8000, endMs: base });
