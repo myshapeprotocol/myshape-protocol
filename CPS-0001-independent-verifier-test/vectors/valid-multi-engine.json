@@ -1,0 +1,59 @@
+{
+  "protocolVersion": "1.0",
+  "receiptId": "019f0000-0000-7000-8000-000000000002",
+  "interval": {
+    "start": "2026-07-22T10:00:02Z",
+    "end": "2026-07-22T10:00:04Z",
+    "coverageMs": 2000
+  },
+  "subject": {
+    "id": "sha256:abcd1234efgh567890ijklmnopqrstuv",
+    "type": "embodied"
+  },
+  "evidence": [
+    {
+      "engineId": "com.example.simulation",
+      "engineVersion": "1.0.0",
+      "confidence": 0.87,
+      "payload": {
+        "score": 0.87
+      },
+      "payloadDigest": "07d00088fd55209d54b6657faf8c1a45652c633a6637c0ec0f33048230c8776e"
+    },
+    {
+      "engineId": "com.example.observer",
+      "engineVersion": "2.0.0",
+      "confidence": 0.72,
+      "payload": {
+        "score": 0.72
+      },
+      "payloadDigest": "f21169049b1c1b3e3245e39e68614273ae09807cd645a8d649c96068680464e9"
+    }
+  ],
+  "assertions": {
+    "observationOccurred": {
+      "value": true,
+      "confidence": 0.95
+    },
+    "continuityMaintained": {
+      "value": true,
+      "confidence": 0.8
+    },
+    "receiptIntegrity": {
+      "value": true,
+      "confidence": 1
+    }
+  },
+  "issuer": {
+    "id": "74c00c0b4be8c3e3",
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
+  },
+  "previousReceiptHash": "55c4110f5a8fba68ee944bb49311f77048a358e08bb43d01be3e8ffc9414c5cc",
+  "references": [],
+  "expiresAt": "2026-12-31T23:59:59Z",
+  "signature": {
+    "algorithm": "Ed25519",
+    "value": "466987c55d5471a7874d1533ef7d7ff1f1653fb6c22a428eb4b2bfcb1e378ce166075975b1067cc1fc3d55b6c70dd369f716371907fa10bed1a728e8707caa02",
+    "signedAt": "2026-08-27T12:18:14.575Z"
+  }
+}

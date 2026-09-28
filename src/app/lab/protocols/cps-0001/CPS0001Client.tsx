@@ -18,7 +18,7 @@ const NON_GOALS: string[] = [
   "Evidence content validity. V₅ checks that payloadDigest matches payload, but does not check whether the evidence means what the issuer claims it means.",
   "Issuer trustworthiness. The contract verifies that the issuer signed the receipt (V₂). It does not verify whether the issuer should be trusted.",
   "Subject identity. The contract verifies the subject reference is stable within a chain (§5.1). It does not map the subject to a real-world identity.",
-  "Revocation status. V₁–V₇ verify the receipt itself. Revocation checking (§4.4) consults an external revocation list.",
+  "Revocation status. V₁–V₇ verify the receipt itself. Revocation checking is a separate, deployment-level step; CPS-0001 v1.0-RC1 defines no revocation list format.",
 ];
 
 const FLOW_STEPS: { k: string; d: string }[] = [

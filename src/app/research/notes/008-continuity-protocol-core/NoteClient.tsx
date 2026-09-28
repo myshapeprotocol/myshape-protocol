@@ -525,7 +525,7 @@ export default function NoteClient() {
                   <tr>
                     <td><code>ISSUED</code></td>
                     <td>Receipt has been produced and signed by the issuer</td>
-                    <td>→ <code>EXPIRED</code> (time) or <code>REVOKED</code> (explicit)</td>
+                    <td>→ <code>EXPIRED</code> (time)</td>
                   </tr>
                   <tr>
                     <td><code>EXPIRED</code></td>
@@ -539,7 +539,11 @@ export default function NoteClient() {
                     <td><code>REVOKED</code></td>
                     <td>
                       The issuer has explicitly withdrawn the receipt before expiry.
-                      Verifiers MUST check revocation status for high-assurance applications.
+                      Revocation checking is a separate, deployment-level step;
+                      CPS-0001 v1.0-RC1 does not define a revocation list format
+                      or a revocation status, so this state is reachable only
+                      through a deployment's own mechanism, never through the
+                      protocol alone.
                     </td>
                     <td>Terminal</td>
                   </tr>
@@ -569,8 +573,16 @@ export default function NoteClient() {
               <p>
                 An issuer MAY revoke a receipt before its expiry. Reasons include:
                 detected compromise, evidence tampering discovered post-issuance, or subject
-                request. The protocol defines a revocation list format; verifiers in
-                high-assurance contexts SHOULD consult it.
+                request.
+              </p>
+              <p>
+                <strong>Scope note.</strong> CPS-0001 v1.0-RC1 does <em>not</em> define a
+                revocation list format, a revocation status field, or a revocation failure
+                code. Revocation is a future-extension candidate, not a v1.0-RC1 protocol
+                capability. Deployments that require revocation must implement it outside
+                the protocol core; verifiers in high-assurance contexts SHOULD consult
+                whatever mechanism their deployment provides, and MUST NOT assume a
+                protocol-defined revocation list exists.
               </p>
             </section>
 
@@ -768,9 +780,9 @@ export default function NoteClient() {
                 <tbody>
                   <tr>
                     <td><code>receiptId</code></td>
-                    <td>string (UUIDv7)</td>
+                    <td>string</td>
                     <td>✓</td>
-                    <td>Unique receipt identifier. UUIDv7 for time-sortable IDs.</td>
+                    <td>Unique receipt identifier. An opaque, non-empty, stable string, signed verbatim as slot 1 of the canonical signing payload. UUIDv7 is <strong>recommended</strong> for time-sortability by producers, but is <strong>not</strong> a validity requirement — verifiers MUST NOT reject a receipt on the basis of its <code>receiptId</code> format.</td>
                   </tr>
                   <tr>
                     <td><code>interval</code></td>
@@ -1054,7 +1066,7 @@ export default function NoteClient() {
         "entropyScore": 0.72,
         "sensorProfile": "stable"
       },
-      "payloadDigest": "sha256:a1b2c3d4e5f6..."
+      "payloadDigest": "3f786850e387550fdab836ed7e6dc881de23001b3f786850e387550fdab836ed7e"
     }
   ],
 
@@ -1166,7 +1178,7 @@ export default function NoteClient() {
                   </tr>
                   <tr>
                     <td><strong>V₄</strong></td>
-                    <td><strong>Temporal consistency.</strong> <code>interval.start</code> MUST be strictly before <code>interval.end</code>. <code>signature.signedAt</code> MUST be ≥ <code>interval.end</code> (you cannot sign before evidence collection completes). <code>expiresAt</code>, if present, MUST be after <code>signature.signedAt</code>.</td>
+                    <td><strong>Temporal consistency.</strong> Five conditions, all normative: <code>interval.start</code> MUST be strictly before <code>interval.end</code>; <code>interval.end</code> MUST be less than or equal to the verification time <code>now</code> (a future interval was never observed); <code>coverageMs</code> MUST equal <code>end − start</code>; <code>signature.signedAt</code> MUST be ≥ <code>interval.end</code>; and <code>expiresAt</code>, if present, MUST be strictly after <code>interval.end</code>. <code>now</code> MUST be supplied by the caller so verification is reproducible. Every temporal input MUST be parseable. See CPS-0001 v1.0-RC1 for the reconciliation note binding <code>expiresAt</code> to <code>interval.end</code> rather than to <code>signedAt</code>.</td>
                     <td><code>TEMPORAL_INCONSISTENCY</code></td>
                   </tr>
                   <tr>
@@ -1176,12 +1188,12 @@ export default function NoteClient() {
                   </tr>
                   <tr>
                     <td><strong>V₆</strong></td>
-                    <td><strong>Freshness.</strong> If <code>expiresAt</code> is present, the current time MUST be before <code>expiresAt</code>. An expired receipt remains cryptographically verifiable (V₁–V₅) but SHOULD NOT be accepted for live authorization.</td>
+                    <td><strong>Freshness.</strong> If <code>expiresAt</code> is present, the verification time <code>now</code> MUST be strictly before <code>expiresAt</code>. An expired receipt remains cryptographically verifiable (V₁–V₅) but SHOULD NOT be accepted for live authorization.</td>
                     <td><code>EXPIRED</code></td>
                   </tr>
                   <tr>
                     <td><strong>V₇</strong></td>
-                    <td><strong>Predecessor reference.</strong> If <code>previousReceiptHash</code> is non-null, the verifier MAY traverse the chain to verify longitudinal continuity. If the verifier possesses the predecessor receipt, it MUST verify that the predecessor reference is cryptographically binding (§5.1).</td>
+                    <td><strong>Predecessor reference (protocol core).</strong> For a non-genesis receipt (<code>previousReceiptHash</code> non-null), the verifier MUST resolve the predecessor from a trusted store and verify four receipt-to-receipt properties: <code>SHA-256(JCS(predecessor)) === current.previousReceiptHash</code>; <code>current.subject.id === predecessor.subject.id</code>; <code>current.issuer.id === predecessor.issuer.id</code>; and <code>predecessor.interval.end &lt;= current.interval.start</code>. A genesis receipt (null pointer) skips V₇ (<code>N/A</code>, not a failure). V₇ runs after V₂ and before V₃–V₆. <em>Store-dependent outcomes such as <code>PREDECESSOR_MISSING</code> are integration-layer, not core conformance — CPS-0001 v1.0-RC1 defines no store interface.</em></td>
                     <td><code>CHAIN_BROKEN</code></td>
                   </tr>
                 </tbody>
@@ -1248,8 +1260,9 @@ function verifyReceiptChain(
                 </li>
                 <li>
                   <strong>Revocation status.</strong> V₁–V₇ verify the receipt itself.
-                  Revocation checking (§4.4) is a separate step that consults an
-                  external revocation list.
+                  Revocation checking is a separate, deployment-level step; CPS-0001
+                  v1.0-RC1 defines no revocation list format, so a verifier consults
+                  whatever mechanism its own deployment provides.
                 </li>
               </ul>
 

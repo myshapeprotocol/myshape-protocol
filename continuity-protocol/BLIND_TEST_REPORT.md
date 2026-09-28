@@ -6,7 +6,7 @@
 
 ## Protocol
 
-CPS-0001 v1.0-rc. Spec: `CPS0001.md`. Entry point: `START_HERE.md`.
+CPS-0001 v1.0-rc. Canonical spec: [`../CPS0001.md`](../CPS0001.md) (repository root). Entry point: `START_HERE.md`.
 
 ## Success Criteria
 

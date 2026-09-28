@@ -1,0 +1,50 @@
+{
+  "protocolVersion": "1.0",
+  "receiptId": "0193a62e-7b11-74a8-9c3d-f1e2a3b4c5d6",
+  "interval": {
+    "start": "2026-07-22T10:00:00Z",
+    "end": "2026-07-22T10:00:02Z",
+    "coverageMs": 2000
+  },
+  "subject": {
+    "id": "sha256:abcd1234efgh567890ijklmnopqrstuv",
+    "type": "embodied"
+  },
+  "evidence": [
+    {
+      "engineId": "com.example.simulation",
+      "engineVersion": "1.0.0",
+      "confidence": 0.85,
+      "payload": {
+        "score": 0.85
+      },
+      "payloadDigest": "68b211b6633b2c4393664710c7dc69a928f6363d6a4c9c2c18fced6fe44363b0"
+    }
+  ],
+  "assertions": {
+    "observationOccurred": {
+      "value": true,
+      "confidence": 0.95
+    },
+    "continuityMaintained": {
+      "value": true,
+      "confidence": 0.85
+    },
+    "receiptIntegrity": {
+      "value": true,
+      "confidence": 1
+    }
+  },
+  "issuer": {
+    "id": "74c00c0b4be8c3e3",
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
+  },
+  "previousReceiptHash": null,
+  "references": [],
+  "expiresAt": "2026-12-31T23:59:59Z",
+  "signature": {
+    "algorithm": "Ed25519",
+    "value": "8c083089cb0689bbc26543139f2c205076175938cfbf0b296f1bba2883df08b093703c66d14ad64a73b4c7c055fa7d8465ee771e5c14e8693756ba40b3635308",
+    "signedAt": "2026-08-27T12:18:14.570Z"
+  }
+}

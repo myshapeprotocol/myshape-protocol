@@ -239,7 +239,7 @@ A: Your Engine, your rules. The protocol imposes no confidence model. Two differ
 
 ## 11. Next Steps
 
-1. Read the [CPS-0001 Specification](./CPS0001.md)
+1. Read the [CPS-0001 Specification](../CPS0001.md) — the canonical normative source
 2. Study the [Toy Engine](./second-producer/toy-engine.ts) (~30 lines)
 3. Study the [PES Engine](../src/engine/presence-entropy.ts) (real-world example)
 4. Build your own Engine

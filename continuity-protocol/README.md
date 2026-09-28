@@ -24,7 +24,7 @@ New to CPS-0001? Start there. It covers the protocol object model, the engine in
 
 ```
 ├── START_HERE.md                          ← Entry point for new implementers
-├── CPS0001.md                             ← Protocol specification
+├── ../CPS0001.md                          ← CANONICAL normative specification (repo root)
 ├── ENGINE_AUTHORING_GUIDE.md              ← How to build an Engine
 ├── WHY_CPS_DOES_NOT_VALIDATE_EVIDENCE.md  ← Protocol boundary
 ├── onboarding-test.mjs                    ← Full pipeline template
@@ -39,6 +39,8 @@ New to CPS-0001? Start there. It covers the protocol object model, the engine in
 │   ├── valid/                             ← Known-good receipts
 │   └── invalid/                           ← Tampered, expired, broken
 ├── schemas/                               ← JSON Schema
+├── EXPECTED-RESULTS.md                    ← Expected outcomes (human-readable)
+├── expected-results.json                  ← Expected outcomes (machine-readable)
 └── conformance/                           ← Conformance test suite
 ```
 

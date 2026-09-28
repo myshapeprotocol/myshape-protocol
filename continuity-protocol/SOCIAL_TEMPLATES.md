@@ -19,7 +19,7 @@ What we need:
 30–90 minutes. Any language. Pass or fail — both are data.
 
 → START_HERE: continuity-protocol/START_HERE.md
-→ Spec: CPS0001.md
+→ Spec: CPS0001.md (repository root — the canonical normative source)
 → Verifier: npx cps-verify your-receipt.json
 
 Known limitations posted in PROTOCOL_STATUS.md.

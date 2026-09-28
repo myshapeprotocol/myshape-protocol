@@ -22,9 +22,16 @@ No MyShape code. No sensor hardware. No special knowledge.
 
 ---
 
-## Step 1: Read the Spec (5 min)
+## Step 1: Read the Spec (5–15 min)
 
-Read `CPS0001.md`. You only need §§1–7. The key object is `ContinuityReceipt`.
+**The canonical normative specification is [`../CPS0001.md`](../CPS0001.md)** — the
+repository-root file. Read it top to bottom; the key object is `ContinuityReceipt`.
+
+Do **not** look for a spec inside this directory: there is no
+`continuity-protocol/CPS0001.md`. The verification contract (V₁–V₇ with its
+conditions and failure codes) is in the root file's
+*Normative Rules and Failure Codes (V₁–V₇)* section, and the canonical signing
+payload is in its Annex N-1.
 
 ## Step 2: Understand the Interface (5 min)
 

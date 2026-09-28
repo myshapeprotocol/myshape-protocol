@@ -1,0 +1,64 @@
+{
+  "$comment": "Expected OUTCOMTS for the frozen CPS-0001 v1.0-RC1 test vectors - NOT rules.",
+  "precedence": "Expected outcomes are derived from the normative CPS-0001 specification (repository root CPS0001.md). If this artifact conflicts with the normative specification, THE SPECIFICATION WINS.",
+  "independence": "This oracle is derived solely from the normative specification, the JSON Schema, and the test vectors. It contains no reference to any implementation, SDK, CLI, reference verifier, conformance suite, test file, or datastore. An independent implementer can use it without consulting any MyShape source code.",
+  "evaluationTime": "2026-09-20T00:00:00Z",
+  "evaluationTimeNote": "Time-sensitive checks (V4 condition 2 'interval.end <= now' and V6 freshness) MUST be evaluated against this fixed verification time, not a live system clock, so that results are reproducible.",
+  "outcomeSemantics": {
+    "PASS": "The check was applied and the receipt satisfied it.",
+    "FAIL": "The check was applied and the receipt violated it.",
+    "N/A": "The check does not apply to this receipt (e.g. V7 for a genesis receipt with previousReceiptHash === null). N/A is not a failure."
+  },
+  "verdictSemantics": "Overall verdict is VALID when every applicable check passes, and INVALID when exactly one or more applicable checks fail. The reported failureCode is the code of the first failing check in execution order (V1, V2, V3, V4, V5, V6, V7).",
+  "checkOrder": ["V1", "V2", "V3", "V4", "V5", "V6", "V7"],
+  "v7StoreNote": "V7 requires a predecessor resolved from a trusted store. CPS-0001 v1.0-RC1 defines no store interface, so outcomes such as PREDECESSOR_MISSING are integration-layer concerns and are NOT core conformance results. They are never used below.",
+  "vectors": [
+    {
+      "file": "test-vectors/valid/single-engine.json",
+      "note": "Genesis receipt (previousReceiptHash === null).",
+      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "PASS", "V7": "N/A",
+      "verdict": "VALID",
+      "failureCode": null
+    },
+    {
+      "file": "test-vectors/valid/multi-engine.json",
+      "note": "Non-genesis receipt. V7 evaluated with test-vectors/valid/single-engine.json as the resolved predecessor: all four protocol-core checks pass.",
+      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "PASS", "V7": "PASS",
+      "verdict": "VALID",
+      "failureCode": null
+    },
+    {
+      "file": "test-vectors/valid/agent-trace.json",
+      "note": "Non-genesis receipt whose previousReceiptHash resolves to no receipt in the supplied vector set, so V7 cannot be satisfied from the published vectors. The stored name is historical; the normative outcome at the fixed evaluation time is V6 EXPIRED, and it is therefore not a VALID receipt despite its directory.",
+      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL", "V7": "N/A",
+      "verdict": "INVALID",
+      "failureCode": "EXPIRED"
+    },
+    {
+      "file": "test-vectors/invalid/expired.json",
+      "note": "Genesis receipt, structurally valid, expired before the fixed evaluation time.",
+      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL", "V7": "N/A",
+      "verdict": "INVALID",
+      "failureCode": "EXPIRED"
+    },
+    {
+      "file": "test-vectors/invalid/tampered-evidence.json",
+      "note": "Genesis receipt whose declared payloadDigest does not match the recomputed digest of payload. The digest is inside the signed payload, so V5 is the first failing check.",
+      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "FAIL", "V6": "PASS", "V7": "N/A",
+      "verdict": "INVALID",
+      "failureCode": "EVIDENCE_TAMPERED"
+    },
+    {
+      "file": "test-vectors/invalid/broken-chain.json",
+      "note": "Non-genesis receipt whose previousReceiptHash is a literal placeholder string rather than a digest of any receipt. Evaluated against the fixed evaluation time it is additionally already past expiry; V7 is reported here for the chain-pointer condition only and is not the reason for the overall verdict.",
+      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL", "V7": "FAIL",
+      "verdict": "INVALID",
+      "failureCode": "EXPIRED"
+    }
+  ],
+  "coverageGap": {
+    "issue": "No published vector exercises V3, or the V7 checks SUBJECT_MISMATCH, ISSUER_MISMATCH, or TEMPORAL_VIOLATION.",
+    "consequence": "An independent implementer can verify the V3 and V7 rules from the specification, but cannot confirm them against a published fixture. Adding such vectors is future work and is deliberately not part of the current frozen set.",
+    "notApplicable": "PREDECESSOR_MISSING is intentionally absent: it is a store/integration-layer outcome, not a CPS-0001 core conformance result."
+  }
+}
