@@ -56,7 +56,7 @@ Producer (any engine) → Continuity Receipt → Verifier (V₁-V₇) → Consum
 
 | Component | What | File |
 |:---|:---|:---|
-| Reference Verifier | V₁-V₇, zero MyShape deps | [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) |
+| Reference Verifier | V₁, V₃–V₆ helper (V₇ hash-only), zero MyShape deps | [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) |
 | HTTP Verifier Plugin | Express middleware, allow/deny + risk | [`verifier-plugin/`](continuity-protocol/verifier-plugin/) |
 | Second Producer | Dummy engine — proves independence | [`second-producer/`](continuity-protocol/second-producer/) |
 | JSON Schema | Schema-first validation | [`schemas/`](continuity-protocol/schemas/) |

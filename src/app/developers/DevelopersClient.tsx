@@ -44,7 +44,7 @@ const QUICK_STEPS = [
 ];
 
 const ENGINES = [
-  { name: "Reference Verifier", path: "continuity-protocol/reference-verifier/", desc: "V₁-V₇ · zero engine deps · TypeScript" },
+  { name: "Reference Verifier", path: "continuity-protocol/reference-verifier/", desc: "V₁, V₃–V₆ helper · V₇ hash-only · zero engine deps · TypeScript" },
   { name: "EE-001 Presence Detection", path: "src/lib/evidence/", desc: "4D entropy scoring from IMU data" },
   { name: "EE-002 Causal Coupling", path: "src/lib/evidence/causal-coupling.ts", desc: "Cross-modal IMU + camera binding" },
   { name: "EE-003 Challenge Response", path: "src/lib/evidence/gyro-challenge.ts", desc: "3-round gyroscope challenge" },

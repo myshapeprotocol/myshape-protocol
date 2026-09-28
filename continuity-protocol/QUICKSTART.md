@@ -101,7 +101,7 @@ If your receipt passes the same 23 assertions, you implement CPS-0001.
 
 ```
 continuity-protocol/
-├── reference-verifier/verifier.ts   ← Types + V₁-V₇
+├── reference-verifier/verifier.ts   ← Types + V₁,V₃–V₆ helper (V₇ hash-only)
 ├── schemas/continuity-receipt.schema.json
 ├── test-vectors/                    ← Reference receipts
 └── conformance/                     ← Test suite

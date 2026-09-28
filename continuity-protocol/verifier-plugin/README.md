@@ -34,7 +34,7 @@ Producer          Receipt          Verifier          Consumer
 ## Imports
 
 The plugin imports only:
-- `continuity-protocol/reference-verifier/verifier` (pure protocol types + V₁-V₇)
+- `continuity-protocol/reference-verifier/verifier` (pure protocol types; V₁, V₃–V₆ helper, plus a V₇ hash-only helper — not a full CPS-0001 conformance oracle)
 
 It does NOT import:
 - MyShape SDK
