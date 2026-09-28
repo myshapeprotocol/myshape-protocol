@@ -18,6 +18,11 @@ artefacts govern.
 | continuity-protocol/test-vectors/invalid/expired.json | 2374D75A73809C7D93F482277B519B1C0EEF8AA4C6A9783346A43944ABC07672 | unknown | 13-field era (assumed) | normative | INVALID — `EXPIRED` (V1-V5 pass) | — |
 | continuity-protocol/test-vectors/invalid/tampered-evidence.json | 4A6367340E54841394C8D1D15B57F4C56095885198D6CCD629AFADBBA95F3C1B | unknown | 13-field era (assumed) | normative | INVALID — `EVIDENCE_TAMPERED` (V1-V4, V6 pass) | — |
 | continuity-protocol/test-vectors/invalid/broken-chain.json | 8BB675D2192B49D2AD14C9BA93F4BE5EA86E54464874F15478E47B063210AF26 | unknown | 13-field era (assumed) | normative | INVALID — `CHAIN_BROKEN` (V7 FAIL, fail-closed: placeholder pointer unresolvable); V6 also fails (`EXPIRED`) but V7 precedes V6 in the normative order | — |
+| continuity-protocol/test-vectors/valid/n2-predecessor.json | 1C3EB7EBE02728FB60258478A8AD9359A92B0981E5F01D091E79ACF766D770FF | N-2 batch | 13-slot/13-field era (N-2 generated) | normative (N-2) | VALID (genesis; V7 N/A) — dedicated predecessor for the three N-2 V7 child vectors; JCS receiptHash `9742df6972f96075772eb90af94adb638fb9a618634f6f7c764fb2777840fead` | — |
+| continuity-protocol/test-vectors/invalid/inconsistent-assertions.json | B1CABCFDD094D0B3750AE11F547C79BBEB2CB6596ECE9AE695E5DEAD701A6441 | N-2 batch | 13-slot/13-field era (N-2 generated) | normative (N-2) | INVALID — `INCONSISTENT_ASSERTIONS` (V3 FAIL; genesis so V7 N/A) | — |
+| continuity-protocol/test-vectors/invalid/subject-mismatch.json | 2A4D79D8CF435FC4B062226A5B7864F40AD4D47F2496F1182534788D4DB9F4BC | N-2 batch | 13-slot/13-field era (N-2 generated) | normative (N-2) | INVALID — `SUBJECT_MISMATCH` (V7 check 2; predecessor = valid/n2-predecessor.json) | — |
+| continuity-protocol/test-vectors/invalid/issuer-mismatch.json | B294CF99447FD24C0B01E9FF694F77ADC282954C6497F7BC2AF0D450232B6D26 | N-2 batch | 13-slot/13-field era (N-2 generated) | normative (N-2) | INVALID — `ISSUER_MISMATCH` (V7 check 3; same public key as predecessor, different issuer.id) | — |
+| continuity-protocol/test-vectors/invalid/chain-temporal-violation.json | 7D1CE03A891F22815E00136A3F22A79EE7A2FEEC1A48E336E76AEFFC13B275FF | N-2 batch | 13-slot/13-field era (N-2 generated) | normative (N-2) | INVALID — `TEMPORAL_VIOLATION` (V7 check 4; predecessor = valid/n2-predecessor.json) | — |
 | bad-signature.json (referenced by cli/README.md:34-42) | — (no file) | — | — | doc-only-missing | — | — |
 
 ## GAP-2 — historical implementation divergence (resolved, non-normative)
@@ -34,12 +39,17 @@ now come from the specification alone, via `EXPECTED-RESULTS.md`.
 
 ## Coverage gaps
 
-No published vector exercises V₃, or the V₇ checks `SUBJECT_MISMATCH`,
-`ISSUER_MISMATCH`, and `TEMPORAL_VIOLATION`. `CHAIN_BROKEN` **is** exercised, by
-`invalid/broken-chain.json`, via the fail-closed unresolvable-predecessor path.
+No negative-coverage gap remains. The V₃ rule and all four protocol-core V₇
+failure codes are exercised by published fixtures: `INCONSISTENT_ASSERTIONS` by
+`invalid/inconsistent-assertions.json`; `CHAIN_BROKEN` by
+`invalid/broken-chain.json` via the fail-closed unresolvable-predecessor path;
+`SUBJECT_MISMATCH`, `ISSUER_MISMATCH` and `TEMPORAL_VIOLATION` by the three N-2
+child vectors resolved against `valid/n2-predecessor.json`. V₇ check 1 also
+exercises a PASS via `valid/multi-engine.json` and the three N-2 child vectors.
 `PREDECESSOR_MISSING` is deliberately
 absent: it is a store/integration-layer outcome, not a CPS-0001 core conformance
-result. See `EXPECTED-RESULTS.md`.
+result. A V₇ check-1 failure with a resolvable-but-mismatched predecessor is not
+constructible as a receipt fixture and is retained as P2. See `EXPECTED-RESULTS.md`.
 
 ## Regression gate
 

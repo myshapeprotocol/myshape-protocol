@@ -17,7 +17,7 @@ This is:
 
 - `spec/CPS0001.md` — CPS-0001 v1.0-RC1 specification (**normative**, byte-identical to the repository-root canonical source)
 - `schema/continuity-receipt.schema.json` — Continuity Receipt JSON Schema (**normative**, byte-identical to the canonical schema)
-- `vectors/` — six receipt files for verification testing (frozen; byte-identical to the canonical vectors)
+- `vectors/` — eleven receipt files for verification testing (frozen; byte-identical to the canonical vectors)
 - `EXPECTED-RESULTS.md` / `expected-results.json` — expected outcomes per vector (**outcomes, not rules**; if these conflict with the specification, the specification wins)
 - `TEST-BRIEF.md` — instructions, procedure, and reporting format
 
@@ -71,6 +71,51 @@ worth reporting.
 
 `N/A` in the V₇ column means the check does not apply to that receipt (a genesis
 receipt has no predecessor). It is not a failure.
+
+## V₇ predecessor bindings — required wiring
+
+Four vectors are **non-genesis**: their `previousReceiptHash` is not `null`, so V₇
+applies and the predecessor must be resolved from your store. This mapping is
+normative and is published here so that it is never left implicit:
+
+```text
+subject-mismatch.json ──┐
+issuer-mismatch.json ───┼── previousReceiptHash ──▶ n2-predecessor.json
+chain-temporal-violation.json ──┘
+```
+
+| Vector (this package) | Resolved predecessor | `predecessorHash` |
+|:---|:---|:---|
+| `multi-engine.json` | `single-engine.json` | `55c4110f5a8fba68ee944bb49311f77048a358e08bb43d01be3e8ffc9414c5cc` |
+| `subject-mismatch.json` | `n2-predecessor.json` | `9742df6972f96075772eb90af94adb638fb9a618634f6f7c764fb2777840fead` |
+| `issuer-mismatch.json` | `n2-predecessor.json` | `9742df6972f96075772eb90af94adb638fb9a618634f6f7c764fb2777840fead` |
+| `chain-temporal-violation.json` | `n2-predecessor.json` | `9742df6972f96075772eb90af94adb638fb9a618634f6f7c764fb2777840fead` |
+
+**How to compute `predecessorHash`**
+
+```
+predecessorHash = SHA-256( UTF-8( JCS( predecessor receipt JSON ) ) )
+```
+
+`JCS` is RFC 8785 canonical JSON, per CPS-0001 Annex N-2:
+
+- object keys sorted ascending by **UTF-16 code unit**
+- no insignificant whitespace
+- `null` preserved
+- numbers in ECMAScript `Number::toString` form
+- strings escaped per JSON
+
+Hash the **parsed receipt object**, not the raw file text — indentation and key
+order in the file do not affect the result.
+
+> **If you do not wire these bindings, you will get `CHAIN_BROKEN`, not
+> `SUBJECT_MISMATCH` / `ISSUER_MISMATCH` / `TEMPORAL_VIOLATION`.** That is correct
+> behaviour under the fail-closed rule, not a bug: an unresolved predecessor means
+> continuity is not established. The expected results in `EXPECTED-RESULTS.md`
+> assume the store is wired as documented above.
+
+The remaining seven vectors are **genesis** (`previousReceiptHash === null`) and
+report V₇ as `N/A`.
 
 ## Reporting
 

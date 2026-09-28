@@ -1,0 +1,51 @@
+{
+  "protocolVersion": "1.0",
+  "receiptId": "019f0000-0000-7000-8000-0000000000a2",
+  "interval": {
+    "start": "2026-07-23T10:00:10Z",
+    "end": "2026-07-23T10:00:20Z",
+    "coverageMs": 10000
+  },
+  "subject": {
+    "id": "sha256:n2-base-subject",
+    "type": "embodied"
+  },
+  "evidence": [
+    {
+      "engineId": "com.example.simulation",
+      "engineVersion": "1.0.0",
+      "confidence": 0.9,
+      "payload": {
+        "score": 0.9,
+        "kind": "n2-v3-negative"
+      },
+      "payloadDigest": "413fedfdca37ca5fbeee7b62c9a2a577ada6546486f314d66d90493f8f97ae93"
+    }
+  ],
+  "assertions": {
+    "observationOccurred": {
+      "value": false,
+      "confidence": 0.95
+    },
+    "continuityMaintained": {
+      "value": true,
+      "confidence": 0.9
+    },
+    "receiptIntegrity": {
+      "value": true,
+      "confidence": 1
+    }
+  },
+  "issuer": {
+    "id": "n2-issuer-0001",
+    "publicKey": "a4370d60a5ba0659f772187e5d6cb3277435cf49d5e4a490f69b20fe229d83b2"
+  },
+  "previousReceiptHash": null,
+  "references": [],
+  "expiresAt": "2099-01-01T00:00:00Z",
+  "signature": {
+    "algorithm": "Ed25519",
+    "value": "4ecf7991cd092b14c61485e71c3c3b37159fbb8048a57a64329346e89c93d228c5dec2c7784bfff9e44c07c0330a53576a306fc1bb51b14c142e5fd14cdff907",
+    "signedAt": "2026-07-23T10:00:20Z"
+  }
+}
