@@ -7,58 +7,62 @@
   "outcomeSemantics": {
     "PASS": "The check was applied and the receipt satisfied it.",
     "FAIL": "The check was applied and the receipt violated it.",
-    "N/A": "The check does not apply to this receipt (e.g. V7 for a genesis receipt with previousReceiptHash === null). N/A is not a failure."
+    "N/A": "The check does not apply to this receipt. Permitted ONLY for V7 on a genesis receipt (previousReceiptHash === null). A non-genesis receipt whose predecessor cannot be resolved is NOT N/A - it is a V7 FAIL with CHAIN_BROKEN. N/A is not a failure."
   },
-  "verdictSemantics": "Overall verdict is VALID when every applicable check passes, and INVALID when exactly one or more applicable checks fail. The reported failureCode is the code of the first failing check in execution order (V1, V2, V3, V4, V5, V6, V7).",
-  "checkOrder": ["V1", "V2", "V3", "V4", "V5", "V6", "V7"],
-  "v7StoreNote": "V7 requires a predecessor resolved from a trusted store. CPS-0001 v1.0-RC1 defines no store interface, so outcomes such as PREDECESSOR_MISSING are integration-layer concerns and are NOT core conformance results. They are never used below.",
+  "verdictSemantics": "Overall verdict is VALID when every applicable check passes, and INVALID when exactly one or more applicable checks fail.",
+  "checkOrder": ["V1", "V2", "V7", "V3", "V4", "V5", "V6"],
+  "checkOrderNote": "This is the NORMATIVE evaluation order defined by the canonical CPS0001.md (Evaluation order and first-failure rule). V7 is evaluated after V2 and before V3-V6. The vector objects below list checks in this same order.",
+  "firstFailureRule": "The reported failureCode is the failure code of the FIRST failing core check in checkOrder. A verifier may short-circuit at the first failure or may continue evaluating the remaining checks for diagnostics, but a later failure MUST NOT displace, override or replace the normative first-failure code. Within V7, the four receipt-to-receipt checks are evaluated in the numbered order 1-4 of the specification and the first that fails supplies the V7 code.",
+  "v7FailClosed": "For a non-genesis receipt whose previousReceiptHash cannot be resolved to a predecessor, receipt-to-receipt continuity is NOT established: V7 = FAIL, failureCode = CHAIN_BROKEN, overall = INVALID. A verifier MUST NOT report N/A for such a receipt.",
+  "v7StoreNote": "V7 requires a predecessor resolved from a trusted store. CPS-0001 v1.0-RC1 defines no store interface, so outcomes such as PREDECESSOR_MISSING are integration-layer concerns and are NOT core conformance results. They are never used below. The store/integration layer may report that a predecessor is unavailable, but the core conformance consequence is fixed by v7FailClosed above: V7 = FAIL with CHAIN_BROKEN. PREDECESSOR_MISSING is not a member of the v1.0-RC1 core failure-code vocabulary and MUST NOT be emitted as a core verdict.",
   "vectors": [
     {
       "file": "test-vectors/valid/single-engine.json",
-      "note": "Genesis receipt (previousReceiptHash === null).",
-      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "PASS", "V7": "N/A",
+      "note": "Genesis receipt (previousReceiptHash === null), so V7 is N/A and fail-closed does not apply.",
+      "V1": "PASS", "V2": "PASS", "V7": "N/A", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "PASS",
       "verdict": "VALID",
       "failureCode": null
     },
     {
       "file": "test-vectors/valid/multi-engine.json",
-      "note": "Non-genesis receipt. V7 evaluated with test-vectors/valid/single-engine.json as the resolved predecessor: all four protocol-core checks pass.",
-      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "PASS", "V7": "PASS",
+      "note": "Non-genesis receipt. V7 evaluated with test-vectors/valid/single-engine.json as the resolved predecessor: the predecessor resolves, so fail-closed does not apply, and all four protocol-core checks pass.",
+      "V1": "PASS", "V2": "PASS", "V7": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "PASS",
       "verdict": "VALID",
       "failureCode": null
     },
     {
       "file": "test-vectors/valid/agent-trace.json",
-      "note": "Non-genesis receipt whose previousReceiptHash resolves to no receipt in the supplied vector set, so V7 cannot be satisfied from the published vectors. The stored name is historical; the normative outcome at the fixed evaluation time is V6 EXPIRED, and it is therefore not a VALID receipt despite its directory.",
-      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL", "V7": "N/A",
+      "note": "Non-genesis receipt whose previousReceiptHash resolves to no receipt in the supplied vector set. Under the normative fail-closed rule V7 FAILS with CHAIN_BROKEN, so V7 is NOT N/A. The stored directory name is historical packaging metadata, not a verdict. The receipt is also past expiresAt at the fixed evaluation time, so V6 fails as well, but V7 precedes V6 in checkOrder and therefore sets the reported first-failure code.",
+      "V1": "PASS", "V2": "PASS", "V7": "FAIL", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL",
       "verdict": "INVALID",
-      "failureCode": "EXPIRED"
+      "failureCode": "CHAIN_BROKEN"
     },
     {
       "file": "test-vectors/invalid/expired.json",
-      "note": "Genesis receipt, structurally valid, expired before the fixed evaluation time.",
-      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL", "V7": "N/A",
+      "note": "Genesis receipt, structurally valid, expired before the fixed evaluation time. V7 is N/A, so V6 supplies the first failing check.",
+      "V1": "PASS", "V2": "PASS", "V7": "N/A", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL",
       "verdict": "INVALID",
       "failureCode": "EXPIRED"
     },
     {
       "file": "test-vectors/invalid/tampered-evidence.json",
-      "note": "Genesis receipt whose declared payloadDigest does not match the recomputed digest of payload. The digest is inside the signed payload, so V5 is the first failing check.",
-      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "FAIL", "V6": "PASS", "V7": "N/A",
+      "note": "Genesis receipt whose declared payloadDigest does not match the recomputed digest of payload. V7 is N/A; the digest is inside the signed payload, so V5 is the first failing check.",
+      "V1": "PASS", "V2": "PASS", "V7": "N/A", "V3": "PASS", "V4": "PASS", "V5": "FAIL", "V6": "PASS",
       "verdict": "INVALID",
       "failureCode": "EVIDENCE_TAMPERED"
     },
     {
       "file": "test-vectors/invalid/broken-chain.json",
-      "note": "Non-genesis receipt whose previousReceiptHash is a literal placeholder string rather than a digest of any receipt. Evaluated against the fixed evaluation time it is additionally already past expiry; V7 is reported here for the chain-pointer condition only and is not the reason for the overall verdict.",
-      "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL", "V7": "FAIL",
+      "note": "Non-genesis receipt whose previousReceiptHash is a literal placeholder string rather than a digest of any receipt, so it cannot be resolved to a predecessor. Under the normative fail-closed rule V7 FAILS with CHAIN_BROKEN. The receipt is additionally past expiry at the fixed evaluation time, so V6 fails as well, but V7 precedes V6 in checkOrder and therefore sets the reported first-failure code.",
+      "V1": "PASS", "V2": "PASS", "V7": "FAIL", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL",
       "verdict": "INVALID",
-      "failureCode": "EXPIRED"
+      "failureCode": "CHAIN_BROKEN"
     }
   ],
   "coverageGap": {
     "issue": "No published vector exercises V3, or the V7 checks SUBJECT_MISMATCH, ISSUER_MISMATCH, or TEMPORAL_VIOLATION.",
     "consequence": "An independent implementer can verify the V3 and V7 rules from the specification, but cannot confirm them against a published fixture. Adding such vectors is future work and is deliberately not part of the current frozen set.",
+    "covered": "CHAIN_BROKEN IS exercised, by test-vectors/valid/agent-trace.json and test-vectors/invalid/broken-chain.json, both via the fail-closed unresolvable-predecessor path.",
     "notApplicable": "PREDECESSOR_MISSING is intentionally absent: it is a store/integration-layer outcome, not a CPS-0001 core conformance result."
   }
 }
