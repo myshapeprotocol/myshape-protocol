@@ -36,11 +36,11 @@ Walk through a real `ContinuityReceipt` JSON.
   "references": [],
   "issuer": {
     "id": "sha256:issuer001",
-    "publicKey": "MCowBQYDK2VwAyEAabc123def456ghi789jkl012mno345pqr678stu901vwx234yz"
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
   },
   "signature": {
     "algorithm": "Ed25519",
-    "value": "iGy9Pq3KlxAbCdEfGhIjKlMnOpQrStUvWxYz0123456789...",
+    "value": "8c083089cb0689bbc26543139f2c205076175938cfbf0b296f1bba2883df08b093703c66d14ad64a73b4c7c055fa7d8465ee771e5c14e8693756ba40b3635308",
     "signedAt": "2026-12-01T10:00:08.000Z"
   }
 }

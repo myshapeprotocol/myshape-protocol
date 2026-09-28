@@ -966,32 +966,34 @@ export default function NoteClient() {
                   </tr>
                   <tr>
                     <td><code>issuer.publicKey</code></td>
-                    <td>string (base64url)</td>
-                    <td>Public key for signature verification. Algorithm is indicated by the key format.</td>
+                    <td>string (lowercase hex)</td>
+                    <td>Public key for signature verification: the <strong>raw 32-byte Ed25519 public key</strong>, encoded as 64 lowercase hex characters. Not base64url, not SPKI-DER, not PEM.</td>
                   </tr>
                   <tr>
                     <td><code>signature.algorithm</code></td>
                     <td>string</td>
-                    <td>Signature algorithm. RECOMMENDED: <code>"Ed25519"</code>.</td>
+                    <td>Signature algorithm. <code>"Ed25519"</code> is the only defined value in v1.0.</td>
                   </tr>
                   <tr>
                     <td><code>signature.value</code></td>
-                    <td>string (base64url)</td>
-                    <td>Signature over the receipt (excluding the signature field itself).</td>
+                    <td>string (lowercase hex)</td>
+                    <td>The <strong>raw 64-byte Ed25519 signature</strong>, encoded as 128 lowercase hex characters. Computed over the canonical signing payload defined in CPS-0001 Annex N-1 — not over a re-serialization of the receipt.</td>
                   </tr>
                   <tr>
                     <td><code>signature.signedAt</code></td>
                     <td>ISO 8601 datetime</td>
-                    <td>When the signature was produced.</td>
+                    <td>When the signature was produced. An ISO 8601 string, not hex-encoded, and not covered by the signature.</td>
                   </tr>
                 </tbody>
               </table>
 
               <p>
-                <strong>Signature computation.</strong> The signature covers all receipt fields
-                <em>except</em> <code>signature</code> itself. Fields are serialized in
-                lexicographic key order, then hashed with SHA-256, then signed. This ensures
-                deterministic verification regardless of JSON key ordering.
+                <strong>Signature computation.</strong> The signature is computed over the
+                canonical signing payload specified in <strong>CPS-0001 Annex N-1</strong> — a
+                fixed 13-slot <code>":"</code>-joined string, not a re-serialization of the
+                receipt. Re-serializing the receipt (for example in lexicographic key order,
+                with or without a prior SHA-256 step) does <strong>not</strong> produce the
+                signed bytes and will fail verification.
               </p>
 
               <h3>6.5 Wire Format</h3>
@@ -1079,11 +1081,11 @@ export default function NoteClient() {
   <span className="text-white/25">// ── Signature: who claims it ──</span>
   "issuer": {
     "id": "sha256:7a8b9c0d1e2f...",
-    "publicKey": "MCowBQYDK2VwAyEA..."
+    "publicKey": "ba45b2a513766740e8e541872a2d46af17d3f0a9a3700f0568beae03b3bad4d9"
   },
   "signature": {
     "algorithm": "Ed25519",
-    "value": "iGy9Pq3Klx...zW0n8TqLm...",
+    "value": "8c083089cb0689bbc26543139f2c205076175938cfbf0b296f1bba2883df08b09...",
     "signedAt": "2026-07-21T14:30:00.100Z"
   }
 }`}</pre>
@@ -1154,7 +1156,7 @@ export default function NoteClient() {
                   </tr>
                   <tr>
                     <td><strong>V₂</strong></td>
-                    <td><strong>Signature validity.</strong> The cryptographic signature MUST verify against the issuer's public key. The signature covers all receipt fields except <code>signature</code> itself, serialized in lexicographic key order (§6.4).</td>
+                    <td><strong>Signature validity.</strong> The Ed25519 signature MUST verify against the issuer's <code>publicKey</code> (raw 32-byte key, lowercase hex). The signature covers the canonical signing payload defined in <strong>CPS-0001 Annex N-1</strong> — a fixed 13-slot <code>":"</code>-joined string — not a re-serialization of the receipt. Fields outside that payload (<code>previousReceiptHash</code>, <code>signedAt</code>, <code>subject.type</code>, <code>evidence.engineId/version/confidence</code>, raw <code>payload</code>) are unsigned in v1.0.</td>
                     <td><code>INVALID_SIGNATURE</code></td>
                   </tr>
                   <tr>

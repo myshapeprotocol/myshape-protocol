@@ -29,7 +29,7 @@ const unsigned = buildReceipt({
     coverageMs: 8000,
   },
   subject: { id: "sha256:abc123...", type: "embodied" },
-  issuer: { id: "my-issuer-001", publicKey: "MCowBQYDK2VwAyEA..." },
+  issuer: { id: "my-issuer-001", publicKey: "<64 lowercase hex chars: raw 32-byte Ed25519 key>" },
 });
 
 // Sign it (real implementations use Ed25519)

@@ -57,7 +57,7 @@ The protocol does NOT inspect payload content. It only verifies that the digest 
 | `issuer.id` | Who claims this receipt |
 | `issuer.publicKey` | Public key for signature verification |
 | `signature.algorithm` | Algorithm (e.g. Ed25519) |
-| `signature.value` | Signature bytes (base64url) |
+| `signature.value` | Signature bytes — raw 64-byte Ed25519 signature, 128 lowercase hex characters |
 | `signature.signedAt` | When the signature was produced |
 
 ---

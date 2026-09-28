@@ -160,7 +160,7 @@
         "publicKey": {
           "type": "string",
           "minLength": 1,
-          "description": "Public key for signature verification (lowercase hex in all current implementations; see CPS0001 Annex N-1)."
+          "description": "Public key for signature verification. Canonical v1.0 encoding: the RAW 32-byte Ed25519 public key as 64 lowercase hex characters (NOT base64url, NOT SPKI-DER, NOT PEM). Descriptive only; this schema does not constrain length or charset. See CPS0001 Annex N-1."
         }
       }
     },
@@ -175,7 +175,7 @@
         "value": {
           "type": "string",
           "minLength": 1,
-          "description": "Signature value (lowercase hex in all current implementations; see CPS0001 Annex N-1). Covers exactly the 13-slot canonical payload defined in CPS0001 Annex N-1, not all receipt fields."
+          "description": "Signature value. Canonical v1.0 encoding: the RAW 64-byte Ed25519 signature as 128 lowercase hex characters (NOT base64url, NOT base64, NOT DER). Descriptive only; this schema does not constrain length or charset. Covers exactly the 13-slot canonical signing payload defined in CPS0001 Annex N-1, not all receipt fields."
         },
         "signedAt": {
           "type": "string",
