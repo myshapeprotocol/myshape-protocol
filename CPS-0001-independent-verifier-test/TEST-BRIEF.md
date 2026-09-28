@@ -22,7 +22,7 @@ The package contains only:
 
 - normative specification (`spec/CPS0001.md`)
 - JSON Schema (`schema/continuity-receipt.schema.json`)
-- seven supplied vectors (`vectors/`)
+- six supplied vectors (`vectors/`)
 - this brief
 
 No other MyShape implementation material is required or permitted.
