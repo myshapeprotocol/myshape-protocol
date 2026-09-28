@@ -11,7 +11,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Develop — The Continuity Lab",
   description:
-    "Reproduce CPS-0001 yourself: specification, frozen test vectors, reference verifier, cps-verify CLI, and the reproduction guide. Engine-independent — the SDK is not the only verification path.",
+    "Reproduce CPS-0001 yourself: specification, frozen test vectors, expected-results oracle, and the reproduction guide. Engine-independent — the SDK is not the only verification path. The cps-verify CLI is receipt-local (V₁–V₆, no V₇).",
   alternates: { canonical: "https://thecontinuitylab.org/develop" },
 };
 
@@ -56,7 +56,7 @@ const JOURNEY: { step: string; label: string; desc: string; href: string; ext: b
 ];
 
 const BOUNDARIES: string[] = [
-  "SDK 0.3.0 — evaluation only. It predates the Batch-2D hardening; for hardened verification use the repository reference verifier / cps-verify.",
+  "SDK 0.3.0 — evaluation only. It predates the Batch-2D hardening; for receipt-local V₁–V₆ checking use cps-verify (it does not evaluate V₇).",
   "The SDK is not the only verification path. CPS-0001 is engine-independent: any conforming verifier can validate a receipt.",
   "CPS-0001 verifies receipt integrity and continuity assertions. It does not prove a subject is a specific human, guarantee identity, or attest to issuer trustworthiness.",
 ];

@@ -284,7 +284,7 @@ export default function TerminalEntry() {
             color: "rgba(255,255,255,0.4)", marginTop: "0.8rem", lineHeight: 1.6,
           }}>
             No servers. No accounts. Three lines of code.<br />
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>SDK 0.3.0 · evaluation only. Reference verifier: cps-verify.</span>
+            <span style={{ color: "rgba(255,255,255,0.35)" }}>SDK 0.3.0 · evaluation only. Receipt-local CLI (V₁–V₆, no V₇): cps-verify.</span>
           </p>
         </div>
 

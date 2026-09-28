@@ -7,7 +7,7 @@
 [![npm](https://img.shields.io/badge/npm-@thecontinuitylab/myshape-red)](https://www.npmjs.com/package/@thecontinuitylab/myshape)
 
 Reference implementation of the MyShape motion-signature engine. Sensor data in → verification result out. Research by [The Continuity Lab](https://thecontinuitylab.org).
-> **SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.**
+> **SDK 0.3.0 predates Batch-2D hardening — evaluation only. For receipt-local V₁–V₆ checking use `cps-verify`; it does not evaluate V₇ and is not a full conformance verifier.**
 
 ## Install
 

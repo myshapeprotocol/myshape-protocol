@@ -29,7 +29,7 @@ CPS-0001 does not replace Ethereum's identity stack — it adds a missing primit
 | **Reference Verifier** | ✅ TypeScript | Zero MyShape dependencies; V₁-V₇ in 273 lines |
 | **Test Vectors** | ✅ 6 receipts | Valid (single/multi/agent), invalid (expired/tampered/broken-chain) |
 | **Conformance Suite** | ✅ 23 assertions, 10 scenarios | Any implementation claiming CPS-0001 compatibility must pass |
-| **CLI Verifier** | ✅ `npx cps-verify` | Verify receipts from any engine |
+| **CLI Verifier** | ✅ `npx cps-verify` | Receipt-local V₁–V₆ check of a single receipt. Does **not** evaluate V₇ predecessor resolution; chained receipts return `INCOMPLETE` |
 | **npm SDK** | ✅ `@thecontinuitylab/myshape` | `verifyContinuity()` — 140 tests, Apache 2.0 |
 | **Benchmark Dataset** | ✅ CC0 on HuggingFace | EE-001 through VS-001 engine pass rates; 576+ runs |
 | **Engine Evidence (PES)** | ✅ 4D entropy scoring | 100% floor: human vs AI synthetic motion separation |

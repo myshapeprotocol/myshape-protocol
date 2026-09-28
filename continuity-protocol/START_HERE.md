@@ -99,7 +99,7 @@ cd continuity-protocol/cli && npm install
 node bin/cps-verify.mjs your-receipt.json
 ```
 
-Expected output:
+Expected output — this CLI is **receipt-local (V₁–V₆ only; it does not evaluate V₇)**:
 ```
 ✅ V₁ Schema Validity
 ✅ V₂ Cryptographic Signature
@@ -107,8 +107,15 @@ Expected output:
 ✅ V₄ Temporal Consistency
 ✅ V₅ Evidence Integrity
 ✅ V₆ Freshness
-VERDICT: ✅ VALID
+  [V₇] Predecessor reference: NOT EVALUATED (no predecessor context)
+VERDICT: ✅ VALID          ← exit 0
 ```
+
+For a chained receipt (`previousReceiptHash !== null`) the CLI prints
+`VERDICT: ⚠️  INCOMPLETE` and exits `3`, because CPS-0001 V₇ applies but this tool has
+no predecessor context. `INCOMPLETE` is a tool status, not a protocol verdict and not
+a CPS-0001 failureCode. For the normative contract and the V₇ rules, read
+[`../CPS0001.md`](../CPS0001.md) — the CLI is not a conformance oracle.
 
 ---
 

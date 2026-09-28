@@ -11,7 +11,7 @@ Time estimate: 30–90 minutes.
 Build a program that produces a valid CPS-0001 Continuity Receipt.
 
 ```
-Your Code → receipt.json → cps-verify → ✅ VALID
+Your Code → receipt.json → cps-verify → ✅ VALID   (genesis: V₁–V₆, V₇ is N/A)
 ```
 
 ## What You May Use
@@ -54,7 +54,13 @@ node cli/bin/cps-verify.mjs your-receipt.json
 # → VERDICT: ✅ VALID
 ```
 
-That's it. If you see six checkmarks and VALID, you've implemented CPS-0001.
+That's it. If you see six checkmarks and `VALID`, your receipt is **receipt-local valid**:
+V₁–V₆ pass and the receipt is genesis (V₇ is `N/A`).
+
+That is **not** the same as full CPS-0001 conformance. CPS-0001 v1.0-RC1 defines
+V₁–V₇. `cps-verify` does not evaluate V₇; for a chained receipt it prints
+`INCOMPLETE` and exits `3` rather than claiming success. If your receipt chains to a
+predecessor, you must also implement the V₇ rules yourself from the specification.
 
 ## We Want To Know
 

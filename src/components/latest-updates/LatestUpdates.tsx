@@ -25,7 +25,7 @@ const UPDATES: UpdateEntry[] = [
   },
   {
     date: "2026-08-19",
-    text: "SDK 0.3.0 released — evaluation only; predates Batch-2D hardening. For hardened verification use the repository reference verifier / cps-verify",
+    text: "SDK 0.3.0 released — evaluation only; predates Batch-2D hardening. For receipt-local V₁–V₆ checking use cps-verify; it does not evaluate V₇.",
     href: "https://www.npmjs.com/package/@thecontinuitylab/myshape",
     tag: "Release",
   },

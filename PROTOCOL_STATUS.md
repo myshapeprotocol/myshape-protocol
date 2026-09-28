@@ -18,7 +18,7 @@
 | Reference Verifier helper (V₁,V₃–V₆) | ✅ Complete — [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) — helper only; normative full oracle = main + trusted ChainStore (V₁–V₇); normative V₁–V₆ oracle = CLI |
 | Test Vectors | ✅ Complete — see `continuity-protocol/VECTOR-INVENTORY.md` (file hashes authoritative; counts differ by grouping) |
 | Conformance Suite | ✅ Complete — 23 assertions, 10 scenarios |
-| CLI Verifier | ✅ Complete — `npx cps-verify` |
+| CLI Verifier | ✅ Receipt-local V₁–V₆ — `npx cps-verify`. Does **not** evaluate V₇; a non-genesis receipt yields `INCOMPLETE` (exit 3), not a conformance claim |
 | HTTP Verifier Plugin | ✅ Complete — Express middleware |
 | JSON Schema | ✅ Complete |
 | SDK (TypeScript) | ✅ Complete — `@thecontinuitylab/myshape` |

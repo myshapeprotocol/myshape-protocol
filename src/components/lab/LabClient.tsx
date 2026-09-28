@@ -389,7 +389,7 @@ const COLUMNS = [
       // vectors → reference verifier → cps-verify). The npm SDK is one
       // optional consumer of CPS-0001, never the only verification path.
       { t: "Reproduce CPS-0001 — spec, test vectors, reference verifier, cps-verify", h: "/lab/develop" },
-      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the reference verifier / cps-verify.", h: "/lab/develop" },
+      { t: "SDK 0.3.0 predates Batch-2D hardening — evaluation only. For receipt-local V₁–V₆ checking use cps-verify; it does not evaluate V₇.", h: "/lab/develop" },
       { t: "npm install @thecontinuitylab/myshape", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
       { t: "npx @thecontinuitylab/myshape demo", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
       { t: "Contribute Data", h: "/lab/contribute" },

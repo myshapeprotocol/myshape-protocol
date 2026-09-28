@@ -1,6 +1,22 @@
 #!/usr/bin/env node
 /**
- * CPS-0001 Reference Verifier — CLI
+ * CPS-0001 Receipt-Local Verifier — CLI
+ *
+ * Scope: evaluates V1-V6 ONLY. It does NOT evaluate V7 — there is no
+ * predecessor store, resolver or chain input. It is not a CPS-0001
+ * conformance oracle and not a substitute for CPS0001.md.
+ *
+ * A non-genesis receipt (previousReceiptHash !== null) therefore has an
+ * unevaluated normative V7 check. This tool reports INCOMPLETE (exit 3)
+ * rather than VALID, because it cannot support a conformance claim.
+ * INCOMPLETE is a tool status: not a protocol verdict, not a CPS-0001
+ * failureCode, and not equivalent to the protocol V7 N/A (genesis only).
+ *
+ * The printed failure reason is the first LOCALLY evaluated failing check.
+ * It is not necessarily the canonical first-failure code, because V7
+ * precedes V3-V6 in the normative order and V7 is not evaluated here.
+ *
+ * Exit codes: 0 = VALID, 1 = INVALID, 2 = usage error, 3 = INCOMPLETE.
  *
  * Usage:
  *   cps-verify receipt.json
@@ -181,6 +197,9 @@ function main() {
   } catch {
     console.error("Usage: cps-verify <receipt.json>");
     console.error("       cat receipt.json | cps-verify");
+    console.error("");
+    console.error("Receipt-local verifier: evaluates V1-V6 only. It does NOT evaluate V7.");
+    console.error("Exit codes: 0 = VALID, 1 = INVALID, 2 = usage error, 3 = INCOMPLETE.");
     process.exit(2);
   }
 
@@ -199,11 +218,37 @@ function main() {
 
   const results = verify(receipt);
   const allPassed = results.every((r) => r.ok);
+
+  // Genesis == V7 does not apply (CPS-0001: N/A only for previousReceiptHash === null).
+  // Non-genesis == V7 is normative but unevaluated here: this tool has no
+  // predecessor context and does not implement V7, JCS or a chain store.
+  const genesis = receipt.previousReceiptHash === null;
+
+  let verdict;
+  let exitCode;
+  let scopeNote;
+  if (!allPassed) {
+    verdict = "❌ INVALID";
+    exitCode = 1;
+    scopeNote = genesis
+      ? "V7 is N/A for this receipt (genesis: previousReceiptHash === null). Evaluation was complete."
+      : "V7 was NOT evaluated (non-genesis receipt, no predecessor context). The reason above is the first locally evaluated failing check; it is NOT necessarily the canonical CPS-0001 first-failure code, because V7 precedes V3-V6 in the normative order.";
+  } else if (genesis) {
+    verdict = "✅ VALID";
+    exitCode = 0;
+    scopeNote = "V7 is N/A for this receipt (genesis: previousReceiptHash === null). V1-V6 evaluation was complete.";
+  } else {
+    verdict = "⚠️  INCOMPLETE";
+    exitCode = 3;
+    scopeNote =
+      "V7 was NOT evaluated. This receipt is non-genesis (previousReceiptHash !== null), so CPS-0001 V7 applies and requires a predecessor resolved from a trusted store. This tool has no predecessor context, so it cannot state a CPS-0001 verdict. INCOMPLETE is a TOOL status: it is not a protocol verdict, not a CPS-0001 failureCode, and not equivalent to the protocol V7 N/A (which applies only to genesis receipts).";
+  }
+
   const engines = receipt.evidence.map((e) => e.engineId).join(", ");
 
   console.log("");
   console.log("══════════════════════════════════════════════");
-  console.log("  CPS-0001 Reference Verifier");
+  console.log("  CPS-0001 Receipt-Local Verifier (V₁–V₆)");
   console.log("══════════════════════════════════════════════");
   console.log("");
   console.log(`  Protocol  : ${receipt.protocolVersion}`);
@@ -218,12 +263,19 @@ function main() {
     const line = r.ok ? `  [${r.id}] ${r.label}` : `  [${r.id}] ${r.label}: ${r.detail}`;
     console.log(`  ${icon} ${line}`);
   }
+  console.log(`  [V₇] Predecessor reference: ${genesis ? "N/A (genesis)" : "NOT EVALUATED (no predecessor context)"}`);
   console.log("");
-  console.log(`  VERDICT: ${allPassed ? "✅ VALID" : "❌ INVALID"}`);
+  console.log(`  VERDICT: ${verdict}`);
+  console.log("");
+  console.log(`  Scope: ${scopeNote}`);
+  console.log("");
+  console.log("  cps-verify is NOT a CPS-0001 conformance oracle. For the normative");
+  console.log("  contract see CPS0001.md; for expected per-vector results see");
+  console.log("  continuity-protocol/EXPECTED-RESULTS.md and expected-results.json.");
   console.log("");
   console.log("══════════════════════════════════════════════");
 
-  process.exit(allPassed ? 0 : 1);
+  process.exit(exitCode);
 }
 
 main();

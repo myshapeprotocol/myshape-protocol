@@ -1,7 +1,7 @@
 {
   "name": "@continuity-protocol/verifier",
   "version": "1.0.0-rc",
-  "description": "CPS-0001 Reference Verifier — standalone CLI for verifying Continuity Receipts",
+  "description": "CPS-0001 receipt-local verifier CLI — evaluates V1-V6 only; does not evaluate V7. Not a conformance oracle.",
   "license": "MIT",
   "type": "module",
   "bin": {

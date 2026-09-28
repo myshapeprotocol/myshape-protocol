@@ -134,7 +134,7 @@ export default function ProtocolFooter() {
                 CONTINUITY PROTOCOL LAYER
               </p>
               <p className="text-[11px] text-white/35 tracking-[0.15em] leading-relaxed uppercase font-mono">
-                SDK 0.3.0 predates Batch-2D hardening — evaluation only. For hardened verification, use the repository reference verifier / cps-verify.
+                SDK 0.3.0 predates Batch-2D hardening — evaluation only. For receipt-local V₁–V₆ checking use cps-verify; it does not evaluate V₇.
               </p>
               <p className="text-[11px] text-white/35 tracking-[0.15em] leading-relaxed uppercase font-mono">
                 ENGINE-INDEPENDENT &middot; CONTINUITY-VERIFIED
