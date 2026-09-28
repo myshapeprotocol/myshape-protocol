@@ -32,10 +32,10 @@
     },
     {
       "file": "test-vectors/valid/agent-trace.json",
-      "note": "Non-genesis receipt whose previousReceiptHash resolves to no receipt in the supplied vector set. Under the normative fail-closed rule V7 FAILS with CHAIN_BROKEN, so V7 is NOT N/A. The stored directory name is historical packaging metadata, not a verdict. The receipt is also past expiresAt at the fixed evaluation time, so V6 fails as well, but V7 precedes V6 in checkOrder and therefore sets the reported first-failure code.",
-      "V1": "PASS", "V2": "PASS", "V7": "FAIL", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL",
+      "note": "GENESIS receipt: previousReceiptHash is null, so V7 does not apply and is reported N/A. The fail-closed rule is scoped to non-genesis receipts and therefore does not apply here. The receipt is past expiresAt at the fixed evaluation time, so V6 fails and supplies the first-failure code. The stored directory name is historical packaging metadata, not a verdict.",
+      "V1": "PASS", "V2": "PASS", "V7": "N/A", "V3": "PASS", "V4": "PASS", "V5": "PASS", "V6": "FAIL",
       "verdict": "INVALID",
-      "failureCode": "CHAIN_BROKEN"
+      "failureCode": "EXPIRED"
     },
     {
       "file": "test-vectors/invalid/expired.json",
@@ -62,7 +62,7 @@
   "coverageGap": {
     "issue": "No published vector exercises V3, or the V7 checks SUBJECT_MISMATCH, ISSUER_MISMATCH, or TEMPORAL_VIOLATION.",
     "consequence": "An independent implementer can verify the V3 and V7 rules from the specification, but cannot confirm them against a published fixture. Adding such vectors is future work and is deliberately not part of the current frozen set.",
-    "covered": "CHAIN_BROKEN IS exercised, by test-vectors/valid/agent-trace.json and test-vectors/invalid/broken-chain.json, both via the fail-closed unresolvable-predecessor path.",
+    "covered": "CHAIN_BROKEN IS exercised, by test-vectors/invalid/broken-chain.json, via the fail-closed unresolvable-predecessor path. test-vectors/valid/agent-trace.json does NOT exercise it: that receipt is a genesis receipt (previousReceiptHash is null), so its V7 is N/A.",
     "notApplicable": "PREDECESSOR_MISSING is intentionally absent: it is a store/integration-layer outcome, not a CPS-0001 core conformance result."
   }
 }

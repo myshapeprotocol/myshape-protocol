@@ -48,7 +48,7 @@ are listed in that normative order.
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|
 | `valid/single-engine.json` | PASS | PASS | N/A | PASS | PASS | PASS | PASS | **VALID** | — |
 | `valid/multi-engine.json` | PASS | PASS | PASS | PASS | PASS | PASS | PASS | **VALID** | — |
-| `valid/agent-trace.json` | PASS | PASS | **FAIL** | PASS | PASS | PASS | **FAIL** | **INVALID** | `CHAIN_BROKEN` |
+| `valid/agent-trace.json` | PASS | PASS | N/A | PASS | PASS | PASS | **FAIL** | **INVALID** | `EXPIRED` |
 | `invalid/expired.json` | PASS | PASS | N/A | PASS | PASS | PASS | **FAIL** | **INVALID** | `EXPIRED` |
 | `invalid/tampered-evidence.json` | PASS | PASS | N/A | PASS | PASS | **FAIL** | PASS | **INVALID** | `EVIDENCE_TAMPERED` |
 | `invalid/broken-chain.json` | PASS | PASS | **FAIL** | PASS | PASS | PASS | **FAIL** | **INVALID** | `CHAIN_BROKEN` |
@@ -57,7 +57,7 @@ are listed in that normative order.
 
 - **`valid/single-engine.json`** — genesis receipt (`previousReceiptHash === null`), so V₇ is `N/A`.
 - **`valid/multi-engine.json`** — non-genesis. V₇ is evaluated with `valid/single-engine.json` as the resolved predecessor; all four protocol-core checks pass.
-- **`valid/agent-trace.json`** — the directory name is historical packaging metadata, **not** a normative outcome. It is a **non-genesis** receipt whose `previousReceiptHash` resolves to no receipt in the published vector set, so under the normative fail-closed rule **V₇ FAILS** and supplies `CHAIN_BROKEN`. It is also already past `expiresAt` at the fixed evaluation time, so V₆ fails as well — but V₇ precedes V₆ in the normative order, so the reported code is `CHAIN_BROKEN`, not `EXPIRED`. It is not a valid receipt despite its location, and V₇ is **not** `N/A` here.
+- **`valid/agent-trace.json`** — the directory name is historical packaging metadata, **not** a normative outcome. This is a **genesis** receipt: `previousReceiptHash` is `null`, so V₇ does not apply and is reported `N/A`. The fail-closed rule is scoped to non-genesis receipts and does not apply here. At the fixed evaluation time the receipt is already past `expiresAt`, so V₆ fails and supplies the first-failure code `EXPIRED`. It is not a valid receipt despite its location.
 - **`invalid/expired.json`** — structurally valid genesis receipt, expired before the evaluation time.
 - **`invalid/tampered-evidence.json`** — declared `payloadDigest` does not match the recomputed digest of `payload`. The digest is inside the signed payload, so V₅ is the first failing check (not V₂).
 - **`invalid/broken-chain.json`** — `previousReceiptHash` is a literal placeholder string rather than a digest of any receipt, so it cannot be resolved to a predecessor. Under the normative fail-closed rule **V₇ FAILS** with `CHAIN_BROKEN`. It is *also* already past expiry at the fixed evaluation time, so V₆ fails as well, but V₇ precedes V₆ in the normative order and therefore sets the reported first-failure code.
@@ -87,9 +87,10 @@ those rules directly from the specification, but cannot confirm them against a
 published fixture. Adding vectors for them is future work and is deliberately not
 part of the current frozen set.
 
-`CHAIN_BROKEN` **is** exercised, by `valid/agent-trace.json` and
-`invalid/broken-chain.json`, both via the fail-closed unresolvable-predecessor
-path.
+`CHAIN_BROKEN` **is** exercised, by `invalid/broken-chain.json`, via the fail-closed
+unresolvable-predecessor path. `valid/agent-trace.json` does **not** exercise it —
+that receipt is a genesis receipt (`previousReceiptHash === null`), so its V₇ is
+`N/A`.
 
 `PREDECESSOR_MISSING` is intentionally absent — it is a store/integration-layer
 outcome, not a CPS-0001 core conformance result. See the store note above.
