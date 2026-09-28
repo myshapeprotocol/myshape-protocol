@@ -15,9 +15,9 @@
 | Component | Status |
 |:---|:---|
 | Specification | ✅ Complete — [CPS0001.md](CPS0001.md) (incl. Annex N-1 13-slot signing input, Annex N-2 digest dual-track) |
-| Reference Verifier helper (V₁,V₃–V₆) | ✅ Complete — [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) — helper only; normative full oracle = main + trusted ChainStore (V₁–V₇); normative V₁–V₆ oracle = CLI |
-| Test Vectors | ✅ Complete — see `continuity-protocol/VECTOR-INVENTORY.md` (file hashes authoritative; counts differ by grouping) |
-| Conformance Suite | ✅ Complete — 23 assertions, 10 scenarios |
+| Reference Verifier helper (V₁,V₃–V₆) | ✅ Complete — [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) — helper only, **not** a conformance oracle. The normative V₁–V₇ contract is [CPS0001.md](CPS0001.md); expected per-vector outcomes are [`expected-results.json`](continuity-protocol/expected-results.json) |
+| Test Vectors | ✅ Complete — see [`VECTOR-INVENTORY.md`](continuity-protocol/VECTOR-INVENTORY.md) — 11 frozen CPS-0001 vectors; file hashes authoritative |
+| Conformance Suite | ✅ Includes oracle-driven regression coverage for all 11 frozen CPS-0001 vectors (V₁–V₇) — [`conformance/`](continuity-protocol/conformance/) |
 | CLI Verifier | ✅ Receipt-local V₁–V₆ — `npx cps-verify`. Does **not** evaluate V₇; a non-genesis receipt yields `INCOMPLETE` (exit 3), not a conformance claim |
 | HTTP Verifier Plugin | ✅ Complete — Express middleware |
 | JSON Schema | ✅ Complete |

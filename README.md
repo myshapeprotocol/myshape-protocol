@@ -56,12 +56,14 @@ Producer (any engine) → Continuity Receipt → Verifier (V₁-V₇) → Consum
 
 | Component | What | File |
 |:---|:---|:---|
-| Reference Verifier | V₁, V₃–V₆ helper (V₇ hash-only), zero MyShape deps | [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) |
+| **Normative authority** | [CPS0001.md](CPS0001.md) — V₁–V₇, failure codes, Annex N-1 | `CPS0001.md` |
+| **Expected outcomes** | [`expected-results.json`](continuity-protocol/expected-results.json) — verdict + failure code per vector | `continuity-protocol/` |
+| Reference Verifier | Optional helper — V₁, V₃–V₆, V₇ hash-only. Not a conformance oracle | [`reference-verifier/verifier.ts`](continuity-protocol/reference-verifier/verifier.ts) |
 | HTTP Verifier Plugin | Express middleware, allow/deny + risk | [`verifier-plugin/`](continuity-protocol/verifier-plugin/) |
 | Second Producer | Dummy engine — proves independence | [`second-producer/`](continuity-protocol/second-producer/) |
 | JSON Schema | Schema-first validation | [`schemas/`](continuity-protocol/schemas/) |
-| Test Vectors | 5 reference receipts | [`test-vectors/`](continuity-protocol/test-vectors/) |
-| Conformance Suite | 23 assertions, 10 scenarios | [`conformance/`](continuity-protocol/conformance/) |
+| Test Vectors | 11 frozen CPS-0001 receipts (4 valid, 7 invalid) | [`test-vectors/`](continuity-protocol/test-vectors/) |
+| Conformance Suite | Includes oracle-driven regression coverage for all 11 frozen CPS-0001 vectors (V₁–V₇) | [`conformance/`](continuity-protocol/conformance/) |
 
 ## Independent Implementation Challenge
 
@@ -73,12 +75,20 @@ You do **not** need:
 - Permission or coordination
 - IMU sensors or phones
 
-You **do** need:
+You **do** need, in this order:
 
-- [CPS-0001 JSON Schema](continuity-protocol/schemas/continuity-receipt.schema.json)
-- [Reference Verifier](continuity-protocol/reference-verifier/verifier.ts)
-- [Test Vectors](continuity-protocol/test-vectors/)
-- [`IMPLEMENT.md`](continuity-protocol/IMPLEMENT.md)
+1. [`CPS0001.md`](CPS0001.md) — the canonical normative specification. V₁–V₇,
+   failure codes, and the Annex N-1 signing input are defined here; it is the
+   authority for the CPS-0001 contract.
+2. [CPS-0001 JSON Schema](continuity-protocol/schemas/continuity-receipt.schema.json) —
+   normative, and what V₁ checks.
+3. [Test Vectors](continuity-protocol/test-vectors/) — 11 frozen CPS-0001 receipts.
+4. [`expected-results.json`](continuity-protocol/expected-results.json) — the expected
+   verdict and failure code for each vector.
+
+Optional, and **not a conformance oracle**: the
+[Reference Verifier](continuity-protocol/reference-verifier/verifier.ts) helper
+(V₁, V₃–V₆, V₇ hash-only) and [`IMPLEMENT.md`](continuity-protocol/IMPLEMENT.md).
 
 The goal is simple: generate or verify a valid Continuity Receipt. No product integration required.
 
