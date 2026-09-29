@@ -39,6 +39,8 @@ function TextInput({ label, value, onChange }: { label: string; value: string; o
 
 export default function SurveyClient() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [domain, setDomain] = useState("");
   const [role, setRole] = useState("");
   const [otherDomain, setOtherDomain] = useState("");
@@ -55,23 +57,48 @@ export default function SurveyClient() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitError(null);
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/discovery_survey`, {
+      // P0 fix — transport through the server route, not the Supabase REST
+      // endpoint directly from the browser. The route is the source of truth:
+      // it applies the rate limiter (5/IP/hr), the request-size guard, the field
+      // allow-list, the per-field length caps and the required-field check,
+      // none of which were enforced by a direct browser insert. The Supabase
+      // anon key no longer needs to be referenced by this component.
+      const res = await fetch("/api/research/survey", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-          Prefer: "return=minimal",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           domain, role, other_domain: otherDomain, has_sensor_data: hasSensorData,
           frequency: freq, duration, data_flow: dataFlow, provenance,
           pain_point: pain, solution, standard_wish: standard, interest, contact,
         }),
       });
-    } catch { /* fail silently */ }
-    setSent(true);
+
+      if (!res.ok) {
+        // Transport-level failure (429 rate limit, 400 validation, 5xx persistence).
+        // Never report success — a false "Thank you" would mean the response
+        // was never recorded.
+        setSubmitError("Your response could not be saved. Please try again.");
+        return;
+      }
+
+      const body = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+      if (!body || body.ok !== true) {
+        setSubmitError("Your response could not be saved. Please try again.");
+        return;
+      }
+
+      // Only an explicit { ok: true } from the route reaches this point.
+      setSent(true);
+    } catch {
+      // Network error — same honest-failure rule as above.
+      setSubmitError("Your response could not be saved. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (sent) {
@@ -132,9 +159,15 @@ export default function SurveyClient() {
             <TextInput label="12. Contact (optional) — Email, WeChat, or DM" value={contact} onChange={setContact} />
           </div>
 
-          <button type="submit"
-            style={{ width: "100%", padding: "14px 0", fontSize: 14, color: "#051025", background: "#60A5FA", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 500 }}>
-            Submit
+          {submitError && (
+            <div role="alert" style={{ marginBottom: 16, padding: "12px 14px", border: "1px solid rgba(248, 81, 73, 0.4)", background: "rgba(248, 81, 73, 0.08)", borderRadius: 4, color: "#f85149", fontSize: 12, lineHeight: 1.6 }}>
+              {submitError}
+            </div>
+          )}
+
+          <button type="submit" disabled={submitting}
+            style={{ width: "100%", padding: "14px 0", fontSize: 14, color: "#051025", background: submitting ? "rgba(96,165,250,0.5)" : "#60A5FA", border: "none", borderRadius: 6, cursor: submitting ? "not-allowed" : "pointer", fontWeight: 500 }}>
+            {submitting ? "Submitting…" : "Submit"}
           </button>
         </form>
 
