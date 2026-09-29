@@ -365,7 +365,22 @@ describe("API Contract — Backward Compatibility", () => {
 // ═══════════════════════════════════════════════════════════
 
 const BASE_URL = "http://localhost:3000";
-const SKIP_LIVE = !process.env.CI && process.env.SKIP_LIVE_TESTS !== "false";
+
+// Live integration tests need a running server on localhost:3000.
+//
+// An explicit SKIP_LIVE_TESTS always wins, in either direction:
+//   "true"  → skip, even on CI
+//   "false" → run,  even locally
+// When it is unset, fall back to the environment: skip by default on a
+// developer machine, run on CI so the contract is not silently unverified.
+//
+// The previous form (!CI && SKIP_LIVE_TESTS !== "false") short-circuited on CI:
+// the left operand was false there, so SKIP_LIVE_TESTS could never take effect
+// in the environment that most needs to control it.
+const SKIP_LIVE =
+  process.env.SKIP_LIVE_TESTS !== undefined
+    ? process.env.SKIP_LIVE_TESTS === "true"
+    : !process.env.CI;
 
 describe.skipIf(SKIP_LIVE)("API Contract — Live Integration", () => {
 
