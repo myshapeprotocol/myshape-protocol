@@ -34,8 +34,8 @@ const JOURNEY: { step: string; label: string; desc: string; href: string; ext: b
   },
   {
     step: "03",
-    label: "Reference verifier",
-    desc: "Build and verify a receipt in the browser, or read the engine-independent reference implementation (no engine imports).",
+    label: "Verify in browser",
+    desc: "Run the CPS-0001 flow in the browser — collect evidence, issue a receipt, verify it (V₁–V₇). Simulated data runs without sensors. Research prototype, not a receipt conformance toolkit.",
     href: "/lab/research/protocol-verify",
     ext: false,
   },

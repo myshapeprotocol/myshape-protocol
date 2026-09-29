@@ -51,6 +51,7 @@ export default function ProtocolFooter() {
       title: "BUILD",
       links: [
         { name: "Developers", href: "/developers" },
+        { name: "Verify Receipt", href: "/verify-receipt" },
         { name: "CPS-0001", href: "/research/notes/008-continuity-protocol-core" },
         { name: "Whitepaper", href: "/whitepaper" },
         { name: "npm SDK", href: "https://www.npmjs.com/package/@thecontinuitylab/myshape" },
@@ -75,7 +76,7 @@ export default function ProtocolFooter() {
     {
       title: "CONNECT",
       links: [
-        { name: "GitHub", href: "https://github.com/myshapeprotocol" },
+        { name: "GitHub", href: "https://github.com/myshapeprotocol/myshape-protocol" },
         { name: "X", href: "https://x.com/myshapeprotocol" },
         { name: "LinkedIn", href: "https://www.linkedin.com/company/111557251/" },
         { name: "Discord", href: "https://discord.gg/zr8Tczard" },

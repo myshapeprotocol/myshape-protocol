@@ -25,7 +25,7 @@ const MYSHAPE_ENTRIES: SitemapEntry[] = [
   // Tier 1: Homepage (1.0)
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   // Tier 2: Core product pages (0.9)
-  { path: "/verify", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/verify-receipt", changeFrequency: "weekly", priority: 0.9 },
   { path: "/vision", changeFrequency: "weekly", priority: 0.9 },
   { path: "/protocol", changeFrequency: "weekly", priority: 0.9 },
   { path: "/motion-demo", changeFrequency: "weekly", priority: 0.9 },
@@ -80,7 +80,11 @@ const MYSHAPE_ENTRIES: SitemapEntry[] = [
   { path: "/blog/what-is-verifiable-credential", changeFrequency: "monthly", priority: 0.6 },
   { path: "/blog/why-passwords-are-broken", changeFrequency: "monthly", priority: 0.6 },
   { path: "/blog/how-to-build-privacy-preserving-identity", changeFrequency: "monthly", priority: 0.6 },
-  // Tier 7: Verify (0.5)
+  // Tier 7: Physical motion check (0.5)
+  // NOTE: /verify is a device motion / script check — it is NOT CPS-0001 receipt
+  // verification. The canonical receipt-verification route is /verify-receipt
+  // (Tier 2 above). Kept here at low priority so the route meaning matches the
+  // route function.
   { path: "/verify", changeFrequency: "monthly", priority: 0.5 },
   // Tier 8: Dashboard (0.3, noindex gated)
   { path: "/dashboard", changeFrequency: "monthly", priority: 0.3 },
