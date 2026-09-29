@@ -47,19 +47,33 @@ const FIELD_LIMITS = {
   standard_wish: MAX_ENUM_LEN,
   interest: MAX_ENUM_LEN,
   contact: MAX_FREETEXT_LEN,
+  consent_version: MAX_ENUM_LEN,
 } as const;
 
 type SurveyFieldKey = keyof typeof FIELD_LIMITS;
 const FIELD_KEYS = Object.keys(FIELD_LIMITS) as SurveyFieldKey[];
 
-// The three questions the form marks as required (SurveyClient).
-const REQUIRED_FIELDS: SurveyFieldKey[] = ["domain", "has_sensor_data", "pain_point"];
+// Consent evidence (Patch 2).
+//
+// consent_version is supplied by the client and must name wording this server
+// actually supports — an unrecognised value is rejected rather than stored, so
+// the row can never claim agreement with text that does not exist.
+//
+// consent_at is NOT client-supplied. It is generated here, on the server, at
+// the moment the submission is accepted. The field is absent from FIELD_LIMITS
+// on purpose: a client that tried to send consent_at would be rejected by the
+// unknown-key check, which is what makes the timestamp unforgeable.
+const SUPPORTED_CONSENT_VERSIONS = ["survey-consent-v1"] as const;
+type ConsentVersion = (typeof SUPPORTED_CONSENT_VERSIONS)[number];
+
+// The three questions the form marks as required (SurveyClient), plus consent.
+const REQUIRED_FIELDS: SurveyFieldKey[] = ["domain", "has_sensor_data", "pain_point", "consent_version"];
 
 type SurveyFields = Record<SurveyFieldKey, string | null>;
 
 function sanitizeSurveyPayload(
   raw: unknown,
-): { ok: true; fields: SurveyFields } | { ok: false; error: string } {
+): { ok: true; fields: SurveyFields; consentVersion: ConsentVersion } | { ok: false; error: string } {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     return { ok: false, error: "Invalid payload" };
   }
@@ -94,7 +108,18 @@ function sanitizeSurveyPayload(
     }
   }
 
-  return { ok: true, fields };
+  // Consent must name wording this server actually supports. An unrecognised
+  // version is refused rather than persisted, so a stored row can never imply
+  // agreement with consent text that was never presented.
+  const consentVersion = fields.consent_version;
+  if (
+    !consentVersion ||
+    !(SUPPORTED_CONSENT_VERSIONS as readonly string[]).includes(consentVersion)
+  ) {
+    return { ok: false, error: "Unrecognised consent version" };
+  }
+
+  return { ok: true, fields, consentVersion: consentVersion as ConsentVersion };
 }
 
 // ── Discord notification (secondary side effect — never fails the request) ──
@@ -183,6 +208,9 @@ export async function POST(req: Request) {
   }
   const fields = sanitized.fields;
   const contactPresent = Boolean(fields.contact);
+  // Server-generated consent evidence. The client's own timestamp is never read
+  // — consent_at is absent from FIELD_LIMITS, so a client cannot supply it.
+  const consentAt = new Date().toISOString();
 
   // ── Persistence — the source of truth ──
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -208,7 +236,7 @@ export async function POST(req: Request) {
         Authorization: `Bearer ${anonKey}`,
         Prefer: "return=minimal",
       },
-      body: JSON.stringify(fields),
+      body: JSON.stringify({ ...fields, consent_at: consentAt }),
     });
 
     if (!res.ok) {

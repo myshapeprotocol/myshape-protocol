@@ -498,6 +498,13 @@
   .hero-demo-firststep {
     max-width: 100%;
   }
+
+  /* Mobile reading order: "Verify a Receipt" is the short, primary action and
+     reads first; the long "Reproduce it without the SDK" sits closest to the
+     scrolling marquee below. Desktop keeps the DOM order (left/right idiom),
+     so this is scoped to narrow viewports only. */
+  .hero-demo-firststeps .hero-demo-firststep:first-child { order: 2; }
+  .hero-demo-firststeps .hero-demo-firststep:last-child { order: 1; }
 }
 
 .hero-demo-title {

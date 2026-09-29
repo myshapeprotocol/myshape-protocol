@@ -243,6 +243,7 @@ function LabStats() {
    ═══════════════════════════════════════════════════════ */
 const CTAS = [
   { label: "Discovery Survey", sub: "5 minutes · Help us map the continuity landscape", href: "/lab/discovery-survey", color: "rgba(212,175,55,", icon: "🔬" },
+  { label: "Participate in the Research", sub: "1 minute · Testing, challenging, reproducing, or implementing", href: "/lab/research-participation", color: "rgba(144,200,255,", icon: "◎" },
   { label: "Protocol Playground", sub: "Live verification · No install · Verify receipts", href: "/lab/playground", color: "rgba(52,211,153,", icon: "🧪" },
 ];
 
@@ -394,6 +395,7 @@ const COLUMNS = [
       { t: "npx @thecontinuitylab/myshape demo", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
       { t: "Contribute Data", h: "/lab/contribute" },
       { t: "Discovery Survey", h: "/lab/discovery-survey" },
+      { t: "Participate in the Research", h: "/lab/research-participation" },
     ],
   },
   {

@@ -291,10 +291,10 @@ export default function PostClient() {
 
         <div className="mt-16 p-6 border border-[#90c8ff]/10 bg-[#90c8ff]/[0.02]">
           <p className="text-white/30 text-[11px] leading-relaxed mb-4">
-            <strong className="text-white/50">Research status (2026-09).</strong> CPS-0001 v1.0-RC1 is an open protocol draft with a reference verifier and experimental evidence engines. SDK 0.3.0 is evaluation-only and predates Batch-2D hardening. There is no live Genesis onboarding; current research participation is via the Discovery Survey.
+            <strong className="text-white/50">Research status (2026-09).</strong> CPS-0001 v1.0-RC1 is an open protocol draft with a reference verifier and experimental evidence engines. SDK 0.3.0 is evaluation-only and predates Batch-2D hardening. There is no live Genesis onboarding; the only public research intake is the Discovery Survey, a questionnaire that collects answers for research analysis and does not enroll anyone.
           </p>
           <p className="text-white/30 text-[11px]">
-            Repository: github.com/myshapeprotocol &middot; Verify a receipt: myshape.com/verify-receipt &middot; Research participation: thecontinuitylab.org/lab/discovery-survey
+            Repository: github.com/myshapeprotocol &middot; Verify a receipt: myshape.com/verify-receipt &middot; Research questionnaire: thecontinuitylab.org/lab/discovery-survey
           </p>
         </div>
 

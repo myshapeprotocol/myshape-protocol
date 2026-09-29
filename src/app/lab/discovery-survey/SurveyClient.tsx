@@ -37,8 +37,24 @@ function TextInput({ label, value, onChange }: { label: string; value: string; o
   );
 }
 
+// Consent wording version. Must match a version the server accepts
+// (SUPPORTED_CONSENT_VERSIONS in src/app/api/research/survey/route.ts).
+// Bump only when the wording below changes — the stored value is what proves
+// which text a respondent agreed to.
+const CONSENT_VERSION = "survey-consent-v1";
+
+// Project governance decision for the current research phase. This is a
+// project policy for this survey — not a scientific standard, and not a
+// legal requirement.
+const RETENTION_DAYS = 180;
+
+const WITHDRAWAL_EMAIL = "protocol@myshape.com";
+
 export default function SurveyClient() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [consented, setConsented] = useState(false);
   const [domain, setDomain] = useState("");
   const [role, setRole] = useState("");
   const [otherDomain, setOtherDomain] = useState("");
@@ -55,34 +71,77 @@ export default function SurveyClient() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (submitting) return;
+    // Client-side gate. The server independently rejects a submission whose
+    // consent_version is missing or unrecognised, so this is UX, not the
+    // enforcement point.
+    if (!consented) {
+      setSubmitError("Please agree to the research consent before submitting.");
+      return;
+    }
+    setSubmitting(true);
+    setSubmitError(null);
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/discovery_survey`, {
+      // P0 fix — transport through the server route, not the Supabase REST
+      // endpoint directly from the browser. The route is the source of truth:
+      // it applies the rate limiter (5/IP/hr), the request-size guard, the field
+      // allow-list, the per-field length caps and the required-field check,
+      // none of which were enforced by a direct browser insert. The Supabase
+      // anon key no longer needs to be referenced by this component.
+      const res = await fetch("/api/research/survey", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-          Prefer: "return=minimal",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           domain, role, other_domain: otherDomain, has_sensor_data: hasSensorData,
           frequency: freq, duration, data_flow: dataFlow, provenance,
           pain_point: pain, solution, standard_wish: standard, interest, contact,
+          consent_version: CONSENT_VERSION,
         }),
       });
-    } catch { /* fail silently */ }
-    setSent(true);
+
+      if (!res.ok) {
+        // Transport-level failure (429 rate limit, 400 validation, 5xx persistence).
+        // Never report success — a false "Thank you" would mean the response
+        // was never recorded.
+        setSubmitError("Your response could not be saved. Please try again.");
+        return;
+      }
+
+      const body = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+      if (!body || body.ok !== true) {
+        setSubmitError("Your response could not be saved. Please try again.");
+        return;
+      }
+
+      // Only an explicit { ok: true } from the route reaches this point.
+      setSent(true);
+    } catch {
+      // Network error — same honest-failure rule as above.
+      setSubmitError("Your response could not be saved. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (sent) {
     return (
       <div style={{ minHeight: "100dvh", background: "#051025", color: "#E6EDF7", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "system-ui, sans-serif" }}>
-        <div style={{ textAlign: "center", maxWidth: 400 }}>
+        <div style={{ textAlign: "center", maxWidth: 440 }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>✓</div>
           <h2 style={{ fontSize: 22, fontWeight: 300, margin: "0 0 8px", color: "#60A5FA" }}>Thank you</h2>
-          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7, marginBottom: 24 }}>
-            Your response helps us understand whether this problem is real — or isn't.
+          <p style={{ fontSize: 13, color: "#94A3B8", lineHeight: 1.7, marginBottom: 20 }}>
+            Your response helps us understand whether this problem is real — or isn&apos;t.
           </p>
+          <div style={{ textAlign: "left", padding: "14px 16px", border: "1px solid rgba(96,165,250,0.2)", background: "rgba(96,165,250,0.04)", borderRadius: 4, marginBottom: 20 }}>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, margin: "0 0 10px" }}>
+              <strong style={{ color: "rgba(255,255,255,0.8)", fontWeight: 500 }}>What happens next</strong>
+            </p>
+            <ul style={{ margin: 0, paddingLeft: 18, color: "rgba(255,255,255,0.5)", fontSize: 12, lineHeight: 1.8 }}>
+              <li>This was a research questionnaire. Submitting it does not enroll you in anything — it is not a registration, recruitment or enrollment application, or participation in EV-000 or any other study.</li>
+              <li>Your response is retained for {RETENTION_DAYS} days from submission, then deleted according to the questionnaire&apos;s data-handling policy.</li>
+              <li>You can ask us to stop contacting you, or ask us to delete this response. Email <a href={`mailto:${WITHDRAWAL_EMAIL}`} style={{ color: "#60A5FA" }}>{WITHDRAWAL_EMAIL}</a> and tell us which you mean. If you did not leave contact details, include anything you remember about the submission and we will locate it.</li>
+            </ul>
+          </div>
           <a href="/lab" style={{ display: "inline-block", padding: "10px 28px", border: "1px solid rgba(96,165,250,0.3)", color: "rgba(96,165,250,0.7)", fontSize: 13, textDecoration: "none", borderRadius: 4 }}>← Back to The Continuity Lab</a>
         </div>
       </div>
@@ -99,6 +158,30 @@ export default function SurveyClient() {
         </p>
 
         <form onSubmit={submit}>
+          {/* Research consent — required before any answer is submitted.
+              The wording below is the text that CONSENT_VERSION refers to. */}
+          <div style={{ marginBottom: 32, padding: "16px", border: "1px solid rgba(96,165,250,0.25)", background: "rgba(96,165,250,0.04)", borderRadius: 4 }}>
+            <h3 style={{ fontSize: 13, fontWeight: 500, color: "#60A5FA", margin: "0 0 12px", letterSpacing: "0.05em", textTransform: "uppercase" }}>Research consent</h3>
+            <ul style={{ margin: "0 0 14px", paddingLeft: 18, color: "rgba(255,255,255,0.6)", fontSize: 12, lineHeight: 1.8 }}>
+              <li>This is a research questionnaire. It is not a registration, not a recruitment or enrollment application, and not participation in EV-000 or any other study.</li>
+              <li>We collect the answers you give in this questionnaire, plus the submission time.</li>
+              <li>Your answers are used for continuity research and research analysis.</li>
+              <li>Responses are retained for {RETENTION_DAYS} days from submission, then deleted according to the questionnaire&apos;s data-handling policy.</li>
+              <li>You can ask us to stop contacting you.</li>
+              <li>You can ask us to delete a questionnaire response you already submitted. To reach us, email <a href={`mailto:${WITHDRAWAL_EMAIL}`} style={{ color: "#60A5FA" }}>{WITHDRAWAL_EMAIL}</a>. These are two different requests — tell us which one you mean.</li>
+              <li>If you leave the optional follow-up contact blank, your answers are still recorded; we just will not be able to contact you about them.</li>
+            </ul>
+            <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.6 }}>
+              <input
+                type="checkbox"
+                checked={consented}
+                onChange={(e) => { setConsented(e.target.checked); setSubmitError(null); }}
+                style={{ marginTop: 2, width: 14, height: 14, accentColor: "#60A5FA", flexShrink: 0 }}
+              />
+              <span>I have read the above and consent to my answers being collected and used as described.</span>
+            </label>
+          </div>
+
           <div style={{ marginBottom: 32 }}>
             <h3 style={{ fontSize: 13, fontWeight: 500, color: "#60A5FA", margin: "0 0 12px", letterSpacing: "0.05em", textTransform: "uppercase" }}>Part 1 — Your Domain</h3>
             <Select label="1. What domain do you work in?" options={DOMAINS} value={domain} onChange={setDomain} required />
@@ -129,12 +212,18 @@ export default function SurveyClient() {
           <div style={{ marginBottom: 32 }}>
             <h3 style={{ fontSize: 13, fontWeight: 500, color: "#60A5FA", margin: "0 0 12px", letterSpacing: "0.05em", textTransform: "uppercase" }}>Part 5 — Curiosity</h3>
             <Select label="11. Curious enough to read a one-page protocol spec?" options={INTEREST} value={interest} onChange={setInterest} />
-            <TextInput label="12. Contact (optional) — Email, WeChat, or DM" value={contact} onChange={setContact} />
+            <TextInput label="12. Optional follow-up contact — Email, WeChat, or DM. Used only to contact you about this questionnaire. It is not a registration, participant ID, enrollment, membership, or EV-000 signup." value={contact} onChange={setContact} />
           </div>
 
-          <button type="submit"
-            style={{ width: "100%", padding: "14px 0", fontSize: 14, color: "#051025", background: "#60A5FA", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 500 }}>
-            Submit
+          {submitError && (
+            <div role="alert" style={{ marginBottom: 16, padding: "12px 14px", border: "1px solid rgba(248, 81, 73, 0.4)", background: "rgba(248, 81, 73, 0.08)", borderRadius: 4, color: "#f85149", fontSize: 12, lineHeight: 1.6 }}>
+              {submitError}
+            </div>
+          )}
+
+          <button type="submit" disabled={submitting}
+            style={{ width: "100%", padding: "14px 0", fontSize: 14, color: "#051025", background: submitting ? "rgba(96,165,250,0.5)" : "#60A5FA", border: "none", borderRadius: 6, cursor: submitting ? "not-allowed" : "pointer", fontWeight: 500 }}>
+            {submitting ? "Submitting…" : "Submit"}
           </button>
         </form>
 
