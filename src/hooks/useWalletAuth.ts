@@ -103,82 +103,6 @@ export function useWalletAuth(): WalletAuthState {
     }
   }, []);
 
-  const connect = useCallback(async (opts?: { email?: string }): Promise<WalletConnectResult | null> => {
-    const isMock = isMockMode();
-    try {
-      setStatus("connecting");
-      setError("");
-
-      if (isMock) {
-        await new Promise((r) => setTimeout(r, 600));
-        setStatus("signing");
-        await new Promise((r) => setTimeout(r, 500));
-        const addr = mockAddress();
-
-        setStatus("verifying");
-        const domain = window.location.host;
-        const now = new Date().toISOString();
-        const message = `${domain} wants you to sign in with your Ethereum account:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: ${BASE_MAINNET}\nNonce: ${Date.now()}\nIssued At: ${now}`;
-        const mockSig = "0x" + Array.from({ length: 130 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
-
-        let siweData: Record<string, unknown> = { skip_otp: true, is_genesis: false };
-        try {
-          const res = await fetch("/api/auth/siwe", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message, signature: mockSig, address: addr, email: opts?.email || undefined }),
-          });
-          siweData = await res.json();
-        } catch { /* fallback to defaults */ }
-        return finalizeConnection(addr, siweData, opts?.email);
-      }
-
-      if (!window.ethereum) {
-        setError("No EIP-1193 wallet detected. Install any Web3 wallet.");
-        setStatus("error");
-        return null;
-      }
-
-      await ensureBaseChain();
-
-      const accounts = (await window.ethereum.request({ method: "eth_requestAccounts" })) as string[];
-      if (!accounts?.length) {
-        setError("No accounts authorized.");
-        setStatus("error");
-        return null;
-      }
-      const addr = accounts[0];
-
-      setStatus("signing");
-      const domain = window.location.host;
-      const now = new Date().toISOString();
-      const message = `${domain} wants you to sign in:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: ${BASE_MAINNET}\nNonce: ${Date.now()}\nIssued At: ${now}`;
-
-      const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
-      const signer = await provider.getSigner();
-      const signature = await signer.signMessage(message);
-
-      setStatus("verifying");
-      const res = await fetch("/api/auth/siwe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, signature, address: addr, email: opts?.email || undefined }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Signature verification failed");
-        setStatus("error");
-        return null;
-      }
-
-      return finalizeConnection(addr, data, opts?.email);
-    } catch (err: unknown) {
-      setError((err as Error).message?.slice(0, 100) || "Connection failed");
-      setStatus("error");
-      return null;
-    }
-  }, []);
-
   const finalizeConnection = (addr: string, data: Record<string, unknown>, email?: string): WalletConnectResult => {
     setAddress(addr);
     setStatus("done");
@@ -207,6 +131,88 @@ export function useWalletAuth(): WalletAuthState {
       status: (data.status as string) || "ACTIVE",
     };
   };
+
+  const connect = useCallback(async (opts?: { email?: string }): Promise<WalletConnectResult | null> => {
+    const isMock = isMockMode();
+    try {
+      setStatus("connecting");
+      setError("");
+
+      if (isMock) {
+        await new Promise((r) => setTimeout(r, 600));
+        setStatus("signing");
+        await new Promise((r) => setTimeout(r, 500));
+        const addr = mockAddress();
+
+        setStatus("verifying");
+        await new Promise((r) => setTimeout(r, 500));
+        // P0-AUTH: mock mode never touches the real auth endpoint.
+        // The previous demo path POSTed a forged SIWE message (client
+        // Date.now() nonce + random signature) to /api/auth/siwe, which the
+        // server now correctly rejects. Simulating success locally keeps the
+        // demo UX without producing client-generated SIWE nonces.
+        const siweData: Record<string, unknown> = { skip_otp: true, is_genesis: false };
+        return finalizeConnection(addr, siweData, opts?.email);
+      }
+
+      if (!window.ethereum) {
+        setError("No EIP-1193 wallet detected. Install any Web3 wallet.");
+        setStatus("error");
+        return null;
+      }
+
+      await ensureBaseChain();
+
+      const accounts = (await window.ethereum.request({ method: "eth_requestAccounts" })) as string[];
+      if (!accounts?.length) {
+        setError("No accounts authorized.");
+        setStatus("error");
+        return null;
+      }
+      const addr = accounts[0];
+
+      setStatus("signing");
+      const domain = window.location.host;
+
+      // Fetch server-generated nonce (replay protection)
+      const nonceRes = await fetch("/api/auth/siwe/nonce", { method: "GET" });
+      if (!nonceRes.ok) {
+        setError("Failed to get authentication nonce. Please try again.");
+        setStatus("error");
+        return null;
+      }
+      const nonceData = await nonceRes.json();
+      const nonce = nonceData.nonce;
+
+      const now = new Date();
+      const expirationTime = new Date(now.getTime() + 5 * 60 * 1000); // 5 min TTL
+
+      const message = `${domain} wants you to sign in:\n${addr}\n\n${SIWE_STATEMENT}\n\nURI: https://${domain}\nVersion: 1\nChain ID: ${BASE_MAINNET}\nNonce: ${nonce}\nIssued At: ${now.toISOString()}\nExpiration Time: ${expirationTime.toISOString()}`;
+
+      const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
+      const signer = await provider.getSigner();
+      const signature = await signer.signMessage(message);
+
+      setStatus("verifying");
+      const res = await fetch("/api/auth/siwe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, signature, address: addr, email: opts?.email || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Signature verification failed");
+        setStatus("error");
+        return null;
+      }
+
+      return finalizeConnection(addr, data, opts?.email);
+    } catch (err: unknown) {
+      setError((err as Error).message?.slice(0, 100) || "Connection failed");
+      setStatus("error");
+      return null;
+    }
+  }, []);
 
   const disconnect = useCallback(() => {
     setAddress(null);
