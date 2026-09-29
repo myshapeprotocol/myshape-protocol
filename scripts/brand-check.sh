@@ -56,7 +56,33 @@ for PATTERN in "${BANNED[@]}"; do
       RAW_MATCHES=$(grep -Hin "$PATTERN" "$file" 2>/dev/null || true)
             # 排除: 技术术语/HTML标签/HTTP fetch body；以及合法 DOM API document.body.* 调用
       # （明确例外：只匹配含 document.body 的行，不影响任何其它 banned-word 检测）
-            MATCHES=$(echo "$RAW_MATCHES" | grep -v -i -E 'document\.body|data.body|non.biometric|no[[:space:]]+biometric|Particle.Body|body[: ].|BodyInit|<body|</body|body \{|biometric, device attestation, reputation|biometric binding is enforced|Post Body$|the-post-biometric-era-2026|dqs-body|Post-Biometric' || true)
+            MATCHES=$(echo "$RAW_MATCHES" | grep -v -i -E 'document\.body|data.body|non.biometric|no[[:space:]]+biometric|Particle.Body|BodyInit|<body|</body|biometric, device attestation, reputation|biometric binding is enforced|Post Body$|the-post-biometric-era-2026|dqs-body|Post-Biometric' || true)
+      if [ -n "$MATCHES" ]; then
+        # Occurrence-level suppression for the `body` rule only.
+        #
+        # Invariant: a match may be suppressed only when the matched occurrence
+        # itself is demonstrably technical. An entire line is never dropped
+        # merely because some other technical occurrence exists on that line.
+        #
+        # Technique: replace demonstrably technical `body` occurrences with a
+        # harmless placeholder, then rescan the result. Any banned occurrence
+        # that survives the placeholder substitution is a genuine violation and
+        # keeps the line in MATCHES.
+        #
+        # Technical contexts recognised (deliberately narrow, no brace matching,
+        # no broad object-key bypass):
+      #   body.foo / body?.foo / body!.foo     member access, optional, non-null
+        #   const|let|var body                    declaration
+        #   f(body) / f(body, x) / f(body: T)     call argument, parameter
+        #   body = value                          assignment
+        #   return body                           bare identifier return
+        #   (body)                                parenthesised argument
+        if [ "$PATTERN" = '\bbody\b' ]; then
+          TECH_BODY='(\bbody\s*[?!]*\.[A-Za-z_$])|(\b(const|let|var)\s+body\b)|(\(\s*body\s*[,):])|(\bbody\s*=[^=])|(\breturn\s+body\b)|(\(body\))'
+          SURVIVING=$(printf '%s\n' "$MATCHES" | sed -E "s/${TECH_BODY}/__TECH_BODY__/g" | grep -i -E "$PATTERN" || true)
+          MATCHES="$SURVIVING"
+        fi
+      fi
       if [ -n "$MATCHES" ]; then
         VIOLATIONS=$((VIOLATIONS + 1))
         echo -e "${RED}✘ BANNED WORD${NC} found in: ${YELLOW}$file${NC}"
