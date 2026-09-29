@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "conservativeFalsePositives": [
+    {
+      "id": "cfp-requestinit-route-test",
+      "rule": "\\bbody\\b",
+      "file": "src/app/api/auth/siwe/route.test.ts",
+      "contentSha256": "e35cbe428aaa9ca779744676cde56ee62662a91787bd541c498c48e9e4307f17",
+      "exactText": "    body: JSON.stringify(body),",
+      "reason": "Fetch request payload object key; not natural-language usage",
+      "addedBy": "Atlas-approved",
+      "addedOn": "2026-09-29"
+    },
+    {
+      "id": "cfp-requestinit-usewalletauth",
+      "rule": "\\bbody\\b",
+      "file": "src/hooks/useWalletAuth.ts",
+      "contentSha256": "facc70b8652c83ac7634e84c773755d81e4b64d332de6205601d670d17eff274",
+      "exactText": "        body: JSON.stringify({ message, signature, address: addr, email: opts?.email || undefined }),",
+      "reason": "Fetch request payload object key; not natural-language usage",
+      "addedBy": "Atlas-approved",
+      "addedOn": "2026-09-29"
+    }
+  ]
+}
