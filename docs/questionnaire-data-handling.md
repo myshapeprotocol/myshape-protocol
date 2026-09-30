@@ -131,3 +131,130 @@ To help us locate the response, include whatever you have:
 Contact details make a response easier to locate and verify, but they are not a
 technical precondition for a deletion request. A request can still be made
 without them.
+
+---
+
+# Operator access
+
+This section describes what the repository actually provides, as distinct from
+what the governance sections above require. Where a capability is described as
+manual, it means a person performs the task by hand in the Supabase Dashboard.
+It does not mean an automated process exists in this repository.
+
+## Where the data lives
+
+Both tables live in the same Supabase project as the rest of the application.
+
+| Instrument | Table |
+|---|---|
+| Discovery Questionnaire | `discovery_survey` |
+| Research Participation | `research_participation` |
+
+Configuration comes from `NEXT_PUBLIC_SUPABASE_URL`. The public submission
+routes write using the public anon key. The operator read path uses
+`SUPABASE_SERVICE_ROLE_KEY`.
+
+## How responses are read
+
+There is no admin dashboard for these tables. Two supported paths exist.
+
+### 1. Operator read page
+
+    /lab/research-responses/login          sign-in form
+    /lab/research-responses?instrument=survey
+    /lab/research-responses?instrument=participation
+
+The page requires an `OPERATOR_SECRET` environment variable. Submitting it
+issues an HttpOnly, SameSite=Strict session cookie scoped to
+`/lab/research-responses`, valid for one hour. Without a valid session the page
+returns 404 and performs no database read.
+
+The `instrument` parameter is matched against a fixed two-entry lookup. An
+unknown or missing value returns 404. A caller cannot supply a table name.
+
+### 2. Supabase Dashboard
+
+The Table Editor or SQL Editor remains available and is the fallback if the
+operator page is unavailable. The two tables are separate and are queried
+independently.
+
+## Finding people who asked to be contacted
+
+`research_participation` records the opt-in in its own column, so the set is
+explicit:
+
+    SELECT * FROM research_participation
+    WHERE wants_contact = 'yes'
+    ORDER BY created_at DESC;
+
+`discovery_survey` has no such column. Contact presence is the only signal:
+
+    SELECT * FROM discovery_survey
+    WHERE contact IS NOT NULL
+    ORDER BY created_at DESC;
+
+Both are also available as a filter link on the operator page
+(`has_contact=1`, and `wants_contact=yes` for participation only).
+
+## Withdrawal and deletion — what actually exists
+
+There is **no deletion endpoint, no deletion script, and no deletion audit
+trail** in this repository. There is also no "do not contact" column on either
+table. Deletion is performed manually.
+
+### Stop future contact
+
+This is **not currently trackable in the database.** Neither table has a column
+for "already asked not to contact", so there is no way to record or verify that
+a request has been handled. In practice the only record is whatever the
+operator keeps outside the database.
+
+This is a known gap, not an implemented capability.
+
+### Delete a response
+
+Deletion is possible through the Supabase Dashboard. Neither table defines a
+`FOR DELETE` policy, so the ability to delete relies on the service role's
+default `BYPASSRLS` rather than on an explicit grant in the schema.
+
+Deletion leaves no record that it happened.
+
+### Locating a response
+
+There is no participant identifier. To locate a response, an operator must use
+whatever the person provides:
+
+- the contact value they entered, if any;
+- an approximate submission time;
+- recognisable answers.
+
+Contact is not a technical precondition for a deletion request. Without any of
+the above, locating one specific response is not practical.
+
+## What is manual today
+
+- Reading responses, via the operator page or the Supabase Dashboard
+- Locating a response for a withdrawal request
+- Performing a deletion
+- Recording that a "stop future contact" request was handled
+- Verifying consent coverage across responses
+
+## What does not exist
+
+- A participant identifier of any kind
+- An account or authentication for respondents
+- A self-service deletion portal
+- A deletion endpoint, script, or audit trail
+- A "do not contact" flag on either table
+- Automated retention enforcement — the 180-day policy is documented above
+  but is not implemented as a job
+- A paginated or exportable operator view
+- Per-operator accounts or audit of who read what
+
+## Known security limitation
+
+Both tables have an `allow_anon_insert` policy with `WITH CHECK (true)`, which
+permits an unconstrained direct insert. A caller holding the public anon key
+can bypass the submission API and write a row without `consent_at`. This is a
+known Security Reality item and is not addressed by the operator read path.
+
