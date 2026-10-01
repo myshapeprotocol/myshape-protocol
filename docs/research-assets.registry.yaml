@@ -1,0 +1,290 @@
+# Research Asset Registry
+# ============================================================
+# GOVERNANCE SSOT for MyShape / The Continuity Lab research assets.
+#
+# This file is authoritative. Any future database is a disposable
+# operational read model rebuilt from this file. On conflict this
+# file wins and the database is treated as wrong.
+#
+# No value here may be inferred. Every governance or world-state
+# assertion carries evidence. Where evidence is insufficient the
+# field is explicitly null with a resolution marker and the
+# question stays open.
+#
+# Structure: Asset -> Version -> Surface
+#   asset_id       stable human-facing identity
+#   version_id     stable internal identity, immutable
+#   version_label  human-readable label, nullable
+#   A surface reaches its version only through version_id and
+#   never carries asset_id.
+#
+# The r-index in version_id is record-creation order only. It is
+# not a version ordering. Version ordering may only use
+# version_label, and null labels are excluded from comparison.
+#
+# The relationship between a version and its asset comes from the
+# data structure, never from parsing the version_id prefix.
+# ============================================================
+
+schema_version: 1
+
+assets:
+
+  - asset_id: RN-001
+    asset_type: research_note
+    canonical_title: "RN-001  The Continuity Problem"
+    lifecycle_status: active
+    evidence:
+      - locator: "ROADMAP.md:21"
+        value: "RN-001 | The Continuity Problem | Published"
+      - locator: "PROTOCOL_STATUS.md:88"
+        value: "RN-001 | The Continuity Problem"
+      - locator: "src/app/research/notes/001-the-continuity-problem/page.tsx:5"
+        value: "title: Research Note #001  The Continuity Problem"
+    versions:
+      - version_id: rn-001-r01
+        version_label: null
+        version_resolution: unresolved
+        version_label_note: "No version evidence located. The document is a pre-submission LaTeX package with no version marker."
+        lifecycle_status: published
+        released_on: null
+        evidence:
+          - locator: "ROADMAP.md:21"
+            value: "RN-001 Published; no version label present in any index entry"
+          - locator: "papers/arxiv-rn-001/README.md:1"
+            value: "candidate source; arXiv submission package"
+        source:
+          kind: directory
+          path: papers/arxiv-rn-001
+        source_resolution: candidate
+        source_candidate_note: "papers/arxiv-rn-001/README.md:1 reads arXiv Submission Package, The Continuity Problem. The directory name and title match this asset, but the document set is a submission package and its status as canonical source is not asserted anywhere in the repository."
+        source_commit: null
+        source_commit_note: "The canonical source is touched by 3 commits. source_commit is populated only when a source is established by exactly one commit, so it stays null. A last-modified commit is not a version source commit."
+        surfaces:
+          - brand: continuity-lab
+            canonical_url: "https://thecontinuitylab.org/research/notes/001-the-continuity-problem"
+            route_path: "src/app/lab/research/notes/001-the-continuity-problem"
+            status: live
+            last_verified_at: null
+            indexed_in: []
+            evidence:
+              - locator: "src/app/lab/research/notes/001-the-continuity-problem/page.tsx:8"
+                value: "alternates.canonical for the Continuity Lab host"
+          - brand: myshape
+            canonical_url: "https://www.myshape.com/research/notes/001-the-continuity-problem"
+            route_path: "src/app/research/notes/001-the-continuity-problem"
+            status: live
+            last_verified_at: null
+            indexed_in:
+              - llms.txt
+            evidence:
+              - locator: "src/app/research/notes/001-the-continuity-problem/page.tsx:8"
+                value: "alternates.canonical for the MyShape host"
+              - locator: "public/llms.txt:12"
+                value: "RN-001: The Continuity Problem"
+  - asset_id: RN-002
+    asset_type: research_note
+    canonical_title: "RN-002  PES Benchmark v0.2"
+    lifecycle_status: active
+    evidence:
+      - locator: "ROADMAP.md:22"
+        value: "RN-002 | PES Benchmark v0.2 | Published"
+      - locator: "PROTOCOL_STATUS.md:89"
+        value: "RN-002 | PES Benchmark v0.2"
+      - locator: "src/app/research/notes/002-pes-benchmark/page.tsx:5"
+        value: "title: RN-002  PES Benchmark v0.2"
+    versions:
+      - version_id: rn-002-r01
+        version_label: v0.2
+        version_resolution: resolved
+        version_label_note: "The version label appears in the asset title itself and in every index entry. It is a stated fact, not an inference."
+        lifecycle_status: published
+        released_on: null
+        released_on_note: "Remains null by locked governance decision. Three conflicting dates exist and none is authoritative: the page passes published 2026.07.10 to ResearchMeta, source_commit 4612893a is dated 2026-07-15, and the document header states July 2026. released_on means only the date this version was released as this version; none of these three is that date."
+        evidence:
+          - locator: "ROADMAP.md:22"
+            value: "version label v0.2 stated in the asset title"
+          - locator: "public/llms.txt:11"
+            value: "RN-002: PES Benchmark v0.2"
+        source:
+          kind: repo_paths
+          paths:
+            - papers/rn-002/pes-benchmark-v0.2-article.md
+            - papers/rn-002/cover.png
+            - papers/rn-002/cover.html
+        source_resolution: resolved
+        source_commit: 4612893a
+        source_commit_note: "The canonical source is touched by exactly 1 commit, so the establishing commit is unambiguous. Commit 4612893a, 2026-07-15, docs: RN-002 paper assets."
+        surfaces:
+          - brand: continuity-lab
+            canonical_url: "https://thecontinuitylab.org/research/notes/002-pes-benchmark"
+            route_path: "src/app/lab/research/notes/002-pes-benchmark"
+            status: live
+            last_verified_at: null
+            indexed_in: []
+            evidence:
+              - locator: "src/app/lab/research/notes/002-pes-benchmark/page.tsx:8"
+                value: "alternates.canonical for the Continuity Lab host"
+          - brand: myshape
+            canonical_url: "https://www.myshape.com/research/notes/002-pes-benchmark"
+            route_path: "src/app/research/notes/002-pes-benchmark"
+            status: live
+            last_verified_at: null
+            indexed_in:
+              - llms.txt
+            evidence:
+              - locator: "src/app/research/notes/002-pes-benchmark/page.tsx:8"
+                value: "alternates.canonical for the MyShape host"
+              - locator: "public/llms.txt:11"
+                value: "RN-002: PES Benchmark v0.2"
+  - asset_id: RN-003
+    asset_type: research_note
+    canonical_title: "RN-003  Cross-Modal Binding"
+    lifecycle_status: active
+    evidence:
+      - locator: "ROADMAP.md:23"
+        value: "RN-003 | Cross-Modal Binding (477 runs) | Published"
+      - locator: "PROTOCOL_STATUS.md:90"
+        value: "RN-003 | Cross-Modal Binding (477 runs)"
+      - locator: "src/app/research/notes/003-cross-modal-binding/page.tsx:5"
+        value: "title: RN-003  Cross-Modal Binding"
+    versions:
+      - version_id: rn-003-r01
+        version_label: null
+        version_resolution: unresolved
+        version_label_note: "No version evidence located."
+        lifecycle_status: published
+        released_on: null
+        evidence:
+          - locator: "ROADMAP.md:23"
+            value: "RN-003 Published; no version label present in any index entry"
+          - locator: "docs/RN-004-cps-0001-evolution.md:7"
+            value: "relative link to RN-003-cross-modal-binding; target file absent from the repository"
+        source: null
+        source_resolution: unresolved
+        source_unresolved_note: "No canonical source exists. docs/RN-003-cross-modal-binding.md is absent from the repository, yet it is referenced as a relative link from docs/RN-004-cps-0001-evolution.md at line 7 and line 167. The originating document cannot be located."
+        source_commit: null
+        conflicts:
+          - field: run_count
+            resolution: unresolved
+            conflict_note: "Two different experiment counts are published. Neither is selected here. Resolution requires a human to edit the registry and remove this entry."
+            evidence:
+              - locator: "ROADMAP.md:23"
+                value: "Cross-Modal Binding (477 runs)"
+              - locator: "PROTOCOL_STATUS.md:90"
+                value: "Cross-Modal Binding (477 runs)"
+              - locator: "public/llms.txt:10"
+                value: "RN-003 Cross-Modal Binding, 576-run validation"
+        surfaces:
+          - brand: continuity-lab
+            canonical_url: "https://thecontinuitylab.org/research/notes/003-cross-modal-binding"
+            route_path: "src/app/lab/research/notes/003-cross-modal-binding"
+            status: live
+            last_verified_at: null
+            indexed_in: []
+            evidence:
+              - locator: "src/app/lab/research/notes/003-cross-modal-binding/page.tsx:8"
+                value: "alternates.canonical for the Continuity Lab host"
+          - brand: myshape
+            canonical_url: "https://www.myshape.com/research/notes/003-cross-modal-binding"
+            route_path: "src/app/research/notes/003-cross-modal-binding"
+            status: live
+            last_verified_at: null
+            indexed_in:
+              - llms.txt
+              - llms-full.txt
+            evidence:
+              - locator: "src/app/research/notes/003-cross-modal-binding/page.tsx:8"
+                value: "alternates.canonical for the MyShape host"
+              - locator: "public/llms.txt:10"
+                value: "RN-003: Cross-Modal Binding"
+              - locator: "public/llms-full.txt:128"
+                value: "RN-003 index entry"
+
+  - asset_id: RN-004
+    asset_type: research_note
+    canonical_title: "RN-004  From Human Verification to Continuity Infrastructure"
+    lifecycle_status: active
+    evidence:
+      - locator: "ROADMAP.md:24"
+        value: "RN-004 | From Human Verification to Continuity Infrastructure | Published"
+      - locator: "docs/RN-004-cps-0001-evolution.md:1"
+        value: "document heading, RN-004 From Human Verification to Continuity Infrastructure"
+    versions:
+      - version_id: rn-004-r01
+        version_label: null
+        version_resolution: unresolved
+        version_label_note: "No version evidence. The document contains no version marker. The version-like tokens present in it were each checked and none is this asset version: section headings 5.1 through 5.5, a reference to CPS-0001 as v1.0-RC, and a reference to RN-002 as v0.2."
+        lifecycle_status: published
+        released_on: null
+        released_on_note: "Remains null by locked governance decision. The document self-reports Published 2026-07-25 and source_commit d3bcb344 is dated 2026-07-25, but agreement between a document claim and the commit that introduced it is not independent corroboration of a version release date."
+        evidence:
+          - locator: "ROADMAP.md:24"
+            value: "RN-004 Published; no version label present"
+          - locator: "docs/RN-004-cps-0001-evolution.md:1"
+            value: "document heading; no version marker anywhere in the document"
+        source:
+          kind: file
+          path: docs/RN-004-cps-0001-evolution.md
+        source_resolution: resolved
+        source_commit: d3bcb344
+        source_commit_note: "The canonical source is touched by exactly 1 commit, so the establishing commit is unambiguous. Commit d3bcb344, 2026-07-25, feat: RN-004 and FD-002. That commit also introduced docs/FD-002-single-engine-plateau.md, so it is a source commit for two assets."
+        surfaces: []
+        surfaces_note: "This asset has no public surface. Confirmed by governance decision and by repository scan: the public route at research/notes/004 declares RFC-0001, and this asset appears in no index file."
+  - asset_id: RN-005
+    asset_type: research_note
+    canonical_title: "RN-005  Two-Stage Continuity Verification"
+    lifecycle_status: active
+    evidence:
+      - locator: "docs/RN-005-two-stage-continuity-verification.md:1"
+        value: "document heading, RN-005 Two-Stage Continuity Verification"
+      - locator: "src/app/research/notes/009-two-stage-continuity-verification/page.tsx:5"
+        value: "title: RN-005  Two-Stage Continuity Verification"
+    versions:
+      - version_id: rn-005-r01
+        version_label: null
+        version_resolution: unresolved
+        version_label_note: "Document line 5 reads Status Draft v0.1, which is a status qualifier rather than a standalone version label. Document lines 3, 81 and 98 use v0.2 to refer to CPS-0001, not to this asset. Document line 23 reads Two-stage decision rule (v0.2) and its attribution cannot be determined from the repository. The v0.2 attribution remains unresolved and is not used as this asset version label."
+        lifecycle_status: draft
+        released_on: null
+        implementation_baseline: 3a2680c
+        implementation_baseline_note: "Recorded as a separate, non-source field. The document cites commit 3a2680c as the CPS-0001 v0.2 implementation it was written against. This is an implementation reference, not this version source commit."
+        evidence:
+          - locator: "docs/RN-005-two-stage-continuity-verification.md:5"
+            value: "Status Draft v0.1; a status qualifier, not a standalone version label"
+          - locator: "docs/RN-005-two-stage-continuity-verification.md:98"
+            value: "v0.2 refers to CPS-0001, not to this asset"
+        source:
+          kind: file
+          path: docs/RN-005-two-stage-continuity-verification.md
+        source_resolution: resolved
+        source_commit: 17a29444
+        source_commit_note: "The canonical source is touched by exactly 1 commit, so the establishing commit is unambiguous. Commit 17a29444, 2026-08-16, docs: add RN-005 two-stage continuity research note."
+        conflicts:
+          - field: version_lifecycle_status
+            resolution: unresolved
+            conflict_note: "The existing public page metadata disagrees with the governance decision. The governance decision is authoritative and is recorded in lifecycle_status above. The page is not modified by this registry. Resolution requires a human decision recorded in the registry, not a silent page edit."
+            evidence:
+              - locator: "human governance decision"
+                value: "RN-005 version lifecycle is draft"
+              - locator: "src/app/research/notes/009-two-stage-continuity-verification/NoteClient.tsx"
+                value: "ResearchMeta artifactId RN-005, status Published, published 2026.08.16"
+        surfaces:
+          - brand: continuity-lab
+            canonical_url: "https://thecontinuitylab.org/research/notes/009-two-stage-continuity-verification"
+            route_path: "src/app/lab/research/notes/009-two-stage-continuity-verification"
+            status: live
+            last_verified_at: null
+            indexed_in: []
+            evidence:
+              - locator: "src/app/lab/research/notes/009-two-stage-continuity-verification/page.tsx:9"
+                value: "alternates.canonical for the Continuity Lab host"
+          - brand: myshape
+            canonical_url: "https://www.myshape.com/research/notes/009-two-stage-continuity-verification"
+            route_path: "src/app/research/notes/009-two-stage-continuity-verification"
+            status: live
+            last_verified_at: null
+            indexed_in: []
+            evidence:
+              - locator: "src/app/research/notes/009-two-stage-continuity-verification/page.tsx:9"
+                value: "alternates.canonical for the MyShape host"
