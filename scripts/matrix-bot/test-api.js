@@ -1,9 +1,17 @@
 #!/usr/bin/env node
 /**
  * Agnes API Diagnostic — test all request format variations
+ * Key is read from the AGNES_API_KEY environment variable.
  */
+const KEY = process.env.AGNES_API_KEY;
+
+// No credential is stored in this repository. Supply it at runtime.
+if (!KEY) {
+  console.error("AGNES_API_KEY is not set. Export it before running this diagnostic.");
+  process.exit(1);
+}
+
 const axios = require("axios");
-const KEY = "sk-NXYlKfhNEpYhkT0hPJOfInyNDPxUFs2RBlGKghYsi95hljeZ";
 const BASE = "https://api.agnes-ai.com";
 
 const models = ["deepseek-v4-pro", "deepseek-v4-pro".replace(/-/g, "_"), "gpt-4o", "claude-3-opus"];
