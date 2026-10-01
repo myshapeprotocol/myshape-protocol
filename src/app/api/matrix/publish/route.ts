@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { platform, content, title, url, imagePath } = await request.json();
+    const { platform, content, title, url } = await request.json();
 
     if (!platform || !content) {
       return NextResponse.json(
@@ -155,51 +155,6 @@ export async function POST(request: Request) {
           lifecycleState: "PUBLISHED",
           isReshareDisabledByAuthor: false,
         };
-
-        // Upload image if provided (LinkedIn image → media URN)
-        if (imagePath) {
-          const { readFileSync: rfs } = await import("node:fs");
-          const { resolve: r } = await import("node:path");
-          const imgData = rfs(r(process.cwd(), imagePath));
-
-          // ① Register upload
-          const initRes = await lfetch("https://api.linkedin.com/v2/images?action=initializeUpload", {
-            method: "POST",
-            headers: {
-              "Authorization": "Bearer " + userToken,
-              "Content-Type": "application/json",
-              "X-Restli-Protocol-Version": "2.0.0",
-              "LinkedIn-Version": "202406",
-            },
-            body: JSON.stringify({ initializeUploadRequest: { owner: orgUrn } }),
-          });
-          if (!initRes.ok) {
-            const e = await initRes.text();
-            throw new Error("LinkedIn image init failed: " + initRes.status + " " + e.slice(0, 200));
-          }
-          const initData = await initRes.json() as {
-            value?: { uploadUrl?: string; image?: string };
-          };
-          const uploadUrl = initData.value?.uploadUrl;
-          const imageUrn = initData.value?.image;
-          if (!uploadUrl || !imageUrn) {
-            throw new Error("LinkedIn image init: missing uploadUrl or image URN");
-          }
-
-          // ② PUT binary image
-          const putRes = await lfetch(uploadUrl, {
-            method: "PUT",
-            headers: { "Content-Type": "application/octet-stream" },
-            body: imgData,
-          });
-          if (!putRes.ok) {
-            throw new Error("LinkedIn image upload failed: " + putRes.status);
-          }
-
-          // ③ Attach image to post payload
-          postBody.content = { media: { id: imageUrn } };
-          console.log("[matrix/publish] LinkedIn image uploaded:", imageUrn);
-        }
 
         const postRes = await lfetch("https://api.linkedin.com/v2/posts", {
           method: "POST",
