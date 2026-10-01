@@ -396,9 +396,12 @@ export default function NoteClient() {
             </section>
 
             {/* ── Related Research ── */}
+            {/* Navigation only: DS-001 and BM-001 are the artifact pages that
+                support this note. No claim, metric or figure is introduced here. */}
             <RelatedResearch
               supportedBy={[
                 { id: "BM-001", label: "PES Benchmark v0.2", href: "/research/benchmarks" },
+                { id: "DS-001", label: "Continuity Dataset", href: "/research/dataset" },
               ]}
               referencedDecisions={[
                 { id: "DL-001", label: "PES threshold set at 0.40", href: "/research" },

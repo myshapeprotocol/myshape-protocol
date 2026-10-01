@@ -30,7 +30,28 @@ const ENGINES = [
   { engine: "VS-001", name: "Dual-Engine Pipeline", rate: "Passive observer + active challenge", slug: "/research/protocol-verify" },
 ];
 
-const DATASET = { id: "DS-001", name: "Continuity Dataset", status: "576 runs · 4 engines · HuggingFace", slug: "https://huggingface.co/TheContinuityLab/myshape-576" };
+const DATASET = { id: "DS-001", name: "Continuity Dataset", status: "576 runs · 4 engines · HuggingFace", slug: "/research/dataset", external: "https://huggingface.co/TheContinuityLab/myshape-576" };
+
+const BENCHMARKS = [
+  { id: "BM-001", title: "PES Benchmark v0.2", desc: "", slug: "/research/benchmarks" },
+];
+
+/**
+ * Navigation affordance rendered under a hub section heading. Lets an external
+ * researcher reach the collection index rather than only the few cards that
+ * fit on the hub itself. Pure navigation — carries no research claim.
+ */
+function SectionIndexLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="inline-block mb-5 pl-4 font-mono text-[11px] tracking-[0.15em] uppercase text-white/35 hover:text-white/60 transition-colors"
+      onMouseEnter={() => playTick(480, "sine", 0.04, 0.015)}
+    >
+      {label} →
+    </Link>
+  );
+}
 
 export default function ResearchClient() {
   return (
@@ -69,6 +90,7 @@ export default function ResearchClient() {
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#d29922]/70">Specifications</h2>
           </div>
           <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What would a standard for continuity look like?</p>
+          <SectionIndexLink href="/specs" label="All specifications" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {SPECS.map((s) => (
               <Link key={s.id} href={s.slug} className="rn-card" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
@@ -88,6 +110,7 @@ export default function ResearchClient() {
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#60A5FA]/70">Research Notes</h2>
           </div>
           <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What have we learned so far?</p>
+          <SectionIndexLink href="/research/notes" label="All notes" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {NOTES.map((n) => (
               <Link key={n.id} href={n.slug} className="rn-card" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
@@ -112,6 +135,24 @@ export default function ResearchClient() {
                 <div className="rn-card-num" style={{color:"rgba(100,116,139,0.6)"}}><span className="rn-card-dot" style={{background:"#64748B",boxShadow:"0 0 4px rgba(100,116,139,0.3)"}} />{r.id}</div>
                 <div className="rn-card-title">{r.title}</div>
                 <div className="rn-card-subtitle">{r.desc}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Benchmarks */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="w-1 h-1 rounded-full bg-[#f85149] shadow-[0_0_6px_rgba(248,81,73,0.4)]" />
+            <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#f85149]/70">Benchmarks</h2>
+          </div>
+          <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">What do the numbers actually say?</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {BENCHMARKS.map((b) => (
+              <Link key={b.id} href={b.slug} className="rn-card" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
+                <div className="rn-card-num"><span className="rn-card-dot" style={{background:"#f85149",boxShadow:"0 0 6px rgba(248,81,73,0.4)"}} />{b.id}</div>
+                <div className="rn-card-title">{b.title}</div>
+                <div className="rn-card-subtitle">{b.desc}</div>
               </Link>
             ))}
           </div>
@@ -142,10 +183,20 @@ export default function ResearchClient() {
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#a371f7]/70">Dataset</h2>
           </div>
           <p className="text-[11px] tracking-[0.05em] text-white/15 mb-5 pl-4">All the data, open and available.</p>
-          <a href={DATASET.slug} className="rn-card block max-w-md" target="_blank" rel="noopener noreferrer" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
+          <Link href={DATASET.slug} className="rn-card block max-w-md" onMouseEnter={() => playTick(520, "sine", 0.05, 0.02)}>
             <div className="rn-card-num"><span className="rn-card-dot" style={{background:"#a371f7",boxShadow:"0 0 6px rgba(163,113,247,0.5)"}} />{DATASET.id}</div>
             <div className="rn-card-title">{DATASET.name}</div>
             <div className="rn-card-subtitle">{DATASET.status}</div>
+            <div className="rn-card-date">Dataset page →</div>
+          </Link>
+          <a
+            href={DATASET.external}
+            className="inline-block mt-3 pl-4 font-mono text-[11px] tracking-[0.15em] uppercase text-white/35 hover:text-white/60 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => playTick(480, "sine", 0.04, 0.015)}
+          >
+            Raw data on HuggingFace ↗
           </a>
         </div>
 
@@ -155,6 +206,7 @@ export default function ResearchClient() {
             <span className="w-1 h-1 rounded-full bg-[#d4af37] shadow-[0_0_6px_rgba(212,175,55,0.4)]" />
             <h2 className="text-[11px] tracking-[0.4em] uppercase text-[#d4af37]/70">Open Questions</h2>
           </div>
+          <SectionIndexLink href="/research/open-questions" label="All open questions" />
           <Link href="/research/open-questions/001" className="research-agenda-card" onMouseEnter={() => playTick(720, "sine", 0.06, 0.025)}>
             <div className="research-agenda-card-label">OQ-001</div>
             <div className="research-agenda-card-title">Can continuity exist independently of identity?<span className="research-agenda-card-arrow">→</span></div>
