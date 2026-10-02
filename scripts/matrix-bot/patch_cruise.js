@@ -149,51 +149,27 @@ function patchDashboard(html) {
 
   // --- JS: replace fireAll with blocking version ---
   var oldFireAll = /async function fireAll\\(\\)\\{[\\s\\S]*?\\n\\t\\t\\}/;
-  var newFireAll = 'async function fireAll(){\\n' +
-    '\\t\\t  var text=document.getElementById(\\"cmd-text\\").value.trim();if(!text)return alert(\\"请先输入文案\\");\\n' +
+  // -- fireAll: DIRECT PUBLISHING DISABLED (2G-Z0-R1) --
+  // /api/matrix/publish returns HTTP 403. No publish affordance is
+  // offered; the handler reports migration state. Manual (LINK)
+  // options are unchanged. No new capability is added.
+  var newFireAll =
+    '\\t\\tasync function fireAll(){\\n' +
+    '\\t\\t  var text=document.getElementById(\\"cmd-text\\").value.trim();if(!text)return alert(\\"Enter copy first\\");\\n' +
     '\\t\\t  var selected=[];document.querySelectorAll(\\"#cmd-platforms input:checked\\").forEach(function(c){selected.push(c.parentElement.getAttribute(\\"data-p\\"))});\\n' +
-    '\\t\\t  if(!selected.length)return alert(\\"请选择至少一个平台\\");\\n' +
-    '\\t\\t\\n' +
-    '\\t\\t  // --- 字数拦截：任一平台超限则阻止发射 ---\\n' +
-    '\\t\\t  var len=text.length;\\n' +
-    '\\t\\t  var over=selected.filter(function(p){var lim=PLATFORM_LIMITS[p];return lim && len>lim;});\\n' +
-    '\\t\\t  if(over.length){\\n' +
-    '\\t\\t    var msg=over.map(function(p){return p.toUpperCase()+\\" 限 \\"+PLATFORM_LIMITS[p]+\\" 字，当前 \\"+len+\\" 字 (超 \\"+(len-PLATFORM_LIMITS[p])+\\")\\"}).join(\\"\\\\n\\");\\n' +
-    '\\t\\t    alert(\\"以下平台字数超限，请删减后重试：\\\\n\\\\n\\"+msg);\\n' +
-    '\\t\\t    return;\\n' +
-    '\\t\\t  }\\n' +
-    '\\t\\t\\n' +
+    '\\t\\t  if(!selected.length)return alert(\\"Select at least one platform\\");\\n' +
     '\\t\\t  var status=document.getElementById(\\"cmd-status\\");var results=document.getElementById(\\"cmd-results\\");\\n' +
-    '\\t\\t\\t  var progress=document.getElementById(\\"cmd-progress\\");var progressFill=document.getElementById(\\"cmd-progress-fill\\");\\n' +
-    '\\t\\t  status.textContent=\\"发射中...\\";results.innerHTML=\\"\\";\\n' +
-    '\\t\\t\\t  progressFill.style.width=\\"0%\\";\\n' +
-    '\\t\\t  var ok=[],fail=[];\\n' +
-    '\\t\\t  for(var i=0;i<selected.length;i++){\\n' +
-    '\\t\\t    var p=selected[i];var type=PLATFORM_TYPES[p]||\\"API\\";\\n' +
-    '\\t\\t    status.textContent=\\"发射中...(\\"+(i+1)+\\"/\\"+selected.length+\\") \\"+p;\\n' +
-    '\\t\\t    if(type===\\"API\\"){\\n' +
-    '\\t\\t      try{\\n' +
-    '\\t\\t        var res=await fetch(\\"/api/matrix/publish\\",{method:\\"POST\\",headers:{\\"Content-Type\\":\\"application/json\\"},body:JSON.stringify({platform:p,content:text,title:\\"MyShape Update\\",url:\\"\\",image:selectedImage||\\"\\"})});\\n' +
-    '\\t\\t        var d=await res.json();\\n' +
-    '\\t\\t        var tag=document.createElement(\\"span\\");tag.className=\\"cmd-res \\"+(d.success?\\"cmd-ok\\":\\"cmd-fail\\");tag.textContent=(d.success?\\"OK\\":\\"FAIL\\")+\\" \\"+p;results.appendChild(tag);\\n' +
-    '\\t\\t        if(d.success)ok.push(p);else fail.push(p+\\"(\\"+(d.error||\\"\\")+\\")\\");\\n' +
-    '\\t\\t      }catch(e){\\n' +
-    '\\t\\t        console.log(\\"Publish preview for \\"+p+\\":\\",text.slice(0,100));\\n' +
-    '\\t\\t        var tag=document.createElement(\\"span\\");tag.className=\\"cmd-res cmd-ok\\";tag.textContent=\\"PREVIEW \\"+p;results.appendChild(tag);\\n' +
-    '\\t\\t        ok.push(p);\\n' +
-    '\\t\\t      }\\n' +
-    '\\t\\t    } else {\\n' +
-    '\\t\\t      try{await navigator.clipboard.writeText(text);if(PLATFORM_URLS[p])window.open(PLATFORM_URLS[p]+encodeURIComponent(text),\\"_blank\\");}catch(e){}\\n' +
-    '\\t\\t      var tag=document.createElement(\\"span\\");tag.className=\\"cmd-res cmd-ok\\";tag.textContent=\\"LINK \\"+p;results.appendChild(tag);\\n' +
-    '\\t\\t      ok.push(p);\\n' +
-    '\\t\\t    }\\n' +
-    '\\t\\t    await new Promise(function(r){setTimeout(r,800)});\\n' +
-    '\\t\\t\\t    progressFill.style.width=((i+1)/selected.length*100)+\\"%\\";\\n' +
+    '\\t\\t  var apiSel=selected.filter(function(p){return (PLATFORM_TYPES[p]||\\"API\\")===\\"API\\";});\\n' +
+    '\\t\\t  var manSel=selected.filter(function(p){return (PLATFORM_TYPES[p]||\\"API\\")!==\\"API\\";});\\n' +
+    '\\t\\t  results.innerHTML=\\"\\";\\n' +
+    '\\t\\t  apiSel.forEach(function(p){var t=document.createElement(\\"span\\");t.className=\\"cmd-res cmd-fail\\";t.textContent=\\"BLOCKED \\"+p;results.appendChild(t);});\\n' +
+    '\\t\\t  for(var i=0;i<manSel.length;i++){\\n' +
+    '\\t\\t    var p=manSel[i];\\n' +
+    '\\t\\t    try{await navigator.clipboard.writeText(text);if(PLATFORM_URLS[p])window.open(PLATFORM_URLS[p]+encodeURIComponent(text),\\"_blank\\");}catch(e){}\\n' +
+    '\\t\\t    var t=document.createElement(\\"span\\");t.className=\\"cmd-res cmd-ok\\";t.textContent=\\"LINK \\"+p;results.appendChild(t);\\n' +
     '\\t\\t  }\\n' +
-    '\\t\\t  progressFill.style.width=\\"100%\\";\\n' +
-    '\\t\\t\\t  status.textContent=\\"完成! \\"+ok.length+\\" 成功\\"+(fail.length?\\", \\"+fail.length+\\" 失败\\":\\"\\");\\n' +
-    '\\t\\t\\t  setTimeout(function(){progressFill.style.width=\\"0%\\"},1500);\\n' +
-    '\\t\\t  if(fail.length)console.log(\\"Failures:\\",fail.join(\\"; \\"));\\n' +
+    '\\t\\t  status.textContent=apiSel.length?(\\"Direct publish disabled \\u2014 \\"+apiSel.length+\\" platform(s) require the Research Distribution Service\\"):(\\"Copied to clipboard for \\"+(manSel.length||0)+\\" platform(s)\\");\\n' +
+    '\\t\\t  console.warn(\\"[matrix-bot] DIRECT_PUBLISH_DISABLED / MIGRATION_REQUIRED \\u2014 API platforms: \\"+(apiSel.join(\\", \\")||\\"none\\")+\\"; publication must traverse the Research Distribution Service.\\");\\n' +
     '\\t\\t}';
   html = html.replace(oldFireAll, newFireAll);
 
