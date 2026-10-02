@@ -7,6 +7,21 @@ on:
     branches: [master, main]
 
 jobs:
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    # Fails on newly introduced hardcoded credentials. The pre-commit
+    # hook (scripts/ip-protection-check.sh CHECK 4) only protects the
+    # machine that has it installed; this gate covers everyone.
+    #
+    # It does not scan git history. A secret committed before this job
+    # existed is still in history — only rotation removes it.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan tracked files for hardcoded secrets
+        run: bash scripts/secret-scan.sh
+
   quality:
     name: TypeScript + Tests + Build
     runs-on: ubuntu-latest
