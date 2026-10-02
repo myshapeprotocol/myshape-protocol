@@ -18,6 +18,35 @@
 #   A surface reaches its version only through version_id and
 #   never carries asset_id.
 #
+# SURFACE IDENTITY
+#
+#   surface_id     stable identity of a destination surface,
+#                  globally stable across Registry versions
+#   brand          the brand that owns that surface
+#   canonical_url  canonical public location of the surface/content
+#   route_path     repository/site routing location of the content
+#   status         current state of the surface (live/stale/withdrawn)
+#
+#   These are four distinct concepts and none of them substitutes for
+#   another. surface_id is the identity; brand, canonical_url and
+#   route_path are its properties. Code MUST read surface_id directly
+#   and MUST NOT fall back to brand, canonical_url or route_path when
+#   surface_id is absent. The absence of a surface_id is a hard failure,
+#   not a prompt to derive one.
+#
+#   A surface_id is unique WITHIN A VERSION. The same surface_id may
+#   legitimately appear on different versions of different assets,
+#   because the same destination surface serves them all. Uniqueness
+#   across the whole Registry would be wrong: it would assert that two
+#   assets published to the same destination are the same surface.
+#
+#   Distribution consumption: research_distribution.surface holds a
+#   Registry surface_id value. Its column name stays "surface"; only the
+#   value it carries is fixed to surface_id. The distribution identity
+#   key (version_id, surface, platform, content_fingerprint) therefore
+#   yields one distribution per surface per version, and a version with
+#   two surfaces yields two distinct distributions.
+#
 # The r-index in version_id is record-creation order only. It is
 # not a version ordering. Version ordering may only use
 # version_label, and null labels are excluded from comparison.
@@ -62,6 +91,7 @@ assets:
         source_commit_note: "The canonical source is touched by 3 commits. source_commit is populated only when a source is established by exactly one commit, so it stays null. A last-modified commit is not a version source commit."
         surfaces:
           - brand: continuity-lab
+            surface_id: continuity-lab-research
             canonical_url: "https://thecontinuitylab.org/research/notes/001-the-continuity-problem"
             route_path: "src/app/lab/research/notes/001-the-continuity-problem"
             status: live
@@ -71,6 +101,7 @@ assets:
               - locator: "src/app/lab/research/notes/001-the-continuity-problem/page.tsx:8"
                 value: "alternates.canonical for the Continuity Lab host"
           - brand: myshape
+            surface_id: myshape-public
             canonical_url: "https://www.myshape.com/research/notes/001-the-continuity-problem"
             route_path: "src/app/research/notes/001-the-continuity-problem"
             status: live
@@ -117,6 +148,7 @@ assets:
         source_commit_note: "The canonical source is touched by exactly 1 commit, so the establishing commit is unambiguous. Commit 4612893a, 2026-07-15, docs: RN-002 paper assets."
         surfaces:
           - brand: continuity-lab
+            surface_id: continuity-lab-research
             canonical_url: "https://thecontinuitylab.org/research/notes/002-pes-benchmark"
             route_path: "src/app/lab/research/notes/002-pes-benchmark"
             status: live
@@ -126,6 +158,7 @@ assets:
               - locator: "src/app/lab/research/notes/002-pes-benchmark/page.tsx:8"
                 value: "alternates.canonical for the Continuity Lab host"
           - brand: myshape
+            surface_id: myshape-public
             canonical_url: "https://www.myshape.com/research/notes/002-pes-benchmark"
             route_path: "src/app/research/notes/002-pes-benchmark"
             status: live
@@ -177,6 +210,7 @@ assets:
                 value: "RN-003 Cross-Modal Binding, 576-run validation"
         surfaces:
           - brand: continuity-lab
+            surface_id: continuity-lab-research
             canonical_url: "https://thecontinuitylab.org/research/notes/003-cross-modal-binding"
             route_path: "src/app/lab/research/notes/003-cross-modal-binding"
             status: live
@@ -186,6 +220,7 @@ assets:
               - locator: "src/app/lab/research/notes/003-cross-modal-binding/page.tsx:8"
                 value: "alternates.canonical for the Continuity Lab host"
           - brand: myshape
+            surface_id: myshape-public
             canonical_url: "https://www.myshape.com/research/notes/003-cross-modal-binding"
             route_path: "src/app/research/notes/003-cross-modal-binding"
             status: live
@@ -275,6 +310,7 @@ assets:
                 value: "ResearchMeta artifactId RN-005, status Published, published 2026.08.16"
         surfaces:
           - brand: continuity-lab
+            surface_id: continuity-lab-research
             canonical_url: "https://thecontinuitylab.org/research/notes/009-two-stage-continuity-verification"
             route_path: "src/app/lab/research/notes/009-two-stage-continuity-verification"
             status: live
@@ -284,6 +320,7 @@ assets:
               - locator: "src/app/lab/research/notes/009-two-stage-continuity-verification/page.tsx:9"
                 value: "alternates.canonical for the Continuity Lab host"
           - brand: myshape
+            surface_id: myshape-public
             canonical_url: "https://www.myshape.com/research/notes/009-two-stage-continuity-verification"
             route_path: "src/app/research/notes/009-two-stage-continuity-verification"
             status: live
