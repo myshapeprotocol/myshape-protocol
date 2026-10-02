@@ -1,0 +1,18 @@
+# Repository-level deterministic line-ending policy.
+#
+# G-4: canonical governed content is the exact bytes of the checked-out
+# canonical source file. That is only deterministic if the checkout
+# representation is deterministic, and without an explicit rule it is
+# governed by each machine's core.autocrlf. A fresh clone on a host with
+# core.autocrlf=true produced CRLF working-tree bytes where this working
+# tree has LF, which yields a different content_fingerprint for the same
+# source. The policy belongs here, in the repository, rather than hidden
+# inside the fingerprint algorithm where it would weaken the meaning of
+# the digest.
+#
+# `text=auto` lets git detect binary content and leave it alone; the 24
+# tracked binary files (.png, .pdf, .svg, .wasm, .woff*) are unaffected.
+# At the time this rule was added every tracked file was stored with LF in
+# the index (i/crlf = 0, i/mixed = 0), so no renormalization was required
+# and none was performed.
+* text=auto eol=lf
