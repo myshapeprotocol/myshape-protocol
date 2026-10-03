@@ -197,6 +197,32 @@ export async function distributeResearch(
   // ---- 3. Authorized. From here delivery may proceed. ----
   const renderedText = request.content;
 
+  // ---- 3a. Reconcile the derived governance cache BEFORE any state
+  //          transition. The first live publication reached this point
+  //          with `governance_state` still reading DRAFT while the
+  //          event log said HUMAN_APPROVED, so `advance("PUBLISHED")`
+  //          refused after the message had already been sent.
+  //
+  //          Governance has ALLOWed, so the event log is authoritative
+  //          and the cache is provably stale. Persisting the derived
+  //          value keeps the application interlock and the database
+  //          CHECK satisfiable. It writes only `governance_state`, and
+  //          it derives internally — no caller supplies a state.
+  const cache = await deliveryState.refreshGovernanceCache(
+    distributionId,
+    repository,
+  );
+  if (!cache.ok) {
+    // Fail closed. Refusing here means no attempt is opened and
+    // nothing is sent, so no unrecorded delivery can occur.
+    return {
+      ok: false,
+      code: "DELIVERY_STATE_ERROR",
+      detail: `governance cache could not be refreshed: ${cache.detail}`,
+      distributionId,
+    };
+  }
+
   const inFlight = await deliveryState.advance(distributionId, "IN_FLIGHT");
   if (!inFlight.ok) {
     return {

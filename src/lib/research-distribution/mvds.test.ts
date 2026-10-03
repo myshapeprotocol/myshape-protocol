@@ -285,34 +285,42 @@ describe("MVDS attempt writer", () => {
 // Delivery state
 // ---------------------------------------------------------------
 
-describe("MVDS delivery state", () => {
-  function stateDouble(row: unknown): {
-    client: DeliveryStateClient;
-    updates: Record<string, unknown>[];
-  } {
-    const updates: Record<string, unknown>[] = [];
-    const client = {
-      from: (table: string) => ({
-        select: () => ({
-          eq: () => ({
-            maybeSingle: () => Promise.resolve({ data: row, error: null }),
-          }),
+/** Shared client double: records every UPDATE and serves a live row. */
+function stateDouble(row: unknown): {
+  client: DeliveryStateClient;
+  updates: Record<string, unknown>[];
+} {
+  const updates: Record<string, unknown>[] = [];
+  const client = {
+    from: (table: string) => ({
+      select: () => ({
+        eq: () => ({
+          maybeSingle: () => Promise.resolve({ data: row, error: null }),
         }),
-        update: (values: Record<string, unknown>) => {
-          updates.push({ __table: table, ...values });
-          return {
-            eq: () => ({
-              select: () => ({
-                single: () => Promise.resolve({ data: row, error: null }),
-              }),
-            }),
-          };
-        },
       }),
-    } as unknown as DeliveryStateClient;
-    return { client, updates };
-  }
+      update: (values: Record<string, unknown>) => {
+        updates.push({ __table: table, ...values });
+        // Persist into the served row so a write-then-read sequence is
+        // observable. A frozen row cannot model the cache refresh
+        // followed by the PUBLISHED transition, which is exactly the
+        // sequence the first live publication exercised.
+        if (row && typeof row === "object") {
+          Object.assign(row as Record<string, unknown>, values);
+        }
+        return {
+          eq: () => ({
+            select: () => ({
+              single: () => Promise.resolve({ data: row, error: null }),
+            }),
+          }),
+        };
+      },
+    }),
+  } as unknown as DeliveryStateClient;
+  return { client, updates };
+}
 
+describe("MVDS delivery state", () => {
   it("moves NOT_ATTEMPTED to IN_FLIGHT", async () => {
     const { client, updates } = stateDouble({
       delivery_state: "NOT_ATTEMPTED",
@@ -396,6 +404,157 @@ describe("MVDS delivery state", () => {
     });
     await createSupabaseDeliveryStateStore(client).advance(7, "PUBLISHED");
     expect(Object.keys(updates[0]).sort()).toEqual(["__table", "delivery_state"]);
+  });
+});
+
+// ---------------------------------------------------------------
+// Regression: the first live publication failure
+//
+// The event log derived HUMAN_APPROVED, governance allowed the send,
+// and then advance("PUBLISHED") refused because the persisted cache
+// still read DRAFT. These tests pin the repair.
+// ---------------------------------------------------------------
+
+describe("MVDS governance cache regression", () => {
+  const APPROVAL = {
+    event_id: 1,
+    decision: "approved",
+    approver_type: "HUMAN",
+    approver_id: "Raymond Wu",
+    approval_ref: "first-publication-rn002-001",
+    content_fingerprint: "b".repeat(64),
+    registry_commit: "abc1234",
+  };
+
+  function repoWith(
+    events: unknown,
+  ): DistributionRepository {
+    return {
+      async loadDistribution() {
+        return { distribution_id: "7", registry_commit: "abc1234" };
+      },
+      async loadEvents() {
+        return events as never;
+      },
+      async loadAttempts() {
+        return [];
+      },
+    } as unknown as DistributionRepository;
+  }
+
+  it("persists HUMAN_APPROVED when the event log derives it (the failure case)", async () => {
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "IN_FLIGHT",
+      governance_state: "DRAFT",
+    });
+    const result = await createSupabaseDeliveryStateStore(
+      client,
+    ).refreshGovernanceCache(7, repoWith([APPROVAL]));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.governanceState).toBe("HUMAN_APPROVED");
+    expect(result.written).toBe(true);
+    expect(updates).toHaveLength(1);
+    expect(updates[0].governance_state).toBe("HUMAN_APPROVED");
+  });
+
+  it("writes only governance_state, never an identity or registry column", async () => {
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "IN_FLIGHT",
+      governance_state: "DRAFT",
+    });
+    await createSupabaseDeliveryStateStore(client).refreshGovernanceCache(
+      7,
+      repoWith([APPROVAL]),
+    );
+    expect(Object.keys(updates[0]).sort()).toEqual([
+      "__table",
+      "governance_state",
+    ]);
+  });
+
+  it("is idempotent: a fresh cache is not rewritten", async () => {
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "IN_FLIGHT",
+      governance_state: "HUMAN_APPROVED",
+    });
+    const result = await createSupabaseDeliveryStateStore(
+      client,
+    ).refreshGovernanceCache(7, repoWith([APPROVAL]));
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.written).toBe(false);
+    expect(updates).toHaveLength(0);
+  });
+
+  it("an empty event log derives DRAFT and never authorises", async () => {
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "NOT_ATTEMPTED",
+      governance_state: "HUMAN_APPROVED",
+    });
+    const result = await createSupabaseDeliveryStateStore(
+      client,
+    ).refreshGovernanceCache(7, repoWith([]));
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.governanceState).toBe("DRAFT");
+    expect(updates[0].governance_state).toBe("DRAFT");
+  });
+
+  it("AI_REVIEWED derives AI_REVIEWED and still cannot publish", async () => {
+    const ai = { ...APPROVAL, approver_type: "AI_REVIEW" };
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "IN_FLIGHT",
+      governance_state: "HUMAN_APPROVED",
+    });
+    const store = createSupabaseDeliveryStateStore(client);
+    const refreshed = await store.refreshGovernanceCache(7, repoWith([ai]));
+    expect(refreshed.ok).toBe(true);
+    if (!refreshed.ok) return;
+    expect(refreshed.governanceState).toBe("AI_REVIEWED");
+    expect(updates[0].governance_state).toBe("AI_REVIEWED");
+    // The interlock must still refuse PUBLISHED for AI_REVIEWED.
+    const pub = await store.advance(7, "PUBLISHED");
+    expect(pub.ok).toBe(false);
+    if (pub.ok) return;
+    expect(pub.code).toBe("NOT_HUMAN_APPROVED");
+  });
+
+  it("a withdrawal derives WITHDRAWN and cannot publish", async () => {
+    const withdrawn = { ...APPROVAL, decision: "withdrawn" };
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "IN_FLIGHT",
+      governance_state: "HUMAN_APPROVED",
+    });
+    const store = createSupabaseDeliveryStateStore(client);
+    const refreshed = await store.refreshGovernanceCache(7, repoWith([withdrawn]));
+    expect(refreshed.ok).toBe(true);
+    if (!refreshed.ok) return;
+    expect(refreshed.governanceState).toBe("WITHDRAWN");
+    const pub = await store.advance(7, "PUBLISHED");
+    expect(pub.ok).toBe(false);
+  });
+
+  it("an unreadable event log fails closed and writes nothing", async () => {
+    const { client, updates } = stateDouble({
+      distribution_id: 7,
+      delivery_state: "IN_FLIGHT",
+      governance_state: "DRAFT",
+    });
+    const result = await createSupabaseDeliveryStateStore(
+      client,
+    ).refreshGovernanceCache(7, repoWith(null));
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.code).toBe("EVENT_HISTORY_UNREADABLE");
+    expect(updates).toHaveLength(0);
   });
 });
 
@@ -575,15 +734,21 @@ describe("MVDS orchestrator", () => {
   function stateRec(): {
     store: DeliveryStateStore;
     advances: ProgressionTarget[];
+    refreshes: number[];
   } {
     const advances: ProgressionTarget[] = [];
+    const refreshes: number[] = [];
     const store: DeliveryStateStore = {
       async advance(_id, target) {
         advances.push(target);
         return { ok: true, deliveryState: target };
       },
+      async refreshGovernanceCache(id) {
+        refreshes.push(id);
+        return { ok: true, governanceState: "HUMAN_APPROVED", written: true };
+      },
     };
-    return { store, advances };
+    return { store, advances, refreshes };
   }
 
   function attemptsRec() {
