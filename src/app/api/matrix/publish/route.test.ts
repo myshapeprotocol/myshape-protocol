@@ -1,7 +1,8 @@
 /**
  * B2 Security Regression  /api/matrix/publish imagePath removal
  *
- * Security invariant: no request payload field may drive a filesystem read.
+ * Security invariant: no request payload field may drive a filesystem read,
+ * and the disabled publisher never contacts a platform.
  *
  * The route previously destructured `imagePath` out of the request JSON and
  * fed it to path.resolve(process.cwd(), imagePath) -> readFileSync. Because
@@ -15,6 +16,15 @@
  * These tests assert the *mechanism* is gone rather than asserting a status
  * code  node:fs is never imported and no image-upload call is ever issued to
  * LinkedIn, even when the caller supplies a hostile path.
+ *
+ * Current contract (2G-Z0-R1): `POST()` takes ZERO arguments and
+ * unconditionally returns HTTP 403 with DIRECT_PUBLISH_DISABLED /
+ * MIGRATION_REQUIRED — before any rate limiter, credential check,
+ * filesystem access, or platform call. A payload, hostile or not, is
+ * never delivered to handler logic. These tests therefore assert 403
+ * (the obsolete active-publisher 200/401 expectations were adapted),
+ * while keeping the original mechanism assertions: node:fs is never
+ * read from and no outbound platform call is ever issued.
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
@@ -55,7 +65,10 @@ vi.mock("undici", () => ({
 const ENV_KEYS = ["MATRIX_API_KEY", "LINKEDIN_USER_ACCESS_TOKEN"] as const;
 let savedEnv: Record<string, string | undefined> = {};
 
-// Unique client IP per call: the route rate-limits 5 requests / 15 min / IP.
+// Builds the request a caller would send (unique client IP per call to mirror
+// real traffic). The current handler accepts no request argument, so this
+// body is never parsed by the route — construction only documents the
+// scenarios being refused.
 function post(payload: Record<string, unknown>, ip: string): Request {
   return new Request("http://localhost/api/matrix/publish", {
     method: "POST",
@@ -97,86 +110,91 @@ const HOSTILE_PATHS = [
 
 describe("B2 - imagePath cannot reach the filesystem", () => {
   it.each(HOSTILE_PATHS)(
-    "hostile path %j: no fs read, no image upload, post still publishes",
+    "hostile path %j: no fs read, no platform call, route stays 403",
     async (hostilePath, index) => {
-      const { POST } = await import("./route");
-      const res = await POST(
-        post(
-          {
-            platform: "linkedin",
-            content: "invariant check",
-            title: "invariant check",
-            imagePath: hostilePath,
-          },
-          "10.0.0." + String(index + 1),
-        ),
+      // The payload a hostile caller would send. POST() takes no arguments
+      // (2G-Z0-R1), so this body never reaches handler logic; the route
+      // must refuse before it could be parsed.
+      const request = post(
+        {
+          platform: "linkedin",
+          content: "invariant check",
+          title: "invariant check",
+          imagePath: hostilePath,
+        },
+        "10.0.0." + String(index + 1),
       );
+      const sent = (await request.json()) as { imagePath?: string };
+      expect(sent.imagePath).toBe(hostilePath);
 
-      expect(res.status).toBe(200);
+      const { POST, DIRECT_PUBLISH_DISABLED, MIGRATION_REQUIRED } =
+        await import("./route");
+      const res = await POST();
+
+      expect(res.status).toBe(403);
       const payload = (await res.json()) as {
         success?: boolean;
-        status?: string;
+        error?: string;
+        migration?: string;
       };
-      expect(payload.success).toBe(true);
-      expect(payload.status).toBe("PUBLISHED");
+      expect(payload.success).toBe(false);
+      expect(payload.error).toBe(DIRECT_PUBLISH_DISABLED);
+      expect(payload.migration).toBe(MIGRATION_REQUIRED);
 
       expect(state.fsReads).toBe(0);
-      const imageCalls = state.linkedinUrls.filter((u) =>
-        u.includes("/v2/images"),
-      );
-      expect(imageCalls).toHaveLength(0);
-      expect(state.linkedinUrls).toEqual([
-        "https://api.linkedin.com/v2/posts",
-      ]);
+      expect(state.linkedinUrls).toHaveLength(0);
     },
   );
 });
 
-describe("B2 - existing publish behaviour preserved", () => {
-  it("publishes without any image field and never imports node:fs", async () => {
-    const { POST } = await import("./route");
-    const res = await POST(
-      post(
-        { platform: "linkedin", content: "plain text post", title: "plain" },
-        "10.1.0.1",
-      ),
+describe("B2 - disabled-route contract (2G-Z0-R1)", () => {
+  it("refuses a payload with no image field: 403, no fs read, no platform call", async () => {
+    const request = post(
+      { platform: "linkedin", content: "plain text post", title: "plain" },
+      "10.1.0.1",
     );
+    expect(request.method).toBe("POST");
 
-    expect(res.status).toBe(200);
+    const { POST, DIRECT_PUBLISH_DISABLED, MIGRATION_REQUIRED } =
+      await import("./route");
+    const res = await POST();
+
+    expect(res.status).toBe(403);
     const payload = (await res.json()) as {
       success?: boolean;
-      status?: string;
+      error?: string;
+      migration?: string;
     };
-    expect(payload.success).toBe(true);
-    expect(payload.status).toBe("PUBLISHED");
+    expect(payload.success).toBe(false);
+    expect(payload.error).toBe(DIRECT_PUBLISH_DISABLED);
+    expect(payload.migration).toBe(MIGRATION_REQUIRED);
     expect(state.fsReads).toBe(0);
-    expect(state.linkedinUrls).toEqual([
-      "https://api.linkedin.com/v2/posts",
-    ]);
+    expect(state.linkedinUrls).toHaveLength(0);
   });
 
-  it("ignores an unknown imagePath silently rather than erroring", async () => {
-    const { POST } = await import("./route");
-    const res = await POST(
-      post(
-        {
-          platform: "linkedin",
-          content: "unknown field tolerated",
-          title: "unknown",
-          imagePath: "some/other/field.json",
-        },
-        "10.1.0.2",
-      ),
+  it("treats a supplied imagePath as inert: 403 before any parse, no fs read", async () => {
+    const request = post(
+      {
+        platform: "linkedin",
+        content: "unknown field tolerated",
+        title: "unknown",
+        imagePath: "some/other/field.json",
+      },
+      "10.1.0.2",
     );
+    const sent = (await request.json()) as { imagePath?: string };
+    expect(sent.imagePath).toBe("some/other/field.json");
 
-    expect(res.status).toBe(200);
-    const payload = (await res.json()) as { status?: string };
-    expect(payload.status).toBe("PUBLISHED");
+    const { POST } = await import("./route");
+    const res = await POST();
+
+    expect(res.status).toBe(403);
     expect(state.fsReads).toBe(0);
+    expect(state.linkedinUrls).toHaveLength(0);
   });
 
-  it("still rejects unauthenticated callers", async () => {
-    const { POST } = await import("./route");
+  it("refuses unauthenticated callers with the same 403 (no credential check)", async () => {
+    const { POST, DIRECT_PUBLISH_DISABLED } = await import("./route");
     const unauthenticated = new Request(
       "http://localhost/api/matrix/publish",
       {
@@ -189,9 +207,16 @@ describe("B2 - existing publish behaviour preserved", () => {
         }),
       },
     );
-    const res = await POST(unauthenticated);
+    expect(unauthenticated.headers.get("x-api-key")).toBeNull();
 
-    expect(res.status).toBe(401);
+    const res = await POST();
+
+    // The refusal precedes authentication: callers without a key get the
+    // same policy 403, not the legacy 401 credential error.
+    expect(res.status).toBe(403);
+    const payload = (await res.json()) as { error?: string };
+    expect(payload.error).toBe(DIRECT_PUBLISH_DISABLED);
     expect(state.fsReads).toBe(0);
+    expect(state.linkedinUrls).toHaveLength(0);
   });
 });
