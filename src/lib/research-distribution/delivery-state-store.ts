@@ -51,7 +51,27 @@
 // only ever called with a distribution_id that already passed
 // `requestDistribution()`. The PUBLISHED guard is a safety
 // interlock, not an authorization decision.
+//
+// WHY governance_state IS NOW REFRESHED HERE
+//
+// The first live publication failed at this exact line. The event log
+// said HUMAN_APPROVED, governance correctly allowed the delivery,
+// and then the PUBLISHED transition refused because the persisted
+// `governance_state` column still read DRAFT. Nothing in MVDS ever
+// wrote that column: it stayed at its DEFAULT forever, so the
+// application guard and the database CHECK could never be satisfied.
+//
+// The fix is NOT to weaken either guard. The fix is to maintain the
+// cache the schema already assumes exists. `refreshGovernanceCache`
+// re-derives the value from the SAME authoritative source the
+// service already uses — the event log, via `deriveGovernanceState`
+// — and persists that derived value. It never accepts a
+// caller-supplied governance state, so it cannot become a second
+// authority. There is still exactly one derivation.
 // ============================================================
+
+import { deriveGovernanceState } from "./derivation";
+import type { DistributionRepository } from "./distribution-service";
 
 const TABLE = "research_distribution";
 
@@ -69,7 +89,20 @@ export type DeliveryStateFailure =
    */
   | "NOT_HUMAN_APPROVED"
   /** The row's current state cannot legally move to the target. */
-  | "ILLEGAL_TRANSITION";
+  | "ILLEGAL_TRANSITION"
+  /** The event log could not be read, so the cache cannot be refreshed. */
+  | "EVENT_HISTORY_UNREADABLE"
+  /** Derivation failed; there is no state to persist. */
+  | "DERIVATION_FAILED";
+
+export type GovernanceCacheResult =
+  | {
+      ok: true;
+      governanceState: "DRAFT" | "AI_REVIEWED" | "HUMAN_APPROVED" | "WITHDRAWN";
+      /** False when the persisted cache already held the derived value. */
+      written: boolean;
+    }
+  | { ok: false; code: DeliveryStateFailure; detail: string };
 
 export type DeliveryStateResult =
   | { ok: true; deliveryState: ProgressionTarget }
@@ -111,6 +144,19 @@ export interface DeliveryStateStore {
     distributionId: number,
     target: ProgressionTarget,
   ): Promise<DeliveryStateResult>;
+
+  /**
+   * Recompute `governance_state` from the event log and persist it.
+   *
+   * The cache is a projection, never an input to authorization. This
+   * reads the same events `requestDistribution()` reads and derives
+   * through the same `deriveGovernanceState`, so the two cannot
+   * disagree. Callers cannot supply a governance value.
+   */
+  refreshGovernanceCache(
+    distributionId: number,
+    repository: DistributionRepository,
+  ): Promise<GovernanceCacheResult>;
 }
 
 /**
@@ -213,6 +259,84 @@ export function createSupabaseDeliveryStateStore(
       }
 
       return { ok: true, deliveryState: target };
+    },
+
+    async refreshGovernanceCache(
+      distributionId: number,
+      repository: DistributionRepository,
+    ): Promise<GovernanceCacheResult> {
+      // ---- 1. Read the authoritative source: the event log ----
+      const events = await repository.loadEvents(String(distributionId));
+      if (events === null) {
+        // Absence of evidence. Never assume an empty log means DRAFT.
+        return {
+          ok: false,
+          code: "EVENT_HISTORY_UNREADABLE",
+          detail:
+            "the governance event log could not be read, so the cached " +
+            "governance state cannot be refreshed",
+        };
+      }
+
+      // ---- 2. Derive through the SAME function the service uses ----
+      const derived = deriveGovernanceState(events);
+      if (!derived.ok || derived.state === null) {
+        return {
+          ok: false,
+          code: "DERIVATION_FAILED",
+          detail:
+            "derivation produced no governance state, so the cache was " +
+            "left untouched",
+        };
+      }
+      const governanceState = derived.state;
+
+      // ---- 3. Persist only when the cache is actually stale ----
+      const { data, error } = await client
+        .from(TABLE)
+        .select("distribution_id,governance_state")
+        .eq("distribution_id", distributionId)
+        .maybeSingle();
+
+      if (error) {
+        return {
+          ok: false,
+          code: "STORE_ERROR",
+          detail: error instanceof Error ? error.message : String(error),
+        };
+      }
+      if (!data || typeof data !== "object") {
+        return {
+          ok: false,
+          code: "DISTRIBUTION_NOT_FOUND",
+          detail: `no research_distribution row with distribution_id ${distributionId}`,
+        };
+      }
+
+      const current = (data as { governance_state?: unknown }).governance_state;
+      if (current === governanceState) {
+        return { ok: true, governanceState, written: false };
+      }
+
+      const { error: updateError } = await client
+        .from(TABLE)
+        .update({ governance_state: governanceState })
+        .eq("distribution_id", distributionId)
+        .select("distribution_id")
+        .single();
+
+      if (updateError) {
+        return {
+          ok: false,
+          code: "STORE_ERROR",
+          detail:
+            updateError instanceof Error
+              ? updateError.message
+              : String(updateError),
+        };
+      }
+
+      return { ok: true, governanceState, written: true };
     },
   };
 }
