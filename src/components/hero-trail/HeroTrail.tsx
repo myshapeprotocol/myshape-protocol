@@ -142,7 +142,7 @@ export default function HeroTrail() {
             CONTINUITY, <span style={{ color: "rgba(0,229,255,0.8)" }}>WITHOUT</span> IDENTITY.
           </h1>
           <p className="hero-demo-tagline" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Identity tells you who someone claims to be.<br />Continuity asks whether the same key-controlled presence persisted across an interval.
+            What if continuity could be verified, not assumed?
           </p>
         </div>
 
