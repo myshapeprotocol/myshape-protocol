@@ -7,10 +7,11 @@
 // registry_commit may be recorded.
 //
 // Tests A-C and E exercise that function with synthetic bytes, so no Git
-// state is fabricated. Test D additionally reads the real repository
-// read-only, to confirm that one Registry blob is genuinely carried by
-// more than one commit, which is why the derivation never searches
-// history.
+// state is fabricated. Test D reads the current checkout at HEAD only --
+// never the repository history. An earlier version also asserted a
+// repository-wide blob-ambiguity fact via `git log --all`; that was a
+// repository-topology assertion, not a contract assertion, and it did not
+// survive a shallow single-ref checkout. See the note in the D block below.
 // ============================================================
 
 import { execFileSync } from "node:child_process";
@@ -171,24 +172,14 @@ function git(...args: string[]): string {
 }
 
 describe("historical search is deliberately not used", () => {
-  it("D: the real repository carries one Registry blob in more than one commit", () => {
-    // This is the fact that makes the reverse mapping ambiguous: given
-    // Registry bytes, no unique commit can be derived, so the contract
-    // derives from HEAD instead of searching.
-    const log = git("log", "--all", "--format=%H", "--", REGISTRY_PATH);
-    const byBlob = new Map<string, string[]>();
-    for (const commit of log.split("\n")) {
-      if (!commit.trim()) continue;
-      try {
-        const blob = git("rev-parse", `${commit}:${REGISTRY_PATH}`);
-        byBlob.set(blob, [...(byBlob.get(blob) ?? []), commit]);
-      } catch {
-        // commit does not carry the Registry; nothing to record
-      }
-    }
-    const shared = [...byBlob.values()].filter((v) => v.length > 1);
-    expect(shared.length).toBeGreaterThan(0);
-  });
+  // NOTE: an earlier version of this block also asserted that "the real
+  // repository carries one Registry blob in more than one commit", by running
+  // `git log --all` and mapping each commit to its Registry blob. That assertion
+  // was removed: it verifies a property of whatever refs a checkout happens to
+  // have, not a property of resolveRegistryCommit(). It held only in a
+  // full-history, multi-ref clone and failed in the shallow single-ref
+  // checkout used by CI. DERIVATION-SPEC 3.6.7 records the blob-ambiguity
+  // rationale in prose; it is not a unit-test boundary. See Gate 19.
 
   it("D: derivation returns HEAD, never an ancestor or the introduction commit", () => {
     const head = git("rev-parse", "HEAD");
