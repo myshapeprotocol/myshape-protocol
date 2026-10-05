@@ -280,7 +280,7 @@ These remain blocked on the database environment identified in Phase 2G-M.
 
 | # | Item | Effect on tests |
 |---|---|---|
-| 1 | **`registry_commit` freshness (§3.5)** — same-lifecycle approval provenance mismatch | **Governance rule CLOSED; enforcement PENDING UNFREEZE.** The rule is settled (spec §3.5), but the frozen evaluator receives only `GovernanceEventInput[]` and never `distribution.registry_commit`, so Cases B and D below are **unobservable, not merely untested**. No executable test may assert enforcement until the pipeline is unfrozen. See §7.1. |
+| 1 | **`registry_commit` freshness (§3.5)** — same-lifecycle approval provenance mismatch | **Governance rule CLOSED; enforcement IMPLEMENTED at the authorization layer.** The derivation-layer evaluator still receives only `GovernanceEventInput[]` and never observes `distribution.registry_commit` — that limitation is unchanged. Freshness is an *authorisation precondition*, not a derivation input, and is enforced by `approval-freshness.ts` (`checkApprovalFreshness`), surfaced by `governance-gate.ts` as `STALE_APPROVAL_PROVENANCE`, and wired in by `distribution-service.ts`. Cases B and D are therefore observable and tested at the authorization layer. See §7.1. |
 | 2 | **Spec defect §3.1 vs §3.3** | Resolved in this matrix (§0, G-18). The derivation spec should be corrected. |
 | 3 | **Single-writer assumption** | Not testable at the unit level; requires concurrency testing against a real database. |
 
@@ -292,20 +292,26 @@ and what is **blocked**, and does **not** mark a blocked case as passing.
 | Case | Shape | Status | Note |
 |---|---|---|---|
 | A | one lifecycle, `distribution = A`, event `= A` | **Testable now — baseline valid** | Equal values agree; derivation is `HUMAN_APPROVED`. |
-| B | one lifecycle, `distribution = B`, event `= A` | **GOVERNANCE RULE DEFINED / ENFORCEMENT PENDING UNFREEZE** | The evaluator never receives `distribution.registry_commit`, so this is byte-identical to Case A at the input. **Unobservable**, not merely unimplemented. |
+| B | one lifecycle, `distribution = B`, event `= A` | **Testable now — enforced** | Enforced by `approval-freshness.ts` as a stale anchor, surfaced by `governance-gate.ts` as `STALE_APPROVAL_PROVENANCE`. Covered by `approval-freshness.test.ts` ("B: distribution = B, events = [A] is STALE_APPROVAL_PROVENANCE"). |
 | C | one lifecycle, several approvals, all `= A` | **Testable now — baseline valid** | Agreement across events holds; derivation is `HUMAN_APPROVED`. |
-| D | one lifecycle, events `[A, A, B]`, anchor unknown | **GOVERNANCE RULE DEFINED / ENFORCEMENT PENDING UNFREEZE** | The evaluator sees two commits but cannot determine which is the current distribution anchor, so it cannot decide which approvals are stale. |
+| D | one lifecycle, events `[A, A, B]`, anchor unknown | **Testable now — enforced** | The freshness layer compares the distribution anchor against the commits named by participating approvals and fails closed on a mismatch. Covered by `approval-freshness.test.ts` ("D: events = [A, A, B] against anchor A is stale"). |
 | E | two lifecycles, `distribution 1 = A`, `distribution 2 = B` | **Testable now — legitimate** | Distinct lifecycles legitimately differ. **Not** a split error and **not** a contradiction. |
 | F | same `content_fingerprint`, different `registry_commit` | **Testable now — not a content contradiction** | Derivation remains `ok = true`; the fingerprint is the only contradiction key (§3.2). This is a freshness condition, not a content conflict. |
 
-**Do not manufacture executable tests for B or D.** Asserting them today
-would either fail or force the frozen evaluator to be altered to make the
-matrix green, which is exactly the outcome this record exists to prevent.
-Until the pipeline is unfrozen, B and D remain specified-but-unenforced.
+**Where this is enforced.** `registry_commit` freshness is an authorisation
+precondition, so it is enforced outside the frozen derivation evaluator and
+downstream of it: `approval-freshness.ts` compares the distribution anchor
+against the commits named by participating approvals, `governance-gate.ts`
+turns a stale result into a `STALE_APPROVAL_PROVENANCE` refusal, and
+`distribution-service.ts` reads the distribution record on both passes and
+fails closed. The executable coverage is in `approval-freshness.test.ts`
+(cases A–F plus a fails-closed block) and `governance-gate.test.ts` (the
+`canDistribute — provenance` block).
 
-**Existing evaluator behaviour is unchanged and must not be read as
+**Existing derivation behaviour is unchanged and must not be read as
 enforcement.** `REGISTRY_COMMIT_SPLIT` reports a split among event commits
-and still returns `HUMAN_APPROVED`; it does not implement §3.5.
+and `deriveGovernanceState()` still returns `HUMAN_APPROVED`; the derivation
+layer does not implement §3.5 and is not claimed to.
 
 ---
 
@@ -321,12 +327,15 @@ its tests now exist in the repository:
 This reconciliation changed only this document's descriptive text. No
 implementation file, migration, or database state was modified in producing it.
 
-The open items in §7 remain open. In particular: the `registry_commit`
-freshness cases B and D are still **unobservable** rather than merely
-untested; the derivation spec defect noted in §0 item 2 is recorded as a defect
-to be corrected in that spec, not as corrected here; and the cases requiring a
-real database environment remain **unverified** and are **not** marked as
-passing. The migration digest originally recorded in this document described
+The open items in §7 are updated as follows. The `registry_commit`
+freshness cases B and D are **enforced and tested at the authorization
+layer** (`approval-freshness.ts` → `governance-gate.ts` →
+`distribution-service.ts`); the derivation-layer evaluator still does not
+observe `distribution.registry_commit` and is not claimed to. The derivation
+spec defect noted in §0 item 2 is recorded as a defect to be corrected in
+that spec, not as corrected here; and the cases requiring a real database
+environment remain **unverified** and are **not** marked as passing. The
+migration digest originally recorded in this document described
 `435aff98` and is **not re-verified** by this reconciliation. Whether the
 migration has been applied is a separate question requiring separate
 verification.
