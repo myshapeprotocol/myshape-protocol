@@ -59,7 +59,7 @@ export default function ChallengeClient() {
           </a>
 
           <p className="text-white/12 text-[11px] tracking-[0.1em]">
-            Or email challenge@myshape.com
+            Or email dev@myshape.com
           </p>
         </div>
 

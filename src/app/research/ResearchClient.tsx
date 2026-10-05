@@ -30,7 +30,7 @@ const ENGINES = [
   { engine: "VS-001", name: "Dual-Engine Pipeline", rate: "Passive observer + active challenge", slug: "/research/protocol-verify" },
 ];
 
-const DATASET = { id: "DS-001", name: "Continuity Dataset", status: "576 runs · 4 engines · HuggingFace", slug: "https://huggingface.co/TheContinuityLab/myshape-576" };
+const DATASET = { id: "DS-001", name: "Continuity Dataset", status: "576 runs · 4 engines · HuggingFace", slug: "https://huggingface.co/datasets/ContinuityLab-Org/myshape-576" };
 
 export default function ResearchClient() {
   return (

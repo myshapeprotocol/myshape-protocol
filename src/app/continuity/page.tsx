@@ -31,6 +31,12 @@ export default function ContinuityPage() {
           text-decoration: none; transition: all 0.2s;
         }
         .link-ghost:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.55); }
+        .exp-card { transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease; }
+        .exp-card:hover {
+          border-color: rgba(144,200,255,0.55) !important;
+          background: rgba(144,200,255,0.06) !important;
+          box-shadow: 0 4px 20px -6px rgba(144,200,255,0.28), inset 0 0 0 1px rgba(144,200,255,0.12);
+        }
       `}</style>
 
       <ProtocolHeader />
@@ -98,25 +104,25 @@ export default function ContinuityPage() {
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 24 }}>
-            <div style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
+            <div className="exp-card" style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
               <div style={{ fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
                 Can we tell biological entropy from synthetic smoothness?
               </div>
               <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "monospace" }}>4-dimensional entropy patterns. Subtle, inconsistent across time — and difficult to maintain convincingly under continuous observation.</div>
             </div>
-            <div style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
+            <div className="exp-card" style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
               <div style={{ fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
                 If two sensors observe the same event, do their signals agree?
               </div>
               <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "monospace" }}>Cross-modal temporal alignment: 100% across 316 trials.</div>
             </div>
-            <div style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
+            <div className="exp-card" style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
               <div style={{ fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
                 Can randomized gyroscope challenges defeat replay attacks?
               </div>
               <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "monospace" }}>Jittered timing. Unexpected directions. Pass rate: 59% across 200 attempts.</div>
             </div>
-            <div style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
+            <div className="exp-card" style={{ padding: "16px 20px", border: "1px solid rgba(144,200,255,0.08)", background: "rgba(144,200,255,0.015)" }}>
               <div style={{ fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
                 Can we chain passive and active checks into a single session?
               </div>

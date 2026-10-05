@@ -623,6 +623,12 @@ export default function LabClient() {
               style={{ color: "rgba(255,255,255,0.25)", textDecoration: "none", textTransform: "uppercase" }}>{f.l}</a>
           ))}
         </div>
+        <div style={{ marginBottom: 12 }}>
+          <a href="mailto:dev@myshape.com"
+            onMouseEnter={(e) => { playTick(500, "sine", 0.04, 0.02); e.currentTarget.style.color = "rgba(0,229,255,0.6)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; }}
+            style={{ color: "rgba(255,255,255,0.25)", textDecoration: "none" }}>dev@myshape.com</a>
+        </div>
         The Continuity Lab, 2026
       </footer>
     </div>
