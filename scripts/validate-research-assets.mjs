@@ -58,9 +58,10 @@ const VERSION_KEYS = new Set([
   "implementation_baseline", "implementation_baseline_note",
   "supersedes_version_id", "citation_ref",
   "conflicts", "surfaces", "surfaces_note",
+  "content_path", "content_path_note",
 ]);
 const SURFACE_KEYS = new Set([
-  "brand", "canonical_url", "route_path", "surface_title", "status",
+  "surface_id", "brand", "canonical_url", "route_path", "surface_title", "status",
   "last_verified_at", "indexed_in", "evidence",
 ]);
 const SOURCE_KEYS = new Set(["kind", "path", "paths"]);
@@ -471,6 +472,7 @@ for (const asset of assets) {
     }
     let lastBrand = null;
     let lastUrl = null;
+    const versionSurfaceIds = new Set();
 
     for (const surface of surfaces) {
       if (!isObj(surface)) { err("SCHEMA", at + ": each surface must be a mapping"); continue; }
@@ -479,6 +481,27 @@ for (const asset of assets) {
       }
       surfaceCount += 1;
       const sat = at + "/" + surface.brand;
+
+      // Surface identity. surface_id is the identity of the destination
+      // surface; brand, canonical_url and route_path are its properties and
+      // never substitute for it. A missing or non-scalar surface_id is a
+      // hard failure -- there is deliberately no fallback to another field,
+      // because deriving identity from a presentation field would let two
+      // different surfaces collide and would manufacture a governance fact.
+      if (!isStr(surface.surface_id) || surface.surface_id.length === 0) {
+        err("SID-1", sat + ": surface_id is required and must be a non-empty string");
+      } else if (!/^[a-z0-9][a-z0-9-]*$/.test(surface.surface_id)) {
+        err("SID-2", sat + ": surface_id must be lowercase alphanumeric with hyphens");
+      } else {
+        // Unique WITHIN A VERSION. The same surface_id on a different
+        // version is expected, not an error: one destination surface serves
+        // many asset versions.
+        if (versionSurfaceIds.has(surface.surface_id)) {
+          err("SID-3", sat + ": surface_id \"" + surface.surface_id
+            + "\" is already used by another surface of version " + vid);
+        }
+        versionSurfaceIds.add(surface.surface_id);
+      }
 
       checkEnum("LC-S", surface.status, SURFACE_STATUS, sat + ".status");
       if (Object.prototype.hasOwnProperty.call(surface, "asset_id")) {
