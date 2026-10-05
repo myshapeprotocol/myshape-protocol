@@ -18,12 +18,46 @@ out of the chain.
 | Check | Result |
 |---|---|
 | Quarantine location | `supabase/quarantine/20261001_research_publication.sql` |
-| Bytes | 16,101 — unchanged |
-| SHA-256 | `37430860A8F5D15F189F3B90E2214BD7112687462560ED04260E75F4B1E5374F` — matches the preservation record |
+| Git blob object ID (SHA-1) | `a18f5883081ed8323beaaf3dc7a0b515ddbadbea` |
+| Canonical bytes (Git tree) | 16,018 — unchanged |
+| Canonical content SHA-256 (Git tree) | `82B7D62A5003DF0199081695CBC7789CF72F4E0C21C89B49CF202D5105D7239E` |
 | Content edited | No |
 | Deleted | No |
 | Tracked in git | Yes, recorded as a rename |
 | Still in execution chain | No |
+
+### 0.1 Provenance note — superseding the original recorded hash
+
+The preservation record for this artifact originally stated
+`SHA-256 37430860A8F5D15F189F3B90E2214BD7112687462560ED04260E75F4B1E5374F`
+at `16,101` bytes. **That value is superseded.** It was computed from a
+working-tree representation whose line endings were not normalised, so it is
+not reproducible from the Git object and must not be used to verify this
+artifact.
+
+The canonical identity of the artifact is the **Git-tree byte stream**:
+
+| Identifier | Value | Meaning |
+|---|---|---|
+| Git blob object ID | `a18f5883081ed8323beaaf3dc7a0b515ddbadbea` | Git's own SHA-1 object name |
+| Content SHA-256 | `82B7D62A5003DF0199081695CBC7789CF72F4E0C21C89B49CF202D5105D7239E` | SHA-256 over the Git-tree bytes |
+| Byte count | 16,018 | Length of the Git-tree byte stream |
+
+These are **different identifiers of different things** and must not be
+conflated: the blob object ID is Git's address for the object, the content
+SHA-256 is a digest of its bytes, and the byte count is its length.
+
+Verification basis: the same blob object ID is reachable from all three
+references that carry this artifact —
+
+| Reference | Path |
+|---|---|
+| `9bffec9b` | `supabase/migrations/20261001_research_publication.sql` |
+| `e2854417` | `supabase/quarantine/20261001_research_publication.sql` |
+| `HEAD` | `supabase/quarantine/20261001_research_publication.sql` |
+
+— so the artifact is byte-identical across preservation, quarantine and the
+promoted tree. The SQL was not modified at any point.
 
 ---
 

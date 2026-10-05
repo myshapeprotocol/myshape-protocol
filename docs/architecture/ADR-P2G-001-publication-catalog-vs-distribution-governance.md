@@ -47,6 +47,15 @@ and is now preserved at
 `supabase/migrations/20261001_research_publication.sql`, SHA-256
 `37430860A8F5D15F189F3B90E2214BD7112687462560ED04260E75F4B1E5374F`.
 
+> **Provenance correction.** The SHA-256 recorded above
+> (`37430860…`, 16,101 bytes) was computed from a non-normalised working-tree
+> representation and is **not reproducible from the Git object**. The canonical
+> identifiers of the artifact are the Git blob object ID
+> `a18f5883081ed8323beaaf3dc7a0b515ddbadbea` and the content SHA-256 over the
+> Git-tree bytes `82B7D62A5003DF0199081695CBC7789CF72F4E0C21C89B49CF202D5105D7239E`
+> (16,018 bytes). The file has since been moved out of the migration chain to
+> `supabase/quarantine/`. See `REVIEW-P2G-002` §0.1.
+
 The artifact had never been committed to any branch. Until this
 preservation it existed in exactly one detached worktree and could have
 been lost irrecoverably.
