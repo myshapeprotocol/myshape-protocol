@@ -28,7 +28,7 @@ implementation modules and 10 test files**:
 | Distribution service | `distribution-service.ts` | `distribution-service.test.ts` |
 | Distribution writer | `distribution-writer.ts` | `distribution-writer.test.ts` |
 | Supabase repositories | `distribution-repository-supabase.ts`, `distribution-store-supabase.ts`, `attempt-store-supabase.ts`, `approval-store.ts` | `distribution-repository-supabase.test.ts` |
-| MVDS delivery | `mvds.ts` (via `delivery-adapter.ts`) | `mvds.test.ts` |
+| MVDS delivery (layer, no single `mvds.ts` module) | `delivery-adapter.ts`, `delivery-resend.ts`, `attempt-store-supabase.ts`, `delivery-state-store.ts`, `approval-store.ts`, `distribute.ts`, `distribution-writer.ts` | `mvds.test.ts` |
 | Delivery state | `delivery-state-store.ts`, `delivery-adapter.ts`, `delivery-resend.ts`, `distribute.ts` | — |
 
 The fingerprint rule defined in §4.3 is implemented in
