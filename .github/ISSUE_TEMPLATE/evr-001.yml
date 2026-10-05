@@ -1,0 +1,208 @@
+name: External Verification Record (EVR-001)
+description: Submit the record of one external execution against a MyShape / The Continuity Lab artifact.
+title: "[EVR-001] "
+labels: ["evr-001"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## What this form is
+
+        This records **one execution** you performed. It is an auditable submission
+        record, not a verdict.
+
+        **submitted does not mean executed, reproduced, conformant, verified,
+        trusted, true, human, or authorized.**
+
+        - `result_class` is **your reported classification**. It is not accepted,
+          not verified, and confers no approval.
+        - Review and verification are a **separate, later** state that this form
+          does not grant.
+        - A GitHub Issue is an auditable submission record. It is **not**
+          cryptographic proof of authorship and **not** immutable evidence.
+        - Attribution below is **self-reported**. It is not independently verified.
+
+  - type: dropdown
+    id: executor_nature
+    attributes:
+      label: executor_nature
+      description: How was this executed? Required.
+      options:
+        - HUMAN
+        - AI
+        - MIXED
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### ⚠️ If you select AI or MIXED
+
+        This is an **AI-executed** or AI-assisted verification.
+        **It is NOT human independent validation.**
+
+        Do not present it as a human-verified result. Cite the artifact version,
+        the procedure, and the verbatim output so the execution can be re-checked.
+
+  - type: input
+    id: executor_attribution
+    attributes:
+      label: executor_attribution
+      description: >
+        Name, handle, or organization — or the literal value ANONYMOUS.
+        Self-reported attribution only; not cryptographic identity proof.
+      placeholder: "your-name-or-ANONYMOUS"
+    validations:
+      required: true
+
+  - type: input
+    id: artifact_id
+    attributes:
+      label: artifact_id
+      description: Which artifact did you test?
+      placeholder: "cps-0001"
+    validations:
+      required: true
+
+  - type: input
+    id: artifact_version
+    attributes:
+      label: artifact_version
+      description: >
+        Exact version, tag, or commit you tested. Required for reproducibility.
+      placeholder: "v1.0-RC1 (89c0c4ce) or 40-char commit SHA"
+    validations:
+      required: true
+
+  - type: input
+    id: procedure_ref
+    attributes:
+      label: procedure_ref
+      description: >
+        Which documented procedure did you follow? File path plus section is
+        preferred.
+      placeholder: "continuity-protocol/QUICKSTART.md — Verification"
+    validations:
+      required: true
+
+  - type: textarea
+    id: input_ref
+    attributes:
+      label: input_ref
+      description: >
+        What was the input? Test-vector path, receipt hash, or a description of
+        your own sample.
+      placeholder: "test-vectors/valid/single-engine.json"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: expected_result
+      description: >
+        What did you expect BEFORE running? Record this before execution where
+        practical — it is what makes the record non-circular.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed_result
+    attributes:
+      label: observed_result
+      description: What actually happened?
+      render: text
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result_class
+    attributes:
+      label: result_class
+      description: >
+        Your reported classification. This is not an accepted or verified result.
+      options:
+        - CONFORMANT
+        - NON_CONFORMANT
+        - ERROR
+        - INCONCLUSIVE
+    validations:
+      required: true
+
+  - type: input
+    id: execution_timestamp
+    attributes:
+      label: execution_timestamp
+      description: When did you run it? UTC, ISO-8601.
+      placeholder: "2026-10-04T12:00:00Z"
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence_output
+    attributes:
+      label: evidence_output
+      description: >
+        Verbatim output, log, or transcript, or a reference to it. No proprietary
+        or private format required — plain text is sufficient.
+      render: shell
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: semantic_boundary_acknowledgement
+    attributes:
+      label: semantic_boundary_acknowledgement
+      description: Required acknowledgement. All items must be checked.
+      options:
+        - label: >
+            I acknowledge that submitted ≠ executed ≠ reproduced ≠ conformant
+            ≠ verified ≠ trusted ≠ true ≠ human ≠ authorized.
+        - label: >
+            I acknowledge that if executor_nature is AI or MIXED, this record is
+            NOT human independent validation.
+        - label: >
+            I acknowledge that a GitHub Issue is an auditable submission record,
+            NOT cryptographic proof of authorship and NOT immutable evidence.
+        - label: >
+            I acknowledge that result_class is my own reported classification
+            and is not accepted or verified by submitting this form.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: environment
+      description: >
+        Optional, but supply it when environment or version could affect the
+        result. OS / runtime / language / model / tool / library versions.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: challenge_notes
+    attributes:
+      label: challenge_notes
+      description: >
+        Optional. Challenges, caveats, anomalies, or anything a reviewer should
+        look at twice.
+      render: text
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: public_attribution_consent
+    attributes:
+      label: public_attribution_consent
+      description: >
+        Optional. Your submission is not withheld if you leave this unchecked.
+      options:
+        - label: >
+            I consent to publicly attributing this record to
+            executor_attribution as written.
+    validations:
+      required: false
