@@ -188,9 +188,9 @@ export default function ContributePage() {
             This experiment requires mobile motion sensors, which are only available on phones.
             Scan the QR code to continue on your device.
           </p>
-          {/* QR code → canonical /contribute URL (api.qrserver.com is allow-listed in CSP) */}
+          {/* QR code → canonical /contribute URL (static asset in public/, same-origin — no external QR service) */}
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(HANDOFF_URL)}`}
+            src="/qr-contribute.png"
             alt={`QR code linking to ${HANDOFF_URL}`}
             width={220}
             height={220}

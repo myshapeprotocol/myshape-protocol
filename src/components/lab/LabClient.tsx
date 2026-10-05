@@ -615,19 +615,13 @@ export default function LabClient() {
             { l: "X", h: "https://x.com/myshapeprotocol", ext: true },
             { l: "npm", h: "https://www.npmjs.com/package/@thecontinuitylab/myshape", ext: true },
             { l: "Discord", h: "https://discord.gg/zr8Tczard", ext: true },
-            { l: "MyShape", h: "https://www.myshape.com", ext: true },
+            { l: "EMAIL", h: "mailto:dev@myshape.com", ext: false },
           ].map((f) => (
             <a key={f.l} href={f.h} target={f.ext ? "_blank" : undefined} rel={f.ext ? "noopener noreferrer" : undefined}
               onMouseEnter={(e) => { playTick(500, "sine", 0.04, 0.02); e.currentTarget.style.color = "rgba(0,229,255,0.6)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; }}
               style={{ color: "rgba(255,255,255,0.25)", textDecoration: "none", textTransform: "uppercase" }}>{f.l}</a>
           ))}
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <a href="mailto:dev@myshape.com"
-            onMouseEnter={(e) => { playTick(500, "sine", 0.04, 0.02); e.currentTarget.style.color = "rgba(0,229,255,0.6)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; }}
-            style={{ color: "rgba(255,255,255,0.25)", textDecoration: "none" }}>dev@myshape.com</a>
         </div>
         The Continuity Lab, 2026
       </footer>
