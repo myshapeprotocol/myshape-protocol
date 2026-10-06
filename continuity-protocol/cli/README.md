@@ -27,7 +27,7 @@ V₇ `N/A` — protocol `N/A` applies only to true genesis receipts
 *not necessarily* the canonical CPS-0001 first-failure code, because V₇ precedes
 V₃–V₆ in the normative order and V₇ is not evaluated here. For example,
 `invalid/broken-chain.json` fails locally at V₆ while canonical evaluation fails at
-V₇ with `CHAIN_BROKEN`.
+V₇ with `PREDECESSOR_MISSING`.
 
 For the normative contract see [`CPS0001.md`](../../CPS0001.md). For expected per-vector
 results see [`../EXPECTED-RESULTS.md`](../EXPECTED-RESULTS.md) and

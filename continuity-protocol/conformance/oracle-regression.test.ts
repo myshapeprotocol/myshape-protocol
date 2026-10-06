@@ -177,13 +177,13 @@ describe("L1 — oracle self-consistency", () => {
 // those are then compared against the oracle. Disagreement fails the test.
 //
 // For a non-genesis vector with no published predecessor binding, V7 is FAIL and
-// the code is CHAIN_BROKEN, transcribed from the oracle's own published
+// the code is PREDECESSOR_MISSING, transcribed from the oracle's own published
 // `v7FailClosed` rule. That literal is a transcription, not a new rule: the
 // assertion below still compares it against the oracle, so changing the oracle
 // fails here rather than silently following.
-// ═══════════════════════════════════════════════════════════════════
 
-const V7_FAIL_CLOSED_CODE = "CHAIN_BROKEN"; // from oracle.v7FailClosed
+
+const V7_FAIL_CLOSED_CODE = "PREDECESSOR_MISSING"; // from oracle.v7FailClosed
 
 function evaluateDetailed(file: string) {
   const r = receipts.get(file);

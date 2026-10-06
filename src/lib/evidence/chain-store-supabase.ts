@@ -102,19 +102,10 @@ export async function verifyReceiptWithStore(
   }
 
   if (!predecessor) {
-    // Store-layer fact: the predecessor is unavailable.
-    // Core CPS-0001 consequence: fail-closed -> CHAIN_BROKEN (v1.0-RC1 V₇).
-    // This wrapper is core-facing, so VerificationResult.reason MUST carry a
-    // core failure code. PREDECESSOR_MISSING is deliberately kept OUT of
-    // `reason`: it is a store/integration diagnostic, not a v1.0-RC1 core
-    // failure code, and must never re-enter the core vocabulary.
-    // Both branches of this function (store error and store-miss) therefore
-    // now yield the same deterministic core verdict.
     return {
       status: "INVALID",
-      reason: "CHAIN_BROKEN",
-      detail:
-        "Predecessor unavailable in trusted chain store (store-layer diagnostic: predecessor unresolved; core verdict is CHAIN_BROKEN under the v1.0-RC1 fail-closed rule).",
+      reason: "PREDECESSOR_MISSING",
+      detail: "Predecessor receipt not found in trusted chain store.",
     };
   }
 

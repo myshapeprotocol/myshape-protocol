@@ -108,11 +108,11 @@ predecessorHash = SHA-256( UTF-8( JCS( predecessor receipt JSON ) ) )
 Hash the **parsed receipt object**, not the raw file text — indentation and key
 order in the file do not affect the result.
 
-> **If you do not wire these bindings, you will get `CHAIN_BROKEN`, not
+> **If you do not wire these bindings, you will get `PREDECESSOR_MISSING`, not
 > `SUBJECT_MISMATCH` / `ISSUER_MISMATCH` / `TEMPORAL_VIOLATION`.** That is correct
-> behaviour under the fail-closed rule, not a bug: an unresolved predecessor means
-> continuity is not established. The expected results in `EXPECTED-RESULTS.md`
-> assume the store is wired as documented above.
+> behaviour for an unresolved predecessor, not a bug: continuity is not established.
+> The expected results in `EXPECTED-RESULTS.md` assume the store is wired as
+> documented above.
 
 The remaining seven vectors are **genesis** (`previousReceiptHash === null`) and
 report V₇ as `N/A`.

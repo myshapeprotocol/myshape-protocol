@@ -95,13 +95,13 @@ describe("V₇ — Wrong hash", () => {
 });
 
 describe("V₇ — Missing predecessor", () => {
-  it("store.resolve(hash) === null → CHAIN_BROKEN (fail-closed, canonical v1.0-RC1)", () => {
+  it("store.resolve(hash) === null → PREDECESSOR_MISSING", () => {
     const A = makeReceipt(linkInterval(0, 2));
     const B = makeReceipt({ ...linkInterval(1, 2), previousReceiptHash: computeReceiptHash(A) });
     const store = new MemoryChainStore(); // empty
     const res = verifyReceipt(B, store);
     expect(res.status).toBe("INVALID");
-    if (res.status === "INVALID") expect(res.reason).toBe("CHAIN_BROKEN");
+    if (res.status === "INVALID") expect(res.reason).toBe("PREDECESSOR_MISSING");
   });
 });
 

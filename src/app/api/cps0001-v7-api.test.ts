@@ -92,14 +92,14 @@ describe("API — verify-receipt distinguishes genesis vs chained", () => {
     expect(j.v7).toBe("ENFORCED");
   });
 
-  it("chained missing predecessor → INVALID CHAIN_BROKEN (core fail-closed)", async () => {
+  it("chained missing predecessor → INVALID (fail closed)", async () => {
     const B = makeReceipt({ subjectId: "S", issuerId: "I", startMs: base - 8000, endMs: base });
     B.previousReceiptHash = "missinghash";
     state.lookup = { getReceiptByHash: async () => null };
     const res = await verifyPOST(post(B));
     const j = await res.json();
     expect(j.status).toBe("INVALID");
-    expect(j.reason).toBe("CHAIN_BROKEN");
+    expect(j.reason).toBe("PREDECESSOR_MISSING");
   });
 });
 
