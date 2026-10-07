@@ -52,7 +52,6 @@ function basePresent(overrides?: Partial<QuestionnaireInput>): QuestionnaireInpu
     provenance_level: "P1",
     independence_level: "L1",
     reproducibility: "PARTIAL",
-    evidence_status: "PENDING",
     limitations: ["none declared"],
     conflicts: [],
     ...overrides,
@@ -75,7 +74,6 @@ function baseAbsent(overrides?: Partial<QuestionnaireInput>): QuestionnaireInput
     provenance_level: "P0",
     independence_level: "L0",
     reproducibility: "NOT_APPLICABLE",
-    evidence_status: "PENDING",
     limitations: ["no artifact located in searched scopes; what was missing could not be found"],
     conflicts: [],
     absence: {
@@ -306,11 +304,14 @@ describe("System-generated and derived fields are protected", () => {
     expect(build(spoofed).payload.submitted_at).toBe(FIXED_NOW);
   });
 
-  it("26. participant cannot set a final evidence_status outside §4.1", () => {
-    const validation = validateQuestionnaire(basePresent({ evidence_status: "ACCEPTED" as QuestionnaireInput["evidence_status"] }));
+  it("26. evidence_status is system-derived — participant-supplied values are rejected", () => {
+    const validation = validateQuestionnaire({
+      ...basePresent(),
+      evidence_status: "ACCEPTED",
+    } as unknown as QuestionnaireInput);
     expect(validation.errors.map(function (e) { return e.field; })).toContain("evidence_status");
-    // initial §4.1 values remain allowed — the FINAL value is derived by the implementation
-    expect(build(basePresent({ evidence_status: "PENDING" })).payload.evidence_status).toBe("PENDING");
+    // the system sets the §4.1 initial state — the FINAL value stays derived by the implementation
+    expect(build(basePresent()).payload.evidence_status).toBe("PENDING");
   });
 
   it("27. participant cannot set verdict", () => {
@@ -336,6 +337,19 @@ describe("System-generated and derived fields are protected", () => {
     expect(Object.keys(payload)).not.toContain("blocked_reason");
     expect(Object.keys(payload)).not.toContain("rejection_reason");
     expect(payload.review).toBe("PENDING");
+  });
+
+  it("36. participant-supplied non-PENDING lifecycle values never reach the payload", () => {
+    const injected = ["VALIDATED", "ARCHIVED", "REJECTED", "ACCEPTED"];
+    for (const value of injected) {
+      const spoofed = { ...basePresent(), evidence_status: value } as unknown as QuestionnaireInput;
+      expect(errorFields(spoofed)).toContain("evidence_status");
+      expect(function () { build(spoofed); }).toThrow();
+    }
+    // clean inputs: the payload carries only the system-derived initial state
+    expect(build(basePresent()).payload.evidence_status).toBe("PENDING");
+    expect(build(baseAbsent()).payload.evidence_status).toBe("PENDING");
+    expect(build(baseUnknown()).payload.evidence_status).toBe("PENDING");
   });
 });
 

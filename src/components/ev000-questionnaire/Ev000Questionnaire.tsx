@@ -13,7 +13,6 @@ import { useState, type JSX } from "react";
 import {
   ARTIFACT_AUTHENTICITY_VALUES,
   CONFLICT_TYPE_VALUES,
-  EVIDENCE_STATUS_VALUES,
   EXECUTION_PROVENANCE_VALUES,
   EXECUTION_STATUS_VALUES,
   FINDING_VALIDITY_VALUES,
@@ -28,7 +27,6 @@ import {
   validateQuestionnaire,
   type ArtifactAuthenticity,
   type ConflictType,
-  type EvidenceStatus,
   type ExecutionProvenance,
   type ExecutionStatus,
   type FindingValidity,
@@ -82,7 +80,6 @@ interface AbsenceDraft {
 interface Draft {
   actor_label: string;
   submission_origin: string;
-  evidence_status: string;
   artifact_authenticity: string;
   artifact_type_or_class: string;
   artifact_id: string;
@@ -111,7 +108,6 @@ const EMPTY_CONFLICT: ConflictDraft = {
 const INITIAL_DRAFT: Draft = {
   actor_label: "",
   submission_origin: "",
-  evidence_status: "PENDING",
   artifact_authenticity: "",
   artifact_type_or_class: "",
   artifact_id: "",
@@ -184,7 +180,6 @@ function toInput(draft: Draft): QuestionnaireInput {
     provenance_level: draft.provenance_level as ProvenanceLevel,
     independence_level: draft.independence_level as IndependenceLevel,
     reproducibility: draft.reproducibility as Reproducibility,
-    evidence_status: draft.evidence_status as EvidenceStatus,
     limitations: splitLines(draft.limitations_text),
     conflicts: conflicts,
     absence: isAbsent
@@ -314,13 +309,6 @@ export default function Ev000Questionnaire(): JSX.Element {
               />
               <p className={hintCls}>A real source locator for this evidence (Contract §2.2).</p>
             </div>
-            <EnumSelect
-              label="Initial evidence_status (§4.1) — final value is derived by the implementation"
-              value={draft.evidence_status}
-              options={EVIDENCE_STATUS_VALUES}
-              onChange={function (value) { patch({ evidence_status: value }); }}
-              allowEmpty={false}
-            />
           </div>
         );
       case 2:
@@ -708,9 +696,11 @@ export default function Ev000Questionnaire(): JSX.Element {
                 <strong>evidence_id</strong> and <strong>submitted_at</strong> are system-generated.
               </li>
               <li>
-                Final <strong>evidence_status</strong>, <strong>verdict</strong>, <strong>validation_result</strong>,{" "}
-                <strong>acceptance_status</strong>, <strong>blocked_reason</strong>, and{" "}
-                <strong>rejection_reason</strong> are derived by the EV-000 implementation and reviewers — never by this form.
+                <strong>evidence_status</strong> is system-set to <code>PENDING</code> at intake (§4.1) — it is not
+                participant-selectable. The final <strong>evidence_status</strong>, <strong>verdict</strong>,{" "}
+                <strong>validation_result</strong>, <strong>acceptance_status</strong>, <strong>blocked_reason</strong>,
+                and <strong>rejection_reason</strong> are derived by the EV-000 implementation and reviewers — never by
+                this form.
               </li>
               <li>Declaring nothing you did not observe is the only requirement of this step.</li>
             </ul>

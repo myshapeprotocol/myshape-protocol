@@ -12,6 +12,9 @@
 //   fields (verdict / validation_result / acceptance_status /
 //   blocked_reason / rejection_reason) are never emitted
 // - review is system-generated ("PENDING") at intake
+// - evidence_status is system-generated ("PENDING") at intake —
+//   never participant-selectable; the final value stays derived
+//   by the EV-000 implementation
 // - evidence_id / submitted_at are system-generated
 // - provenance / independence / reproducibility / execution /
 //   finding_validity are five independent inputs — nothing is
@@ -104,6 +107,10 @@ export const EVIDENCE_STATUS_VALUES = [
   "INCONCLUSIVE",
 ] as const; // §4.1 — ACCEPTED deliberately absent (it is not a lifecycle value)
 export type EvidenceStatus = (typeof EVIDENCE_STATUS_VALUES)[number];
+
+// §4.1 — system-derived initial lifecycle state. The participant never
+// supplies evidence_status; the EV-000 implementation derives the final value.
+export const INITIAL_EVIDENCE_STATUS: EvidenceStatus = "PENDING";
 
 export const REVIEW_STATUS_VALUES = ["PENDING", "REVIEWED", "DISAGREED"] as const; // §11.1
 export type ReviewStatus = (typeof REVIEW_STATUS_VALUES)[number];
@@ -236,7 +243,6 @@ export interface QuestionnaireInput {
   provenance_level: ProvenanceLevel;
   independence_level: IndependenceLevel;
   reproducibility: Reproducibility;
-  evidence_status: EvidenceStatus;
   limitations: string[];
   conflicts: ConflictDeclaration[];
   absence?: AbsenceAuditInput;
@@ -420,9 +426,9 @@ export function validateQuestionnaire(input: QuestionnaireInput): ValidationResu
     fail("reproducibility", "reproducibility must come from §8.1 vocabulary.");
   }
 
-  // --- Lifecycle input (§4.1): participant supplies an INITIAL value only ---
-  if (!input.evidence_status || !isMember(input.evidence_status, EVIDENCE_STATUS_VALUES)) {
-    fail("evidence_status", "evidence_status must be an initial §4.1 lifecycle value (ACCEPTED is not one); the final value is derived by the EV-000 implementation.");
+  // --- Lifecycle input (§4.1): system-derived — the participant cannot supply evidence_status ---
+  if (Object.prototype.hasOwnProperty.call(input, "evidence_status")) {
+    fail("evidence_status", "evidence_status is system-derived (§4.1) and cannot be participant-provided; this form sets the initial value and the EV-000 implementation derives the final value.");
   }
 
   // --- Limitations / conflicts (§2.1, §11) ---
@@ -509,7 +515,7 @@ export function buildIntakePayload(input: QuestionnaireInput, options?: BuildOpt
     provenance_level: input.provenance_level,
     independence_level: input.independence_level,
     reproducibility: input.reproducibility,
-    evidence_status: input.evidence_status,
+    evidence_status: INITIAL_EVIDENCE_STATUS, // §4.1 — system-generated at intake, not participant-settable
     limitations: input.limitations.map(function (entry) { return entry.trim(); }),
     review: "PENDING", // §11.1 — system-generated at intake, not participant-settable
     conflicts: input.conflicts.map(function (conflict, index) {
