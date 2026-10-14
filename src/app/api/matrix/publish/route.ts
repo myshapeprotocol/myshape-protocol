@@ -1,6 +1,89 @@
 import { NextResponse } from "next/server";
 import { RateLimiter } from "@/lib/rate-limiter";
 
+// ==================================================================
+// DIRECT PUBLISHING IS DISABLED — 2G-Z0-R1
+// ==================================================================
+//
+// This endpoint previously called six platform APIs directly
+// (Bluesky, LinkedIn, Farcaster, Telegram, Reddit, X) using
+// credentials held in environment variables. It wrote no
+// `research_distribution*` row, performed no governance check, and
+// left no audit trail. It was an unaudited publication path
+// bypassing the entire chain:
+//
+//   events → derivation → gate → decision → service → adapter
+//
+// The only route handler below returns HTTP 403. The historical
+// implementation is preserved further down this file, unexported and
+// unreachable, so that migration has evidence to work from and so
+// that nothing is lost by this change. It is inert: no reference to
+// it survives, and it is not exported, so Next.js cannot route it.
+//
+// DO NOT re-export the legacy implementation. Re-enabling direct
+// publishing requires the Research Distribution Service, not a
+// revert of this file.
+//
+// MIGRATION REQUIRED — see:
+//   docs/architecture/RESEARCH-DISTRIBUTION-SERVICE-BOUNDARY.md
+//   RESEARCH-DISTRIBUTION-APPLICATION-CONTRACT.md §6, §7
+// ==================================================================
+
+/** Stable error code for clients and dashboards. */
+export const DIRECT_PUBLISH_DISABLED = "DIRECT_PUBLISH_DISABLED" as const;
+
+/** Stable error code for clients and dashboards. */
+export const MIGRATION_REQUIRED = "MIGRATION_REQUIRED" as const;
+
+/** Human-readable explanation returned to every caller. */
+export const DIRECT_PUBLISH_DISABLED_MESSAGE: string =
+  "DIRECT_PUBLISH_DISABLED: this endpoint no longer publishes to platforms. " +
+  "MIGRATION_REQUIRED: publication must traverse the Research Distribution Service, " +
+  "which derives governance state from the immutable event history and refuses " +
+  "anything without HUMAN_APPROVED approval. No content was published and no " +
+  "platform was contacted.";
+
+/**
+ * POST /api/matrix/publish
+ *
+ * Permanently refuses. The status is 403 rather than 404 because the
+ * endpoint still exists and the refusal is a policy decision, not a
+ * missing resource. 410 would also be defensible; 403 is used because
+ * it is unambiguous about intent.
+ *
+ * No credential is read, no rate limiter is consulted, and no
+ * platform is contacted — not even to fail the request. The refusal
+ * happens before any of that work begins.
+ */
+export async function POST() {
+  return NextResponse.json(
+    {
+      success: false,
+      error: DIRECT_PUBLISH_DISABLED,
+      migration: MIGRATION_REQUIRED,
+      message: DIRECT_PUBLISH_DISABLED_MESSAGE,
+    },
+    { status: 403 },
+  );
+}
+
+// ==================================================================
+// ── HISTORICAL IMPLEMENTATION — PRESERVED, UNREACHABLE ──
+// ==================================================================
+//
+// Everything below is the pre-2G-Z0-R1 implementation, retained
+// verbatim as migration evidence. It is a private function: it is not
+// exported, so Next.js does not treat it as a route handler, and the
+// exported POST above never calls it. TypeScript's `noUnusedLocals`
+// is not enabled in this project, so it compiles without complaint.
+//
+// Do not delete without completing the migration — this is the only
+// record of how each platform call was authenticated and shaped.
+// Do not export, wire up, or call it. That is the one change that
+// would undo this phase.
+//
+// ==================================================================
+
 // 5 publishes per 15 minutes — enough for batch posting, prevents abuse
 const publishLimiter = new RateLimiter({ maxRequests: 5, windowMs: 15 * 60 * 1000 });
 
@@ -13,7 +96,7 @@ const publishLimiter = new RateLimiter({ maxRequests: 5, windowMs: 15 * 60 * 100
  * Supported platforms: bluesky, x/twitter, linkedin, farcaster, discord, telegram, reddit
  * Payload: { platform, content, title, url }
  */
-export async function POST(request: Request) {
+async function legacyDirectPublish(request: Request) {
   try {
     // Authentication: require x-api-key header
     const apiKey = request.headers.get("x-api-key");
