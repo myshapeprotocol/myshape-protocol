@@ -1,10 +1,11 @@
 # IDS Historical Governance Note — PR #31
 
 **Record ID:** IDS-HISTORICAL-GOVERNANCE-NOTE-001
-**Status:** Approved historical record
-**Approval:** Raymond
-**Approval Date:** 2026-10-12
-**Review Date:** 2026-10-12
+**Status:** Historical record — content approval asserted in project history; no formal GitHub Review recorded.
+
+**Content approval:** Raymond, 2026-10-12 (asserted in project history; not independently publicly verifiable in the records examined).
+
+**Review Date:** 2026-10-12 (project-history review date; not a GitHub Review).
 **Repository:** `myshapeprotocol/myshape-protocol`
 **Pull Request:** #31 — Promote Research Distribution System (IDS)
 **Merge Commit:** `0dcbd9e78b6e9ebc2766fca23cb333ecfd23cff0`
@@ -95,8 +96,10 @@ This note was compared claim-by-claim against primary GitHub records in review `
 
 ## 7. Approval
 
-**Status:** Approved historical record.
-**Approval:** Raymond.
-**Approval Date:** 2026-10-12.
+**Status:** Historical record — content approval asserted in project history; no formal GitHub Review recorded.
 
-This approval applies to the historical governance note only. It does not certify IDS technical acceptance, establish missing historical governance facts, or authorize unrelated repository changes.
+**Content approval:** Raymond, 2026-10-12 (asserted in project history; not independently publicly verifiable in the records examined).
+
+**Public verification status:** As of 2026-10-15, a read-only check of GitHub PR #35 records, the `master` tree, and available local project history found no independently verifiable public approval artifact in the examined scope. PR #35 has no recorded formal GitHub Review. The absence of a public artifact does not establish that the historical content approval did not occur.
+
+This content approval applies to the historical governance note only. It is not a merge authorization, does not certify IDS technical acceptance, does not establish missing historical governance facts, and does not authorize unrelated repository changes.
