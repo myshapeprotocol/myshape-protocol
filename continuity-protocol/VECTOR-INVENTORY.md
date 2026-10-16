@@ -10,7 +10,7 @@ File bytes are normative. Hashes below were recorded read-only; vector contents 
 | continuity-protocol/test-vectors/generated/agent-trace.json | DF013BE344B397C97C58D1A3BE70650AAB611E7D1453298BA34C6A11B3F902DF | unknown | unknown | normative (duplicate of valid/agent-trace unexplained — do not merge/delete; time-sensitive plus signature mismatch) | TBD | INVALID V2 plus V6 (verified 2026-09-20: signature mismatch plus expired 2026-07-24T17:57:44.920Z) | TBD |
 | continuity-protocol/test-vectors/invalid/expired.json | 8BB675D2192B49D2AD14C9BA93F4BE5EA86E54464874F15478E47B063210AF26 | unknown | 13-field era (assumed) | normative | INVALID EXPIRED | INVALID | INVALID EXPIRED |
 | continuity-protocol/test-vectors/invalid/tampered-evidence.json | 2374D75A73809C7D93F482277B519B1C0EEF8AA4C6A9783346A43944ABC07672 | unknown | 13-field era (assumed) | normative | INVALID EVIDENCE_TAMPERED or INVALID_SIGNATURE (record actual) | INVALID | INVALID |
-| continuity-protocol/test-vectors/invalid/broken-chain.json | 4A6367340E54841394C8D1D15B57F4C56095885198D6CCD629AFADBBA95F3C1B | unknown | 13-field era (assumed) | normative | INVALID CHAIN_BROKEN (with store) | VALID-or-INVALID by V1-V6 only (CLI has no V7 — record actual) | CHAIN_BROKEN via verifyPredecessor |
+| continuity-protocol/test-vectors/invalid/broken-chain.json | 4A6367340E54841394C8D1D15B57F4C56095885198D6CCD629AFADBBA95F3C1B | unknown | 13-field era (assumed) | normative | INVALID PREDECESSOR_MISSING (with store) | VALID-or-INVALID by V1-V6 only (CLI has no V7 — record actual) | CHAIN_BROKEN via verifyPredecessor |
 | bad-signature.json (referenced by cli/README.md:34-42) | — (no file) | — | — | doc-only-missing | — | — | — |
 
 ## GAP-2 — implementation divergence vs normative resolution
